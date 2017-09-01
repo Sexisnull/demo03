@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<#include '/common.html'/>
+<script type="text/javascript" src="${request.contextPath}/static/jquery/ui/page.js"></script>
+<title>统一身份认证</title>
+</head>
+</head>
+<body class="easyui-layout" data-options="fit:false">  
+	<div data-options="region:'north'">
+		<div id="page-title">
+			在线用户
+		</div>
+	</div>  
+	<div data-options="region:'center',fit:false">
+		<div id="grid_toolbar">
+			<div class="datagrid-toolbar-btn-wrap">
+				<a class="datagrid-toolbar-btn" onclick="toolbarAction('reload')"><iclass="icon-refresh"></i>刷新</a>
+			</div>
+	   </div>
+	   <table id="datagrid"></table>
+	</div>
+</body>
+
+<script type="text/javascript">
+
+var queryParams = {};
+
+$(function() {
+	$('#datagrid').datagrid({
+		url:'${request.contextPath}/setting/list.uids',
+		queryParams: queryParams,
+		loadMsg: '正在加载数据，请稍后...',
+		fitColumns:true,
+		striped:true,
+		fit:true,
+		border: false,
+		pagination: true,
+		columns:[[
+					{field:'accountName', title:'登录名', width:10},
+					{field:'appName', title:'所属应用', width:10},
+					{field:'ip', title:'访问IP', width:10},
+					{field:'loginTime', title:'访问时间', width:20}
+				]],
+		toolbar:'#grid_toolbar'
+	});
+	
+	//分页
+	$('#datagrid').datagrid('getPager').pagination({
+		beforePageText: '当前第',
+		afterPageText: '页，共 {pages} 页',
+		displayMsg: '当前显示 {from} 到 {to} ，共 {total} 条记录'
+	});
+})
+
+// 刷新按钮的响应方法
+function toolbarAction(action) {
+	switch (action) {
+	case 'reload':
+		$('#datagrid').datagrid("reload");
+		break;
+	}
+}
+
+</script>
+</html>

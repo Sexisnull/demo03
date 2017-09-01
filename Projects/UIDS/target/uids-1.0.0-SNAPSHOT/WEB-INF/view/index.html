@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>统一身份认证系统</title>
+<#include '/common.html'/>
+<link type="text/css" rel="stylesheet" href="${request.contextPath}/static/css/main.css"/>
+<script>
+	var cookiePath = '${request.contextPath}/';
+
+	var sso = false;
+	var compactModal = $(window).width() <= 1024 ? true : false;
+
+	var height;
+	var channel = $.cookie('channel');
+	var menuUrl = $.cookie('menuUrl');
+	var pageUrl = $.cookie('pageUrl');
+	if(!pageUrl && !menuUrl){
+		pageUrl = '${request.contextPath}/org/index.uids';
+		menuUrl = '${request.contextPath}/org/orgTree.uids';
+	}
+	
+	$(function() {
+		channel = channel ? channel : $('li[channel]').attr('channel');
+		$('body').on('mousedown', '*', function() {
+			if (typeof($dp) != 'undefined') {
+				try {
+					$dp.hide();//修复弹出框内的日历控件有时候关闭窗口不消失
+				} catch(e) {
+					
+				}
+			}
+		});
+		
+		if (sso) {
+			$('#sso').addClass('running');
+			$('#sso').append('<i class="icon-reorder" style="color: #FFF; margin: 0 10px;"></i>');
+			ssoCheck();
+		}
+
+		$('.nav-menu > li').hover(function() {
+			$(this).not('.active').addClass('hover');
+			$(this).children('.nav-submenu').slideDown(50);
+		}, function() {
+			$(this).not('.active').removeClass('hover');
+			$(this).children('.nav-submenu').hide();
+		});
+
+		$('.nav-submenu > li').hover(function() {
+			$(this).css('background-color', '#EFEFEF');
+		}, function() {
+			$(this).css('background-color', '');
+		});
+
+		$('li[channel=' + channel + ']').addClass('active');
+		$('#page').attr('src', pageUrl);
+		$('#menu').attr('src', menuUrl);
+
+		height = $(window).height() - $('#header').outerHeight();
+
+		$('#page-wrap').css('top', $('#header').outerHeight());
+
+		initLayout();
+
+		$(window).resize(function() {
+			height = $(window).height() - $('#header').outerHeight();
+			compactModal = $(window).width() <= 1024 ? true : false;
+			initLayout();
+		});
+
+		$('.nav-link[page]').click(function() {
+			$('.active').removeClass('active');
+			$('.hover').removeClass('hover');
+			var currentNav = $(this).closest('li[channel]');
+			currentNav.addClass('active');
+
+			channel = currentNav.attr('channel');
+			pageUrl = $(this).attr('page');
+			menuUrl = $(this).attr('menu');
+			menuUrl = menuUrl ? menuUrl : null;
+
+			initLayout();
+
+			$('#page').attr('src', pageUrl);
+			$('#menu').attr('src', menuUrl);
+
+			$.cookie('channel', channel, {path: cookiePath});
+			$.cookie('pageUrl', pageUrl, {path: cookiePath});
+			$.cookie('menuUrl', menuUrl, {path: cookiePath});
+		});
+	});
+
+	/**
+	 * 设置布局
+	 */
+	function initLayout() {
+		if (menuUrl && !compactModal) {
+			$('#page-wrap').width($(top.window).width() - 240).height(height);
+			$('#menu-wrap').css({
+				top : $('#header').outerHeight(),
+				left : 'auto'
+			}).removeClass('compact').show().height(height);
+		} else {
+			$('#menu-wrap').addClass('compact').height(400).hide();
+			$('#page-wrap').width($(top.window).width()).height(height);
+		}
+	}
+	/**
+	 * 获取sso列表
+	 */
+	function ssoCheck() {
+		var url = "/gsjis/interface/ldap/sso.do";
+		$.ajax({
+			type : "POST",
+			url : url,
+			success : function(msg) {
+				var appList = eval(msg);
+				if (appList) {
+					$.each(appList, function(index, app) {
+						$('#sso').append(app);
+					});
+				}
+			}
+		});
+	}
+	
+	/**
+	 * 保持用户在线，20分钟一次
+	 */
+	setInterval(function(){
+		var url = '/gsjis/manager/user/keep_online.do';
+		ajaxSubmit(url, {
+			type:'html',
+			error:function(a,b,msg){
+			}
+		});
+	}, 1200000);
+	
+	function singleDome(url){
+		window.location.href = url;
+	}
+	
+	var param = {};
+	function logout(){
+		$.ajax({
+			url: '${request.contextPath}/sys/logoutLog.uids',
+			type: 'post',
+			data: param,
+	    	dataType: 'json',
+	    	beforeSend: function() {
+	    		loadLayer = layer.load(0, {shade: [0.5, '#fff'] });
+	    	},
+	    	success: function(data) {
+	    		layer.close(loadLayer);
+		    	if (data.state == 1) {
+		    		top.location.href='${request.contextPath}/sys/logout.uids'
+		    	} else {
+		    		layer.alert(data.info, {icon: 0, shade: [0.5, '#fff']});
+		    	}
+	    	}
+		});
+	}
+</script>
+</head>
+<body>
+	<div id="header">
+		<div id="sso"></div>
+		<div id="header-container">
+			<div id="logo" title="sysName">
+				<label class="label" style="font-size: 30px; font-weight: 500;text-overflow:ellipsis; 
+					white-space:nowrap">统一身份认证系统</label>    
+			</div>
+			<div id="nav">
+	<ul class="nav-menu">
+		<li channel="group" class="" style="">
+			<div  onclick=""  class="nav-title nav-link">机构管理</div>
+			<ul class="nav-submenu" style="left: auto; right: -1px;">
+			    <li class="" style="">
+					<div onclick="" menu="${request.contextPath}/org/orgTree.uids" page="${request.contextPath}/org/index.uids" class="nav-link"><span>机构管理</span></div>
+				</li>
+				<li class="" style="">
+					<div onclick=""  page="${request.contextPath}/org/group/index.uids" class="nav-link"><span>分组管理</span></div>
+				</li>
+			</ul>
+		</li>
+ 		<li channel="user" class="" style="">
+ 			<div  onclick=""  class="nav-title nav-link">用户管理</div>
+ 			<ul class="nav-submenu" style="left: auto; right: -1px;">
+			    <li class="" style="">
+				<div onclick="" page="${request.contextPath}/user/index.uids?type=1" class="nav-link"><span>个人用户</span></div>
+				</li>
+				<li class="" style="">
+				<div onclick="" page="${request.contextPath}/user/index.uids?type=2" class="nav-link"><span>法人用户</span></div>
+				</li>
+			</ul>
+		</li>
+		<li channel="account" class="" style="">
+			<div  onclick=""  class="nav-title nav-link">账号管理</div>
+			<ul class="nav-submenu" style="left: auto; right: -1px;">
+			    <li class="" style="">
+					<div onclick=""  page="${request.contextPath}/account/index.uids?type=1" class="nav-link"><span>公务账号</span></div>
+				</li>
+				<li class="" style="">
+					<div onclick=""  page="${request.contextPath}/account/index.uids?type=2" class="nav-link"><span>个人账号</span></div>
+				</li>
+				<li class="" style="">
+					<div onclick=""  page="${request.contextPath}/account/index.uids?type=3" class="nav-link"><span>法人账号</span></div>
+				</li>
+			</ul>
+		</li>
+		<li channel="role" class="" style="">
+			<div onclick=""  page="${request.contextPath}/role/roleMgr.uids" class="nav-title nav-link">角色管理</div>
+		</li>
+		<li channel="app"  class="" style="">
+			<div  onclick=""  class="nav-title nav-link">应用管理</div>
+		    <ul class="nav-submenu" style="left: auto; right: -1px;">
+			    <li class="" style="">
+					<div onclick="" menu="${request.contextPath}/app/orgTree.uids" page="${request.contextPath}/app/appMgr.uids" class="nav-link"><span>应用管理</span></div>
+				</li>
+				<li class="" style="">
+					<div onclick=""  page="${request.contextPath}/source/sourceMgr.uids" class="nav-link"><span>资源管理</span></div>
+				</li>
+			</ul>
+		</li>
+		<li channel="sysconfig" class="" style="">
+			<div onclick=""   class="nav-title nav-link">系统管理</div>
+			<ul class="nav-submenu" style="left: auto; right: -1px;">
+				<li class="" style="">
+					<div onclick=""  page="${request.contextPath}/sysConfig/index.uids" class="nav-link"><span>系统参数</span></div>
+				</li>
+				<!-- <li class="" style="">
+					<div onclick="" menu="${request.contextPath}/sys/individuationTree.uids" page="${request.contextPath}/sys/individuationMgr.uids" class="nav-link"><span>个性化设置</span></div>
+				</li>
+				<li class="" style="">
+					<div onclick="" menu="${request.contextPath}/sys/viewTree.uids" page="${request.contextPath}/sys/viewMgr.uids" class="nav-link"><span>同步列表</span></div>
+				</li> -->
+				<li class="" style="">
+					<div onclick="" menu="${request.contextPath}/sysArea/areaTree.uids" page="${request.contextPath}/sysArea/areaMgr.uids" class="nav-link"><span>区域管理</span></div>
+				</li>
+				<li class="" style="">
+					<div onclick=""  page="${request.contextPath}/sysLog/logMgr.uids" class="nav-link"><span>日志管理</span></div>
+				</li>
+				<li class="" style="">
+					<div onclick=""  page="${request.contextPath}/sysBan/banMgr.uids" class="nav-link"><span>封停管理</span></div>
+				</li>
+			</ul>
+		</li>
+		<li class="separator"></li>
+		<li channel="other" class="" style="width: 40px;">
+			<div onclick=""   class="nav-title nav-link"><i class="icon-th-large nav-account-btn"></i></div>
+			<ul class="nav-submenu" style="left: auto; right: -1px;">
+			    <li class="" style="">
+					<div onclick="top.location.href='${request.contextPath}/accountHome/accountHome.uids'"   class="nav-link"><span>浏览前台</span></div>
+				</li>
+				<li class="" style="">
+					<div onclick="openDialog('${request.contextPath}/sys/accountSetting.uids',500,500,{title:'账户设置'})"   class="nav-link"><span>账户设置</span></div>
+				</li>
+				<li class="" style="">
+					<div onclick=""  page="${request.contextPath}/setting/onlineMgr.uids" class="nav-link"><span>在线用户</span></div>
+				</li>
+				<li class="" style="">
+					<div onclick="logout()" class="nav-link"><span>系统退出</span></div>
+				</li>
+			</ul>
+		</li>
+		<li class="separator"></li>
+	</ul>
+</div>
+		</div>
+	</div>
+	<div id="page-wrap">
+		<iframe name="page" id="page" frameborder="0" style="height: 100%;"></iframe>
+	</div>
+	<div id="menu-wrap">
+		<iframe name="menu" id="menu" frameborder="0" allowTranspancy="true"></iframe>
+	</div>
+</body>
+</html>

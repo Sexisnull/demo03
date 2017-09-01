@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<#include '/common.html'/>
+<script type="text/javascript" src="${request.contextPath}/static/jquery/ui/page.js"></script>
+<title>统一身份认证</title>
+</head>
+</head>
+<body class="easyui-layout" data-options="fit:false">  
+	<div data-options="region:'north'">
+		<div id="page-title">
+			角色管理
+		</div>
+	</div>  
+	<div data-options="region:'center',fit:false">
+		<div id="grid_toolbar">
+			<@hasPerm perms="admin">
+			<div class="datagrid-toolbar-btn-wrap">
+				<a class="datagrid-toolbar-btn" onclick="toolbarAction('add')"><i class="icon-plus-sign"></i>新增</a>
+				<a class="datagrid-toolbar-btn" onclick="toolbarAction('remove')"><i class="icon-minus-sign"></i>删除</a>
+				<a class="datagrid-toolbar-btn" onclick="toolbarAction('open')"><i></i>启用</a>
+				<a class="datagrid-toolbar-btn" onclick="toolbarAction('close')"><i></i>禁用</a>
+			</div>
+			</@hasPerm>
+			<div class="datagrid-toolbar-search-wrap">
+				<div class="datagrid-toolbar-simple-search">
+					<input type="text" id="grid_simple_search" class="input-text" style="width:150px;" name="searchText" value="" placeholder="请输入角色名称"/>
+					<input id="search" type="submit" class="btn btn-small btn-primary" style="margin-left:5px;" value="检索" onclick="advancesearchCheck()"/>
+				</div>
+			</div>
+	   </div>
+	   <table id="datagrid"></table>
+	</div>
+<script type="text/javascript">
+var queryParams = {};
+$(function() {
+	$('#datagrid').datagrid({
+		url:'${request.contextPath}/role/roleList.uids',
+		queryParams: queryParams,
+		loadMsg: '正在加载数据，请稍后...',
+		fitColumns:true,
+		striped:true,
+		fit:true,
+		border: false,
+		pagination: true,
+		columns:[[
+			{checkbox: true, field:'uuid'},
+			{field:'name',title:'角色名称',width:10},
+			{field:'mark',title:'标识符',width:10},
+			{field:'desc',title:'角色描述',width:20},
+			{field:'validStatus',title:'状态',width:10,
+				formatter: function(value, row, index) {
+					if(row.validStatus == 0){
+						return '启用';
+					}else{
+						return '禁用';
+					}
+				}
+			},
+			<@hasPerm perms="admin">
+			{field:' ',title:'操作',width:10,
+				formatter: function(value, row, index) {
+					var openOrClose = "";
+					if(row.validStatus == 0){
+						openOrClose = '<a class="hwq2button gray" onclick="openOrClose(\'close\',\''+row.uuid+'\')" dataId="' + row.uuid + '">禁用</a>';
+					} else {
+						openOrClose = '<a class="hwq2button blue" onclick="openOrClose(\'open\',\''+row.uuid+'\')" dataId="' + row.uuid + '">启用</a>';
+					}
+					
+					<@hasPerm perms="admin">
+					return '<ul><li class="operation">'
+					+'<a class="hwq2button blue" onclick="grant(this)" objId="' + row.uuid + '">授权</a>'
+					+'<a class="hwq2button green" onclick="edit(\''+row.uuid+'\')" >编辑</a>'
+					+ openOrClose +'</li></ul>';
+					</@hasPerm>
+					
+					return '<ul><li class="operation">'
+					+'<a class="hwq2button blue" onclick="grant(this)" objId="' + row.uuid + '">授权</a>'
+					+ openOrClose +'</li></ul>';
+				}
+			}
+			</@hasPerm>
+		]],
+		toolbar:'#grid_toolbar'
+	});
+	//分页
+	$('#datagrid').datagrid('getPager').pagination({
+		beforePageText: '当前第',
+		afterPageText: '页，共 {pages} 页',
+		displayMsg: '当前显示 {from} 到 {to} ，共 {total} 条记录'
+	});
+})
+//普通检索-检索button
+function advancesearchCheck(){
+	queryParams.searchText = $.trim($('#grid_simple_search').val());
+	$('#datagrid').datagrid('load', queryParams);
+}
+
+//授权
+function grant(obj) {
+	var url = "${request.contextPath}/role/auth/grant.uids?id=" + $(obj).attr('objId');
+	openDialog(url, 800, 500, {title : '角色授权'});
+}
+
+function toolbarAction(action) {
+		//获取选定行
+		var rows = $('#datagrid').datagrid('getSelections');
+		var ids = '';
+		for( var i = 0 ; i<rows.length; i++){
+			if(i>0){
+				ids +=',';
+			}
+			ids += rows[i].uuid;
+		}
+		
+		switch (action) {
+		case 'remove':
+			if (ids == "") {
+				alert("未选中任何记录");
+				return;
+			}
+			confirmLayer = layer.confirm("您确定要删除这" + ids.split(",").length + "条记录吗", {
+			    btn: ['确定','取消']
+			}, function() {
+				ajaxSubmit("${request.contextPath}/role/roleDele.uids?ids=" + ids,{
+					success:function(result){
+						if(result.state == 1){
+							layer.close(confirmLayer);
+							layer.msg(result.info, {icon: result.state, time: 1500, shade: [0.5, '#fff']}, function() {
+								refresh();
+				    		});
+						}else{
+							layer.alert(result.info);
+						}
+					}
+				});
+			});
+			break;
+		case 'add':
+			openDialog('${request.contextPath}/role/roleNewOrEdit.uids?', 550, 420, {
+				title : '角色新增'
+			});
+			break;
+		case 'open':
+			if (ids == "") {
+				alert("未选中任何记录");
+				return;
+			}
+			confirmLayer = layer.confirm("您确定要启用这" + ids.split(",").length + "条记录吗", {
+			    btn: ['确定','取消']
+			}, function() {
+				ajaxSubmit("${request.contextPath}/role/openOrClose.uids?ids=" + ids+"&status="+action,{
+					success:function(result){
+						layer.close(confirmLayer);
+						if(result.state == 1){							
+							layer.msg(result.info, {icon: result.state, time: 1500, shade: [0.5, '#fff']}, function() {
+								refresh();
+				    		});
+						}else{
+							layer.alert(result.info);
+						}
+					}
+				});
+			});
+			break;
+		case 'close':
+			if (ids == "") {
+				alert("未选中任何记录");
+				return;
+			}
+			confirmLayer = layer.confirm("您确定要禁用这" + ids.split(",").length + "条记录吗", {
+				    btn: ['确定','取消']
+				}, function() {
+				ajaxSubmit("${request.contextPath}/role/openOrClose.uids?ids=" + ids+"&status="+action,{
+					success:function(result){
+						layer.close(confirmLayer);
+						if(result.state == 1){
+							layer.msg(result.info, {icon: result.state, time: 1500, shade: [0.5, '#fff']}, function() {
+								refresh();
+				    		});
+						}else{
+							layer.alert(result.info);
+						}
+					}
+				});
+			});
+			break;
+		}
+}
+function edit(id) {
+	openDialog('${request.contextPath}/role/roleNewOrEdit.uids?iid=' + id, 550, 420, {
+		title : '角色编辑'
+	});
+}
+//单个打开或关闭
+function openOrClose(status,id){
+	var showStr = (status == "open")?"启用":"禁用";
+	confirmLayer = layer.confirm('确定'+showStr+'所选数据？', {
+	    btn: ['确定','取消']
+	}, function() {
+		ajaxSubmit('${request.contextPath}/role/openOrClose.uids?ids=' + id+'&status='+status,{
+			success:function(result){
+				layer.close(confirmLayer);
+				if(result.state == 1){		    		
+					layer.msg(result.info, {icon: result.state, time: 1500, shade: [0.5, '#fff']}, function() {
+						refresh();
+		    		});
+				}else{
+					layer.alert(result.info);
+				}
+			}
+		});
+	});
+}
+
+function refresh(){
+	$('#datagrid').datagrid("reload");
+}
+</script>
+</body>
+</html>

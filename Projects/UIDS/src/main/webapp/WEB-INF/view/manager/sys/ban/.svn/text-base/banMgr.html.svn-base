@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<#include '/common.html'/>
+<script type="text/javascript" src="${request.contextPath}/static/jquery/ui/page.js"></script>
+<title>统一身份认证</title>
+</head>
+</head>
+<body class="easyui-layout" data-options="fit:false">  
+	<div data-options="region:'north'">
+		<div id="page-title">
+			封停管理
+		</div>
+	</div>
+	<div data-options="region:'center',fit:false">
+		<div id="grid_toolbar">
+		<@hasPerm perms="admin">
+			<div class="datagrid-toolbar-btn-wrap">
+				<a class="datagrid-toolbar-btn" onclick="toolbarAction()"><i class="icon-minus-sign"></i>删除</a>
+			</div>
+		</@hasPerm>
+			<div class="datagrid-toolbar-search-wrap">
+				<div class="datagrid-toolbar-simple-search">
+					<input type="text" id="grid_simple_search" class="input-text" style="width:150px;" name="searchText" value="" placeholder="请输入登录名"/>
+					<input id="search" type="submit" class="btn btn-small btn-primary" style="margin-left:5px;" value="检索" onclick="advancesearchCheck()"/>
+				</div>
+			</div>
+	   </div>
+	   <table id="datagrid"></table>
+	</div>
+<script type="text/javascript">
+var queryParams = {queryParams: ''};
+$(function() {
+	//获取list列表	
+	$('#datagrid').datagrid({
+		url:'${request.contextPath}/sysBan/list.uids',
+		queryParams: queryParams,
+		loadMsg: '正在加载数据，请稍后...',
+		fitColumns:true,
+		striped:true,
+		fit:true,
+		border: false,
+		pagination: true,
+		columns:[[
+			{checkbox: true, field:'uuid'},
+			{field:'accountName',title:'登录名',width:20},
+			{field:'appName',title:'应用名称',width:20},
+			{field:'lastLoginIp',title:'最后登录IP',width:20},
+			{field:'lastLoginTime',title:'最后登录时间',width:10},
+			{field:'recentErrorTimes',title:'错误次数',width:10},
+		]],
+		toolbar:'#grid_toolbar'
+	});
+	
+	//分页
+	$('#datagrid').datagrid('getPager').pagination({
+		beforePageText: '当前第',
+		afterPageText: '页，共 {pages} 页',
+		displayMsg: '当前显示 {from} 到 {to} ，共 {total} 条记录'
+	});
+})
+//普通检索-检索button
+function advancesearchCheck(){
+	queryParams.searchText = $.trim($('#grid_simple_search').val());
+	$('#datagrid').datagrid('load', queryParams);
+}
+function toolbarAction() {
+	var rows = $('#datagrid').datagrid('getSelections');
+	
+	var ids = '';
+	
+	for( var i = 0 ; i<rows.length; i++){
+		if(i>0){
+			ids +=',';
+		}
+		ids += rows[i].uuid;
+	}
+	if (ids == "") {
+		alert("未选中任何记录");
+		return;
+	}
+	confirmLayer = layer.confirm("您确定要删除这" + ids.split(",").length + "条记录吗", {
+	    btn: ['确定','取消']
+	}, function() {
+		ajaxSubmit("${request.contextPath}/sysBan/dele.uids?ids=" + ids,{
+			success:function(result){
+				layer.close(loadLayer);
+	    		layer.close(confirmLayer);
+				if(result.state == 1){
+					layer.msg(result.info, {icon: result.state, time: 1500, shade: [0.5, '#fff']}, function() {
+						refresh();
+		    		});
+				}else{
+					layer.alert(result.info);
+				}
+			}
+		});
+	});
+}
+function refresh(){
+	$('#datagrid').datagrid("reload");
+}
+</script>
+</body>
+</html>

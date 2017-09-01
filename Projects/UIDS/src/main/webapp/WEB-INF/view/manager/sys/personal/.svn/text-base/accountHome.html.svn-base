@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+<meta charset="utf-8">
+<title>统一身份认证账号主页</title>
+<meta name="keywords" content="统一身份认证账号主页"> 
+<meta name="description" content="统一身份认证账号主页"> 
+<!-- css -->
+<link href="${request.contextPath}/static/css/layout_home.css" rel="stylesheet" rev="stylesheet" type="text/css" media="all" />
+<link rel="stylesheet" type="text/css" href="${request.contextPath}/static/css/homestyle.css">
+<!-- js -->
+<script type="text/javascript" src="${request.contextPath}/static/jquery/jquery-1.8.0.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/static/layer/layer.js"></script>
+<script type="text/javascript" src="${request.contextPath}/static/jquery/uids/haidao.offcial.general.js"></script>
+</head>
+<body>
+<div class="view-topbar">
+	<div class="topbar-console">
+		<div class="tobar-head fl">
+			<a href="javascript:void(0);" class="topbar-logo fl">
+			<span><img src="${request.contextPath}/static/images/logo.png" width="20" height="20"></span>
+			</a>
+			<a id="home" href="javascript:void(0);" onclick="changeit(this)" src="${request.contextPath}/accountHome/home.uids?accountId=${account.uuid}" class="topbar-home-link topbar-btn text-center fl"><span>统一身份认证</span></a>
+		</div>
+	</div>
+	<div class="topbar-info">
+		<ul class="fr">
+			<li class="fl topbar-info-item">
+			<div class="dropdown">
+				<a href="javascript:void(0);" class="topbar-btn">
+				<span class="fl text-normal">你好,  ${account.nickname!''}</span>
+				<span class="icon-arrow-down"></span>
+				</a>
+				<ul class="dropdown-menu">
+					<li><a href="${request.contextPath}/sys/index.uids">管理后台</a></li>
+					<li><a onclick="logout()" href="javascript:void(0);">退出账号</a></li>
+				</ul>
+			</div>
+			</li>
+		</ul>
+	</div>
+</div>
+<div class="view-body">
+	<div class="view-sidebar">
+		<div class="sidebar-content">
+			<div class="sidebar-nav">
+				<div class="sidebar-title">
+					<a href="javascript:void(0);">
+						<span class="icon"><b class="fl icon-arrow-down"></b></span>
+						<span class="text-normal">账号设置</span>
+					</a>
+				</div>
+				<ul class="sidebar-trans">
+					<li onclick="changeit(this)" src="${request.contextPath}/accountHome/lookOrEdit.uids?type=${account.type}&id=${account.uuid!''}&act=msg">
+						<a href="javascript:void(0);">
+							<b class="sidebar-icon"><img src="${request.contextPath}/static/images/icon_author.png" width="16" height="16"></b>
+							<span class="text-normal">修改账号信息</span>
+						</a>
+					</li>
+					<li onclick="changeit(this)" src="${request.contextPath}/accountHome/lookOrEdit.uids?type=${account.type}&id=${account.uuid!''}&act=pass">
+						<a href="javascript:void(0);">
+							<b class="sidebar-icon"><img src="${request.contextPath}/static/images/icon_message.png" width="16" height="16"></b>
+							<span class="text-normal">修改账号密码</span>
+						</a>
+					</li>
+					<li onclick="writeOffAccount()">
+						<a href="javascript:void(0);">
+							<b class="sidebar-icon"><img src="${request.contextPath}/static/images/icon_cost.png" width="16" height="16"></b>
+							<span class="text-normal">账号注销</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+			<div class="sidebar-nav">
+				<div class="sidebar-title">
+					<a href="javascript:void(0);">
+						<span class="icon"><b class="fl icon-arrow-down"></b></span>
+						<span class="text-normal">用户中心</span>
+					</a>
+				</div>
+				<ul class="sidebar-trans">
+					<li onclick="changeit(this)" src="${request.contextPath}/accountHome/details.uids?accountId=${account.uuid}">
+						<a href="javascript:void(0);">
+							<b class="sidebar-icon"><img src="${request.contextPath}/static/images/icon_order.png" width="16" height="16"></b>
+							<span class="text-normal">完善用户信息</span>
+						</a>
+					</li>
+					<#if !account.user??>
+					<li onclick="changeit(this)" src="${request.contextPath}/accountHome/bindUser.uids?accountId=${account.uuid}">
+						<a href="javascript:void(0);">
+							<b class="sidebar-icon"><img src="${request.contextPath}/static/images/icon_news.png" width="16" height="16"></b>
+							<span class="text-normal">绑定已有用户</span>
+						</a>
+					</li>
+					</#if>
+					<#if account.user??>
+					<li onclick="changeit(this)" src="${request.contextPath}/accountHome/authPhone.uids?id=${account.uuid!''}">
+						<a href="javascript:void(0);">
+							<b class="sidebar-icon"><img src="${request.contextPath}/static/images/icon_authentication.png" width="16" height="16"></b>
+							<span class="text-normal">认证手机</span>
+						</a>
+					</li>
+					<li onclick="changeit(this)" src="${request.contextPath}/accountHome/unbundledUsers.uids?id=${account.uuid!''}">
+						<a href="javascript:void(0);">
+							<b class="sidebar-icon"><img src="${request.contextPath}/static/images/icon_authentication.png" width="16" height="16"></b>
+							<span class="text-normal">解绑用户</span>
+						</a>
+					</li>
+					</#if>
+				</ul>
+			</div>
+		</div>
+	</div>
+		<div>
+		  	<iframe id= "dd" src = "${request.contextPath}/accountHome/home.uids?accountId=${account.uuid}" style="width:100%;height:850px;"></iframe>
+		</div>
+</div>
+<script>
+	$(".sidebar-title").live('click', function() {
+		if ($(this).parent(".sidebar-nav").hasClass("sidebar-nav-fold")) {
+			$(this).next().slideDown(200);
+			$(this).parent(".sidebar-nav").removeClass("sidebar-nav-fold");
+		} else {
+			$(this).next().slideUp(200);
+			$(this).parent(".sidebar-nav").addClass("sidebar-nav-fold");
+		}
+	});
+	$(function(){
+		//边缘弹出
+		<#if !account.user??>
+			showMessage();
+			$('#home').click(function(){
+				showMessage();
+			});
+		</#if>
+		});
+
+	function changeit(obj){
+		dd.src = $(obj).attr('src');
+	}
+	
+	var param = {};
+	function logout(){
+		$.ajax({
+			url: '${request.contextPath}/sys/logoutLog.uids',
+			type: 'post',
+			data: param,
+	    	dataType: 'json',
+	    	beforeSend: function() {
+	    		loadLayer = layer.load(0, {shade: [0.5, '#fff'] });
+	    	},
+	    	success: function(data) {
+	    		layer.close(loadLayer);
+		    	if (data.state == 1) {
+		    		top.location.href='${request.contextPath}/sys/logout.uids'
+		    	} else {
+		    		layer.alert(data.info, {icon: 0, shade: [0.5, '#fff']});
+		    	}
+	    	}
+	});
+	}
+
+	function showMessage(){
+		layer.open({
+		    type: 1
+		    ,title: false
+		    ,closeBtn: 0 //不显示关闭按钮
+		    ,offset: 'rb' //具体配置参考：offset参数项
+		    ,content: '<div style="padding: 36px 22px; color: #988D82; font-weight: 600; background-color: #F7F7F7;"><div>您的账号还未绑定用户！！您可以通过【完善用户信息】进行绑定，也可以通过【绑定已有用户】进行绑定</div></div>'
+		    ,btnAlign: 'c' //按钮居中
+		    ,shade: [0.8, 'rgba(255, 255, 255, 0.01)'] //不显示遮罩
+		    ,shadeClose:true
+		    ,area: ['220px', '140px']
+		    /* ,time: 2000 //2秒后自动关闭 */
+		    ,anim: 2
+		    ,isOutAnim:true
+		    ,yes: function(){
+		      layer.closeAll();
+		    }
+		  });
+	}
+	function writeOffAccount(){
+		layer.confirm('您确认要注销账号？，账号注销后不能再使用此账号登录系统！！', {
+			  btn: ['继续','返回'], //按钮
+			  title: "账号注销",
+			  offset: '100px'
+			}, function(index, layero){
+				layer.close(index); //如果设定了yes回调，需进行手工关闭
+				//iframe层
+				layer.open({
+				  type: 2,
+				  title: '账号注销',
+				  shadeClose: false,
+				  shade: 0.8,
+				  area: ['600px', '60%'],
+				  offset: '20px',
+				  content: '${request.contextPath}/accountHome/writeOffAccount.uids?accountId=${account.uuid}' //iframe的url
+				}); 
+			});
+	}
+</script>
+</body>
+</html>

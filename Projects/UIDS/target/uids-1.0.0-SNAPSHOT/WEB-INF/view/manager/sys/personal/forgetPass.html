@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>找回密码</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="text/javascript" src="${request.contextPath}/static/jquery/jquery-1.8.0.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/static/layer/layer.js"></script>
+<link rel="stylesheet" type="text/css" href="${request.contextPath}/static/layer/skin/default/layer.css">
+<link rel="stylesheet" type="text/css" href="${request.contextPath}/static/layui/css/layui.css">
+<link rel="stylesheet" type="text/css" href="${request.contextPath}/static/css/forgot.css">
+<script type="text/javascript" src="${request.contextPath}/static/layui/layui.js"></script>
+<#include '/validate.html'/>
+
+<script type="text/javascript">
+
+layui.use(['form', 'layedit', 'laydate'], function(){
+  var form = layui.form()
+  ,layer = layui.layer
+  ,layedit = layui.layedit
+  ,laydate = layui.laydate;  
+});
+
+//全局变量
+var params = {};
+var pass_params = {};
+var sel_mark = null;
+var accountId = null;
+
+$(function(){
+	$('#oprform1').show();
+	$('#oprform2').hide();
+	$('#oprform3').hide();
+	
+	$('#submit1').click(function() {
+		if ( buildParam1() ) {
+			netStep1();
+		}
+	});
+	$('#submit2').click(function() {
+		if ( buildParam2() ) {
+			netStep2();
+		}
+	});
+	
+	$('#submit3').click(function() {
+		if ( buildParam3() ) {
+			netStep3();
+		}
+	});
+	
+	// 短信验证码按钮的倒计时设置
+	var valid_time = 60;
+	var util = {
+	    wait: valid_time,
+	    hsTime: function (obj) {
+	    	var _this = this;
+	        if (_this.wait <= 0) {
+	            $(obj).removeAttr("disabled").val('重发短信验证码');
+	            _this.wait = valid_time;
+	        } else {
+	            $(obj).attr("disabled", true).val('在' + _this.wait + '秒后点此重发');
+	            _this.wait--;
+	            setTimeout(function () {
+	                _this.hsTime(obj);
+	            }, 1000)
+	        }
+	    }
+	};
+	
+	// 校验原手机：发送短信验证码
+	$("#msg-btn_old").click(function(){
+		// TODO 字段校验
+		
+		// 用户的身份证号
+		var mobile = $.trim($('#phone-number_old').val());
+		if(!checkMobile(mobile)){
+			layer.msg('请输入正确的手机号码！', {icon: 7,time: 1500 });
+			return;
+		}
+		
+		// 设置按钮
+		util.hsTime('#msg-btn_old');
+		
+		// 提交给后台处理：后台去发送手机验证码
+		$.ajax({
+			url: '${request.contextPath}/sys/sendCode.uids',
+			type: 'post',
+			data: {mobile: mobile, type: 6},
+	    	dataType: 'json',
+	    	beforeSend: function() {
+	    		loadLayer = layer.load(0, {shade: [0.5, '#fff'] });
+	    	},
+	    	success: function(data) {	    		
+	    		layer.close(loadLayer);	    		
+	    		layer.alert(data.info, {icon: data.state, time: 1500, shade: [0.5, '#fff']});
+		    	if (data.state == 1) {
+		    		// SmsRecord记录的uuid
+		    		sel_mark = data.data;
+		    	}
+	    	}
+		});	 
+	})
+	
+});
+
+//获取用户输入数据
+function buildParam1() {
+	// TODO 数据校验
+	if ($.trim($('#account-name').val()) == '' ) {
+		layer.msg('请输入用户名！', {icon: 7,time: 1500 });
+		return false;
+	}
+	if ( $.trim($('#app').val()) == '' ) {
+		layer.msg('请选择应用！', {icon: 7,time: 1500 });
+		return false;
+	}
+	params.accountName = $.trim($('#account-name').val());
+	params.appId = $.trim($('#app').val());
+	return true;
+}
+
+//登录
+function netStep1() {
+	
+	var ajaxTimeout = $.ajax({
+		url: '${request.contextPath}/sys/login/checkAccountAndApp.uids',
+		timeout : 5000, // TODO 超时时间设置(单位毫秒)，这里可由配置信息指定
+		type: 'post',
+		data: params,
+    	dataType: 'json',
+    	beforeSend: function() {
+    		loadLayer = layer.load(0, {shade: [0.5, '#fff'] });
+    	},
+    	success: function(data) {
+    		layer.close(loadLayer);
+	    	if (data.state == 1) {
+	    		$('.mod-sub-list1').removeClass('list1-active');
+	    		$('.mod-sub-list2').addClass('list2-active');
+	    		$('#oprform1').hide();
+	    		$('#oprform2').show();
+	    		$('#oprform3').hide();
+	    	} else {
+	    		layer.alert(data.info, {icon: 0, shade: [0.5, '#fff']});
+	    	}
+    	}
+	});
+}
+
+//获取用户输入数据
+function buildParam2() {
+	// 发送方身份随机码
+	params.mark = sel_mark;
+	
+	//手机号码
+	params.phoneNumber = $.trim($('#phone-number_old').val());
+	// 验证码
+	params.code = $.trim($('#code_old').val());
+	
+	if (params.phoneNumber == '') {
+		layer.msg('手机号不能为空！', {icon: 7,time: 1500 });
+		return false;
+	} else if (!checkMobile(params.phoneNumber)) {
+		layer.msg('请输入正确的手机号码！', {icon: 7,time: 1500 });
+		return false;
+	}
+	if (params.code == '') {
+		layer.msg('手机验证码不能为空！', {icon: 7,time: 1500 });
+		return false;
+	}
+	return true;
+}
+
+//登录
+function netStep2() {
+	
+	var ajaxTimeout = $.ajax({
+		url: '${request.contextPath}/sys/login/checkPhoneNumber.uids',
+		timeout : 5000, // TODO 超时时间设置(单位毫秒)，这里可由配置信息指定
+		type: 'post',
+		data: params,
+    	dataType: 'json',
+    	beforeSend: function() {
+    		loadLayer = layer.load(0, {shade: [0.5, '#fff'] });
+    	},
+    	success: function(data) {
+    		layer.close(loadLayer);
+	    	if (data.state == 1) {
+	    		$('.mod-sub-list2').removeClass('list2-active');
+	    		$('.mod-sub-list3').addClass('list3-active');
+	    		$('#oprform1').hide();
+	    		$('#oprform2').hide();
+	    		$('#oprform3').show();
+	    		$('#tip_msg').text('您正在找回的帐号是：'+params.accountName);
+	    		accountId = data.accountId;
+	    	} else {
+	    		layer.alert(data.info, {icon: 0, shade: [0.5, '#fff']});
+	    	}
+    	}
+	});
+}
+
+
+
+//获取用户输入数据
+function buildParam3() {
+	
+	//账号id
+	pass_params.accountId = accountId;
+	
+	// 新密码
+	pass_params.newPass = $.trim($('#passNew').val());
+	//确认新密码
+	pass_params.newPassReal = $.trim($('#passNewReal').val());
+	
+	if( pass_params.newPass != pass_params.newPassReal ){
+		layer.msg('两次输入密码不一致，请重新输入！', {icon: 7,time: 1500 });
+		return false;
+	}
+	
+	if (pass_params.newPass == '') {
+		layer.msg('新密码不能为空！', {icon: 7,time: 1500 });
+		return false;
+	}
+	
+	if (pass_params.newPassReal == '') {
+		layer.msg('确认密码不能为空！', {icon: 7,time: 1500 });
+		return false;
+	}
+	return true;
+}
+
+//登录
+function netStep3() {
+	
+	var ajaxTimeout = $.ajax({
+		url: '${request.contextPath}/sys/login/changePassword.uids',
+		timeout : 5000, // TODO 超时时间设置(单位毫秒)，这里可由配置信息指定
+		type: 'post',
+		data: pass_params,
+    	dataType: 'json',
+    	beforeSend: function() {
+    		loadLayer = layer.load(0, {shade: [0.5, '#fff'] });
+    	},
+    	success: function(data) {
+    		layer.close(loadLayer);
+	    	if (data.state == 1) {
+	    		layer.msg(data.info, {icon: data.state, time: 500, shade: [0.5, '#fff']}, function() {
+	    			// 跳转到账号登录页面
+					top.location.href='${request.contextPath}/gsjis/login.uids';
+	    		});
+	    	} else {
+	    		layer.alert(data.info, {icon: 0, shade: [0.5, '#fff']});
+	    	}
+    	}
+	});
+}
+
+</script>
+</head>
+<body>
+	<!-- main container -->
+	<div class="content">
+         <div class="container-fluid">
+            <div id="pad-wrapper" class="user-profile">
+	            <div id="nav">
+	                <div class="nav-2">
+						<div class="mod-nav clearfix">
+							<h1 class="page-type-notab">统一身份认证系统 | 找回密码</h1>
+						</div>
+					</div>
+				</div>
+				<div id="content">
+					<div class="mod-forgot">
+					    <ul class="mod-sub-nav">
+							<li class="mod-sub-list1 list1-active">确认帐号</li>
+							<li class="mod-sub-list2">安全验证</li>
+							<li class="mod-sub-list3">重置密码</li>
+						</ul>
+						
+						<form action="" class="layui-form" method="post" id="oprform1" name="oprform">
+							<p class="step-email-info pass-msg-p">请填写您需要找回的帐号</p>
+						  	<div class="layui-form-item">
+						    	<label class="layui-form-label pass-lable-dv">账号名</label>
+						    	<div class="layui-input-block pass-block-dv">
+						      		<input type="text" id="account-name" name="account-name" required maxlength="128" placeholder="请输入账号名" class="layui-input">
+						    	</div>
+						  	</div>
+						  	<div class="layui-form-item">
+						    	<label class="layui-form-label pass-lable-dv">所属应用</label>
+						    	<div class="layui-input-block pass-block-dv">
+							      	<select id="app" name="app" required >
+							       		<option value="">请选择</option>
+										<#list apps as app>
+											<option value="${app.uuid!''}">${app.name!''}</option>
+										</#list>
+							      	</select>
+						    	</div>
+						  	</div>
+							<div class="mod-step-detail" style="margin-left: 88px;">
+								<div>
+									<input  id="submit1" type="button" name="" value="下一步" class="pass-button-submit">
+								</div>
+							</div>
+						</form>
+						<form action="" class="layui-form" method="post" id="oprform2" name="oprform">
+							<p class="step-email-info pass-msg-p">为了你的帐号安全，请完成身份验证</p>
+						  	<div class="layui-form-item">
+						  		<label class="layui-form-label pass-lable-dv1">验证手机号</label>
+						  		<div class="layui-input-block pass-block-dv1">
+						    		<input type="text" name="username" id="phone-number_old" maxlength="11" placeholder="请输入手机号" lay-verify="required" autocomplete="off" class="layui-input">
+						  		</div>
+							</div>
+							<div class="layui-form-item">
+						  		<label class="layui-form-label pass-lable-dv1">单击发送短信</label>
+						  		<div class="layui-input-block pass-block-dv1">
+						    		<input type="button" id="msg-btn_old" class="layui-btn layui-btn-normal" value="点击获取短信验证码" style="margin-bottom: 10px; width: 100%; background-color: #9E92B3;">
+						  		</div>
+							</div>
+							<div class="layui-form-item">
+						 		<label class="layui-form-label pass-lable-dv1">短信验证码</label>
+							 	<div class="layui-input-block pass-block-dv1">
+						   			<input type="text" name="password" id="code_old" lay-verify="pass" maxlength="6" placeholder="请输入短信验证码" autocomplete="off" class="layui-input">
+						 		</div>
+							</div>
+							<div class="mod-step-detail" style="margin-left: 100px;">
+								<div>
+									<input  id="submit2" type="button" name="" value="下一步" class="pass-button-submit">
+								</div>
+							</div>
+						</form>
+						<form action="" class="layui-form" method="post" id="oprform3" name="oprform">
+							<p id="tip_msg" class="step-email-info pass-msg-p"></p>
+						  	<div class="layui-form-item">
+						    	<label class="layui-form-label pass-lable-dv">新密码</label>
+						    	<div class="layui-input-block pass-block-dv">
+						      		<input type="password" id="passNew" name="passNew" required maxlength="128" placeholder="请输入新密码" class="layui-input">
+						    	</div>
+						  	</div>
+						  	<div class="layui-form-item">
+						    	<label class="layui-form-label pass-lable-dv">确认密码</label>
+						    	<div class="layui-input-block pass-block-dv">
+						      		<input type="password" id="passNewReal" name="passNewReal" required maxlength="128" placeholder="请确认密码" class="layui-input">
+						    	</div>
+						  	</div>
+							<div class="mod-step-detail" style="margin-left: 88px;">
+								<div>
+									<input  id="submit3" type="button" name="" value="确定" class="pass-button-submit">
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+            </div>
+        </div>
+    </div>
+    <!-- end main container -->
+</body>
+</html>

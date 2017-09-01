@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title> 
+<#include '/common.html'/> 
+<#include '/tree.html'/>
+<#include '/validate.html'/>
+<script type="text/javascript" src="${request.contextPath}/static/res/uploadify/js/jquery.uploadify-3.1.min.js"></script>
+</head>
+<script type="text/javascript">
+	//保存的参数
+	var sparams = {createTime: '${info.createTime!''}'};
+	//初始化表单信息
+	function init() {
+
+		sparams.uuid = $.trim($('#applicationId').val());
+		sparams.type = $.trim($("input[name='type']:checked").val());
+		sparams.name = $.trim($('#name').val());
+		sparams.mark = $.trim($('#mark').val());
+		sparams.accountEncryptType = $.trim($("input[name='accountEncryptType']:checked").val());
+		sparams.accountEncryptSalt = $.trim($('#accountEncryptSalt').val());
+		sparams.enctyptionType = $.trim($("input[name='enctyptionType']:checked").val());
+		sparams.encryptionKey = $.trim($('#encryptionKey').val());
+		sparams.encryptionSalt = $.trim($('#encryptionSalt').val());
+		sparams.singleLoginUrl = $.trim($('#url').val());
+		sparams.singleLoginUrl = $.trim($('#url').val());
+		sparams.netType = $.trim($('#netType').val());
+		sparams.isShow = $.trim($('#isShow').val());
+		sparams.desc = $.trim($('#appDesc').val());
+		sparams.clientId = $.trim($('#clientId').val());
+		sparams.clientKey = $.trim($('#clientKey').val());
+		sparams.parentId = $.trim($('#pid').val());
+		sparams.isUniteOff = $.trim($("input[name='isUniteOff']:checked").val());
+		sparams.isUniteReg = $.trim($("input[name='isUniteReg']:checked").val());
+		sparams.isShow = $.trim($("input[name='isShow']:checked").val());
+		sparams.appDesc = $.trim($('#appDesc').val());
+		sparams.accountEncryptIterations = $('#accountEncryptIterations').val();
+			var icon = $('#icon').val();
+			if (icon.indexOf('?id=') <0) {
+				sparams.iconId = $.trim('');
+			} else {
+				var iconId = icon.substring(icon.length-32,icon.length);
+				sparams.iconId = $.trim(iconId);
+			}
+		//日志
+		var infouuid = '${info.uuid!'insert'}';
+	 	if( infouuid == 'insert' ){
+	 		sparams.operate = 'insert';
+	 	}else{
+	 		sparams.operate = 'update';
+	 	}
+	}
+
+	//保存信息
+	function saveInfo() {
+			init();
+			$.ajax({
+				url : '${request.contextPath}/app/appSaveOrUpdate.uids',
+				type : 'post',
+				data : sparams,
+				dataType : 'json',
+				beforeSend : function() {
+					loadLayer = layer.load(0, {
+						shade : [ 0.5, '#fff' ]
+					});
+				},
+				success : function(data) {
+					layer.close(loadLayer);
+					if (data.state == 1) {
+	    				layer.msg(data.info, {icon: data.state, time: 500, shade: [0.5, '#fff']}, function() {
+	    					closeDialog(true);
+		    		});
+		    	}  else {
+						 layer.alert(data.info, {
+							icon : 0,
+							shade : [ 0.5, '#fff' ]
+						});
+					}
+				}
+			});
+	}
+	
+	$(function() {
+		$("#icon2").attr("src","${request.contextPath}/icon/viewIcon.uids?id="+ $('#iconId').val());
+		 $('#parentOrg').menu({
+				tree : 'parentOrg_Id',
+				height : 200,
+				init : function(menu, obj, treeJq) {
+					initTree('${request.contextPath}/org/parentSearch.uids', 'pId', beforeClick, onClickParentOrg, onDblClickParentOrg, 'parentOrg_Id');
+				}
+			});
+		 //应用类型单选框初始化
+		 $('input:radio[name="type"][value="${info.type!''}"]').prop('checked', true); 
+		 //加密设置单选框初始化
+		 $('input:radio[name="enctyptionType"][value="${info.enctyptionType!''}"]').prop('checked', true);
+		 //网络类型radio初始化
+		 $('input:radio[name="netType"][value="${info.netType!''}"]').prop('checked', true);
+		 //前台展示radio初始化
+		 $('input:radio[name="isShow"][value="${info.isShow!''}"]').prop('checked', true);
+		 //统一注册radio初始化
+		 $('input:radio[name="isUniteReg"][value="${info.isUniteReg!''}"]').prop('checked', true);
+		//统一注销radio初始化
+		 $('input:radio[name="isUniteOff"][value="${info.isUniteOff!''}"]').prop('checked', true);
+		//加密方式radio初始化
+		 $('input:radio[name="accountEncryptType"][value="${info.accountEncryptType!''}"]').prop('checked', true);
+		//图片上传
+		$("#iconFile").uploadify({
+			swf : '${request.contextPath}/static/res/uploadify/image/uploadify.swf',
+			multi : false,//是否能选择多个文件
+			//auto:false,//文件选择完成后，是否自动上传
+			'uploader' : '${request.contextPath}/icon/fileUpload.uids?iconType='+$('#appIcon').val(),//文件上传后台处理类
+			'langFile' : '${request.contextPath}/static/res/uploadify/js/uploadifyLang_zh.js',
+			'height' : 34,
+			'width' : 98,
+			'buttonText':"",
+			'uploadLimit':'10',
+			'queueID' : 'fileQueue',
+			'fileSizeLimit' : '1MB',//文件大小限制最大为1G
+			'fileTypeExts' : '*.jpg;*.png;*.gif',//允许上传的文件类型           
+			'removeCompleted' : false,
+			onUploadSuccess : function(file, data, response) {//上传完成时触发（每个文件触发一次）
+				var jsonobj = eval('(' + data + ')');
+				if (jsonobj.msgMap == '1') {
+					$("#iconPath").val(jsonobj.name);
+					$("#iconId").val(jsonobj.uuid);
+					$("#icon2").attr("src","${request.contextPath}/icon/viewIcon.uids?id="+jsonobj.uuid+"&iconType="+$('#appIcon').val());
+				} else if(jsonobj.msgMap == '2'){
+					alert('您上传的文件太大，请选择不超过1M的图片');
+				} else if(jsonobj.msgMap == '3'){
+					alert('您上传的文件尺寸太大，建议大小92*92');
+				}
+			}
+		});
+		
+		// 如果是编辑，则不用显示应用类型
+		if ( '${info.uuid!''}' != '' ) {
+			$('#app_Type').hide();
+		}
+		
+		// 设置某些标签的显示或隐藏
+		setTagShowOrHide("${info.type!'common'}");
+		
+		// 更改法人类型的触发事件
+		$('input:radio[name="type"]').change(function() {
+			setTagShowOrHide($(this).val());
+		});
+		
+		// 显示或隐藏某些标签
+		function setTagShowOrHide(type) {
+			if ( type == 'system' ) {
+				$('#tr_encryptType').hide();
+				$('#tr_encryptKey').hide();
+				$('#tr_encryptSalt').hide();
+				$('#tr_sso_url').hide();
+				$('#is_show').hide();
+				$('#is_united_register').hide();
+				$('#is_united_unregister').hide();
+			} else if ( type == 'common' ){
+				$('#tr_encryptType').show();
+				$('#tr_encryptKey').show();
+				$('#tr_encryptSalt').show();
+				$('#tr_sso_url').show();
+				$('#is_show').show();
+				$('#is_united_register').show();
+				$('#is_united_unregister').show();
+			}
+		}
+		
+		//验证
+		$.validator.setDefaults({  
+	        submitHandler: function() {
+	            saveInfo();
+	        }  
+	    });  
+		
+		$().ready(function() {
+			$('#saveBtn').click(function(){
+				gswwValidate($("#oprform"));
+			});
+		});
+	});
+	function randomChar(num) {
+		var jsSeed = "0123456789qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
+		var jsTmp = "";
+		if (num == '' || num <= 0) {
+			num = 16;
+		}
+		for (var i = 0; i < num; i++) {
+			jsTmp += jsSeed.charAt(Math.ceil(Math.random() * 1000000)
+					% jsSeed.length);
+		}
+		return jsTmp;
+	}
+	function generateKey() {
+		$('#encryptionKey').val(randomChar(16));
+	}
+	function generateSalt() {
+		$('#encryptionSalt').val(randomChar(16));
+	}
+	
+	// 生成随机字符串
+	function generateRadomStr(tagId, length) {
+		var radomValue = randomChar(length);
+		
+		$('#' + tagId).val(radomValue);
+	}
+	
+	//机构选择节点点击前回调
+	function beforeClick(treeId, treeNode, clickFlag) {
+		if (treeNode.isDisabled)
+			return false;
+		return (treeNode.id != 0);
+	}
+	function onClickParentOrg(event, treeId, treeNode) {
+		if (treeNode.isDisabled)
+			return;
+
+		$('#pid').val(treeNode.id);
+		$('#parentOrg').val(treeNode.name);
+	}
+	function onDblClickParentOrg(event, treeId, treeNode) {
+		if (treeNode == null) {
+			return;
+		}
+		if (treeNode.isDisabled)
+			return;
+		if (treeNode.id == '0') {
+			onTopClick();
+		} else {
+			$('#pid').val(treeNode.id);
+			$('#parentOrg').val(treeNode.name);
+		}
+		$('#parentOrg_menu').fadeOut(50);
+	}
+	//机构选择 根节点 点击回调
+	function onTopClick(treeId) {
+		if(treeId == 'parentOrg_Id'){
+			$('#parentOrgId').val('0');
+			$('#parentOrg').val("机构管理");
+		}else{
+			$('#parentOrg_NewId').val('0');
+			$('#parentOrg_New').val("机构管理");
+		}
+	}	
+	function cleariocn(){
+		$("#icon").attr("src","/gsjis/resources/jis/front/app/default.jpg");
+	}
+	
+	function writeurl(domain, syncurl, ssourl){
+		$("#appUrl").val(domain + syncurl);
+		$("#ssoUrl").val(domain + ssourl);
+	}
+	function writehttpurl(domain, syncurl){
+		$("#appUrl").val(domain + syncurl);
+	}
+	function setvalue(ssourl){
+		$("#appUrl").val(ssourl);
+	}
+	
+	function setSsoLogin(){
+		var ssoLogin = $('[name=userDefined]:checked').val();
+		if(ssoLogin == '1'){
+			$('[id^=tr_ssoLogin_]').show();
+		}else{
+			$('[id^=tr_ssoLogin_]').hide();
+		}
+	}
+
+	//选择图标
+	function selpic(){
+		openDialog('${request.contextPath}/icon/iconSelect.uids?iconType='+$('#appIcon').val(), 625, 400, {
+			title : '图标'
+		});
+	}
+	function writeimgpath(path){
+		document.getElementById("icon").value = path;
+		document.getElementById("icon2").src = path;
+	}
+	function writeUUID(uuid){
+		document.getElementById("iconId").value = uuid;
+	}
+	
+	//生成4位随机字符 
+	function S4() {
+	   return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+	};
+	//生成客户端32位UUID
+	function getClientIdUuid() {
+		var uuid = (S4()+S4()+S4()+S4()+S4()+S4()+S4()+S4());
+		$('#clientId').val(uuid);
+	};
+	//生成客户端32位UUID
+	function getClientKeyUuid() {
+		var uuid = (S4()+S4()+S4()+S4()+S4()+S4()+S4()+S4());
+		$('#clientKey').val(uuid);
+	};
+
+</script>
+<body class="easyui-layout">
+	<form action="" method="post" id="oprform" name="oprform">
+		<div id="dialog-content" style="height: 479px;">
+			<input type="hidden" id="applicationId" value="${info.uuid!''}" />
+			<input type="hidden" name="groupFormBean.iid" id="iid" value="46313" /> 
+			<input type="hidden" name="parentId" id="pid" value="${parent.uuid!''}" />
+			<input type="hidden" name="iconId" id="iconId" value="${info.sysIcon.uuid!''}" />
+			<input type="hidden" name="icon" id="icon" value="" /> 
+			<input type="hidden" id="appIcon" value="application">
+			<table border="0" align="center" cellpadding="10" cellspacing="0"
+				class="table">
+				<tr id="app_Type">
+					<td align="right" class="label" width="100px">应用类型</td>
+					<td class="required">*</td>
+					<td>
+	                    <input type="radio" name="type" required value="system">统一身份认证系统 &nbsp;
+	                    <input type="radio" name="type" value="common" checked="checked">接入应用系统 &nbsp; 
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td align="right" class="label" width="100px">应用名称</td>
+					<td class="required">*</td>
+					<td><input type="text" id="name" name="name"  required maxlength="32" 
+						class="input-text" value="${info.name!''}" /></td>
+					<td rowspan="2"
+						style="vertical-align: middle; padding-bottom: 0px;"><img
+						id="icon2" src=""></td>
+				</tr>
+				<tr>
+					<td align="right" class="label">应用标识</td>
+					<td class="required">*</td>
+					<td><input type="text" id="mark" name="mark" maxlength="20"  required
+						class="input-text" value="${info.mark!''}" /></td>
+				</tr>
+				<tr>
+					<td align="right" class="label">所属机构</td>
+					<td class="required">*</td>
+					<td>
+					   <input type="text" name="parentUuid" id="parentOrg" required  class="input-text" value="${parent.shortName!''}"></td>
+				</tr>
+				<tr id="tr_encryptType">
+					<td align="right" class="label" width="200px">传送数据加密方式</td>
+					<td class="required">*</td>
+					<td>
+					    <input id="enctyptionType" type="radio" name="enctyptionType" required value="1"  required>AES+BASE64&nbsp;
+					</td>
+					<td></td>
+				</tr>
+				<tr id="tr_encryptKey">
+					<td align="right" class="label" width="200px">传送数据加密秘钥</td>
+					<td class="required">*</td>
+					<td><input type="text" id="encryptionKey" name="encryptionKey"  required
+						maxlength="16" class="input-text" value="${info.encryptionKey!''}" /></td>
+					<td><input type="button" class="btn btn-success btn-small" name="button"
+						onclick="generateKey()" value="重新生成"></td>
+				</tr>
+				<tr id="tr_encryptSalt">
+					<td align="right" class="label" width="200px">传送数据加密salt</td>
+					<td class="required">*</td>
+					<td><input type="text" id="encryptionSalt" name="encryptionSalt"  required
+						maxlength="16" class="input-text" value="${info.encryptionSalt!''}" /></td>
+					<td><input type="button" class="btn btn-success btn-small" name="button"
+						onclick="generateSalt()" value="重新生成"></td>
+				</tr>
+				<tr id="client-id">
+					<td align="right" class="label">clientId</td>
+					<td class="required">*</td>
+					<td><input type="text" id="clientId" name="clientId"  required
+						maxlength="32" class="input-text" value="${info.clientId!''}" /></td>
+					<td><input type="button" class="btn btn-success btn-small" name="button"
+						onclick="getClientIdUuid()" value="重新生成"></td>
+				</tr>
+				<tr id="client_key">
+					<td align="right" class="label">clientSecret</td>
+					<td class="required">*</td>
+					<td><input type="text" id="clientKey" name="clientKey"  required
+						maxlength="32" class="input-text" value="${info.clientKey!''}" /></td>
+					<td><input type="button" class="btn btn-success btn-small" name="button"
+						onclick="getClientKeyUuid()" value="重新生成"></td>
+				</tr>
+				<tr id="tr_appIcon">
+					<td align="right" class="label">应用图标</td>
+					<td><img
+						src="${request.contextPath}/static/images/help.png"
+						style="vertical-align: middle;" class="help"
+						title="请上传1M以内的png、jpg图片，建议大小92*92" /></td>
+					<td>
+						<span style="position:relative;padding-right:98px;">
+								<input id="iconPath" name="iconPath" class="file input-text" style="margin-right:5px;display:inline;width:193px;">
+								<div  style="width: 98px; height: 34px; background: transparent url(&quot;${request.contextPath}/static/images/singlefileupload.png&quot;) no-repeat scroll right center; display: inline; position: absolute; overflow: hidden;">
+									<input id="iconFile" class="input-text" name="iconFile"  input-width="200" style="position: relative; height: 34px; width: 98px; display: inline; cursor: pointer; opacity: 0;" type="file">
+								</div>
+						</span>
+					</td>
+					<td><input id="seletpic" type="button" name="seletpic" class="btn btn-success btn-small" onclick="selpic()" value="选择图标">
+						<input style="display: none;" type="button" name="pirc" class="btn btn-success btn-small" onclick="cleariocn()" value="默认图片">
+					</td>
+				</tr>
+				<tr id="tr_sso_url">
+					<td align="right" class="label">单点登录URL</td>
+					<td class="required">*</td>
+					<td><input type="text" id="url"
+						name="url" maxlength="100"  required class="input-text"
+						value="${info.singleLoginUrl!''}" /></td>
+				</tr>
+				<tr>
+					<td align="right" class="label">网络类型</td>
+					<td class="required">*</td>
+					<td>
+					      <input type="radio" name="netType"   value="public" required id="netType">外网&nbsp;
+					      <input type="radio" name="netType"  value="private" id="netType">专网 
+					</td>
+				</tr>
+				<tr>
+					<td align="right" class="label" width="200px">账号加密方式</td>
+					<td class="required">*</td>
+					<td>
+					     <input id="accountEncryptType" type="radio" name="accountEncryptType" required value="MD5"  required>MD5&nbsp;
+					</td>
+				</tr>
+				<tr id="tr_encryptSalt">
+					<td align="right" class="label" width="200px">账号加密salt</td>
+					<td></td>
+					<td>
+						<input type="text" id="accountEncryptSalt" name="accountEncryptSalt" maxlength="128" class="input-text" value="${info.accountEncryptSalt!''}" />
+					</td>
+					<td>
+						<input type="button" class="btn btn-success btn-small" name="button" onclick="generateRadomStr('accountEncryptSalt', 32)" value="重新生成">
+					</td>
+				</tr>
+				<tr>
+					<td align="right" class="label">账号加密轮数</td>
+					<td class="required">*</td>
+					<td>
+						  <input type="text"  class="input-text" name="accountEncryptIterations"   value="${info.accountEncryptIterations!''}" id="accountEncryptIterations"> 
+					</td>
+				</tr>
+				<tr id="is_show">
+					<td align="right" class="label">前台是否显示</td>
+					<td class="required">*</td>
+					<td>
+					<input type="radio" name="isShow" value="1" id="isShow">是&nbsp; 
+					<input type="radio" name="isShow" value="0" id="isShow">否
+					<td></td>
+				</tr>
+				<tr id="is_united_register">
+					<td align="right" class="label">是否统一注册</td>
+					<td class="required">*</td>
+					<td>
+                    <input type="radio" name="isUniteReg" value="1" id="isUniteReg" required>是&nbsp; 
+                    <input type="radio" name="isUniteReg" value="0" id="isUniteReg" >否 
+					<td></td>
+				</tr>
+				<tr id="is_united_unregister">
+					<td align="right" class="label">是否统一注销</td>
+					<td class="required">*</td>
+					<td>
+					<input type="radio" name="isUniteOff" value="1" id="isUniteOff" required>是&nbsp;
+					<input type="radio" name="isUniteOff" value="0" id="isUniteOff" >否 
+					<td></td>
+				</tr>
+				<tr>
+					<td align="right" class="label">应用描述</td>
+					<td class="required">&nbsp;</td>
+					<td><textarea class="input-textarea" id="appDesc" 
+							name="appDesc"  required maxlength="128">${info.appDesc!''}</textarea></td>
+					<td></td>
+				</tr>
+			</table>
+		</div>
+	<div data-options="region:'south'">
+		<div id="dialog-toolbar">
+			<input type="submit" name="save" class="btn btn-primary" value="保存"
+				id="saveBtn"> <input type="button" name="cancel" class="btn"
+				value="取消" onclick="closeDialog();">
+		</div>
+	</div>
+	</form>
+</body>
+</html>

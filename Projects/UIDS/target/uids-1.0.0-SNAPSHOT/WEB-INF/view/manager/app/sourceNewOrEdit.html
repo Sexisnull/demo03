@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>资源新增</title> 
+<#include '/common.html'/>
+<#include '/validate.html'/>
+<script type="text/javascript" src="${request.contextPath}/static/res/uploadify/js/jquery.uploadify-3.1.min.js"></script>
+</head>
+<script type="text/javascript">
+
+//保存的参数
+var sparams = {createTime: '${info.createTime!''}'};
+
+//初始化表单信息
+function init(){
+	sparams.uuid = $.trim($('#sourceUuid').val());
+	sparams.name = $.trim($('#name').val());
+	sparams.code = $.trim($('#code').val());
+	sparams.iconPath = $.trim($('#iconPath').val());
+	sparams.url = $.trim($('#url').val());
+	sparams.desc = $.trim($('#sourceDesc').val());
+	sparams.id = $.trim($("#app").val());
+	if ($('#iconId').val() == '') {
+		var icon = $('#icon').val();
+		var iconId = icon.substring(icon.length-32,icon.length);
+		sparams.iconId = $.trim(iconId);
+	} else {
+		sparams.iconId = $.trim($('#iconId').val());
+	}
+	//日志
+	var infouuid = '${info.uuid!'insert'}';
+ 	if( infouuid == 'insert' ){
+ 		sparams.operate = 'insert';
+ 	}else{
+ 		sparams.operate = 'update';
+ 	}
+}
+
+
+//保存信息
+function saveInfo() {
+		init();
+		$.ajax({
+			url: '${request.contextPath}/source/sourceSaveOrUpdate.uids',
+			type: 'post',
+			data: sparams,
+	    	dataType: 'json',
+	    	beforeSend: function() {
+	    		loadLayer = layer.load(0, {shade: [0.5, '#fff'] });
+	    	},
+	    	success: function(data) {
+	    		layer.close(loadLayer);
+		    	if (data.state == 1) {
+	    			closeDialog(true);
+		    	} else {
+		    		layer.alert(data.info, {icon: 0, shade: [0.5, '#fff']});
+		    	}
+	    	}
+		});
+}
+$(function() {		
+	//验证
+	$.validator.setDefaults({  
+        submitHandler: function() {
+            saveInfo();
+        }  
+    });  
+	$().ready(function() {
+		$('#saveBtn').click(function(){
+			debugger;
+			gswwValidate($("#oprform"));
+		});
+	});
+	//迷人图标加载
+	$("#icon2").attr("src","${request.contextPath}/icon/viewIcon.uids?id="+ $('#iconId').val()+"&iconType="+$('#sourceIcon').val());
+	//所属应用初始化
+	 $("#app option[value='${info.app.uuid!''}']").attr("selected", true);
+	uploadify();
+});
+
+function uploadify () {
+	//图片上传
+	$("#iconFile").uploadify({
+		swf : '${request.contextPath}/static/res/uploadify/image/uploadify.swf',
+		multi : false,//是否能选择多个文件
+		//auto:false,//文件选择完成后，是否自动上传
+		'uploader' : '${request.contextPath}/icon/fileUpload.uids?iconType='+$('#sourceIcon').val(),//文件上传后台处理类
+		'langFile' : '${request.contextPath}/static/res/uploadify/js/uploadifyLang_zh.js',
+		'height' : 15,
+		'width' : 70,
+		'buttonText':"",
+		'uploadLimit':'10',
+		'queueID' : 'fileQueue',
+		'fileSizeLimit' : '1MB',//文件大小限制最大为1G
+		'fileTypeExts' : '*.jpg;*.png;*.gif',//允许上传的文件类型           
+		'removeCompleted' : false,
+		onUploadSuccess : function(file, data, response) {//上传完成时触发（每个文件触发一次）
+			var jsonobj = eval('(' + data + ')');
+			if (jsonobj.msgMap == '1') {
+				$("#iconPath").val(jsonobj.name);
+				$("#iconId").val(jsonobj.uuid);
+				$("#icon2").attr("src","${request.contextPath}/icon/viewIcon.uids?id="+jsonobj.uuid+"&iconType="+$('#sourceIcon').val());
+			} else if(jsonobj.msgMap == '2'){
+				alert('您上传的文件太大，请选择不超过1M的图片');
+			} else if(jsonobj.msgMap == '3'){
+				alert('您上传的文件尺寸太大，建议大小92*92');
+			}
+		}
+	});
+}
+
+//选择图标
+function selpic(){
+	openDialog('${request.contextPath}/icon/iconSelect.uids?iconType='+$('#sourceIcon').val(), 625, 400, {
+		title : '图标'
+	});
+}
+
+function writeimgpath(path){
+	document.getElementById("icon").value = path;
+	document.getElementById("icon2").src = path;
+}
+
+</script>
+<body class="easyui-layout">
+	<form action="" method="post" id="oprform" name="oprform">
+			<div id="dialog-content" style="height: 479px;">
+			<input type="hidden" id="appSelect" value="${info.app.uuid!''}" />
+			<input type="hidden" id="sourceUuid" value="${info.uuid!''}">
+			<input type="hidden" id="sourceIcon" value="resource">
+			<input type="hidden" name="iconId" id="iconId" value="${info.sysIcon.uuid!''}" />
+		    <input type="hidden" name="icon" id="icon" value="" />
+			<table border="0" align="center" cellpadding="10" cellspacing="0"
+						class="table">
+						<tr>
+							<td align="right" class="label" width="100px">资源名称</td>
+							<td class="required">*</td>
+							<td><input type="text" id="name" name="name"  required
+								class="input-text" value="${info.name!''}" maxlength="64"/></td>
+							<td rowspan="2"
+								style="vertical-align: middle; padding-bottom: 0px;"><img
+								id="icon2" src=""></td>
+						</tr>
+						<tr>
+							<td align="right" class="label">资源编码</td>
+							<td class="required">*</td>
+							<td><input type="text" id="code" name="code"  required
+								class="input-text" value="${info.code!''}" maxlength="20" /></td>
+						</tr>
+						<tr>
+							<td align="right" class="label">资源路径</td>
+							<td class="required">*</td>
+							<td><input type="text" id="url" name="url"  required
+								class="input-text" value="${info.url!''}" maxlength="128"/></td>
+						</tr>
+						<tr id="tr_appIcon">
+								<td align="right" class="label">资源图标</td>
+								<td><img
+									src="${request.contextPath}/static/images/help.png"
+									style="vertical-align: middle;" class="help"
+									title="请上传1M以内的png、jpg图片，建议大小92*92" /></td>
+								<td>
+									<span style="position:relative;padding-right:98px;">
+											<input id="iconPath" name="iconPath" class="file input-text" style="margin-right:5px;display:inline;width:193px;">
+											<div  style="width: 98px; height: 34px; background: transparent url(&quot;${request.contextPath}/static/images/singlefileupload.png&quot;) no-repeat scroll right center; display: inline; position: absolute; overflow: hidden;">
+												<input id="iconFile" type="file" class="input-text" name="iconFile" input-width="200" style="position: relative; height: 34px; width: 98px; display: inline; cursor: pointer; opacity: 0;"/>
+											</div>
+									</span>
+												</td>
+									<td>
+									    <input id="seletpic" name="seletpic" type="button" class="btn btn-success btn-small" onclick="selpic()" value="选择图标">
+										<input name="nopic" style="display: none;" type="button" class="btn btn-success btn-small" onclick="cleariocn()" value="默认图片">
+									</td>
+			            </tr>
+						<tr>
+							<td align="right" class="label">所属应用</td>
+							<td class="required">*</td>
+							<td>
+								<select id="app" name="app"  required class="input-text" style="width: 312px" onchange="changeApp(this)">
+									<option value="">---请选择---</option>
+						        	<#list appList as app>
+						        		<option value="${app.uuid!''}">${app.name!''}</option>
+						        	</#list>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td align="right" class="label">资源描述</td>
+							<td ></td>
+							<td><textarea class="input-textarea" id="sourceDesc" required
+									name="desc" maxlength="128" >${info.desc!''}</textarea></td>
+							<td></td>
+						</tr>
+					   
+					</table>
+			</div>
+	<div data-options="region:'south'">
+		<div id="dialog-toolbar">
+			<input type="submit" name="save" class="btn btn-primary" value="保存" id="saveBtn"> <input type="button" name="cancel" class="btn"
+				value="取消" onclick="closeDialog();">
+		</div>
+	</div>
+	</form>
+</body>
+</html>

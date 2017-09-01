@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<#include '/common.html'/>
+<#include '/tree.html'/>
+<style type="text/css">
+#grantCheckbox li {
+	float: left;
+}
+</style>
+</head>
+<script type="text/javascript">
+
+	//保存的参数
+	var sparams = {};
+	
+	// 表单验证
+ 	function buildParams() {
+		if ($('#grantType option:selected').val() == '') {
+			layer.msg('请选择授权方式', {
+				icon : 7,
+				time : 1500
+			});
+			return false;
+		}
+		if ($('#grantType option:selected').val() == 'groupGrant') {
+			if ($('#orgGroup option:selected').val() == '') {
+				layer.msg('请选择分组', {
+					icon : 7,
+					time : 1500
+				});
+				return false;
+			}
+		}
+		if ($('#grantType option:selected').val() == 'roleGrant') {
+			if ($('#pid').val() == '') {
+				layer.msg('请选择所属机构', {
+					icon : 7,
+					time : 1500
+				});
+				return false;
+			}
+		}
+		if ($('#role option:selected').val() == '') {
+			layer.msg('请选择授权角色', {
+				icon : 7,
+				time : 1500
+			});
+			return false;
+		}
+		
+		return true;
+	}
+ 
+	//初始化表单信息
+	function init() {
+		
+		sparams.uuid = $.trim($('#sourceGrantId').val());
+		sparams.orgType = $.trim($('#orgRelation option:selected').val());
+		sparams.orgGroupId = $.trim($('#orgGroup option:selected').val());
+		sparams.orgId = $.trim($('#pid').val());
+		sparams.sourceId = $.trim($('#sourceId').val());
+		sparams.type = $.trim($('#grantType option:selected').val());
+		sparams.roleId = $.trim($('#role option:selected').val())
+	}
+
+	// 保存信息
+	function saveInfo() {
+		
+		// 如果字段校验通过，则保存信息
+		if ( buildParams() ){
+			
+			// 获取字段信息
+			init();
+			
+			$.ajax({
+				url : '${request.contextPath}/auth/grantSourceSave.uids',
+				type : 'post',
+				data : sparams,
+				dataType : 'json',
+				beforeSend : function() {
+					loadLayer = layer.load(0, {
+						shade : [ 0.5, '#fff' ]
+					});
+				},
+				success : function(data) {
+					layer.close(loadLayer);
+					if (data.state == 1) {
+						layer.msg('保存成功！', {
+							icon : 7,
+							time : 1500
+						});
+						closeDialog(true);
+					} else if (data.state == 2) {
+						layer.msg('保存失败！', {
+							icon : 7,
+							time : 1500
+						});
+					}else if (data.state == 0) {
+						layer.alert(data.info, {icon: 0, shade: [0.5, '#fff']});
+					}
+				}
+			});
+		}
+	}
+	$(function() {
+		$('#parentOrg').menu({
+			tree : 'parentOrg_Id',
+			height : 200,
+			init : function(menu, obj, treeJq) {
+				initTree('${request.contextPath}/org/parentSearch.uids', 'pId', beforeClick, onClickParentOrg, onDblClickParentOrg, 'parentOrg_Id');
+			}
+		});
+		grantType();
+		$("#grantType option").each(function(i, o) {
+			if ($(this).attr("selected")) {
+				if (o.value == 'groupGrant') {
+					$('.orgautoGroup').show();
+					$('#parentOrgTr').hide();
+					$('#parentOrg').val("");
+					$('#pid').val("");
+				} else if (o.value == 'roleGrant') {
+					$('.orgautoGroup').show();
+					$('.orgautoGroup').hide();
+					$('#orgGroup').val("");
+				}
+			}
+		})
+		var orgRelation = $("#orgRelation").val();
+		var grants = $("#grantType").val();
+		if (orgRelation != '') {
+			var code = $("#orgRelation").find("option:selected").attr("codeId");
+			$('#parentOrg').menu(
+					{
+						tree : 'parentOrg_Id',
+						height : 200,
+						init : function(menu, obj, treeJq) {
+							initTree("${request.contextPath}/app/detailData.uids?code="+code, 'pId', beforeClick, onClickParentOrg, onDblClickParentOrg, 'parentOrg_Id');
+						}
+					});
+		}
+		if (grants == 'roleGrant') {
+			 $('#parentOrg').menu({
+					tree : 'parentOrg_Id',
+					height : 200,
+					init : function(menu, obj, treeJq) {
+						initTree('${request.contextPath}/org/parentSearch.uids', 'pId', beforeClick, onClickParentOrg, onDblClickParentOrg, 'parentOrg_Id');
+					}
+				});
+		}
+	})
+	function grantType() {
+		//授权菜单的联动--机构划分
+		$("#grantType").change(function() {
+			$("#grantType option").each(function(i, o) {
+				if ($(this).attr("selected")) {
+					if (o.value == 'groupGrant') {
+						$('.orgautoGroup').show();
+						$('#parentOrgTr').hide();
+						$('#parentOrg').val("");
+						$('#pid').val("");
+					} else if (o.value == 'roleGrant'){
+						$('#parentOrgTr').show();
+						 $('#parentOrg').menu({
+								tree : 'parentOrg_Id',
+								height : 200,
+								init : function(menu, obj, treeJq) {
+									initTree('${request.contextPath}/org/parentSearch.uids', 'pId', beforeClick, onClickParentOrg, onDblClickParentOrg, 'parentOrg_Id');
+								}
+							});
+						$('.orgautoGroup').hide();
+						$('#orgGroup').val("");
+					}
+				}
+
+			});
+		});
+	}
+	//机构选择节点点击前回调
+	function beforeClick(treeId, treeNode, clickFlag) {
+		if (treeNode.isDisabled)
+			return false;
+		return (treeNode.id != 0);
+	}
+	function onClickParentOrg(event, treeId, treeNode) {
+		if (treeNode.isDisabled)
+			return;
+
+		$('#pid').val(treeNode.id);
+		$('#parentOrg').val(treeNode.name);
+	}
+	function onDblClickParentOrg(event, treeId, treeNode) {
+		if (treeNode == null) {
+			return;
+		}
+		if (treeNode.isDisabled)
+			return;
+		if (treeNode.id == '0') {
+			onTopClick();
+		} else {
+			$('#pid').val(treeNode.id);
+			$('#parentOrg').val(treeNode.name);
+		}
+		$('#parentOrg_menu').fadeOut(50);
+	}
+	//机构选择 根节点 点击回调
+	function onTopClick(treeId) {
+		if(treeId == 'parentOrg_Id'){
+			$('#parentOrgId').val('0');
+			$('#parentOrg').val("机构管理");
+		}else{
+			$('#parentOrg_NewId').val('0');
+			$('#parentOrg_New').val("机构管理");
+		}
+	}
+</script>
+<body class="easyui-layout">
+	<div data-options="region:'center'">
+	<input type="hidden" id="sourceGrantId" value="${appResourceAuth.uuid!''}">
+		<div id="grantTable">
+			<table border="0" align="center" cellpadding="10" cellspacing="0" style="margin-top: 15px" class="table">
+				<tr>
+					<td align="right" class="label" width="100px">授权方式</td>
+					<td class="required">*</td>
+					<td><select name="type" id="grantType" class="input-text"">
+							<option value="">---请选择---</option> <#if appResourceAuth.type??>
+							<#if appResourceAuth.type == 'roleGrant'>
+							<option value="roleGrant" selected="selected">单级授权</option>
+							<option value="groupGrant">分组授权</option> 
+							 </#if>
+							 <#if
+							appResourceAuth.type == 'groupGrant'>
+							<option value="roleGrant">单级授权</option>
+							<option value="groupGrant" selected="selected">分组授权</option>
+							</#if> <#else>
+							<option value="roleGrant">单级授权</option>
+							<option value="groupGrant">分组授权</option> </#if>
+					</select></td>
+				</tr>
+				<tr class="orgautoGroup" style="display: none">
+					<td align="right" class="label">选择分组</td>
+					<td class="required">*</td>
+					<td><select name="orgGroupId" id="orgGroup" class="input-text">
+							<option value="">---请选择---</option> 
+							<#list orgGroups as group>
+							<#if appResourceAuth.orgGroup??> 
+							<#if appResourceAuth.orgGroup.uuid == group.uuid>
+							 <option value="${group.uuid!''}" selected="selected">${group.name!''}</option>
+							<#else>
+							 <option value="${group.uuid!''}">${group.name!''}</option> 
+							</#if> 
+							<#else>
+							<option value="${group.uuid!''}">${group.name!''}</option>
+							 </#if>
+							</#list>
+					</select>
+				</td>
+				</tr>
+				<tr id="parentOrgTr">
+					<td align="right" class="label">所属机构</td>
+					<td class="required">*</td>
+					<td>
+					<#if appResourceAuth.org??>
+					      <input type="text" name="parent.uuid" id="parentOrg" class="input-text" readonly="readonly"  value="${appResourceAuth.org.shortName!''}"> 
+					<#else> 
+						 <input type="text" name="parent.uuid" id="parentOrg" class="input-text" readonly="readonly" value="">
+				    </#if>
+					</td>
+				</tr>
+				<tr>
+					<td align="right" class="label">授权角色</td>
+					<td class="required">*</td>
+					<td><select name="role" id="role" class="input-text">
+							<option value="">---请选择---</option> 
+							<#list roles as role> 
+							<#if appResourceAuth.role??> 
+							<#if appResourceAuth.role.uuid ==role.uuid>
+							 <option value="${role.uuid!''}" selected="selected">${role.name!''}</option>
+							<#else>
+							 <option value="${role.uuid!''}">${role.name!''}</option> 
+							</#if> 
+							<#else>
+							<option value="${role.uuid!''}">${role.name!''}</option>
+							 </#if>
+							</#list>
+					</select></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div data-options="region:'south'">
+		<div id="dialog-toolbar">
+			<input type="button" class="btn btn-primary" value="保存"
+				onclick="saveInfo()"> <input type="button" class="btn"
+				value="取消" onclick="closeDialog();">
+		</div>
+	</div>
+	<div style="display: none">
+		<input type="hidden" name="parentId" id="pid" value="${parent.uuid!''}" /> 
+		<input type="hidden" name="roleId" id="rolepid" value="" /> 
+		<input type="hidden" name="sourceId" id="sourceId" value="${sourceId}" />
+	</div>
+</body>
+</html>

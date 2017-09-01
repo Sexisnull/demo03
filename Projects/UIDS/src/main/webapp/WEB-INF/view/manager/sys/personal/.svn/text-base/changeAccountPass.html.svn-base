@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>修改账号密码</title>
+<#include '/common.html'/>
+</head>
+<body class="easyui-layout">
+	<div region="center" style="overflow-y: auto; padding: 10px;">
+		<table border="0" align="center" cellpadding="10" cellspacing="0" class="table">
+			<tbody>
+				<tr>
+					<td align="right" class="label">原密码</td>
+					<td class="required">*</td>
+					<td>
+						<input type="password" id="old-pass" maxlength="128" class="input-text"">
+					</td>
+				</tr>
+				<tr>
+					<td align="right" class="label">新密码</td>
+					<td class="required">*</td>
+					<td>
+						<input type="password" id="new-pass" maxlength="128" class="input-text">
+					</td>
+				</tr>
+				<tr>
+					<td align="right" class="label"></td>
+					<td></td>
+					<td style="padding-bottom: 0px;">
+						<div id="weak-pass" class="pass-type"><p>弱</p></div>
+       				 	<div id="middle-pass" class="pass-type"><p>中</p></div>
+       				 	<div id="strong-pass" class="pass-type"><p>强</p></div>
+       					<div style="clear: both;"></div>
+					</td>
+				</tr>
+				<tr>
+					<td align="right" class="label">确认密码</td>
+					<td class="required">*</td>
+					<td>
+						<input type="password" id="repeat-pass" maxlength="128" class="input-text">
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<div region="south" id="dialog-toolbar">
+		<div id="dialog-toolbar-panel">
+			<input type="button" class="btn btn-primary" value="保  存"> 
+			<input type="button" class="btn btn-cancel" value="取消" onclick="closeDialog();">
+		</div>
+	</div>
+</body>
+<style type="text/css">
+.pass-type{
+	width: 31%; 
+	height: 12px; 
+	display: inline-block; 
+	text-align:center; 
+	background-color: #CCCCCC; 
+	border:1px solid #CCC;
+	border-radius:2px;
+}
+.pass-type p{
+    position: relative;
+    bottom: 10px;
+}
+</style>
+<script type="text/javascript">
+
+// 保存的参数
+var params = {accountId: '${accountId}'};
+
+$(function() {
+	
+	//保存
+	$('.btn-primary').click(function() {
+		if ( buildParams() ) {
+			saveInfo();
+		}
+	});	
+});
+
+//密码强度
+$('#new-pass').bind('input propertychange', function() {
+	// 强：密码为八位及以上并且字母数字特殊字符三项都包括
+	var strongRegex = new RegExp("^(?=.{8,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$", "g");
+	// 中：密码为七位及以上并且字母、数字、特殊字符三项中有两项
+	var mediumRegex = new RegExp("^(?=.{7,})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$", "g");
+	// 弱：6位
+	var weakRegex = new RegExp("(?=.{6,}).*", "g");
+	
+	if ( strongRegex.test($(this).val()) ) {
+		$('#weak-pass').css("background-color", "#1AE61A");
+		$('#middle-pass').css("background-color", "#1AE61A");
+		$('#strong-pass').css("background-color", "#1AE61A");			
+	} else if ( mediumRegex.test($(this).val()) ) {
+		$('#weak-pass').css("background-color", "#1AE61A");
+		$('#middle-pass').css("background-color", "#1AE61A");
+		$('#strong-pass').css("background-color", "#CCCCCC");
+	} else if ( weakRegex.test($(this).val()) ) {			
+		$('#weak-pass').css("background-color", "#1AE61A");
+		$('#middle-pass').css("background-color", "#CCCCCC");
+		$('#strong-pass').css("background-color", "#CCCCCC");
+	} else {
+		$('#weak-pass').css("background-color", "#CCCCCC");
+		$('#middle-pass').css("background-color", "#CCCCCC");
+		$('#strong-pass').css("background-color", "#CCCCCC");
+		
+		return false;
+	}
+	
+     return true;
+});
+
+// 构建参数
+function buildParams() {
+	
+	// TODO 参数校验
+	
+	params.oldPass = $.trim($('#old-pass').val());
+	params.newPass = $.trim($('#new-pass').val());
+	
+	return true;
+}
+	
+//保存信息
+function saveInfo() {
+	$.ajax({
+		url: '${request.contextPath}/sys/saveAccountPass.uids',
+		type: 'post',
+		data: params,
+    	dataType: 'json',
+    	beforeSend: function() {
+    		loadLayer = layer.load(0, {shade: [0.5, '#fff'] });
+    	},
+    	success: function(data) {
+    		layer.close(loadLayer);
+	    	if (data.state == 1) {
+    			layer.msg(data.info, {icon: data.state, time: 1500, shade: [0.5, '#fff']}, function() {
+    				closeDialog(true);
+	    		});
+	    	} else {
+	    		layer.alert(data.info, {icon: 0, shade: [0.5, '#fff']});
+	    	}
+    	}
+	});
+}
+
+</script>
+</html>

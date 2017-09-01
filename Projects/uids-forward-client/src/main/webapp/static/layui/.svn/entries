@@ -1,0 +1,74 @@
+10
+
+dir
+53172
+svn://202.100.72.161/GSEGOV/trunk/Projects/uids-forward-client/src/main/webapp/static/layui
+svn://202.100.72.161/GSEGOV
+
+
+
+2017-06-18T14:25:01.348787Z
+50659
+taolm
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+24668b6d-5285-7e4f-8916-2af19ee164fa
+
+css
+dir
+
+font
+dir
+
+images
+dir
+
+lay
+dir
+
+layui.js
+file
+
+
+
+
+2017-08-16T02:42:50.000000Z
+b860b310e9b592cd1dbc4fb5d37b09b7
+2017-06-18T14:25:01.348787Z
+50659
+taolm
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+5465
+

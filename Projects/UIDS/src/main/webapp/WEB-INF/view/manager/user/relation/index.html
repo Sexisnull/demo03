@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html style="overflow-y:hidden;">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>用户列表</title>
+<#include '/common.html'/>
+<#include '/tree.html'/>
+</head>
+<body class="easyui-layout">
+	<div region="north" style="height: 65px; border-top: 0px; border-left: 0px; border-right: 0px;">
+		<@hasPerm perms="admin, user_admin">
+		<a class="datagrid-toolbar-btn" onclick="addRelation()" style=" margin: 10px;"> 
+			<i class="icon-plus-sign"></i>添加角色关系
+		</a>
+		</@hasPerm>
+	</div>
+	<div region="center" style="overflow-y: auto;">	
+		<table id="datagrid"></table>
+	</div>
+	<div style="display:none;">
+		<div id="window-dialog" class="easyui-dialog" style="padding:5px;width:360px;height:200px;" title="添加角色关系"
+			buttons="#dlg-buttons" data-options="closed:true, closable:false, inline:false, modal:false, top:25, left:150">
+			<table>
+				<tbody>
+					<tr>
+						<td align="right" class="label" style="padding:10px">机构名称</td>
+						<td class="required" style="padding:5px">*</td>
+						<td>
+							<input type="text" id="organization" orgId="" value="" class="input-text" style="width:200px">
+						</td>
+					</tr>
+					<tr>
+						<td align="right" class="label" style="padding:10px">角色名称</td>
+						<td class="required" style="padding:5px">*</td>
+						<td>
+							<select id="role" class="input-text" style="width:210px">		        		
+	        					<option value="">---请选择---</option>
+								<#list roles as role>
+									<option value="${role.uuid!''}">${role.name!''}</option>
+								</#list>
+	        				</select>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div id="dlg-buttons">
+			<a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveInfo()">确定</a>
+			<a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#window-dialog').dialog('close')">取消</a>
+		</div>
+	</div>
+</body>
+
+<script type="text/javascript">
+
+// 查询用户列表的参数
+var queryParams = {userId:'${userId}'};
+
+$(function() {
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////
+	// 机构树
+	$('#organization').menu({
+		tree : 'orgTree',
+		height : 200,
+		init : function() {
+			initTree('${request.contextPath}/org/parentSearch.uids', 'pId', null, onClickCall, onDblClickCall, 'orgTree');
+		}
+	});
+	
+	// 点击节点的回调函数
+	function onClickCall(event, treeId, treeNode) {
+		if ( treeNode.isDisabled ) {
+ 			return ;
+ 		}
+		$('#organization').attr('orgId', treeNode.id);
+		$('#organization').val(treeNode.name);
+		
+		return false;
+	}
+	
+	// 双击节点的回调函数
+	function onDblClickCall(event, treeId, treeNode) {
+		if ( treeNode.isDisabled ) {
+ 			return ;
+ 		}
+		$('#organization').attr('orgId', treeNode.id);
+		$('#organization').val(treeNode.name);
+		
+		// 隐藏机构树 
+		// TODO 直接使用未定义的id不是一个好方法，应该还有别的方法
+		$('#organization_menu').fadeOut(50);     
+		
+		return false;
+	}	
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////
+		
+	// 列表
+	$('#datagrid').datagrid({
+		url:'${request.contextPath}/relation/data.uids',
+		queryParams: queryParams,
+		loadMsg: '正在加载数据，请稍后...',
+		fitColumns:true,
+		striped:true,
+		fit:true,
+		border: false,
+		pagination: true,
+		scrollbarSize: 4,
+		columns:[[
+			{field:'orgShortName',title:'机构名',width:10},
+			{field:'roleName',title:'角色名',width:10},
+			<@hasPerm perms="admin, user_admin">
+			{field:'operation',title:'操作',width:10,
+				formatter: function(value, row, index) {
+					return '<ul>' + '<li><a class="hwq2button blue" onclick="onDelete(this)" objId="' + row.uuid + '">删除</a></li>' + '</ul>';
+				}
+			}
+			</@hasPerm>
+		]]
+	});
+	//分页
+	$('#datagrid').datagrid('getPager').pagination({
+		beforePageText: '当前第',
+		afterPageText: '页，共 {pages} 页',
+		displayMsg: '当前显示 {from} 到 {to} ，共 {total} 条记录'
+	});
+});
+
+// 删除
+function onDelete(obj) {
+	confirmLayer = layer.confirm("您确定要删除这条记录吗", {
+	    btn: ['确定','取消']
+	}, function() {
+		$.ajax({
+			url: '${request.contextPath}/relation/delete.uids',
+			data: {ids: $(obj).attr('objId')},
+			type: 'post',
+	    	dataType: 'json',
+	    	success: function(data) {
+	    		layer.close(loadLayer);
+	    		layer.close(confirmLayer);
+	    		
+	    		if (data.state == 1) {
+	    			layer.msg(data.info, {icon: data.state, time: 1500, shade: [0.5, '#fff']}, function() {
+	    				$('#datagrid').datagrid("reload");
+		    		});
+	    		} else {
+	    			layer.alert(data.info, {icon: 0, shade: [0.5, '#fff']});
+	    		}
+	    	}
+		});
+	});	
+}
+
+//打开添加权限对话框
+function addRelation(){
+	// 检查权限
+	$.ajax({
+   		url: '${request.contextPath}/user/checkAdminPermission.uids',
+   		type: 'post',
+   		data: {userIds: queryParams.userId},
+       	dataType: 'json',
+       	beforeSend: function() {
+       		loadLayer = layer.load(0, {shade: [0.5, '#fff'] });
+       	},
+       	success: function(data) {
+       		layer.close(loadLayer);
+   	    	if (data.state == 1) {
+   	    		$('#window-dialog').dialog('open');
+   	    	} else {
+   	    		layer.alert("对不起，您没有权限给此用户分配角色!", {icon: data.state, shade: [0.5, '#fff']});
+   	    	}
+       	}
+    });	
+}
+
+//保存的参数
+var params = {userId:'${userId}'};
+
+//构建参数
+function buildParams() {
+
+	// TODO 参数校验
+	if ($.trim($('#organization').attr('orgId')) == '') {
+		layer.msg('请选择机构名称！', {icon: 7,time: 1500 });
+		return false;
+	}
+	if ($.trim($('#role').val()) == '') {
+		layer.msg('请选择角色名称！', {icon: 7,time: 1500 });
+		return false;
+	}
+	params.orgId = $.trim($('#organization').attr('orgId'));
+	params.roleId = $.trim($('#role').val());
+	
+	return true;
+}
+	
+//保存信息
+function saveInfo() {
+	
+	if ( !buildParams() ) {
+		return ;
+	}
+
+	// 检查权限
+	$.ajax({
+   		url: '${request.contextPath}/relation/checkAdminPermission.uids',
+   		type: 'post',
+   		data: {orgId: params.orgId},
+       	dataType: 'json',
+       	beforeSend: function() {
+       		loadLayer = layer.load(0, {shade: [0.5, '#fff'] });
+       	},
+       	success: function(data) {
+       		layer.close(loadLayer);
+   	    	if (data.state == 1) {
+   	    		$.ajax({
+   	    			url: '${request.contextPath}/relation/save.uids',
+   	    			type: 'post',
+   	    			data: params,
+   	    	    	dataType: 'json',
+   	    	    	beforeSend: function() {
+   	    	    		loadLayer = layer.load(0, {shade: [0.5, '#fff'] });
+   	    	    	},
+   	    	    	success: function(data) {
+   	    	    		layer.close(loadLayer);
+   	    		    	if (data.state == 1) {
+   	    	    			$('#window-dialog').dialog('close');
+   	    	    			$('#datagrid').datagrid("reload");
+   	    		    	} else {
+   	    		    		layer.alert(data.info, {icon: 0, shade: [0.5, '#fff']});
+   	    		    	}
+   	    	    	}
+   	    		});
+   	    	} else {
+   	    		layer.alert(data.info, {icon: data.state, shade: [0.5, '#fff']});
+   	    	}
+       	}
+    });	
+}
+</script>
+</html>
