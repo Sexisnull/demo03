@@ -1,0 +1,624 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workbench progressCount="47" version="2.0">
+<workbenchAdvisor/>
+<window height="728" maximized="true" width="1024" x="130" y="0">
+<fastViewData fastViewLocation="1024"/>
+<perspectiveBar>
+<itemSize x="160"/>
+</perspectiveBar>
+<coolbarLayout>
+<coolItem id="group.file" itemType="typeGroupMarker"/>
+<coolItem id="org.eclipse.ui.workbench.file" itemType="typeToolBarContribution" x="124" y="22"/>
+<coolItem id="additions" itemType="typeGroupMarker"/>
+<coolItem id="org.eclipse.debug.ui.launchActionSet" itemType="typeToolBarContribution" x="135" y="22"/>
+<coolItem id="org.eclipse.jdt.ui.JavaElementCreationActionSet" itemType="typeToolBarContribution" x="78" y="22"/>
+<coolItem id="org.eclipse.search.searchActionSet" itemType="typeToolBarContribution" x="78" y="22"/>
+<coolItem id="org.eclipse.ui.edit.text.actionSet.presentation" itemType="typeToolBarContribution" x="107" y="22"/>
+<coolItem id="org.mule.tooling.studoc.toolbars.exportDocumentationToolbar" itemType="typeToolBarContribution" x="38" y="22"/>
+<coolItem id="org.mule.tooling.ui" itemType="typeToolBarContribution" x="38" y="22"/>
+<coolItem id="org.eclipse.wst.xml.ui.perspective.NewFileToolBar" itemType="typeToolBarContribution" x="-1" y="-1"/>
+<coolItem id="org.eclipse.wst.xml.ui.design.DesignToolBar" itemType="typeToolBarContribution" x="61" y="22"/>
+<coolItem id="org.eclipse.debug.ui.launch.toolbar" itemType="typeToolBarContribution" x="-1" y="-1"/>
+<coolItem id="org.eclipse.debug.ui.main.toolbar" itemType="typeToolBarContribution" x="38" y="22"/>
+<coolItem id="group.nav" itemType="typeGroupMarker"/>
+<coolItem id="org.eclipse.ui.workbench.navigate" itemType="typeToolBarContribution" x="198" y="22"/>
+<coolItem id="group.editor" itemType="typeGroupMarker"/>
+<coolItem id="org.eclipse.jdt.ui.PropertiesFileEditor" itemType="typePlaceholder" x="-1" y="-1"/>
+<coolItem id="org.eclipse.wst.xml.ui.internal.tabletree.XMLMultiPageEditorPart" itemType="typeToolBarContribution" x="-1" y="-1"/>
+<coolItem id="org.eclipse.jdt.ui.ClassFileEditor" itemType="typePlaceholder" x="-1" y="-1"/>
+<coolItem id="org.eclipse.jdt.ui.CompilationUnitEditor" itemType="typePlaceholder" x="-1" y="-1"/>
+<coolItem id="org.mule.tooling.messageflow.messageFlowEditor" itemType="typeToolBarContribution" x="84" y="22"/>
+<coolItem id="group.help" itemType="typeGroupMarker"/>
+<coolItem id="org.eclipse.ui.workbench.help" itemType="typeToolBarContribution" x="-1" y="-1"/>
+</coolbarLayout>
+<page aggregateWorkingSetId="Aggregate for window 1501471022892" focus="true" label="Workspace - Java">
+<editors>
+<editorArea activeWorkbook="DefaultEditorWorkbook">
+<info part="DefaultEditorWorkbook">
+<folder appearance="1" expanded="2">
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
+</presentation>
+</folder>
+</info>
+</editorArea>
+<editor activePart="true" focus="true" id="org.mule.tooling.messageflow.messageFlowEditor" name="uids-gateway.mflow" partName="uids-gateway" path="E:/Projects/UidsProjects/uids-gateway/uids-gateway/flows/uids-gateway.mflow" title="Mule Config Flow Editor" tooltip="uids-gateway/flows/uids-gateway.mflow" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/uids-gateway/flows/uids-gateway.mflow"/>
+</editor>
+</editors>
+<views>
+<view id="org.eclipse.jdt.ui.JavadocView" partName="Javadoc"/>
+<view id="org.eclipse.jdt.ui.PackageExplorer" partName="Package Explorer">
+<viewState group_libraries="1" layout="2" linkWithEditor="1" rootMode="1" workingSetName="">
+<customFilters userDefinedPatternsEnabled="false">
+<xmlDefinedFilters>
+<child filterId="org.eclipse.jdt.ui.PackageExplorer.StaticsFilter" isEnabled="false"/>
+<child filterId="org.eclipse.jdt.ui.PackageExplorer.NonJavaProjectsFilter" isEnabled="false"/>
+<child filterId="org.eclipse.jdt.ui.PackageExplorer_patternFilterId_.*" isEnabled="true"/>
+<child filterId="org.eclipse.jdt.ui.PackageExplorer.NonSharedProjectsFilter" isEnabled="false"/>
+<child filterId="org.eclipse.jdt.ui.PackageExplorer.SyntheticMembersFilter" isEnabled="true"/>
+<child filterId="org.eclipse.jdt.ui.PackageExplorer.ContainedLibraryFilter" isEnabled="false"/>
+<child filterId="org.eclipse.jdt.internal.ui.PackageExplorer.HideInnerClassFilesFilter" isEnabled="true"/>
+<child filterId="org.eclipse.jdt.internal.ui.PackageExplorer.EmptyInnerPackageFilter" isEnabled="true"/>
+<child filterId="org.eclipse.jdt.ui.PackageExplorer.ClosedProjectsFilter" isEnabled="false"/>
+<child filterId="org.eclipse.jdt.ui.PackageExplorer.EmptyLibraryContainerFilter" isEnabled="true"/>
+<child filterId="org.eclipse.jdt.ui.PackageExplorer.PackageDeclarationFilter" isEnabled="true"/>
+<child filterId="org.eclipse.jdt.ui.PackageExplorer.ImportDeclarationFilter" isEnabled="true"/>
+<child filterId="org.eclipse.jdt.ui.PackageExplorer.NonJavaElementFilter" isEnabled="false"/>
+<child filterId="org.eclipse.jdt.ui.PackageExplorer.LibraryFilter" isEnabled="false"/>
+<child filterId="org.eclipse.pde.ui.BinaryProjectFilter1" isEnabled="false"/>
+<child filterId="org.eclipse.jdt.ui.PackageExplorer.CuAndClassFileFilter" isEnabled="false"/>
+<child filterId="org.eclipse.jdt.internal.ui.PackageExplorer.EmptyPackageFilter" isEnabled="false"/>
+<child filterId="org.eclipse.jdt.ui.PackageExplorer.NonPublicFilter" isEnabled="false"/>
+<child filterId="org.eclipse.jdt.ui.PackageExplorer.LocalTypesFilter" isEnabled="false"/>
+<child filterId="org.eclipse.pde.ui.ExternalPluginLibrariesFilter1" isEnabled="true"/>
+<child filterId="org.eclipse.jdt.ui.PackageExplorer.FieldsFilter" isEnabled="false"/>
+</xmlDefinedFilters>
+</customFilters>
+</viewState>
+</view>
+<view id="org.mule.tooling.ui.contribution.debugger.breakpoints" partName="Mule Breakpoints"/>
+<view id="org.eclipse.ui.console.ConsoleView" partName="Console">
+<viewState/>
+</view>
+<view id="org.eclipse.ui.views.ProblemView" partName="Problems">
+<viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.severityAndDescriptionField" categoryGroup="org.eclipse.ui.ide.severity" markerContentGenerator="org.eclipse.ui.ide.problemsGenerator" partName="Problems">
+<columnWidths org.eclipse.ui.ide.locationField="90" org.eclipse.ui.ide.markerType="90" org.eclipse.ui.ide.pathField="120" org.eclipse.ui.ide.resourceField="90" org.eclipse.ui.ide.severityAndDescriptionField="300"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.severityAndDescriptionField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.resourceField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.pathField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.locationField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.markerType"/>
+</viewState>
+</view>
+<view id="org.mule.tooling.properties.views.MulePropertiesView" partName="Mule Properties View">
+<viewState/>
+</view>
+<view id="org.eclipse.jdt.ui.SourceView" partName="Declaration"/>
+<view id="org.eclipse.ui.views.ContentOutline" partName="Outline">
+<viewState/>
+</view>
+<view id="org.mule.tooling.ui.contribution.debugger.watches" partName="Mule Expression Watches"/>
+<view id="org.mule.tooling.ui.contribution.debugger.view" partName="Mule Debugger View"/>
+</views>
+<perspectives activePart="org.eclipse.jdt.ui.PackageExplorer" activePerspective="org.eclipse.jdt.ui.JavaPerspective">
+<perspective editorAreaTrimState="2" editorAreaVisible="1" fixed="0" version="0.016">
+<descriptor class="org.mule.tooling.ui.contribution.debugger.DebugPerspectiveFactory" id="org.mule.tooling.ui.debugPerspective" label="Mule Debug"/>
+<alwaysOnActionSet id="com.cloveretl.gui.actionset.main"/>
+<alwaysOnActionSet id="org.eclipse.ui.cheatsheets.actionSet"/>
+<alwaysOnActionSet id="org.eclipse.search.searchActionSet"/>
+<alwaysOnActionSet id="org.eclipse.ui.edit.text.actionSet.annotationNavigation"/>
+<alwaysOnActionSet id="org.eclipse.ui.edit.text.actionSet.navigation"/>
+<alwaysOnActionSet id="org.eclipse.ui.edit.text.actionSet.convertLineDelimitersTo"/>
+<alwaysOnActionSet id="org.eclipse.ui.externaltools.ExternalToolsSet"/>
+<alwaysOnActionSet id="org.eclipse.ui.actionSet.keyBindings"/>
+<alwaysOnActionSet id="org.eclipse.ui.actionSet.openFiles"/>
+<alwaysOnActionSet id="org.eclipse.debug.ui.launchActionSet"/>
+<alwaysOnActionSet id="org.eclipse.jdt.ui.JavaActionSet"/>
+<alwaysOnActionSet id="org.eclipse.jdt.ui.JavaElementCreationActionSet"/>
+<alwaysOnActionSet id="org.eclipse.ui.NavigateActionSet"/>
+<show_view_action id="org.eclipse.jdt.ui.PackageExplorer"/>
+<show_view_action id="org.eclipse.jdt.ui.TypeHierarchy"/>
+<show_view_action id="org.eclipse.jdt.ui.SourceView"/>
+<show_view_action id="org.eclipse.jdt.ui.JavadocView"/>
+<show_view_action id="org.eclipse.search.ui.views.SearchView"/>
+<show_view_action id="org.eclipse.ui.console.ConsoleView"/>
+<show_view_action id="org.eclipse.ui.views.ContentOutline"/>
+<show_view_action id="org.eclipse.ui.views.ProblemView"/>
+<show_view_action id="org.eclipse.ui.views.TaskList"/>
+<show_view_action id="org.eclipse.ui.views.ProgressView"/>
+<show_view_action id="org.eclipse.ui.navigator.ProjectExplorer"/>
+<new_wizard_action id="org.mule.tooling.ui.muleToolingWizard"/>
+<new_wizard_action id="org.mule.tooling.ui.messageFlowWizard"/>
+<new_wizard_action id="org.mule.tooling.apikitWizard"/>
+<new_wizard_action id="com.atlas.ui.wizards.NewProjectWizard"/>
+<new_wizard_action id="org.eclipse.jdt.ui.wizards.JavaProjectWizard"/>
+<new_wizard_action id="com.atlas.ui.wizards.NewDataflowWizard"/>
+<new_wizard_action id="org.eclipse.jdt.ui.wizards.NewPackageCreationWizard"/>
+<new_wizard_action id="org.eclipse.jdt.ui.wizards.NewClassCreationWizard"/>
+<new_wizard_action id="org.eclipse.jdt.ui.wizards.NewInterfaceCreationWizard"/>
+<new_wizard_action id="org.eclipse.jdt.ui.wizards.NewEnumCreationWizard"/>
+<new_wizard_action id="org.eclipse.jdt.ui.wizards.NewAnnotationCreationWizard"/>
+<new_wizard_action id="org.eclipse.jdt.ui.wizards.NewSourceFolderCreationWizard"/>
+<new_wizard_action id="org.eclipse.jdt.ui.wizards.NewSnippetFileCreationWizard"/>
+<new_wizard_action id="org.eclipse.jdt.ui.wizards.NewJavaWorkingSetWizard"/>
+<new_wizard_action id="org.eclipse.ui.wizards.new.folder"/>
+<new_wizard_action id="org.eclipse.ui.wizards.new.file"/>
+<new_wizard_action id="org.eclipse.ui.editors.wizards.UntitledTextFileWizard"/>
+<perspective_action id="com.cloveretl.gui.perspective.ETLPerspective"/>
+<hide_toolbar_item_id id="org.eclipse.debug.ui.commands.RunToLine"/>
+<hide_toolbar_item_id id="org.eclipse.jdt.ui.actions.OpenProjectWizard"/>
+<hide_toolbar_item_id id="org.eclipse.ui.edit.text.toggleShowSelectedElementOnly"/>
+<view id="org.mule.tooling.ui.contribution.debugger.view"/>
+<view id="org.eclipse.ui.console.ConsoleView"/>
+<view id="org.eclipse.ui.views.ProblemView"/>
+<view id="org.mule.tooling.ui.contribution.debugger.watches"/>
+<view id="org.mule.tooling.ui.contribution.debugger.breakpoints"/>
+<view id="org.eclipse.jdt.ui.PackageExplorer"/>
+<fastViewBars/>
+<layout>&#x0A;<mainWindow>&#x0A;<info folder="true" part="org.eclipse.ui.internal.ViewStack@73ad4ecc">&#x0A;<folder appearance="2" expanded="2">&#x0A;<page content="org.eclipse.jdt.ui.PackageExplorer" label="Package Explorer"/>
+</folder>
+</info>
+<info folder="true" part="stickyFolderRight" ratio="0.75" ratioLeft="750" ratioRight="250" relationship="2" relative="org.eclipse.ui.internal.ViewStack@73ad4ecc">&#x0A;<folder appearance="2" expanded="2">&#x0A;<page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
+<page content="org.eclipse.ui.internal.introview" label="LabelNotFound"/>
+<page content="org.eclipse.ui.cheatsheets.views.CheatSheetView" label="LabelNotFound"/>
+</folder>
+</info>
+<info folder="true" part="bottom" ratio="0.54931974" ratioLeft="323" ratioRight="265" relationship="4" relative="org.eclipse.ui.internal.ViewStack@73ad4ecc">&#x0A;<folder appearance="2" expanded="2">&#x0A;<page content="org.mule.tooling.ui.contribution.debugger.view" label="Mule Debugger View"/>
+<page content="org.eclipse.ui.console.ConsoleView" label="Console"/>
+<page content="org.eclipse.ui.views.ProblemView" label="Problems"/>
+<page content="org.eclipse.search.ui.views.SearchView" label="LabelNotFound"/>
+<page content="org.eclipse.ui.views.BookmarkView" label="LabelNotFound"/>
+<page content="org.eclipse.ui.views.ProgressView" label="LabelNotFound"/>
+</folder>
+</info>
+<info folder="true" part="debug-top-right" ratio="0.75" ratioLeft="750" ratioRight="250" relationship="2" relative="org.eclipse.ui.internal.ViewStack@73ad4ecc">&#x0A;<folder appearance="2" expanded="2">&#x0A;<page content="org.mule.tooling.ui.contribution.debugger.watches" label="Mule Expression Watches"/>
+<page content="org.mule.tooling.ui.contribution.debugger.breakpoints" label="Mule Breakpoints"/>
+</folder>
+</info>
+<info part="org.eclipse.ui.editorss" ratio="0.24933334" ratioLeft="187" ratioRight="563" relationship="2" relative="org.eclipse.ui.internal.ViewStack@73ad4ecc"/>
+</mainWindow>
+</layout>
+</perspective>
+<perspective editorAreaTrimState="2" editorAreaVisible="1" fixed="0" version="0.016">
+<descriptor class="org.mule.tooling.ui.ToolingPerspectiveFactory" id="org.tooling.ui.toolingPerspective" label="Mule"/>
+<alwaysOnActionSet id="com.cloveretl.gui.actionset.main"/>
+<alwaysOnActionSet id="org.eclipse.ui.cheatsheets.actionSet"/>
+<alwaysOnActionSet id="org.eclipse.search.searchActionSet"/>
+<alwaysOnActionSet id="org.eclipse.ui.edit.text.actionSet.annotationNavigation"/>
+<alwaysOnActionSet id="org.eclipse.ui.edit.text.actionSet.navigation"/>
+<alwaysOnActionSet id="org.eclipse.ui.edit.text.actionSet.convertLineDelimitersTo"/>
+<alwaysOnActionSet id="org.eclipse.ui.externaltools.ExternalToolsSet"/>
+<alwaysOnActionSet id="org.eclipse.ui.actionSet.keyBindings"/>
+<alwaysOnActionSet id="org.eclipse.ui.actionSet.openFiles"/>
+<alwaysOnActionSet id="org.eclipse.debug.ui.launchActionSet"/>
+<alwaysOnActionSet id="org.eclipse.jdt.ui.JavaActionSet"/>
+<alwaysOnActionSet id="org.eclipse.jdt.ui.JavaElementCreationActionSet"/>
+<alwaysOnActionSet id="org.eclipse.ui.NavigateActionSet"/>
+<show_view_action id="org.eclipse.jdt.ui.PackageExplorer"/>
+<show_view_action id="org.eclipse.search.ui.views.SearchView"/>
+<show_view_action id="org.eclipse.ui.console.ConsoleView"/>
+<show_view_action id="org.eclipse.ui.views.ContentOutline"/>
+<show_view_action id="org.eclipse.ui.views.ProblemView"/>
+<show_view_action id="org.eclipse.ui.views.TaskList"/>
+<show_view_action id="org.eclipse.ui.views.ProgressView"/>
+<show_view_action id="org.eclipse.ui.navigator.ProjectExplorer"/>
+<new_wizard_action id="org.mule.tooling.ui.muleToolingWizard"/>
+<new_wizard_action id="org.mule.tooling.ui.messageFlowWizard"/>
+<new_wizard_action id="org.eclipse.jdt.ui.wizards.JavaProjectWizard"/>
+<new_wizard_action id="org.eclipse.jdt.ui.wizards.NewPackageCreationWizard"/>
+<new_wizard_action id="org.eclipse.jdt.ui.wizards.NewClassCreationWizard"/>
+<new_wizard_action id="org.eclipse.jdt.ui.wizards.NewInterfaceCreationWizard"/>
+<new_wizard_action id="org.eclipse.jdt.ui.wizards.NewEnumCreationWizard"/>
+<new_wizard_action id="org.eclipse.jdt.ui.wizards.NewAnnotationCreationWizard"/>
+<new_wizard_action id="org.eclipse.jdt.ui.wizards.NewSourceFolderCreationWizard"/>
+<new_wizard_action id="org.eclipse.jdt.ui.wizards.NewJavaWorkingSetWizard"/>
+<new_wizard_action id="org.eclipse.ui.wizards.new.folder"/>
+<new_wizard_action id="org.eclipse.ui.wizards.new.file"/>
+<new_wizard_action id="org.eclipse.ui.editors.wizards.UntitledTextFileWizard"/>
+<perspective_action id="com.cloveretl.gui.perspective.ETLPerspective"/>
+<hide_toolbar_item_id id="org.eclipse.ui.edit.text.toggleShowSelectedElementOnly"/>
+<hide_toolbar_item_id id="org.eclipse.debug.ui.commands.RunToLine"/>
+<hide_toolbar_item_id id="org.eclipse.jdt.ui.actions.OpenProjectWizard"/>
+<view id="org.mule.tooling.properties.views.MulePropertiesView"/>
+<view id="org.eclipse.ui.console.ConsoleView"/>
+<view id="org.eclipse.jdt.ui.PackageExplorer"/>
+<fastViewBars>&#x0A;<fastViewBar fastViewLocation="16384" id="leftBottom" orientation="512" selectedTabId="org.mule.tooling.connectivitytesting.views.ConnectivityTestingView" style="0">&#x0A;<fastViews>&#x0A;<view id="org.mule.tooling.connectivitytesting.views.ConnectivityTestingView" ratio="0.3"/>
+<view id="org.eclipse.ui.views.ContentOutline" ratio="0.3"/>
+</fastViews>
+</fastViewBar>
+</fastViewBars>
+<layout>&#x0A;<mainWindow>&#x0A;<info folder="true" part="left">&#x0A;<folder activePageID="org.eclipse.jdt.ui.PackageExplorer" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.jdt.ui.PackageExplorer" label="Package Explorer"/>
+<page content="org.eclipse.ui.navigator.ProjectExplorer" label="LabelNotFound"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
+</presentation>
+</folder>
+</info>
+<info folder="true" part="org.eclipse.ui.internal.ViewStack@2c2db130" ratio="0.75" ratioLeft="750" ratioRight="250" relationship="2" relative="left">&#x0A;<folder appearance="2" expanded="2">&#x0A;<page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
+<page content="org.eclipse.ui.internal.introview" label="LabelNotFound"/>
+<page content="org.eclipse.ui.cheatsheets.views.CheatSheetView" label="LabelNotFound"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
+</folder>
+</info>
+<info part="org.eclipse.ui.editorss" ratio="0.24924698" ratioLeft="331" ratioRight="997" relationship="2" relative="left"/>
+<info folder="true" part="bottom" ratio="0.77666664" ratioLeft="466" ratioRight="134" relationship="4" relative="org.eclipse.ui.editorss">&#x0A;<folder activePageID="org.eclipse.ui.console.ConsoleView" appearance="2" expanded="2">&#x0A;<page content="org.mule.tooling.properties.views.MulePropertiesView" label="Mule Properties View"/>
+<page content="org.eclipse.ui.console.ConsoleView" label="Console"/>
+<page content="org.eclipse.ui.views.ProblemView" label="LabelNotFound"/>
+<page content="org.eclipse.search.ui.views.SearchView" label="LabelNotFound"/>
+<page content="org.eclipse.ui.views.BookmarkView" label="LabelNotFound"/>
+<page content="org.eclipse.ui.views.ProgressView" label="LabelNotFound"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
+<part id="1"/>
+</presentation>
+</folder>
+</info>
+<info folder="true" part="leftBottom" ratio="0.548552" ratioLeft="322" ratioRight="265" relationship="4" relative="left">&#x0A;<folder appearance="2" expanded="2">&#x0A;<page content="org.mule.tooling.connectivitytesting.views.ConnectivityTestingView" label="LabelNotFound"/>
+<page content="org.eclipse.ui.views.ContentOutline" label="LabelNotFound"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
+</folder>
+</info>
+</mainWindow>
+</layout>
+</perspective>
+<perspective editorAreaTrimState="2" editorAreaVisible="1" fixed="0" version="0.016">
+<descriptor class="org.eclipse.jdt.internal.ui.JavaPerspectiveFactory" id="org.eclipse.jdt.ui.JavaPerspective" label="Java"/>
+<alwaysOnActionSet id="com.cloveretl.gui.actionset.main"/>
+<alwaysOnActionSet id="org.eclipse.ui.cheatsheets.actionSet"/>
+<alwaysOnActionSet id="org.eclipse.search.searchActionSet"/>
+<alwaysOnActionSet id="org.eclipse.ui.edit.text.actionSet.annotationNavigation"/>
+<alwaysOnActionSet id="org.eclipse.ui.edit.text.actionSet.navigation"/>
+<alwaysOnActionSet id="org.eclipse.ui.edit.text.actionSet.convertLineDelimitersTo"/>
+<alwaysOnActionSet id="org.eclipse.ui.externaltools.ExternalToolsSet"/>
+<alwaysOnActionSet id="org.eclipse.ui.actionSet.keyBindings"/>
+<alwaysOnActionSet id="org.eclipse.ui.actionSet.openFiles"/>
+<alwaysOnActionSet id="org.eclipse.debug.ui.launchActionSet"/>
+<alwaysOnActionSet id="org.eclipse.jdt.ui.JavaActionSet"/>
+<alwaysOnActionSet id="org.eclipse.jdt.ui.JavaElementCreationActionSet"/>
+<alwaysOnActionSet id="org.eclipse.ui.NavigateActionSet"/>
+<alwaysOnActionSet id="org.eclipse.debug.ui.breakpointActionSet"/>
+<alwaysOnActionSet id="org.eclipse.jdt.debug.ui.JDTDebugActionSet"/>
+<alwaysOnActionSet id="org.eclipse.jdt.junit.JUnitActionSet"/>
+<show_view_action id="org.eclipse.jdt.ui.PackageExplorer"/>
+<show_view_action id="org.eclipse.jdt.ui.TypeHierarchy"/>
+<show_view_action id="org.eclipse.jdt.ui.SourceView"/>
+<show_view_action id="org.eclipse.jdt.ui.JavadocView"/>
+<show_view_action id="org.eclipse.search.ui.views.SearchView"/>
+<show_view_action id="org.eclipse.ui.console.ConsoleView"/>
+<show_view_action id="org.eclipse.ui.views.ContentOutline"/>
+<show_view_action id="org.eclipse.ui.views.ProblemView"/>
+<show_view_action id="org.eclipse.ui.views.ResourceNavigator"/>
+<show_view_action id="org.eclipse.ui.views.TaskList"/>
+<show_view_action id="org.eclipse.ui.views.ProgressView"/>
+<show_view_action id="org.eclipse.ui.navigator.ProjectExplorer"/>
+<show_view_action id="org.eclipse.ui.texteditor.TemplatesView"/>
+<show_view_action id="org.eclipse.pde.runtime.LogView"/>
+<show_view_action id="org.eclipse.ant.ui.views.AntView"/>
+<new_wizard_action id="org.eclipse.jdt.ui.wizards.JavaProjectWizard"/>
+<new_wizard_action id="org.eclipse.jdt.ui.wizards.NewPackageCreationWizard"/>
+<new_wizard_action id="org.eclipse.jdt.ui.wizards.NewClassCreationWizard"/>
+<new_wizard_action id="org.eclipse.jdt.ui.wizards.NewInterfaceCreationWizard"/>
+<new_wizard_action id="org.eclipse.jdt.ui.wizards.NewEnumCreationWizard"/>
+<new_wizard_action id="org.eclipse.jdt.ui.wizards.NewAnnotationCreationWizard"/>
+<new_wizard_action id="org.eclipse.jdt.ui.wizards.NewSourceFolderCreationWizard"/>
+<new_wizard_action id="org.eclipse.jdt.ui.wizards.NewSnippetFileCreationWizard"/>
+<new_wizard_action id="org.eclipse.jdt.ui.wizards.NewJavaWorkingSetWizard"/>
+<new_wizard_action id="org.eclipse.ui.wizards.new.folder"/>
+<new_wizard_action id="org.eclipse.ui.wizards.new.file"/>
+<new_wizard_action id="org.eclipse.ui.editors.wizards.UntitledTextFileWizard"/>
+<new_wizard_action id="org.eclipse.jdt.junit.wizards.NewTestCaseCreationWizard"/>
+<perspective_action id="org.eclipse.jdt.ui.JavaBrowsingPerspective"/>
+<perspective_action id="org.eclipse.debug.ui.DebugPerspective"/>
+<perspective_action id="com.cloveretl.gui.perspective.ETLPerspective"/>
+<perspective_action id="org.eclipse.wst.jsdt.ui.JavaPerspective"/>
+<hide_toolbar_item_id id="org.eclipse.ui.edit.text.toggleShowSelectedElementOnly"/>
+<hide_toolbar_item_id id="org.eclipse.debug.ui.commands.RunToLine"/>
+<hide_toolbar_item_id id="org.eclipse.jdt.ui.actions.OpenProjectWizard"/>
+<view id="org.eclipse.jdt.ui.PackageExplorer"/>
+<view id="org.eclipse.ui.views.ProblemView"/>
+<view id="org.eclipse.jdt.ui.JavadocView"/>
+<view id="org.eclipse.jdt.ui.SourceView"/>
+<view id="org.eclipse.ui.console.ConsoleView"/>
+<fastViewBars>
+<fastViewBar fastViewLocation="131072" id="right" orientation="512" selectedTabId="org.eclipse.ui.views.ContentOutline" style="0">
+<fastViews>
+<view id="org.eclipse.ui.views.ContentOutline" ratio="0.3"/>
+</fastViews>
+</fastViewBar>
+</fastViewBars>
+<layout>
+<mainWindow>
+<info folder="true" part="left">
+<folder activePageID="org.eclipse.jdt.ui.PackageExplorer" appearance="2" expanded="2">
+<page content="org.eclipse.jdt.ui.PackageExplorer" label="Package Explorer"/>
+<page content="org.eclipse.jdt.ui.TypeHierarchy" label="LabelNotFound"/>
+<page content="org.eclipse.ui.views.ResourceNavigator" label="LabelNotFound"/>
+<page content="org.eclipse.ui.navigator.ProjectExplorer" label="LabelNotFound"/>
+<page content="org.eclipse.jdt.junit.ResultView" label="LabelNotFound"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
+</presentation>
+</folder>
+</info>
+<info folder="true" part="stickyFolderRight" ratio="0.7498122" ratioLeft="998" ratioRight="333" relationship="2" relative="left">
+<folder appearance="2" expanded="2">
+<page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
+<page content="org.eclipse.ui.internal.introview" label="LabelNotFound"/>
+<page content="org.eclipse.ui.cheatsheets.views.CheatSheetView" label="LabelNotFound"/>
+</folder>
+</info>
+<info part="org.eclipse.ui.editorss" ratio="0.34186748" ratioLeft="454" ratioRight="874" relationship="2" relative="left"/>
+<info folder="true" part="bottom" ratio="0.7495854" ratioLeft="452" ratioRight="151" relationship="4" relative="org.eclipse.ui.editorss">
+<folder activePageID="org.eclipse.ui.console.ConsoleView" appearance="2" expanded="2">
+<page content="org.eclipse.ui.views.ProblemView" label="Problems"/>
+<page content="org.eclipse.jdt.ui.JavadocView" label="Javadoc"/>
+<page content="org.eclipse.jdt.ui.SourceView" label="Declaration"/>
+<page content="org.eclipse.ui.console.ConsoleView" label="Console"/>
+<page content="org.eclipse.search.ui.views.SearchView" label="LabelNotFound"/>
+<page content="org.eclipse.ui.views.BookmarkView" label="LabelNotFound"/>
+<page content="org.eclipse.ui.views.ProgressView" label="LabelNotFound"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
+<part id="1"/>
+<part id="2"/>
+<part id="3"/>
+</presentation>
+</folder>
+</info>
+<info folder="true" part="right" ratio="0.7497497" ratioLeft="749" ratioRight="250" relationship="2" relative="org.eclipse.ui.editorss">
+<folder appearance="2" expanded="2">
+<page content="org.eclipse.ui.views.ContentOutline" label="LabelNotFound"/>
+<page content="org.eclipse.ui.texteditor.TemplatesView" label="LabelNotFound"/>
+<page content="org.eclipse.ant.ui.views.AntView" label="LabelNotFound"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
+</folder>
+</info>
+</mainWindow>
+</layout>
+</perspective>
+</perspectives>
+<workingSets/>
+<navigationHistory>
+<editors>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/uids-gateway/src/main/java/com/gsww/uids/gateway/service/impl/OauthServiceImpl.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/uids-gateway/src/main/java/com/gsww/uids/gateway/service/impl/AuthcodeResponseServiceImpl.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/uids-gateway/src/main/java/com/gsww/uids/gateway/rest/AuthenticateService.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/uids-gateway/src/main/java/com/gsww/uids/gateway/rest/RestInterfaceService.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.mule.tooling.messageflow.messageFlowEditor" path="/uids-gateway/flows/uids-gateway.mflow"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.wst.xml.ui.internal.tabletree.XMLMultiPageEditorPart" path="/uids-gateway/src/main/resources/applicationContext.xml"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.PropertiesFileEditor" path="/uids-gateway/src/main/resources/jdbc.properties"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/uids-gateway/src/main/java/com/gsww/uids/gateway/util/MD5.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/uids-gateway/src/main/java/com/gsww/uids/gateway/util/UUIDHexGenerator.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/uids-gateway/src/main/java/com/gsww/uids/gateway/util/BASE64.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/uids-gateway/src/main/java/com/gsww/uids/gateway/util/AESOperator.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/uids-gateway/src/main/java/com/gsww/uids/gateway/util/BytesHelper.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/uids-gateway/src/main/java/com/gsww/uids/gateway/util/Contants.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/uids-gateway/src/main/java/com/gsww/uids/gateway/util/ConvertSqlToDtoList.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/uids-gateway/src/main/java/com/gsww/uids/gateway/util/Dbid.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/uids-gateway/src/main/java/com/gsww/uids/gateway/util/HttpRequestBodyToParamMap.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/uids-gateway/src/main/java/com/gsww/uids/gateway/util/HttpRequestToString.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/uids-gateway/src/main/java/com/gsww/uids/gateway/util/IdentifierGenerator.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/uids-gateway/src/main/java/com/gsww/uids/gateway/util/JSONUtil.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/uids-gateway/src/main/java/com/gsww/uids/gateway/util/PropertiesHelper.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/uids-gateway/src/main/java/com/gsww/uids/gateway/util/ReflectionUtils.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/uids-gateway/src/main/java/com/gsww/uids/gateway/util/ReflectUtil.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/uids-gateway/src/main/java/com/gsww/uids/gateway/util/SimpleRetryPolicy.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/uids-gateway/src/main/java/com/gsww/uids/gateway/util/SimpleRetryPolicyTemplate.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/uids-gateway/src/main/java/com/gsww/uids/gateway/util/SpringContextHolder.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/uids-gateway/src/main/java/com/gsww/uids/gateway/util/StringHelper.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/uids-gateway/src/main/java/com/gsww/uids/gateway/util/StringUtil.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/uids-gateway/src/main/java/com/gsww/uids/gateway/util/TimeHelper.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/uids-gateway/src/main/java/com/gsww/uids/gateway/util/UUIDGenerator.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/uids-gateway/src/main/java/com/gsww/uids/gateway/ws/CustSubscribe.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/uids-gateway/src/main/java/com/gsww/uids/gateway/ws/CustSubscribeImpl.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/uids-gateway/src/main/java/com/gsww/uids/gateway/util/AESOperator.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.mule.tooling.messageflow.messageFlowEditor" path="/uids-gateway/flows/uids-gateway.mflow"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/uids-gateway/src/main/java/com/gsww/uids/gateway/rest/RestInterfaceService.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/uids-gateway/src/main/java/com/gsww/uids/gateway/rest/AuthenticateService.java"/>
+</editors>
+<item historyLabel="RestInterfaceService.java" index="3">
+<position info="not_deleted" x="491" y="34"/>
+</item>
+<item historyLabel="AuthenticateService.java" index="2">
+<position info="not_deleted" x="411" y="19"/>
+</item>
+<item historyLabel="Mule Config Flow Editor" index="4"/>
+<item historyLabel="AuthenticateService.java" index="2">
+<position info="not_deleted" x="411" y="19"/>
+</item>
+<item historyLabel="AuthcodeResponseServiceImpl.java" index="1">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="Mule Config Flow Editor" index="4"/>
+<item historyLabel="AuthenticateService.java" index="2">
+<position info="not_deleted" x="411" y="19"/>
+</item>
+<item historyLabel="AuthenticateService.java" index="2">
+<position info="not_deleted" x="607" y="0"/>
+</item>
+<item historyLabel="AuthenticateService.java" index="2">
+<position info="not_deleted" x="1735" y="13"/>
+</item>
+<item historyLabel="OauthServiceImpl.java" index="0">
+<position info="not_deleted" x="1414" y="0"/>
+</item>
+<item historyLabel="AuthenticateService.java" index="2">
+<position info="not_deleted" x="1889" y="0"/>
+</item>
+<item historyLabel="Mule Config Flow Editor" index="4"/>
+<item historyLabel="applicationContext.xml" index="5">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="jdbc.properties" index="6">
+<position info="not_deleted" x="259" y="0"/>
+</item>
+<item historyLabel="MD5.java" index="7">
+<position/>
+</item>
+<item historyLabel="UUIDHexGenerator.java" index="8">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="BASE64.java" index="9">
+<position info="not_deleted" x="2661" y="0"/>
+</item>
+<item historyLabel="BASE64.java" index="9">
+<position info="not_deleted" x="8" y="26"/>
+</item>
+<item historyLabel="BASE64.java" index="9">
+<position info="not_deleted" x="292" y="0"/>
+</item>
+<item historyLabel="BASE64.java" index="9">
+<position info="not_deleted" x="305" y="11"/>
+</item>
+<item historyLabel="AESOperator.java" index="10">
+<position info="not_deleted" x="305" y="11"/>
+</item>
+<item historyLabel="AESOperator.java" index="10">
+<position info="not_deleted" x="2212" y="4"/>
+</item>
+<item historyLabel="BytesHelper.java" index="11">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="Contants.java" index="12">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="ConvertSqlToDtoList.java" index="13">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="Dbid.java" index="14">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="HttpRequestBodyToParamMap.java" index="15">
+<position info="not_deleted" x="4" y="0"/>
+</item>
+<item historyLabel="HttpRequestToString.java" index="16">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="IdentifierGenerator.java" index="17">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="JSONUtil.java" index="18">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="MD5.java" index="7">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="PropertiesHelper.java" index="19">
+<position info="not_deleted" x="385" y="0"/>
+</item>
+<item historyLabel="ReflectionUtils.java" index="20">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="ReflectUtil.java" index="21">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="SimpleRetryPolicy.java" index="22">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="SimpleRetryPolicyTemplate.java" index="23">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="SpringContextHolder.java" index="24">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="StringHelper.java" index="25">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="StringUtil.java" index="26">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="TimeHelper.java" index="27">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="UUIDGenerator.java" index="28">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="UUIDHexGenerator.java" index="8">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="CustSubscribe.java" index="29">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="CustSubscribeImpl.java" index="30">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="AESOperator.java" index="31">
+<position info="not_deleted" x="323" y="0"/>
+</item>
+<item historyLabel="Mule Config Flow Editor" index="32"/>
+<item historyLabel="RestInterfaceService.java" index="33">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="AuthenticateService.java" index="34">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="RestInterfaceService.java" index="33">
+<position info="not_deleted" x="469" y="0"/>
+</item>
+<item active="true" historyLabel="Mule Config Flow Editor" index="32"/>
+</navigationHistory>
+<input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
+</page>
+<workbenchWindowAdvisor/>
+<actionBarAdvisor/>
+<trimLayout>
+<trimArea IMemento.internal.id="131072">
+<trimItem IMemento.internal.id="right"/>
+</trimArea>
+<trimArea IMemento.internal.id="128">
+<trimItem IMemento.internal.id="org.eclipse.ui.internal.WorkbenchWindow.topBar"/>
+</trimArea>
+<trimArea IMemento.internal.id="1024">
+<trimItem IMemento.internal.id="org.eclise.ui.internal.FastViewBar"/>
+<trimItem IMemento.internal.id="org.eclipse.jface.action.StatusLineManager"/>
+<trimItem IMemento.internal.id="org.eclipse.ui.internal.progress.ProgressRegion"/>
+</trimArea>
+</trimLayout>
+</window>
+<mruList>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="AuthenticateService.java" tooltip="uids-gateway/src/main/java/com/gsww/uids/gateway/rest/AuthenticateService.java">
+<persistable path="/uids-gateway/src/main/java/com/gsww/uids/gateway/rest/AuthenticateService.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="RestInterfaceService.java" tooltip="uids-gateway/src/main/java/com/gsww/uids/gateway/rest/RestInterfaceService.java">
+<persistable path="/uids-gateway/src/main/java/com/gsww/uids/gateway/rest/RestInterfaceService.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.mule.tooling.messageflow.messageFlowEditor" name="uids-gateway.mflow" tooltip="uids-gateway/flows/uids-gateway.mflow">
+<persistable path="/uids-gateway/flows/uids-gateway.mflow"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="AESOperator.java" tooltip="uids-gateway/src/main/java/com/gsww/uids/gateway/util/AESOperator.java">
+<persistable path="/uids-gateway/src/main/java/com/gsww/uids/gateway/util/AESOperator.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="CustSubscribeImpl.java" tooltip="uids-gateway/src/main/java/com/gsww/uids/gateway/ws/CustSubscribeImpl.java">
+<persistable path="/uids-gateway/src/main/java/com/gsww/uids/gateway/ws/CustSubscribeImpl.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="CustSubscribe.java" tooltip="uids-gateway/src/main/java/com/gsww/uids/gateway/ws/CustSubscribe.java">
+<persistable path="/uids-gateway/src/main/java/com/gsww/uids/gateway/ws/CustSubscribe.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="TimeHelper.java" tooltip="uids-gateway/src/main/java/com/gsww/uids/gateway/util/TimeHelper.java">
+<persistable path="/uids-gateway/src/main/java/com/gsww/uids/gateway/util/TimeHelper.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="StringUtil.java" tooltip="uids-gateway/src/main/java/com/gsww/uids/gateway/util/StringUtil.java">
+<persistable path="/uids-gateway/src/main/java/com/gsww/uids/gateway/util/StringUtil.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="StringHelper.java" tooltip="uids-gateway/src/main/java/com/gsww/uids/gateway/util/StringHelper.java">
+<persistable path="/uids-gateway/src/main/java/com/gsww/uids/gateway/util/StringHelper.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="SpringContextHolder.java" tooltip="uids-gateway/src/main/java/com/gsww/uids/gateway/util/SpringContextHolder.java">
+<persistable path="/uids-gateway/src/main/java/com/gsww/uids/gateway/util/SpringContextHolder.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="SimpleRetryPolicyTemplate.java" tooltip="uids-gateway/src/main/java/com/gsww/uids/gateway/util/SimpleRetryPolicyTemplate.java">
+<persistable path="/uids-gateway/src/main/java/com/gsww/uids/gateway/util/SimpleRetryPolicyTemplate.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="SimpleRetryPolicy.java" tooltip="uids-gateway/src/main/java/com/gsww/uids/gateway/util/SimpleRetryPolicy.java">
+<persistable path="/uids-gateway/src/main/java/com/gsww/uids/gateway/util/SimpleRetryPolicy.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="ReflectUtil.java" tooltip="uids-gateway/src/main/java/com/gsww/uids/gateway/util/ReflectUtil.java">
+<persistable path="/uids-gateway/src/main/java/com/gsww/uids/gateway/util/ReflectUtil.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="ReflectionUtils.java" tooltip="uids-gateway/src/main/java/com/gsww/uids/gateway/util/ReflectionUtils.java">
+<persistable path="/uids-gateway/src/main/java/com/gsww/uids/gateway/util/ReflectionUtils.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="PropertiesHelper.java" tooltip="uids-gateway/src/main/java/com/gsww/uids/gateway/util/PropertiesHelper.java">
+<persistable path="/uids-gateway/src/main/java/com/gsww/uids/gateway/util/PropertiesHelper.java"/>
+</file>
+</mruList>
+</workbench>

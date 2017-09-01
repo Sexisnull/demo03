@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="com.gsww.uids.gateway.entity.AuthcodeRequest"/>
+<fullyQualifiedTypeName name="com.gsww.uids.gateway.entity.AuthcodeResponse"/>
+<fullyQualifiedTypeName name="com.gsww.uids.gateway.entity.SSOUser"/>
+<fullyQualifiedTypeName name="com.gsww.uids.gateway.service.AccessTokenRequestService"/>
+<fullyQualifiedTypeName name="com.gsww.uids.gateway.entity.AccessTokenRequest"/>
+<fullyQualifiedTypeName name="com.gsww.uids.gateway.util.StringUtil"/>
+<fullyQualifiedTypeName name="com.gsww.uids.gateway.service.AccessTokenResponseService"/>
+<fullyQualifiedTypeName name="com.gsww.uids.gateway.dao.HibernateBaseDao"/>
+<fullyQualifiedTypeName name="com.gsww.uids.gateway.entity.AccessTokenResponse"/>
+<fullyQualifiedTypeName name="org.hibernate.annotations.common.util.StringHelper"/>
+<fullyQualifiedTypeName name="com.gsww.uids.gateway.util.TimeHelper"/>
+</qualifiedTypeNameHistroy>
