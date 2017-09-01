@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<#include '/common.html'/>
+<script type="text/javascript" src="${request.contextPath}/static/jquery/ui/page.js"></script>
+<script type="text/javascript" src="${request.contextPath}/static/My97DatePicker/WdatePicker.js"></script>
+<link type="text/css" rel="stylesheet" href="${request.contextPath}/static/My97DatePicker/skin/WdatePicker.css"/>
+<title>统一身份认证</title>
+</head>
+</head>
+<body class="easyui-layout">  
+	<div region="north">
+		<div id="page-title">
+			日志管理
+		</div>
+	</div>
+	<div region="center" style="overflow-y: auto;">
+		<div class="grid-advsearch" >
+    	<form action="${request.contextPath}/sysLog/list.uids" method="post" id="oprform" name="oprform" >模块名称  
+	        <#assign text>
+				${moduleList}
+			</#assign>
+			<#assign jsonarray = text?eval />
+	        <select name="module" class="input-text" data-value="" style="width: 110px; margin-right: 20px;">		        		
+			        <option value="">---请选择---</option>
+			        <#list jsonarray as item>
+			        <option value="${item.number}">${item.value!''}</option>
+			        </#list>
+			 </select>操作描述  
+        	<input name="logDesc" type="text" class="input-text" value="" style="width: 100px; margin: 0 20px 0 0px;">操作时间  
+   			<input class="Wdate" style="height: 22px;width: 165px;cursor:pointer;padding-left:10px;" type="text" id="startTime" name="startTime" value="" onclick="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'endTime\')}'})" placeholder="--选择开始时间--">-到-
+    		<input class="Wdate" style="height: 22px;width: 165px;cursor:pointer;padding-left:10px;" type="text" id="endTime" value="" name="endTime" onclick="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'startTime\')}'})" placeholder="--选择结束时间--">
+	        <input type="button" class="btn btn-small btn-primary" value="检索" onclick="simplesearchCheck()" style="margin-right: 5px;">
+	        <input type="button" class="btn btn-small advsearch-cancel" onclick="reBack()" value="返回">
+	        <div class="line-dotted"></div>
+    	</form>
+		</div>
+		<div id="grid_toolbar">
+			<div class="datagrid-toolbar-search-wrap">
+				<div class="datagrid-toolbar-simple-search">
+					<input type="text" id="grid_simple_search" class="input-text"
+							style="width: 150px;" name="searchText" value=""
+							placeholder="请输入操作描述" />
+					<input type="button" class="btn btn-small btn-primary"
+						style="margin-left: 5px;" value="检索" onclick="advancesearchCheck()"/>
+				</div>
+				<input type="button" class="btn btn-small btn-advsearch"
+					onclick="advancedChack()" style="margin-left: 5px;" value="高级检索" />
+			</div>
+	   </div>
+	   <table id="datagrid"></table>
+	</div>
+<script type="text/javascript">
+var queryParams = {queryParams: ''};
+$(function() {
+	$('#datagrid').datagrid({
+		url:'${request.contextPath}/sysLog/list.uids',
+		queryParams: queryParams,
+		loadMsg: '正在加载数据，请稍后...',
+		fitColumns:true,
+		striped:true,
+		fit:true,
+		border: false,
+		pagination: true,
+		scrollbarSize: 6,
+		columns:[[
+			{field:'uuid',hidden:true},
+			{field:'logDesc',title:'操作描述',width:20},
+			{field:'time',title:'操作时间',width:10},
+			{field:'accountName',title:'操作账号',width:10},
+			{field:'appName',title:'账号来源应用',width:10},
+			{field:'userName',title:'操作人',width:10},
+			{field:'module',title:'模块名称',width:10},
+			{field:'type',title:'操作类型',width:10},
+			{field:'ip',title:'操作IP',width:10}
+		]],
+		toolbar:'#grid_toolbar'
+	});
+	//分页
+	$('#datagrid').datagrid('getPager').pagination({
+		beforePageText: '当前第',
+		afterPageText: '页，共 {pages} 页',
+		displayMsg: '当前显示 {from} 到 {to} ，共 {total} 条记录'
+	});
+})
+//普通检索-检索button
+function advancesearchCheck(){
+	queryParams.logDesc = $.trim($('#grid_simple_search').val());
+	$('#datagrid').datagrid('load', queryParams);
+}
+//高级检索-检索button
+function simplesearchCheck(){
+	queryParams.module = $.trim($('select[name=module]').val());
+	queryParams.logDesc = $.trim($('input[name=logDesc]').val());
+	queryParams.startTime = $.trim($('#startTime').val());
+	queryParams.endTime = $.trim($('#endTime').val());
+	$('#datagrid').datagrid('load', queryParams);
+}
+//高级检索
+function advancedChack() {
+	//点击高级检索，清空普通检索中值
+	$('#grid_simple_search').val('');
+	$('.grid-advsearch').show();
+	$('#grid_toolbar').hide();
+}
+//高级检索返回
+function reBack() {
+	//点击普通检索，清空高级检索的值
+	$('form select,input[type=text]').val('');
+	$('.grid-advsearch').hide();
+	$('#grid_toolbar').show();
+}
+//根据条件设置表格行背景颜色
+function setRowBgColor(index, row) {
+    if (row.type) {
+        return 'background-color:yellow;color:black;';
+    }
+}
+</script>
+</body>
+</html>

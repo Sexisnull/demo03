@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+<meta charset="utf-8">
+<title>统一身份认证账号主页</title>
+<meta name="keywords" content="统一身份认证账号主页"> 
+<meta name="description" content="统一身份认证账号主页"> 
+<!-- css -->
+<link href="${request.contextPath}/static/css/layout_home.css" rel="stylesheet" rev="stylesheet" type="text/css" media="all" />
+<link rel="stylesheet" type="text/css" href="${request.contextPath}/static/css/homestyle.css">
+<link rel="stylesheet" type="text/css" href="${request.contextPath}/static/css/app.css">
+<!-- js -->
+<script type="text/javascript" src="${request.contextPath}/static/jquery/jquery-1.8.0.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/static/layer/layer.js"></script>
+<script type="text/javascript" src="${request.contextPath}/static/jquery/uids/haidao.offcial.general.js"></script>
+</head>
+<body>
+<div class="view-product background-color">
+	<div class="padding-big background-color">
+		<div class="account-info clearfix">
+			<div class="text-box-main min-width-300 fl">
+				<dl>
+					<dt class="padding-big-left lists-border-list clearfix">
+						<div class="title fl padding-big-top padding-big-bottom">
+							<p>HI,${account.nickname!''}</p>
+							<p class="margin-small-top clearfix">
+								<span class="fl">账户安全级别：<em class="text-blue-deep">${safte!''}</em></span>
+								<#if realName == 3>
+									<!--通过实名认证-->
+									<a class="fl rz" href="javascript:void(0);">通过实名认证</a>
+								<#else>
+									<!--没有实名认证-->
+									<a class="button bg-blue-deep icon icon-button-blue fl margin-left" style="color: #ADA2A2;" href="javascript:void(0);">未实名认证,请完善用户信息</a>
+								</#if>
+							</p>
+						</div>
+						<span class="fr icon-head">
+							<img src="${request.contextPath}/static/images/avatar.php" alt="账户头像">
+						</span>
+					</dt>
+					<dd class="padding-big clearfix">
+						<p class="w50 fl">
+							<i class="fl icon icon-mobile"></i>
+
+							<span class="fl margin-left">手机：<em class="text-blue-deep">${bindPhone!''}</em></span>
+						</p>
+					</dd>
+				</dl>
+			</div>
+			<div class="text-box-main min-width-360 fl">
+				<dl>
+					<dt class="padding-big lists-border-list clearfix">
+						<div class="fl w50 title">
+							<p>账号信息</p>
+							<p class="margin-small-top clearfix">
+								<span class="fl">账号名：<em class="text-blue-deep">${account.name!''}</em></span>
+							</p>
+						</div>
+						<div class="fl w50 padding-left title">
+							<p>账号类别</p>
+							<p class="margin-small-top clearfix">
+								<span class="fl">类别：<em class="text-blue-deep">${accountType!''}</em></span>
+							</p>
+						</div>
+					</dt>
+					<dd class="padding-big">
+						<div class="account-class text-hidden">
+							<a href="javascript:void(0);">最后一次登录时间：</a>
+							<a href="javascript:void(0);"><em class="text-blue-deep">${lastLoginTime!''}</em></a>
+						</div>
+					</dd>
+				</dl>
+			</div>
+		</div>
+
+		<div class="account-product margin-big-top clearfix">
+			<div class="text-box-main padding-big fl mine-product">
+				<h2 class="h6 margin-big-bottom">单点登录应用</h2>
+				<div class="mine-product-content clearfix">
+					<ul class="w100 fl lists">
+						<div id="content">
+						  <div class="page-ztb-box page-ztb-box3">
+						        <div class="container">
+						            <div class="ztb-desc">
+						                <ul id="center" class="ztb-zy-list">
+						                    <#list sources as source>
+							                    <li>
+							                        <a href="javascript:void(0);">
+							                        <div class="ztb-zy-i">
+							                            <div class="ztb-zy-i-m" style="background-color: rgb(210, 118, 248);">
+							                                <i class="vh-i"></i>
+							                                <div class="cnt-area">
+							                                    <span class="ico"><img id="img_app" src="${request.contextPath}/static/images/appicon_1.png" alt="应用系统"></span>
+							                                    <span class="text">${source.app.name!''}</span>
+							                                </div>
+							                            </div>
+							                            <div class="ztb-zy-i-d" style="background-color: rgb(157, 124, 212);" sid="${source.uuid!''}" onclick="reqUrl(this)" title="${source.app.name!''}">
+							                                <i class="vh-i"></i>
+							                                <div class="cnt-area">${source.name!''}</div>
+							                            </div>
+							                        </div>
+							                        </a>
+							                    </li>
+						                    </#list>
+						                </ul>
+						            </div>
+						        </div>
+						    </div>
+						</div>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+function reqUrl(obj) {
+	window.open("${request.contextPath}/accountHome/sso.uids?sid="+$(obj).attr('sid'));
+}
+$(document).ready(function() {
+	var len = $('#center li').length;
+	var col = ["rgb(80, 205, 142)","rgb(128, 108, 255)","rgb(239, 111, 60)","rgb(233, 188, 69)","rgb(217, 89, 76)","rgb(97, 125, 145)","rgb(150, 86, 149)","rgb(215, 148, 82)"];
+	for(var i=0; i<len; i++){
+		var j = i;
+		if(i > 8){
+			j = i%8;
+		}
+		$('#center li:eq('+i+') span img').attr('src','${request.contextPath}/static/images/appicon_'+j+'.png');
+		$('#center .ztb-zy-i-m:eq('+i+')').css({"background-color":col[j]});
+		$('#center .ztb-zy-i-d:eq('+i+')').css({"background-color":col[j]});
+		
+	}
+
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+# 本配置文件用于质量内建的代码bug自动扫描
+# Encoding of the source code. Default is default system encoding
+# sonar.sourceEncoding=UTF-8
+
+sonar.projectKey=UIDS-CLIENT
+sonar.projectName=UIDS-CLIENT
+sonar.projectVersion=1.0
+ 
+sonar.sources=src/main/java
+# sonar.tests=src/test/java
+# sonar.java.binaries=target/classes,target/test-classes
+# sonar.java.test.binaries=target/test-classes
+sonar.java.source=1.6
+sonar.language=java
+
+sonar.java.coveragePlugin=jacoco
+
+#\u544A\u8BC9sonarqube\u53BB\u54EA\u4E2A\u76EE\u5F55\u8BFB\u53D6\u5355\u5143\u6D4B\u8BD5\u7ED3\u679C
+sonar.junit.reportsPath=target/surefire-reports
+
+#Tells SonarQube where the unit tests code coverage report is
+sonar.jacoco.reportPath=jacoco/jacoco-ut.exec
+
+#Tells SonarQube where the integration tests code coverage report is
+sonar.jacoco.itReportPath=jacoco/jacoco-it.exec
+# Encoding of the source files
+sonar.sourceEncoding=UTF-8

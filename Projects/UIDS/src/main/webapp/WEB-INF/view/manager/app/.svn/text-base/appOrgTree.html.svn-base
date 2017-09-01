@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>机构列表树形菜单</title> 
+<#include '/common.html'/>
+<#include '/tree.html'/>
+<script type="text/javascript">
+$(function() {
+	// 加载机构树
+	var url = '${request.contextPath}/app/groupDetail.uids';
+	initTree(url, 'groupId', null, null, null, 'tree');
+}); 
+</script>
+
+<style type="text/css">
+body {
+	margin: 5px;
+	background-color: #F6F6F6;
+}
+</style>
+</head>
+<body>
+	<ul id="tree" class="ztree"></ul>
+</body>
+</html>

@@ -1,0 +1,15 @@
+.menu {
+	display: none;
+	position: absolute;
+	background: #FFF;
+	border: 1px solid #CCC;
+	border-radius: 5px;
+	box-shadow: 2px 2px 1px #EFEFEF;
+	z-index: 10000;
+}
+
+.menu-content {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>欢迎页面</title>
+</head>
+<body>
+	<!-- 如果已经成功获取用户信息，则登录成功 -->
+	<#if userName??>
+		<p>欢迎 '${userName}'，您已经成功登录正向代理应用！</p>
+		<a href="${request.contextPath}/mgr/refreshToken.do?accessToken='${access_token}'&refreshToken='${refresh_token}'">刷新token</a>
+		<a href="${request.contextPath}/mgr/logout.do">退出</a><br>
+		<a href="${reverse_client_entry}?token_url=${share_token_provider}">进入反向代理应用</a>
+	<#else>
+		<p>很抱歉，您还没有登录正向代理应用，请先登录！</p>
+		<a href="${request.contextPath}/mgr/login.do">登录</a>
+	</#if>
+</body>
+</html>

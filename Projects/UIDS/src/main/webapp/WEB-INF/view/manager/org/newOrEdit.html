@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>机构新增或编辑</title>
+<#include '/common.html'/>
+<#include '/tree.html'/>
+<#include '/validate.html'/>
+</head>
+<script type="text/javascript">
+
+//全局变量定义
+var sparams = {uuid: '${info.uuid!''}', sequence:${info.sequence}, createTime: '${info.createTime!''}'};
+var upperQueryParams = {orgId: '${info.uuid!''}', type: 'upper'};
+var downQueryParams = {orgId: '${info.uuid!''}', type: 'down'};
+var parentOrgIds = new Array();
+var relationTypeIds = new Array();
+var deleteRelationIds = new Array();
+
+//初始化方法
+$(function() {
+	//上级机构列表
+	$('#upperDatagrid').datagrid({
+		url:'${request.contextPath}/org/relation/data.uids',
+		queryParams: upperQueryParams,
+		loadMsg: '正在加载数据，请稍后...',
+		fitColumns:true,
+		striped:true,
+		fit:true,
+		border: false,
+		pagination: false,
+		scrollbarSize: 0,
+		columns:[[
+			{field:'uuid', hidden:true},
+			{field:'pId', hidden:true},
+			{field:'typeId', hidden:true},
+			{field:'relation',title:'上下级关系',width:10,align:'center'},
+			{field:'code',title:'机构编码',width:10,align:'center'},
+			{field:'name',title:'机构名称',width:10,align:'center'},
+			{field:' ',title:'操作',width:10,align:'center',
+				formatter: function(value, row, index) {
+					return '<ul class="listHandler" onclick="del(\''+row.uuid+'\',\''+index+'\',\''+row.pId+'\',\''+row.typeId+'\')">'
+					+'<li><a style="color:blue;font-size:12px;">删除</a></li>'
+		      		+'</ul>';
+				}
+			}
+		]]
+	});
+	//下级机构列表
+	$('#downDatagrid').datagrid({
+		url:'${request.contextPath}/org/relation/data.uids',
+		queryParams: downQueryParams,
+		loadMsg: '正在加载数据，请稍后...',
+		fitColumns:true,
+		striped:true,
+		fit:true,
+		border: false,
+		pagination: false,
+		scrollbarSize: 0,
+		columns:[[
+			{field:'shortName',title:'机构名称',width:10,align:'center'},
+			{field:'code',title:'机构编码',width:10,align:'center'},
+			{field:'suffix',title:'机构后缀',width:10,align:'center'},
+			{field:'type',title:'节点类型',width:10,align:'center'},
+			{field:'fullName',title:'机构全名',width:10,align:'center'}
+		]]
+	});
+	
+	// 如果是新增，则机构编码不显示
+	if ( '${info.uuid!''}' == '' ) {
+		$('#tr-org-code').hide();
+	} else { // 如果是编辑，则父节点不能编辑
+		$('#parentOrg').attr('disabled', true);
+	}
+	
+	//初始化选择框
+	$('#nodeType').val('${info.type!''}');
+	
+	//区域节点树
+	$('#areaCode').menu({
+		tree : 'areacodeId',
+		height : 200,
+		init : function() {
+			initTree('${request.contextPath}/org/areaCodeSearch.uids', 'pId', beforeClick, onClickAreaCode, onDbClickAreaCode, 'areacodeId');
+		}
+	});
+	
+	//机构新增级或编辑上级节点树
+	 $('#parentOrg').menu({
+		tree : 'parentOrg_Id',
+		height : 200,
+		init : function(menu, obj, treeJq) {
+			initTree('${request.contextPath}/org/parentSearch.uids', 'pId', beforeClick, onClickParentOrg, onDblClickParentOrg, 'parentOrg_Id');
+		}
+	});
+	
+	//上级机构新增上级节点树
+	 $('#parentOrg_New').menu({
+		tree : 'parentOrg_Id_New',
+		height : 200,
+		init : function(menu, obj, treeJq) {
+			initTree('${request.contextPath}/org/parentSearch.uids', 'pId', beforeClick, onClickParentOrg, onDblClickParentOrg, 'parentOrg_Id_New');
+		}
+	});
+	//保存表单信息
+	 $('#saveBtn').click(function() {
+		if ( buildParams() ) {
+			saveInfo();
+		}
+	});
+});
+
+//校验表单保存信息
+function buildParams(){
+	sparams.code = $.trim($('#areaCode').val());
+	if ($.trim($('#name').val()) == '') {
+		layer.msg('请输入机构名称！', {icon: 7,time: 1500 });
+		return false;
+	}else if(!checkName($.trim($('#name').val()))){
+		layer.msg('机构名称中不能包含特殊字符！', {icon: 7,time: 1500 });
+		return false;
+	}
+	if ($.trim($('#allname').val()) == '') {
+		layer.msg('请输入机构全名！', {icon: 7,time: 1500 });
+		return false;
+	}else if(!checkName($.trim($('#allname').val()))){
+		layer.msg('机构全名中不能包含特殊字符！', {icon: 7,time: 1500 });
+		return false;
+	}
+	if ($.trim($('#nodeType').val()) == '') {
+		layer.msg('请选择节点类型！', {icon: 7,time: 1500 });
+		return false;
+	}
+	if ($.trim($('#areaCode').val()) == '') {
+		layer.msg('请选择区域编码！', {icon: 7,time: 1500 });
+		return false;
+	}
+	if ($.trim($('#suffix').val()) == '') {
+		layer.msg('请输入机构后缀！', {icon: 7,time: 1500 });
+		return false;
+	}else if(!checkSuffix($.trim($('#suffix').val()))){
+		layer.msg('机构后缀中只能包含数字字母和英文句号！', {icon: 7,time: 1500 });
+		return false;
+	}
+	
+	var orgCode = $.trim($('#orgCode').val());
+	if ( orgCode != '' ) {
+		if(!isChinaChar($.trim($('#orgCode').val()))){
+			layer.msg('组织机构代码中不能包含汉字！', {icon: 7,time: 1500 });
+			return false;
+		}else if(!isNumberOrLetter($.trim($('#orgCode').val()))){
+			layer.msg('请输入标准的组织机构代码！', {icon: 7,time: 1500 });
+			return false;
+		}else if($.trim($('#orgCode').val()).length != 9 ){
+			layer.msg('组织机构代码共9位！', {icon: 7,time: 1500 });
+			return false;
+		}
+	}
+	if($.trim($('#parentOrgId').val()) == '') {
+		layer.msg('请选择上级节点！', {icon: 7,time: 1500 });
+		return false;
+	}
+	if(!checkDesc($.trim($('#spec').val()))) {
+		layer.msg('描述中不能包含特殊字符！', {icon: 7,time: 1500 });
+		return false;
+	}
+ 	sparams.shortName = $.trim($('#name').val());
+ 	sparams.fullName = $.trim($('#allname').val());
+ 	sparams.type = $.trim($('#nodeType').val());
+ 	sparams.suffix = $.trim($('#suffix').val());
+ 	 
+ 	sparams.orgCode = $.trim($('#orgCode').val());
+ 	sparams.code = $.trim($('#code').val());
+ 	sparams.desc = $.trim($('#spec').val());
+ 	sparams.parentIs = '${info.parentIs}';
+ 	sparams.parentId = $.trim($('#parentOrgId').val());
+ 	sparams.areaId = $.trim($('#areaId').val());
+ 	sparams.oldParentId = $.trim($('#oldParentId').val());
+ 	//按类型划分上级机构
+ 	sparams.parentOrgId = parentOrgIds.join(',');
+ 	//机构类型
+ 	sparams.relationTypeId = relationTypeIds.join(',');
+ 	sparams.deleteRelationId = deleteRelationIds.join(',');
+ 	//日志相关参数
+ 	if( sparams.uuid == '' ){
+ 		sparams.operate = 'insert';
+ 	}else{
+ 		sparams.operate = 'update';
+ 	}
+ 	return true;
+}
+//打开上级机构编辑对话框
+function addParentOrg(){
+	$('#dd').dialog('open');
+}
+//在列表动态添加上级机构
+function addParentOrgRow(){
+	var id = $.trim($('#parentOrg_NewId').val());
+	var typeId = $.trim($('#relationType').val());
+	var addRow = {};
+	
+	if($.inArray(typeId, relationTypeIds) != -1){
+			var typeName = $.trim($("#relationType option:selected").text());;
+			var pOrgName = $.trim($('#parentOrg_New').val());
+			alert("已存在【" + typeName +"】划分的上级机构，请选择其他划分方式！");
+			return;
+	}
+	
+	// 提交权限验证
+	$.ajax({
+		url: '${request.contextPath}/org/checkAdminPermission.uids',
+		type: 'post',
+		data: {orgIds: id},
+    	dataType: 'json',
+    	beforeSend: function() {
+    		loadLayer = layer.load(0, {shade: [0.5, '#fff'] });
+    	},
+    	success: function(data) {
+    		layer.close(loadLayer);
+	    	if (data.state == 1) {
+	    		parentOrgIds.push(id);
+	    		relationTypeIds.push(typeId);
+	    		
+	    		addRow.pId = id;
+	    		addRow.typeId = typeId;
+	    		
+	    		$.ajax({
+	    			url: '${request.contextPath}/org/searchParentOrgOrType.uids',
+	    			type: 'post',
+	    			data: addRow,
+	    	    	dataType: 'json',
+	    	    	beforeSend: function() {
+	    	    		loadLayer = layer.load(0, {shade: [0.5, '#fff'] });
+	    	    	},
+	    	    	success: function(data) {
+	    	    		layer.close(loadLayer);
+	    		    	if (data.state == 1) {
+	    		    		$('#upperDatagrid').datagrid('insertRow',{
+	    		    			row: {    
+	    		    				pId:	id,
+	    		    				typeId:	typeId,
+	    		    				relation: data.relation,
+	    		    				code: data.code,
+	    		    				name: data.name
+	    		    			}
+	    		    		});
+	    		    		$('#dd').dialog('close');
+	    		    	} else {
+	    		    		layer.alert(data.info, {icon: 0, shade: [0.5, '#fff']});
+	    		    	}
+	    	    	}
+	    		});
+	    	} else {
+	    		layer.alert("对不起，您没有权限使用此上级机构！", {icon: data.state, shade: [0.5, '#fff']});
+	    	}
+    	}
+	});
+}
+//删除上级机构
+function del(id,index,pId,typeId){
+	confirmLayer = layer.confirm("您确定要删除这条记录吗", {
+	    btn: ['确定','取消']
+	}, function() {
+		layer.close(loadLayer);
+		layer.close(confirmLayer);
+		deleteRelationIds.push(id);
+		$('#upperDatagrid').datagrid('deleteRow',index);
+		parentOrgIds.removeByValue(pId);
+		relationTypeIds.removeByValue(typeId);
+	});
+}
+//保存
+function saveInfo() {
+	$.ajax({
+		url: '${request.contextPath}/org/saveOrUpdate.uids',
+		type: 'post',
+		data: sparams,
+    	dataType: 'json',
+    	beforeSend: function() {
+    		loadLayer = layer.load(0, {shade: [0.5, '#fff'] });
+    	},
+    	success: function(data) {
+    		layer.close(loadLayer);
+	    	if (data.state == 1) {
+	    		closeDialogRefresh();
+	    	} else {
+	    		layer.alert(data.info, {icon: 0, shade: [0.5, '#fff']});
+	    	}
+    	}
+	});
+}
+//选择节点点击前回调
+function beforeClick(treeId, treeNode, clickFlag) {
+	if (treeNode.isDisabled)
+		return false;
+	return (treeNode.id != 0);
+}
+//区域选择单击显示区域编码
+function onClickAreaCode(event, treeId, treeNode) {
+	$('#areaId').val(treeNode.id);
+	$('#areaCode').val(treeNode.code);
+}
+//双击区域显示区域编码并收起选择下拉框
+function onDbClickAreaCode(event, treeId, treeNode) {
+	if(treeNode == null){
+		return;
+	}
+	if (treeNode.isDisabled )//根节点及失效节点双击无效
+		return;
+	$('#areaId').val(treeNode.id);
+	$('#areaCode').val(treeNode.code);
+	$('#areaCode_menu').fadeOut(50);
+}
+//机构选择单击显示机构名称
+function onClickParentOrg(event, treeId, treeNode) {
+	if (treeNode.isDisabled)
+		return;
+	if(treeId == 'parentOrg_Id'){
+		$('#parentOrgId').val(treeNode.id);
+		$('#parentOrg').val(treeNode.name);
+	}else{
+		$('#parentOrg_NewId').val(treeNode.id);
+		$('#parentOrg_New').val(treeNode.name);
+	}
+}
+//机构选择双击选中机构并收起下拉框
+function onDblClickParentOrg(event, treeId, treeNode) {
+	if (treeNode == null) {
+		return;
+	}
+	/* if (treeNode.isDisabled)
+		return; */
+	if (treeNode.id == '0') {
+		onTopClick(treeId);
+	} else {
+		if(treeId == 'parentOrg_Id'){
+			$('#parentOrgId').val(treeNode.id);
+			$('#parentOrg').val(treeNode.name);
+		}else{
+			$('#parentOrg_NewId').val(treeNode.id);
+			$('#parentOrg_New').val(treeNode.name);
+		}
+	}
+	if(treeId == 'parentOrg_Id'){
+		$('#parentOrg_menu').fadeOut(50);
+	}else{
+		$('#parentOrg_New_menu').fadeOut(50);
+	}	
+}
+//机构选择 根节点 点击回调
+function onTopClick(treeId) {
+	if(treeId == 'parentOrg_Id'){
+		$('#parentOrgId').val('0');
+		$('#parentOrg').val("机构管理");
+	}else{
+		$('#parentOrg_NewId').val('0');
+		$('#parentOrg_New').val("机构管理");
+	}
+}	
+</script>
+<style type="text/css">
+
+.datagrid-upper{
+	border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+}
+
+</style>
+</head>
+<body class="easyui-layout">
+	<div region="center">
+		<div class="easyui-tabs" data-options="border:false, fit:true, plain:true">
+			<div title="基本属性" style="padding: 10px; overflow-y: auto;">
+				<table border="0" align="center" cellpadding="10" cellspacing="0"
+					class="table">
+					<tbody>
+						<tr>
+							<td align="right" class="label">机构名称</td>
+							<td class="required">*</td>
+							<td><input type="text" id="name" name="shortName" maxlength="64" class="input-text" value="${info.shortName!''}" placeholder="请填写机构简称，例如：省发改委"></td>
+						</tr>
+						<tr>
+							<td align="right" class="label">机构全名</td>
+							<td class="required">*</td>
+							<td><input type="text" id="allname" name="fullName" maxlength="64" class="input-text" value="${info.fullName!''}" placeholder="请填写机构全称，例如：青海省发展和改革委员会"></td>
+						</tr>
+						<tr>
+							<td align="right" class="label">节点类型</td>
+							<td class="required">*</td>
+							<td>
+								<select name="type" id="nodeType" required class="input-text">
+										<option value="">请选择</option>
+									<#list typeList as type>
+										<option value="${type.name!''}">${type.value!''}</option>
+						        	 </#list>
+										
+								</select>
+							</td>
+						</tr>
+						<tr id="tr_areacode">
+							<td align="right" class="label">区域编码</td>
+							<td class="required">*</td>
+							<td>
+								<input type="hidden" id="areaId" value="${area.uuid!''}"/>
+								<input type="text" name="area.uuid" id="areaCode" required class="input-text" maxlength="12" value="${area.code!''}" placeholder="请选择区域编码" readonly="readonly">
+							</td>
+						</tr>
+
+						<tr>
+							<td align="right" class="label">机构后缀</td>
+							<td class="required">*</td>
+							<td>
+								<input type="text" name="suffix" id="suffix" required maxlength="33" class="input-text" value="${info.suffix!''}" placeholder="请填写最简洁的拼音缩写，例如：fgw（发改委）">
+							</td>
+						</tr>
+						
+						<tr id="tr-org-code">
+							<td align="right" class="label">机构编码</td>
+							<td class="required">*</td>
+							<td>
+								<input type="text" name="code" id="code" class="input-text" value="${info.code!''}" disabled="disabled">
+							</td>
+						</tr>
+						
+						<tr>
+							<td align="right" class="label">组织机构代码</td>
+							<td></td>
+							<td>
+								<input type="text" name="orgCode" id="orgCode" class="input-text" value="${info.orgCode!''}" placeholder="请填写标准的9位组织机构代码" minlength="9" maxlength="9">
+							</td>
+						</tr>
+						
+						<tr>
+							<td align="right" class="label">上级节点</td>
+							<td class="required">*</td>
+							<td>
+								<input type="hidden" id="parentOrgId" value="${parent.uuid!''}"/>
+								<input type="text" name="parent.uuid" id="parentOrg" required  class="input-text" value="${parent.shortName!''}">
+								<#if info.parent??>
+									<input type="hidden" id="oldParentId" name="oldParentId" value="${info.parent.uuid!''}">
+								<#else>
+									<input type="hidden" id="oldParentId" name="oldParentId" value="">
+								</#if>
+							</td>
+						</tr>
+						<tr>
+							<td align="right" class="label">机构描述</td>
+							<td></td>
+							<td>
+								<textarea id="spec" name="desc" class="input-textarea">${info.desc!''}</textarea>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div id="upperOrg" title="上级机构" style="padding: 10px;">
+				<div  class="easyui-layout" data-options="fit:true">
+					<div region="north" style="height: 65px;" class="datagrid-upper">
+						<a class="datagrid-toolbar-btn" onclick="addParentOrg()" style=" margin: 10px;"> <i class="icon-plus-sign"></i>添加上级机构</a>
+					</div>
+					<div region="center" style="overflow-y: auto;">	
+						<table id="upperDatagrid"></table>
+					</div>
+				</div>
+				<div id="dd" class="easyui-dialog" style="padding:5px;width:360px;height:200px;" title="添加上级机构"
+					buttons="#dlg-buttons" data-options="closed:true, closable:false, inline:false, modal:false, top:25, left:150">
+					<table>
+						<tbody>
+							<tr>
+								<td style="padding:16px">划分方式</td>
+								<td>
+									<select name="relationType" id="relationType" data-value="0" class="input-text" style="width:210px">
+										<option value="0">请选择</option>
+										<#list classifyList as classify>
+											<option value="${classify.uuid}">${classify.name!''}</option>
+						        	 	</#list>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td style="padding:16px">上级机构</td>
+								<td>
+									<input type="hidden" id="parentOrg_NewId" value="${parent.uuid!''}" />
+									<input type="text" id="parentOrg_New" class="input-text" value="${parent.shortName!'请选择'}" style="width:200px">
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div id="dlg-buttons">
+					<a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="addParentOrgRow()">确定</a>
+					<a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dd').dialog('close')">取消</a>
+				</div>
+			</div>
+			<div id="downOrg" title="下级机构" style="padding: 10px;">
+				<div  class="easyui-layout" data-options="fit:true">
+					<div region="center" style="overflow-y: auto;">
+						<table id="downDatagrid"></table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div region="south" id="dialog-toolbar">
+		<div id="dialog-toolbar-panel">
+			<input type="button" class="btn btn-primary" value="保  存" id="saveBtn"> 
+			<input type="button" class="btn" value="取消" onclick="closeDialog();">
+		</div>
+	</div>
+</body>
+</html>
