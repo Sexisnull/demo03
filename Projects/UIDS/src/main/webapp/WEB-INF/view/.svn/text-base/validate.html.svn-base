@@ -1,6 +1,0 @@
-<script type="text/javascript" src="${request.contextPath}/static/jquery/validate/jquery.validate.js"></script>
-<script type="text/javascript" src="${request.contextPath}/static/jquery/validate/jquery.validate.min.js"></script>
-<script type="text/javascript" src="${request.contextPath}/static/jquery/validate/messages_zh.js"></script>
-<script type="text/javascript" src="${request.contextPath}/static/jquery/validate/jquery-form.js"></script>
-<script type="text/javascript" src="${request.contextPath}/static/common/uidsValidate.js"></script>
-<script type="text/javascript" src="${request.contextPath}/static/jquery/ui/validity/idCardValidity.js"></script>
