@@ -1,0 +1,75 @@
+@charset "utf-8";
+
+.nav-bar {
+	padding: 0;
+	background-color: #fff;
+}
+
+.header-left {
+	margin-top: 5%;
+	height: 100px;
+	background: url(../images/login/login_floor.png) no-repeat right center;
+}
+
+.logo {
+	width: 80px;
+	height: 100%;
+	float: left;
+	background: url(../images/login/logo.png) no-repeat center;
+	/*border: 1px solid #de0000;*/
+}
+
+.title {
+	height: 100%;
+	/*background: url(../images/login/login_title1.png) no-repeat;*/
+	margin-left: 90px;
+    font-size: 46px;
+    color: #085bb0;
+    font-family: "幼圆";
+    font-weight: bolder;
+	line-height: 112px;
+	padding-left: 0;
+	/*border: 1px solid #DE0000;*/
+}
+
+.main-swap {
+	height: 400px;
+	background: url(../images/login/login_mid_bg2.png) repeat-x center;
+}
+
+.main-swap span {
+	font-size: 30px;
+	font-weight: blod;
+	line-height: 100px;
+}
+
+.login-swap {
+	background: #fff url(../images/login/login_poper.png) no-repeat left top;
+	width: 50%;
+	margin: auto;
+	border: 1px solid #ccc;
+	padding: 10px 20px 5px 20px;
+	border-radius: 8px;
+	color: #333;
+}
+
+.checkLabel {
+	display: inline;
+}
+
+
+.control-label,legend {
+	font-family: "Microsoft YaHei";
+}
+
+.footer {
+	text-align: center;
+	height: 50px;
+	line-height: 50px;
+	color: #999;
+}
+
+.controls input[type='checkbox'] {
+	margin-bottom: 2px;
+	margin-top: 0px;
+}

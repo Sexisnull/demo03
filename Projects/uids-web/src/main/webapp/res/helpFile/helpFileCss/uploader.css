@@ -1,0 +1,42 @@
+.uploadify{
+	height: 21px;
+    width: 70px;
+    border: 1px solid #08c;
+    border-radius: 9px;
+    color: #08c;
+    padding: 4px 0 4px;
+}
+.bluegreen input{
+	margin-left: 45px;
+}
+.uploadify-button {
+	margin-left: 10px;
+}
+.pul{
+	list-style:none;
+}
+.pul li{
+	line-height:30px;
+}
+.file_upload{
+	cursor:pointer;
+}
+#upload_help,#textarea_help{
+    font-size: 100%;
+    width: 483;
+    border: solid 1px #dddddd;
+    margin-bottom: 4px;
+}
+.t_textarea_help,.t_upload_help{
+    color: #333;
+    font-size: 14px;
+
+}
+
+.upload_body{
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+div#fileQueue {
+    margin-top: 10px;
+}

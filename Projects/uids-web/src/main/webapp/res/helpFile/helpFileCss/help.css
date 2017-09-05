@@ -1,0 +1,40 @@
+input#uploader {
+		    background-color: #659be0;
+		    color: #ffffff;
+		    height: 28px;
+		    width: 63px;
+		    margin-top: -2px;
+		    border-bottom: #659be0;
+		    border-top: #659be0;
+		    border-left: #659be0;
+		    border-right: #659be0;
+		               }
+		input#uploader:hover{
+		 background-color: #81ade6;
+		}               
+         #sysHelpDeleteSelect{
+          background-color: #ed6b75;
+          color: #ffffff;
+		    height: 28px;
+		    width: 63px;
+		    margin-top: -2px;
+		    border-bottom: #ed6b75;
+		    border-top: #ed6b75;
+		    border-left: #ed6b75;
+		    border-right: #ed6b75;
+         }		               
+		  #sysHelpDeleteSelect:hover{
+		  background-color: #81ade6;
+		  }    
+	.div_fileExplain{
+	width: 245px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+		    }  
+	.div_fileTitle,.div_fileName{   
+	width: 139px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+		    } 
