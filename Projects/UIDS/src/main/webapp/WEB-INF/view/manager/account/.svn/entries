@@ -1,37 +1,0 @@
-10
-
-dir
-53565
-svn://202.100.72.161/GSEGOV/trunk/Projects/UIDS/src/main/webapp/WEB-INF/view/manager/account
-svn://202.100.72.161/GSEGOV
-
-
-
-2017-07-27T16:47:19.870075Z
-52292
-taolm
-
-
-svn:special svn:externals svn:needs-lock
-
-
-
-
-
-
-
-
-
-
-
-24668b6d-5285-7e4f-8916-2af19ee164fa
-
-corporate
-dir
-
-government
-dir
-
-public
-dir
-
