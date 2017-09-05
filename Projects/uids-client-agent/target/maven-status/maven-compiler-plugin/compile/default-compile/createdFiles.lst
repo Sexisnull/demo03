@@ -1,7 +1,0 @@
-com/gsww/oauth2/OAuth2AuthenticationException.class
-com/gsww/oauth2/OAuth2AuthenticationFilter.class
-com/gsww/oauth2/AESOperator.class
-com/gsww/entity/Token.class
-com/gsww/entity/SSOUser.class
-com/gsww/oauth2/OAuth2Token.class
-com/gsww/oauth2/OAuth2Realm.class
