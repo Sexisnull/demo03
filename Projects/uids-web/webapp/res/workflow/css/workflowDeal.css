@@ -1,0 +1,24 @@
+/*****���������,������gloabal*****/
+#nextStepDiv a {
+	text-align: left;
+	color: #756A4F;
+	display: block;
+	white-space: nowrap;
+	text-decoration: none;
+	padding: 4px 6px;
+	margin: 1px;
+}
+#nextStepDiv a:hover
+{
+	padding: 3px 5px;
+	color: #395500;
+	border: 1px solid #A5D11F;
+	background: #F4FBE1;
+}
+#nextStepDiv .menuClick
+{
+	padding: 3px 5px;
+	color: #000000;
+	border: 1px solid #98C7F5;
+	background: #ECF4FD url('../res/workflow/images/arrow.png') right no-repeat;
+}
