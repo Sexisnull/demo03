@@ -361,7 +361,7 @@
 					$.get("${ctx}/login/loginOut");
 					//?service=http://127.0.0.1:8080/aais
 					//window.location.href='${ctx}/login';
-					window.location.href='http://127.0.0.1:8080/uums-web';
+					window.location.href='http://127.0.0.1:8080/uids-web';
 				});
 			}
 			
