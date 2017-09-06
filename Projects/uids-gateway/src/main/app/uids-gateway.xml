@@ -10,17 +10,14 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
 http://www.mulesoft.org/schema/mule/servlet http://www.mulesoft.org/schema/mule/servlet/current/mule-servlet.xsd">
-    <flow name="ssoServlet" doc:name="ssoServlet">
-        <servlet:inbound-endpoint path="/ssoServlet" address="com.gsww.uids.gateway.servlet.SsoServlet" responseTimeout="10000" encoding="UTF-8" doc:name="Servlet"/>
-    </flow>
 
 	<!-- REST接口发布-->
-	<flow name="authenticateService" doc:name="authenticateService">
-        <http:inbound-endpoint exchange-pattern="request-response" host="0.0.0.0" port="8081" doc:name="HTTP"/>
+<!-- 	<flow name="authenticateService" doc:name="authenticateService">
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8080" doc:name="HTTP"/>
         <jersey:resources doc:name="REST">
             <component class="com.gsww.uids.gateway.rest.AuthenticateService"/>
         </jersey:resources>
-    </flow> 
+    </flow>  -->
     <!-- WebService接口发布 
     <flow name="CustSubscribe" doc:name="CustSubscribe">
         <inbound-endpoint exchange-pattern="request-response" address="http://0.0.0.0:8081/services/zwy/custSubscribe" doc:name="xmlString"/>
