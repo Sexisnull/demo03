@@ -24,7 +24,6 @@
 	<classpathentry kind="lib" path="lib/jnp-client.jar"/>
 	<classpathentry kind="lib" path="lib/json-lib-2.3-jdk15.jar"/>
 	<classpathentry kind="lib" path="lib/kahadb-5.4.0.jar"/>
-	<classpathentry kind="lib" path="lib/ojdbc14-10.2.0.2.0.jar"/>
 	<classpathentry kind="lib" path="lib/proxool-0.9.1.jar"/>
 	<classpathentry kind="lib" path="lib/proxool-cglib-0.9.1.jar"/>
 	<classpathentry kind="lib" path="lib/sagSDK.jar"/>
@@ -94,5 +93,6 @@
 	<classpathentry kind="lib" path="lib/kafka/validation-api-1.1.0.Final.jar"/>
 	<classpathentry kind="lib" path="lib/kafka/zkclient-0.8.jar"/>
 	<classpathentry kind="lib" path="lib/kafka/zookeeper-3.4.6.jar"/>
+	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.42-bin.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

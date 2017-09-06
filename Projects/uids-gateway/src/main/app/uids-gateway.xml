@@ -12,12 +12,12 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 http://www.mulesoft.org/schema/mule/servlet http://www.mulesoft.org/schema/mule/servlet/current/mule-servlet.xsd">
 
 	<!-- REST接口发布-->
-<!-- 	<flow name="authenticateService" doc:name="authenticateService">
+	<flow name="authenticateService" doc:name="authenticateService">
         <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8080" doc:name="HTTP"/>
         <jersey:resources doc:name="REST">
             <component class="com.gsww.uids.gateway.rest.AuthenticateService"/>
         </jersey:resources>
-    </flow>  -->
+    </flow> 
     <!-- WebService接口发布 
     <flow name="CustSubscribe" doc:name="CustSubscribe">
         <inbound-endpoint exchange-pattern="request-response" address="http://0.0.0.0:8081/services/zwy/custSubscribe" doc:name="xmlString"/>

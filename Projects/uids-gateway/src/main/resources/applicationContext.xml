@@ -37,6 +37,7 @@
 		</bean>
 		<!--  <bean id="businessAssist" class="com.gsww.ismp.crminterface.biz.BusinessAssist" scope="prototype" />	-->
 		<!-- SpringContextHandler定义 -->
-		<bean class="com.gsww.zwy.gateway.util.SpringContextHolder" lazy-init="false"/>
-
+		<bean class="com.gsww.uids.gateway.util.SpringContextHolder" lazy-init="false"/>
+		<!-- DAO Bean -->
+		<bean id="ssoDao" class="com.gsww.uids.gateway.dao.sso.SsoDao" scope="prototype" />
 </beans>
