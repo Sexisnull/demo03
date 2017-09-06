@@ -1,4 +1,4 @@
-var path = '/uums-web/';
+var path = '/uids-web/';
 $(function() {
 	// 操作框的点击效果
 	$(".listHandler").on("click", function() {

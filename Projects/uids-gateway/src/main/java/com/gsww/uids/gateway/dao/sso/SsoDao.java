@@ -18,7 +18,11 @@ public class SsoDao {
 		sql.append("select ssourl FROM jis_application where mark = ? ");
 		
 		Map<String,Object> map = jdbcTemplate.queryForMap(sql.toString(), appmark);
-		return String.valueOf(map.get("mark"));
+		if(map.get("ssourl") != null){
+			return String.valueOf(map.get("ssourl"));
+		}else{
+			return "";
+		}
 	}
 	
 }
