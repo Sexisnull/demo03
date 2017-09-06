@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<inner>
+		<groupentity path="com.hanweb.inner.entity.InnerGroup" id="id" groupcode="groupCode" 
+			groupname="groupName" pargroupid="parGroupId"/>
+		<groupservice path="com.hanweb.inner.service.InnerGroupService" addmethod="addGroup" 
+			modifymethod="modifyGroup"  removemethod="removeGroup"  
+			findmethod="findGroup" msg="msg"/>
+		<userentity path="com.hanweb.inner.entity.InnerUser" id="id" loginname="loginName" 
+			loginpass="loginPass" username="userName" groupid="groupId" 
+			groupname="groupName" cardid="cardId" comptel="comptel" compfax="compfax"
+			mobile="mobile" email="email" qq="qq" msn="msn" hometel="hometel"
+			headShip="headShip" />
+		<userservice path="com.hanweb.inner.service.InnerUserService" addmethod="addUser"
+			modifymethod="modifyUser"  removemethod="removeUser" 
+			enablemethod="enableUser" disablemethod="disableUser"
+			findmethod="findUser" msg="msg"/>
+		<app appmark="" encrypttype="" enckey="" jisurl=""/><!--自动产生-->
+	</inner>
+	<outer>
+		<userentity path="com.hanweb.outer.entity.OuterUser" id="id" loginname="loginName" 
+			loginpass="loginPass" username="userName" 
+			cardid="cardId" comptel="comptel" compfax="compfax"
+			mobile="mobile" email="email" qq="qq" msn="msn" hometel="hometel"
+			headShip="headShip" />
+		<userservice path="com.hanweb.outer.service.OuterUserService" addmethod="addUser"
+			modifymethod="modifyUser"  removemethod="removeUser" 
+			enablemethod="enableUser" disablemethod="disableUser"
+			findmethod="findUser" msg="msg"/>
+		<app appmark="" encrypttype="" enckey="" jisurl=""/><!--自动产生-->
+	</outer>
+</root>

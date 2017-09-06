@@ -1,0 +1,1 @@
+{"allParCode":"","allParName":"","appName":"","appid":0,"cardId":"","compfax":"","comptel":"","email":"","groupCode":"","groupName":"","headShip":"","hometel":"","id":0,"loginName":"","loginPass":"","mobile":"","msn":"","ndlogin":"","parCode":"","parName":"","qq":"","state":"","userName":""}

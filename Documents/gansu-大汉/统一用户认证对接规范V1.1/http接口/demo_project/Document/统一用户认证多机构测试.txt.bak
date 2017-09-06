@@ -1,0 +1,31 @@
+多层机构处理问题
+String usrgrpnames= (String)map.get("alldomainname");   
+//如 "机构001002001,机构001002,机构001" ,其中"机构001002001"为当前机构,"机构001"为最上层机构
+			//支持多级父机构同步
+String[] groupList  = usrgrpnames.split(",");	
+String strParid = "";
+if(groupList != null && groupList.length >0){
+	for(int i=groupList.length-1;i>-1;i--){
+		usrgrp = new Merp_Pub_UsergroupEntity();    //机构对象
+		usrgrp.setVc_usergroupname(Convert.getValue(groupList[i]));  //从最上层机构开始查询  第一个即为"机构01"
+		usrgrp.setVc_parid(strParid);
+		//判断该机构是否存在
+		ArrayList  al = grpblf.getGroupEntity(usrgrp);  
+		
+		if(al!=null && al.size()>0){		//如果该机构存在  
+			usrgrp = al.get(0);
+	       		usrgrp.setVc_parid(strParid);	//设置父机构ID
+			strParid = Convert.getValue(usrgrp.getC_id());  将此机构的ID做为下一次循环机构的父ID
+							
+			if(i==0){       //i==0时 即当前机构
+				usrgrp.setVc_extend01(domainid);  //将机构编码存入机构中
+				grpblf.doUpdateExcute(usrgrp);	     //更新机构
+				return true;
+					}
+		}else{	//如果机构不存在 则新增机构 并返回其机构ID做为下一个机构的父ID
+			strParid = doInsertGroup(groupList, i, strParid,domainid, pardomainid);
+			return true;
+			}
+	     al=null;
+		}
+	}

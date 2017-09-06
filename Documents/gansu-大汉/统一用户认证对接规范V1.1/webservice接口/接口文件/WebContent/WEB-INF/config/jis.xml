@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<inner>
+		<groupentity path="机构实体类路径" id="机构ID属性名称" groupcode="机构编码属性名称" 
+			groupname="机构名称属性名称" pargroupid="父机构ID属性名称"/>
+		<groupservice path="机构操作类路径" addmethod="机构新增方法" 
+			modifymethod="机构修改方法"  removemethod="机构删除方法"  
+			findmethod="机构查询方法" msg="操作信息属性"/>
+		<userentity path="用户实体路径" id="用户ID属性名称" loginname="登陆名属性名称" 
+			loginpass="密码属性名称" username="用户名称属性名称" groupid="机构ID属性名称" 
+			groupname="机构名称属性名称" cardid="身份证属性名称" comptel="公司电话属性名称" compfax="传真属性名称"
+			mobile="手机号码属性名称" email="Email属性名称" qq="QQ属性名称" msn="MSN属性名称" hometel="家庭电话属性名称"
+			headShip="职务属性名称" />
+		<userservice path="用户操作类路径" addmethod="用户新增方法"
+			modifymethod="用户修改方法"  removemethod="用户删除方法" 
+			enablemethod="用户启用方法" disablemethod="用户停用方法"
+			findmethod="用户查询方法" msg="操作信息属性"/>
+		<app appmark="" encrypttype="" enckey="" jisurl=""/><!--自动产生-->
+	</inner>
+	<outer>
+		<userentity path="用户实体路径" id="用户ID属性名称" loginname="登陆名属性名称" 
+			loginpass="密码属性名称" username="用户名称属性名称" 
+			cardid="身份证属性名称" comptel="公司电话属性名称" compfax="传真属性名称"
+			mobile="手机号码属性名称" email="Email属性名称" qq="QQ属性名称" msn="MSN属性名称" hometel="家庭电话属性名称"
+			headShip="职务属性名称" />
+		<userservice path="用户操作类路径" addmethod="用户新增方法"
+			modifymethod="用户修改方法"  removemethod="用户删除方法" 
+			enablemethod="用户启用方法" disablemethod="用户停用方法"
+			findmethod="用户查询方法" msg="操作信息属性"/>
+		<app appmark="" encrypttype="" enckey="" jisurl=""/><!--自动产生-->
+	</outer>
+</root>

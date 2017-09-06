@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ldap>
+	<appname>com</appname><!-- 应用名称 自动产生-->
+	<encrypttype>1</encrypttype> <!-- 加密方式 自动产生-->
+	<enckey>o3h2iB8ggnp2</enckey><!-- 密钥 自动产生-->   
+	<ldapurl>http://127.0.0.1:8080/jis2.2/</ldapurl><!-- 统一用户系统url 自动产生-->
+	<ssourl></ssourl><!-- 指定跳转url 自动产生-->
+	<onlydecryptpaw>0</onlydecryptpaw> <!-- 是否仅加密密码 0用户名和密码都加密 1仅加密密码 -->
+	<loginform><!-- 配置登录所需相关参数 必填-->
+		<hidden id="action" value="../../index.jsp"/><!-- 跳转地址 必填-->
+		<hidden id="userid" value="{loginuser}"/><!-- 登录名 必填-->
+		<hidden id="userpassword" value="{loginpass}"/><!-- 密码 必填-->
+		<hidden id="compid" value="1"/><!-- 隐藏值，如果有多个隐藏值，可拷贝本行进行扩展-->
+	</loginform>
+</ldap>
