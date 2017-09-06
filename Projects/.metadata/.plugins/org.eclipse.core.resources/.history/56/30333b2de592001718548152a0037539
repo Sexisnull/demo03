@@ -1,0 +1,8 @@
+package com.gsww.jup;
+
+
+public class test {
+	public static void main(String[] args) {
+		   MD5 Md5 = new MD5();
+	}
+}
