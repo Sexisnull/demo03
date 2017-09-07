@@ -44,53 +44,34 @@
                 <span class="title">${systemMap.title }</span> --%>
                 <div class="logo1"></div>
                 <div class="logo2"></div>
-                <div class="logo-font"><font>统一用户管理平台</font></div>
+                <div class="logo-font"><font>统一身份认证系统</font></div>
             </div>
             <div class="callDisp nav_wrap">
             	<ul>
             		<li class="display"><font class="fonts" id="fontss"></font></li>
             	</ul>
             </div>
-			<div class="callMenu">
-				<ul>
-					<li onclick="callSkip(1)" class="calling">呼叫</li>
-					<li onclick="callSkip(2)" class="recalling">重呼</li>
-					<li onclick="callSkip(3)" class="pastcalling">过号</li>
-					<li onclick="callSkip(5)" class="startservice">开始</li>
-					<li onclick="callSkip(4)" class="stopservice">暂停</li>
-					<li class="noplay"></li>
-					<li class="waits">等待人数</li>
-					<li class="persons"><font color="#FFB424" id="countWaiter"></font>人</li>
-				</ul>
-			</div>
-            <div class="header_userinfo" <c:if test="${topmenueValue eq '1' and nodeType != '1'}"> style="width: 575px;" </c:if>>
+            <div class="header_userinfo" style="width: 575px;">
                 <ul class="header_nav">
-                    <c:if test="${topmenueValue eq '1' and nodeType != '1'}">
-                    	<li class="call">
-							<p>排号呼叫</p>
-						</li>
-					</c:if>
-                    <!--  <li class="home" onclick="goHome();">
-                        <p>返回首页</p>
-                    </li> --><!--
-                    <li class="home" onclick="goHome1();">
+                    
+                    <li class="home" onclick="toFront();">
                         <p>返回首页</p>
                     </li>
-					
-                    --><li class="speaker modify-msgs">
-                    	<p>消息提醒</p>
+                    <li class="speaker modify-msgs">
+                    	<p>账户设置</p>
                     </li>
                     <li class="pwd modify-pwd">
-                        <p>个人中心</p>
+                        <p>在线用户</p>
                     </li>
                     
                     <li class="logout" onclick="loginOut();">
                         <p>退出系统</p>
                     </li>
 				</ul>
-				<div class="nav_wrap" style="margin-top: 10px;">
+				<div class="nav_wrap" style="margin-top: 10px;max-width:170px;">
 		                   <div class="nav_userinfo">
 		                  <p class="name" title="${sysUserSession.userName}">
+		                  	你好，
 		                  <c:if test="${fn:length(sysUserSession.userName)>7 }">
 		                         ${fn:substring(sysUserSession.userName, 0, 7)}...
 		                   </c:if>
@@ -124,7 +105,6 @@
 	    </div>
 	    <div class="msgs-center" style="display: none">
 	    	<div class="content">
-	    	<%-- 	<%@include file="../main/msgs_notify.jsp"%> --%>
 	    	</div>
 	    </div>
 	    <!-- nav菜单导航模板 -->
@@ -156,6 +136,7 @@
 	    <script type="text/javascript" src="${ctx}/res/plugin/jquery.layout/jquery.layout-latest.min.js"></script>
 	    <!-- 滚动条组件 -->
 	    <script type="text/javascript" src="${ctx}/res/plugin/scroll/jquery.mCustomScrollbar.concat.min.js"></script>
+		<script type="text/javascript" src="${ctx}/res/skin/login/js/login.js"></script>
 <%--	    <script type="text/javascript" src="${ctx}/res/plugin/nicescroll/jquery.nicescroll.min.js"></script>--%>
 	    <script type="text/javascript">
 	        $(function () {

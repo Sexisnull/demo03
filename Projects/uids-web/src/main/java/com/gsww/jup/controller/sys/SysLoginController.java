@@ -225,7 +225,7 @@ public class SysLoginController {
 				e.printStackTrace();
 			}
 		}
-		return  new ModelAndView("redirect:/index");
+		return  new ModelAndView("redirect:/frontIndex");
 	}
 	/**
 	 * 用户退出
@@ -246,7 +246,7 @@ public class SysLoginController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/index")
+	@RequestMapping(value = "/frontIndex")
 	public String getSysIndex(HttpServletRequest request) {
 		try {
 			request.getSession().removeAttribute("theme");
@@ -258,8 +258,29 @@ public class SysLoginController {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		return "main/index";
+		return "main/frontIndex";
 	}
+	
+	@RequestMapping(value = "/backIndex")
+	public String toBackIndex(HttpServletRequest request) {
+		try {
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return "main/backIndex";
+	}
+	
+	@RequestMapping(value = "/appSetting")
+	public String appSetting(HttpServletRequest request) {
+		try {
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return "main/appSetting";
+	}
+	
 	@RequestMapping(value = "/iframe")
 	public String getiframe(HttpServletRequest request) {
 		try {
