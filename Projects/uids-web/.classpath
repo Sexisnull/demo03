@@ -36,10 +36,12 @@
 =======
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
-	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/kaptcha-2.3.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/ldapmd51.3.jar"/>
+<<<<<<< HEAD
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/kaptcha-2.3.jar"/>
+=======
 >>>>>>> d6341f6776f3e5d222dbfac9c8286f8f48de2c31
+>>>>>>> 72a5feca4556b335b6ed27d5fd590f092b0a6d5a
 	<classpathentry kind="output" path="webapp/WEB-INF/classes"/>
 </classpath>

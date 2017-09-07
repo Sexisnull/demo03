@@ -8,6 +8,16 @@
 		<item value="org.eclipse.ui.wizards.import.ExternalProject" key="ImportExportPage.STORE_SELECTED_IMPORT_WIZARD_ID"/>
 		<list key="ImportExportPage.STORE_EXPANDED_IMPORT_CATEGORIES">
 			<item value="org.eclipse.ui.Basic"/>
+			<item value="com.genuitec.eclipse.sqlexplorer.databasecategory"/>
+			<item value="org.guvnor.tools.importwizcat"/>
+			<item value="com.genuitec.eclipse.maven.importwizards"/>
+			<item value="com.genuitec.myeclipse"/>
+			<item value="org.eclipse.pde.ui.PluginDevelopment"/>
+			<item value="org.eclipse.debug.ui"/>
+			<item value="org.tigris.subversion.subclipse.ui.svn"/>
+			<item value="org.eclipse.team.ui.importWizards"/>
+			<item value="com.genuitec.eclipse.uml2.ui"/>
+			<item value="org.eclipse.jst.ws.consumption.ui.wsimport.category"/>
 		</list>
 	</section>
 </section>
