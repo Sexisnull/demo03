@@ -18,14 +18,14 @@ http://www.mulesoft.org/schema/mule/servlet http://www.mulesoft.org/schema/mule/
             <component class="com.gsww.uids.gateway.rest.AuthenticateService"/>
         </jersey:resources>
     </flow> 
-    <!-- WebService接口发布 
-    <flow name="CustSubscribe" doc:name="CustSubscribe">
-        <inbound-endpoint exchange-pattern="request-response" address="http://0.0.0.0:8081/services/zwy/custSubscribe" doc:name="xmlString"/>
-        <cxf:jaxws-service serviceClass="com.gsww.uids.gateway.ws.CustSubscribeImpl" doc:name="SOAP"/>
+    <!-- 获取机构信息接口 -->
+    <flow name="WSGroup" doc:name="WSGroup">
+        <inbound-endpoint exchange-pattern="request-response" address="http://0.0.0.0:8081/services/WSGroup" doc:name="WebService"/>
+        <cxf:jaxws-service serviceClass="com.gsww.uids.gateway.ws.WSGroupImpl" doc:name="SOAP" />
         <component doc:name="comp">
-            <singleton-object class="com.gsww.uids.gateway.ws.CustSubscribeImpl"/>
+            <singleton-object class="com.gsww.uids.gateway.ws.WSGroupImpl"/>
         </component>
-    </flow> -->
+    </flow>
     
 
 </mule>
