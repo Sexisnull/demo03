@@ -35,6 +35,6 @@ dependency-reduced-pom.xml
 # studio Files
 
 .studio/
-
+.mule/
 
 README.html
