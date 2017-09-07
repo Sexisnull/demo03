@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="uids-gateway">
-    <flow SubFlow="false" name="authenticateService" entity-id="7c41036e-0f23-4aad-b6dd-c8c61982b044">
+    <flow SubFlow="false" name="authenticateService" entity-id="15cce51b-d640-4c7b-87c0-7102fab4537b">
         <properties>
-            <property name="tracking:enable-default-events"/>
-            <property name="bussinessEventsLabel"/>
-            <property name="processingStrategy2"/>
             <property name="processingStrategy"/>
+            <property name="processingStrategy2"/>
+            <property name="bussinessEventsLabel"/>
             <property name="auxiliary;index" value="1"/>
+            <property name="tracking:enable-default-events"/>
         </properties>
         <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#1">
             <graphicalData x="0" y="0" width="0" height="0"/>
             <endpoint direction="Inbound" message-exchange-pattern="RequestResponse" name="HTTP" type="http://www.mulesoft.org/schema/mule/http/endpoint" entity-id="HTTP#1">
                 <graphicalData x="0" y="0" width="0" height="0"/>
                 <properties>
-                    <property name="connector-ref"/>
-                    <property name="address"/>
-                    <property name="method"/>
-                    <property name="mimeType"/>
-                    <property name="encoding"/>
-                    <property name="httpLabel"/>
+                    <property name="port" value="8080"/>
+                    <property name="host" value="localhost"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="followRedirects"/>
+                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/http/endpoint"/>
+                    <property name="keep-alive"/>
+                    <property name="contentType"/>
                     <property name="disableTransportTransformer"/>
-                    <property name="auxiliary;index" value="2"/>
-                    <property name="path"/>
-                    <property name="responseTransformer-refs"/>
+                    <property name="password"/>
                     <property name="exchange-pattern" value="request-response"/>
                     <property name="tracking:enable-default-events"/>
                     <property name="ref"/>
-                    <property name="password"/>
-                    <property name="keep-alive"/>
-                    <property name="port" value="8080"/>
-                    <property name="followRedirects"/>
-                    <property name="host" value="localhost"/>
-                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/http/endpoint"/>
                     <property name="transformer-refs"/>
-                    <property name="businessEventsLabel"/>
+                    <property name="httpLabel"/>
+                    <property name="address"/>
+                    <property name="path"/>
+                    <property name="encoding"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="method"/>
                     <property name="user"/>
-                    <property name="contentType"/>
+                    <property name="auxiliary;index" value="2"/>
                     <property name="responseTimeout"/>
+                    <property name="mimeType"/>
+                    <property name="connector-ref"/>
                 </properties>
             </endpoint>
             <pattern name="REST" type="http://www.mulesoft.org/schema/mule/jersey/resources" entity-id="REST#1">
@@ -44,9 +44,9 @@
                 <properties>
                     <property name="auxiliary;index" value="3"/>
                     <property-collection name="@http://www.mulesoft.org/schema/mule/core/component;0">
-                        <property name="auxiliary;wrapIn" value="4"/>
                         <property name="class" value="com.gsww.uids.gateway.rest.AuthenticateService"/>
                         <property name="auxiliary;index" value="4"/>
+                        <property name="auxiliary;wrapIn" value="4"/>
                     </property-collection>
                 </properties>
             </pattern>
