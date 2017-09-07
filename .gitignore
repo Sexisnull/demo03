@@ -23,6 +23,7 @@ dependency-reduced-pom.xml
 .project
 .settings/
 *.class
+.metadata/
 # IntelliJ IDEA Files
 
 .idea/
