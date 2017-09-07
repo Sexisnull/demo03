@@ -2,8 +2,13 @@ package com.gsww.jup.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  */
@@ -51,6 +56,10 @@ public class OutsideuserEntity implements Serializable {
 	private String headRenamePic;
 	private String bodyRenamePic;
 
+	@Id
+	@GeneratedValue(generator="system-uuid")
+	@GenericGenerator(name="system-uuid", strategy="uuid.hex")
+	@Column(name = "IID", unique = true, nullable = false)
 	public int getIid() {
 		return iid;
 	}
