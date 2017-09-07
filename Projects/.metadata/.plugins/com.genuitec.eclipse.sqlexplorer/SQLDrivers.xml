@@ -339,4 +339,18 @@
         <name>Sybase Adaptive Server Enterprise</name>
         <url>jdbc:sybase:Tds:&lt;host&gt;:&lt;port&gt;/&lt;DBNAME&gt;</url>
     </Bean>
+    <Bean Class="net.sourceforge.squirrel_sql.fw.sql.SQLDriver">
+        <driverClassName>org.apache.derby.jdbc.ClientDriver</driverClassName>
+        <identifier Class="net.sourceforge.squirrel_sql.fw.id.UidIdentifier">
+            <string>20988a6:15e57209c35:-7fde</string>
+        </identifier>
+        <jarFileName/>
+        <jarFileNames Indexed="true">
+            <Bean Class="net.sourceforge.squirrel_sql.fw.util.beanwrapper.StringWrapper">
+                <string>C:\Users\gaopf\.myeclipse\libs\derby_10.2.2.0\derbyclient.jar</string>
+            </Bean>
+        </jarFileNames>
+        <name>MyEclipse Derby</name>
+        <url>jdbc:derby://&lt;host&gt;:&lt;port&gt;/&lt;db&gt;</url>
+    </Bean>
 </Beans>
