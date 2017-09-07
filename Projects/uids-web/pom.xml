@@ -27,7 +27,7 @@
 		<hibernate-validator.version>4.3.1.Final</hibernate-validator.version>
 		<jolokia.version>1.1.2</jolokia.version>
 		<jackson.version>2.1.5</jackson.version>
-		<log4j.version>1.2.15</log4j.version>
+		<log4j.version>1.2.17</log4j.version>
 		<slf4j.version>1.7.5</slf4j.version>
 		<logback.version>1.0.13</logback.version>
 		<commons-lang3.version>3.1</commons-lang3.version>
@@ -61,18 +61,13 @@
 			<version>${json-lib.version}</version>
 			<classifier>jdk15</classifier>
 		</dependency>
-		<!-- com.oracle begin -->
-		<dependency>
-			<groupId>com.oracle</groupId>
-			<artifactId>ojdbc14</artifactId>
-			<version>${oracle14.version}</version>
-		</dependency>
+		<!-- com.mysql begin -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>${mysql.version}</version>
 		</dependency>
-		<!-- com.oracle end -->
+		<!-- com.mysql end -->
 		<!-- SPRINGSIDE MODULES begin -->
 
 		<dependency>
