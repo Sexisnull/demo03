@@ -18,6 +18,11 @@ import com.gsww.uids.gateway.dao.application.ApplicationDao;
 import com.gsww.uids.gateway.entity.ApplicationMule;
 import com.gsww.uids.gateway.util.SpringContextHolder;
 
+/**
+ * 
+ * @author zhl
+ *
+ */
 @Path("/uids")
 public class HttpInterfaceService {
 	
@@ -36,58 +41,22 @@ public class HttpInterfaceService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public boolean appRegister(String reqJson) {
+		logger.info("<应用注册接口>接收到请求内容:" + reqJson);
 		boolean returnMark = false; //注册成功标志
 		try {
 			ApplicationMule app = objectMapper.readValue(reqJson, ApplicationMule.class);
-			logger.info("<应用注册接口>接收到请求内容:" + reqJson);
-			System.out.println("<应用注册接口>接收到请求内容:" + reqJson);
 			if (!reqJson.isEmpty()) {
-				applicationDao.appRegister(app);
+				//此处应该回调第三方接口,并将Map传递过去
 				returnMark = true;
 				logger.info("<应用注册接口>成功:" + returnMark);
 			}
 		} catch (Exception e) {
+			logger.info("<应用注册接口>异常:" + e.getMessage());
 			e.printStackTrace();
 		} 
 
 		return returnMark;
 	}
-	
-	/**
-	 * 机构新增接口
-	 * @param map
-	 * @return
-	 */
-	@POST
-	@Path("/group/insert")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public boolean doGroupInsertExcute(Map map){
-		logger.info("<机构新增接口>接收到请求内容:"+map);
-		System.out.println("<机构新增接口>接收到请求内容:"+map);
-		return false;
-	}
-	
-	@POST
-	@Path("/group/update")
-	@Consumes(MediaType.APPLICATION_JSON)
-	//@Produces(MediaType.APPLICATION_JSON)
-	public boolean doGroupUpdateExcute(Map map){
-		logger.info("<修改机构接口>接收到请求内容:"+map);
-		System.out.println("<修改机构接口>接收到请求内容:"+map);
-		return false;
-	}
-	
-	@POST
-	@Path("/group/delete")
-	@Consumes(MediaType.APPLICATION_JSON)
-	//@Produces(MediaType.APPLICATION_JSON)
-	public boolean doGroupDeleteExcute(Map map){
-		logger.info("<删除机构接口>接收到请求内容:"+map);
-		System.out.println("<删除机构接口>接收到请求内容:"+map);
-		return false;
-	}
-	
 	
 }
 

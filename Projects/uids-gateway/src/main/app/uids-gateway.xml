@@ -33,5 +33,11 @@ http://www.mulesoft.org/schema/mule/servlet http://www.mulesoft.org/schema/mule/
         </component>
     </flow>
     
-
+    <!-- 实时同步列表JOB -->
+    <flow name="immediateSyncJob" doc:name="immediateSyncJob">
+        <quartz:inbound-endpoint jobName="ImmediateSyncJob" repeatInterval="0" responseTimeout="10000" doc:name="Quartz" repeatCount="0" startDelay="0">
+            <quartz:event-generator-job groupName="Job" jobGroupName="Job"/>
+        </quartz:inbound-endpoint>
+        <component class="com.gsww.uids.gateway.job.ImmediateSyncJob" doc:name="Java"/>
+    </flow>
 </mule>
