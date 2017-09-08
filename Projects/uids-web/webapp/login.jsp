@@ -165,7 +165,7 @@
 		var passWord = $("#passWord").val();
 		var authCode = $("#authCode").val();
 		var loginURL = '${ctx}/login/sysLogin';
-		var indexURL = '${ctx}/index';
+		var indexURL = '${ctx}/frontIndex';
 		if (!userName || userName == '') {
 			$("#userName").poshytip('update', '用户名不能为空！');
 			$("#userName").poshytip('show');
