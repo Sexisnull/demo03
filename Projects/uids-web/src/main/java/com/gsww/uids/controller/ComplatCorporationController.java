@@ -26,6 +26,7 @@ import com.gsww.jup.service.sys.DepartmentService;
 import com.gsww.jup.service.sys.SysAccountService;
 import com.gsww.jup.service.sys.SysRoleService;
 import com.gsww.jup.util.PageUtils;
+import com.gsww.jup.util.StringHelper;
 import com.gsww.uids.entity.ComplatCorporation;
 import com.gsww.uids.service.ComplatCorporationService;
 /**
@@ -103,11 +104,16 @@ public class ComplatCorporationController extends BaseController{
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/corporationEdit", method = RequestMethod.GET)
-	public ModelAndView accountEdit(Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+	public ModelAndView accountEdit(String corporationId,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		ModelAndView mav=new ModelAndView("users/corporation/corporation_edit");
+		ComplatCorporation corporation = null;
 		try {
-			ComplatCorporation corporation = new ComplatCorporation();
-			
+			if(StringHelper.isNotBlack(corporationId)){
+				Integer iid = Integer.parseInt(corporationId);
+				corporation = complatCorporationService.findByKey(iid);
+			}else{
+				corporation = new ComplatCorporation();
+			}
 			model.addAttribute("corporation",corporation);
 		} catch (Exception e) {
 			e.printStackTrace();

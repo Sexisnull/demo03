@@ -81,36 +81,33 @@
 		
         <div class="list-topBar  advanced-search">
         	 <div class="list-toolbar">
-            <!-- 操作按钮开始 -->	 
-             <gsww:opTag menuId="402880e85e5c3efe015e5c43d4da0001" tabIndex="1" operatorType="1"></gsww:opTag>
-           </div> 
-            
+             <!-- 操作按钮开始 -->	 
+	             <gsww:opTag menuId="402880e85e5c3efe015e5c43d4da0001" tabIndex="1" operatorType="1"></gsww:opTag>
+            </div> 
         </div>
-        <!-- 高级探索表单 -->
-        <form id="form2" name="form2" action="${ctx}/complat/corporationList">
-        
-        <ul class="advanced-content" style="display:none;">
-        	<li>
-        		<input type="hidden"  name="orderField" value="${orderField}"/> 
-				<input type="hidden"  name="orderSort" value="${orderSort}"/>
-            	<label>姓名:</label>
-                <input type="text" class="" name="search_LIKE_realName" value="${sParams['LIKE_realName']}"/>
-            </li>
-            <li>
-            	<label>登录名:</label>
-                <input type="text" class="" name="search_LIKE_loginName" value="${sParams['LIKE_loginName']}"/>
-            </li>  
-            <li>
-            	<label>企业或机构名称:</label>
-                <input type="text" class="" name="search_LIKE_name" value="${sParams['LIKE_name']}"/>
-            </li>
-            <li>
-            	<label>身份证号码:</label>
-                <input type="text" class="" name="search_LIKE_cardNumber" value="${sParams['LIKE_cardNumber']}"/>
-            </li>          
-            <li class="advanced-search-btn">搜索</li>
-        </ul>
-        </form>
+	        <form id="form2" name="form2" action="${ctx}/complat/corporationList">
+		        <ul class="advanced-content" style="display:none;">
+		        	<li>
+		        		<input type="hidden"  name="orderField" value="${orderField}"/> 
+						<input type="hidden"  name="orderSort" value="${orderSort}"/>
+		            	<label>姓名:</label>
+		                <input type="text" class="" name="search_LIKE_realName" value="${sParams['LIKE_realName']}"/>
+		            </li>
+		            <li>
+		            	<label>登录名:</label>
+		                <input type="text" class="" name="search_LIKE_loginName" value="${sParams['LIKE_loginName']}"/>
+		            </li>  
+		            <li>
+		            	<label>企业或机构名称:</label>
+		                <input type="text" class="" name="search_LIKE_name" value="${sParams['LIKE_name']}"/>
+		            </li>
+		            <li>
+		            	<label>身份证号码:</label>
+		                <input type="text" class="" name="search_LIKE_cardNumber" value="${sParams['LIKE_cardNumber']}"/>
+		            </li>          
+		            <li class="advanced-search-btn">搜索</li>
+		        </ul>
+	        </form>
         <!-- 提示信息开始 -->
          <div class="form-alert;" >
          	<tags:message msgMap="${msgMap}"></tags:message>
@@ -129,12 +126,13 @@
                     <th width="10%" style="text-align: center;">姓名</th>
                     <th width="10%" style="text-align: center;">登录名</th>
                     <th width="10%" style="text-align: center;">法人类型</th>
-                    <th width="10%" style="text-align: center;">企业（机构）名称</th>
-                    <th width="10%" class="alignL" style="text-align: center;">手机号码</th>
+                    <th width="15%" style="text-align: center;">企业（机构）名称</th>
+                    <th width="13%" class="alignL" style="text-align: center;">手机号码</th>
                     <th width="5%" class="alignL" style="text-align: center;">账号开启</th>
                     <th width="5%" style="text-align: center;">审核状态</th>
                     <th width="5%" style="text-align: center;">实名认证</th>
                     <th width="15%" style="text-align: center;">注册时间</th>
+                    <th width="10%" style="text-align: center;">操作</th>
                 </tr>
             </thead> 
             <tbody>
@@ -196,6 +194,9 @@
 	                    </td>
 	                     <td style="text-align: center;">
 	                    	${complatCorporation.createTime}
+	                    </td>
+	                    <td class="position-content" style="text-align: center;" >
+	                        <gsww:opTag menuId="402880e85e5c3efe015e5c43d4da0001" tabIndex="1" operatorType="2"></gsww:opTag>
 	                    </td>
 	                </tr>
 				</c:forEach>
