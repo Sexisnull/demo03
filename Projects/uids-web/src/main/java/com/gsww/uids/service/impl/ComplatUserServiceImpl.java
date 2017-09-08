@@ -89,4 +89,14 @@ public class ComplatUserServiceImpl implements ComplatUserService{
 		complatUserDao.save(complatUser);
 	}
 
+
+
+	@Override
+	public void save(ComplatUser entity) {
+		// TODO Auto-generated method stub
+		if(entity!=null){
+			complatUserDao.save(entity);
+		}
+	}
+
 }
