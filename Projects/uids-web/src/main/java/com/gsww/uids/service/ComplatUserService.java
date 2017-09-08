@@ -12,6 +12,9 @@ import com.gsww.uids.entity.ComplatUser;
 
 public interface ComplatUserService {
 
+	
+	
+	public void save(ComplatUser entity);
 	/**
 	 * 
 	 * 查询政府用户列表
