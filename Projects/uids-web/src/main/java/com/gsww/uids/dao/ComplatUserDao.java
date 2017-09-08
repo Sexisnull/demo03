@@ -23,5 +23,15 @@ import com.gsww.uids.entity.ComplatUser;
 public interface ComplatUserDao extends PagingAndSortingRepository<ComplatUser, Integer>,JpaSpecificationExecutor<ComplatUser>{
 
 	ComplatUser findByIid(Integer iid);
-			
+
+	/**
+	 * 根据登录名称和密码获取用户实体
+	 * @param userName
+	 * @param password
+	 * @author 张磊
+	 * @return
+	 */
+	public List<ComplatUser> findByLoginnameAndPwd(String userName,
+			String password);
+	
 }

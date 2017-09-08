@@ -1,4 +1,4 @@
-package com.gsww.ischool.entity;
+package com.gsww.uids.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

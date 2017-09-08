@@ -10,13 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.gsww.jup.dao.sys.SysAccountDao;
 import com.gsww.jup.dao.sys.SysRoleAcctRelDao;
 import com.gsww.jup.dao.sys.SysRoleDao;
-import com.gsww.jup.entity.sys.SysAccount;
 import com.gsww.jup.entity.sys.SysRoleAcctRel;
 import com.gsww.jup.entity.sys.SysUserSession;
 import com.gsww.jup.service.sys.SysLoginService;
+import com.gsww.uids.dao.ComplatUserDao;
+import com.gsww.uids.entity.ComplatUser;
 
 /**
  * <p>Copyright: Copyright (c) 2011</p>
@@ -32,9 +32,8 @@ import com.gsww.jup.service.sys.SysLoginService;
 @Transactional
 @Service("sysLoginService")
 public class SysLoginServiceImpl implements SysLoginService {
-
 	@Autowired
-	private SysAccountDao sysAccountDao;
+	private ComplatUserDao complatUserDao;
 	@Autowired
 	private SysRoleAcctRelDao sysRoleAcctRelDao;
 	@Autowired
@@ -43,17 +42,17 @@ public class SysLoginServiceImpl implements SysLoginService {
 	@Override
 	public SysUserSession login(String userName, String password, String ip) throws Exception {
 		
-		List<SysAccount> userList = sysAccountDao.findByLoginAccountAndLoginPassword(userName,password);
+		List<ComplatUser> userList = complatUserDao.findByLoginnameAndPwd(userName,password);
 		if (userList != null && userList.size() == 1) {
-			SysAccount user = userList.get(0);
+			ComplatUser user = userList.get(0);
 			SysUserSession sysUserSession = new SysUserSession();
-			sysUserSession.setAccountId(user.getUserAcctId());
-			sysUserSession.setUserName(user.getUserName());
+			sysUserSession.setAccountId(user.getIid()+"");
+			sysUserSession.setUserName(user.getName());
 /*			sysUserSession.setDeptId(user.getSysDepartment().getDeptId());
 			sysUserSession.setDeptCode(user.getSysDepartment().getDeptCode());
 			sysUserSession.setDeptName(user.getSysDepartment().getDeptName());*/
 			sysUserSession.setUserIp(ip);
-			List<SysRoleAcctRel> roleList = sysRoleAcctRelDao.findByUserAcctId(user.getUserAcctId());
+			List<SysRoleAcctRel> roleList = sysRoleAcctRelDao.findByUserAcctId(user.getIid()+"");
 			String roles = "";
 			String roleNames = "";
 			if(roleList!=null && roleList.size()>0){
@@ -65,9 +64,9 @@ public class SysLoginServiceImpl implements SysLoginService {
 				roleNames = roleNames.substring(0, roleNames.length()-1);
 			}
 			sysUserSession.setRoleIds(roles);
-			sysUserSession.setUserSex(user.getUserSex());
+			sysUserSession.setUserSex(user.getSex()+"");
 			sysUserSession.setRoleNames(roleNames);
-			sysUserSession.setUserState(user.getUserState());
+			sysUserSession.setUserState(user.getEnable()+"");
 			return sysUserSession;
 		}
 		return null;
@@ -75,7 +74,7 @@ public class SysLoginServiceImpl implements SysLoginService {
 
 	@Override
 	public SysUserSession login(String userName) throws Exception {
-		List<SysAccount> userList = sysAccountDao.findByLoginAccount(userName);
+		/*List<SysAccount> userList = complatUserDao.findByLoginAccount(userName);
 		if (userList != null && userList.size() == 1) {
 			SysAccount user = userList.get(0);
 			SysUserSession sysUserSession = new SysUserSession();
@@ -101,6 +100,7 @@ public class SysLoginServiceImpl implements SysLoginService {
 			sysUserSession.setUserState(user.getUserState());
 			return sysUserSession;
 		}
+		return null;*/
 		return null;
 	}
 

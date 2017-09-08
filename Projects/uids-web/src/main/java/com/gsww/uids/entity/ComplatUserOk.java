@@ -1,4 +1,4 @@
-package com.gsww.ischool.entity;
+package com.gsww.uids.entity;
 
 import java.sql.Timestamp;
 import javax.persistence.Column;
