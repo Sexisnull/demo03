@@ -1,155 +1,155 @@
-package com.gsww.uids.entity;
+package com.gsww.ischool.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.GenericGenerator;
-
 /**
- * 数据调用实体类
- * @author Seven
- *
+ * JisDatacall entity. @author MyEclipse Persistence Tools
  */
-@SuppressWarnings("serial")
 @Entity
-@Table(name = "JIS_DATACALL")
-public class JisDatacall implements java.io.Serializable{
-	private int iid;         	 //主键id
-	private String resName;   	 //名称
-	private String resUrl;   	 //url地址
-	private int callingType; 	 //调用方式,0：iframe调用,1：rss调用
-	private int isVerification;  //是否验证
-	private int orderType;   	 //排序方式
-	private String content;  	 //rss模板样式
-	private String timeFormat;   //时间格式 
-	private int appId;  		 //应用id
-	private String remark; 		 //标识
-	private int infoNum;   		 //信息数量
-	
+@Table(name = "jis_datacall", catalog = "uidsdx")
+public class JisDatacall implements java.io.Serializable {
+
+	// Fields
+
+	private Integer iid;
+	private String resname;
+	private String resurl;
+	private Integer callingtype;
+	private Integer isverification;
+	private Integer appid;
+	private Integer ordertype;
+	private String timeformat;
+	private String content;
+	private String remark;
+	private Integer infonum;
+
+	// Constructors
+
+	/** default constructor */
 	public JisDatacall() {
-		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public JisDatacall(int iid, String resName, String resUrl, int callingType,
-			int isVerification, int orderType, String content,
-			String timeFormat, int appId, String remark, int infoNum) {
-		super();
-		this.iid = iid;
-		this.resName = resName;
-		this.resUrl = resUrl;
-		this.callingType = callingType;
-		this.isVerification = isVerification;
-		this.orderType = orderType;
+	/** full constructor */
+	public JisDatacall(String resname, String resurl, Integer callingtype,
+			Integer isverification, Integer appid, Integer ordertype,
+			String timeformat, String content, String remark, Integer infonum) {
+		this.resname = resname;
+		this.resurl = resurl;
+		this.callingtype = callingtype;
+		this.isverification = isverification;
+		this.appid = appid;
+		this.ordertype = ordertype;
+		this.timeformat = timeformat;
 		this.content = content;
-		this.timeFormat = timeFormat;
-		this.appId = appId;
 		this.remark = remark;
-		this.infoNum = infoNum;
+		this.infonum = infonum;
 	}
 
+	// Property accessors
 	@Id
-	@GeneratedValue(generator="system-uuid")
-	@GenericGenerator(name="system-uuid", strategy="uuid.hex")
-	@Column(name = "IID", unique = true, nullable = false)
-	public int getIid() {
-		return iid;
+	@GeneratedValue(strategy = IDENTITY)
+	@Column(name = "iid", unique = true, nullable = false)
+	public Integer getIid() {
+		return this.iid;
 	}
 
-	public void setIid(int iid) {
+	public void setIid(Integer iid) {
 		this.iid = iid;
 	}
 
-	@Column(name = "RESNAME")
-	public String getResName() {
-		return resName;
+	@Column(name = "resname", length = 100)
+	public String getResname() {
+		return this.resname;
 	}
 
-	public void setResName(String resName) {
-		this.resName = resName;
+	public void setResname(String resname) {
+		this.resname = resname;
 	}
 
-	@Column(name = "RESURL")
-	public String getResUrl() {
-		return resUrl;
+	@Column(name = "resurl", length = 900)
+	public String getResurl() {
+		return this.resurl;
 	}
 
-	public void setResUrl(String resUrl) {
-		this.resUrl = resUrl;
+	public void setResurl(String resurl) {
+		this.resurl = resurl;
 	}
 
-	@Column(name = "CALLINGTYPE")
-	public int getCallingType() {
-		return callingType;
+	@Column(name = "callingtype")
+	public Integer getCallingtype() {
+		return this.callingtype;
 	}
 
-	public void setCallingType(int callingType) {
-		this.callingType = callingType;
+	public void setCallingtype(Integer callingtype) {
+		this.callingtype = callingtype;
 	}
 
-	@Column(name = "ISVERIFICATION")
-	public int getIsVerification() {
-		return isVerification;
+	@Column(name = "isverification")
+	public Integer getIsverification() {
+		return this.isverification;
 	}
 
-	public void setIsVerification(int isVerification) {
-		this.isVerification = isVerification;
+	public void setIsverification(Integer isverification) {
+		this.isverification = isverification;
 	}
 
-	@Column(name = "ORDERTYPE")
-	public int getOrderType() {
-		return orderType;
+	@Column(name = "appid")
+	public Integer getAppid() {
+		return this.appid;
 	}
 
-	public void setOrderType(int orderType) {
-		this.orderType = orderType;
+	public void setAppid(Integer appid) {
+		this.appid = appid;
 	}
 
-	@Column(name = "CONTENT")
+	@Column(name = "ordertype")
+	public Integer getOrdertype() {
+		return this.ordertype;
+	}
+
+	public void setOrdertype(Integer ordertype) {
+		this.ordertype = ordertype;
+	}
+
+	@Column(name = "timeformat", length = 60)
+	public String getTimeformat() {
+		return this.timeformat;
+	}
+
+	public void setTimeformat(String timeformat) {
+		this.timeformat = timeformat;
+	}
+
+	@Column(name = "content", length = 65535)
 	public String getContent() {
-		return content;
+		return this.content;
 	}
 
 	public void setContent(String content) {
 		this.content = content;
 	}
 
-	@Column(name = "TIMEFORMAT")
-	public String getTimeFormat() {
-		return timeFormat;
-	}
-
-	public void setTimeFormat(String timeFormat) {
-		this.timeFormat = timeFormat;
-	}
-
-	@Column(name = "APPID")
-	public int getAppId() {
-		return appId;
-	}
-
-	public void setAppId(int appId) {
-		this.appId = appId;
-	}
-
-	@Column(name = "REMARK")
+	@Column(name = "remark", length = 100)
 	public String getRemark() {
-		return remark;
+		return this.remark;
 	}
 
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
 
-	@Column(name = "INFONUM")
-	public int getInfoNum() {
-		return infoNum;
+	@Column(name = "infonum")
+	public Integer getInfonum() {
+		return this.infonum;
 	}
 
-	public void setInfoNum(int infoNum) {
-		this.infoNum = infoNum;
+	public void setInfonum(Integer infonum) {
+		this.infonum = infonum;
 	}
+
 }

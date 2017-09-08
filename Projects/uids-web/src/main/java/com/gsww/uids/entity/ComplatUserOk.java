@@ -9,11 +9,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * ComplatUser entity. @author MyEclipse Persistence Tools
+ * ComplatUserOk entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "complat_user", catalog = "uidsdx")
-public class ComplatUser implements java.io.Serializable {
+@Table(name = "complat_user-ok", catalog = "uidsdx")
+public class ComplatUserOk implements java.io.Serializable {
 
 	// Fields
 
@@ -51,17 +51,17 @@ public class ComplatUser implements java.io.Serializable {
 	// Constructors
 
 	/** default constructor */
-	public ComplatUser() {
+	public ComplatUserOk() {
 	}
 
 	/** full constructor */
-	public ComplatUser(String uuid, String loginname, String pwd, String name,
-			Integer groupid, Integer age, Integer sex, Integer enable,
-			Integer usertype, String pwdquestion, String pwdanswer,
-			Timestamp createtime, String ip, Timestamp accesstime,
-			String pinyin, String mobile, String phone, String fax,
-			String email, String qq, String msn, String address, String post,
-			String headship, Integer orderid, String loginallname,
+	public ComplatUserOk(String uuid, String loginname, String pwd,
+			String name, Integer groupid, Integer age, Integer sex,
+			Integer enable, Integer usertype, String pwdquestion,
+			String pwdanswer, Timestamp createtime, String ip,
+			Timestamp accesstime, String pinyin, String mobile, String phone,
+			String fax, String email, String qq, String msn, String address,
+			String post, String headship, Integer orderid, String loginallname,
 			Timestamp modifytime, Integer synState, Integer opersign) {
 		this.uuid = uuid;
 		this.loginname = loginname;
