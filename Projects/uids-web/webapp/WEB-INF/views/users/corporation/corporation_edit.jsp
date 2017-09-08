@@ -3,32 +3,26 @@
 <html>
 
 <%@ include file="/include/meta.jsp"%> 
-
+<script type="text/javascript" src="${ctx}/res/js/region/checkpwd.js"></script>
 <head>
 <title>甘肃万维JUP课题</title>
-<style type="text/css">
-.ztree {margin-top: 10px;border: 1px solid #cfd9db; display:none;background: #f0f6e4;height:360px;overflow-y:scroll;overflow-x:auto;}
-</style>
 <script type="text/javascript">
 $().ready(function() {
 
 //表单校验
-var userNameInput=$("#userName").val();
+var corNameInput=$("#name").val();
  $("#editForm").validate({
     rules: {
-	   userName: {
+	   name: {
 	    required: true,
-	    cnRangelength: [0,32],
-	    stringCheck:userNameInput
+	    cnRangelength: [0,33],
+	    corNameInput
 	   },
-	   userRole: {
+	   regNumber: {
 	    required: true
 	   },
-	   loginAccount: {
+	   cardNumber: {
 	    required: true,
-	    chrnum:true,
-	    uniqueLoginAccount:true,
-	    maxlength: 32
 	   },
 	   userSchool:{
 	   cnRangelength: [0,64]
@@ -66,22 +60,20 @@ var userNameInput=$("#userName").val();
 	   {
 	   	 required: true	
 	   }
-	  },submitHandler:function(form){
-            var userRole=$("#userRole").val(); 
-            var deptId=$("#deptId").val();
-            if(userRole==''){
-            	$.validator.errorShow($("#userRole"),'请选择角色');
-            	return false;
-            }else if(deptId==''){
-            	$.validator.errorShow($("#deptId"),'请选择机构');
-            	return false;
-            }else{
-				 form.submit();
-			}
-        } 
+	  }
     });
     
-
+    //民族
+	var nations = ["汉族","壮族","回族","满族","维吾尔族","苗族","彝族","土家族","藏族","蒙古族",
+	               "侗族","布依族","瑶族","白族","朝鲜族","哈尼族","黎族","哈萨克族","傣族","畲族",
+	               "傈僳族","东乡族","仡佬族","拉祜族","佤族","水族","纳西族","羌族","土族","仫佬族",
+	               "锡伯族","柯尔克孜族","景颇族","达斡尔族","撒拉族","布朗族","毛南族","塔吉克族","普米族","阿昌族",
+	               "怒族","鄂温克族","京族","基诺族","德昂族","保安族","俄罗斯族","裕固族","乌孜别克族","门巴族",
+	               "鄂伦春族","独龙族","赫哲族","高山族","珞巴族","塔塔尔族"];
+	var nation = $("#nation");
+	for(var i=0;i<nations.length;i++){
+		nation.append("<option value='nations[i]'>"+nations[i]+"</option>");
+	}
 });
 
 $(function(){
@@ -91,6 +83,7 @@ $(function(){
 	//
 	$(".icon-date-r").click(function(){ $(this).prev("input").click(); });
 });
+
 
 </script>
 
@@ -109,7 +102,8 @@ $(function(){
 			</li>
 			<li class="split"></li>
 			<li class="active">
-				<a class="last-position">用户新增</a>
+				<c:if test="${corporation.iid==null}">用户新增</c:if>
+				<c:if test="${corporation.iid!=null}">用户编辑</c:if>
 			</li>
    		</ol>
     </div>
@@ -129,39 +123,42 @@ $(function(){
     		<tr>
 	        	 <th> 法人类型：</th>
 	        	 <td>
-	        	 	<gsww:checkboxTag name="type" type="corporationType" inputType="radio" value="${corporation.type}"></gsww:checkboxTag>
+	        	 	<gsww:checkboxTag name="type" defaultValue="1" type="corporationType" inputType="radio" value="${corporation.type}"></gsww:checkboxTag>
 	        	 </td>
-	        	 <th><b class="mustbe">*</b> 企业名称：</th>
+			</tr>
+    		<tr>
+    			<th><b class="mustbe">*</b> 企业名称：</th>
 				 <td>
 					<input type="text" id="name" name="name" value="${corporation.name}" />
 				</td>
-			</tr>
-    		<tr>
-	        	 <th><b class="mustbe">*</b>工商注册号/社会信用代码：</th>
-	        	 <td>
-					<input type="text" id="regNumber" name="regNumber" value="${corporation.regNumber}" />
-				</td>
-				<th> 组织机构代码：</th>
-				<td>
-					<input type="text"  id="orgNumber" name="orgNumber" value="${corporation.orgNumber}" />
-				</td>
-			</tr>
-			<tr>
-				<th><b class="mustbe">*</b> 企业法人姓名：</th>
+	        	<th><b class="mustbe">*</b> 企业法人姓名：</th>
                 <td>
-                	<input type="text"  id="realName" name="realName" value="${corporation.realName}" />
-                </td>
-				<th> 企业法人民族：</th>
-				
-				<td>
-					<gsww:checkboxTag name="userSex" type="XB" inputType="radio" value="${sysAccount.userSex}"></gsww:checkboxTag>
-				</td>
+                	<input type="text"  id="realName" name="realName" maxlength="33" value="${corporation.realName}" />
+                </td> 
 			</tr>
 			<tr>
 				<th><b class="mustbe">*</b> 企业法人身份证号：</th>
 				<td>
 					<input type="text" id="cardNumber" name="cardNumber" value="${corporation.cardNumber}"">
 	            </td>
+				<th> 企业法人民族：</th>
+				<td>
+					<select id="nation" name="nation">
+						<option value="">请选择</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<th><b class="mustbe">*</b>工商注册号/社会信用代码：</th>
+	        	 <td>
+					<input type="text" id="regNumber" name="regNumber" value="${corporation.regNumber}" />
+				</td>
+	            <c:if test="${corporation.iid==null}">
+					<th> 组织机构代码：</th>
+					<td>
+						<input type="text"  id="orgNumber" name="orgNumber" value="${corporation.orgNumber}" style=""/>
+					</td>
+				</c:if>
 			</tr>
 			<tr>
 				<th>账户信息</th>
@@ -180,18 +177,29 @@ $(function(){
 			<tr>
 				<th> 密码：</th>
 	        	<td>
-	        		<input type="password" id="pwd" name="pwd" value="${corporation.pwd}" />
+	        		<input type="password" id="pwd" name="pwd" value="${corporation.pwd}" 
+	        		onkeyup="javascript:EvalPwd(this.value);"/>
 	            	
 	        	</td>
-				<td>
-					密码强度
-				</td>
-			</tr>
-			<tr>
 				<th>邮箱：</th>
 				<td>
 					<input type="text" class="input" id="email" name="email" value="${corporation.email}" />
 	            	<i class="form-icon-clear"></i>
+				</td>
+			</tr>
+			<tr>
+				<th>密码强度</th>
+				<td>
+					<table id="pwdpower" title="字母加数字加符号就会强" style="width: 100%" cellspacing="0"
+					cellpadding="0" border="0">
+						<tbody>
+							<tr>
+								<td id="pweak" style="">弱</td>
+								<td id="pmedium" style="">中</td>
+								<td id="pstrong" style="">强</td>
+							</tr>
+						</tbody>
+					</table>
 				</td>
 				<th>办公电话：</th>
 				<td>
