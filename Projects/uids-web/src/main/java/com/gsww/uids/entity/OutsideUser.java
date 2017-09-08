@@ -10,7 +10,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+
 /**
+ * Title: OutsideUser.java 
+ * Description: 个人用户实体类
+ * @author yangxia
+ * @created 2017年9月8日 下午7:51:33
  */
 @Entity
 @Table(name = "COMPLAT_OUTSIDEUSER")
@@ -55,6 +61,14 @@ public class OutsideUser implements Serializable {
 	private String rejectReason;// 审核未通过原因
 	private String headRenamePic;// 身份证头部照片 新名称
 	private String bodyRenamePic;// 身份证照片新名称
+	private String residenceId; // 户籍所在地区
+	private String presidenceId; // 户籍所在地市
+	private String gpresidenceId; // 户籍所在地省
+	private String residenceDetail; // 户籍所在地详址
+	private String livingAreaId; // 常住地区
+	private String plivingAreaId; // 常住地市
+	private String gplivingAreaId; // 常住地省
+	private String livingAreaDetail;// 常住详细地
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -67,6 +81,8 @@ public class OutsideUser implements Serializable {
 		this.iid = iid;
 	}
 
+	@GeneratedValue(generator = "system-uuid")
+	@GenericGenerator(name = "system-uuid", strategy = "uuid.hex")
 	@Column(name = "UUID")
 	public String getUuid() {
 		return uuid;
@@ -400,12 +416,86 @@ public class OutsideUser implements Serializable {
 		this.bodyRenamePic = bodyRenamePic;
 	}
 
+	@Column(name = "RESIDENCEID")
+	public String getResidenceId() {
+		return residenceId;
+	}
+
+	public void setResidenceId(String residenceId) {
+		this.residenceId = residenceId;
+	}
+
+	@Column(name = "PRESIDENCEID")
+	public String getPresidenceId() {
+		return presidenceId;
+	}
+
+	public void setPresidenceId(String presidenceId) {
+		this.presidenceId = presidenceId;
+	}
+
+	@Column(name = "GPRESIDENCEID")
+	public String getGpresidenceId() {
+		return gpresidenceId;
+	}
+
+	public void setGpresidenceId(String gpresidenceId) {
+		this.gpresidenceId = gpresidenceId;
+	}
+
+	@Column(name = "RESIDENCEDETAIL")
+	public String getResidenceDetail() {
+		return residenceDetail;
+	}
+
+	public void setResidenceDetail(String residenceDetail) {
+		this.residenceDetail = residenceDetail;
+	}
+
+	@Column(name = "LIVINGAREAID")
+	public String getLivingAreaId() {
+		return livingAreaId;
+	}
+
+	public void setLivingAreaId(String livingAreaId) {
+		this.livingAreaId = livingAreaId;
+	}
+
+	@Column(name = "PLIVINGAREAID")
+	public String getPlivingAreaId() {
+		return plivingAreaId;
+	}
+
+	public void setPlivingAreaId(String plivingAreaId) {
+		this.plivingAreaId = plivingAreaId;
+	}
+
+	@Column(name = "GPLIVINGAREAID")
+	public String getGplivingAreaId() {
+		return gplivingAreaId;
+	}
+
+	public void setGplivingAreaId(String gplivingAreaId) {
+		this.gplivingAreaId = gplivingAreaId;
+	}
+
+	@Column(name = "LIVINGAREADETAIL")
+	public String getLivingAreaDetail() {
+		return livingAreaDetail;
+	}
+
+	public void setLivingAreaDetail(String livingAreaDetail) {
+		this.livingAreaDetail = livingAreaDetail;
+	}
+
 	public OutsideUser(Integer iid, String uuid, String loginName, String pwd, String name, Integer age, String sex,
 			Integer enable, String degree, String pinyin, Integer papersType, String papersNumber, String description,
 			String mobile, String phone, String fax, String email, String qq, String msn, String address, String post,
 			String workUnit, String headShip, Date birthDate, Date loginTime, String loginIp, String regIp,
 			Date createTime, String regSite, Integer isAuth, Integer authState, String headPic, String bodyPic,
-			Integer isUpload, String compTel, String rejectReason, String headRenamePic, String bodyRenamePic) {
+			Integer isUpload, String compTel, String rejectReason, String headRenamePic, String bodyRenamePic,
+			String residenceId, String presidenceId, String gpresidenceId, String residenceDetail, String livingAreaId,
+			String plivingAreaId, String gplivingAreaId, String livingAreaDetail) {
 		super();
 		this.iid = iid;
 		this.uuid = uuid;
@@ -445,9 +535,16 @@ public class OutsideUser implements Serializable {
 		this.rejectReason = rejectReason;
 		this.headRenamePic = headRenamePic;
 		this.bodyRenamePic = bodyRenamePic;
+		this.residenceId = residenceId;
+		this.presidenceId = presidenceId;
+		this.gpresidenceId = gpresidenceId;
+		this.residenceDetail = residenceDetail;
+		this.livingAreaId = livingAreaId;
+		this.plivingAreaId = plivingAreaId;
+		this.gplivingAreaId = gplivingAreaId;
+		this.livingAreaDetail = livingAreaDetail;
 	}
 
 	public OutsideUser() {
 	}
-
 }
