@@ -38,4 +38,5 @@ dependency-reduced-pom.xml
 .studio/
 .mule/
 
+jdbc.properties
 README.html
