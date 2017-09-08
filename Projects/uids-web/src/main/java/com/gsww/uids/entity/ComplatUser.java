@@ -7,6 +7,19 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * <p>Copyright: Copyright (c) 2014</p>
+ * <p>公司名称 : 中国电信甘肃万维公司</p>
+ * <p>项目名称 : jup-core</p>
+ * <p>创建时间 : 2017-09-07 下午14:30:23</p>
+ * <p>类描述 :   政府用户模块实体类    </p>
+ *
+ *
+ * @version 3.0.0
+ * @author <a href=" ">shenxh</a>
+ */
+
+
 @Entity
 @Table(name = "COMPLAT_USER")
 public class ComplatUser implements java.io.Serializable{

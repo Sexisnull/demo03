@@ -7,31 +7,21 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.gsww.uids.entity.ComplatUser;
 
-public interface ComplatUserDao extends
-PagingAndSortingRepository<ComplatUser, Integer>,
-JpaSpecificationExecutor<ComplatUser>{
+/**
+ * <p>Copyright: Copyright (c) 2014</p>
+ * <p>公司名称 : 中国电信甘肃万维公司</p>
+ * <p>项目名称 : jup-core</p>
+ * <p>创建时间 : 2017-09-07 下午14:30:23</p>
+ * <p>类描述 :   政府用户模块DAO层    </p>
+ *
+ *
+ * @version 3.0.0
+ * @author <a href=" ">shenxh</a>
+ */
 
-	
 
-	
-	
-	/**
-	 * 新增政府用户信息保存
-	 */
-	public List<ComplatUser> saveComplatUser();
-	
-	
-	/**
-	 * 根据账号主键查询账号信息
-	 * @param accountId
-	 * @return
-	 */
-	ComplatUser findById(String pk);
-	
-	
-	List<ComplatUser> findByIid(int iid);
+public interface ComplatUserDao extends PagingAndSortingRepository<ComplatUser, Integer>,JpaSpecificationExecutor<ComplatUser>{
 
-	List<ComplatUser> findByRoleId(String uuid);
-	
-	
+	ComplatUser findByIid(Integer iid);
+			
 }

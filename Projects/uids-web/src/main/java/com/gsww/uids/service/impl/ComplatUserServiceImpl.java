@@ -12,8 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gsww.jup.entity.sys.SysAccount;
 import com.gsww.uids.dao.ComplatUserDao;
+import com.gsww.uids.entity.ComplatCorporation;
 import com.gsww.uids.entity.ComplatUser;
 import com.gsww.uids.service.ComplatUserService;
+
 
 @Transactional
 @Service("complatUserService")
@@ -22,12 +24,6 @@ public class ComplatUserServiceImpl implements ComplatUserService{
 	@Autowired
 	private ComplatUserDao complatUserDao;
 	
-	@Override
-	public Page<ComplatUser> getUserPage(Specification<ComplatUser> spec,PageRequest pageRequest) {
-		return complatUserDao.findAll(spec, pageRequest);
-	}
-	
-	
 	
 	/**
 	 * 查询用户列表
@@ -35,68 +31,33 @@ public class ComplatUserServiceImpl implements ComplatUserService{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<ComplatUser> findComplatUserList(int iid)throws Exception{
-		List<ComplatUser> list=new ArrayList<ComplatUser>();
-		//List<ComplatUser> userList=new ArrayList<ComplatUser>();
+	@Override
+	public Page<ComplatUser> getComplatUserPage(Specification<ComplatUser> spec,PageRequest pageRequest) {
+		return complatUserDao.findAll(spec, pageRequest);
+	}
+	
+	
+	
+	
+	@Override
+	public ComplatUser findByKey(Integer iid) throws Exception {		
+		return complatUserDao.findByIid(iid);
+	}
+	
+
+	@Override
+	public void save(ComplatUser complatUser) {
 		
-		list=complatUserDao.findByIid(iid);
-		/*if(list.size()>0){
-			for (ComplatUser complatUser : list) {
-				complatUser=complatUserDao.findByRoleId(complatUser.getUuid());
-				list.add(complatUser);
-			}
-		}*/
-		return list;
-	}
-	
-	
-	
-	@Override
-	public ComplatUser findByKey(String pk) throws Exception {
-		ComplatUser complatUser=complatUserDao.findById(pk);
-		return complatUser;
-	}
-	
-	
-	/**
-	 * 删除用户角色中间表数据
-	 * @param userInfo
-	 * @throws Exception
-	 */
-	public void deleteAccountRole(ComplatUser entity) throws Exception{
-		if(entity!=null){
-			List<ComplatUser> list=complatUserDao.findByIid(entity.getIid());
-			if(list.size()>0){
-				for (ComplatUser complatUser : list) {
-					complatUserDao.delete(complatUser);
-				}			
-			}
-		}
-	}
-	
-	
-	/**
-	 * 保存用户角色关系表
-	 * @param userId
-	 * @param roleId
-	 * @throws Exception
-	 */
-	@Override
-	public void saveUserRole(int userId,String uuid) throws Exception{
-		ComplatUser complatUser=new ComplatUser();
-		complatUser.setIid(userId);
-		complatUser.setUuid(uuid);
 		complatUserDao.save(complatUser);
 	}
 
-
-
 	@Override
-	public void save(ComplatUser entity) {
-		// TODO Auto-generated method stub
-		if(entity!=null){
-			complatUserDao.save(entity);
-		}
+	public void delete(ComplatUser complatUser) throws Exception {
+		
+		complatUserDao.delete(complatUser);
 	}
+	
+
+
 
 }

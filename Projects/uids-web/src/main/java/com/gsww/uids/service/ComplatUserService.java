@@ -7,14 +7,25 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.gsww.jup.entity.sys.SysAccount;
+import com.gsww.uids.entity.ComplatCorporation;
 import com.gsww.uids.entity.ComplatUser;
 
-
+/**
+ * <p>Copyright: Copyright (c) 2014</p>
+ * <p>公司名称 : 中国电信甘肃万维公司</p>
+ * <p>项目名称 : jup-core</p>
+ * <p>创建时间 : 2017-09-07 下午14:30:23</p>
+ * <p>类描述 :   政府用户模块service层    </p>
+ *
+ *
+ * @version 3.0.0
+ * @author <a href=" ">shenxh</a>
+ */
 public interface ComplatUserService {
 
 	
 	
-	public void save(ComplatUser entity);
+
 	/**
 	 * 
 	 * 查询政府用户列表
@@ -22,41 +33,21 @@ public interface ComplatUserService {
 	 * @param pageRequest
 	 * @return
 	 */
-	public Page<ComplatUser> getUserPage(Specification<ComplatUser> spec, PageRequest pageRequest);
+	public Page<ComplatUser> getComplatUserPage(Specification<ComplatUser> spec, PageRequest pageRequest);
 	
 	
 	/**
-	 * 查询用户角色列表
-	 * @param userId
-	 * @return
-	 * @throws Exception
+	 * 根据主键查询法人信息
 	 */
-	public List<ComplatUser> findComplatUserList(int iid)throws Exception;
-	
+	ComplatUser findByKey(Integer iid) throws Exception;
 	
 	/**
-	 * 根据主键查找对象
-	 * @param pk
-	 * @throws Exception
+	 * 保存
 	 */
-	public ComplatUser findByKey(String pk) throws Exception;
-	
+	void save(ComplatUser complatUser) throws Exception;
 	
 	/**
-	 * 删除用户角色中间表数据
-	 * @param userInfo
-	 * @throws Exception
+	 * 删除
 	 */
-	public void deleteAccountRole(ComplatUser entity) throws Exception;
-	
-	
-	
-	/**
-	 * 保存用户角色关系表
-	 * @param userId
-	 * @param roleId
-	 * @throws Exception
-	 */
-	public void saveUserRole(int userId,String uuid) throws Exception;
-
+	void delete(ComplatUser complatUser) throws Exception;
 }
