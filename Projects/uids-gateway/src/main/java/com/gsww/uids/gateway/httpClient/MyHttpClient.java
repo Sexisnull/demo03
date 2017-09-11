@@ -23,8 +23,8 @@ import org.apache.log4j.Logger;
 public class MyHttpClient{
 	protected Logger logger = Logger.getLogger(getClass());
 	
-	public static Integer syncToApplication(String url,String jsonString)throws Exception{
-		int status =0;
+	public static Map<String,Object> syncToApplication(String url,String jsonString)throws Exception{
+		Map<String,Object> returnMap = new HashMap<String,Object>();
 		HttpClient httpClient = new HttpClient();
 		PostMethod post = new PostMethod(url);
 		NameValuePair json = new NameValuePair("jsonString",jsonString);
@@ -33,16 +33,18 @@ public class MyHttpClient{
 		httpClient.getHttpConnectionManager().getParams().setConnectionTimeout(8000);
 		httpClient.getHttpConnectionManager().getParams().setSoTimeout(8000);
 	    try {
-	    	status = httpClient.executeMethod(post);
-			System.out.println(status);
+	    	int status = httpClient.executeMethod(post);
+	    	System.out.println(status);
 			System.out.println(post.getResponseBodyAsString());
+	    	returnMap.put("status", String.valueOf(status));
+	    	returnMap.put("respMsg", post.getResponseBodyAsString());
 		} catch (IOException e) {
 			e.printStackTrace();
 			post.releaseConnection();
 			throw new Exception(e.getMessage());
 		}
 	    post.releaseConnection(); 
-		return status;
+		return returnMap;
 	}
 	
 }
