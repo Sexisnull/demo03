@@ -32,7 +32,7 @@ public interface JisDatacallService {
 	 * @param iid
 	 * @throws Exception
 	 */
-	public JisDatacall findByKey(String iid) throws Exception;
+	public JisDatacall findByKey(Integer iid) throws Exception;
 	
 	/**
 	 * 根据标识获得数据调用对象

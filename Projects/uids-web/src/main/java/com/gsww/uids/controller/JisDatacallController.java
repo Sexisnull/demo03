@@ -26,10 +26,13 @@ import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
 import com.gsww.jup.util.PageUtils;
-import com.gsww.jup.util.StringHelper;
 import com.gsww.uids.entity.JisDatacall;
 import com.gsww.uids.service.JisDatacallService;
-
+/**
+ * 数据调用控制器
+ * @author Seven
+ *
+ */
 @Controller
 @RequestMapping(value = "/datacall")
 public class JisDatacallController extends BaseController{
@@ -93,10 +96,10 @@ public class JisDatacallController extends BaseController{
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/datacallEdit", method = RequestMethod.GET)
-	public String datacallEdit(String iid,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+	public String datacallEdit(Integer iid,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		try {
 			JisDatacall jisDatacall = null;
-			if(StringHelper.isNotBlack(iid)){
+			if(iid!=null){
 				String orderField="";
 				String orderSort="";
 				if(StringUtils.isNotBlank(request.getParameter("orderField"))){
@@ -106,8 +109,8 @@ public class JisDatacallController extends BaseController{
 					orderSort=(String)request.getParameter("orderSort");
 				}
 				jisDatacall = jisDatacallService.findByKey(iid);
-				Map<String,String> datacallMap=new HashMap<String,String>();
-				List<JisDatacall> datacallList=new ArrayList<JisDatacall>();
+				Map<String,String> map=new HashMap<String,String>();
+				List<JisDatacall> list=new ArrayList<JisDatacall>();
 				/*userList=sysCardService.findUserNameList(cardId);*/
 				/*roleList=sysUserService.findAccountRoleList(sysUser.getUserId());*/
 				/*String userName="";
@@ -123,8 +126,8 @@ public class JisDatacallController extends BaseController{
 				}else{
 					userMap.put("0", "");
 				}*/
-				model.addAttribute("datacallList", datacallList);
-				model.addAttribute("datacallMap", datacallMap);
+				model.addAttribute("list", list);
+				model.addAttribute("map", map);
 				/*model.addAttribute("userId", userId);*/
 				model.addAttribute("orderField", orderField);
 				model.addAttribute("orderSort", orderSort);
@@ -132,9 +135,6 @@ public class JisDatacallController extends BaseController{
 				jisDatacall = new JisDatacall();
 			}
 			model.addAttribute("jisDatacall", jisDatacall);
-			/*List<SysRole> list=new ArrayList<SysRole>();
-			list=sysRoleService.findRoleList();
-			model.addAttribute("sysRoleList",list);*/			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -146,31 +146,29 @@ public class JisDatacallController extends BaseController{
 	 */
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/datacallSave", method = RequestMethod.POST)
-	public ModelAndView datacallSave(String iid,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+	public ModelAndView datacallSave(JisDatacall jisDatacall,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+		
 		try {
-			JisDatacall jisDatacall=null;
-			iid=request.getParameter("iid");
-			
-			//1、先保存用户
-			jisDatacall = jisDatacallService.save(jisDatacall);
-			//2、保存用户角色关系表
-			/*sysAccountService.deleteAccountRole(sysAccount);
-			String userRoles=request.getParameter("userRole");
-			if(StringUtils.isNotBlank(userRoles)){
-				String[] roles=userRoles.split(",");
-				for (String roleId : roles) {
-					
-					sysAccountService.saveUserRole(sysAccount.getUserAcctId(), roleId);
-				}
+			if(jisDatacall != null){
+				jisDatacallService.save(jisDatacall);
+				returnMsg("success","保存成功",request);
 			}
-			//System.out.println("Saveuser:"+sysAccount.getUserAcctId());*/	
+		} catch (Exception e) {
+			e.printStackTrace();
+			returnMsg("error","保存失败",request);
+		} finally{
+			return new ModelAndView("redirect:/datacall/datacallList");
+		}
+		
+		/*try {
+			jisDatacall = jisDatacallService.save(jisDatacall);
 			returnMsg("success","保存成功",request);
 		} catch (Exception e) {
 			e.printStackTrace();
 			returnMsg("error","保存失败",request);
 		} finally{
-			return  new ModelAndView("redirect:/jis/datacallList");
-		}
+			return  new ModelAndView("redirect:/datacall/datacallList");
+		}*/
 		
 	}
 	
@@ -179,16 +177,12 @@ public class JisDatacallController extends BaseController{
 	 */
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/datacallDelete", method = RequestMethod.GET)
-	public ModelAndView datacallDelete(String iid,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+	public ModelAndView datacallDelete(Integer iid,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		try {
-			String[] para=iid.split(",");
 			JisDatacall jisDatacall = null;
-			boolean flag=false;
-			for(int i=0;i<para.length;i++){
-				jisDatacall=jisDatacallService.findByKey(para[i].trim());
-				jisDatacallService.delete(jisDatacall);
-					flag=true;
-			}
+			jisDatacall=jisDatacallService.findByKey(iid);
+			jisDatacallService.delete(jisDatacall);
+			boolean flag=true;
 			if(flag){
 				returnMsg("success","删除成功",request);
 			}else{
@@ -198,7 +192,7 @@ public class JisDatacallController extends BaseController{
 			e.printStackTrace();
 			returnMsg("error", "删除失败",request);			
 		} finally{
-			return  new ModelAndView("redirect:/jis/datacallList");
+			return  new ModelAndView("redirect:/datacall/datacallList");
 		}
 		
 	}
@@ -206,8 +200,8 @@ public class JisDatacallController extends BaseController{
 	/**
 	 * 查看账号情信息
 	 */
-	@RequestMapping(value = "/datacallView", method = RequestMethod.GET)
-	public String datacallView(String iid,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {		
+	/*@RequestMapping(value = "/datacallView", method = RequestMethod.GET)
+	public String datacallView(int iid,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {		
 		try {
 			JisDatacall jisDatacall = null;
 			if(StringHelper.isNotBlack(iid)){
@@ -220,7 +214,7 @@ public class JisDatacallController extends BaseController{
 			e.printStackTrace();
 		}
 		return "system/jis/datacall_view";
-	}
+	}*/
 	
 	/**
 	 * 标识是否重复
