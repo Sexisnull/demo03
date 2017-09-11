@@ -1,5 +1,6 @@
 package com.gsww.uids.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
@@ -38,6 +39,7 @@ import com.gsww.uids.service.OutsideUserService;
 @RequestMapping(value = "/complat")
 public class OutsideUserController extends BaseController {
 	private static Logger logger = LoggerFactory.getLogger(OutsideUserController.class);
+	private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	@Autowired
 	private OutsideUserService outsideUserService;
 
@@ -89,14 +91,17 @@ public class OutsideUserController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/outsideuserEdit", method = RequestMethod.GET)
-	public String accountEdit(String iid, Model model, HttpServletRequest request, HttpServletResponse response)
+	public String accountEdit(String outsideuserId, Model model, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		// ModelAndView mav=new
 		// ModelAndView("users/outsideUser/outsideUser_edit");
 		try {
 			OutsideUser outsideUser = null;
-			if (StringHelper.isNotBlack(iid)) {
-				outsideUser = outsideUserService.findByKey(Integer.parseInt(iid));
+			if (StringHelper.isNotBlack(outsideuserId)) {
+				outsideUser = outsideUserService.findByKey(Integer.parseInt(outsideuserId));
+				Date createTime = outsideUser.getCreateTime();
+				String time = sdf.format(createTime);
+				model.addAttribute("time", time);
 			} else {
 				outsideUser = new OutsideUser();
 			}
@@ -119,16 +124,26 @@ public class OutsideUserController extends BaseController {
 	@RequestMapping(value = "/outsideuserSave", method = RequestMethod.POST)
 	public ModelAndView accountSave(OutsideUser outsideUser, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		
 		try {
 			if (outsideUser != null) {
-				Date d = new Date();  
-				outsideUser.setEnable(1); // 是否禁用
-				outsideUser.setAuthState(0); // 审核状态
-				outsideUser.setIsAuth(0); // 是否审核
-				outsideUser.setCreateTime(d);//创建时间
-				outsideUserService.save(outsideUser);
-				returnMsg("success", "保存成功", request);
+				String iidStr = String.valueOf(outsideUser.getIid());
+				System.out.println(iidStr);
+				if (iidStr == "null" || iidStr.length() <= 0) {
+					Date d = new Date(); 
+					outsideUser.setEnable(1); // 是否禁用
+					outsideUser.setAuthState(0); // 审核状态
+					outsideUser.setIsAuth(0); // 是否审核
+					outsideUser.setCreateTime(d);//创建时间
+					outsideUserService.save(outsideUser);
+					returnMsg("success", "保存成功", request);
+				} else {
+					//注册时间
+					String time = request.getParameter("time");
+					Date createTime = sdf.parse(time);
+					outsideUser.setCreateTime(createTime);
+					outsideUserService.save(outsideUser);
+					returnMsg("success", "编辑成功", request);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
