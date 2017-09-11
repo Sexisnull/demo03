@@ -24,15 +24,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.code.kaptcha.Constants;
-import com.gsww.jup.entity.sys.SysAccount;
 import com.gsww.jup.entity.sys.SysLog;
 import com.gsww.jup.entity.sys.SysUserSession;
-import com.gsww.jup.service.sys.SysAccountService;
 import com.gsww.jup.service.sys.SysLogService;
 import com.gsww.jup.service.sys.SysLoginService;
 import com.gsww.jup.service.sys.SysMenuService;
 import com.gsww.jup.util.MD5;
 import com.gsww.jup.util.TimeHelper;
+import com.gsww.uids.entity.ComplatUser;
+import com.gsww.uids.service.ComplatUserService;
 
 /**
  * <p>Copyright: Copyright (c) 2011</p>
@@ -47,8 +47,9 @@ import com.gsww.jup.util.TimeHelper;
  */
 @Controller
 public class SysLoginController {
+	
 	@Autowired
-	private SysAccountService sysAccountService;
+	private ComplatUserService complatUserService;
 	@Autowired
 	private SysLoginService sysLoginService;
 	@Autowired
@@ -77,7 +78,7 @@ public class SysLoginController {
 		if (sessionKaptcha.equals(inputKaptcha)) {
 			// 验证码正确，检查用户名和密码
 			try {
-				SysUserSession sysUserSession = sysLoginService.login(userName, new MD5().getMD5ofStr(passWord), loginIp);
+				SysUserSession sysUserSession = sysLoginService.login(userName, passWord, loginIp);
 				if (sysUserSession != null) {
 					if(sysUserSession.getUserState().equals("1")){
 						request.getSession().setAttribute("sysUserSession", sysUserSession);
@@ -225,7 +226,7 @@ public class SysLoginController {
 				e.printStackTrace();
 			}
 		}
-		return  new ModelAndView("redirect:/index");
+		return  new ModelAndView("redirect:/frontIndex");
 	}
 	/**
 	 * 用户退出
@@ -246,7 +247,7 @@ public class SysLoginController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/index")
+	@RequestMapping(value = "/frontIndex")
 	public String getSysIndex(HttpServletRequest request) {
 		try {
 			request.getSession().removeAttribute("theme");
@@ -258,8 +259,29 @@ public class SysLoginController {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		return "main/index";
+		return "main/frontIndex";
 	}
+	
+	@RequestMapping(value = "/backIndex")
+	public String toBackIndex(HttpServletRequest request) {
+		try {
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return "main/backIndex";
+	}
+	
+	@RequestMapping(value = "/appSetting")
+	public String appSetting(HttpServletRequest request) {
+		try {
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return "main/appSetting";
+	}
+	
 	@RequestMapping(value = "/iframe")
 	public String getiframe(HttpServletRequest request) {
 		try {
@@ -331,7 +353,7 @@ public class SysLoginController {
 		ModelAndView mav = new ModelAndView();
 		try{
 			SysUserSession sysUserSession = (SysUserSession) request.getSession().getAttribute("sysUserSession");
-			SysAccount sysAccount = sysAccountService.findByKey(sysUserSession.getAccountId());
+			ComplatUser sysAccount = complatUserService.findByKey(Integer.parseInt(sysUserSession.getAccountId()));
 			mav.addObject("sysAccount", sysAccount);
 			mav.setViewName("/main/userDetail");
 		}catch (Exception ex) {
@@ -369,11 +391,11 @@ public class SysLoginController {
 		newPwd = (String) request.getParameter("newPwd");
 		try {
 			SysUserSession sysUserSession = (SysUserSession) request.getSession().getAttribute("sysUserSession");
-			SysAccount sysAccount = sysAccountService.findByKey(sysUserSession.getAccountId());
-			passWord = sysAccount.getLoginPassword();
+			ComplatUser sysAccount = complatUserService.findByKey(Integer.parseInt(sysUserSession.getAccountId()));
+			passWord = sysAccount.getPwd();
 			if (passWord.equals(new MD5().getMD5ofStr(oldPwd))) {
-				sysAccount.setLoginPassword(new MD5().getMD5ofStr(newPwd));
-				sysAccountService.save(sysAccount);
+				sysAccount.setPwd(new MD5().getMD5ofStr(newPwd));
+				complatUserService.save(sysAccount);
 				request.getSession().removeAttribute("sysUserSession");
 			} else {
 				returnStr = "旧密码输入错误";

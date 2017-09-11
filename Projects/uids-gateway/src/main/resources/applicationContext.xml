@@ -40,4 +40,6 @@
 		<bean class="com.gsww.uids.gateway.util.SpringContextHolder" lazy-init="false"/>
 		<!-- DAO Bean -->
 		<bean id="ssoDao" class="com.gsww.uids.gateway.dao.sso.SsoDao" scope="prototype" />
+		<bean id="applicationDao" class="com.gsww.uids.gateway.dao.application.ApplicationDao" scope="prototype" />
+		<bean id="sysViewDao" class="com.gsww.uids.gateway.dao.sysview.SysViewDao" scope="prototype" />
 </beans>
