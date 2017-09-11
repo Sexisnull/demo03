@@ -5,11 +5,11 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
-
 @Entity
 @Table(name="complat_role")
 public class ComplatRole implements Serializable{
@@ -17,68 +17,67 @@ public class ComplatRole implements Serializable{
 	private static final long serialVersionUID = -1064119275354985881L;
 	
 	
-	private int iid;
-	private String uuid;
+	private Integer iid;
 	private String name;
 	private String spec;
-	private int isdeFault;
-	private int type;
+	private Integer isdeFault;
+	private Integer type;
 	private String pinYin;
+	
 	@Id
-	@GeneratedValue(generator="system-uuid")
-	@GenericGenerator(name="system-uuid", strategy="uuid.hex")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)  
 	@Column(name = "IID", unique = true, nullable = false)
-	public int getIid() {
+	public Integer getIid() {
 		return iid;
 	}
-	public void setIid(int iid) {
+	public void setIid(Integer iid) {
 		this.iid = iid;
 	}
+	
+	@Column(name = "NAME")
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	@Column(name = "SPEC")
 	public String getSpec() {
 		return spec;
 	}
 	public void setSpec(String spec) {
 		this.spec = spec;
 	}
-	public int getIsdeFault() {
+	
+	@Column(name = "ISDEFAULT")
+	public Integer getIsdeFault() {
 		return isdeFault;
 	}
-	public void setIsdeFault(int isdeFault) {
+	public void setIsdeFault(Integer isdeFault) {
 		this.isdeFault = isdeFault;
 	}
-	public int getType() {
+	
+	@Column(name = "TYPE")
+	public Integer getType() {
 		return type;
 	}
-	public void setType(int type) {
+	public void setType(Integer type) {
 		this.type = type;
 	}
+	
+	@Column(name = "PINYIN")
 	public String getPinYin() {
 		return pinYin;
 	}
 	public void setPinYin(String pinYin) {
 		this.pinYin = pinYin;
 	}
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-	
-	public String getUuid() {
-		return uuid;
-	}
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
-	}
-	public ComplatRole(int iid, String uuid, String name, String spec,
-			int isdeFault, int type, String pinYin) {
+
+	public ComplatRole(Integer iid,String name, String spec,
+			Integer isdeFault, Integer type, String pinYin) {
 		super();
 		this.iid = iid;
-		this.uuid = uuid;
 		this.name = name;
 		this.spec = spec;
 		this.isdeFault = isdeFault;
