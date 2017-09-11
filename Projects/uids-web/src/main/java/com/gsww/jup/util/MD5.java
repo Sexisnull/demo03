@@ -407,7 +407,7 @@ public class MD5 {
 		} else{
 			System.out.println("MD5(" + args[0] + ")=" + m.getMD5ofStr(args[0]));
 		}*/
-		String password="123456";
+		String password="gszw@888888";
 		System.out.println("MD5 Test suite:"+m.getMD5ofStr(password));
 		System.out.println("MD5 Test suite:"+m.getMD5ofStr(m.getMD5ofStr(password)));		
 	}

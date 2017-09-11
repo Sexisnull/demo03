@@ -8,55 +8,105 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.gsww.uids.gateway.dao.sso.SsoDao;
 import com.gsww.uids.gateway.util.SpringContextHolder;
-import com.hanweb.sso.ldap.util.MD5;
-import com.sun.xml.bind.v2.TODO;
 
-@Path("/jis/sso")
+@Path("/front")
 public class AuthenticateService {
 	
 	private SsoDao dao = SpringContextHolder.getBean("ssoDao");
 	
+	/**
+	 * 个人用户单点接口
+	 * @param action
+	 * @param appmark
+	 * @param redirectUrl
+	 * @param ticket
+	 * @return
+	 */
 	@GET
-	@Path("/usp.do")
+	@Path("/per/interface.do")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public String usp(@QueryParam("action")String action,
+	public String per(@QueryParam("action")String action,
 			@QueryParam("appmark")String appmark,
-			@QueryParam("redirectUrl")String redirectUrl,
+			@QueryParam("gotoUrl")String gotoUrl,
 			@QueryParam("ticket")String ticket){
 		
 		if(StringUtils.isBlank(action)){
-			return "login.jsp";
+			return "http://www.gszwfw.gov.cn/gsjis/front/perlogin.do";
 		}else{
 			if("ticketLogin".equals(action) && !StringUtils.isBlank(appmark)){//统一登录
 				String url = dao.findUrlByAppmark(appmark);
 				return url;
-			}else if(StringUtils.isBlank(appmark)){
-				return "没有传入应用标识！";
 			}
 			
 			if("register".equals(action)){//统一注册
-				return "login.jsp"; //TODO
+				return "http://www.gszwfw.gov.cn/gsjis/front/register/perregister.do"; //TODO
 			}
 			if("logout".equals(action)){//统一注销
-				return "logout.jsp";//TODO
+				return "http://www.gszwfw.gov.cn/gsjis/front/perlogin.do";//TODO
 			}
 			if("editPassword".equals(action) && !StringUtils.isBlank(ticket)){//修改密码
-				return "login.jsp"; //TODO
+				return "http://www.gszwfw.gov.cn/gsjis/front/modifyperinfo_show.do"; //TODO
 			}else if("editPassword".equals(action) && StringUtils.isBlank(ticket)){
-				return "票据不能为空！";
+				return "http://www.gszwfw.gov.cn/gsjis/front/perlogin.do";
 			}
 			if("editUser".equals(action)){//修改个人信息
-				return "login.jsp"; //TODO
+				return "http://www.gszwfw.gov.cn/gsjis/front/modifyperinfo_show.do"; //TODO
 			}else if("editUser".equals(action) && StringUtils.isBlank(ticket)){
-				return "票据不能为空！";
+				return "http://www.gszwfw.gov.cn/gsjis/front/perlogin.do";
 			}
 		}
-		return "系统错误！";
+		return "http://www.gszwfw.gov.cn/gsjis/front/perlogin.do";
 	}
 	
+	/**
+	 * 法人用户单点接口
+	 * @param action
+	 * @param appmark
+	 * @param redirectUrl
+	 * @param ticket
+	 * @return
+	 */
+	@GET
+	@Path("/cor/interface.do")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public String cor(@QueryParam("action")String action,
+			@QueryParam("appmark")String appmark,
+			@QueryParam("gotoUrl")String gotoUrl,
+			@QueryParam("ticket")String ticket){
+		
+		if(StringUtils.isBlank(action)){
+			return "http://www.gszwfw.gov.cn/gsjis/front/corlogin.do";
+		}else{
+			if("ticketLogin".equals(action) && !StringUtils.isBlank(appmark)){//统一登录
+				String url = dao.findUrlByAppmark(appmark);
+				return url;
+			}
+			
+			if("register".equals(action)){//统一注册
+				return "http://www.gszwfw.gov.cn/gsjis/front/register/corregister.do"; //TODO
+			}
+			
+			if("logout".equals(action)){//统一注销
+				return "http://www.gszwfw.gov.cn/gsjis/front/corlogin.do";//TODO
+			}
+			
+			if("editPassword".equals(action) && !StringUtils.isBlank(ticket)){//修改密码
+				return "http://www.gszwfw.gov.cn/gsjis/front/modifyperinfo_show.do"; //TODO
+			}else if("editPassword".equals(action) && StringUtils.isBlank(ticket)){
+				return "http://www.gszwfw.gov.cn/gsjis/front/corlogin.do";
+			}
+			
+			if("editUser".equals(action)){//修改个人信息
+				return "http://www.gszwfw.gov.cn/gsjis/front/modifyperinfo_show.do"; //TODO
+			}else if("editUser".equals(action) && StringUtils.isBlank(ticket)){
+				return "http://www.gszwfw.gov.cn/gsjis/front/corlogin.do";
+			}
+		}
+		return "http://www.gszwfw.gov.cn/gsjis/front/corlogin.do";
+	}
 }

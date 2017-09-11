@@ -7,6 +7,7 @@ Thumbs.db
 *#
 *~
 *.sublime-*
+*.jar
 
 # Build Artifacts
 
@@ -22,6 +23,8 @@ dependency-reduced-pom.xml
 .classpath
 .project
 .settings/
+*.class
+.metadata/
 # IntelliJ IDEA Files
 
 .idea/
@@ -33,6 +36,7 @@ dependency-reduced-pom.xml
 # studio Files
 
 .studio/
+.mule/
 
-
+jdbc.properties
 README.html
