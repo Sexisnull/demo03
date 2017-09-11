@@ -13,7 +13,10 @@ public class ApplicationDao extends JdbcTemplateDao{
 	protected Logger logger = Logger.getLogger(getClass());	
 	
 	//注册应用SQL
-	String appRegisterSql = "INSERT INTO jis_application(name,encryptkey,appurl,mark,encrypttype) VALUES(?,?,?,?,?)";
+	private static final String APP_REGISTER_SQL = "INSERT INTO jis_application(name,encryptkey,appurl,mark,encrypttype) VALUES(?,?,?,?,?)";
+	
+	//查询应用
+	private static final String SELECT_APP_SQL = "select * from jis_application t WHERE t.iid = ?";
 	
 	/**
 	 *应用注册
@@ -24,6 +27,11 @@ public class ApplicationDao extends JdbcTemplateDao{
 		if(app.getEncrypttype() != null && !"".equals(app.getEncrypttype())){
 			type = Integer.valueOf((String) app.getEncrypttype());
 		}
-		jdbcTemplate.update(appRegisterSql, new Object[]{app.getAppname(),app.getEnckey(),app.getSysurl(),app.getLdapurl(),type});
+		jdbcTemplate.update(APP_REGISTER_SQL, new Object[]{app.getAppname(),app.getEnckey(),app.getSysurl(),app.getLdapurl(),type});
+	}
+	
+	public Map<String,Object> selectAppById(int iid){
+		Map<String,Object> map = jdbcTemplate.queryForMap(SELECT_APP_SQL, new Object[]{iid});
+		return map;
 	}
 }
