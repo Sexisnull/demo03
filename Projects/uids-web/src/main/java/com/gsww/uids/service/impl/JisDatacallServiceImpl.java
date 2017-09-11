@@ -15,8 +15,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.gsww.uids.dao.JisDatacallDao;
 import com.gsww.uids.entity.JisDatacall;
 import com.gsww.uids.service.JisDatacallService;
-
-
+/**
+ * 数据调用业务实现类
+ * @author Seven
+ *
+ */
 @Transactional
 @Service("JisDatacallService")
 public class JisDatacallServiceImpl implements JisDatacallService {
@@ -33,13 +36,12 @@ public class JisDatacallServiceImpl implements JisDatacallService {
 	public String delete(JisDatacall entity) throws Exception {
 		JSONObject jsonObject = JSONObject.fromObject(entity);  
 		String logMsg=jsonObject.toString();
-		//删除
 		jisDatacallDao.delete(entity);
 		return logMsg;
 	}
 
 	@Override
-	public JisDatacall findByKey(String iid) throws Exception {
+	public JisDatacall findByKey(Integer iid) throws Exception {
 		JisDatacall jisDatacall=jisDatacallDao.findByIid(iid);
 		return jisDatacall;
 	}
