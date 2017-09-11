@@ -1,6 +1,7 @@
 package com.gsww.uids.controller;
 
-import java.util.HashMap;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 
 import javax.servlet.ServletRequest;
@@ -22,11 +23,9 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
-import com.gsww.jup.service.sys.DepartmentService;
-import com.gsww.jup.service.sys.SysAccountService;
-import com.gsww.jup.service.sys.SysRoleService;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.jup.util.StringHelper;
+import com.gsww.jup.util.TimeHelper;
 import com.gsww.uids.entity.ComplatCorporation;
 import com.gsww.uids.service.ComplatCorporationService;
 /**
@@ -43,17 +42,11 @@ import com.gsww.uids.service.ComplatCorporationService;
 @RequestMapping(value = "/complat")
 public class ComplatCorporationController extends BaseController{
 	private static Logger logger = LoggerFactory.getLogger(ComplatCorporationController.class);
-	@Autowired
-	private SysAccountService sysAccountService;
-	@Autowired
-	private SysRoleService sysRoleService;
-	@Autowired
-	private DepartmentService departmentService;
-	private Map<String,String> resMap=new HashMap<String,String>();
+	private SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
 	
 	@Autowired
 	private ComplatCorporationService complatCorporationService;
-
+	
 	/**
 	 * 获取法人列表
 	 * @param pageNumber
@@ -106,11 +99,18 @@ public class ComplatCorporationController extends BaseController{
 	@RequestMapping(value = "/corporationEdit", method = RequestMethod.GET)
 	public ModelAndView accountEdit(String corporationId,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		ModelAndView mav=new ModelAndView("users/corporation/corporation_edit");
-		ComplatCorporation corporation = null;
+		ComplatCorporation corporation = null;   
 		try {
 			if(StringHelper.isNotBlack(corporationId)){
 				Integer iid = Integer.parseInt(corporationId);
 				corporation = complatCorporationService.findByKey(iid);
+				
+				//对注册时间进行转换
+				Date createTime = corporation.getCreateTime();
+				if(createTime != null){
+					String time = sdf.format(createTime);
+					model.addAttribute("time",time);
+				}
 			}else{
 				corporation = new ComplatCorporation();
 			}
@@ -127,8 +127,38 @@ public class ComplatCorporationController extends BaseController{
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/corporationSave", method = RequestMethod.POST)
 	public ModelAndView accountSave(ComplatCorporation corporation,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+		 
 		try {
 			if(corporation != null){
+				String authState = corporation.getauthState().toString();
+				if(authState == null || "".equals(authState)){
+					Integer iState = Integer.parseInt(authState);
+					iState = 0;
+					corporation.setauthState(iState);
+				}
+				String isAuth = corporation.getisAuth().toString();
+				if(isAuth == null || "".equals(isAuth)){
+					Integer iAuth = Integer.parseInt(isAuth);
+					iAuth = 0;
+					corporation.setisAuth(iAuth);
+				}
+				String enable = corporation.getEnable().toString();
+				if(enable == null || "".equals(enable)){
+					Integer ienable = Integer.parseInt(enable);
+					ienable = 1;
+					corporation.setEnable(ienable);
+				}
+				
+				//对注册时间进行转换
+				Date createTime = null;
+				String time = request.getParameter("time");
+				if(time == null || "".equals(time)){
+					time = TimeHelper.getCurrentTime();
+					createTime = sdf.parse(time);
+				}else{
+					createTime = sdf.parse(time);
+				}
+				corporation.setCreateTime(createTime);
 				complatCorporationService.save(corporation);
 				returnMsg("success","保存成功",request);
 			}
