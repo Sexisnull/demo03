@@ -20,7 +20,7 @@ JpaSpecificationExecutor<JisDatacall>{
 	 * @param iid
 	 * @return
 	 */
-	JisDatacall findByIid(String iid);
+	JisDatacall findByIid(Integer iid);
 	
 	/**
 	 * 根据标识获得数据调用对象
