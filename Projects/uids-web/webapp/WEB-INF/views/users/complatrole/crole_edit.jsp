@@ -6,24 +6,24 @@
 <title></title>
 <script type="text/javascript">
 $().ready(function() {
-//表单校验
-var roleNameInput=$("#roleName").val();
- $("#editForm").validate({
-    rules: {
-	   roleName: {
-	    required: true,
-	    cnRangelength: [0,128],
-	    uniqueRoleName:true,
-	    stringCheck:roleNameInput
-	   },
-	   roleDesc: {
-	    cnRangelength: [0,1024]
-	   }
-	  }
-    });
-  // Ajax重命名校验
-	$.uniqueValidate('uniqueRoleName', '${ctx}/sys/checkRole', ['roleName','oldRoleName'], '对不起，这个角色重复了');
-});
+	//表单校验
+	var roleNameInput=$("#name").val();
+	 $("#editForm").validate({
+	    rules: {
+		   	name: {
+		    required: true,
+		    cnRangelength: [0,128],
+		    uniqueRoleName:true,
+		    stringCheck:roleNameInput
+		   },
+		   spec: {
+		    cnRangelength: [0,1024]
+		   }
+		  }
+	    });
+	  // Ajax重命名校验
+		$.uniqueValidate('uniqueRoleName', '${ctx}/complat/ccheckcRole', ['name','oldRoleName'], '对不起，这个角色重复了');
+	});
 </script>
 <style type="text/css">
 .form-content textarea {
@@ -61,13 +61,13 @@ var roleNameInput=$("#roleName").val();
     		<tr>
     			<th style="text-align: center;"><b class="mustbe">*</b>请输入角色名称:</th>
     			<td>
-    				<input type="text" id="roleName" class="input" name="name" value="${complatRole.name}"  style="width: 92.5%;"/>
+    				<input type="text" id="name" class="input" name="name" value="${complatRole.name}"  style="width: 92.5%;"/>
             		<input type="hidden" id="oldRoleName" class="input" name="oldRoleName" value="${complatRole.name}"  />
             		<input type="hidden" id="croleId" class="input" name="iid" value="${complatRole.iid}"  />
     			</td>
     		</tr>
     		<tr>
-    			<th style="text-align: center;"><b class="mustbe">*</b>请输入角色描述:</th>
+    			<th style="text-align: center;"><b class="mustbe"></b>请输入角色描述:</th>
     			<td>
     			<textarea class="textarea" name="spec" style="width: 89.1%;">${complatRole.spec}</textarea>
     			</td>

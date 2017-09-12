@@ -61,4 +61,12 @@ http://www.mulesoft.org/schema/mule/servlet http://www.mulesoft.org/schema/mule/
         </quartz:inbound-endpoint>
         <component class="com.gsww.uids.gateway.job.ImmediateSyncJob" doc:name="Java"/>
     </flow>
+    
+    <!-- 记录同步历史JOB -->
+    <flow name="recordSyncHisJob" doc:name="recordSyncHisJob">
+        <quartz:inbound-endpoint jobName="RecordSyncHisJob" repeatInterval="0" responseTimeout="10000" doc:name="Quartz" repeatCount="0" startDelay="0">
+            <quartz:event-generator-job groupName="Job" jobGroupName="Job"/>
+        </quartz:inbound-endpoint>
+        <component class="com.gsww.uids.gateway.job.RecordSyncHisJob" doc:name="Java"/>
+    </flow>
 </mule>
