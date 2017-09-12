@@ -6,6 +6,11 @@
 	</projects>
 	<buildSpec>
 		<buildCommand>
+			<name>org.eclipse.wst.jsdt.core.javascriptValidator</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
 			<name>org.eclipse.ui.externaltools.ExternalToolBuilder</name>
 			<triggers>full,incremental,</triggers>
 			<arguments>
@@ -46,16 +51,7 @@
 			</arguments>
 		</buildCommand>
 		<buildCommand>
-			<name>com.genuitec.eclipse.springframework.springbuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
-		<buildCommand>
-<<<<<<< HEAD
 			<name>org.eclipse.m2e.core.maven2Builder</name>
-=======
-			<name>org.maven.ide.eclipse.maven2Builder</name>
->>>>>>> 359e3cb96e954d39e9c8943c124312e9495c728e
 			<arguments>
 			</arguments>
 		</buildCommand>
@@ -66,7 +62,6 @@
 		</buildCommand>
 	</buildSpec>
 	<natures>
-		<nature>com.genuitec.eclipse.springframework.springnature</nature>
 		<nature>org.maven.ide.eclipse.maven2Nature</nature>
 		<nature>org.eclipse.jem.workbench.JavaEMFNature</nature>
 		<nature>com.genuitec.eclipse.ast.deploy.core.deploymentnature</nature>

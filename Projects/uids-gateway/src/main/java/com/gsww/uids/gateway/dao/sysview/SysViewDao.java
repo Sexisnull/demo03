@@ -14,20 +14,26 @@ public class SysViewDao extends JdbcTemplateDao{
 	protected Logger logger = Logger.getLogger(getClass());	
 	
 	//查询同步实时列表sql
-	String sysViewSQL = "select t.objectid,t.state,t.result,t.optresult,t.synctime,t.appid,t.codeid,t.objectname,t.operatetype,t.times,t.errorspec from jis_sysview t";
+	private static final String SYSVIEW_SQL = "select t.iid,t.objectid,t.state,t.result,t.optresult,t.synctime,t.appid,t.codeid,t.objectname,t.operatetype,t.times,t.errorspec from jis_sysview t";
 	
 	//查询同步当前列表sql
-	String currSysViewSQL = "select t.objectid,t.state,t.result,t.optresult,t.synctime,t.appid,t.codeid,t.objectname,t.operatetype,t.times,t.errorspec from jis_sysview_current t";
+	private static final String CURR_SYSVIEW_SQL = "select t.iid,t.objectid,t.state,t.result,t.optresult,t.synctime,t.appid,t.codeid,t.objectname,t.operatetype,t.times,t.errorspec from jis_sysview_current t";
 	
 	//删除同步实时列表sql
-	String deleteSysViewSQL = "delete from jis_sysview t where t.iid=?";
+	private static final String DELETE_SYSVIEW_SQL = "delete from jis_sysview t where t.iid=?";
+	
+	//插入当前列表数据
+	private static final String INSERT_CURRSYSVIEW_SQL = "INSERT INTO jis_sysview_current (objectid,state,result,optresult,synctime,appid,codeid,objectname,operatetype,times,errorspec ) SELECT t.objectid,t.state,t.result,t.optresult,t.synctime,t.appid,t.codeid,t.objectname,t.operatetype,t.times,t.errorspec from jis_sysview t where t.iid=?";
+	
+	//更新当前列表数据
+	private static final String UPDATE_CURRSYSVIEW_SQL = "update jis_sysview_current t SET t.optresult = ? where t.iid=?";
 	
 	/**
 	 *实时列表
 	 * @param map
 	 */
 	public List<Map<String, Object>> selectSysView(){
-		List<Map<String, Object>> map = jdbcTemplate.queryForList(sysViewSQL);
+		List<Map<String, Object>> map = jdbcTemplate.queryForList(SYSVIEW_SQL);
 		return map;
 	}
 	
@@ -36,15 +42,31 @@ public class SysViewDao extends JdbcTemplateDao{
 	 * @param map
 	 */
 	public List<Map<String, Object>> selectCurrSysView(){
-		List<Map<String, Object>> map = jdbcTemplate.queryForList(currSysViewSQL);
+		List<Map<String, Object>> map = jdbcTemplate.queryForList(CURR_SYSVIEW_SQL);
 		return map;
 	}
 	
 	/**
-	 * 删除实时同步数据
+	 * 删除实时列表数据
 	 * @param iid
 	 */
-	public void deleteSysView(String iid){
-		jdbcTemplate.update(deleteSysViewSQL, new Object[]{iid});
+	public void deleteSysView(int iid){
+		jdbcTemplate.update(DELETE_SYSVIEW_SQL, new Object[]{iid});
+	}
+	
+	/**
+	 * 插入实时列表数据到当前列表数据
+	 * @param iid
+	 */
+	public void insertSysViewCurr(int iid){
+		jdbcTemplate.update(INSERT_CURRSYSVIEW_SQL, new Object[]{iid});
+	}
+	
+	/**
+	 * 更新当前列表数据
+	 * @param iid
+	 */
+	public void updateSysViewCurr(int iid,int optresult){
+		jdbcTemplate.update(UPDATE_CURRSYSVIEW_SQL, new Object[]{optresult,iid});
 	}
 }

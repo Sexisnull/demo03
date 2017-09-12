@@ -16,49 +16,36 @@ var corNameInput=$("#name").val();
 	   name: {
 	    required: true,
 	    cnRangelength: [0,33],
-	    corNameInput
+	    corNameInput  
+	   },
+	   realName:{
+	   	required: true	
 	   },
 	   regNumber: {
-	    required: true
+	    required: true	
 	   },
-	   cardNumber: {
-	    required: true,
-	   },
-	   userSchool:{
-	   cnRangelength: [0,64]
-	   },
-	   userEducation:{
-	   	cnRangelength: [0,32]
-	   },
-	   userPostion:{
-	   	cnRangelength: [0,64]
-	   },
-	   userIdentityCode:{
+	   cardNumber:{
 	   	isIdCardNo:true,
 	   	 maxlength: 18
 	   },
-	   userPostcode:{
-	   	isZipCode:true,
-	   	maxlength: 6
+	   orgNumber:{
+	   	required: true
 	   },
-	   userAddress:{
-	   	cnRangelength: [0,256]
+	   loginName:{
+	   	required: true
 	   },
-	   userTele:{
+	   mobile:{
 	   	isMobile:true,
-	   	maxlength: 16
+	   	required: true
 	   },
-	   userHomeTele:{
-	   	isPhone:true,
-	   	maxlength: 16
+	   pwd:{
+	   	required: true
 	   },
-	   userEmail:{
-	   	email:true,
-	   	maxlength: 64
+	   email:{
+	   	email:true
 	   },
-	   userSexs:
-	   {
-	   	 required: true	
+	   phone:{
+	   	isPhone:true
 	   }
 	  }
     });
@@ -111,109 +98,124 @@ $(function(){
     <form id="editForm" method="post" action="${ctx}/complat/corporationSave">
     
     <div style="display:none;">
-    	<input type="hidden" id="corporationId" name="corporationId" value="${corporation.uuid}"/>
+    	<input type="hidden" id="iid" name="iid" value="${corporation.iid}"/>
+    	<input type="hidden" id="enable" name="enable" value="${corporation.enable}"/>
+        <input type="hidden" id="authState" name="authState" value="${corporation.authState}"/>
+    	<input type="hidden" id="isAuth" name="isAuth" value="${corporation.isAuth}"/>
+    	<input type="hidden" id="time" name="time" value="${time}">
     </div>
     
     <!--表单的主内容区域-->
-    <div class="form-content">
-    	<table class="form-table">
-    		<tr>
-    			<th>基本属性</th>
-    		</tr>
-    		<tr>
-	        	 <th> 法人类型：</th>
-	        	 <td>
-	        	 	<gsww:checkboxTag name="type" defaultValue="1" type="corporationType" inputType="radio" value="${corporation.type}"></gsww:checkboxTag>
-	        	 </td>
-			</tr>
-    		<tr>
-    			<th><b class="mustbe">*</b> 企业名称：</th>
-				 <td>
-					<input type="text" id="name" name="name" value="${corporation.name}" />
-				</td>
-	        	<th><b class="mustbe">*</b> 企业法人姓名：</th>
-                <td>
-                	<input type="text"  id="realName" name="realName" maxlength="33" value="${corporation.realName}" />
-                </td> 
-			</tr>
-			<tr>
-				<th><b class="mustbe">*</b> 企业法人身份证号：</th>
-				<td>
-					<input type="text" id="cardNumber" name="cardNumber" value="${corporation.cardNumber}"">
-	            </td>
-				<th> 企业法人民族：</th>
-				<td>
-					<select id="nation" name="nation">
-						<option value="">请选择</option>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<th><b class="mustbe">*</b>工商注册号/社会信用代码：</th>
-	        	 <td>
-					<input type="text" id="regNumber" name="regNumber" value="${corporation.regNumber}" />
-				</td>
-	            <c:if test="${corporation.iid==null}">
-					<th> 组织机构代码：</th>
+    <div style="height:400px;width:1100px; border:solid 1px #C6E6FF; padding: 5px;">
+    	<div style="width: 1000px;margin: 10px;">
+		 	<table style="float: left;width: 20%;line-height: 100px">
+		 		<tr>
+		 			<th>基本属性</th>
+		 		</tr>
+		 	</table>
+		 	<table class="form-table" border="1" cellspacing="1" cellpadding="0" frame=box rules=none style=" border-color:#C6E6FF;float: left;width: 80%;line-height: 25px;">
+		    		<tr>
+			        	 <th> 法人类型：</th>
+			        	 <td>
+			        	 	<gsww:checkboxTag name="type" defaultValue="1" type="corporationType" inputType="radio" value="${corporation.type}"></gsww:checkboxTag>
+			        	 </td>
+					</tr>
+		    		<tr>
+		    			<th><b class="mustbe">*</b> 企业名称：</th>
+						 <td width="20%">
+							<input type="text" id="name" name="name" value="${corporation.name}" />
+						</td>
+			        	<th><b class="mustbe">*</b> 企业法人姓名：</th>
+		                <td>
+		                	<input type="text"  id="realName" name="realName" maxlength="33" value="${corporation.realName}" />
+		                </td> 
+					</tr>
+					<tr>
+						<th><b class="mustbe">*</b> 企业法人身份证号：</th>
+						<td>
+							<input type="text" id="cardNumber" name="cardNumber" value="${corporation.cardNumber}"">
+			            </td>
+						<th> 企业法人民族：</th>
+						<td>
+							<select id="nation" name="nation">
+								<option value="">请选择</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<th><b class="mustbe">*</b>工商注册号/社会信用代码：</th>
+			        	 <td>
+							<input type="text" id="regNumber" name="regNumber" value="${corporation.regNumber}" />
+						</td>
+			            <c:if test="${corporation.iid==null}">
+							<th> 组织机构代码：</th>
+							<td>
+								<input type="text"  id="orgNumber" name="orgNumber" value="${corporation.orgNumber}" style=""/>
+							</td>
+						</c:if>
+					</tr>
+				</table>
+		</div>
+		<div style="width: 1000px; margin: 10px;">
+			<table style="float: left;width: 20%;line-height: 100px">
+	   			<tr>
+					<th>账户信息</th>
+				</tr>
+	    	</table>
+	    	<table class="form-table" border="1" cellspacing="1" cellpadding="0" frame=box rules=none style="border:solid 1px #C6E6FF;float: left;margin-top: 10px;width: 80%">
+				<tr>
+					<th><b class="mustbe">*</b>用户名：</th>
 					<td>
-						<input type="text"  id="orgNumber" name="orgNumber" value="${corporation.orgNumber}" style=""/>
+						<input type="text"  class="loginName" name="loginName" value="${corporation.loginName}" />
+		            	
+		            </td>
+		        	<th><b class="mustbe">*</b> 手机号码：</th>
+		        	<td>
+		        		<input type="text" id="mobile" name="mobile" value="${corporation.mobile}" />
+		        	</td>
+				</tr>
+				<tr>
+					<th> 密码：</th>
+		        	<td>
+		        		<input type="password" id="pwd" name="pwd" value="${corporation.pwd}" 
+		        		onkeyup="javascript:EvalPwd(this.value);"/>
+		            	
+		        	</td>
+					<th>邮箱：</th>
+					<td>
+						<input type="text" class="input" id="email" name="email" value="${corporation.email}" />
+		            	<i class="form-icon-clear"></i>
 					</td>
-				</c:if>
-			</tr>
-			<tr>
-				<th>账户信息</th>
-			</tr>
-			<tr>
-				<th><b class="mustbe">*</b>用户名：</th>
-				<td>
-					<input type="text"  class="loginName" name="loginName" value="${corporation.loginName}" />
-	            	
-	            </td>
-	        	<th><b class="mustbe">*</b> 手机号码：</th>
-	        	<td>
-	        		<input type="text" id="mobile" name="mobile" value="${corporation.mobile}" />
-	        	</td>
-			</tr>
-			<tr>
-				<th> 密码：</th>
-	        	<td>
-	        		<input type="password" id="pwd" name="pwd" value="${corporation.pwd}" 
-	        		onkeyup="javascript:EvalPwd(this.value);"/>
-	            	
-	        	</td>
-				<th>邮箱：</th>
-				<td>
-					<input type="text" class="input" id="email" name="email" value="${corporation.email}" />
-	            	<i class="form-icon-clear"></i>
-				</td>
-			</tr>
-			<tr>
-				<th>密码强度</th>
-				<td>
-					<table id="pwdpower" title="字母加数字加符号就会强" style="width: 100%" cellspacing="0"
-					cellpadding="0" border="0">
-						<tbody>
-							<tr>
-								<td id="pweak" style="">弱</td>
-								<td id="pmedium" style="">中</td>
-								<td id="pstrong" style="">强</td>
-							</tr>
-						</tbody>
-					</table>
-				</td>
-				<th>办公电话：</th>
-				<td>
-					<input type="text" id="phone" name="phone" value="${corporation.phone}" />
-				</td>
-			</tr>
-			<tr>
-				<th>经营范围：</th>
-				<td>
-					<input type="text"  class="input" id="scope" name="scope" value="${corporation.scope}"  />
-				</td>
-			</tr>
-			</table>
-    </div>
+				</tr>
+				<tr>
+					<th>密码强度</th>
+					<td>
+						<table id="pwdpower" title="字母加数字加符号就会强" style="width: 100%" cellspacing="0"
+						cellpadding="0" border="0">
+							<tbody>
+								<tr>
+									<td id="pweak" style="">弱</td>
+									<td id="pmedium" style="">中</td>
+									<td id="pstrong" style="">强</td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+					<th>办公电话：</th>
+					<td>
+						<input type="text" id="phone" name="phone" value="${corporation.phone}" />
+					</td>
+				</tr>
+				<tr>
+					<th>经营范围：</th>
+					<td>
+						<input type="text"  class="input" id="scope" name="scope" value="${corporation.scope}"  />
+					</td>
+				</tr>
+		</table>
+	</div>
+	</div>
+    
     <div style="clear:both;"></div>
     <!--表单的按钮组区域-->
     <div class="form-btn">
