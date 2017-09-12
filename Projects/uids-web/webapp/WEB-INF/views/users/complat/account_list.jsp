@@ -11,10 +11,7 @@
 <title>甘肃万维JUP课题</title>
 
 <script type="text/javascript"> 
-	
-</script>
-
-$(function(){
+	$(function(){
 		//高级搜索按钮点击事件
 		$('.advanced-btn').on('click',function(){
 			$('.advanced-content').toggle('fast');
@@ -60,6 +57,9 @@ $(function(){
 			return false;
 		}
 }
+</script>
+
+
 </head>
 <body>
 
