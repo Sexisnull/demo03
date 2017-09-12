@@ -1,7 +1,10 @@
-package com.gsww.jup.service.sys.impl;
+package com.gsww.uids.service.impl;
 
-import java.util.List;
-
+import com.gsww.jup.entity.ComplatRoleRelation;
+import com.gsww.uids.dao.ComplatRoleDao;
+import com.gsww.uids.dao.ComplatRoleRelationDao;
+import com.gsww.uids.entity.ComplatRole;
+import com.gsww.uids.service.ComplatRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -9,12 +12,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.gsww.jup.dao.ComplatRoleDao;
-import com.gsww.jup.dao.ComplatRoleRelationDao;
-import com.gsww.jup.entity.ComplatRole;
-import com.gsww.jup.entity.ComplatRoleRelation;
-import com.gsww.jup.entity.sys.SysRole;
-import com.gsww.jup.service.sys.ComplatRoleService;
+import java.util.List;
 
 @Transactional
 @Service("complatRoleService")
@@ -26,7 +24,7 @@ public class ComplatRoleServiceImpl implements ComplatRoleService{
 
 	@Override
 	public Page<ComplatRole> getRolePage(Specification<ComplatRole> spec,
-			PageRequest pageRequest) {
+										 PageRequest pageRequest) {
 		// TODO Auto-generated method stub
 		return dao.findAll(spec, pageRequest);
 	}
