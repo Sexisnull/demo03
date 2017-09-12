@@ -6,13 +6,8 @@
 	</projects>
 	<buildSpec>
 		<buildCommand>
-			<name>org.eclipse.ui.externaltools.ExternalToolBuilder</name>
-			<triggers>full,incremental,</triggers>
+			<name>org.eclipse.wst.common.project.facet.core.builder</name>
 			<arguments>
-				<dictionary>
-					<key>LaunchConfigHandle</key>
-					<value>&lt;project&gt;/.externalToolBuilders/org.eclipse.wst.common.project.facet.core.builder.launch</value>
-				</dictionary>
 			</arguments>
 		</buildCommand>
 		<buildCommand>
@@ -51,11 +46,7 @@
 			</arguments>
 		</buildCommand>
 		<buildCommand>
-<<<<<<< HEAD
 			<name>org.eclipse.m2e.core.maven2Builder</name>
-=======
-			<name>org.maven.ide.eclipse.maven2Builder</name>
->>>>>>> 359e3cb96e954d39e9c8943c124312e9495c728e
 			<arguments>
 			</arguments>
 		</buildCommand>
@@ -66,8 +57,8 @@
 		</buildCommand>
 	</buildSpec>
 	<natures>
-		<nature>com.genuitec.eclipse.springframework.springnature</nature>
 		<nature>org.maven.ide.eclipse.maven2Nature</nature>
+		<nature>com.genuitec.eclipse.springframework.springnature</nature>
 		<nature>org.eclipse.jem.workbench.JavaEMFNature</nature>
 		<nature>com.genuitec.eclipse.ast.deploy.core.deploymentnature</nature>
 		<nature>com.genuitec.eclipse.j2eedt.core.webnature</nature>
