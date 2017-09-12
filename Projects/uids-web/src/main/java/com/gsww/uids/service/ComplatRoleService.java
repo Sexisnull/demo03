@@ -5,9 +5,6 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
-
-import com.gsww.jup.entity.sys.SysRole;
-import com.gsww.jup.entity.sys.SysRoleAcctRel;
 import com.gsww.uids.entity.ComplatRole;
 import com.gsww.uids.entity.ComplatRolerelation;
 
