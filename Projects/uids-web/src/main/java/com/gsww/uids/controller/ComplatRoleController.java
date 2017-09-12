@@ -22,10 +22,10 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
-import com.gsww.jup.entity.ComplatRoleRelation;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.jup.util.StringHelper;
 import com.gsww.uids.entity.ComplatRole;
+import com.gsww.uids.entity.ComplatRolerelation;
 import com.gsww.uids.service.ComplatRoleService;
 @Controller
 @RequestMapping(value="/complat")
@@ -112,7 +112,7 @@ public class ComplatRoleController extends BaseController{
 		try {
 			String[] para=croleId.split(",");
 			for(int i=0;i<para.length;i++){
-				List<ComplatRoleRelation> acct = roleService.findAcctByroleId(Integer.parseInt(para[i].trim()));
+				List<ComplatRolerelation> acct = roleService.findAcctByroleId(Integer.parseInt(para[i].trim()));
 				ComplatRole role = roleService.findByKey(Integer.parseInt(para[i].trim()));
 				if(acct!=null && acct.size()>0){
 					resMsg += "名称为“"+role.getName()+"”的角色下存在用户，不能删除！   </br>   ";
