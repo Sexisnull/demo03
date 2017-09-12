@@ -1,4 +1,4 @@
-package com.gsww.jup.entity;
+package com.gsww.uids.entity;
 
 import java.io.Serializable;
 
