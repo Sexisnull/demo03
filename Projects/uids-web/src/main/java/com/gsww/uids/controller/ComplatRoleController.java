@@ -25,11 +25,7 @@ import com.gsww.jup.controller.BaseController;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.jup.util.StringHelper;
 import com.gsww.uids.entity.ComplatRole;
-<<<<<<< HEAD
-import com.gsww.uids.entity.ComplatRoleRelation;
-=======
 import com.gsww.uids.entity.ComplatRolerelation;
->>>>>>> 9b9ebf74bfed4c28637b43429fa8aca33d294949
 import com.gsww.uids.service.ComplatRoleService;
 @Controller
 @RequestMapping(value="/complat")
