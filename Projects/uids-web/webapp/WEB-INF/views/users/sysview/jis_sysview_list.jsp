@@ -9,11 +9,11 @@
 		<script type="text/javascript">
 		/**搜索表单校验**/
 	function checkSubmitForm() {
-		var objectNameSearch = $("#objectNameSearch").val();
-		if (objectNameSearch == '' || isChinaOrNumbOrLett(objectNameSearch)) {
+		var objectnameSearch = $("#objectnameSearch").val();
+		if (objectnameSearch == '' || isChinaOrNumbOrLett(objectnameSearch)) {
 			form1.submit();
 		} else {
-			$.validator.errorShow($("#objectNameSearch"), '只能包括中英文、数字、@和下划线');
+			$.validator.errorShow($("#objectnameSearch"), '只能包括中英文、数字、@和下划线');
 		}
 	}
 		</script>
@@ -50,7 +50,7 @@
 										操作对象名：
 									</th>
 									<td width="20%">
-									<input type="text" placeholder="操作对象名称" id="objectNameSearch" name="search_LIKE_objectName"  value="${sParams['LIKE_objectName']}" class="input"/>
+									<input type="text" placeholder="操作对象名称" id="objectnameSearch" name="search_LIKE_objectname"  value="${sParams['LIKE_objectname']}" class="input"/>
 									</td>
 									<td class="btn-group">
 										<a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a>
@@ -114,19 +114,19 @@
 								<td>
 									<div class="label">
 										<i class="check_btn"></i>
-										<input id="${jisSysview.objectId}" value="${jisSysview.objectId}"
+										<input id="${jisSysview.iid}" value="${jisSysview.iid}"
 											type="checkbox" class="check_btn" style="display: none;" />
 									</div>
 								</td>
 								<td>
-									${jisSysview.objectName}
+									${jisSysview.objectname}
 								</td>
 								<td style="word-break: break-all; word-wrap: break-word;">
-									${jisSysview.codeId}
+									${jisSysview.codeid}
 								</td>
 								<td class="alignL" style="text-align: center">
 									<div class="list-longtext">
-										${jisSysview.operateType}
+										${jisSysview.operatetype}
 									</div>
 								</td>
 								<td class="alignL" style="text-align: center">
@@ -136,7 +136,7 @@
 								</td>
 								<td class="alignL" style="text-align: center">
 									<div class="list-longtext">
-										${jisSysview.syncTime}
+										${jisSysview.synctime}
 									</div>
 								</td>
 								
@@ -144,7 +144,7 @@
 								</td>
 								<td class="alignL" style="text-align: center">
 									<div class="list-longtext">
-										${jisSysview.optResult}
+										${jisSysview.optresult}
 									</div>
 								</td>
 								<td class="alignL" style="text-align: center">

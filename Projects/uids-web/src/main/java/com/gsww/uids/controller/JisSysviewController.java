@@ -60,9 +60,9 @@ import com.gsww.uids.service.JisSysviewService;
 				ex.printStackTrace();
 				logger.error("列表打开失败："+ex.getMessage());
 				returnMsg("error","列表打开失败",(HttpServletRequest) request);
-				return "redirect:/sys/jisSysviewList";
+				return "redirect:/uids/jisSysviewList";
 			}
-			return "sys/jis_sysview_list";
+			return "users/sysview/jis_sysview_list";
 		}
 
 	}
