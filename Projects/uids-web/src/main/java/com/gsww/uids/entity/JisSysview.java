@@ -1,6 +1,5 @@
 package com.gsww.uids.entity;
 
-<<<<<<< HEAD
 import java.util.Date;
 
 import javax.persistence.Column;
