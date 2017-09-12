@@ -22,10 +22,10 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
-import com.gsww.jup.entity.ComplatRoleRelation;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.jup.util.StringHelper;
 import com.gsww.uids.entity.ComplatRole;
+import com.gsww.uids.entity.ComplatRoleRelation;
 import com.gsww.uids.service.ComplatRoleService;
 @Controller
 @RequestMapping(value="/complat")
