@@ -22,16 +22,8 @@ package com.gsww.uids.controller;
 	import com.gsww.jup.controller.sys.SysAccountController;
 
 	import com.gsww.jup.util.PageUtils;
-
-<<<<<<< HEAD
-import com.gsww.uids.entity.JisHistory;
-import com.gsww.uids.service.JisHistoryService;
-=======
-import com.gsww.uids.entity.JisSysviewHistory;
-import com.gsww.uids.service.JisSysviewHistoryService;
->>>>>>> 0f1e907c2c1b5c7934a70a80948604ffa7ebc6cb
-
-
+	import com.gsww.uids.entity.JisSysviewHistory;
+	import com.gsww.uids.service.JisSysviewHistoryService;
 	@Controller
 	@RequestMapping(value = "/uids")
 	public class JisHistoryController extends BaseController{
@@ -49,11 +41,7 @@ import com.gsww.uids.service.JisSysviewHistoryService;
 			try{
 				//初始化分页数据
 				PageUtils pageUtils=new PageUtils(pageNo,pageSize,orderField,orderSort);
-<<<<<<< HEAD
-				PageRequest pageRequest=super.buildPageRequest(hrequest,pageUtils,JisHistory.class,findNowPage);
-=======
 				PageRequest pageRequest=super.buildPageRequest(hrequest,pageUtils,JisSysviewHistory.class,findNowPage);
->>>>>>> 0f1e907c2c1b5c7934a70a80948604ffa7ebc6cb
 				
 				//搜索属性初始化
 				Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");

@@ -1,39 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-	<classpathentry kind="src" output="webapp/WEB-INF/classes" path="src/main/java">
-		<attributes>
-			<attribute name="optional" value="true"/>
-			<attribute name="maven.pomderived" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="src" output="target/test-classes" path="src/test/java">
-		<attributes>
-			<attribute name="optional" value="true"/>
-			<attribute name="maven.pomderived" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="src" output="target/test-classes" path="src/test/functional">
-		<attributes>
-			<attribute name="optional" value="true"/>
-			<attribute name="maven.pomderived" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-=======
->>>>>>> 0f1e907c2c1b5c7934a70a80948604ffa7ebc6cb
 	<classpathentry kind="src" output="webapp/WEB-INF/classes" path="src/main/java"/>
 	<classpathentry kind="src" path="src/main/resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
@@ -41,9 +7,5 @@
 	<classpathentry kind="lib" path="webapp/WEB-INF/lib/kaptcha-2.3.jar"/>
 	<classpathentry kind="lib" path="webapp/WEB-INF/lib/ldapmd51.3.jar"/>
 	<classpathentry kind="lib" path="webapp/WEB-INF/lib/log4j-1.2.17.jar"/>
-<<<<<<< HEAD
-=======
->>>>>>> 28630c685a8b4126ab69768c6353027687d338d4
->>>>>>> 0f1e907c2c1b5c7934a70a80948604ffa7ebc6cb
 	<classpathentry kind="output" path="webapp/WEB-INF/classes"/>
 </classpath>
