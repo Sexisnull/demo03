@@ -26,8 +26,8 @@ import org.springside.modules.web.Servlets;
 import com.gsww.jup.controller.BaseController;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.jup.util.StringHelper;
-import com.gsww.uids.entity.OutsideUser;
-import com.gsww.uids.service.OutsideUserService;
+import com.gsww.uids.entity.ComplatOutsideuser;
+import com.gsww.uids.service.ComplatOutsideuserService;
 
 /**
  * Title: OutsideUserController.java Description: 个人用户控制层
@@ -37,11 +37,11 @@ import com.gsww.uids.service.OutsideUserService;
  */
 @Controller
 @RequestMapping(value = "/complat")
-public class OutsideUserController extends BaseController {
-	private static Logger logger = LoggerFactory.getLogger(OutsideUserController.class);
+public class ComplatOutsideuserController extends BaseController {
+	private static Logger logger = LoggerFactory.getLogger(ComplatOutsideuserController.class);
 	private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	@Autowired
-	private OutsideUserService outsideUserService;
+	private ComplatOutsideuserService outsideUserService;
 
 	@RequestMapping(value = "/outsideuserList", method = RequestMethod.GET)
 	public String accountList(@RequestParam(value = "page", defaultValue = "1") int pageNo,
@@ -59,14 +59,14 @@ public class OutsideUserController extends BaseController {
 			}
 			// 初始化分页数据
 			PageUtils pageUtils = new PageUtils(pageNo, pageSize, orderField, orderSort);
-			PageRequest pageRequest = super.buildPageRequest(hrequest, pageUtils, OutsideUser.class, findNowPage);
+			PageRequest pageRequest = super.buildPageRequest(hrequest, pageUtils, ComplatOutsideuser.class, findNowPage);
 
 			// 搜索属性初始化
 			Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
-			Specification<OutsideUser> spec = super.toNewSpecification(searchParams, OutsideUser.class);
+			Specification<ComplatOutsideuser> spec = super.toNewSpecification(searchParams, ComplatOutsideuser.class);
 
 			// 分页
-			Page<OutsideUser> pageInfo = outsideUserService.getOutsideUserPage(spec, pageRequest);
+			Page<ComplatOutsideuser> pageInfo = outsideUserService.getOutsideUserPage(spec, pageRequest);
 			model.addAttribute("pageInfo", pageInfo);
 
 			// 将搜索条件编码成字符串，用于排序，分页的URL
@@ -96,14 +96,14 @@ public class OutsideUserController extends BaseController {
 		// ModelAndView mav=new
 		// ModelAndView("users/outsideUser/outsideUser_edit");
 		try {
-			OutsideUser outsideUser = null;
+			ComplatOutsideuser outsideUser = null;
 			if (StringHelper.isNotBlack(outsideuserId)) {
 				outsideUser = outsideUserService.findByKey(Integer.parseInt(outsideuserId));
 				Date createTime = outsideUser.getCreateTime();
 				String time = sdf.format(createTime);
 				model.addAttribute("time", time);
 			} else {
-				outsideUser = new OutsideUser();
+				outsideUser = new ComplatOutsideuser();
 			}
 			model.addAttribute("outsideUser", outsideUser);
 		} catch (Exception e) {
@@ -122,7 +122,7 @@ public class OutsideUserController extends BaseController {
 	 */
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/outsideuserSave", method = RequestMethod.POST)
-	public ModelAndView accountSave(OutsideUser outsideUser, HttpServletRequest request, HttpServletResponse response)
+	public ModelAndView accountSave(ComplatOutsideuser outsideUser, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		try {
 			if (outsideUser != null) {
@@ -167,7 +167,7 @@ public class OutsideUserController extends BaseController {
 			throws Exception {
 		try {
 			String[] para = corporationId.split(",");
-			OutsideUser outsideUser = null;
+			ComplatOutsideuser outsideUser = null;
 			for (int i = 0; i < para.length; i++) {
 				Integer corId = Integer.parseInt(para[i].trim());
 				outsideUser = outsideUserService.findByKey(corId);
