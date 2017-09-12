@@ -126,4 +126,21 @@ public class Contants {
 	public static final String SMS_USER_PURCHASE="4";
 	public static final String SMS_USER_CANCEL="5";
 	public static final String SMS_USER_MODIFY="6";
+	
+	/**
+	 * 同步列表JOB
+	 */
+	public static final int TRANS_HTTP = 0;
+	public static final int TRANS_WEBSERVICE = 1;
+	public static final String SYNC_SUCCESS_TURE = "true";
+	public static final String SYNC_SUCCESS_FALSE = "false";
+	
+	/**
+	 * 同步结果
+	 */
+	public static final int OPTRESULT_NO = 1;
+	public static final int OPTRESULT_SUCESS = 2;
+	public static final int OPTRESULT_FALSE = 3;
+	public static final int OPTRESULT_NET_BARRIER = 4;
+	
 }

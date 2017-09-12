@@ -3,11 +3,9 @@ package com.gsww.uids.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.GenericGenerator;
-
 /**
  * 数据调用实体类
  * @author Seven
@@ -52,8 +50,7 @@ public class JisDatacall implements java.io.Serializable{
 	}
 
 	@Id
-	@GeneratedValue(generator="system-uuid")
-	@GenericGenerator(name="system-uuid", strategy="uuid.hex")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "IID", unique = true, nullable = false)
 	public int getIid() {
 		return iid;

@@ -9,169 +9,19 @@
 <head>
 <meta charset="utf-8"/>
 <title>甘肃万维JUP课题</title>
-
 <script type="text/javascript"> 
-	/**密码初始化**/	
-	function initData(url,parm){
-		if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checked').length!=0){
-			    $.dialog.confirm('选中账号密码将初始化成"111111",您确认要初始化吗？',function(){
-				var ids = "";
-				$('.list-table tbody input[type=checkbox]').each(function(i, o) {
-					if($(o).attr('checked')) {
-						ids += $(o).val() + ",";
-					}
-				});
-				window.location.href="${ctx}/"+url+"?"+parm+"="+ids.substring(0,ids.length-1);
-			 });
-			
-		}else{
-			$.dialog.alert('请您至少选择一条数据',function(){
-				return null;
-			 });
-		}
-	}
-	
-	function deleteData() {
-		var paraTypeId=$(".userAcctId").val();
-		if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checked').length!=0){
-				$.dialog.confirm('您确认要删除吗？',function(){
-					var ids = "";
-					$('.list-table tbody input[type=checkbox]').each(function(i, o) {
-						if($(o).attr('checked')) {
-							ids += $(o).val() + ",";
-						}
-					});
-					window.location.href="${ctx}/sys/accountDelete?userAcctId="+ids.substring(0,ids.length-1);
-				});
-				
-			}else{
-				$.dialog.confirm('请您至少选择一条数据',function(){
-					return null;
-				});
-			}
-	}
-
-	/**批量停用系统**/	
-	function stopData(url,parm){
-		if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checked').length!=0){
-			$.dialog.confirm('您确认要停用选中账号吗？',function(){ 
-				var ids = "";
-				$('.list-table tbody input[type=checkbox]').each(function(i, o) {
-					if($(o).attr('checked')) {
-						ids += $(o).val() + ",";
-					}
-				});
-				window.location.href="${ctx}/"+url+"?"+parm+"="+ids.substring(0,ids.length-1);
-			 }); 
-		}else{
-			 $.dialog.alert('请您至少选择一条数据',function(){ 
-				return null;
-			 }); 
-		}
-	}
-	/**批量启用单位**/	
-	function startData(url,parm){
-	
-		if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checked').length!=0){
-			 $.dialog.confirm('您确认要启用选中账号吗？',function(){ 
-				var ids = "";
-				$('.list-table tbody input[type=checkbox]').each(function(i, o) {
-			
-					if($(o).attr('checked')) {
-						ids += $(o).val() + ",";
-					}
-				});
-				window.location.href="${ctx}/"+url+"?"+parm+"="+ids.substring(0,ids.length-1);
-			 }); 
-		}else{ 
-			$.dialog.alert('请您至少选择一条数据',function(){ 
-				return null;
-			 }); 
-			
-		}
-	}
-	/**停用单条数据**/
-	function stopSingle(url,parm,obj){
-	 var singleId=$(obj).parent().parent().parent().parent().find('td:first').find('input').attr('id'); 
-		var flag=false;
-			$.ajax({
-				 type: "POST",
-				 url: "${ctx}/sys/checkAccountState",
-				 data: "userAcctId=" + singleId,
-				 dataType: 'text',
-				 async:false,
-				 success: function (data) {
-				 if (data == "stop") {
-					 flag=true;					 
-				 } else {
-					 flag=false;
-				 }
-				}
-             });
-			if(flag==true){
-				$.dialog.alert("该账号已经停用"); 
-				return false;
-			}else{
-				$.dialog.confirm('您确认要停用吗？',function(){ 
-					window.location.href="${ctx}/"+url+"?"+parm+"="+singleId;
-				 }); 
-		}
-	}
-	/**启用单条数据**/
-	function startSingle(url,parm,obj){
-	 var singleId=$(obj).parent().parent().parent().parent().find('td:first').find('input').attr('id'); 
-	
-		var flag=false;
-			$.ajax({
-				 type: "POST",
-				 url: "${ctx}/sys/checkAccountState",
-				 data: "userAcctId=" + singleId,
-				 dataType: 'text',
-				 async:false,
-				 success: function (data) {
-				 if (data == "start") {
-					 flag=true;					 
-				 } else {
-					 flag=false;
-				 }
-				}
-             });
-			if(flag==true){
-				Dialog.alert("该账号已经启用");
-				return false;
-			}else{
-				$.dialog.confirm('您确认要启用吗？',function(){ 
-					window.location.href="${ctx}/"+url+"?"+parm+"="+singleId;
-				 }); 
-		}
-	}
-	
-	$(function(){
-		//高级搜索按钮点击事件
-		$('.advanced-btn').on('click',function(){
-			$('.advanced-content').toggle('fast');
-		});
-		$(".advanced-search-btn").click(function(){
-			$("#form2").submit();
-		});
-		//阻止按键盘Enter键提交表单
-		var $inp = $('input');
-		$inp.keypress(function (e) { 
-		    var key = e.which; 
-		    if (key == 13) {
-		        return false;
-		    }
-		});	
-		
-	});
-	/**搜索表单校验**/
 	function checkSubmitForm(){
-		var loginAccountSearch=$("#loginAccountSearch").val();
-		if(loginAccountSearch==''||isNumbOrLett(loginAccountSearch)){
-			
+		var resNameSearch = $("#resNameSearch").val();
+		if(resNameSearch ==  '' || isNumbOrLett(resNameSearch)){
 			form1.submit();
 		}else{
-			$.validator.errorShow($("#loginAccountSearch"),'只能包括数字和字母');
+			$.validator.errorShow($("#resNameSearch"),'只能包括数字和字母');
+		}
+		var remarkSearch = $("#remarkSearch").val();
+		if(remarkSearch ==  '' || isNumbOrLett(remarkSearch)){
+			form1.submit();
+		}else{
+			$.validator.errorShow($("#remarkSearch"),'只能包括数字和字母');
 		}
 	}
 	/*
@@ -190,22 +40,10 @@
 		}else{
 			return false;
 		}
-	}	
-	function orderAccount(orderSort){
-		switch(orderSort){
-			case 'ASC':
-				window.location.href="${ctx}/sys/accountList?orderField=loginAccount&orderSort=ASC";
-				break;
-			case 'DESC':
-				window.location.href="${ctx}/sys/accountList?orderField=loginAccount&orderSort=DESC";
-				break;
-		}
 	}
 </script>
-
 </head>
 <body>
-
 <div class="list-warper">
 	<!--列表的面包屑区域-->
 	<div class="position">
@@ -228,10 +66,6 @@
 		<form id="form1" name="pageForm" action="${ctx}/datacall/datacallList" method="get">
 			<table class="">
 				<tr>
-					<%-- <th>菜单名称：</th>
-					<td width="20%">
-						<input type="text" id="menuNameSerach" placeholder="菜单名称" name="search_LIKE_menuName" class="input" value="${sParams['LIKE_menuName']}"/>
-					</td> --%>
 					<th style="padding-left: 300px">数据名称：</th>
 						<td width="20%">
 							<input type="text"  style="width: 170px;" placeholder="数据名称" value="${sParams['LIKE_resName']}" id="resNameSearch" name="search_LIKE_resName" />
@@ -245,8 +79,6 @@
 			</table>
 		</form>
 	</div>
-    
-    
 	<!--列表内容区域-->
 	<div class="list">
 	<input type="hidden" id="orderField" name="orderField" value="${orderField}"/> 
@@ -256,13 +88,6 @@
         	 <div class="list-toolbar">
             <!-- 操作按钮开始 -->	 
              <gsww:opTag menuId="8a929cb35e5b837b015e5b929dc50001" tabIndex="1" operatorType="1"></gsww:opTag>
-             <!--<ul class="list-Topbtn">
-            	<li class="add"><a title="新增" onclick="add('sys/accountEdit'); "></a></li>
-                <li class="passwordRest"><a title="密码初始化" onclick="initData('sys/initPassWord','userAcctId'); " ></a></li>                
-                <li class="disable"><a title="停用" onclick="stopData('sys/accountStop','userAcctId'); " ></a></li>
-                <li class="enable"><a title="启用" onclick="startData('sys/accountStart','userAcctId'); " ></a></li>
-                <li class="del"><a title="删除" onclick="deleteData('sys/accountDelete','userAcctId'); " ></a></li>
-             </ul>-->
              <!-- 操作按钮结束 -->
            </div> 
             
@@ -300,14 +125,6 @@
 								</div>             		
                 	</th>
                     <th width="10%" style="text-align: center;">
-	                    <%-- <div style="float: right;height:19px;margin-top: -6px;">
-		                    <p onclick="orderAccount('ASC');" style="height:10px">
-		                    	<img src="${ctx}/res/skin/default/image/sort-up.png" height="8" width="9" alt="升序"/>
-		                    </p>
-		                    <p onclick="orderAccount('DESC');" style="height:10px">
-		                   		<img src="${ctx}/res/skin/default/image/sort-down.png" width="9" height="8"  alt="降序"/>
-		                    </p>
-	                    </div> --%>
                   ID        
                     </th>
                     <th width="15%" style="text-align: center;">名称</th>
@@ -339,11 +156,11 @@
 	                    	<div title="${datacall.resUrl}" class="word_break">${datacall.resUrl}</div>
 	                    </td>
 	                    <td style="text-align: center;">
-	                    	<c:if test="${datacall.callingType==0}">IFRAME调用</c:if>
-							<c:if test="${datacall.callingType==1}">RSS调用</c:if>
+	                    	<c:if test="${datacall.callingType==1}">IFRAME调用</c:if>
+							<c:if test="${datacall.callingType==2}">RSS调用</c:if>
 	                    </td>
 	                	<td class="alignL" style="text-align: center;">
-	                    	<c:if test="${datacall.isVerification==0}">否</c:if>
+	                    	<c:if test="${datacall.isVerification==2}">否</c:if>
 							<c:if test="${datacall.isVerification==1}">是</c:if>
 	                    </td>
 	                	<td class="position-content" style="text-align: center;" >
