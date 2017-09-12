@@ -130,23 +130,14 @@ public class ComplatCorporationController extends BaseController{
 		 
 		try {
 			if(corporation != null){
-				String authState = corporation.getauthState().toString();
-				if(authState == null || "".equals(authState)){
-					Integer iState = Integer.parseInt(authState);
-					iState = 0;
-					corporation.setauthState(iState);
+				if(!StringHelper.isNotBlack(corporation.getauthState().toString())){
+					corporation.setauthState(0);
 				}
-				String isAuth = corporation.getisAuth().toString();
-				if(isAuth == null || "".equals(isAuth)){
-					Integer iAuth = Integer.parseInt(isAuth);
-					iAuth = 0;
-					corporation.setisAuth(iAuth);
+				if(!StringHelper.isNotBlack(corporation.getisAuth().toString())){
+					corporation.setisAuth(0);
 				}
-				String enable = corporation.getEnable().toString();
-				if(enable == null || "".equals(enable)){
-					Integer ienable = Integer.parseInt(enable);
-					ienable = 1;
-					corporation.setEnable(ienable);
+				if(!StringHelper.isNotBlack(corporation.getEnable().toString())){
+					corporation.setEnable(1);
 				}
 				
 				//对注册时间进行转换

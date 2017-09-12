@@ -4,7 +4,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 
+<<<<<<< HEAD
 import com.gsww.uids.entity.JisHistory;
+=======
+>>>>>>> 0f1e907c2c1b5c7934a70a80948604ffa7ebc6cb
 import com.gsww.uids.entity.JisSysview;
 
 public interface JisSysviewService {
@@ -17,6 +20,6 @@ public interface JisSysviewService {
 		 * @return
 		 * @throws Exception
 		 */
-		public JisSysview findByKey(String objectId) throws Exception;
+		public JisSysview findByIid(Integer iid) throws Exception;
 		
 }
