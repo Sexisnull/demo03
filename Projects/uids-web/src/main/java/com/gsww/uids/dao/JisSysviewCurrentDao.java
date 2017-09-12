@@ -7,15 +7,15 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.gsww.jup.entity.sys.SysApps;
 import com.gsww.jup.entity.sys.SysOperator;
-import com.gsww.uids.entity.JisCurrent;
+import com.gsww.uids.entity.JisSysviewCurrent;
 
 
-public interface JisCurrentDao extends PagingAndSortingRepository<JisCurrent, Integer>,JpaSpecificationExecutor<JisCurrent> {
+public interface JisSysviewCurrentDao extends PagingAndSortingRepository<JisSysviewCurrent, Integer>,JpaSpecificationExecutor<JisSysviewCurrent> {
 
-	JisCurrent findByObjectId(String objectId);
 	
-	JisCurrent findByIid(Integer iid);
+	
+	JisSysviewCurrent findByIid(Integer iid);
 
-	List<JisCurrent> findAll();
+	List<JisSysviewCurrent> findAll();
 
 }
