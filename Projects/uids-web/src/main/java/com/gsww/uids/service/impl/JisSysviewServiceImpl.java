@@ -23,7 +23,7 @@ public class JisSysviewServiceImpl implements JisSysviewService{
 	}
 
 	@Override
-	public JisSysview findByKey(String objectId) throws Exception {
-		return jisSysviewDao.findByObjectId(objectId);
+	public JisSysview findByIid(Integer iid) throws Exception {
+		return jisSysviewDao.findByIid(iid);
 	}
 }

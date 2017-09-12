@@ -1,4 +1,4 @@
-package com.gsww.jup.entity;
+package com.gsww.uids.entity;
 
 import java.io.Serializable;
 
@@ -11,7 +11,7 @@ import javax.persistence.Table;
 //用户角色实体
 @Entity
 @Table(name="complat_rolerelation")
-public class ComplatRoleRelation implements Serializable{
+public class ComplatRolerelation implements Serializable{
 
 	/**
 	 * 
@@ -22,10 +22,10 @@ public class ComplatRoleRelation implements Serializable{
 	private int roleId;
 	private int userId;
 	private int groupId;
-	public ComplatRoleRelation() {
+	public ComplatRolerelation() {
 		super();
 	}
-	public ComplatRoleRelation(int iid, int roleId, int userId, int groupId) {
+	public ComplatRolerelation(int iid, int roleId, int userId, int groupId) {
 		super();
 		this.iid = iid;
 		this.roleId = roleId;

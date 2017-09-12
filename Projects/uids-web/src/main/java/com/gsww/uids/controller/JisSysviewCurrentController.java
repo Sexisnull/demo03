@@ -33,16 +33,16 @@ import com.gsww.jup.entity.sys.SysRole;
 
 import com.gsww.jup.util.PageUtils;
 
-import com.gsww.uids.entity.JisCurrent;
-import com.gsww.uids.service.JisCurrentService;
+import com.gsww.uids.entity.JisSysviewCurrent;
+import com.gsww.uids.service.JisSysviewCurrentService;
 
 
 @Controller
 @RequestMapping(value = "/uids")
-public class JisCurrentController extends BaseController{
+public class JisSysviewCurrentController extends BaseController{
 	private static Logger logger = LoggerFactory.getLogger(SysAccountController.class);
 	@Autowired
-	private JisCurrentService jisCurrentService;
+	private JisSysviewCurrentService jisSysviewCurrentService;
 	
 	@RequestMapping(value="/jisCurList",method = RequestMethod.GET)
 	public String jisCurList(@RequestParam(value = "page", defaultValue = "1") int pageNo,
@@ -54,15 +54,15 @@ public class JisCurrentController extends BaseController{
 		try{
 			//初始化分页数据
 			PageUtils pageUtils=new PageUtils(pageNo,pageSize,orderField,orderSort);
-			PageRequest pageRequest=super.buildPageRequest(hrequest,pageUtils,JisCurrent.class,findNowPage);
+			PageRequest pageRequest=super.buildPageRequest(hrequest,pageUtils,JisSysviewCurrent.class,findNowPage);
 			
 			//搜索属性初始化
 			Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
-			Specification<JisCurrent>  spec=super.toSpecification(searchParams, JisCurrent.class);
+			Specification<JisSysviewCurrent>  spec=super.toSpecification(searchParams, JisSysviewCurrent.class);
 			//
 		
 			//分页
-			Page<JisCurrent> pageInfo = jisCurrentService.getJisPage(spec,pageRequest);
+			Page<JisSysviewCurrent> pageInfo = jisSysviewCurrentService.getJisPage(spec,pageRequest);
 			model.addAttribute("pageInfo", pageInfo);
 			Map<String,String> userAppsmap=new HashMap<String,String>();
 				List<SysApps> appsList=new ArrayList<SysApps>();
@@ -95,11 +95,11 @@ public class JisCurrentController extends BaseController{
 	public ModelAndView jisCurDelete( String objectId, HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		try {
 			String[] para=objectId.split(",");
-			JisCurrent jisCurrent = null;
+			JisSysviewCurrent jisCurrent = null;
 			for(int i=0;i<para.length;i++){
 				Integer Iid = Integer.parseInt(para[i].trim());
-				jisCurrent=jisCurrentService.findByIid(Iid);
-				jisCurrentService.delete(jisCurrent);
+				jisCurrent=jisSysviewCurrentService.findByIid(Iid);
+				jisSysviewCurrentService.delete(jisCurrent);
 			}
 			returnMsg("success","删除成功",request);
 		} catch (Exception e) {

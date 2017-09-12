@@ -22,19 +22,14 @@ package com.gsww.uids.controller;
 	import com.gsww.jup.controller.sys.SysAccountController;
 
 	import com.gsww.jup.util.PageUtils;
-
-	import com.gsww.uids.entity.JisCurrent;
-import com.gsww.uids.entity.JisHistory;
-import com.gsww.uids.service.JisCurrentService;
-import com.gsww.uids.service.JisHistoryService;
-
-
+	import com.gsww.uids.entity.JisSysviewHistory;
+	import com.gsww.uids.service.JisSysviewHistoryService;
 	@Controller
 	@RequestMapping(value = "/uids")
 	public class JisHistoryController extends BaseController{
 		private static Logger logger = LoggerFactory.getLogger(SysAccountController.class);
 		@Autowired
-		private JisHistoryService jisHistoryService;
+		private JisSysviewHistoryService jisSysviewHistoryService;
 		
 		@RequestMapping(value="/jisHisList",method = RequestMethod.GET)
 		public String jisHisList(@RequestParam(value = "page", defaultValue = "1") int pageNo,
@@ -46,14 +41,14 @@ import com.gsww.uids.service.JisHistoryService;
 			try{
 				//初始化分页数据
 				PageUtils pageUtils=new PageUtils(pageNo,pageSize,orderField,orderSort);
-				PageRequest pageRequest=super.buildPageRequest(hrequest,pageUtils,JisCurrent.class,findNowPage);
+				PageRequest pageRequest=super.buildPageRequest(hrequest,pageUtils,JisSysviewHistory.class,findNowPage);
 				
 				//搜索属性初始化
 				Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
-				Specification<JisHistory>  spec=super.toSpecification(searchParams, JisHistory.class);
+				Specification<JisSysviewHistory>  spec=super.toSpecification(searchParams, JisSysviewHistory.class);
 				
 				//分页
-				Page<JisHistory> pageInfo = jisHistoryService.getJisPage(spec,pageRequest);
+				Page<JisSysviewHistory> pageInfo = jisSysviewHistoryService.getJisPage(spec,pageRequest);
 				model.addAttribute("pageInfo", pageInfo);
 				// 将搜索条件编码成字符串，用于排序，分页的URL
 				model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));

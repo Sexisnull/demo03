@@ -6,10 +6,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 
-import com.gsww.jup.entity.ComplatRoleRelation;
 import com.gsww.jup.entity.sys.SysRole;
 import com.gsww.jup.entity.sys.SysRoleAcctRel;
 import com.gsww.uids.entity.ComplatRole;
+import com.gsww.uids.entity.ComplatRolerelation;
 
 public interface ComplatRoleService {
 	//角色分页查询
@@ -23,6 +23,6 @@ public interface ComplatRoleService {
 	//根据主键删除
 	public void delete(int id) throws Exception;
 	//根据角色查询用户关系
-	public List<ComplatRoleRelation> findAcctByroleId(Integer roleId)throws Exception;
+	public List<ComplatRolerelation> findAcctByroleId(Integer roleId)throws Exception;
 
 }
