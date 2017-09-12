@@ -1,4 +1,4 @@
-package com.gsww.jup.controller.sys;
+package com.gsww.uids.controller;
 
 import java.util.List;
 import java.util.Map;
@@ -7,6 +7,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.gsww.uids.entity.ComplatRole;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,15 +23,11 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
-import com.gsww.jup.entity.ComplatRole;
 import com.gsww.jup.entity.ComplatRoleRelation;
-import com.gsww.jup.entity.sys.SysRole;
-import com.gsww.jup.entity.sys.SysRoleAcctRel;
-import com.gsww.jup.entity.sys.SysUserSession;
-import com.gsww.jup.service.sys.ComplatRoleService;
+import com.gsww.uids.service.ComplatRoleService;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.jup.util.StringHelper;
-import com.gsww.jup.util.TimeHelper;
+
 @Controller
 @RequestMapping(value="/complat")
 public class ComplatRoleController extends BaseController{
