@@ -7,11 +7,13 @@ import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+
 /**
  * ComplatRole entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "complat_role", catalog = "uidsdx")
+@Table(name = "complat_role")
 public class ComplatRole implements java.io.Serializable {
 
 	// Fields
@@ -40,9 +42,11 @@ public class ComplatRole implements java.io.Serializable {
 	}
 
 	// Property accessors
-	@Id
-	@GeneratedValue(strategy = IDENTITY)
-	@Column(name = "iid", unique = true, nullable = false)
+	
+    @GenericGenerator(name="generator", strategy="uuid.hex")
+    @Id 
+    @GeneratedValue(generator="generator")
+    @Column(name="iid", unique=true, nullable=false)
 	public Integer getIid() {
 		return this.iid;
 	}
