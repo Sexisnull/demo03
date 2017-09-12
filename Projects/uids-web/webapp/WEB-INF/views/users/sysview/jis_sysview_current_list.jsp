@@ -10,8 +10,8 @@
 		
 		/**搜索表单校验**/
 	function checkSubmitForm() {
-		var objectNameSearch = $("#objectNameSearch").val();
-		if (objectNameSearch == '' || isChinaOrNumbOrLett(objectNameSearch)) {
+		var objectnameSearch = $("#objectnameSearch").val();
+		if (objectnameSearch == '' || isChinaOrNumbOrLett(objectnameSearch)) {
 			form1.submit();
 		} else {
 			$.validator.errorShow($("#objectNameSearch"), '只能包括中英文、数字、@和下划线');
@@ -94,7 +94,7 @@ if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checke
 										同步结果：
 									</th>
 									<td width=130px>
-									<select id="optResult" name="optResult"  class="select right" >
+									<select id="optresult" name="optresult"  class="select right" >
 	          	  		               <option value="0">------请选择------</option>
 		          		               <option value="未同步">未同步</option>
 		          		               <option value="同步失败">同步失败</option>
@@ -117,8 +117,8 @@ if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checke
 										操作对象名称：
 									</th>
 										<td width=120px>
-								<input type="text" placeholder="操作对象名称" id="objectNameSearch" 
-								name="search_LIKE_objectName"  value="${sParams['LIKE_objectName']}" class="input"/>
+								<input type="text" placeholder="操作对象名称" id="objectnameSearch" 
+								name="search_LIKE_objectname"  value="${sParams['LIKE_objectname']}" class="input"/>
 							</td>
 							<td class="btn-group"> <a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a></td>
 								
@@ -187,24 +187,24 @@ if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checke
 									</div>
 								</td>
 								<td>
-									${jisCurrent.objectName}
+									${jisCurrent.objectname}
 								</td>
 								<td style="word-break: break-all; word-wrap: break-word;">
-									${jisCurrent.codeId}
+									${jisCurrent.codeid}
 								</td>
 								<td class="alignL" style="text-align: center">
 									<div class="list-longtext">
-										${jisCurrent.operateType}
+										${jisCurrent.operatetype}
 									</div>
 								</td>
 								<td class="alignL" style="text-align: center">
 									<div class="list-longtext">
-										${jisCurrent.appId}
+										${jisCurrent.appid}
 									</div>
 								</td>
 								<td class="alignL" style="text-align: center">
 									<div class="list-longtext">
-										${jisCurrent.syncTime}
+										${jisCurrent.synctime}
 									</div>
 								</td>
 								
@@ -212,7 +212,7 @@ if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checke
 								</td>
 								<td class="alignL" style="text-align: center">
 									<div class="list-longtext">
-										${jisCurrent.optResult}
+										${jisCurrent.optresult}
 									</div>
 								</td>
 								

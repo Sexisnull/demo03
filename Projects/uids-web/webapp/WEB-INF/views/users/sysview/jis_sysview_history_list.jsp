@@ -9,11 +9,11 @@
 		<script type="text/javascript">
 		/**搜索表单校验**/
 function checkSubmitForm() {
-		var objectNameSearch = $("#objectNameSearch").val();
-		if (objectNameSearch == '' || isChinaOrNumbOrLett(objectNameSearch)) {
+		var objectnameSearch = $("#objectnameSearch").val();
+		if (objectnameSearch == '' || isChinaOrNumbOrLett(objectnameSearch)) {
 			form1.submit();
 		} else {
-			$.validator.errorShow($("#objectNameSearch"), '只能包括中英文、数字、@和下划线');
+			$.validator.errorShow($("#objectnameSearch"), '只能包括中英文、数字、@和下划线');
 		}
 	}
 		</script>
@@ -50,8 +50,8 @@ function checkSubmitForm() {
 										操作对象名：
 									</th>
 									<td width="20%">
-										<input type="text" id="objectNameSearch" placeholder="操作对象名"
-										<input type="text" placeholder="操作对象名称" id="objectNameSearch" name="search_LIKE_objectName"  value="${sParams['LIKE_objectName']}" class="input"/>
+										<input type="text" id="objectnameSearch" placeholder="操作对象名"
+										<input type="text" placeholder="操作对象名称" id="objectnameSearch" name="search_LIKE_objectname"  value="${sParams['LIKE_objectname']}" class="input"/>
 									</td>
 									<td class="btn-group">
 										<a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a>
@@ -115,29 +115,29 @@ function checkSubmitForm() {
 								<td>
 									<div class="label">
 										<i class="check_btn"></i>
-										<input id="${jisHistory.objectId}" value="${jisHistory.objectId}"
+										<input id="${jisHistory.iid}" value="${jisHistory.iid}"
 											type="checkbox" class="check_btn" style="display: none;" />
 									</div>
 								</td>
 								<td>
-									${jisHistory.objectName}
+									${jisHistory.objectname}
 								</td>
 								<td style="word-break: break-all; word-wrap: break-word;">
-									${jisHistory.codeId}
+									${jisHistory.codeid}
 								</td>
 								<td class="alignL" style="text-align: center">
 									<div class="list-longtext">
-										${jisHistory.operateType}
+										${jisHistory.operatetype}
 									</div>
 								</td>
 								<td class="alignL" style="text-align: center">
 									<div class="list-longtext">
-										${jisHistory.appId}
+										${jisHistory.appid}
 									</div>
 								</td>
 								<td class="alignL" style="text-align: center">
 									<div class="list-longtext">
-										${jisHistory.syncTime}
+										${jisHistory.synctime}
 									</div>
 								</td>
 								
@@ -145,7 +145,7 @@ function checkSubmitForm() {
 								</td>
 								<td class="alignL" style="text-align: center">
 									<div class="list-longtext">
-										${jisHistory.optResult}
+										${jisHistory.optresult}
 									</div>
 								</td>
 								<td class="alignL" style="text-align: center">

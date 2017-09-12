@@ -37,7 +37,7 @@ import com.gsww.uids.service.JisSysviewService;
 		@RequestMapping(value="/jisSysviewList",method = RequestMethod.GET)
 		public String jisSysviewList(@RequestParam(value = "page", defaultValue = "1") int pageNo,
 				@RequestParam(value = "page.size", defaultValue = PAGE_SIZE) int pageSize,
-				@RequestParam(value = "order.field", defaultValue = "syncTime") String orderField,
+				@RequestParam(value = "order.field", defaultValue = "synctime") String orderField,
 				@RequestParam(value = "order.sort", defaultValue = "DESC") String orderSort,
 				@RequestParam(value = "findNowPage", defaultValue = "false") String findNowPage,
 				Model model,ServletRequest request,HttpServletRequest hrequest){
@@ -60,9 +60,9 @@ import com.gsww.uids.service.JisSysviewService;
 				ex.printStackTrace();
 				logger.error("列表打开失败："+ex.getMessage());
 				returnMsg("error","列表打开失败",(HttpServletRequest) request);
-				return "redirect:/sys/jisSysviewList";
+				return "redirect:/uids/jisSysviewList";
 			}
-			return "sys/jis_sysview_list";
+			return "users/sysview/jis_sysview_list";
 		}
 
 	}
