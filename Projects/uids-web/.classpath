@@ -30,9 +30,9 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.7.0_80">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7">
 		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
 <<<<<<< HEAD
@@ -169,6 +169,10 @@
 	<classpathentry kind="lib" path="webapp/WEB-INF/lib/wsdl4j-1.6.3.jar"/>
 	<classpathentry kind="lib" path="webapp/WEB-INF/lib/xml-resolver-1.2.jar"/>
 	<classpathentry kind="lib" path="webapp/WEB-INF/lib/xmlschema-core-2.0.3.jar"/>
+<<<<<<< HEAD
 >>>>>>> 14f74883d5fe727d82fba23e4f6f111fbe0a3dab
+=======
+>>>>>>> db6db1dda2306de0c4c0e92fb01fe610aa26bacf
+>>>>>>> 8b9b83d648c6dc0f971cff51c50e7ec07ca19759
 	<classpathentry kind="output" path="webapp/WEB-INF/classes"/>
 </classpath>
