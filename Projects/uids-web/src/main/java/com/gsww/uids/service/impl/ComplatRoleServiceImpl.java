@@ -62,4 +62,10 @@ public class ComplatRoleServiceImpl implements ComplatRoleService{
 		return comrelationDao.findByRoleId(roleId);
 	}
 
+	@Override
+	public List<ComplatRole> findByName(String name) {
+		// TODO Auto-generated method stub
+		return dao.findByName(name);
+	}
+
 }
