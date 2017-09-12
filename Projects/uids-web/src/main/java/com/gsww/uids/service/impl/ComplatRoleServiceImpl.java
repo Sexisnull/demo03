@@ -8,10 +8,19 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+<<<<<<< HEAD
 import com.gsww.uids.dao.ComplatRoleDao;
 import com.gsww.uids.dao.ComplatRoleRelationDao;
 import com.gsww.uids.entity.ComplatRole;
 import com.gsww.uids.entity.ComplatRoleRelation;
+=======
+
+import com.gsww.jup.entity.sys.SysRole;
+import com.gsww.uids.dao.ComplatRoleDao;
+import com.gsww.uids.dao.ComplatRoleRelationDao;
+import com.gsww.uids.entity.ComplatRole;
+import com.gsww.uids.entity.ComplatRolerelation;
+>>>>>>> 9b9ebf74bfed4c28637b43429fa8aca33d294949
 import com.gsww.uids.service.ComplatRoleService;
 
 @Transactional
@@ -55,7 +64,7 @@ public class ComplatRoleServiceImpl implements ComplatRoleService{
 	}
 
 	@Override
-	public List<ComplatRoleRelation> findAcctByroleId(Integer roleId)
+	public List<ComplatRolerelation> findAcctByroleId(Integer roleId)
 			{
 		// TODO Auto-generated method stub
 		return comrelationDao.findByRoleId(roleId);

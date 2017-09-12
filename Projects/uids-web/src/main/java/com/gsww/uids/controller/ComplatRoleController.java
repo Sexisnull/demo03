@@ -25,7 +25,11 @@ import com.gsww.jup.controller.BaseController;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.jup.util.StringHelper;
 import com.gsww.uids.entity.ComplatRole;
+<<<<<<< HEAD
 import com.gsww.uids.entity.ComplatRoleRelation;
+=======
+import com.gsww.uids.entity.ComplatRolerelation;
+>>>>>>> 9b9ebf74bfed4c28637b43429fa8aca33d294949
 import com.gsww.uids.service.ComplatRoleService;
 @Controller
 @RequestMapping(value="/complat")
@@ -112,7 +116,7 @@ public class ComplatRoleController extends BaseController{
 		try {
 			String[] para=croleId.split(",");
 			for(int i=0;i<para.length;i++){
-				List<ComplatRoleRelation> acct = roleService.findAcctByroleId(Integer.parseInt(para[i].trim()));
+				List<ComplatRolerelation> acct = roleService.findAcctByroleId(Integer.parseInt(para[i].trim()));
 				ComplatRole role = roleService.findByKey(Integer.parseInt(para[i].trim()));
 				if(acct!=null && acct.size()>0){
 					resMsg += "名称为“"+role.getName()+"”的角色下存在用户，不能删除！   </br>   ";

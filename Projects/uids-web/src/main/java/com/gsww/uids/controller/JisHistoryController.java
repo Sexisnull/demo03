@@ -22,11 +22,8 @@ package com.gsww.uids.controller;
 	import com.gsww.jup.controller.sys.SysAccountController;
 
 	import com.gsww.jup.util.PageUtils;
-
-import com.gsww.uids.entity.JisSysviewHistory;
-import com.gsww.uids.service.JisSysviewHistoryService;
-
-
+	import com.gsww.uids.entity.JisSysviewHistory;
+	import com.gsww.uids.service.JisSysviewHistoryService;
 	@Controller
 	@RequestMapping(value = "/uids")
 	public class JisHistoryController extends BaseController{
