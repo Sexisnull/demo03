@@ -23,9 +23,7 @@ package com.gsww.uids.controller;
 
 	import com.gsww.jup.util.PageUtils;
 
-	import com.gsww.uids.entity.JisCurrent;
 import com.gsww.uids.entity.JisHistory;
-import com.gsww.uids.service.JisCurrentService;
 import com.gsww.uids.service.JisHistoryService;
 
 
@@ -46,7 +44,7 @@ import com.gsww.uids.service.JisHistoryService;
 			try{
 				//初始化分页数据
 				PageUtils pageUtils=new PageUtils(pageNo,pageSize,orderField,orderSort);
-				PageRequest pageRequest=super.buildPageRequest(hrequest,pageUtils,JisCurrent.class,findNowPage);
+				PageRequest pageRequest=super.buildPageRequest(hrequest,pageUtils,JisHistory.class,findNowPage);
 				
 				//搜索属性初始化
 				Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");

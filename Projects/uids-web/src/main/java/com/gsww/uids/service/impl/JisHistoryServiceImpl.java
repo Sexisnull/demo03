@@ -7,11 +7,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.gsww.uids.dao.JisCurrentDao;
 import com.gsww.uids.dao.JisHistoryDao;
-import com.gsww.uids.entity.JisCurrent;
 import com.gsww.uids.entity.JisHistory;
-import com.gsww.uids.service.JisCurrentService;
 import com.gsww.uids.service.JisHistoryService;
 
 @Transactional
