@@ -1,10 +1,11 @@
 package com.gsww.uids.dao;
 
-import com.gsww.uids.entity.ComplatRole;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import java.util.List;
+import com.gsww.uids.entity.ComplatRole;
 
 
 public interface ComplatRoleDao extends PagingAndSortingRepository<ComplatRole, Integer>,JpaSpecificationExecutor<ComplatRole>{

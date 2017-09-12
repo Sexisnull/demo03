@@ -1,12 +1,15 @@
 package com.gsww.uids.service;
 
-import com.gsww.jup.entity.ComplatRoleRelation;
-import com.gsww.uids.entity.ComplatRole;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.util.List;
+import com.gsww.jup.entity.ComplatRoleRelation;
+import com.gsww.jup.entity.sys.SysRole;
+import com.gsww.jup.entity.sys.SysRoleAcctRel;
+import com.gsww.uids.entity.ComplatRole;
 
 public interface ComplatRoleService {
 	//角色分页查询

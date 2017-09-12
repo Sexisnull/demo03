@@ -91,7 +91,7 @@
 							<th width="10">
 								<div class="label">
 									<i class="check_btn check_all"></i>
-									<input type="checkbox" class="check_btn" style="display: none;" />
+									<input id="${complatRole.iid}" value="${complatRole.iid}" type="checkbox" class="check_btn" style="display: none;" />
 								</div>
 							</th>
 							<th width="20%">
