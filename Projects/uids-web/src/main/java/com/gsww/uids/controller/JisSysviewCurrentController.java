@@ -47,7 +47,7 @@ public class JisSysviewCurrentController extends BaseController{
 	@RequestMapping(value="/jisCurList",method = RequestMethod.GET)
 	public String jisCurList(@RequestParam(value = "page", defaultValue = "1") int pageNo,
 			@RequestParam(value = "page.size", defaultValue = PAGE_SIZE) int pageSize,
-			@RequestParam(value = "order.field", defaultValue = "syncTime") String orderField,
+			@RequestParam(value = "order.field", defaultValue = "synctime") String orderField,
 			@RequestParam(value = "order.sort", defaultValue = "DESC") String orderSort,
 			@RequestParam(value = "findNowPage", defaultValue = "false") String findNowPage,
 			Model model,ServletRequest request,HttpServletRequest hrequest){
@@ -81,9 +81,9 @@ public class JisSysviewCurrentController extends BaseController{
 			ex.printStackTrace();
 			logger.error("列表打开失败："+ex.getMessage());
 			returnMsg("error","列表打开失败",(HttpServletRequest) request);
-			return "redirect:/sys/jisCurList";
+			return "redirect:/uids/jisCurList";
 		}
-		return "sys/jis_current_list";
+		return "users/sysview/jis_sysview_current_list";
 	}
 
 	

@@ -7,9 +7,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.gsww.uids.dao.OutsideUserDao;
-import com.gsww.uids.entity.OutsideUser;
-import com.gsww.uids.service.OutsideUserService;
+import com.gsww.uids.dao.ComplatOutsideuserDao;
+import com.gsww.uids.entity.ComplatOutsideuser;
+import com.gsww.uids.service.ComplatOutsideuserService;
 
 /**
  * 
@@ -20,27 +20,27 @@ import com.gsww.uids.service.OutsideUserService;
  */
 @Transactional
 @Service("outsideUserService")
-public class OutsideUserServiceImpl implements OutsideUserService {
+public class ComplatOutsideuserServiceImpl implements ComplatOutsideuserService {
 	@Autowired
-	private OutsideUserDao outsideUserDao;
+	private ComplatOutsideuserDao outsideUserDao;
 
 	@Override
-	public Page<OutsideUser> getOutsideUserPage(Specification<OutsideUser> spec, PageRequest pageRequest) {
+	public Page<ComplatOutsideuser> getOutsideUserPage(Specification<ComplatOutsideuser> spec, PageRequest pageRequest) {
 		return outsideUserDao.findAll(spec, pageRequest);
 	}
 
 	@Override
-	public OutsideUser findByKey(Integer iid) {
+	public ComplatOutsideuser findByKey(Integer iid) {
 		return outsideUserDao.findByIid(iid);
 	}
 
 	@Override
-	public void save(OutsideUser outsideUser) {
+	public void save(ComplatOutsideuser outsideUser) {
 		outsideUserDao.save(outsideUser);
 	}
 
 	@Override
-	public void delete(OutsideUser outsideUser) {
+	public void delete(ComplatOutsideuser outsideUser) {
 		outsideUserDao.delete(outsideUser);
 	}
 }

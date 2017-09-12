@@ -20,7 +20,7 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity
 @Table(name = "COMPLAT_OUTSIDEUSER")
-public class OutsideUser implements Serializable {
+public class ComplatOutsideuser implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer iid; // 用户id
@@ -488,7 +488,7 @@ public class OutsideUser implements Serializable {
 		this.livingAreaDetail = livingAreaDetail;
 	}
 
-	public OutsideUser(Integer iid, String uuid, String loginName, String pwd, String name, Integer age, String sex,
+	public ComplatOutsideuser(Integer iid, String uuid, String loginName, String pwd, String name, Integer age, String sex,
 			Integer enable, String degree, String pinyin, Integer papersType, String papersNumber, String description,
 			String mobile, String phone, String fax, String email, String qq, String msn, String address, String post,
 			String workUnit, String headShip, Date birthDate, Date loginTime, String loginIp, String regIp,
@@ -545,6 +545,6 @@ public class OutsideUser implements Serializable {
 		this.livingAreaDetail = livingAreaDetail;
 	}
 
-	public OutsideUser() {
+	public ComplatOutsideuser() {
 	}
 }
