@@ -1,4 +1,4 @@
-package com.gsww.jup.dao;
+package com.gsww.uids.dao;
 
 import java.util.List;
 
