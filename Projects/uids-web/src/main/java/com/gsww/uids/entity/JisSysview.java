@@ -17,7 +17,7 @@ public class JisSysview implements java.io.Serializable {
 
 	private static final long serialVersionUID = 2492351453264347034L;
 
-	
+
 	private Integer iid;
 	private String objectId;
 	private String objectName;
@@ -30,11 +30,11 @@ public class JisSysview implements java.io.Serializable {
 	private String operateType;
 	private Integer times;
 	private String errorspec;
-	
+
 	public JisSysview() {
 	}
 
-	
+
 	public JisSysview(String objectName, String state,String result,Integer optResult,Integer appid
 		,Date syncTime,Integer appId,String codeId,	String operateType,Integer times,String errorspec) {
 		this.objectName = objectName;
@@ -47,7 +47,7 @@ public class JisSysview implements java.io.Serializable {
 		this.times=times;
 		this.errorspec=errorspec;
 	}
-	
+
 	@Id
 	@GeneratedValue(generator="system-uuid")
 	@GenericGenerator(name="system-uuid", strategy="uuid.hex")
