@@ -7,7 +7,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.gsww.uids.entity.ComplatRole;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +23,10 @@ import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
 import com.gsww.jup.entity.ComplatRoleRelation;
-import com.gsww.uids.service.ComplatRoleService;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.jup.util.StringHelper;
-
+import com.gsww.uids.entity.ComplatRole;
+import com.gsww.uids.service.ComplatRoleService;
 @Controller
 @RequestMapping(value="/complat")
 public class ComplatRoleController extends BaseController{
@@ -64,12 +63,12 @@ public class ComplatRoleController extends BaseController{
 			returnMsg("msgMap","列表打开失败",(HttpServletRequest) request);
 			return "redirect:/complat/roleList";
 		}
-		return "sys/complatrole";
+		return "users/complatrole/complatrole";
 	}
 	//新增或编辑，页面跳转
 	@RequestMapping(value = "/croleEdit", method = RequestMethod.GET)
 	public ModelAndView roleEdit(String croleId,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
-		ModelAndView mav = new ModelAndView("sys/crole_edit");
+		ModelAndView mav = new ModelAndView("users/complatrole/crole_edit");
 		try {
 			ComplatRole cRole = null;
 			if(StringHelper.isNotBlack(croleId)){
@@ -108,10 +107,10 @@ public class ComplatRoleController extends BaseController{
 	//删除角色
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/croleDelete", method = RequestMethod.GET)
-	public ModelAndView roleDelete(String ids,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+	public ModelAndView roleDelete(String croleId,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		String resMsg = "";
 		try {
-			String[] para=ids.split(",");
+			String[] para=croleId.split(",");
 			for(int i=0;i<para.length;i++){
 				List<ComplatRoleRelation> acct = roleService.findAcctByroleId(Integer.parseInt(para[i].trim()));
 				ComplatRole role = roleService.findByKey(Integer.parseInt(para[i].trim()));
