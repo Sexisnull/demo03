@@ -16,7 +16,7 @@ var corNameInput=$("#name").val();
 	   name: {
 	    required: true,
 	    cnRangelength: [0,33],
-	    corNameInput
+	    corNameInput  
 	   },
 	   realName:{
 	   	required: true	
