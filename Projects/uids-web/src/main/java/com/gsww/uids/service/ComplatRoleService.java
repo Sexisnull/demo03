@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+
 import com.gsww.uids.entity.ComplatRole;
 import com.gsww.uids.entity.ComplatRolerelation;
 
@@ -21,5 +22,7 @@ public interface ComplatRoleService {
 	public void delete(int id) throws Exception;
 	//根据角色查询用户关系
 	public List<ComplatRolerelation> findAcctByroleId(Integer roleId)throws Exception;
+	//根据角色名查询
+	List<ComplatRole> findByName(String name);
 
 }

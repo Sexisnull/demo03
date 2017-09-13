@@ -1,5 +1,6 @@
 package com.gsww.uids.service.impl;
 
+<<<<<<< HEAD
 import java.util.List;
 import java.util.Map;
 
@@ -26,4 +27,17 @@ public class JisApplicationServiceImpl implements JisApplicationService {
 		return mapList;
 	}
 
+=======
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.gsww.uids.service.JisApplicationService;
+
+@Transactional
+@Service("jisApplicationService")
+public class JisApplicationServiceImpl implements JisApplicationService{
+	
+	
+	
+>>>>>>> 0a7a30be8820fcb0c223016a83220645f3e1c9c1
 }

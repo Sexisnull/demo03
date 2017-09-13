@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="uids-gateway">
-    <flow SubFlow="false" name="authenticateService" entity-id="7a0f9184-1e2e-47d9-9ef9-b1ed7c747f68">
+    <flow SubFlow="false" name="authenticateService" entity-id="8b7ae07d-4bce-4c7c-831f-d898845b302f">
         <properties>
             <property name="processingStrategy"/>
             <property name="processingStrategy2"/>
@@ -53,7 +53,7 @@
         </lane>
         <apikit>false</apikit>
     </flow>
-    <flow SubFlow="false" name="httpInterfaceService" entity-id="dcfd02c3-402a-478d-a9b1-8e38b7c6de7c">
+    <flow SubFlow="false" name="httpInterfaceService" entity-id="9087d464-54a5-4670-b570-5a5129677419">
         <properties>
             <property name="processingStrategy"/>
             <property name="processingStrategy2"/>
@@ -106,7 +106,7 @@
         </lane>
         <apikit>false</apikit>
     </flow>
-    <flow SubFlow="false" name="WSGroup" entity-id="7209c446-6951-490e-9cda-6a77be97170f">
+    <flow SubFlow="false" name="WsPerAuth" entity-id="c33a21b6-9c0f-4ca8-9ea5-1100c14165e1">
         <properties>
             <property name="processingStrategy"/>
             <property name="processingStrategy2"/>
@@ -125,7 +125,7 @@
                     <property name="tracking:enable-default-events"/>
                     <property name="ref"/>
                     <property name="transformer-refs"/>
-                    <property name="address" value="http://0.0.0.0:8081/services/WSGroup"/>
+                    <property name="address" value="http://0.0.0.0:8081/services/WsPerAuth"/>
                     <property name="encoding"/>
                     <property name="responseTransformer-refs"/>
                     <property name="auxiliary;index" value="10"/>
@@ -139,7 +139,7 @@
                 <properties>
                     <property name="port"/>
                     <property name="wsdlLocation"/>
-                    <property name="serviceClass" value="com.gsww.uids.gateway.ws.WSGroupImpl"/>
+                    <property name="serviceClass" value="com.gsww.uids.gateway.ws.WsPerAuthImpl"/>
                     <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/cxf/jaxws-service"/>
                     <property name="configuration-ref"/>
                     <property name="namespace"/>
@@ -159,7 +159,7 @@
                     <property name="class"/>
                     <property name="auxiliary;index" value="12"/>
                     <property-collection name="@http://www.mulesoft.org/schema/mule/core/singleton-object;0">
-                        <property name="class" value="com.gsww.uids.gateway.ws.WSGroupImpl"/>
+                        <property name="class" value="com.gsww.uids.gateway.ws.WsPerAuthImpl"/>
                         <property name="auxiliary;index" value="13"/>
                         <property name="auxiliary;wrapIn" value="13"/>
                     </property-collection>
@@ -168,7 +168,7 @@
         </lane>
         <apikit>false</apikit>
     </flow>
-    <flow SubFlow="false" name="immediateSyncJob" entity-id="8010b1b1-63d3-41e5-8630-e489610bbbab">
+    <flow SubFlow="false" name="WsCorAuth" entity-id="617344b4-5b52-484d-aa59-aa8b0841cce6">
         <properties>
             <property name="processingStrategy"/>
             <property name="processingStrategy2"/>
@@ -177,6 +177,130 @@
             <property name="tracking:enable-default-events"/>
         </properties>
         <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#4">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <endpoint direction="Inbound" message-exchange-pattern="OneWay" name="WebService" type="http://www.mulesoft.org/schema/mule/core/endpoint" entity-id="Generic#2">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="businessEventsLabel"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="exchange-pattern" value="request-response"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="address" value="http://0.0.0.0:8081/services/WsCorAuth"/>
+                    <property name="encoding"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="auxiliary;index" value="15"/>
+                    <property name="responseTimeout"/>
+                    <property name="mimeType"/>
+                    <property name="connector-ref"/>
+                </properties>
+            </endpoint>
+            <pattern name="SOAP" type="http://www.mulesoft.org/schema/mule/cxf/soapComponent" entity-id="SOAP#2">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="port"/>
+                    <property name="wsdlLocation"/>
+                    <property name="serviceClass" value="com.gsww.uids.gateway.ws.WsCorAuthImpl"/>
+                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/cxf/jaxws-service"/>
+                    <property name="configuration-ref"/>
+                    <property name="namespace"/>
+                    <property name="validationEnabled"/>
+                    <property name="bindingId"/>
+                    <property name="onException"/>
+                    <property name="service"/>
+                    <property name="mtomEnabled"/>
+                    <property name="soapVersion"/>
+                    <property name="enableMuleSoapHeaders"/>
+                    <property name="auxiliary;index" value="16"/>
+                </properties>
+            </pattern>
+            <pattern name="comp" type="http://www.mulesoft.org/schema/mule/core/component" entity-id="Java#2">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="class"/>
+                    <property name="auxiliary;index" value="17"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/core/singleton-object;0">
+                        <property name="class" value="com.gsww.uids.gateway.ws.WsCorAuthImpl"/>
+                        <property name="auxiliary;index" value="18"/>
+                        <property name="auxiliary;wrapIn" value="18"/>
+                    </property-collection>
+                </properties>
+            </pattern>
+        </lane>
+        <apikit>false</apikit>
+    </flow>
+    <flow SubFlow="false" name="WSGroup" entity-id="a5009146-e41a-499d-8fa3-74fdac7dc67c">
+        <properties>
+            <property name="processingStrategy"/>
+            <property name="processingStrategy2"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="auxiliary;index" value="19"/>
+            <property name="tracking:enable-default-events"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#5">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <endpoint direction="Inbound" message-exchange-pattern="OneWay" name="WebService" type="http://www.mulesoft.org/schema/mule/core/endpoint" entity-id="Generic#3">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="businessEventsLabel"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="exchange-pattern" value="request-response"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="address" value="http://0.0.0.0:8081/services/WSGroup"/>
+                    <property name="encoding"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="auxiliary;index" value="20"/>
+                    <property name="responseTimeout"/>
+                    <property name="mimeType"/>
+                    <property name="connector-ref"/>
+                </properties>
+            </endpoint>
+            <pattern name="SOAP" type="http://www.mulesoft.org/schema/mule/cxf/soapComponent" entity-id="SOAP#3">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="port"/>
+                    <property name="wsdlLocation"/>
+                    <property name="serviceClass" value="com.gsww.uids.gateway.ws.WSGroupImpl"/>
+                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/cxf/jaxws-service"/>
+                    <property name="configuration-ref"/>
+                    <property name="namespace"/>
+                    <property name="validationEnabled"/>
+                    <property name="bindingId"/>
+                    <property name="onException"/>
+                    <property name="service"/>
+                    <property name="mtomEnabled"/>
+                    <property name="soapVersion"/>
+                    <property name="enableMuleSoapHeaders"/>
+                    <property name="auxiliary;index" value="21"/>
+                </properties>
+            </pattern>
+            <pattern name="comp" type="http://www.mulesoft.org/schema/mule/core/component" entity-id="Java#3">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="class"/>
+                    <property name="auxiliary;index" value="22"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/core/singleton-object;0">
+                        <property name="class" value="com.gsww.uids.gateway.ws.WSGroupImpl"/>
+                        <property name="auxiliary;index" value="23"/>
+                        <property name="auxiliary;wrapIn" value="23"/>
+                    </property-collection>
+                </properties>
+            </pattern>
+        </lane>
+        <apikit>false</apikit>
+    </flow>
+    <flow SubFlow="false" name="immediateSyncJob" entity-id="ec041346-8cb1-4190-b876-56bc89bf94c4">
+        <properties>
+            <property name="processingStrategy"/>
+            <property name="processingStrategy2"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="auxiliary;index" value="24"/>
+            <property name="tracking:enable-default-events"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#6">
             <graphicalData x="0" y="0" width="0" height="0"/>
             <endpoint direction="Inbound" message-exchange-pattern="OneWay" name="Quartz" type="http://www.mulesoft.org/schema/mule/quartz/endpoint" entity-id="Quartz#1">
                 <graphicalData x="0" y="0" width="0" height="0"/>
@@ -194,23 +318,71 @@
                     <property name="startDelay" value="0"/>
                     <property name="encoding"/>
                     <property name="cronExpression"/>
-                    <property name="auxiliary;index" value="15"/>
+                    <property name="auxiliary;index" value="25"/>
                     <property name="mimeType"/>
                     <property name="responseTimeout" value="10000"/>
                     <property name="connector-ref"/>
                     <property-collection name="@http://www.mulesoft.org/schema/mule/quartz/event-generator-job;0">
                         <property name="groupName" value="Job"/>
                         <property name="jobGroupName" value="Job"/>
-                        <property name="auxiliary;index" value="16"/>
-                        <property name="auxiliary;wrapIn" value="16"/>
+                        <property name="auxiliary;index" value="26"/>
+                        <property name="auxiliary;wrapIn" value="26"/>
                     </property-collection>
                 </properties>
             </endpoint>
-            <pattern name="Java" type="http://www.mulesoft.org/schema/mule/core/component" entity-id="Java#2">
+            <pattern name="Java" type="http://www.mulesoft.org/schema/mule/core/component" entity-id="Java#4">
                 <graphicalData x="0" y="0" width="0" height="0"/>
                 <properties>
                     <property name="class" value="com.gsww.uids.gateway.job.ImmediateSyncJob"/>
-                    <property name="auxiliary;index" value="17"/>
+                    <property name="auxiliary;index" value="27"/>
+                </properties>
+            </pattern>
+        </lane>
+        <apikit>false</apikit>
+    </flow>
+    <flow SubFlow="false" name="recordSyncHisJob" entity-id="50b84ac6-f8d8-4033-bd6e-a568241a058f">
+        <properties>
+            <property name="processingStrategy"/>
+            <property name="processingStrategy2"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="auxiliary;index" value="28"/>
+            <property name="tracking:enable-default-events"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#7">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <endpoint direction="Inbound" message-exchange-pattern="OneWay" name="Quartz" type="http://www.mulesoft.org/schema/mule/quartz/endpoint" entity-id="Quartz#2">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="businessEventsLabel"/>
+                    <property name="repeatCount" value="0"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="jobName" value="RecordSyncHisJob"/>
+                    <property name="exchange-pattern" value="one-way"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="repeatInterval" value="0"/>
+                    <property name="address"/>
+                    <property name="startDelay" value="0"/>
+                    <property name="encoding"/>
+                    <property name="cronExpression"/>
+                    <property name="auxiliary;index" value="29"/>
+                    <property name="mimeType"/>
+                    <property name="responseTimeout" value="10000"/>
+                    <property name="connector-ref"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/quartz/event-generator-job;0">
+                        <property name="groupName" value="Job"/>
+                        <property name="jobGroupName" value="Job"/>
+                        <property name="auxiliary;index" value="30"/>
+                        <property name="auxiliary;wrapIn" value="30"/>
+                    </property-collection>
+                </properties>
+            </endpoint>
+            <pattern name="Java" type="http://www.mulesoft.org/schema/mule/core/component" entity-id="Java#5">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="class" value="com.gsww.uids.gateway.job.RecordSyncHisJob"/>
+                    <property name="auxiliary;index" value="31"/>
                 </properties>
             </pattern>
         </lane>

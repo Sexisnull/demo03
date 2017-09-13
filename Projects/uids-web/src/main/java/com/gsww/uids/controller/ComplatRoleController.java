@@ -7,6 +7,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,5 +133,25 @@ public class ComplatRoleController extends BaseController{
 			return  new ModelAndView("redirect:/complat/croleList");
 		}
 		
+	}
+	//账号是否被使用
+	@RequestMapping(value="/ccheckcRole", method = RequestMethod.GET)
+	public void checkRole(HttpServletRequest request,HttpServletResponse response)throws Exception {
+		try {
+			String roleNameInput=StringUtils.trim((String)request.getParameter("name"));
+			String roleNameold=StringUtils.trim((String)request.getParameter("oldRoleName"));
+			if(!roleNameInput.equals(roleNameold)){
+				List<ComplatRole> cRoleList = roleService.findByName(roleNameInput);
+				if(cRoleList!=null && cRoleList.size()>0){
+					response.getWriter().write("0");
+				}else{
+					response.getWriter().write("1");
+				}
+			}else{
+				response.getWriter().write("1");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

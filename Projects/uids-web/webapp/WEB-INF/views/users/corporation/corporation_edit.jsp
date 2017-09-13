@@ -188,7 +188,7 @@ $(function(){
 					</td>
 				</tr>
 				<tr>
-					<th>密码强度</th>
+					<th>密码强度：</th>
 					<td>
 						<table id="pwdpower" title="字母加数字加符号就会强" style="width: 100%" cellspacing="0"
 						cellpadding="0" border="0">
