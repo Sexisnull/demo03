@@ -48,10 +48,8 @@ public class ComplatGroup implements java.io.Serializable{
     private Integer opersign;
     private Timestamp createtime;
     private Timestamp modifytime;
-    private Integer synState;
-    private String syncSign;
-    private String syncDate;
-    
+    private Integer synstate;
+
 
    // Constructors
 /** default constructor */
@@ -60,7 +58,7 @@ public class ComplatGroup implements java.io.Serializable{
 
    
    /** full constructor */
-   public ComplatGroup(String name, Integer nodetype, String codeid, String orgcode, String orgtype, Integer areatype, String areacode, String suffix, String spec, Integer pid, Integer orderid, String pinyin, Integer iscombine, String groupallname, Integer opersign, Timestamp createtime, Timestamp modifytime, Integer synState, String syncSign, String syncDate) {
+   public ComplatGroup(String name, Integer nodetype, String codeid, String orgcode, String orgtype, Integer areatype, String areacode, String suffix, String spec, Integer pid, Integer orderid, String pinyin, Integer iscombine, String groupallname, Integer opersign, Timestamp createtime, Timestamp modifytime, Integer synState) {
        this.name = name;
        this.nodetype = nodetype;
        this.codeid = codeid;
@@ -78,9 +76,7 @@ public class ComplatGroup implements java.io.Serializable{
        this.opersign = opersign;
        this.createtime = createtime;
        this.modifytime = modifytime;
-       this.synState = synState;
-       this.syncSign = syncSign;
-       this.syncDate = syncDate;
+       this.synstate = synState;
    }
 
   
@@ -258,7 +254,6 @@ public class ComplatGroup implements java.io.Serializable{
    }
    
    @Column(name="modifytime", length=0)
-
    public Timestamp getModifytime() {
        return this.modifytime;
    }
@@ -267,34 +262,13 @@ public class ComplatGroup implements java.io.Serializable{
        this.modifytime = modifytime;
    }
    
-   @Column(name="synState")
-
+   @Column(name="synstate")
    public Integer getSynState() {
-       return this.synState;
+       return this.synstate;
    }
    
    public void setSynState(Integer synState) {
-       this.synState = synState;
-   }
-   
-   @Column(name="SYNC_SIGN", length=1)
-
-   public String getSyncSign() {
-       return this.syncSign;
-   }
-   
-   public void setSyncSign(String syncSign) {
-       this.syncSign = syncSign;
-   }
-   
-   @Column(name="SYNC_DATE", length=19)
-
-   public String getSyncDate() {
-       return this.syncDate;
-   }
-   
-   public void setSyncDate(String syncDate) {
-       this.syncDate = syncDate;
+       this.synstate = synState;
    }
    
 }

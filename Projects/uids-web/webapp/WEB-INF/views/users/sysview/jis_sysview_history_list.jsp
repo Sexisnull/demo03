@@ -85,7 +85,7 @@ function checkSubmitForm() {
 									<input type="checkbox" class="check_btn" style="display: none;" />
 								</div>
 							</th>
-							<th width="10%">
+							<th width="15%">
 								操作对象名称
 							</th >
 							<th width="15%">
@@ -94,18 +94,18 @@ function checkSubmitForm() {
 							<th width="10%" class="alignL" style="text-align: center">
 								操作类型
 							</th>
-							<th width="15%" style="text-align: center">
+							<th width="20%" style="text-align: center">
 								应用名称
 							</th>
 							<th width="20%" style="text-align: center">
 								创建时间
 							</th>
 							
-							<th width="6%" style="text-align: center">
+							<th width="10%" style="text-align: center">
 								同步结果
 							</th>
-							<th width="15%" style="text-align: center">
-								详细情况
+							<th width="12%" style="text-align: center">
+								操作
 							</th>
 						</tr>
 					</thead>
@@ -132,7 +132,7 @@ function checkSubmitForm() {
 								</td>
 								<td class="alignL" style="text-align: center">
 									<div class="list-longtext">
-										${jisHistory.appid}
+										${applicationMap[jisHistory.appid]}
 									</div>
 								</td>
 								<td class="alignL" style="text-align: center">
@@ -145,7 +145,7 @@ function checkSubmitForm() {
 								</td>
 								<td class="alignL" style="text-align: center">
 									<div class="list-longtext">
-										${jisHistory.optresult}
+										${paraMap[jisHistory.optresult]}
 									</div>
 								</td>
 								<td class="alignL" style="text-align: center">
@@ -162,7 +162,7 @@ function checkSubmitForm() {
 				<!-- 列表结束 -->
 			</div>
 			<!-- 分页 -->
-			<tags:pagination page="${pageInfo}" paginationSize="5" />
+			<tags:pagination page="${pageInfo}" paginationSize="10" />
 		</div>
 	</body>
 </html>

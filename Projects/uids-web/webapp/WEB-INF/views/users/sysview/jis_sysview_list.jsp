@@ -84,7 +84,7 @@
 									<input type="checkbox" class="check_btn" style="display: none;" />
 								</div>
 							</th>
-							<th width="10%">
+							<th width="15%">
 								操作对象名称
 							</th >
 							<th width="15%">
@@ -100,11 +100,11 @@
 								创建时间
 							</th>
 						
-							<th width="6%" style="text-align: center">
+							<th width="10%" style="text-align: center">
 								同步结果
 							</th>
-							<th width="15%" style="text-align: center">
-								详细情况
+							<th width="12%" style="text-align: center">
+								操作
 							</th>
 						</tr>
 					</thead>
@@ -131,7 +131,7 @@
 								</td>
 								<td class="alignL" style="text-align: center">
 									<div class="list-longtext">
-										${jisSysview.appid}
+										${applicationMap[jisSysview.appid]}
 									</div>
 								</td>
 								<td class="alignL" style="text-align: center">
@@ -144,7 +144,7 @@
 								</td>
 								<td class="alignL" style="text-align: center">
 									<div class="list-longtext">
-										${jisSysview.optresult}
+										${paraMap[jisSysview.optresult]}
 									</div>
 								</td>
 								<td class="alignL" style="text-align: center">
@@ -161,7 +161,7 @@
 				<!-- 列表结束 -->
 			</div>
 			<!-- 分页 -->
-			<tags:pagination page="${pageInfo}" paginationSize="5" />
+			<tags:pagination page="${pageInfo}" paginationSize="10" />
 		</div>
 	</body>
 </html>
