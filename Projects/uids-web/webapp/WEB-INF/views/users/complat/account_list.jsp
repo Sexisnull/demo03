@@ -76,7 +76,7 @@
 			</li>
 			<li class="split"></li>
 			<li class="active">
-				用户列表
+				政府用户列表
 			</li>
     	</ol>
     </div>
@@ -93,10 +93,10 @@
 						<td width="20%">
 							<input type="text"  style="width: 170px;" placeholder="用户姓名" value="${sParams['LIKE_name']}" id="nameSearch" name="search_LIKE_name" />
 						</td>
-					<th style="padding-left: 300px">用户登录名：</th>
-						<td width="20%">
-							<input type="text"  style="width: 170px;" placeholder="用户登录名" value="${sParams['LIKE_loginname']}" id="loginnameSearch" name="search_LIKE_loginname" />
-						</td>
+					<th>用户登录名：</th>
+						 <td>
+							<input type="text" style="width: 170px;" placeholder="用户登录名" value="${sParams['LIKE_loginname']}" id="loginnameSearch" name="search_LIKE_loginname" />
+						</td> 
 					<td class="btn-group"> <a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a></td>
 				</tr>
 			</table>

@@ -32,7 +32,6 @@ import com.gsww.jup.controller.BaseController;
 import com.gsww.jup.entity.sys.SysAccount;
 import com.gsww.jup.entity.sys.SysDepartment;
 import com.gsww.jup.entity.sys.SysRole;
-import com.gsww.jup.entity.sys.SysUserApps;
 import com.gsww.jup.service.sys.DepartmentService;
 import com.gsww.jup.service.sys.SysAccountService;
 import com.gsww.jup.service.sys.SysRoleService;

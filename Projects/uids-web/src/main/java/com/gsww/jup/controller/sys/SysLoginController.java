@@ -27,9 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.code.kaptcha.Constants;
 import com.gsww.jup.controller.BaseController;
-import com.gsww.jup.entity.sys.SysLog;
 import com.gsww.jup.entity.sys.SysUserSession;
-import com.gsww.jup.service.sys.SysLogService;
 import com.gsww.jup.service.sys.SysLoginService;
 import com.gsww.jup.service.sys.SysMenuService;
 import com.gsww.jup.util.JSONUtil;
@@ -57,8 +55,8 @@ public class SysLoginController extends BaseController{
 	private ComplatUserService complatUserService;
 	@Autowired
 	private SysLoginService sysLoginService;
-	@Autowired
-	private SysLogService sysLogService;
+//	@Autowired
+//	private SysLogService sysLogService;
 	@Autowired
 	private SysMenuService sysMenuService;
 	@Autowired
@@ -96,15 +94,15 @@ public class SysLoginController extends BaseController{
 						response.getWriter().write(JSONObject.toJSONString(resMap));
 						try {
 							// 登录日志
-							SysLog log = new SysLog();
-							log.setUserAcctId(sysUserSession.getAccountId());
-							log.setLogIp(sysUserSession.getUserIp());
-							log.setLogModel("系统登录");
-							log.setLogModelOperator(userName);
-							log.setLogType("1");
-							log.setLogContent("成功");
-							log.setOperatorTime(TimeHelper.getCurrentTime());
-							sysLogService.logInsert(log);
+//							SysLog log = new SysLog();
+//							log.setUserAcctId(sysUserSession.getAccountId());
+//							log.setLogIp(sysUserSession.getUserIp());
+//							log.setLogModel("系统登录");
+//							log.setLogModelOperator(userName);
+//							log.setLogType("1");
+//							log.setLogContent("成功");
+//							log.setOperatorTime(TimeHelper.getCurrentTime());
+//							sysLogService.logInsert(log);
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -114,15 +112,15 @@ public class SysLoginController extends BaseController{
 						response.getWriter().write(JSONObject.toJSONString(resMap));
 						try {
 							// 登录日志
-							SysLog log = new SysLog();
-							log.setUserAcctId(sysUserSession.getAccountId());
-							log.setLogIp(sysUserSession.getUserIp());
-							log.setLogModel("系统登录");
-							log.setLogModelOperator(userName);
-							log.setLogType("1");
-							log.setLogContent("失败");
-							log.setOperatorTime(TimeHelper.getCurrentTime());
-							sysLogService.logInsert(log);
+//							SysLog log = new SysLog();
+//							log.setUserAcctId(sysUserSession.getAccountId());
+//							log.setLogIp(sysUserSession.getUserIp());
+//							log.setLogModel("系统登录");
+//							log.setLogModelOperator(userName);
+//							log.setLogType("1");
+//							log.setLogContent("失败");
+//							log.setOperatorTime(TimeHelper.getCurrentTime());
+//							sysLogService.logInsert(log);
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -133,15 +131,15 @@ public class SysLoginController extends BaseController{
 					response.getWriter().write(JSONObject.toJSONString(resMap));
 					try {
 						// 登录日志
-						SysLog log = new SysLog();
-						log.setUserAcctId("-999");
-						log.setLogIp(loginIp);
-						log.setLogModel("系统登录");
-						log.setLogModelOperator(userName);
-						log.setLogType("1");
-						log.setLogContent("失败");
-						log.setOperatorTime(TimeHelper.getCurrentTime());
-						sysLogService.logInsert(log);
+//						SysLog log = new SysLog();
+//						log.setUserAcctId("-999");
+//						log.setLogIp(loginIp);
+//						log.setLogModel("系统登录");
+//						log.setLogModelOperator(userName);
+//						log.setLogType("1");
+//						log.setLogContent("失败");
+//						log.setOperatorTime(TimeHelper.getCurrentTime());
+//						sysLogService.logInsert(log);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -186,30 +184,30 @@ public class SysLoginController extends BaseController{
 						response.getWriter().write(JSONObject.toJSONString(resMap));
 						try {
 							// 登录日志
-							SysLog log = new SysLog();
-							log.setUserAcctId(sysUserSession.getAccountId());
-							log.setLogIp(sysUserSession.getUserIp());
-							log.setLogModel("系统登录");
-							log.setLogModelOperator(userName);
-							log.setLogType("1");
-							log.setLogContent("成功");
-							log.setOperatorTime(TimeHelper.getCurrentTime());
-							sysLogService.logInsert(log);
+//							SysLog log = new SysLog();
+//							log.setUserAcctId(sysUserSession.getAccountId());
+//							log.setLogIp(sysUserSession.getUserIp());
+//							log.setLogModel("系统登录");
+//							log.setLogModelOperator(userName);
+//							log.setLogType("1");
+//							log.setLogContent("成功");
+//							log.setOperatorTime(TimeHelper.getCurrentTime());
+//							sysLogService.logInsert(log);
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
 					}else{
 						try {
 							// 登录日志
-							SysLog log = new SysLog();
-							log.setUserAcctId(sysUserSession.getAccountId());
-							log.setLogIp(sysUserSession.getUserIp());
-							log.setLogModel("CAS系统登录");
-							log.setLogModelOperator(userName);
-							log.setLogType("1");
-							log.setLogContent("失败");
-							log.setOperatorTime(TimeHelper.getCurrentTime());
-							sysLogService.logInsert(log);
+//							SysLog log = new SysLog();
+//							log.setUserAcctId(sysUserSession.getAccountId());
+//							log.setLogIp(sysUserSession.getUserIp());
+//							log.setLogModel("CAS系统登录");
+//							log.setLogModelOperator(userName);
+//							log.setLogType("1");
+//							log.setLogContent("失败");
+//							log.setOperatorTime(TimeHelper.getCurrentTime());
+//							sysLogService.logInsert(log);
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -217,15 +215,15 @@ public class SysLoginController extends BaseController{
 				} else {
 					try {
 						// 登录日志
-						SysLog log = new SysLog();
-						log.setUserAcctId("-999");
-						log.setLogIp(loginIp);
-						log.setLogModel("系统登录");
-						log.setLogModelOperator(userName);
-						log.setLogType("1");
-						log.setLogContent("失败");
-						log.setOperatorTime(TimeHelper.getCurrentTime());
-						sysLogService.logInsert(log);
+//						SysLog log = new SysLog();
+//						log.setUserAcctId("-999");
+//						log.setLogIp(loginIp);
+//						log.setLogModel("系统登录");
+//						log.setLogModelOperator(userName);
+//						log.setLogType("1");
+//						log.setLogContent("失败");
+//						log.setOperatorTime(TimeHelper.getCurrentTime());
+//						sysLogService.logInsert(log);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
