@@ -45,9 +45,6 @@
 		$("#advanced-search-btn").click(function(){
 			$("#form2").submit();
 		});
-		$("#advanced-search-btn-cancel").on('click',function(){
-			$('.advanced-content').toggle('fast');
-		});
 		//阻止按键盘Enter键提交表单
 		var $inp = $('input');
 		$inp.keypress(function (e) { 
@@ -96,28 +93,25 @@
 			</table>
 		</form>
 		<!-- 高级探索表单 -->
-    	<div class="search-content">
-			<form id="form2" name="form2" action="${ctx}/complat/outsideuserList" method="get">
-				<table class="advanced-content" style="display:none;">
-					<tr>
-						<th style="padding-left: 10px">姓名：</th>
-							<td width="20%">
-								<input type="text"  style="width: 170px;" placeholder="请输姓名:" value="${sParams['LIKE_name']}" id="nameSearch" name="search_LIKE_name" />
-							</td>
-						<th style="padding-left: 5px">登录名：</th>
-							<td width="20%">
-								<input type="text"  style="width: 170px;" placeholder="请输入登录名:" value="${sParams['LIKE_loginName']}" id="loginNameSearch" name="search_LIKE_loginName" />
-							</td>
-						<th style="padding-left: 10px">身份证号码：</th>
-							<td width="20%">
-								<input type="text"  style="width: 170px;" placeholder="请输入身份证号码:" value="${sParams['LIKE_papersNumber']}" id="degreeSearch" name="search_LIKE_papersNumber" />
-							</td>
-						<td class="btn-group"> <a id="advanced-search-btn" class="btnSearch" >高级搜索</a></td>
-						<td class="btn-group"> <a id="advanced-search-btn-cancel" class="btnSearch" >取消</a></td>
-					</tr>
-				</table>
-			</form>
-		</div>
+		<form id="form2" name="form2" action="${ctx}/complat/outsideuserList" method="get">
+			<table class="advanced-content" style="display:none;">
+				<tr>
+					<th style="padding-left: 10px">姓名：</th>
+						<td width="20%">
+							<input type="text"  style="width: 170px;" placeholder="请输姓名:" value="${sParams['LIKE_name']}" id="nameSearch" name="search_LIKE_name" />
+						</td>
+					<th style="padding-left: 5px">登录名：</th>
+						<td width="20%">
+							<input type="text"  style="width: 170px;" placeholder="请输入登录名:" value="${sParams['LIKE_loginName']}" id="loginNameSearch" name="search_LIKE_loginName" />
+						</td>
+					<th style="padding-left: 10px">身份证号码：</th>
+						<td width="20%">
+							<input type="text"  style="width: 170px;" placeholder="请输入身份证号码:" value="${sParams['LIKE_papersNumber']}" id="degreeSearch" name="search_LIKE_papersNumber" />
+						</td>
+					<td class="btn-group"> <a id="advanced-search-btn" class="btnSearch" >搜索</a></td>
+				</tr>
+			</table>
+		</form>
 	</div>
 	
        

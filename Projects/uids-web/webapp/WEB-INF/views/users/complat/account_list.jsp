@@ -97,7 +97,10 @@
 						 <td>
 							<input type="text" style="width: 170px;" placeholder="用户登录名" value="${sParams['LIKE_loginname']}" id="loginnameSearch" name="search_LIKE_loginname" />
 						</td> 
-					<td class="btn-group"> <a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a></td>
+					<td class="btn-group"> <a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a>
+					
+					
+					</td>
 				</tr>
 			</table>
 		</form>
@@ -108,21 +111,12 @@
 	<div class="list">
 	<input type="hidden" id="orderField" name="orderField" value="${orderField}"/> 
 	<input type="hidden" id="orderSort" name="orderSort" value="${orderSort}"/>
-		
         <div class="list-topBar  advanced-search">
         	 <div class="list-toolbar">
             <!-- 操作按钮开始 -->	 
              <gsww:opTag menuId="11" tabIndex="1" operatorType="1"></gsww:opTag>
-             <!--<ul class="list-Topbtn">
-            	<li class="add"><a title="新增" onclick="add('sys/accountEdit'); "></a></li>
-                <li class="passwordRest"><a title="密码初始化" onclick="initData('sys/initPassWord','userAcctId'); " ></a></li>                
-                <li class="disable"><a title="停用" onclick="stopData('sys/accountStop','userAcctId'); " ></a></li>
-                <li class="enable"><a title="启用" onclick="startData('sys/accountStart','userAcctId'); " ></a></li>
-                <li class="del"><a title="删除" onclick="deleteData('sys/accountDelete','userAcctId'); " ></a></li>
-             </ul>-->
              <!-- 操作按钮结束 -->
            </div> 
-            
         </div>
         <!-- 高级探索表单 -->
         <form id="form2" name="form2" action="${ctx}/complat/complatList">
