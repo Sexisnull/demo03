@@ -1,6 +1,9 @@
 package com.gsww.uids.controller;
 
-	import java.util.Map;
+	import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 	import javax.servlet.ServletRequest;
 	import javax.servlet.http.HttpServletRequest;
@@ -21,8 +24,10 @@ package com.gsww.uids.controller;
 	import com.gsww.jup.controller.BaseController;
 	import com.gsww.jup.controller.sys.SysAccountController;
 
+import com.gsww.jup.service.sys.SysParaService;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.uids.entity.JisSysview;
+import com.gsww.uids.service.JisApplicationService;
 import com.gsww.uids.service.JisSysviewService;
 
 
@@ -33,6 +38,10 @@ import com.gsww.uids.service.JisSysviewService;
 		private static Logger logger = LoggerFactory.getLogger(SysAccountController.class);
 		@Autowired
 		private JisSysviewService jisSysviewService;
+		@Autowired
+		private JisApplicationService jisApplicationService;
+		@Autowired
+		private SysParaService sysParaService;
 		
 		@RequestMapping(value="/jisSysviewList",method = RequestMethod.GET)
 		public String jisSysviewList(@RequestParam(value = "page", defaultValue = "1") int pageNo,
@@ -50,9 +59,27 @@ import com.gsww.uids.service.JisSysviewService;
 				Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 				Specification<JisSysview>  spec=super.toSpecification(searchParams, JisSysview.class);
 				
+				
+				//map放入
+				List<Map<String, Object>> applicationList =new ArrayList<Map<String,Object>>() ;
+				List<Map<String, Object>> paraList =new ArrayList<Map<String,Object>>() ;
+				Map<Integer,Object> applicationMap = new HashMap<Integer,Object>();
+				Map<String,Object> paraMap = new HashMap<String,Object>();
+				applicationList=jisApplicationService.getJisApplicationList();
+				paraList=sysParaService.getParaList();
+				for(Map<String,Object> application:applicationList){
+					applicationMap.put((Integer) application.get("iid"), application.get("name"));
+				}			
+				for(Map<String,Object> para:paraList){
+					paraMap.put( para.get("PARA_CODE")+"",  para.get("PARA_NAME")+"");
+					
+				}
+				
 				//分页
 				Page<JisSysview> pageInfo = jisSysviewService.getJisPage(spec,pageRequest);
 				model.addAttribute("pageInfo", pageInfo);
+				model.addAttribute("applicationMap", applicationMap);
+				model.addAttribute("paraMap", paraMap);
 				// 将搜索条件编码成字符串，用于排序，分页的URL
 				model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
 				model.addAttribute("sParams", searchParams);

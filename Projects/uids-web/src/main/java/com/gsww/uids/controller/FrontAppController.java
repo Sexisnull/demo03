@@ -32,7 +32,7 @@ public class FrontAppController extends BaseController{
 				theme = "default";
 			}
 			SysUserSession session = (SysUserSession) request.getSession().getAttribute("sysUserSession");
-			
+			session.getRoleIds();
 			
 			request.getSession().setAttribute("theme", theme);
 		} catch (Exception ex) {

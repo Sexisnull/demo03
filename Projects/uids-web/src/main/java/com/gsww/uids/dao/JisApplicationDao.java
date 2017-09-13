@@ -9,7 +9,7 @@ import com.gsww.uids.entity.JisApplication;
  * @author zhanglei
  *
  */
-public interface JisApplicationDao extends PagingAndSortingRepository<JisApplication, String>,
-JpaSpecificationExecutor<JisApplication>{
-
+public interface JisApplicationDao extends PagingAndSortingRepository<JisApplication, String>,JpaSpecificationExecutor<JisApplication>{
+	
+	
 }

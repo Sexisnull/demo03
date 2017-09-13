@@ -31,9 +31,12 @@ import com.gsww.jup.entity.sys.SysOperator;
 import com.gsww.jup.entity.sys.SysParaType;
 import com.gsww.jup.entity.sys.SysRole;
 
+import com.gsww.jup.service.sys.SysParaService;
+import com.gsww.jup.service.sys.SysParaTypeService;
 import com.gsww.jup.util.PageUtils;
 
 import com.gsww.uids.entity.JisSysviewCurrent;
+import com.gsww.uids.service.JisApplicationService;
 import com.gsww.uids.service.JisSysviewCurrentService;
 
 
@@ -43,7 +46,10 @@ public class JisSysviewCurrentController extends BaseController{
 	private static Logger logger = LoggerFactory.getLogger(SysAccountController.class);
 	@Autowired
 	private JisSysviewCurrentService jisSysviewCurrentService;
-	
+	@Autowired
+	private JisApplicationService jisApplicationService;
+	@Autowired
+	private SysParaService sysParaService;
 	@RequestMapping(value="/jisCurList",method = RequestMethod.GET)
 	public String jisCurList(@RequestParam(value = "page", defaultValue = "1") int pageNo,
 			@RequestParam(value = "page.size", defaultValue = PAGE_SIZE) int pageSize,
@@ -59,21 +65,30 @@ public class JisSysviewCurrentController extends BaseController{
 			//搜索属性初始化
 			Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 			Specification<JisSysviewCurrent>  spec=super.toSpecification(searchParams, JisSysviewCurrent.class);
-			//
+			
+			
+			//map放入
+			List<Map<String, Object>> applicationList =new ArrayList<Map<String,Object>>() ;
+			List<Map<String, Object>> paraList =new ArrayList<Map<String,Object>>() ;
+			Map<Integer,Object> applicationMap = new HashMap<Integer,Object>();
+			Map<String,Object> paraMap = new HashMap<String,Object>();
+			applicationList=jisApplicationService.getJisApplicationList();
+			paraList=sysParaService.getParaList();
+			for(Map<String,Object> application:applicationList){
+				applicationMap.put((Integer) application.get("iid"), application.get("name"));
+			}			
+			for(Map<String,Object> para:paraList){
+				paraMap.put(  (String) para.get("PARA_CODE"),  para.get("PARA_NAME"));
+				
+			}
+			
 		
 			//分页
 			Page<JisSysviewCurrent> pageInfo = jisSysviewCurrentService.getJisPage(spec,pageRequest);
 			model.addAttribute("pageInfo", pageInfo);
-			Map<String,String> userAppsmap=new HashMap<String,String>();
-				List<SysApps> appsList=new ArrayList<SysApps>();
-			//	appsList=jisCurrentService.findAppsList();
-				String appsName="";
-				Map<String,Object> appMap=new HashMap<String,Object>();
-				for (SysApps sysApps : appsList) {
-					appMap.put("key", sysApps.getKey());
-					appMap.put("appName", sysApps.getAppName());
-				}							
-						
+			model.addAttribute("applicationMap", applicationMap);
+			model.addAttribute("paraMap", paraMap);
+
 			// 将搜索条件编码成字符串，用于排序，分页的URL
 			model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
 			model.addAttribute("sParams", searchParams);
