@@ -1,12 +1,15 @@
 package com.gsww.uids.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.gsww.jup.entity.sys.SysAccount;
+import com.gsww.jup.entity.sys.SysUserSession;
 import com.gsww.uids.entity.ComplatCorporation;
 import com.gsww.uids.entity.ComplatUser;
 
@@ -50,4 +53,8 @@ public interface ComplatUserService {
 	 * 删除
 	 */
 	void delete(ComplatUser complatUser) throws Exception;
+	
+	
+	
+
 }
