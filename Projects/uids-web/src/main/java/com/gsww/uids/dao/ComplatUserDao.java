@@ -31,7 +31,7 @@ public interface ComplatUserDao extends PagingAndSortingRepository<ComplatUser, 
 	 * @author 张磊
 	 * @return
 	 */
-	public List<ComplatUser> findByLoginnameAndPwd(String userName,
-			String password);
+	public List<ComplatUser> findByLoginnameAndPwdAndGroupid(String userName,
+			String password,Integer groupId);
 	
 }
