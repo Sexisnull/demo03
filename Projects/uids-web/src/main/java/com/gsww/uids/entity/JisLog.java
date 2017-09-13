@@ -57,7 +57,7 @@ public class JisLog implements java.io.Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "iid",unique = true, nullable = false)
+	@Column(name = "iid")
 	public Integer getIid() {
 		return this.iid;
 	}
@@ -98,7 +98,7 @@ public class JisLog implements java.io.Serializable {
 		return this.operateType;
 	}
 
-	public void setOperatetype(Integer operateType) {
+	public void setOperateType(Integer operateType) {
 		this.operateType = operateType;
 	}
 
