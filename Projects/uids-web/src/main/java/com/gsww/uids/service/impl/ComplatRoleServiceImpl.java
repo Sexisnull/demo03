@@ -19,7 +19,7 @@ import com.gsww.uids.service.ComplatRoleService;
 @Service("complatRoleService")
 public class ComplatRoleServiceImpl implements ComplatRoleService{
 	@Autowired
-	private ComplatRoleDao dao;
+	private ComplatRoleDao roleDao;
 	@Autowired
 	private ComplatRoleRelationDao comrelationDao;
 
@@ -27,20 +27,20 @@ public class ComplatRoleServiceImpl implements ComplatRoleService{
 	public Page<ComplatRole> getRolePage(Specification<ComplatRole> spec,
 			PageRequest pageRequest) {
 		// TODO Auto-generated method stub
-		return dao.findAll(spec, pageRequest);
+		return roleDao.findAll(spec, pageRequest);
 	}
 
 	@Override
 	public void save(ComplatRole entity) throws Exception {
 		// TODO Auto-generated method stub
-		dao.save(entity);
+		roleDao.save(entity);
 	}
 
 	@Override
 	public void delete(int id) throws Exception {
 		// TODO Auto-generated method stub
 		
-		dao.delete(id);
+		roleDao.delete(id);
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class ComplatRoleServiceImpl implements ComplatRoleService{
 	@Override
 	public ComplatRole findByKey(int id) throws Exception {
 		// TODO Auto-generated method stub
-		return dao.findByIid(id);
+		return roleDao.findByIid(id);
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class ComplatRoleServiceImpl implements ComplatRoleService{
 	@Override
 	public List<ComplatRole> findByName(String name) {
 		// TODO Auto-generated method stub
-		return dao.findByName(name);
+		return roleDao.findByName(name);
 	}
 
 }
