@@ -1,12 +1,17 @@
 package com.gsww.uids.entity;
 
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -47,8 +52,7 @@ public class ComplatGroup implements java.io.Serializable{
 
 
    // Constructors
-
-   /** default constructor */
+/** default constructor */
    public ComplatGroup() {
    }
 

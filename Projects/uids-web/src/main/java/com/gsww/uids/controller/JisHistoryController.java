@@ -34,7 +34,7 @@ package com.gsww.uids.controller;
 		@RequestMapping(value="/jisHisList",method = RequestMethod.GET)
 		public String jisHisList(@RequestParam(value = "page", defaultValue = "1") int pageNo,
 				@RequestParam(value = "page.size", defaultValue = PAGE_SIZE) int pageSize,
-				@RequestParam(value = "order.field", defaultValue = "synctime") String orderField,
+				@RequestParam(value = "order.field", defaultValue = "syncTime") String orderField,
 				@RequestParam(value = "order.sort", defaultValue = "DESC") String orderSort,
 				@RequestParam(value = "findNowPage", defaultValue = "false") String findNowPage,
 				Model model,ServletRequest request,HttpServletRequest hrequest){
