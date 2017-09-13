@@ -71,7 +71,7 @@ public class JisLog implements java.io.Serializable {
 		return this.userId;
 	}
 
-	public void setUserid(String userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 
