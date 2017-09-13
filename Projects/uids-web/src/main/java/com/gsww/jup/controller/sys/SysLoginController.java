@@ -20,7 +20,6 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,7 +33,6 @@ import com.gsww.jup.service.sys.SysLogService;
 import com.gsww.jup.service.sys.SysLoginService;
 import com.gsww.jup.service.sys.SysMenuService;
 import com.gsww.jup.util.JSONUtil;
-import com.gsww.jup.util.MD5;
 import com.gsww.jup.util.TimeHelper;
 import com.gsww.uids.entity.ComplatGroup;
 import com.gsww.uids.entity.ComplatUser;
@@ -252,46 +250,6 @@ public class SysLoginController extends BaseController{
 			request.getSession().removeAttribute("sysUserSession");
 		}
 	}
-
-	/**
-	 * 首页index页面加载
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/frontIndex")
-	public String getSysIndex(HttpServletRequest request) {
-		try {
-			request.getSession().removeAttribute("theme");
-			String theme = request.getParameter("theme");
-			if(StringUtils.isBlank(theme)) {
-				theme = "default";
-			}
-			request.getSession().setAttribute("theme", theme);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return "main/frontIndex";
-	}
-	
-	@RequestMapping(value = "/backIndex")
-	public String toBackIndex(HttpServletRequest request) {
-		try {
-			
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return "main/backIndex";
-	}
-	
-	@RequestMapping(value = "/appSetting")
-	public String appSetting(HttpServletRequest request) {
-		try {
-			
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return "main/appSetting";
-	}
 	
 	@RequestMapping(value = "/iframe")
 	public String getiframe(HttpServletRequest request) {
@@ -440,7 +398,7 @@ public class SysLoginController extends BaseController{
 	}
 	
 	/**
-	 * 加载修改密码页面
+	 * 加载组织机构页面
 	 * @param request
 	 * @return
 	 */
