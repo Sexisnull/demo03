@@ -61,23 +61,15 @@ public class JisSysviewCurrentController extends BaseController{
 			@RequestParam(value = "findNowPage", defaultValue = "false") String findNowPage,
 			Model model,ServletRequest request,HttpServletRequest hrequest){
 		try{
-			//HibernateDao hibernateDao = new HibernateDao(entityManagerFactory,JisSysviewCurrent.class);
 			//初始化分页数据
 			PageUtils pageUtils=new PageUtils(pageNo,pageSize,orderField,orderSort);
 			PageRequest pageRequest=super.buildPageRequest(hrequest,pageUtils,JisSysviewCurrent.class,findNowPage);
 			
 			//搜索属性初始化
-			String synctime = hrequest.getParameter("synctime");
+			//String synctime = hrequest.getParameter("synctime");
 			
 			Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
-			if(synctime!= null &&!"".equals(synctime)){
-				DateFormat format = new SimpleDateFormat("yyyy-MM-dd");  
-				Date date = format.parse(synctime);  
-				searchParams.put("LIKE_synctime", new Timestamp(date.getTime()));
-			}
 			Specification<JisSysviewCurrent>  spec=super.toSpecification(searchParams, JisSysviewCurrent.class);
-			//List<PropertyFilter> param = HibernateUtils.buildPropertyFilters(hrequest, "LIKE_D_synctime");
-			//List<JisSysviewCurrent> jisSysviewCurrent= hibernateDao.find(param);
 			
 			//map放入
 			List<Map<String, Object>> applicationList =new ArrayList<Map<String,Object>>() ;
@@ -151,12 +143,12 @@ public class JisSysviewCurrentController extends BaseController{
 	@RequestMapping(value="/getOptresult",method = RequestMethod.GET)
 	@ResponseBody
 	public List<Map<String, Object>> getOptresult(){
-		List<Map<String, Object>> appMap = null;
+		List<Map<String, Object>> paraMap = null;
 		try {
-			appMap = jisApplicationService.getJisApplicationList();
+			paraMap = sysParaService.getParaList("OPT_RESULT");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return appMap;
+		return paraMap;
 	}
 }
