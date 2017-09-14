@@ -101,7 +101,13 @@ color: rgb(119, 119, 119);
 }
 .form-table th:first-child {
     padding-left: 0px;
-	width:100px;
+	width:130px;
+}
+.form-table td {
+    height: 32px;
+    line-height: 32px;
+    white-space: nowrap;
+    padding: 2px 2px;
 }
 </style>
 </head>
@@ -141,7 +147,7 @@ color: rgb(119, 119, 119);
 			<tr>
 				<td  style="max-width:0px;width:100px;ont-weight:bold;" align="center">基本属性</td>
 				<td>
-					<table class="form-table" style="border:solid 1px #C6E6FF; padding:5px" >
+					<table class="form-table" style="border:solid 1px #C6E6FF; padding:2px" >
 			    		<tr>
 							<th><b class="mustbe">*</b>登录名：</th>
 							<td>
@@ -226,15 +232,12 @@ color: rgb(119, 119, 119);
 					</table>
 				</td>
 			</tr>
-			<tr>
-				<td></td>
-				<td></td>
-			</tr>
+			
 			<tr>
 				
-				<td width=50px align="center" style="ont-weight:bold;">详细属性</td>
+				<td style="max-width:0px;width:100px;ont-weight:bold;" align="center">详细属性</td>
 				<td>
-					<table class="form-table" style="border:solid 1px #C6E6FF; padding:5px" >	
+					<table class="form-table" style="border:solid 1px #C6E6FF; padding:2px" >	
 			    		<tr>
 							<th><b class="mustbe">*</b>性别：</th>
 							<td>
@@ -244,7 +247,7 @@ color: rgb(119, 119, 119);
 							<%-- <td>
 								<input type="text"  class="sex" name="sex" value="${outsideUser.sex}" />
 				            </td> --%>
-				        	<th>年龄</th>
+				        	<th>年龄：</th>
 							<td>
 								<input type="text"  class="age" name="age" value="${outsideUser.age}" />
 							</td>

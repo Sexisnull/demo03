@@ -9,16 +9,24 @@ import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
+import java.util.UUID;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONObject;
+
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import org.slf4j.LoggerFactory;
 
@@ -31,6 +39,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.web.Servlets;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,7 +49,6 @@ import com.gsww.jup.util.ExcelUtil;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.jup.util.StringHelper;
 import com.gsww.uids.entity.ComplatUser;
-import com.gsww.uids.service.CheckExcelService;
 import com.gsww.uids.service.ComplatUserService;
 
 /**
@@ -63,10 +71,7 @@ public class ComplatUserController extends BaseController{
 
 	@Autowired
 	private ComplatUserService complatUserService;
-	
-	@Autowired
-	private CheckExcelService checkExcelService;
-	
+
 	/**
 	 * 获取政府用户列表
 	 * @param pageNumber
@@ -167,6 +172,7 @@ public class ComplatUserController extends BaseController{
 					returnMsg("success", "保存成功", request);
 				} else {
 					//注册时间
+					complatUser.setEnable(1); // 是否禁用
 					String time = request.getParameter("time");
 					Date createTime = sdf.parse(time);
 					complatUser.setCreatetime(createTime);
@@ -266,6 +272,9 @@ public class ComplatUserController extends BaseController{
 	}
 	
 	
+	
+	
+
 	/**
 	 * 数据导入
 	 * 
@@ -274,99 +283,100 @@ public class ComplatUserController extends BaseController{
 	 * @param response
 	 * @return
 	 * @throws Exception
+	 * @RequestParam(value="excelFile")MultipartFile multipartFile,
 	 */
+	@SuppressWarnings("finally")
 	@RequestMapping(value = "/complatImport", method = RequestMethod.POST)
-	public String complatImport(@RequestParam("filename") MultipartFile file,
-			Model model, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
-		String Msg = "";	
-		String fileName = file.getOriginalFilename(); // 获取文件名
-		long maxSize = 1024 * 1024 * 10; // 允许最大上传文件大小
-
-		// 判断文件大小、即名称
-		long size = file.getSize();
-		if (fileName == null || ("").equals(fileName) && size == 0) {
-			Msg = "文件内容为空，请选择合适的文件！";
-			model.addAttribute("msg", Msg);
-			return "users/complat/account_list";
-		}
-		if (size > maxSize) {
-			Msg = "上传文件大小超过10M，请选择合适的文件！";
-			model.addAttribute("msg", Msg);
-			return "users/complat/account_list";
-		}
-		// 获取项目根目录
-		String ctxPath = request.getSession().getServletContext().getRealPath("");
-		String modelFileName = "政府用户信息统计列表.xlsx";
-
-		// 获取模板文件路径
-		String modelPath = ctxPath + "/uploadFile/complat/" + modelFileName;
-		// 读取 excel 文件名
-		File modelFile = new File(modelPath);	 
-		// 上传文件表头和模板表头做对比
-		/**
-		 * 返回值： 0--> 检验成功 1--> 文件名不合适 2--> 文件表头不匹配
-		 */
-		int j = checkExcelService.compareModelAndReal(modelFileName, modelFile,
-				fileName, file);
-		if (j == 0) {
-			try {
-				// 把文件转换成字节流形式
-				// InputStream in = file.getInputStream();
-				LinkedHashMap<String, String> fieldMap = new LinkedHashMap<String, String>();
-				 fieldMap.put("0", "用户姓名");
-				 fieldMap.put("1", "年龄");
-				 fieldMap.put("2", "性别");
-				 fieldMap.put("3", "用户职务");
-				 fieldMap.put("4", "传真");
-				 fieldMap.put("5", "固定电话");
-				 fieldMap.put("6", "移动电话");
-				 fieldMap.put("7", "E-mail");
-				 fieldMap.put("8", "MSN");
-				 fieldMap.put("9", "QQ");
-				 fieldMap.put("10", "地址");
-				 fieldMap.put("11", "邮政编码");
-				 fieldMap.put("12", "登录名");
-				 fieldMap.put("13", "登录全名");
-				 fieldMap.put("14", "密码");
-				 fieldMap.put("15", "密码找回问题");
-				 fieldMap.put("16", "密码找回问题答案");
-				 List<ComplatUser> resultList = ExcelUtil.readXls(fileName, ComplatUser.class, fieldMap);
-				if (fieldMap.get("err_null") != null) {
-					Msg = "EXCEL数据为空！";
-					model.addAttribute("msg", Msg);
-					return "users/complat/account_list";
-				} else if (fieldMap.get("err_row") != null) {
-						Msg = "第" + fieldMap.get("err_row") + "行，第"
-								+ fieldMap.get("err_cell") + "列数据有误，批量导入EXCEL数据失败！";
-					model.addAttribute("msg", Msg);
-					return "users/complat/account_list";
-				} else {
-					Msg = "批量导入EXCEL数据成功,共" + fieldMap.get("num") + "条！";
-					model.addAttribute("msg", Msg);
-					return "users/complat/account_list";
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-				Msg = "批量导入EXCEL数据失败！";
-				model.addAttribute("msg", Msg);
-				return "users/complat/account_list";
-			}
-		} else if (j == 1) {
-			Msg = "导入的文件不是Excel文件！";
-			model.addAttribute("msg", Msg);
-			return "users/complat/account_list";
-		} else if (j == 2) {
-			Msg = "导入的文件表头和模板不匹配！";
-			model.addAttribute("msg", Msg);
-			return "users/complat/account_list";
-		} else {
-			Msg = "导入文件失败！";
-			model.addAttribute("msg", Msg);
-			return "users/complat/account_list";
-		}				
+	public ModelAndView complatImport(@RequestParam("excelFile")MultipartFile multipartFile,
+			HttpServletRequest request,Model model,
+			HttpServletResponse response) throws Exception {				
+        Map<String,String> fileMap = new HashMap<String, String>();//返回Map
+		final String UPLOAD_EXCEL_PATH = "E:\\demo\\complat\\";
+		String absoluteFilePath = request.getSession().getServletContext().getRealPath(UPLOAD_EXCEL_PATH);
+		String fileName = multipartFile.getOriginalFilename();
+		System.out.println("fileName==="+fileName);
+		String uuid = UUID.randomUUID().toString().replace("-", "");
+		String uuidFileName = uuid + fileName;
+		System.out.println("uuidFileName==="+uuidFileName);
+		//FileUtil.upFile(multipartFile.getInputStream(), uuidFileName, absoluteFilePath);
+		LinkedHashMap<String, String> fieldMap = new LinkedHashMap<String, String>();
+		fieldMap.put("0", "name");
+		fieldMap.put("1", "loginname");
+		fieldMap.put("2", "loginallname");
+		fieldMap.put("3", "mobile");
+		fieldMap.put("4", "email");
+		fieldMap.put("5", "enable");
+		fieldMap.put("6", "createtime");
+		List<ComplatUser> users= ExcelUtil.readXls(absoluteFilePath+"/"+uuidFileName,ComplatUser.class,fieldMap);
 		
+		try {
+			for(ComplatUser complatUser:users){
+				List<ComplatUser> list = complatUserService.findByUserName(complatUser.getName());
+				if(null != list && list.size()>0){
+					fileMap.put("flag", "0");
+				}else{
+					complatUserService.save(complatUser);
+					fileMap.put("flag", "1");
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			fileMap.put("error", "1");
+		}
+		String returnMsg = JSONObject.fromObject(fileMap).toString();
+		return new ModelAndView("redirect:/complat/complatList");
+		//return "users/complat/account_list";
 	}
+	
+	
+	
+	/**
+	 * 数据导出
+	 * 
+	 * @param file
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */	
+	@RequestMapping(value = "/complatExport", method = RequestMethod.POST)
+	public void complatExport(@RequestParam("excelFile") MultipartFile file,
+			String complatUserId,Model model, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {	
+		String[] complatUserIds = complatUserId.split(",");		
+		String fileName = "政府用户信息统计列表.xlsx";
+		Map<String,Object> map = new HashMap<String,Object>(); 
+		List headList = new ArrayList();//表头数据  
+        headList.add("用户姓名");
+        headList.add("登录名");
+        headList.add("登录全名");
+        headList.add("手机号码");
+        headList.add("邮箱");
+        headList.add("账号开启");
+        headList.add("注册时间");
+		Workbook wb = new XSSFWorkbook();  // 导出 Excel为2007 工作簿对象  
+        
+		List dataList = new ArrayList();
+		for(String iid:complatUserIds){
+			ComplatUser complatUser = complatUserService.findByKey(Integer.parseInt(iid));
+			TreeMap<String,Object> treeMap = new TreeMap<String, Object>();
+			treeMap.put("1", complatUser.getName());
+			treeMap.put("2", complatUser.getLoginname());
+			treeMap.put("3", complatUser.getLoginallname());
+			treeMap.put("4", complatUser.getMobile());
+			treeMap.put("5", complatUser.getEmail());			
+			treeMap.put("6", complatUser.getEnable());
+			treeMap.put("7", complatUser.getCreatetime());
+			
+			dataList.add(treeMap);
+		}
+		map.put(ExcelUtil.HEADERINFO, headList);  
+        map.put(ExcelUtil.DATAINFON, dataList); 
+        ExcelUtil.writeExcel(map, wb,response, fileName);
+
+	}				
+		
+
 	
 	
 	

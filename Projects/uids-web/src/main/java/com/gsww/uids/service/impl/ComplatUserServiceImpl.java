@@ -3,6 +3,7 @@ package com.gsww.uids.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -55,6 +56,16 @@ public class ComplatUserServiceImpl implements ComplatUserService{
 	public void delete(ComplatUser complatUser) throws Exception {
 		
 		complatUserDao.delete(complatUser);
+	}
+
+
+
+
+	@Override
+	public List<ComplatUser> findByUserName(String name) {
+		List<ComplatUser> list=new ArrayList<ComplatUser>();
+		list=complatUserDao.findByName(name);
+		return list;
 	}
 	
 

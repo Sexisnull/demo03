@@ -103,12 +103,6 @@
 	float:left;
 }
 		
-/*.alert_tb p span#close {
-	margin-left:575px;
-	font-weight:500;
-	cursor:pointer;
-	font-size:18px;
-}*/ 
 .mybg{
 	background-color:#000;
 	width:100%;
@@ -123,35 +117,16 @@
 
 </style>
 <script type="text/javascript"> 
-	$(function(){
-		//高级搜索按钮点击事件
-		$('.advanced-btn').on('click',function(){
-			$('.advanced-content').toggle('fast');
-		});
-		$(".advanced-search-btn").click(function(){
-			$("#form2").submit();
-		});
-		//阻止按键盘Enter键提交表单
-		var $inp = $('input');
-		$inp.keypress(function (e) { 
-		    var key = e.which; 
-		    if (key == 13) {
-		        return false;
-		    }
-		});			
-});
-	
-/**搜索表单校验**/
-	function checkSubmitForm(){
-		var loginNameSearch=$("#loginnameSearch").val();
-		if(loginNameSearch==''||isNumbOrLett(loginNameSearch)){			
+function checkSubmitForm(){
+		var loginnameSearch = $("#loginnameSearch").val();
+		if(loginnameSearch ==  '' || isNumbOrLett(loginnameSearch)){
 			form1.submit();
 		}else{
 			$.validator.errorShow($("#loginnameSearch"),'只能包括数字和字母');
 		}
-}	
-
-/*
+	}
+	
+	/*
 	用途：检查输入字符串是否只由汉字、字母、数字组成
 	输入：
 	value：字符串
@@ -167,7 +142,30 @@
 		}else{
 			return false;
 		}
-}
+	}
+	
+	$(function(){
+		//高级搜索按钮点击事件
+		$('#advanced-btn').on('click',function(){
+			$('.advanced-content').toggle('fast');
+		});
+		$("#advanced-search-btn").click(function(){
+			$("#form2").submit();
+		});
+		$("#advanced-search-btn-cancel").on('click',function(){
+			$('.advanced-content').toggle('fast');
+		});
+		//阻止按键盘Enter键提交表单
+		var $inp = $('input');
+		$inp.keypress(function (e) { 
+		    var key = e.which; 
+		    if (key == 13) {
+		        return false;
+		    }
+		});
+	});
+	
+	
 
 
 /***新增***/
@@ -176,9 +174,25 @@ function addComplatUser(){
 }
 
 /***删除***/
-function deleteComplatUser(){
-     window.location.href="${ctx}/complat/complatUserDelete?complatUserId="+complatUserId;
-}
+$(function(){
+ $("#deleteUser").click(function(url,parm){
+		if($(".boxOne:checked").length == 0&&$('#list-table input:checkbox:checked').length == 0){
+        	alert("请先选择要删除的数据");
+        }else if($("input[type=checkbox]:checked").length >= 1){      
+          	var ids = "";
+				$('#list-table tbody input[type=checkbox]').each(function(i, o) {
+					if($(o).attr('checked')) {
+						ids += $(o).val() + ",";
+					}
+				});		                     
+           window.location.href="${ctx}/complat/complatUserDelete?complatUserId="+ids;             						       
+        } 			
+	});
+});
+
+
+
+
 
 /***用户导入***/
 //弹出层
@@ -193,13 +207,6 @@ function intPutComplatUser(){
 }
 	
  
-//导入
-$(function(){
-   $("#excel_button").click(function(){
-	   $("#form1").submit();
-   });
-
-});
 
 
 //下载模板
@@ -208,13 +215,49 @@ function downloadTemplate(fileName){
 }	  
 
 
+//导入
+$(function(){  
+  $("#excel_button").click(function(){		  	
+	var file = $("#excelFile").val();
+	if(file==null || file==""){
+		 alert("请选择文件..");
+		 return;
+	}else{
+		 console.log(file);
+		 alert(33333);
+		 $("#form3").submit();
+	}
+			/*var index = file.subString(file.lastIndexOf(".")+1);
+			if(file == ""){
+				alert("请选择文件..");
+				return;
+			}else if(!(index == "xls" ||index == "xlsx")){
+				alert("请上传后缀名为xls或xlsx的文件!");
+				return;
+			}else{
+				$("#form3").submit();
+			}*/
+   });
+});
+
+
 /***导出***/
 function outPutComplatUser(){
-    window.location.href="${ctx}/complat/complatExport";
+  /* if($("input[type=checkbox]:checked").length == 0){      
+       var ids = "";
+	   $('#list-table tbody input[type=checkbox]').each(function(i, o) {
+			if($(o).attr('')) {
+				ids += $(o).val() + ",";
+			}
+	   });	
+	   console.log(ids);*/	                     
+       window.location.href="${ctx}/complat/complatExport"; 
+       alert("==========");            						       
+     //}   
 }
 
-	
-	
+
+
 	
 </script>
 
@@ -241,22 +284,43 @@ function outPutComplatUser(){
     
     <div class="search-content">
 		<form id="form1" name="pageForm" action="${ctx}/complat/complatList" method="get">
-			<table class="">
-				<tr>					
-					<!--<th style="padding-left: 300px">用户姓名：</th>
-					<td width="20%">
-						<input type="text"  style="width: 170px;" placeholder="用户姓名" value="${sParams['LIKE_name']}" id="nameSearch" name="search_LIKE_name" />
-					</td>
-					-->
-					<th  style="padding-left: 300px"> 请输入登录名：</th>
-					<td width="20%">
-						<input type="text"  style="width: 170px;" placeholder="请输入登录名" value="${sParams['LIKE_loginname']}" id="loginnameSearch" name="search_LIKE_loginname" />
-					</td> 
+			<table class="advanced-content">
+				<tr>
+					<th style="padding-left: 300px">请输入登录名：</th>
+						<td width="20%">
+							<input type="text"  style="width: 170px;" placeholder="请输入登录名" value="${sParams['LIKE_loginname']}" id="loginnameSearch" name="search_LIKE_loginname" />
+						</td>
 					<td class="btn-group"> <a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a></td>
+					<td class="btn-group"> <a id="advanced-btn" class="btnSearch" >高级搜索</a></td>
 				</tr>
-			</table>	
+			</table>
 		</form>
+		
+		 <!-- 高级探索表单 -->
+        <div class="search-content">
+			<form id="form2" name="form2" action="${ctx}/complat/complatList" method="get">
+				<table class="advanced-content" style="display:none;">
+					<tr>
+						<th style="padding-left: 10px">姓名：</th>
+							<td width="20%">
+								<input type="text"  style="width: 170px;" placeholder="请输姓名:" value="${sParams['LIKE_name']}" id="nameSearch" name="search_LIKE_name" />
+							</td>
+						<th style="padding-left: 5px">登录名：</th>
+							<td width="20%">
+								<input type="text"  style="width: 170px;" placeholder="请输入登录名:" value="${sParams['LIKE_loginname']}" id="loginnameSearch" name="search_LIKE_loginname" />
+							</td>
+						<!--<th style="padding-left: 10px">身份证号码：</th>
+							<td width="20%">
+								<input type="text"  style="width: 170px;" placeholder="请输入身份证号码:" value="${sParams['LIKE_papersNumber']}" id="degreeSearch" name="search_LIKE_papersNumber" />
+							</td>
+						--><td class="btn-group"> <a id="advanced-search-btn" class="btnSearch" >高级搜索</a></td>
+						<td class="btn-group"> <a id="advanced-search-btn-cancel" class="btnSearch" >取消</a></td>
+					</tr>
+				</table>
+			</form>
+		</div>
 	</div>
+    
     
     
 	<!--列表内容区域-->
@@ -265,46 +329,16 @@ function outPutComplatUser(){
 	<input type="hidden" id="orderSort" name="orderSort" value="${orderSort}"/>
 		
         <div class="list-topBar  advanced-search">
-        
-        
-        
-        
-        	<div class="list-toolbar">
+        	<div class="list-toolbar" style="margin-left:860px;height:30px;">
              <!--  操作按钮开始 	    -->   
               <button class="addUser" onclick="addComplatUser()"><i class="btn_icon3"></i><span>新 增</span></button>
-              <button class="deleteUser" onclick="deleteComplatUser()"><i class="btn_icon4"></i><span>删 除</span></button>
+              <button class="deleteUser" id="deleteUser"><i class="btn_icon4"></i><span>删 除</span></button>
               <button class="userInput"  id="userInput" onclick="intPutComplatUser()"><i class="btn_icon4"></i><span>用户导入</span></button>
               <button class="userOutput"  id="userOutput"" onclick="outPutComplatUser()"><i class="btn_icon4"></i><span>用户导出</span></button>  
            <!--   操作按钮结束  --> 
            </div> 
-            
-             
-            
         </div>
-        <!-- 高级探索表单 -->
-        <form id="form2" name="form2" action="${ctx}/complat/complatList">        
-        <ul class="advanced-content" style="display:none;">
-        	<li>
-        		<input type="hidden"  name="orderField" value="${orderField}"/> 
-				<input type="hidden"  name="orderSort" value="${orderSort}"/>
-            	<label>姓名:</label>
-                <input type="text" class="" name="search_LIKE_name" value="${sParams['LIKE_name']}"/>
-            </li>
-            <li>
-            	<label>登录名:</label>
-                <input type="text" class="" name="search_LIKE_loginname" value="${sParams['LIKE_loginname']}"/>
-            </li><!--  
-            <li>
-            	<label>企业或机构名称:</label>
-                <input type="text" class="" name="search_LIKE_name" value="${sParams['LIKE_name']}"/>
-            </li>
-            <li>
-            	<label>身份证号码:</label>
-                <input type="text" class="" name="search_LIKE_cardNumber" value="${sParams['LIKE_cardNumber']}"/>
-            </li>          
-            --><li class="advanced-search-btn">搜索</li>
-        </ul>
-        </form>
+       
         
         
        
@@ -315,13 +349,13 @@ function outPutComplatUser(){
     	</div>
     	<!-- 提示信息结束 -->
     	<!-- 列表开始 -->
-        <table cellpadding="0" cellspacing="0" border="0" width="100%" class="list-table">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%" id="list-table" class="list-table">
         	<thead>
             	<tr>
                 	<th width="10px">   
                 		<div class="label">
 									<i class="check_btn check_all"></i>
-									<input type="checkbox" class="check_btn" style="display: none;" />
+									<input type="checkbox" class="check_btn" id="boxOne" style="display: none;" />
 								</div>             		
                 	</th>
                 	
@@ -391,32 +425,30 @@ function outPutComplatUser(){
 
    <!-- 导入数据时的弹出层 -->
         <div id="alerttb" class="alert_tb" style="display:none;"> 
-          <div class="input_one">
+           <div class="input_one">
                <p>
                   <span id="inputUser">用户导入</span>
                  <!--     <span id="close">X</span>   -->                                   
                </p>  
-          </div>    
-          <div class="input_two">
-            	  
-	 		   <ul style="width:610px;">
-	  		      <li>
-	  		         <form id="form1" class="userForm" action="${ctx }/complat/complatImport" method="post" enctype="multipart/form-data" name="batchAdd"> 	 	
-	  		           <label>选择文件：</label>             
-                       <input style="width:300px;margin-top:-5px; border-radius: 4px;background: #659be0;color: #fff;line-height: 20px;font-size: 12px;padding: 2px;cursor: pointer;" id="excel_file" type="file" name="filename" class="file_upload" accept="xls" size="50">                 
-                     </form>	                    
-              </li> 
-              <li>
-                  <button style="width:60px;height:25px;margin-left:495px;background:#f79638;color:#fff;border:1px solid #f79638;border-radius:3px;cursor: pointer;" class="pb_bg_c_qb_1n7XT"  onclick="downloadTemplate();">模板下载</button>                    
-              </li>
-	  		</ul>	    	   
-          </div> 
-          <div class="input_three">            
+           </div>    
+           <div class="input_two">
+            	<form id="form3" name="form3" action="${ctx}/complat/complatImport" method="post" enctype="multipart/form-data">
+       			 <ul class="advanced-content">
+		            <li style="width:96%">				    
+		            	<label style="width:300px; padding-left: 50px;">选择文件：</label>
+		                <input type="file" id="excelFile" class="required" name="excelFile" style="width:300px;height:22px; background: #659be0;cursor: pointer;border: none;font-size: 12px;"/>
+		            </li>  	            
+		            <li><input style="width:60px;height:25px;background:#f79638;color:#fff;border:1px solid #f79638;border-radius:3px;cursor: pointer;" type="button" value="下载模板" onclick= "downloadTemplate();" /></li>
+		            <li><input style="width:60px;height:25px;background:#659be0;color:#fff;border:1px solid #f79638;border-radius:3px;cursor: pointer;" type="button" class="input"  id="excel_button" value="导入" /></li>
+		        </ul>
+             </form>
+             
+           </div>  	  
+           <div class="input_three">            
                 <p>
-                   <button style="width:60px;height:25px;background:#659be0;color:#fff;border:1px solid #f79638;border-radius:3px;cursor: pointer;" type="button" class="input"  id="excel_button">导入</button>
                    <button style="width:60px;height:25px;background:#f79638;color:#fff;border:1px solid #f79638;border-radius:3px;cursor: pointer;" type="button" class="cancel" id="cancel" onclick="javascript:window.location.href='${ctx}/complat/complatList'">取消</button>
                 </p>	 		      	 		     
-          </div>                  
+          </div>  	              	             	  
         </div>
 
 </body>

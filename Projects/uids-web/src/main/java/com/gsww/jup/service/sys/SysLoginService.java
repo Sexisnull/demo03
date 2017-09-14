@@ -28,7 +28,7 @@ public interface SysLoginService {
 	 * @return
 	 * @throws Exception
 	 */
-	public SysUserSession login(String userName, String password, String ip) throws Exception;
+	public SysUserSession login(String userName, String password,String groupid, String ip) throws Exception;
 	
 	/**
 	 * 方法描述 : CAS用户登录

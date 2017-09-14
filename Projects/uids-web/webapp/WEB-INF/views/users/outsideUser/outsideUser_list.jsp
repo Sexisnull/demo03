@@ -95,8 +95,32 @@
 				</tr>
 			</table>
 		</form>
+		<!-- 高级探索表单 -->
+    	<div class="search-content">
+			<form id="form2" name="form2" action="${ctx}/complat/outsideuserList" method="get">
+				<table class="advanced-content" style="display:none;">
+					<tr>
+						<th style="padding-left: 10px">姓名：</th>
+							<td width="20%">
+								<input type="text"  style="width: 170px;" placeholder="请输姓名:" value="${sParams['LIKE_name']}" id="nameSearch" name="search_LIKE_name" />
+							</td>
+						<th style="padding-left: 5px">登录名：</th>
+							<td width="20%">
+								<input type="text"  style="width: 170px;" placeholder="请输入登录名:" value="${sParams['LIKE_loginName']}" id="loginNameSearch" name="search_LIKE_loginName" />
+							</td>
+						<th style="padding-left: 10px">身份证号码：</th>
+							<td width="20%">
+								<input type="text"  style="width: 170px;" placeholder="请输入身份证号码:" value="${sParams['LIKE_papersNumber']}" id="degreeSearch" name="search_LIKE_papersNumber" />
+							</td>
+						<td class="btn-group"> <a id="advanced-search-btn" class="btnSearch" >高级搜索</a></td>
+						<td class="btn-group"> <a id="advanced-search-btn-cancel" class="btnSearch" >取消</a></td>
+					</tr>
+				</table>
+			</form>
+		</div>
 	</div>
-    
+	
+       
     
 	<!--列表内容区域-->
 	<div class="list">
@@ -110,29 +134,7 @@
            	 <!-- 操作按钮结束 -->
            </div> 
         </div>
-        <div class="search-content">
-			<form id="form2" name="form2" action="${ctx}/complat/outsideuserList" method="get">
-				<table class="advanced-content" style="display:none;">
-					<tr>
-						<th style="padding-left: 5px">用户账号：</th>
-							<td width="20%">
-								<input type="text"  style="width: 170px;" placeholder="请输入用户账号:" value="${sParams['LIKE_loginName']}" id="loginNameSearch" name="search_LIKE_loginName" />
-							</td>
-						<th style="padding-left: 10px">学位：</th>
-							<td width="20%">
-								<input type="text"  style="width: 170px;" placeholder="请输入学位:" value="${sParams['LIKE_degree']}" id="degreeSearch" name="search_LIKE_degree" />
-							</td>
-						<th style="padding-left: 10px">用户账号：</th>
-							<td width="20%">
-								<input type="text"  style="width: 170px;" placeholder="请输姓名:" value="${sParams['LIKE_name']}" id="nameSearch" name="search_LIKE_name" />
-							</td>
-						<td class="btn-group"> <a id="advanced-search-btn" class="btnSearch" >高级搜索</a></td>
-						<td class="btn-group"> <a id="advanced-search-btn-cancel" class="btnSearch" >取消</a></td>
-					</tr>
-				</table>
-			</form>
-		</div>
-        <!-- 高级探索表单 -->
+        
         <%-- <form id="form2" name="form2" action="${ctx}/complat/outsideuserList">
         
         <ul class="advanced-content" style="display:none;">

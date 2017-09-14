@@ -40,14 +40,14 @@ public interface ComplatUserService {
 	
 	
 	/**
-	 * 根据主键查询法人信息
+	 * 根据主键查询用户信息
 	 */
 	ComplatUser findByKey(Integer iid) throws Exception;
 	
 	/**
 	 * 保存
 	 */
-	void save(ComplatUser complatUser) throws Exception;
+	void save(ComplatUser complatUser);
 	
 	/**
 	 * 删除
@@ -55,6 +55,9 @@ public interface ComplatUserService {
 	void delete(ComplatUser complatUser) throws Exception;
 	
 	
-	
+	/**
+	 * 根据用户名查询用户信息
+	 */
+	List<ComplatUser> findByUserName(String name);
 
 }
