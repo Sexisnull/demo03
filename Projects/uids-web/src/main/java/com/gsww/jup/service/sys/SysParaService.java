@@ -124,5 +124,5 @@ public interface SysParaService {
 	
 	
 
-	public List<Map<String, Object>> getParaList()throws Exception;
+	public List<Map<String, Object>> getParaList(String paraTypeName)throws Exception;
 }
