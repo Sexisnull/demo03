@@ -162,4 +162,21 @@ public class JisLogServiceImpl implements JisLogService {
 		return null;
 	}
 
+	@Override
+	public List<Map<String, Object>> getCzlxList() throws Exception {
+
+		String sql = "select sp.PARA_CODE,sp.PARA_NAME from sys_parameter sp where sp.PARA_TYPE_ID =(select t.PARA_TYPE_ID from sys_parameter_type t where t.PARA_TYPE_NAME ='czlx' and t.PARA_TYPE_STATE !='0')";
+		List<Map<String, Object>> mapList = jdbcTemplate.queryForList(sql,
+				new Object[] {});
+		return mapList;
+
+	}
+
+	@Override
+	public List<Map<String, Object>> getMkmcList() throws Exception {
+		String sql = "select sp.PARA_CODE,sp.PARA_NAME from sys_parameter sp where sp.PARA_TYPE_ID =(select t.PARA_TYPE_ID from sys_parameter_type t where t.PARA_TYPE_NAME ='mkmc' and t.PARA_TYPE_STATE !='0')";
+		List<Map<String, Object>> mapList = jdbcTemplate.queryForList(sql,
+				new Object[] {});
+		return mapList;
+	}
 }

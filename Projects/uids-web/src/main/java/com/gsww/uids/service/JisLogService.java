@@ -3,20 +3,14 @@ package com.gsww.uids.service;
 import java.util.List;
 import java.util.Map;
 
-
-
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.gsww.uids.entity.JisLog;
 
-
-
 /**
- * Copyright: Copyright (c) 2011
- * </p>
+ * Copyright: Copyright (c) 2011 </p>
  * <p>
  * 公司名称 : 中国电信甘肃万维公司
  * </p>
@@ -33,10 +27,14 @@ import com.gsww.uids.entity.JisLog;
  * @author <a href=" ">zcc</a>
  * */
 public interface JisLogService {
+	/* 获取操作类型 */
+	public List<Map<String, Object>> getCzlxList() throws Exception;
 
-	
-	public Page<Map<String,String>> getJisLogPage(int pageNumber,int pageSize,List<List<String>> searchCodition) throws Exception;
+	/* 获取模块名称 */
+	public List<Map<String, Object>> getMkmcList() throws Exception;
 
+	public Page<Map<String, String>> getJisLogPage(int pageNumber,
+			int pageSize, List<List<String>> searchCodition) throws Exception;
 
 	public void logInsert(JisLog jisLog);
 
@@ -68,6 +66,5 @@ public interface JisLogService {
 	 * @throws Exception
 	 */
 	public List<JisLog> findBySpec(String spec) throws Exception;
-
 
 }

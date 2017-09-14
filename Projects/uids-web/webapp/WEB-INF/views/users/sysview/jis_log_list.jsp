@@ -152,6 +152,11 @@
 									<div class="list-longtext">
 										${jisLog.moduleName}
 									</div>
+									<c:forEach items="${mkmc}" var="mkmc">
+										<c:if test="${mkmc.paraCode}==${jisLog.moduleName} ">
+---------------------------------------------------
+										</c:if>
+									</c:forEach>
 								</td>
 								<td class="alignL" style="text-align: center">
 									<div class="list-longtext">
