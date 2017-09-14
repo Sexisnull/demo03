@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gsww.uids.dao.JisSysviewCurrentDao;
 import com.gsww.uids.entity.JisSysviewCurrent;
-import com.gsww.uids.service.JisApplicationService;
 import com.gsww.uids.service.JisSysviewCurrentService;
 
 @Transactional

@@ -20,7 +20,6 @@ import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
 import com.gsww.jup.util.PageUtils;
-import com.gsww.uids.entity.ComplatCorporation;
 import com.gsww.uids.entity.ComplatUser;
 import com.gsww.uids.service.ComplatUserService;
 

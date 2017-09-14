@@ -30,12 +30,6 @@ import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
 import com.gsww.jup.controller.sys.SysAccountController;
-
-import com.gsww.jup.entity.sys.SysAccount;
-import com.gsww.jup.entity.sys.SysOperator;
-import com.gsww.jup.entity.sys.SysParaType;
-import com.gsww.jup.entity.sys.SysRole;
-
 import com.gsww.jup.service.sys.SysParaService;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.uids.entity.JisSysviewCurrent;

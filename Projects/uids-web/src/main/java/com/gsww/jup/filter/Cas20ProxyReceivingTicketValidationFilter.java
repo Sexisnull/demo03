@@ -1,7 +1,13 @@
 package com.gsww.jup.filter;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -12,7 +18,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jasig.cas.client.proxy.*;
+import org.jasig.cas.client.proxy.Cas20ProxyRetriever;
+import org.jasig.cas.client.proxy.CleanUpTimerTask;
+import org.jasig.cas.client.proxy.ProxyGrantingTicketStorage;
+import org.jasig.cas.client.proxy.ProxyGrantingTicketStorageImpl;
 import org.jasig.cas.client.util.CommonUtils;
 import org.jasig.cas.client.validation.AbstractTicketValidationFilter;
 import org.jasig.cas.client.validation.Cas20ProxyTicketValidator;

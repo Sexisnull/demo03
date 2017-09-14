@@ -1,14 +1,7 @@
 package com.gsww.uids.controller;
 
-import com.alipay.api.AlipayClient;
-import com.alipay.api.DefaultAlipayClient;
-import com.alipay.api.request.AlipayOpenAuthTokenAppQueryRequest;
-import com.alipay.api.request.AlipayOpenAuthTokenAppRequest;
-import com.alipay.api.response.AlipayOpenAuthTokenAppQueryResponse;
-import com.alipay.api.response.AlipayOpenAuthTokenAppResponse;
-import com.gsww.jup.controller.BaseController;
-import com.gsww.jup.util.StringHelper;
 import net.sf.json.JSONSerializer;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -16,10 +9,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import sun.nio.cs.ext.GBK;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import com.alipay.api.AlipayClient;
+import com.alipay.api.DefaultAlipayClient;
+import com.alipay.api.request.AlipayOpenAuthTokenAppRequest;
+import com.alipay.api.response.AlipayOpenAuthTokenAppResponse;
+import com.gsww.jup.controller.BaseController;
+import com.gsww.jup.util.StringHelper;
 
 /**
  * AliController

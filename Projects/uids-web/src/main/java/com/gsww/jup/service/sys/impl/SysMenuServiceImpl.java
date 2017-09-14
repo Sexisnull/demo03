@@ -24,7 +24,6 @@ import com.gsww.jup.dao.sys.SysRoleOperRelDao;
 import com.gsww.jup.entity.sys.SysMenu;
 import com.gsww.jup.entity.sys.SysOperator;
 import com.gsww.jup.service.sys.SysMenuService;
-import com.gsww.jup.util.Constants;
 import com.gsww.jup.util.NullHelper;
 import com.gsww.jup.util.XmlHelper;
 

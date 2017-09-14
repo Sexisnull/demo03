@@ -148,12 +148,10 @@ public class JisLogController extends BaseController {
 			Page<JisLog> pageInfo = jisLogService.getJisLogPage(spec,
 					pageRequest);
 			model.addAttribute("pageInfo", pageInfo);
-			
 			// 测试获取结果
-			System.out.println("czlx" + jisLogService.getCzlxList());
-			model.addAttribute("czlx", sysParaService.getParaList());
-			System.out.println("mkmc" + jisLogService.getMkmcList());
-			model.addAttribute("mkmc", jisLogService.getMkmcList());
+			model.addAttribute("czlxList", sysParaService.getParaList("czlx"));
+			model.addAttribute("mkmcList", sysParaService.getParaList("mkmc"));
+
 			// 将搜索条件编码成字符串，用于排序，分页的URL
 			model.addAttribute("searchParams", Servlets
 					.encodeParameterStringWithPrefix(searchParams, "search_"));
