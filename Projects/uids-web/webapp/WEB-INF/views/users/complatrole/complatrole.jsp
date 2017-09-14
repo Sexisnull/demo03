@@ -71,7 +71,7 @@
 					<!-- 搜索内容结束 -->
 					<!-- 操作按钮开始 -->
 					<div class="list-toolbar">
-						<gsww:opTag menuId="8a9200c05e5f797f015e5f8c0ee10003" tabIndex="1" operatorType="1"></gsww:opTag>
+						 <gsww:opTag menuId="8a9200c05e5f797f015e5f8c0ee10003" tabIndex="1" operatorType="1"></gsww:opTag>
 					</div>
 					<!-- 操作按钮结束 -->
 
@@ -120,7 +120,7 @@
 									${complatRole.spec}
 								</td>
 								<td class="position-content">
-									<gsww:opTag menuId="8a9200c05e5f797f015e5f8c0ee10003" tabIndex="1" operatorType="2"></gsww:opTag>
+									<gsww:opTag menuId="8a9200c05e5f797f015e5f8c0ee10003" tabIndex="1" operatorType="2"></gsww:opTag> 
 								</td>
 							</tr>
 						</c:forEach>

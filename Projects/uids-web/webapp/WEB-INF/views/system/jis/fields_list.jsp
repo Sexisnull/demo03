@@ -80,7 +80,7 @@
         <div class="list-topBar  advanced-search">
            <div class="list-toolbar">
              <!-- 操作按钮开始 -->	 	 
-             <gsww:opTag menuId="8a929c4a5e56e308015e571a965a0002" tabIndex="1" operatorType="1"></gsww:opTag>
+             <gsww:opTag menuId="8a929c4a5e7508c1015e75512fa40066" tabIndex="1" operatorType="1"></gsww:opTag>
            	 <!-- 操作按钮结束 -->
            </div> 
         </div>
@@ -121,7 +121,13 @@
 	                    	<div title="${jisFields.fieldname}" class="word_break">${jisFields.fieldname}</div>
 	                    </td>
 	                    <td style="text-align: center;">
-	                    	<div title="${jisFields.type}" class="word_break">${jisFields.type}</div>
+	                    	<div class="alignL">
+	                    		<div class="list-longtext">
+	                    			<c:if test="${jisFields.type == '1'}">字符串</c:if>
+	                           		<c:if test="${jisFields.type == '2'}">枚举型</c:if>
+	                           		<c:if test="${jisFields.type == '3'}">固定值</c:if>
+	                    		</div>
+	                        </div>
 	                    </td>
 	                    <td style="text-align: center;">
 	                    	<div class="alignL">
@@ -132,7 +138,7 @@
 	                        </div>
 	                    </td>
 	                	<td class="position-content" style="text-align: center;" >
-	                        <gsww:opTag menuId="8a929c4a5e56e308015e571a965a0002" tabIndex="1" operatorType="2"></gsww:opTag>
+	                        <gsww:opTag menuId="8a929c4a5e7508c1015e75512fa40066" tabIndex="1" operatorType="2"></gsww:opTag>
 	                    </td>
 	                </tr>
 				</c:forEach>

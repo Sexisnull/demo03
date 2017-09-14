@@ -44,8 +44,8 @@ $().ready(function() {
 			</li>
 			<li class="split"></li>
 			<li class="active">
-				<c:if test="${empty complatRole.iid}">角色新增1</c:if>
-				<c:if test="${not empty complatRole.iid}">角色编辑1</c:if>
+				<c:if test="${empty complatRole.iid}">角色新增</c:if>
+				<c:if test="${not empty complatRole.iid}">角色编辑</c:if>
 			</li>
 		</ol>
     <!--表单的选项卡切换-->

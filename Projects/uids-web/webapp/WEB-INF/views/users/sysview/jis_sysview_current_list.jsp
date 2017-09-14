@@ -199,7 +199,7 @@ if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checke
 								</td>
 								<td class="alignL" style="text-align: center">
 									<div class="list-longtext">
-										${jisCurrent.appid}
+										${applicationMap[jisCurrent.appid]}
 									</div>
 								</td>
 								<td class="alignL" style="text-align: center">
@@ -207,12 +207,10 @@ if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checke
 										${jisCurrent.synctime}
 									</div>
 								</td>
-								
-									
 								</td>
 								<td class="alignL" style="text-align: center">
 									<div class="list-longtext">
-										${jisCurrent.optresult}
+										${paraMap[jisCurrent.optresult]}
 									</div>
 								</td>
 								
@@ -231,7 +229,7 @@ if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checke
 				<!-- 列表结束 -->
 			</div>
 			<!-- 分页 -->
-			<tags:pagination page="${pageInfo}" paginationSize="5" />
+			<tags:pagination page="${pageInfo}" paginationSize="10" />
 		</div>
 	</body>
 </html>

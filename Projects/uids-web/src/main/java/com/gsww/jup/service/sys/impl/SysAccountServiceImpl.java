@@ -17,12 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.gsww.jup.dao.sys.SysAccountDao;
 import com.gsww.jup.dao.sys.SysRoleAcctRelDao;
 import com.gsww.jup.dao.sys.SysRoleDao;
-import com.gsww.jup.dao.sys.SysUserAppsDao;
 import com.gsww.jup.entity.sys.SysAccount;
 import com.gsww.jup.entity.sys.SysDepartment;
 import com.gsww.jup.entity.sys.SysRole;
 import com.gsww.jup.entity.sys.SysRoleAcctRel;
-import com.gsww.jup.entity.sys.SysUserApps;
 import com.gsww.jup.service.sys.SysAccountService;
 import com.gsww.jup.util.MD5;
 @Transactional
@@ -34,8 +32,6 @@ public class SysAccountServiceImpl implements SysAccountService{
 	private SysRoleAcctRelDao sysRoleAcctRelDao;
 	@Autowired
 	private SysRoleDao sysRoleDao;
-	@Autowired
-	private SysUserAppsDao sysUserAppsDao;
 	@Autowired
 	protected org.springframework.jdbc.core.JdbcTemplate jdbcTemplate;
 	
@@ -202,10 +198,10 @@ public class SysAccountServiceImpl implements SysAccountService{
 	/**
 	 *同步用户 2
 	 */
-	@Override
-	public SysUserApps saveSync(SysUserApps sysUserApps) {		
-		return sysUserAppsDao.save(sysUserApps);
-	}
+//	@Override
+//	public SysUserApps saveSync(SysUserApps sysUserApps) {		
+//		return sysUserAppsDao.save(sysUserApps);
+//	}
 	/**
 	 *查找用户是否存在
 	 */

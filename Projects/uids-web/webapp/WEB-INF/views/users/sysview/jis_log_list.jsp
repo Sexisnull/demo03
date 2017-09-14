@@ -5,18 +5,29 @@
 	<head>
 		<meta charset="utf-8" />
 		<title></title>
-		<script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgcore.lhgdialog.min.js"></script>
+		<script type="text/javascript"
+			src="${ctx}/res/plugin/lhgdialog/lhgcore.lhgdialog.min.js"></script>
 		<script type="text/javascript">
-		/**搜索表单校验**/
-function checkSubmitForm() {
-		var objectnameSearch = $("#objectnameSearch").val();
-		if (objectnameSearch == '' || isChinaOrNumbOrLett(objectnameSearch)) {
+	/**搜索表单校验**/
+	function checkSubmitForm() {
+		var spec = $("#spec").val();
+		if (spec == '' || isChinaOrNumbOrLett(spec)) {
 			form1.submit();
 		} else {
-			$.validator.errorShow($("#objectnameSearch"), '只能包括中英文、数字、@和下划线');
+			$.validator.errorShow($("#spec"), '只能包括中英文、数字、@和下划线');
 		}
 	}
-		</script>
+	$(function() {
+		//阻止按键盘Enter键提交表单
+		var $inp = $('input');
+		$inp.keypress(function(e) {
+			var key = e.which;
+			if (key == 13) {
+				return false;
+			}
+		});
+	});
+</script>
 	</head>
 	<body>
 		<div class="list-warper">
@@ -27,46 +38,39 @@ function checkSubmitForm() {
 				</li>
 				<li class="split"></li>
 				<li>
-					<a href="#">系统管理</a>
+					<a href="#">业务系统管理</a>
 				</li>
 				<li class="split"></li>
 				<li class="active">
-					同步列表
+					日志管理
 				</li>
 			</ol>
 			<!--列表内容区域-->
 			<div class="list">
-				<!--<div class="list-title">角色列表</div>-->
+				<!--<div class="list-title">日志列表</div>-->
 				<div class="list-topBar">
 					<!-- 搜索内容开始 -->
 					<div class="search-content">
-						<form id="form1" name="pageForm" action="${ctx}/uids/jisHisList"
+						<form id="form1" name="pageForm" action="${ctx}/uids/logList"
 							method="get">
-							<div>
 							<table class="">
 								<tr>
-									
 									<th>
-										操作对象名：
+										操作描述：
 									</th>
 									<td width="20%">
-										<input type="text" id="objectnameSearch" placeholder="操作对象名"
-										<input type="text" placeholder="操作对象名称" id="objectnameSearch" name="search_LIKE_objectname"  value="${sParams['LIKE_objectname']}" class="input"/>
+										<input type="text" id="spec" placeholder="操作描述"
+											name="search_LIKE_spec" class="input"
+											value="${sParams['LIKE_spec']}" />
 									</td>
 									<td class="btn-group">
 										<a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a>
 									</td>
 								</tr>
 							</table>
-							</div>
 						</form>
 					</div>
 					<!-- 搜索内容结束 -->
-					<!-- 操作按钮开始 -->
-					<!--<div class="list-toolbar">
-						<gsww:opTag menuId="12" tabIndex="1" operatorType="1"></gsww:opTag>
-					</div>
-					--><!-- 操作按钮结束 -->
 
 				</div>
 				<!-- 提示信息开始 -->
@@ -79,81 +83,86 @@ function checkSubmitForm() {
 					class="list-table">
 					<thead>
 						<tr>
-							<th width="2">
+							<th width="10">
 								<div class="label">
 									<i class="check_btn check_all"></i>
 									<input type="checkbox" class="check_btn" style="display: none;" />
 								</div>
 							</th>
-							<th width="15%">
-								操作对象名称
-							</th >
-							<th width="15%">
-								机构编码
+							<th width="20%">
+								操作描述
 							</th>
-							<th width="10%" class="alignL" style="text-align: center">
+							<th>
+								操作时间
+							</th>
+							<th width="15%" class="alignL" style="text-align: center">
+								操作人
+							</th>
+							<th width="10%" style="text-align: center">
+								模块名称
+							</th>
+							<th width="10%" style="text-align: center">
 								操作类型
 							</th>
-							<th width="20%" style="text-align: center">
-								应用名称
-							</th>
-							<th width="20%" style="text-align: center">
-								创建时间
-							</th>
-							
 							<th width="10%" style="text-align: center">
-								同步结果
-							</th>
-							<th width="12%" style="text-align: center">
-								操作
+								操作IP
 							</th>
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach items="${pageInfo.content}" var="jisHistory">
+						<c:forEach items="${pageInfo.content}" var="jisLog">
 							<tr>
 								<td>
+									<!--判断复选框是否可用-->
+									<!--<c:choose>
+										<c:when test="${jisLog.operateType=='1'}">
+											<div class="label">
+												<input id="${jisLog.iid}" value="${jisLog.iid}"
+													type="checkbox" class="check_btn" disabled="disabled" />
+											</div>
+										</c:when>
+										<c:otherwise>
+											<div class="label">
+												<i class="check_btn"></i>
+												<input id="${jisLog.iid}" value="${jisLog.iid}"
+													type="checkbox" class="check_btn" style="display: none;"
+													disabled="disabled" />
+											</div>
+										</c:otherwise>
+									</c:choose>-->
 									<div class="label">
 										<i class="check_btn"></i>
-										<input id="${jisHistory.iid}" value="${jisHistory.iid}"
-											type="checkbox" class="check_btn" style="display: none;" />
+										<input id="${jisLog.iid}" value="${jisLog.iid}"
+											type="checkbox" class="check_btn" style="display: none;"
+											disabled="disabled" />
 									</div>
 								</td>
 								<td>
-									${jisHistory.objectname}
+									${jisLog.spec}
 								</td>
 								<td style="word-break: break-all; word-wrap: break-word;">
-									${jisHistory.codeid}
+									${jisLog.operateTime}
 								</td>
 								<td class="alignL" style="text-align: center">
 									<div class="list-longtext">
-										${jisHistory.operatetype}
+										${jisLog.userId}
 									</div>
 								</td>
 								<td class="alignL" style="text-align: center">
 									<div class="list-longtext">
-										${applicationMap[jisHistory.appid]}
+										${jisLog.moduleName}
 									</div>
 								</td>
 								<td class="alignL" style="text-align: center">
 									<div class="list-longtext">
-										${jisHistory.synctime}
-									</div>
-								</td>
-								
-									
-								</td>
-								<td class="alignL" style="text-align: center">
-									<div class="list-longtext">
-										${paraMap[jisHistory.optresult]}
+										${jisLog.operateType}
 									</div>
 								</td>
 								<td class="alignL" style="text-align: center">
 									<div class="list-longtext">
-										${jisHistory.errorspec}
+										${jisLog.ip}
 									</div>
 								</td>
-								
 							</tr>
 						</c:forEach>
 
@@ -162,8 +171,7 @@ function checkSubmitForm() {
 				<!-- 列表结束 -->
 			</div>
 			<!-- 分页 -->
-			<tags:pagination page="${pageInfo}" paginationSize="10" />
+			<tags:pagination page="${pageInfo}" paginationSize="5" />
 		</div>
 	</body>
 </html>
-		

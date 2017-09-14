@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -17,10 +18,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
 import com.gsww.jup.util.PageUtils;
+import com.gsww.jup.util.StringHelper;
 import com.gsww.uids.entity.JisFields;
 import com.gsww.uids.service.JisFieldsService;
 
@@ -89,4 +92,93 @@ public class JisFieldsController extends BaseController {
 		return "system/jis/fields_list";
 	}
 
+	/**
+	 * @discription 跳转到新增或编辑页面
+	 * @param outsideuserId
+	 * @param model
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/fieldsEdit", method = RequestMethod.GET)
+	public String accountEdit(String fieldsId, Model model, HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		try {
+			JisFields jisFields = null;
+			if (StringHelper.isNotBlack(fieldsId)) {
+				jisFields = jisFieldsService.findByKey(Integer.parseInt(fieldsId));
+			} else {
+				jisFields = new JisFields();
+			}
+			model.addAttribute("jisFields", jisFields);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "system/jis/fields_edit";
+	}
+
+	/**
+	 * @discription 用户扩展属性保存
+	 * @param outsideUser
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("finally")
+	@RequestMapping(value = "/fieldsSave", method = RequestMethod.POST)
+	public ModelAndView accountSave(JisFields jisFields, HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		try {
+			if (jisFields != null) {
+				String iidStr = String.valueOf(jisFields.getIid());
+				if (iidStr == "null" || iidStr.length() <= 0) { // 新增
+					jisFields.setIssys(1);//是否为系统字段
+					jisFields.setIswrite(0);//是否必填
+					jisFieldsService.save(jisFields);
+					returnMsg("success", "保存成功", request);
+				} else { // 编辑
+					jisFieldsService.save(jisFields);
+					returnMsg("success", "编辑成功", request);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			returnMsg("error", "保存失败", request);
+		} finally {
+			return new ModelAndView("redirect:/jis/fieldsList");
+		}
+	}
+
+	/**
+	 * @discription 用户扩展属性删除
+	 * @param corporationId
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("finally")
+	@RequestMapping(value = "/fieldsDelete", method = RequestMethod.GET)
+	public ModelAndView accountDelete(String fieldsId, HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		try {
+			String[] para = fieldsId.split(",");
+			JisFields jisFields = null;
+			for (int i = 0; i < para.length; i++) {
+				Integer iid = Integer.parseInt(para[i].trim());
+				jisFields = jisFieldsService.findByKey(iid);
+				if (jisFields != null) {
+					jisFieldsService.delete(jisFields);
+					returnMsg("success", "删除成功", request);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			returnMsg("error", "删除失败", request);
+		} finally {
+			return new ModelAndView("redirect:/jis/fieldsList");
+		}
+	}
 }

@@ -21,11 +21,18 @@ public class ComplatGroupServiceImpl implements ComplatGroupService{
 	
 	
 	@Override
-	public List<ComplatGroup> findAll(Specification<ComplatGroup> spec) {
+	public List<ComplatGroup> findByPid(Integer pid) {
 		// TODO Auto-generated method stub
 		
-		return complatGroupDao.findAll(spec);
+		return complatGroupDao.findByPid(pid);
 		
+	}
+
+
+	@Override
+	public ComplatGroup findByIid(Integer iid) {
+		
+		return complatGroupDao.findByIid(iid);
 	}
 	
 	

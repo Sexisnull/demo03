@@ -8,6 +8,8 @@ import com.gsww.uids.entity.ComplatGroup;
 
 public interface ComplatGroupService {
 	
-	public List<ComplatGroup> findAll(Specification<ComplatGroup> spec);
+	public List<ComplatGroup> findByPid(Integer pid);
+	
+	public ComplatGroup findByIid(Integer iid);
 	
 }
