@@ -5,7 +5,6 @@
 package com.gsww.jup.service.sys;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -79,6 +78,12 @@ public interface SysParaTypeService {
 	 * @throws Exception
 	 */
 	public void stopParaType(String paraTypeId) throws Exception;
+	/**
+	 * 根据参数类型名称获取数据
+	 * @param paraTypeName
+	 * @throws Exception
+	 */
+	public SysParaType checkParaTypeName(String paraTypeName) throws Exception;
 	
 	
 

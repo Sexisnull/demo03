@@ -290,8 +290,19 @@ function outPutComplatUser(){
 						<td width="20%">
 							<input type="text"  style="width: 170px;" placeholder="请输入登录名" value="${sParams['LIKE_loginname']}" id="loginnameSearch" name="search_LIKE_loginname" />
 						</td>
+<<<<<<< HEAD
 					<td class="btn-group"> <a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a></td>
 					<td class="btn-group"> <a id="advanced-btn" class="btnSearch" >高级搜索</a></td>
+=======
+					<th>用户登录名：</th>
+						 <td>
+							<input type="text" style="width: 170px;" placeholder="用户登录名" value="${sParams['LIKE_loginname']}" id="loginnameSearch" name="search_LIKE_loginname" />
+						</td> 
+					<td class="btn-group"> <a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a>
+					
+					
+					</td>
+>>>>>>> d0b4c695917bc9c2634ded4aa6c2a919f4565e77
 				</tr>
 			</table>
 		</form>
@@ -327,8 +338,8 @@ function outPutComplatUser(){
 	<div class="list">
 	<input type="hidden" id="orderField" name="orderField" value="${orderField}"/> 
 	<input type="hidden" id="orderSort" name="orderSort" value="${orderSort}"/>
-		
         <div class="list-topBar  advanced-search">
+<<<<<<< HEAD
         	<div class="list-toolbar" style="margin-left:860px;height:30px;">
              <!--  操作按钮开始 	    -->   
               <button class="addUser" onclick="addComplatUser()"><i class="btn_icon3"></i><span>新 增</span></button>
@@ -336,6 +347,12 @@ function outPutComplatUser(){
               <button class="userInput"  id="userInput" onclick="intPutComplatUser()"><i class="btn_icon4"></i><span>用户导入</span></button>
               <button class="userOutput"  id="userOutput"" onclick="outPutComplatUser()"><i class="btn_icon4"></i><span>用户导出</span></button>  
            <!--   操作按钮结束  --> 
+=======
+        	 <div class="list-toolbar">
+            <!-- 操作按钮开始 -->	 
+             <gsww:opTag menuId="11" tabIndex="1" operatorType="1"></gsww:opTag>
+             <!-- 操作按钮结束 -->
+>>>>>>> d0b4c695917bc9c2634ded4aa6c2a919f4565e77
            </div> 
         </div>
        

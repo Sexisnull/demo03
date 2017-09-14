@@ -1,8 +1,5 @@
 package com.gsww.jup.util;
 
-import java.util.Map;
-
-import org.hibernate.dialect.function.TrimFunctionTemplate.Specification;
 
 public class PageUtils {
 	

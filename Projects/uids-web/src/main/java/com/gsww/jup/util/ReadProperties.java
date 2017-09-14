@@ -1,9 +1,9 @@
 package com.gsww.jup.util;
 
 import java.io.InputStream;
+import java.util.Properties;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
-import java.util.*;
 /**
  *
  * 读入配置文件

@@ -1,12 +1,13 @@
 package com.gsww.uids.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,23 +20,96 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
+import com.gsww.jup.service.sys.SysParaService;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.uids.entity.JisLog;
 import com.gsww.uids.service.JisLogService;
 
 /**
- * 应用系统日志管理Controller
+ * <p>
+ * Copyright: Copyright (c) 2014
+ * </p>
+ * <p>
+ * 公司名称 : 中国电信甘肃万维公司
+ * </p>
+ * <p>
+ * 项目名称 : jup-core
+ * </p>
+ * <p>
+ * 创建时间 : 2017-09-12 下午14:30:23
+ * </p>
+ * <p>
+ * 类描述 : 在线用户模块controller层
+ * </p>
  * 
- * @author zcc
  * 
+ * @version 3.0.0
+ * @author <a href=" ">yaoxi</a>
  */
 @Controller
-@RequestMapping(value = "/uids")
+@RequestMapping(value = "/jisLog")
 public class JisLogController extends BaseController {
-	private static Logger logger = LoggerFactory
-			.getLogger(JisLogController.class);
+
+	protected Logger logger = Logger.getLogger(getClass());
+
 	@Autowired
 	private JisLogService jisLogService;
+	@Autowired
+	private SysParaService sysParaService;
+
+	public JisLogService getJisLogService() {
+		return jisLogService;
+	}
+
+	public void setJisLogService(JisLogService jisLogService) {
+		this.jisLogService = jisLogService;
+	}
+
+	@RequestMapping(value = "/countUser", method = RequestMethod.GET)
+	public String countUser(
+			@RequestParam(value = "page", defaultValue = "1") int pageNo,
+			@RequestParam(value = "page.size", defaultValue = "10") int pageSize,
+			Model model, ServletRequest request) {
+		try {
+			Page<Map<String, String>> pageInfo = jisLogService.getJisLogPage(
+					pageNo, pageSize, this.getSearchCondition(request));
+			System.out.println("pageInfo:" + pageInfo);
+			model.addAttribute("pageInfo", pageInfo);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			logger.error("列表打开失败：" + ex.getMessage());
+			returnMsg("error", "列表打开失败", (HttpServletRequest) request);
+			return "redirect:/jisLog/countUserList";
+		}
+		return "users/jisLog/countUser_List";
+	}
+
+	/**
+	 * 
+	 * 拼装查询条件
+	 */
+	public List<String> searchConditionInstal(String name, String value,
+			String type) {
+
+		List<String> conditionList = new ArrayList<String>();
+		conditionList.add(name);
+		conditionList.add(value);
+		conditionList.add(type);
+		return conditionList;
+	}
+
+	/**
+	 * 获取查询条件
+	 * 
+	 * @param request
+	 * @return
+	 */
+	public List<List<String>> getSearchCondition(ServletRequest request) {
+
+		List<List<String>> searchList = new ArrayList<List<String>>();
+
+		return searchList;
+	}
 
 	/**
 	 * 获取日志列表
@@ -74,6 +148,10 @@ public class JisLogController extends BaseController {
 			Page<JisLog> pageInfo = jisLogService.getJisLogPage(spec,
 					pageRequest);
 			model.addAttribute("pageInfo", pageInfo);
+			// 测试获取结果
+			model.addAttribute("czlxList", sysParaService.getParaList("czlx"));
+			model.addAttribute("mkmcList", sysParaService.getParaList("mkmc"));
+
 			// 将搜索条件编码成字符串，用于排序，分页的URL
 			model.addAttribute("searchParams", Servlets
 					.encodeParameterStringWithPrefix(searchParams, "search_"));

@@ -14,7 +14,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.StringUtils;
 import org.jasig.cas.client.authentication.AttributePrincipal;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -31,7 +30,6 @@ import com.gsww.jup.entity.sys.SysUserSession;
 import com.gsww.jup.service.sys.SysLoginService;
 import com.gsww.jup.service.sys.SysMenuService;
 import com.gsww.jup.util.JSONUtil;
-import com.gsww.jup.util.TimeHelper;
 import com.gsww.uids.entity.ComplatGroup;
 import com.gsww.uids.entity.ComplatUser;
 import com.gsww.uids.service.ComplatGroupService;

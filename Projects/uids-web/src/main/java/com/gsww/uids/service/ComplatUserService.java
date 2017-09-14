@@ -1,16 +1,22 @@
 package com.gsww.uids.service;
 
+<<<<<<< HEAD
 import java.util.List;
 import java.util.Map;
 
+=======
+>>>>>>> d0b4c695917bc9c2634ded4aa6c2a919f4565e77
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.multipart.MultipartFile;
 
+<<<<<<< HEAD
 import com.gsww.jup.entity.sys.SysAccount;
 import com.gsww.jup.entity.sys.SysUserSession;
 import com.gsww.uids.entity.ComplatCorporation;
+=======
+>>>>>>> d0b4c695917bc9c2634ded4aa6c2a919f4565e77
 import com.gsww.uids.entity.ComplatUser;
 
 /**
