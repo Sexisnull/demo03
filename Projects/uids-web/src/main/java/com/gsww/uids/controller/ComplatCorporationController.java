@@ -70,6 +70,7 @@ public class ComplatCorporationController extends BaseController{
 			
 			//搜索属性初始化
 			Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
+			searchParams.put("NE_operSign", 3);
 			Specification<ComplatCorporation>  spec=super.toNewSpecification(searchParams, ComplatCorporation.class);
 			
 			//分页
@@ -126,18 +127,23 @@ public class ComplatCorporationController extends BaseController{
 	 */
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/corporationSave", method = RequestMethod.POST)
-	public ModelAndView accountSave(ComplatCorporation corporation,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+	public ModelAndView corporationSave(ComplatCorporation corporation,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		 
 		try {
 			if(corporation != null){
-				if(!StringHelper.isNotBlack(corporation.getauthState().toString())){
+				if(corporation.getauthState() == null){
 					corporation.setauthState(0);
 				}
-				if(!StringHelper.isNotBlack(corporation.getisAuth().toString())){
+				if(corporation.getisAuth() == null){
 					corporation.setisAuth(0);
 				}
-				if(!StringHelper.isNotBlack(corporation.getEnable().toString())){
+				if(corporation.getEnable() == null){
 					corporation.setEnable(1);
+				}
+				if(corporation.getOperSign() == null){
+					corporation.setOperSign(1);
+				}else{
+					corporation.setOperSign(2);
 				}
 				
 				//对注册时间进行转换
@@ -175,7 +181,8 @@ public class ComplatCorporationController extends BaseController{
 				Integer corId = Integer.parseInt(para[i].trim());
 				corporation=complatCorporationService.findByKey(corId);
 				if(corporation != null){
-					complatCorporationService.delete(corporation);
+					Integer iid = corporation.getIid();
+					complatCorporationService.updateCorporation(iid);
 					returnMsg("success", "删除成功", request);
 				}
 			}

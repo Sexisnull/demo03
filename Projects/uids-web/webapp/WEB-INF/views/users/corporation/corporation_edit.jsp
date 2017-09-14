@@ -1,3 +1,4 @@
+
 <%@ page language="java" pageEncoding="utf-8"%>
 <!DOCTYPE html>
 <html>
@@ -7,7 +8,7 @@
 <head>
 <title>甘肃万维JUP课题</title>
 <script type="text/javascript">
-$().ready(function() {
+	$().ready(function() {
 
 //表单校验
 var corNameInput=$("#name").val();
@@ -62,16 +63,7 @@ var corNameInput=$("#name").val();
 		nation.append("<option value='nations[i]'>"+nations[i]+"</option>");
 	}
 });
-
-$(function(){
-	// Ajax重命名校验
-	$.uniqueValidate('uniqueLoginAccount', '${ctx}/sys/checkAccount', ['loginAccount','oldLoginAccount'], '对不起，这个账号重复了');
-	$("#roleNames").Popup($(".ulRoleList"), { width: "auto" });
-	//
-	$(".icon-date-r").click(function(){ $(this).prev("input").click(); });
-});
-
-
+	
 </script>
 
 </head>
@@ -85,13 +77,9 @@ $(function(){
 			</li>
 			<li class="split"></li>
 			<li>
-				<a>法人管理</a>
+				<a>用户设置</a>
 			</li>
 			<li class="split"></li>
-			<li class="active">
-				<c:if test="${corporation.iid==null}">用户新增</c:if>
-				<c:if test="${corporation.iid!=null}">用户编辑</c:if>
-			</li>
    		</ol>
     </div>
 	<!--表单的标题区域--> 
@@ -103,6 +91,7 @@ $(function(){
         <input type="hidden" id="authState" name="authState" value="${corporation.authState}"/>
     	<input type="hidden" id="isAuth" name="isAuth" value="${corporation.isAuth}"/>
     	<input type="hidden" id="time" name="time" value="${time}">
+    	<input type="hidden" id="operSign" name="operSign" value="${corporation.operSign}"/>
     </div>
     
     <!--表单的主内容区域-->

@@ -12,4 +12,5 @@ public interface ComplatGroupService {
 	
 	public ComplatGroup findByIid(Integer iid);
 	
+	
 }

@@ -1,5 +1,7 @@
+
 package com.gsww.uids.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -50,4 +52,10 @@ public interface ComplatUserService {
 	 * 删除
 	 */
 	void delete(ComplatUser complatUser) throws Exception;
+	
+	/**
+	 * 修改
+	 */
+	void updateUser(Integer iid,String name,String headShip,String phone,String mobile,String fax,
+			String email,String qq, Date modifyTime,String pwd) throws Exception;
 }

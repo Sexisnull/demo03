@@ -39,10 +39,12 @@ public class ComplatCorporationServiceImpl implements ComplatCorporationService{
 	}
 
 	@Override
-	public void delete(ComplatCorporation corporation) throws Exception {
+	public void updateCorporation(Integer iid) throws Exception {
 		
-		complatCorporationDao.delete(corporation);
+		complatCorporationDao.updateCorporation(iid);
 	}
+
+	
 	
 	
 

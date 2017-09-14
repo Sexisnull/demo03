@@ -66,7 +66,19 @@ public class ComplatCorporation implements java.io.Serializable{
 	private String cardreNamePic;//身份证文件新名称
 	private String licencereNamePic;//企业法人营业执照上传名称
 	private String orgreNamePic;//组织机构代码证新文件名称
-	
+	private Integer operSign;//1-新增；2-修改；3-假删
+	private Integer synState;//0-未备份;2-备份失败；3-备份成功
+	private Integer declarationIid;
+	private String residenceId;//户籍所在地区
+	private String presidenceId;//户籍所在地市
+	private String gpresidenceId;//户籍所在地省
+	private String residenceDetail;//户籍所在地详情
+	private String livingAreaId;//常住地区
+	private String plivingAreaId;//常住地市
+	private String gplivingAreaId;//常住地省
+	private String livingAreaDetail;//常住地详址
+	private Date loginTime;//最后一次登陆时间
+	private String loginIp;//最后一次登录IP
 	
 	
 	public ComplatCorporation() {
@@ -409,7 +421,135 @@ public class ComplatCorporation implements java.io.Serializable{
 		this.orgreNamePic = orgreNamePic;
 	}
 
-	
+	@Column(name = "OPERSIGN")
+	public Integer getOperSign() {
+		return operSign;
+	}
+
+
+	public void setOperSign(Integer operSign) {
+		this.operSign = operSign;
+	}
+
+	@Column(name = "SYNSTATE")
+	public Integer getSynState() {
+		return synState;
+	}
+
+
+	public void setSynState(Integer synState) {
+		this.synState = synState;
+	}
+
+	@Column(name = "DECLARATIONIID")
+	public Integer getDeclarationIid() {
+		return declarationIid;
+	}
+
+
+	public void setDeclarationIid(Integer declarationIid) {
+		this.declarationIid = declarationIid;
+	}
+
+	@Column(name = "RESIDENCEID")
+	public String getResidenceId() {
+		return residenceId;
+	}
+
+
+	public void setResidenceId(String residenceId) {
+		this.residenceId = residenceId;
+	}
+
+	@Column(name = "PRESIDENCEID")
+	public String getPresidenceId() {
+		return presidenceId;
+	}
+
+
+	public void setPresidenceId(String presidenceId) {
+		this.presidenceId = presidenceId;
+	}
+
+	@Column(name = "GPRESIDENCEID")
+	public String getGpresidenceId() {
+		return gpresidenceId;
+	}
+
+
+	public void setGpresidenceId(String gpresidenceId) {
+		this.gpresidenceId = gpresidenceId;
+	}
+
+	@Column(name = "RESIDENCEDETAIL")
+	public String getResidenceDetail() {
+		return residenceDetail;
+	}
+
+
+	public void setResidenceDetail(String residenceDetail) {
+		this.residenceDetail = residenceDetail;
+	}
+
+	@Column(name = "LIVINGAREAID")
+	public String getLivingAreaId() {
+		return livingAreaId;
+	}
+
+
+	public void setLivingAreaId(String livingAreaId) {
+		this.livingAreaId = livingAreaId;
+	}
+
+	@Column(name = "PLIVINGAREAID")
+	public String getPlivingAreaId() {
+		return plivingAreaId;
+	}
+
+
+	public void setPlivingAreaId(String plivingAreaId) {
+		this.plivingAreaId = plivingAreaId;
+	}
+
+	@Column(name = "GPLIVINGAREAID")
+	public String getGplivingAreaId() {
+		return gplivingAreaId;
+	}
+
+
+	public void setGplivingAreaId(String gplivingAreaId) {
+		this.gplivingAreaId = gplivingAreaId;
+	}
+
+	@Column(name = "LIVINGAREADETAIL")
+	public String getLivingAreaDetail() {
+		return livingAreaDetail;
+	}
+
+
+	public void setLivingAreaDetail(String livingAreaDetail) {
+		this.livingAreaDetail = livingAreaDetail;
+	}
+
+	@Column(name = "LOGINTIME")
+	public Date getLoginTime() {
+		return loginTime;
+	}
+
+
+	public void setLoginTime(Date loginTime) {
+		this.loginTime = loginTime;
+	}
+
+	@Column(name = "LOGINIP")
+	public String getLoginIp() {
+		return loginIp;
+	}
+
+
+	public void setLoginIp(String loginIp) {
+		this.loginIp = loginIp;
+	}
 	
 
 }
