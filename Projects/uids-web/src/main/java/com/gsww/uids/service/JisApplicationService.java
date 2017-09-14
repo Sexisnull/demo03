@@ -1,9 +1,7 @@
 package com.gsww.uids.service;
 
-<<<<<<< HEAD
 import java.util.List;
 import java.util.Map;
-=======
 
 import java.util.List;
 import java.util.Map;
@@ -14,18 +12,13 @@ import org.springframework.data.jpa.domain.Specification;
 
 import com.gsww.uids.entity.JisApplication;
 
->>>>>>> c7e81aa39defc07a6e9db6fade5afb87be69e0dd
 /**
  * 应用表service接口
  * @author zhanglei
  *
  */
 public interface JisApplicationService {
-<<<<<<< HEAD
-	public List<Map<String, Object>> getJisApplicationList() throws Exception; 
 
-=======
-	
 	/**
 	 * 保存或修改对象
 	 * @param jisApplication
@@ -85,5 +78,4 @@ public interface JisApplicationService {
 	 * @throws Exception
 	 */
 	public List<Map<String, Object>> getJisApplicationList() throws Exception;
->>>>>>> c7e81aa39defc07a6e9db6fade5afb87be69e0dd
 }
