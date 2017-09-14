@@ -16,27 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.gsww.uids.dao.ComplatGroupDao;
 import com.gsww.uids.entity.ComplatGroup;
 import com.gsww.uids.service.ComplatGroupService;
-<<<<<<< HEAD
-=======
-import java.util.ArrayList;
-
-import net.sf.json.JSONObject;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
-
-import com.gsww.jup.dao.sys.SysAccountDao;
-import com.gsww.jup.dao.sys.SysRoleAcctRelDao;
-import com.gsww.jup.dao.sys.SysRoleDao;
-import com.gsww.jup.entity.sys.SysAccount;
-import com.gsww.jup.entity.sys.SysDepartment;
-import com.gsww.jup.entity.sys.SysMenu;
-import com.gsww.jup.entity.sys.SysRole;
-import com.gsww.jup.entity.sys.SysRoleAcctRel;
-import com.gsww.jup.util.MD5;
->>>>>>> 003ae8ee6a34c0d35cea8fdeb0d0edf12d34da97
 
 @Transactional
 @Service("complatGroupService")
