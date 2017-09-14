@@ -1,14 +1,54 @@
 <%@ page language="java" pageEncoding="utf-8"%>
 <!doctype html>
 <html>
-	<%@ include file="/include/meta.jsp"%>
-	<head>
-		<meta charset="utf-8" />
-		<title></title>
-		<script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgcore.lhgdialog.min.js"></script>
-		<script type="text/javascript">
-		
-		/**搜索表单校验**/
+<%@ include file="/include/meta.jsp"%>
+<head>
+<meta charset="utf-8" />
+<title>同步历史数据</title>
+<script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgcore.lhgdialog.min.js"></script>
+<script type="text/javascript">
+	
+$(function(){	
+    
+    /***/
+    
+    /**操作类型下拉列表初始化*/
+	var operatetypes = ["新增机构","修改机构","删除机构","新增用户","修改用户","删除用户","启用用户","停用用户"];
+	var operatetype = $("#operatetypeSearch");
+	for(var i=0;i<operatetypes.length;i++){
+		operatetype.append("<option value='"+operatetypes[i]+"'>"+operatetypes[i]+"</option>");
+	}
+	
+	/**同步结果下拉列表初始化,数据库读值，此处暂时写固定值*/
+	var optresults = ["未同步","同步成功","同步失败","网络不通"];
+	var optresult = $("#optresultSearch");
+	for(var i=0;i<optresults.length;i++){
+	    var value = i+1;
+		optresult.append("<option value='"+value+"'>"+optresults[i]+"</option>");
+	}
+	
+	var oldOptresult = $("#oldOptresultSearch").val();
+	if(oldOptresult!=null && oldOptresult!=""){
+	    selectItemByValue(document.getElementById("optresultSearch"),oldOptresult);
+	}
+	
+    var oldOperatetype = $("#oldOperatetypeSearch").val();
+    if(oldOperatetype!=null && oldOperatetype !=""){
+        selectItemByValue(document.getElementById("operatetypeSearch"),oldOperatetype);
+    }
+});
+
+/**根据值选中下拉列表*/
+    function selectItemByValue(objSelect,objItemText) { 
+        for(var i=1;i<objSelect.options.length+1;i++) {  
+            if(objSelect.options[i].value == objItemText) {  
+                objSelect.options[i].selected = true;  
+                break;  
+            }  
+        }  
+    } 
+
+/**搜索表单校验**/
 	function checkSubmitForm() {
 		var objectnameSearch = $("#objectnameSearch").val();
 		if (objectnameSearch == '' || isChinaOrNumbOrLett(objectnameSearch)) {
@@ -17,20 +57,18 @@
 			$.validator.errorShow($("#objectNameSearch"), '只能包括中英文、数字、@和下划线');
 		}
 	}
-	
 	/**删除单条信息**/
-
-function delSingle(obj){
+    function delSingle(obj){
 		var singleId=$(obj).parent().parent().parent().parent().find('td:first').find('input').attr('id'); 
 		var objectId=$(".objectId").val();
 		$.dialog.confirm('您确认要删除吗？',function(){
-		window.location.href="${ctx}/uids/jisCurDelete?objectId="+singleId+"&objectId="+objectId;
-	});
-}
-/**删除多条**/
-function delSome(){
+		    window.location.href="${ctx}/uids/jisCurDelete?objectId="+singleId+"&objectId="+objectId;
+		});
+	}
+    /**删除多条**/
+    function delSome(){
 	var iid=$(".objectId").val();
-if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checked').length!=0){
+	if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checked').length!=0){
 		$.dialog.confirm('您确认要删除吗？',function(){
 			var ids = "";
 			$('.list-table tbody input[type=checkbox]').each(function(i, o) {
@@ -42,12 +80,12 @@ if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checke
 		});
 		
 	}else{
-		$.dialog.confirm('请您至少选择一条数据',function(){
-			return null;
-		});
+	$.dialog.confirm('请您至少选择一条数据',function(){
+	    return null;
+	    });
 	}
 }
-		</script>
+</script>
 	</head>
 	<body>
 	
@@ -66,62 +104,42 @@ if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checke
 					同步列表
 				</li>
 			</ol>
-	
 			<div class="list">
-				
 				<div class="list-topBar">
-			
 					 <div class="search-content">
 					 <form id="form1" name="pageForm" action="${ctx}/uids/jisCurList" method="get">
 					     <div>
 							<table class="">
 								<tr>
-									<th>
-										操作类型：
-									</th>
+									<th>操作类型：</th>
 									<td width=130px>
-						                  <select id="operateType" name="operateType"  class="select right" >
-						          	  		<option value="0">------请选择------</option>
-							          		<option value="新增用户">新增用户</option>
-							          		<option value="新增机构">新增机构</option>
-							          		<option value="修改用户">删除用户</option>
-							          		<option value="修改机构">删除机构</option>
-							            	        	</option>		          		
+									    <input id="oldOperatetypeSearch" type="hidden" value="${sParams['EQ_operatetype']}">
+						                <select id="operatetypeSearch" name="search_EQ_operatetype" class="select right">
+						                <option value="">请选择</option>
 						          		</select>
 									</td>
 					
-									<th>
-										同步结果：
-									</th>
+									<th>同步结果：</th>
 									<td width=130px>
-									<select id="optresult" name="optresult"  class="select right" >
-	          	  		               <option value="0">------请选择------</option>
-		          		               <option value="未同步">未同步</option>
-		          		               <option value="同步失败">同步失败</option>
-		          		               <option value="同步成功">同步成功</option>
-		          		               <option value="网络不通">网络不通</option>
+									<input id="oldOptresultSearch" type="hidden" value="${sParams['EQ_optresult']}">
+									<select id="optresultSearch" name="search_EQ_optresult" class="select right">
+	          	  		               <option value="">请选择</option>
 		            	        	</option>		          		
 	          		               </select>
 									</td>
-							 
-						         <th>
-										操作时间：
-									</th>
-									<td width=150px>
-										<input type="text" id="jisNameSearch" placeholder="时间"
-											 onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})"
-											/>
+						            <th>操作时间：</th>
+									<td width=120px>
+										<input type="text" id="synctimeSearch" name="synctime" placeholder="时间" value="${sParams['LIKE_synctime']}" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})"/>
+									    <!-- search_LIKE_ -->
 									</td>
-					
 						            <th>
 										操作对象名称：
 									</th>
-										<td width=120px>
-								<input type="text" placeholder="操作对象名称" id="objectnameSearch" 
-								name="search_LIKE_objectname"  value="${sParams['LIKE_objectname']}" class="input"/>
-							</td>
-							<td class="btn-group"> <a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a></td>
-								
+									<td width=150px>
+									<input type="text" id="objectnameSearch" name="search_LIKE_objectname" placeholder="操作对象名称" value="${sParams['LIKE_objectname']}" class="input"/>
+									</td>
+							        <td class="btn-group">
+							          <a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a>
 									</td>
 								</tr>
 							</table>

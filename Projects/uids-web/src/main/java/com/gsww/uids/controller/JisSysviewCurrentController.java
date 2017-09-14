@@ -1,6 +1,10 @@
 package com.gsww.uids.controller;
 
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,19 +29,17 @@ import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
 import com.gsww.jup.controller.sys.SysAccountController;
+
 import com.gsww.jup.entity.sys.SysAccount;
 import com.gsww.jup.entity.sys.SysOperator;
 import com.gsww.jup.entity.sys.SysParaType;
 import com.gsww.jup.entity.sys.SysRole;
 
 import com.gsww.jup.service.sys.SysParaService;
-import com.gsww.jup.service.sys.SysParaTypeService;
 import com.gsww.jup.util.PageUtils;
-
 import com.gsww.uids.entity.JisSysviewCurrent;
 import com.gsww.uids.service.JisApplicationService;
 import com.gsww.uids.service.JisSysviewCurrentService;
-
 
 @Controller
 @RequestMapping(value = "/uids")
@@ -49,6 +51,7 @@ public class JisSysviewCurrentController extends BaseController{
 	private JisApplicationService jisApplicationService;
 	@Autowired
 	private SysParaService sysParaService;
+	
 	@RequestMapping(value="/jisCurList",method = RequestMethod.GET)
 	public String jisCurList(@RequestParam(value = "page", defaultValue = "1") int pageNo,
 			@RequestParam(value = "page.size", defaultValue = PAGE_SIZE) int pageSize,
@@ -57,30 +60,37 @@ public class JisSysviewCurrentController extends BaseController{
 			@RequestParam(value = "findNowPage", defaultValue = "false") String findNowPage,
 			Model model,ServletRequest request,HttpServletRequest hrequest){
 		try{
+			//HibernateDao hibernateDao = new HibernateDao(entityManagerFactory,JisSysviewCurrent.class);
 			//初始化分页数据
 			PageUtils pageUtils=new PageUtils(pageNo,pageSize,orderField,orderSort);
 			PageRequest pageRequest=super.buildPageRequest(hrequest,pageUtils,JisSysviewCurrent.class,findNowPage);
 			
 			//搜索属性初始化
-			Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
-			Specification<JisSysviewCurrent>  spec=super.toSpecification(searchParams, JisSysviewCurrent.class);
+			String synctime = hrequest.getParameter("synctime");
 			
+			Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
+			if(synctime!= null &&!"".equals(synctime)){
+				DateFormat format = new SimpleDateFormat("yyyy-MM-dd");  
+				Date date = format.parse(synctime);  
+				searchParams.put("LIKE_synctime", new Timestamp(date.getTime()));
+			}
+			Specification<JisSysviewCurrent>  spec=super.toSpecification(searchParams, JisSysviewCurrent.class);
+			//List<PropertyFilter> param = HibernateUtils.buildPropertyFilters(hrequest, "LIKE_D_synctime");
+			//List<JisSysviewCurrent> jisSysviewCurrent= hibernateDao.find(param);
 			
 			//map放入
 			List<Map<String, Object>> applicationList =new ArrayList<Map<String,Object>>() ;
 			List<Map<String, Object>> paraList =new ArrayList<Map<String,Object>>() ;
 			Map<Integer,Object> applicationMap = new HashMap<Integer,Object>();
-			Map<String,Object> paraMap = new HashMap<String,Object>();
+			Map<Integer,Object> paraMap = new HashMap<Integer,Object>();
 			applicationList=jisApplicationService.getJisApplicationList();
 			paraList=sysParaService.getParaList();
 			for(Map<String,Object> application:applicationList){
 				applicationMap.put((Integer) application.get("iid"), application.get("name"));
 			}			
 			for(Map<String,Object> para:paraList){
-				paraMap.put(  (String) para.get("PARA_CODE"),  para.get("PARA_NAME"));
-				
+				paraMap.put(Integer.parseInt((String) para.get("PARA_CODE")),  para.get("PARA_NAME"));
 			}
-			
 		
 			//分页
 			Page<JisSysviewCurrent> pageInfo = jisSysviewCurrentService.getJisPage(spec,pageRequest);
