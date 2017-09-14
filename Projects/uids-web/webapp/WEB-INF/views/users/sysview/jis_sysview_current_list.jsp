@@ -84,9 +84,28 @@ $(function(){
 	    return null;
 	    });
 	}
+	
+	function sync(){
+	}
 }
 </script>
+<<<<<<< HEAD
 	</head>
+=======
+<style type="text/css">
+.select{
+font-size: 12px;
+border: 1px solid #dddddd;
+padding: 3px 8px;
+height: 30px;
+width: 200px;
+}
+.advanced-content input[type="text"]{
+width: 182px !important;
+}
+</style>
+</head>
+>>>>>>> c7e81aa39defc07a6e9db6fade5afb87be69e0dd
 	<body>
 	
 		<div class="list-warper">
@@ -207,6 +226,7 @@ $(function(){
 								<td>
 									${jisCurrent.objectname}
 								</td>
+<<<<<<< HEAD
 								<td style="word-break: break-all; word-wrap: break-word;">
 									${jisCurrent.codeid}
 								</td>
@@ -224,8 +244,47 @@ $(function(){
 									<div class="list-longtext">
 										${jisCurrent.synctime}
 									</div>
+=======
+								<td class="btn-group"> <a id="advanced-btn" class="btnSearch" >高级搜索</a></td>
+							</tr>
+						</table>
+				</form>
+				<form id="form2" name="form2" action="${ctx}/uids/jisCurList" >
+				        <table class="advanced-content" style="display: none;">
+							<tr>
+				                <th>所属应用：</th>
+								<td><input id="oldAppSearch" type="hidden" value="${sParams['EQ_appid']}">
+									<select id="appSearch" name="search_EQ_appid" class="select">
+										<option value="">--请选择--</option>
+									</select>
+								</td>
+
+								<th>操作类型：</th>
+								<td>
+									<input id="oldOperatetypeSearch" type="hidden" value="${sParams['EQ_operatetype']}">
+									<select id="operatetypeSearch" name="search_EQ_operatetype" class="select">
+										<option value="">--请选择--</option>
+									</select>
+								</td>
+
+								<th>同步结果：</th>
+								<td>
+									<input id="oldOptresultSearch" type="hidden" value="${sParams['EQ_optresult']}">
+									<select id="optresultSearch" name="search_EQ_optresult" class="select">
+										<option value="">--请选择--</option>
+									</select>
+								</td>
+							</tr>
+							<tr height="10px"></tr>
+							<tr>
+							    <th>操作时间：</th>
+								<td>
+									<input type="text" id="synctimeSearch" name="search_LIKE_synctime" placeholder="时间" value="${sParams['LIKE_synctime']}" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+									<!-- search_LIKE_ -->
+>>>>>>> c7e81aa39defc07a6e9db6fade5afb87be69e0dd
 								</td>
 								</td>
+<<<<<<< HEAD
 								<td class="alignL" style="text-align: center">
 									<div class="list-longtext">
 										${paraMap[jisCurrent.optresult]}
@@ -248,6 +307,118 @@ $(function(){
 			</div>
 			<!-- 分页 -->
 			<tags:pagination page="${pageInfo}" paginationSize="10" />
+=======
+								<th></th>
+								<td >
+								<!-- style="text-align:right;padding-right: 6%" -->
+								    <a class="btnSearch" id="advanced-search-btn">搜索</a>
+								</td>
+							</tr>
+						</table>
+				</form>
+			</div>
+			
+			<!-- 搜索内容结束 -->
+			<!-- 操作按钮开始 -->
+			<div class="list-toolbar">
+				<gsww:opTag menuId="297e40e05e5f7a4f015e5f93f7b20002" tabIndex="2"
+					operatorType="1"></gsww:opTag>
+			</div>
+			<!-- 操作按钮结束 -->
+
+		</div>
+		<!-- 提示信息开始 -->
+		<div class="form-alert;">
+			<tags:message msgMap="${msgMap}"></tags:message>
+		</div>
+		<!-- 提示信息结束 -->
+		<!-- 列表开始 -->
+		<table cellpadding="0" cellspacing="0" border="0" width="100%"
+			class="list-table">
+			<thead>
+				<tr>
+					<th width="2">
+						<div class="label">
+							<i class="check_btn check_all"></i>
+							<input type="checkbox" class="check_btn" style="display: none;" />
+						</div>
+					</th>
+					<th width="15%">
+						操作对象名称
+					</th>
+					<th width="15%">
+						机构编码
+					</th>
+					<th width="10%" class="alignL" style="text-align: center">
+						操作类型
+					</th>
+					<th width="15%" style="text-align: center">
+						应用名称
+					</th>
+					<th width="20%" style="text-align: center">
+						创建时间
+					</th>
+
+					<th width="10%" style="text-align: center">
+						同步结果
+					</th>
+					<th width="12%" style="text-align: center">
+						操作
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<c:forEach items="${pageInfo.content}" var="jisCurrent">
+					<tr>
+						<td>
+							<div class="label">
+								<i class="check_btn"></i>
+								<input id="${jisCurrent.iid}" value="${jisCurrent.iid}"
+									type="checkbox" class="check_btn" style="display: none;" />
+							</div>
+						</td>
+						<td>
+							${jisCurrent.objectname}
+						</td>
+						<td style="word-break: break-all; word-wrap: break-word;">
+							${jisCurrent.codeid}
+						</td>
+						<td class="alignL" style="text-align: center">
+							<div class="list-longtext">
+								${jisCurrent.operatetype}
+							</div>
+						</td>
+						<td class="alignL" style="text-align: center">
+							<div class="list-longtext">
+								${applicationMap[jisCurrent.appid]}
+							</div>
+						</td>
+						<td class="alignL" style="text-align: center">
+							<div class="list-longtext">
+								${jisCurrent.synctime}
+							</div>
+						</td>
+						</td>
+						<td class="alignL" style="text-align: center">
+							<div class="list-longtext">
+								${paraMap[jisCurrent.optresult]}
+							</div>
+						</td>
+
+						<td class="position-content">
+							<gsww:opTag menuId="297e40e05e5f7a4f015e5f93f7b20002"
+								tabIndex="1" operatorType="2"></gsww:opTag>
+						</td>
+					</tr>
+				</c:forEach>
+
+			</tbody>
+		</table>
+		<!-- 列表结束 -->
+		</div>
+		<!-- 分页 -->
+		<tags:pagination page="${pageInfo}" paginationSize="5" />
+>>>>>>> c7e81aa39defc07a6e9db6fade5afb87be69e0dd
 		</div>
 	</body>
 </html>

@@ -116,7 +116,7 @@ public class JisSysviewCurrentController extends BaseController{
 	 */
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/jisCurDelete", method = RequestMethod.GET)
-	public ModelAndView jisCurDelete( String objectId, HttpServletRequest request,HttpServletResponse response)  throws Exception {
+	public ModelAndView jisCurDelete(String objectId, HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		try {
 			String[] para=objectId.split(",");
 			JisSysviewCurrent jisCurrent = null;
@@ -134,4 +134,40 @@ public class JisSysviewCurrentController extends BaseController{
 		}
 		
 	}
+<<<<<<< HEAD
+=======
+	
+	@RequestMapping(value="/getApplications",method = RequestMethod.GET)
+	@ResponseBody
+	public List<Map<String, Object>> getApplications(){
+		List<Map<String, Object>> appMap = null;
+		try {
+			appMap = jisApplicationService.getJisApplicationList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return appMap;
+	}
+	
+	@RequestMapping(value="/getOptresult",method = RequestMethod.GET)
+	@ResponseBody
+	public List<Map<String, Object>> getOptresult(){
+		List<Map<String, Object>> paraMap = null;
+		try {
+			paraMap = sysParaService.getParaList("OPT_RESULT");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return paraMap;
+	}
+	
+	/*@RequestMapping(value="syncSysview")
+	public ModelAndView syncSysview(int iid, HttpServletRequest request,HttpServletResponse response){
+		//String[] iids = iid.split(",");
+		for(String id:iids){
+			jisSysviewCurrentService.findByIid(iid);
+		}
+		return null;
+	}*/
+>>>>>>> c7e81aa39defc07a6e9db6fade5afb87be69e0dd
 }
