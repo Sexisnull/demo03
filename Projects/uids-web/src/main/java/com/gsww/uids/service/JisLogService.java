@@ -1,10 +1,12 @@
 package com.gsww.uids.service;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
+import java.util.List;
+import java.util.Map;
 
-import com.gsww.uids.entity.JisLog;
+import org.springframework.data.domain.Page;
+
+import com.gsww.uids.entity.CountUser;
+
 
 
 /**
@@ -20,5 +22,6 @@ import com.gsww.uids.entity.JisLog;
  */
 public interface JisLogService {
 	
-	public Page<JisLog> getJisLogPage(Specification<JisLog> spec, PageRequest pageRequest);
+	public Page<Map<String,String>> getJisLogPage(int pageNumber,int pageSize,List<List<String>> searchCodition) throws Exception;
+
 }

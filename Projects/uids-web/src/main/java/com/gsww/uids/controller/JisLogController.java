@@ -1,5 +1,9 @@
 package com.gsww.uids.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletRequest;
@@ -15,11 +19,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.uids.entity.ComplatUser;
+import com.gsww.uids.entity.CountUser;
 import com.gsww.uids.entity.JisLog;
 import com.gsww.uids.service.ComplatUserService;
 import com.gsww.uids.service.JisLogService;
@@ -45,31 +51,54 @@ public class JisLogController extends BaseController{
 	@Autowired
 	private JisLogService jisLogService;
 	
+		
+	public JisLogService getJisLogService() {
+		return jisLogService;
+	}
+
+	public void setJisLogService(JisLogService jisLogService) {
+		this.jisLogService = jisLogService;
+	}
+
 	@RequestMapping(value="/countUser",method = RequestMethod.GET)
 	public String countUser(@RequestParam(value = "page", defaultValue = "1") int pageNo,
-			@RequestParam(value = "page.size", defaultValue = PAGE_SIZE) int pageSize,
-			@RequestParam(value = "order.field", defaultValue = "operateTime") String orderField,
-			@RequestParam(value = "order.sort", defaultValue = "DESC") String orderSort,
-			@RequestParam(value = "findNowPage", defaultValue = "false") String findNowPage,
-			Model model,ServletRequest request,HttpServletRequest hrequest){
-		try{			
-			//初始化分页数据
-			PageUtils pageUtils=new PageUtils(pageNo,pageSize,orderField,orderSort);
-			PageRequest pageRequest=super.buildPageRequest(hrequest,pageUtils,JisLog.class,findNowPage);
-			
-			//搜索属性初始化
-			Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
-			Specification<JisLog>  spec=super.toNewSpecification(searchParams, JisLog.class);
-			
-			//分页
-			Page<JisLog> pageInfo = jisLogService.getJisLogPage(spec, pageRequest);
-			model.addAttribute("pageInfo", pageInfo);									
+			@RequestParam(value = "page.size", defaultValue = "10") int pageSize,
+			Model model,ServletRequest request){
+		try{	
+			Page<Map<String,String>> pageInfo = jisLogService.getJisLogPage(pageNo, pageSize, this.getSearchCondition(request));
+			System.out.println("pageInfo:"+pageInfo);
+			model.addAttribute("pageInfo",pageInfo);
 		}catch(Exception ex){
 			ex.printStackTrace();
 			logger.error("列表打开失败："+ex.getMessage());
 			returnMsg("error", "列表打开失败", (HttpServletRequest) request);
-			return "redirect:/complat/countUser";
+			return "redirect:/jisLog/countUserList";
 		}
-		return "users/complat/countUser";
+		return "users/jisLog/countUser_List";
+	}
+	
+	/**
+	 * 
+	 * 拼装查询条件
+	 */
+	public List<String> searchConditionInstal(String name,String value,String type){
+		
+		List<String> conditionList = new ArrayList<String>();
+		conditionList.add(name);
+		conditionList.add(value);
+		conditionList.add(type);
+		return conditionList;
+	}
+	
+	/**
+	 * 获取查询条件
+	 * @param request
+	 * @return
+	 */
+	public List<List<String>> getSearchCondition(ServletRequest request){
+		
+		List<List<String>> searchList = new ArrayList<List<String>>();
+		
+		return searchList;
 	}
 }
