@@ -50,9 +50,8 @@ function checkSubmitForm() {
 										操作对象名：
 									</th>
 									<td width="20%">
-										<input type="text" id="objectnameSearch" placeholder="操作对象名"
 										<input type="text" placeholder="操作对象名称" id="objectnameSearch" name="search_LIKE_objectname"  value="${sParams['LIKE_objectname']}" class="input"/>
-									</td>
+									</td> 
 									<td class="btn-group">
 										<a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a>
 									</td>
@@ -166,4 +165,3 @@ function checkSubmitForm() {
 		</div>
 	</body>
 </html>
-		
