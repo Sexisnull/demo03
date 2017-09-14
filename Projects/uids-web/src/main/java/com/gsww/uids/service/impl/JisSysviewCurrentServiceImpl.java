@@ -9,14 +9,15 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import com.gsww.uids.dao.JisSysviewCurrentDao;
 import com.gsww.uids.entity.JisSysviewCurrent;
+import com.gsww.uids.service.JisApplicationService;
 import com.gsww.uids.service.JisSysviewCurrentService;
 
 @Transactional
 @Service("jisSysviewCurrentService")
 public class JisSysviewCurrentServiceImpl implements JisSysviewCurrentService{
+	
 	@Autowired
 	private JisSysviewCurrentDao jisSysviewCurrentDao;
 	
@@ -25,15 +26,10 @@ public class JisSysviewCurrentServiceImpl implements JisSysviewCurrentService{
 		return jisSysviewCurrentDao.findAll(spec, pageRequest);
 	}
 
-	
-
 	@Override
 	public List<JisSysviewCurrent> findJisCurList() throws Exception {
 		return jisSysviewCurrentDao.findAll();
 	}
-
-	
-	
 
 	@Override
 	public void delete(JisSysviewCurrent entity) throws Exception {
@@ -42,7 +38,6 @@ public class JisSysviewCurrentServiceImpl implements JisSysviewCurrentService{
 
 	@Override
 	public JisSysviewCurrent findByIid(Integer iid) throws Exception {
-		// TODO Auto-generated method stub
 		return jisSysviewCurrentDao.findByIid(iid);
 	}
 

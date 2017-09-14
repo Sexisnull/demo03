@@ -10,7 +10,15 @@
 	
 $(function(){	
     
-    /***/
+    /**应用下拉框初始化*/
+    var appSearch = $("#appSearch");
+    $.get("${ctx}/uids/getApplications", {}, function (data) {
+        if (data != null) {
+            for(var i=0;i<data.length;i++){
+                 appSearch.append("<option value='"+data[i].iid+"'>"+data[i].name+"</option>");
+            }
+		}
+    })
     
     /**操作类型下拉列表初始化*/
 	var operatetypes = ["新增机构","修改机构","删除机构","新增用户","修改用户","删除用户","启用用户","停用用户"];
@@ -20,6 +28,11 @@ $(function(){
 	}
 	
 	/**同步结果下拉列表初始化,数据库读值，此处暂时写固定值*/
+	$.get("${ctx}/uids/getOptresult", {}, function (data) {
+        if (data != null) {
+            alert(data[0].name);
+        }
+    })
 	var optresults = ["未同步","同步成功","同步失败","网络不通"];
 	var optresult = $("#optresultSearch");
 	for(var i=0;i<optresults.length;i++){
@@ -36,6 +49,7 @@ $(function(){
     if(oldOperatetype!=null && oldOperatetype !=""){
         selectItemByValue(document.getElementById("operatetypeSearch"),oldOperatetype);
     }
+    
 });
 
 /**根据值选中下拉列表*/
@@ -111,6 +125,14 @@ $(function(){
 					     <div>
 							<table class="">
 								<tr>
+								    <th>所属应用：</th>
+									<td width=130px>
+									    <input id="oldAppSearch" type="hidden" value="${sParams['EQ_appid']}">
+						                <select id="appSearch" name="search_EQ_appid" class="select right">
+						                <option value="">请选择</option>
+						          		</select>
+									</td>
+									
 									<th>操作类型：</th>
 									<td width=130px>
 									    <input id="oldOperatetypeSearch" type="hidden" value="${sParams['EQ_operatetype']}">
