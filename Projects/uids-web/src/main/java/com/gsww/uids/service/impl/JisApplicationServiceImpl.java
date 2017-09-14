@@ -8,8 +8,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.gsww.jup.dao.sys.SysOperatorDao;
-import com.gsww.uids.dao.JisApplicationDao;
 import com.gsww.uids.service.JisApplicationService;
 @Transactional
 @Service("jisApplicationService")

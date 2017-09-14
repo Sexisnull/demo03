@@ -3,6 +3,7 @@ package com.gsww.uids.service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+
 import com.gsww.uids.entity.JisSysviewHistory;
 
 public interface JisSysviewHistoryService {

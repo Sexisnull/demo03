@@ -2,7 +2,13 @@ package com.gsww.uids.service.impl;
 
 import java.util.List;
 
+import net.sf.json.JSONObject;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,26 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.gsww.uids.dao.ComplatGroupDao;
 import com.gsww.uids.entity.ComplatGroup;
 import com.gsww.uids.service.ComplatGroupService;
-import java.util.ArrayList;
-
-import net.sf.json.JSONObject;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
-
-import com.gsww.jup.dao.sys.SysAccountDao;
-import com.gsww.jup.dao.sys.SysRoleAcctRelDao;
-import com.gsww.jup.dao.sys.SysRoleDao;
-import com.gsww.jup.dao.sys.SysUserAppsDao;
-import com.gsww.jup.entity.sys.SysAccount;
-import com.gsww.jup.entity.sys.SysDepartment;
-import com.gsww.jup.entity.sys.SysMenu;
-import com.gsww.jup.entity.sys.SysRole;
-import com.gsww.jup.entity.sys.SysRoleAcctRel;
-import com.gsww.jup.entity.sys.SysUserApps;
-import com.gsww.jup.util.MD5;
 
 @Transactional
 @Service("complatGroupService")

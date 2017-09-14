@@ -1,24 +1,22 @@
 package com.gsww.uids.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import java.util.ArrayList;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gsww.jup.ServiceException;
-
 import com.gsww.uids.dao.JisLogDao;
 import com.gsww.uids.entity.JisLog;
 import com.gsww.uids.service.JisLogService;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.jpa.domain.Specification;
 
 /**
  * <p>
@@ -162,21 +160,4 @@ public class JisLogServiceImpl implements JisLogService {
 		return null;
 	}
 
-	@Override
-	public List<Map<String, Object>> getCzlxList() throws Exception {
-
-		String sql = "select sp.PARA_CODE,sp.PARA_NAME from sys_parameter sp where sp.PARA_TYPE_ID =(select t.PARA_TYPE_ID from sys_parameter_type t where t.PARA_TYPE_NAME ='czlx' and t.PARA_TYPE_STATE !='0')";
-		List<Map<String, Object>> mapList = jdbcTemplate.queryForList(sql,
-				new Object[] {});
-		return mapList;
-
-	}
-
-	@Override
-	public List<Map<String, Object>> getMkmcList() throws Exception {
-		String sql = "select sp.PARA_CODE,sp.PARA_NAME from sys_parameter sp where sp.PARA_TYPE_ID =(select t.PARA_TYPE_ID from sys_parameter_type t where t.PARA_TYPE_NAME ='mkmc' and t.PARA_TYPE_STATE !='0')";
-		List<Map<String, Object>> mapList = jdbcTemplate.queryForList(sql,
-				new Object[] {});
-		return mapList;
-	}
 }

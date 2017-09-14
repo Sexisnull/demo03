@@ -27,11 +27,6 @@ import com.gsww.uids.entity.JisLog;
  * @author <a href=" ">zcc</a>
  * */
 public interface JisLogService {
-	/* 获取操作类型 */
-	public List<Map<String, Object>> getCzlxList() throws Exception;
-
-	/* 获取模块名称 */
-	public List<Map<String, Object>> getMkmcList() throws Exception;
 
 	public Page<Map<String, String>> getJisLogPage(int pageNumber,
 			int pageSize, List<List<String>> searchCodition) throws Exception;

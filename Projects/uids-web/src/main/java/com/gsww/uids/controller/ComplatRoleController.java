@@ -24,7 +24,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
-import com.gsww.jup.entity.sys.SysUserSession;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.jup.util.StringHelper;
 import com.gsww.uids.entity.ComplatRole;

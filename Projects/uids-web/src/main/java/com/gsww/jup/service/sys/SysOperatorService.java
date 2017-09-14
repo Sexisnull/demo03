@@ -1,10 +1,13 @@
 package com.gsww.jup.service.sys;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+
 import com.gsww.jup.entity.sys.SysOperator;
-import java.util.*;
 /**操作表接口
  * @author Administrator
  *
