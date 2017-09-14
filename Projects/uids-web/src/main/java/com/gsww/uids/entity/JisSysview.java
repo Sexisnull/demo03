@@ -23,7 +23,7 @@ public class JisSysview implements java.io.Serializable {
 	private String state;
 	private String result;
 	private Integer optresult;
-	private Timestamp synctime;
+	private String synctime;
 	private Integer appid;
 	private String codeid;
 	private String operatetype;
@@ -38,7 +38,7 @@ public class JisSysview implements java.io.Serializable {
 
 	/** full constructor */
 	public JisSysview(String objectid, String objectname, String state,
-			String result, Integer optresult, Timestamp synctime,
+			String result, Integer optresult, String synctime,
 			Integer appid, String codeid, String operatetype, Integer times,
 			String errorspec) {
 		this.objectid = objectid;
@@ -112,11 +112,11 @@ public class JisSysview implements java.io.Serializable {
 	}
 
 	@Column(name = "synctime", length = 0)
-	public Timestamp getSynctime() {
+	public String getSynctime() {
 		return this.synctime;
 	}
 
-	public void setSynctime(Timestamp synctime) {
+	public void setSynctime(String synctime) {
 		this.synctime = synctime;
 	}
 
