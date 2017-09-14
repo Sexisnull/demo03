@@ -1,6 +1,7 @@
 package com.gsww.uids.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import net.sf.json.JSONObject;
 
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +28,9 @@ public class JisApplicationServiceImpl implements JisApplicationService {
 
 	@Autowired
 	private JisApplicationDao jisApplicationDao;
+	
+	@Autowired
+	private JdbcTemplate jdbcTemplate ;
 
 	@Override
 	public JisApplication save(JisApplication entity) throws Exception {
@@ -65,5 +70,12 @@ public class JisApplicationServiceImpl implements JisApplicationService {
 		}else{
 			return null;
 		}
+	}
+	
+	@Override
+	public List<Map<String, Object>> getJisApplicationList() throws Exception {
+		String sql ="select t.iid,t.name from jis_application t";
+		List<Map<String, Object>> mapList = jdbcTemplate.queryForList(sql, new Object[]{});
+		return mapList;
 	}
 }

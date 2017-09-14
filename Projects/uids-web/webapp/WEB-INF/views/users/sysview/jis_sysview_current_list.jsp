@@ -113,10 +113,14 @@ $(function(){
 	    return null;
 	    });
 	}
+	
+	function sync(){
+	}
 }
 </script>
 <style type="text/css">
 .select{
+font-size: 12px;
 border: 1px solid #dddddd;
 padding: 3px 8px;
 height: 30px;
@@ -163,12 +167,12 @@ width: 182px !important;
 						</table>
 				</form>
 				<form id="form2" name="form2" action="${ctx}/uids/jisCurList" >
-				        <table class="advanced-content" style="display: none;border-collapse:separate; border-spacing:0px 10px;">
+				        <table class="advanced-content" style="display: none;">
 							<tr>
 				                <th>所属应用：</th>
 								<td><input id="oldAppSearch" type="hidden" value="${sParams['EQ_appid']}">
 									<select id="appSearch" name="search_EQ_appid" class="select">
-										<option value="">请选择</option>
+										<option value="">--请选择--</option>
 									</select>
 								</td>
 
@@ -176,7 +180,7 @@ width: 182px !important;
 								<td>
 									<input id="oldOperatetypeSearch" type="hidden" value="${sParams['EQ_operatetype']}">
 									<select id="operatetypeSearch" name="search_EQ_operatetype" class="select">
-										<option value="">请选择</option>
+										<option value="">--请选择--</option>
 									</select>
 								</td>
 
@@ -184,11 +188,11 @@ width: 182px !important;
 								<td>
 									<input id="oldOptresultSearch" type="hidden" value="${sParams['EQ_optresult']}">
 									<select id="optresultSearch" name="search_EQ_optresult" class="select">
-										<option value="">请选择</option>
+										<option value="">--请选择--</option>
 									</select>
 								</td>
 							</tr>
-							<tr></tr>
+							<tr height="10px"></tr>
 							<tr>
 							    <th>操作时间：</th>
 								<td>
@@ -200,7 +204,8 @@ width: 182px !important;
 									<input type="text" id="objectnameSearch" name="search_LIKE_objectname" placeholder="操作对象名称" value="${sParams['LIKE_objectname']}" class="input" />
 								</td>
 								<th></th>
-								<td style="text-align:right;padding-right: 6%">
+								<td >
+								<!-- style="text-align:right;padding-right: 6%" -->
 								    <a class="btnSearch" id="advanced-search-btn">搜索</a>
 								</td>
 							</tr>
@@ -298,11 +303,7 @@ width: 182px !important;
 						<td class="position-content">
 							<gsww:opTag menuId="297e40e05e5f7a4f015e5f93f7b20002"
 								tabIndex="1" operatorType="2"></gsww:opTag>
-
 						</td>
-
-
-
 					</tr>
 				</c:forEach>
 
@@ -311,7 +312,7 @@ width: 182px !important;
 		<!-- 列表结束 -->
 		</div>
 		<!-- 分页 -->
-		<tags:pagination page="${pageInfo}" paginationSize="10" />
+		<tags:pagination page="${pageInfo}" paginationSize="5" />
 		</div>
 	</body>
 </html>

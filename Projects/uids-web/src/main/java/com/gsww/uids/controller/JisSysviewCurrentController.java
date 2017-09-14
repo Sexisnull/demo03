@@ -103,7 +103,7 @@ public class JisSysviewCurrentController extends BaseController{
 	 */
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/jisCurDelete", method = RequestMethod.GET)
-	public ModelAndView jisCurDelete( String objectId, HttpServletRequest request,HttpServletResponse response)  throws Exception {
+	public ModelAndView jisCurDelete(String objectId, HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		try {
 			String[] para=objectId.split(",");
 			JisSysviewCurrent jisCurrent = null;
@@ -145,4 +145,13 @@ public class JisSysviewCurrentController extends BaseController{
 		}
 		return paraMap;
 	}
+	
+	/*@RequestMapping(value="syncSysview")
+	public ModelAndView syncSysview(int iid, HttpServletRequest request,HttpServletResponse response){
+		//String[] iids = iid.split(",");
+		for(String id:iids){
+			jisSysviewCurrentService.findByIid(iid);
+		}
+		return null;
+	}*/
 }

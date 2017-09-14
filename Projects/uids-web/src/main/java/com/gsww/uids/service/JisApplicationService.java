@@ -1,6 +1,9 @@
 package com.gsww.uids.service;
 
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -66,4 +69,11 @@ public interface JisApplicationService {
 	 * @throws Exception
 	 */
 	/*public List<JisApplication> findApplicationListByUser(SysUser sysUser)throws Exception;*/
+	
+	/**
+	 * 查询所有应用
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Map<String, Object>> getJisApplicationList() throws Exception;
 }
