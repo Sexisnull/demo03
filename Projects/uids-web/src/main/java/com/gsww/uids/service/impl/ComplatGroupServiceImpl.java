@@ -22,13 +22,11 @@ import org.springframework.data.jpa.domain.Specification;
 import com.gsww.jup.dao.sys.SysAccountDao;
 import com.gsww.jup.dao.sys.SysRoleAcctRelDao;
 import com.gsww.jup.dao.sys.SysRoleDao;
-import com.gsww.jup.dao.sys.SysUserAppsDao;
 import com.gsww.jup.entity.sys.SysAccount;
 import com.gsww.jup.entity.sys.SysDepartment;
 import com.gsww.jup.entity.sys.SysMenu;
 import com.gsww.jup.entity.sys.SysRole;
 import com.gsww.jup.entity.sys.SysRoleAcctRel;
-import com.gsww.jup.entity.sys.SysUserApps;
 import com.gsww.jup.util.MD5;
 
 @Transactional
