@@ -25,8 +25,7 @@ var userNameInput=$("#userName").val();
 	    stringCheck:userNameInput */
 	   },
 	   remark: {
-	    required: true,
-	    uniqueRemark:true
+	    required: true
 	   },
 	   callingType: {
 	    required: true,
@@ -98,10 +97,10 @@ $(function(){
 			$(this).removeClass('erro');
 	});
 	
-	// Ajax标识校验
-	$.uniqueValidate('uniqueRemark', '${ctx}/datacall/checkRemark', ['remark','oldRemark'], '对不起，此标识已存在');
-	/* $("#roleNames").Popup($(".ulRoleList"), { width: "auto" }); */
-	$(".icon-date-r").click(function(){ $(this).prev("input").click(); }); 
+	// Ajax重命名校验
+	/* $.uniqueValidate('uniqueLoginAccount', '${ctx}/sys/checkAccount', ['loginAccount','oldLoginAccount'], '对不起，这个账号重复了');
+	$("#roleNames").Popup($(".ulRoleList"), { width: "auto" });
+	$(".icon-date-r").click(function(){ $(this).prev("input").click(); }); */
 });
 
 </script>
@@ -142,18 +141,18 @@ $(function(){
     <div class="form-content">
     	<table class="form-table">
     		<tr>
-	        	 <th style="text-align: left;"><b class="mustbe">*</b> 请输入数据调用名称：</th>
+	        	 <th><b class="mustbe">*</b> 请输入数据调用名称：</th>
 	        	 <td>
 					<input type="text" placeholder="格式：字母、数字、下划线或中文" id="resName" name="resName" value="${jisDatacall.resName}" />
 				</td>
-				<th style="text-align: center;"><b class="mustbe">*</b> 请输入标识：</th>
+				<th><b class="mustbe">*</b> 请输入标识：</th>
 				<td>
 					<input type="text" placeholder="格式：英文名或数字且唯一" id="remark" name="remark" value="${jisDatacall.remark}" />
 					<input type="hidden" id="oldRemark" name="oldRemark" value="${jisDatacall.remark}"/>
 				</td>
 			</tr>
 			<tr>
-				<th style="text-align:left;"><b class="mustbe">*</b> 请选择调用方式：</th>
+				<th><b class="mustbe">*</b> 请选择调用方式：</th>
                 <td>
                 	<select name="callingType"  >   
 						<option value="">--请选择--</option>   
@@ -161,8 +160,12 @@ $(function(){
 						<option value="2"<c:if test="${jisDatacall.callingType==2}">selected</c:if>>RSS调用</option>
 					</select>
                 </td>
-                
-				<th style="text-align:center;"><b class="mustbe">*</b>是否验证：</th>
+                <th><b class="mustbe">*</b>请输入地址：</th>
+				<td>
+					<textarea class="textarea" name="resUrl"  >${jisDatacall.resUrl}</textarea>
+				</td>
+				<th><b class="mustbe">*</b> 是否验证：</th>
+				
 				<td>
 				
 					<c:if test="${jisDatacall.isVerification=='2'}">
@@ -179,12 +182,6 @@ $(function(){
 						<input type="radio" name="isVerification" value="1"/>是
 						<input type="radio" name="isVerification" value="2"/>否
 					</c:if>
-				</td>
-			</tr>
-			<tr>
-				<th style="text-align: left;"><b class="mustbe">*</b>请输入地址：</th>
-				<td colspan="6">
-					<textarea class="textarea" name="resUrl" style="width:884px;height:125px">${jisDatacall.resUrl}</textarea>
 				</td>
 			</tr>
 			</table>

@@ -130,11 +130,9 @@ public class SysParaServiceImpl implements SysParaService {
 	}
 
 	@Override
-	public List<Map<String, Object>> getParaList(String paraTypeName) throws Exception {
-		String sql ="select sp.PARA_CODE,sp.PARA_NAME from sys_parameter sp where " +
-				"sp.PARA_TYPE_ID =(select t.PARA_TYPE_ID from sys_parameter_type t " +
-				"where t.PARA_TYPE_NAME ='"+paraTypeName+"' and t.PARA_TYPE_STATE !='0')";
-		List<Map<String, Object>> mapList = jdbcTemplate.queryForList(sql);
+	public List<Map<String, Object>> getParaList() throws Exception {
+		String sql ="SELECT p.PARA_CODE,p.PARA_NAME from sys_parameter p where p.PARA_TYPE_ID = '8a929c355e6fa05e015e705fe9910002'";
+		List<Map<String, Object>> mapList = jdbcTemplate.queryForList(sql, new Object[]{});
 		return mapList;
 	}
 

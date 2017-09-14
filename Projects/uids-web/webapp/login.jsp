@@ -7,33 +7,21 @@
 	<head>
 		<META http-equiv="X-UA-Compatible" content="IE=9">
 		</META>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />		
 		<!-- Jquery类库 -->
-		<script type="text/javascript"
-			src="${ctx}/res/plugin/jquery/jquery-1.8.3.min.js"></script>
-		<script type="text/javascript"
-			src="${ctx}/res/plugin/jquery.poshytip/jquery.poshytip.js"></script>
-		<link rel="stylesheet"
-			href="${ctx}/res/plugin/bootstrap/2.3.2/css/bootstrap.css"
-			type="text/css"></link>
-		<link rel="stylesheet" href="${ctx}/res/skin/default/css/login.css"
-			type="text/css"></link>
-		<link rel="stylesheet" href="${ctx}/res/skin/default/css/reset.css"
-			type="text/css"></link>
-		<link rel="stylesheet"
-			href="${ctx}/res/plugin/jquery.poshytip/tip-yellow/tip-yellow.css"
-			type="text/css">
+		<script type="text/javascript" src="${ctx}/res/plugin/jquery/jquery-1.8.3.min.js"></script>
+		<script type="text/javascript" src="${ctx}/res/plugin/jquery.poshytip/jquery.poshytip.js"></script>
+		<link rel="stylesheet" href="${ctx}/res/plugin/bootstrap/2.3.2/css/bootstrap.css" type="text/css"></link>
+		<link rel="stylesheet" href="${ctx}/res/skin/default/css/login.css" type="text/css"></link>
+		<link rel="stylesheet" href="${ctx}/res/skin/default/css/reset.css" type="text/css"></link>
+		<link rel="stylesheet" href="${ctx}/res/plugin/jquery.poshytip/tip-yellow/tip-yellow.css" type="text/css">
 
 
-		<link type="text/css" rel="stylesheet"
-			href="${ctx}/res/skin/login/css/menu.css" />
+		<link type="text/css" rel="stylesheet" href="${ctx}/res/skin/login/css/menu.css" />
 		<script type="text/javascript" src="${ctx}/res/skin/login/js/menu.js"></script>
-		<link type="text/css" rel="stylesheet"
-			href="${ctx}/res/jslib/ztree/css/zTreeStyle/zTreeStyle.css" />
-		<link type="text/css" rel="stylesheet"
-			href="${ctx}/res/skin/login/css/tree.css" />
-		<script type="text/javascript"
-			src="${ctx}/res/jslib/ztree/js/jquery.ztree.all-3.5.min.js"></script>
+		<link type="text/css" rel="stylesheet" href="${ctx}/res/jslib/ztree/css/zTreeStyle/zTreeStyle.css" />
+		<link type="text/css" rel="stylesheet" href="${ctx}/res/skin/login/css/tree.css" />
+		<script type="text/javascript" src="${ctx}/res/jslib/ztree/js/jquery.ztree.all-3.5.min.js"></script>
 		<script type="text/javascript" src="${ctx}/res/skin/login/js/tree.js"></script>
 
 		<script type="text/javascript">
@@ -129,8 +117,7 @@ function resetform() {
 				<div class="row">
 					<div class="col-md-3" style="height: 20px;"></div>
 					<div class="col-md-9">
-						<form id="loginForm" action="${ctx}/login" method="post"
-							class="form-horizontal">
+						<form id="loginForm" action="${ctx}/login" method="post" class="form-horizontal">
 							<input type="hidden" name="groupid" id="groupid" value="128">
 							<div class="login-swap">
 								<fieldset>
@@ -142,8 +129,7 @@ function resetform() {
 											机构：
 										</label>
 										<div class="controls">
-											<input name="groupname" id="groupname" value="甘肃省"
-												type="text" style="cursor: pointer;" />
+											<input name="groupname" id="groupname" value="甘肃省" type="text" style="cursor: pointer;"/>
 										</div>
 									</div>
 									<div class="control-group">
@@ -151,9 +137,7 @@ function resetform() {
 											用户名：
 										</label>
 										<div class="controls">
-											<input type="text" class="input-large" id="userName"
-												name="userName" maxlength="32" placeholder="请输入用户名"
-												value="admin">
+											<input type="text" class="input-large" id="userName" name="userName" maxlength="32" placeholder="请输入用户名">
 										</div>
 									</div>
 									<div class="control-group">
@@ -161,9 +145,7 @@ function resetform() {
 											密码：
 										</label>
 										<div class="controls">
-											<input type="password" class="input-large" id="passWord"
-												name="passWord" maxlength="32" placeholder="请输入密码"
-												value="111111">
+											<input type="password" class="input-large" id="passWord" name="passWord" maxlength="32" placeholder="请输入密码">
 										</div>
 									</div>
 									<div class="control-group">
@@ -171,11 +153,8 @@ function resetform() {
 											验证码：
 										</label>
 										<div class="controls">
-											<input type="text" class="input-medium" id="authCode"
-												name="authCode" maxlength="4" placeholder="请输入验证码">
-											<img id="code_" src="kaptcha/image" alt="点击更换验证码"
-												onclick="chimg();"
-												style="width: 53px; height: 25px; cursor: pointer;" />
+											<input type="text" class="input-medium" id="authCode" name="authCode" maxlength="4" placeholder="请输入验证码">
+											<img id="code_" src="kaptcha/image" alt="点击更换验证码" onclick="chimg();" style="width: 53px; height: 25px; cursor: pointer;" />
 										</div>
 									</div>
 									<div class="control-group">
@@ -193,11 +172,8 @@ function resetform() {
 									<hr style="margin-bottom: 5px;" />
 									<div class="control-group">
 										<div class="controls">
-											<a id="btn_reset" class="btn" href="#"><i
-												class="icon-repeat"></i> 重置</a>
-											<a id="btn_submit" class="btn btn-primary" href="#"
-												onclick="login();"><i class="icon-lock icon-white"></i>
-												登录</a>
+											<a id="btn_reset" class="btn" href="#"><i class="icon-repeat"></i> 重置</a>
+											<a id="btn_submit" class="btn btn-primary" href="#" onclick="login();"><i class="icon-lock icon-white"></i> 登录</a>
 											<%--<a href="http://127.0.0.1:8081/sso-web/login">返回</a>
 			    		--%>
 										</div>

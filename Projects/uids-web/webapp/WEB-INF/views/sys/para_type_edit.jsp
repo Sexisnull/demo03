@@ -15,17 +15,15 @@ $().ready(function() {
 	   paraTypeName: {
 	    required: true,
 	    cnRangelength: [0,64],
-	    uniqueParaTypeName:true,
 	    stringCheck:this
 	   },
-	   paraTypeDesc: {
+	   	   paraTypeDesc: {
 	    required: true,
 	    cnRangelength: [0,256],
 	    stringCheck:this
 	   }
 	  }
     });
-    $.uniqueValidate('uniqueParaTypeName', '${ctx}/sys/checkParaTypeName', ['paraTypeName','oldParaTypeName'], '对不起，这个参数类型名称重复了');
 });
 </script>
 </head>
@@ -61,8 +59,7 @@ $().ready(function() {
         	<tr>
         		<th><b class="mustbe">*</b>请输入参数类型名称：</th>
 				<td>
-					<input type="text" class="input right" id="paraTypeName" name="paraTypeName" value="${sysParaType.paraTypeName}"  />
-					<input type="hidden" id="oldParaTypeName" class="input" name="oldParaTypeName" value="${sysParaType.paraTypeName}"  />
+					<input type="text" class="input right" name="paraTypeName" value="${sysParaType.paraTypeName}"  />
 				</td>
         	</tr>
         	<tr>

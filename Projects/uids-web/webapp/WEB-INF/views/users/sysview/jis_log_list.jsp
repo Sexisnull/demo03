@@ -1,5 +1,4 @@
 <%@ page language="java" pageEncoding="utf-8"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!doctype html>
 <html>
 	<%@ include file="/include/meta.jsp"%>
@@ -52,7 +51,7 @@
 				<div class="list-topBar">
 					<!-- 搜索内容开始 -->
 					<div class="search-content">
-						<form id="form1" name="pageForm" action="${ctx}/jisLog/logList"
+						<form id="form1" name="pageForm" action="${ctx}/uids/logList"
 							method="get">
 							<table class="">
 								<tr>
@@ -99,13 +98,13 @@
 							<th width="15%" class="alignL" style="text-align: center">
 								操作人
 							</th>
-							<th width="15%" style="text-align: center">
+							<th width="10%" style="text-align: center">
 								模块名称
 							</th>
-							<th width="15%" style="text-align: center">
+							<th width="10%" style="text-align: center">
 								操作类型
 							</th>
-							<th width="15%" style="text-align: center">
+							<th width="10%" style="text-align: center">
 								操作IP
 							</th>
 						</tr>
@@ -151,21 +150,12 @@
 								</td>
 								<td class="alignL" style="text-align: center">
 									<div class="list-longtext">
-
-										<c:forEach begin="0" end="${fn:length(mkmcList)}" var="idx">
-											<c:if test="${mkmcList[idx].PARA_CODE==jisLog.moduleName}">
-											${mkmcList[idx].PARA_NAME}
-											</c:if>
-										</c:forEach>
+										${jisLog.moduleName}
 									</div>
 								</td>
 								<td class="alignL" style="text-align: center">
 									<div class="list-longtext">
-										<c:forEach begin="0" end="${fn:length(czlxList)}" var="idx">
-											<c:if test="${czlxList[idx].PARA_CODE==jisLog.operateType}">
-											${czlxList[idx].PARA_NAME}
-											</c:if>
-										</c:forEach>
+										${jisLog.operateType}
 									</div>
 								</td>
 								<td class="alignL" style="text-align: center">

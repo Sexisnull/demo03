@@ -31,8 +31,8 @@ import org.springframework.util.Assert;
 import com.gsww.jup.RestrictionsUtils;
 import com.gsww.jup.util.Page;
 import com.gsww.jup.util.PropertyFilter;
-import com.gsww.jup.util.PropertyFilter.MatchType;
 import com.gsww.jup.util.ReflectionUtils;
+import com.gsww.jup.util.PropertyFilter.MatchType;
 /**
  * 封装SpringSide扩展功能的Hibernat DAO泛型基类.
  * 

@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 
+import com.gsww.jup.entity.sys.SysParaType;
 import com.gsww.uids.entity.JisSysviewCurrent;
 
 public interface JisSysviewCurrentService {

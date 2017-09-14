@@ -1,7 +1,5 @@
 package com.gsww.uids.controller;
 
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletRequest;
@@ -80,11 +78,7 @@ public class JisFieldsController extends BaseController {
 			// 分页
 			Page<JisFields> pageInfo = jisFieldsService.getJisFieldsPage(spec, pageRequest);
 			model.addAttribute("pageInfo", pageInfo);
-			
-			//设置项
-			List<JisFields> jisFieldsList = jisFieldsService.findAllJisFields();
-			model.addAttribute("jisFieldsList", jisFieldsList);
-			
+
 			// 将搜索条件编码成字符串，用于排序，分页的URL
 			model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
 			model.addAttribute("sParams", searchParams);
@@ -186,40 +180,5 @@ public class JisFieldsController extends BaseController {
 		} finally {
 			return new ModelAndView("redirect:/jis/fieldsList");
 		}
-	}
-	/**
-     * @discription   设置是否必填项 
-     * @param fieldiid
-     * @param request
-     * @param response
-     * @return
-     * @throws Exception
-	 */
-	@RequestMapping(value = "/fieldsOperate", method = RequestMethod.GET)
-	public String fieldsOperate(String fieldiid, HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		try {
-			if(fieldiid != null) {
-				String[] para = fieldiid.split(",");
-				for (int i = 0; i < para.length; i++) {
-					Integer iid = Integer.parseInt(para[i].trim());
-					JisFields jisFields = jisFieldsService.findByKey(iid);
-					jisFields.setIswrite(1);
-					jisFieldsService.save(jisFields);
-					returnMsg("success", "设置成功", request);
-				}
-			} else {
-				List<JisFields> jisFieldsList = jisFieldsService.findAllJisFields();
-				for (JisFields jisFields : jisFieldsList) {
-					jisFields.setIswrite(0);
-					jisFieldsService.save(jisFields);
-				}
-				returnMsg("success", "设置成功", request);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			returnMsg("error", "设置失败", request);
-		}
-		return "redirect:/jis/fieldsList";
 	}
 }

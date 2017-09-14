@@ -1,7 +1,5 @@
 package com.gsww.uids.service;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -42,10 +40,4 @@ public interface JisFieldsService {
 	 * @param jisFields
 	 */
 	void delete(JisFields jisFields);
-	
-	/**
-	 * @discription 查询所有用户扩展属性实体   
-	 * @return
-	 */
-	List<JisFields> findAllJisFields();
 }

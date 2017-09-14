@@ -19,13 +19,10 @@ var paraTypeId=$("#paraTypeId").val();
 	    maxlength: 32,
 	    charNo:this,
 	    uniqueParaCode:true
-	   },
-	   paraName: {
+	   },paraName: {
 	    required: true,
-	    cnRangelength: [0,64],
-	    uniqueParaName:true
-	   },
-	   paraSeq:{
+	    cnRangelength: [0,64]
+	   },paraSeq:{
 	   	digits:true,
 	    maxlength: 3
 	   }

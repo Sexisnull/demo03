@@ -23,6 +23,7 @@ import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
 import com.gsww.jup.controller.sys.SysAccountController;
+
 import com.gsww.jup.service.sys.SysParaService;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.uids.entity.JisSysview;
@@ -64,7 +65,7 @@ public class JisSysviewController extends BaseController {
 			Map<Integer, Object> applicationMap = new HashMap<Integer, Object>();
 			Map<Integer, Object> paraMap = new HashMap<Integer, Object>();
 			applicationList = jisApplicationService.getJisApplicationList();
-			paraList = sysParaService.getParaList("OPT_RESULT");
+			paraList = sysParaService.getParaList();
 			for (Map<String, Object> application : applicationList) {
 				applicationMap.put((Integer) application.get("iid"), application.get("name"));
 			}

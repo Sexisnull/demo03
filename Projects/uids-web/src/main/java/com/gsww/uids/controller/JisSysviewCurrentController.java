@@ -24,12 +24,17 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
 import com.gsww.jup.controller.sys.SysAccountController;
+
+import com.gsww.jup.entity.sys.SysAccount;
+import com.gsww.jup.entity.sys.SysOperator;
+import com.gsww.jup.entity.sys.SysParaType;
+import com.gsww.jup.entity.sys.SysRole;
+
 import com.gsww.jup.service.sys.SysParaService;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.uids.entity.JisSysviewCurrent;
@@ -55,15 +60,23 @@ public class JisSysviewCurrentController extends BaseController{
 			@RequestParam(value = "findNowPage", defaultValue = "false") String findNowPage,
 			Model model,ServletRequest request,HttpServletRequest hrequest){
 		try{
+			//HibernateDao hibernateDao = new HibernateDao(entityManagerFactory,JisSysviewCurrent.class);
 			//初始化分页数据
 			PageUtils pageUtils=new PageUtils(pageNo,pageSize,orderField,orderSort);
 			PageRequest pageRequest=super.buildPageRequest(hrequest,pageUtils,JisSysviewCurrent.class,findNowPage);
 			
 			//搜索属性初始化
-			//String synctime = hrequest.getParameter("synctime");
+			String synctime = hrequest.getParameter("synctime");
 			
 			Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
+			if(synctime!= null &&!"".equals(synctime)){
+				DateFormat format = new SimpleDateFormat("yyyy-MM-dd");  
+				Date date = format.parse(synctime);  
+				searchParams.put("LIKE_synctime", new Timestamp(date.getTime()));
+			}
 			Specification<JisSysviewCurrent>  spec=super.toSpecification(searchParams, JisSysviewCurrent.class);
+			//List<PropertyFilter> param = HibernateUtils.buildPropertyFilters(hrequest, "LIKE_D_synctime");
+			//List<JisSysviewCurrent> jisSysviewCurrent= hibernateDao.find(param);
 			
 			//map放入
 			List<Map<String, Object>> applicationList =new ArrayList<Map<String,Object>>() ;
@@ -71,7 +84,7 @@ public class JisSysviewCurrentController extends BaseController{
 			Map<Integer,Object> applicationMap = new HashMap<Integer,Object>();
 			Map<Integer,Object> paraMap = new HashMap<Integer,Object>();
 			applicationList=jisApplicationService.getJisApplicationList();
-			paraList=sysParaService.getParaList("OPT_RESULT");
+			paraList=sysParaService.getParaList();
 			for(Map<String,Object> application:applicationList){
 				applicationMap.put((Integer) application.get("iid"), application.get("name"));
 			}			
@@ -120,29 +133,5 @@ public class JisSysviewCurrentController extends BaseController{
 			return  new ModelAndView("redirect:/uids/jisCurList");
 		}
 		
-	}
-	
-	@RequestMapping(value="/getApplications",method = RequestMethod.GET)
-	@ResponseBody
-	public List<Map<String, Object>> getApplications(){
-		List<Map<String, Object>> appMap = null;
-		try {
-			appMap = jisApplicationService.getJisApplicationList();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return appMap;
-	}
-	
-	@RequestMapping(value="/getOptresult",method = RequestMethod.GET)
-	@ResponseBody
-	public List<Map<String, Object>> getOptresult(){
-		List<Map<String, Object>> paraMap = null;
-		try {
-			paraMap = sysParaService.getParaList("OPT_RESULT");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return paraMap;
 	}
 }

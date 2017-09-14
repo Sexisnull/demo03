@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
-import com.gsww.jup.service.sys.SysParaService;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.uids.entity.JisLog;
 import com.gsww.uids.service.JisLogService;
@@ -54,8 +53,6 @@ public class JisLogController extends BaseController {
 
 	@Autowired
 	private JisLogService jisLogService;
-	@Autowired
-	private SysParaService sysParaService;
 
 	public JisLogService getJisLogService() {
 		return jisLogService;
@@ -148,10 +145,6 @@ public class JisLogController extends BaseController {
 			Page<JisLog> pageInfo = jisLogService.getJisLogPage(spec,
 					pageRequest);
 			model.addAttribute("pageInfo", pageInfo);
-			// 测试获取结果
-			model.addAttribute("czlxList", sysParaService.getParaList("czlx"));
-			model.addAttribute("mkmcList", sysParaService.getParaList("mkmc"));
-
 			// 将搜索条件编码成字符串，用于排序，分页的URL
 			model.addAttribute("searchParams", Servlets
 					.encodeParameterStringWithPrefix(searchParams, "search_"));

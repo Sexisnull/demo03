@@ -3,292 +3,267 @@ package com.gsww.uids.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-
+import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * 应用实体类
- * @author Seven
- *
+ * JisApplication entity. @author MyEclipse Persistence Tools
  */
-@SuppressWarnings("serial")
 @Entity
-@Table(name = "JIS_APPLICATION")
+@Table(name = "jis_application", catalog = "uidsdx")
 public class JisApplication implements java.io.Serializable {
 
-	private Integer iid;                   //应用ID
-	private String name;                   //应用名称
-	private String mark;                   //应用标识
-	private String spec;				   //描述
-	private String encryptKey;             //密钥
-	private String icon;                   //应用图标地址
-	private Integer synUser;               //同步用户，1：同步后台、前台用户，2：只同步后台，3：不同步
-	private Integer loginType;             //登录方式，1：统一用户且单点登录，2：仅单点登录
-	private Integer userDefined;           //是否支持自定义登录帐号/密码，1：自定义帐号，2：固定帐号
-	private String allLoginIid;            //统一帐号用户名
-	private String allPwd;                 //统一帐号密码(加密)
-	private Integer encryptType;           //加密方式，1：不加密，2：MD5加密，3：MD5+base64加密
-	private Integer isSyncGroup;           //是否同步外网用户，0：不支持，1：支持
-	private Integer orderId;               //应用排序号
-	private String appUrl;                 //应用地址
-	private String ssoUrl;                 //登录地址
-	private Integer isShow;                //是否在前台显示，0：否，1：是
-	private ComplatGroup complatGroup;     //所属机构
-	private Integer transType;             //数据传送方式，1：HTTP，2：WebService
-	private Integer isLogOff;              //是否统一注销，0：否，1：是
-	private Integer isUnifyRegister;       //是否统一注册，0：否，1：是
-	private String logOffUrl;
-	private Integer netType;               //网络类型，0：外网，1：专网
-	
+	// Fields
+
+	private Integer iid;
+	private String name;
+	private String mark;
+	private String spec;
+	private Integer transtype;
+	private String encryptkey;
+	private String icon;
+	private Integer logintype;
+	private String appurl;
+	private String ssourl;
+	private Integer userdefined;
+	private String allloginiid;
+	private String allpwd;
+	private Integer encrypttype;
+	private Integer issyncgroup;
+	private Integer orderid;
+	private Integer isshow;
+	private Integer islogoff;
+	private Integer isunifyregister;
+	private String logoffurl;
+	private Integer nettype;
+
+	// Constructors
+
+	/** default constructor */
 	public JisApplication() {
-		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public JisApplication(Integer iid, String name, String mark, String spec,
-			String encryptKey, String icon,Integer synUser,Integer loginType,
-			Integer userDefined, String allLoginIid, String allPwd,
-			Integer encryptType, Integer isSyncGroup, Integer orderId,
-			String appUrl, String ssoUrl, Integer isShow, ComplatGroup complatGroup,
-			Integer transType,Integer isLogOff, Integer isUnifyRegister, 
-			String logOffUrl,Integer netType) {
-		super();
-		this.iid = iid;
+	/** full constructor */
+	public JisApplication(String name, String mark, String spec,
+			Integer transtype, String encryptkey, String icon,
+			Integer logintype, String appurl, String ssourl,
+			Integer userdefined, String allloginiid, String allpwd,
+			Integer encrypttype, Integer issyncgroup, Integer orderid,
+			Integer isshow, Integer islogoff, Integer isunifyregister,
+			String logoffurl, Integer nettype) {
 		this.name = name;
 		this.mark = mark;
 		this.spec = spec;
-		this.encryptKey = encryptKey;
+		this.transtype = transtype;
+		this.encryptkey = encryptkey;
 		this.icon = icon;
-		this.synUser = synUser;
-		this.loginType = loginType;
-		this.userDefined = userDefined;
-		this.allLoginIid = allLoginIid;
-		this.allPwd = allPwd;
-		this.encryptType = encryptType;
-		this.isSyncGroup = isSyncGroup;
-		this.orderId = orderId;
-		this.appUrl = appUrl;
-		this.ssoUrl = ssoUrl;
-		this.isShow = isShow;
-		this.complatGroup = complatGroup;
-		this.transType = transType;
-		this.isLogOff = isLogOff;
-		this.isUnifyRegister = isUnifyRegister;
-		this.logOffUrl = logOffUrl;
-		this.netType = netType;
+		this.logintype = logintype;
+		this.appurl = appurl;
+		this.ssourl = ssourl;
+		this.userdefined = userdefined;
+		this.allloginiid = allloginiid;
+		this.allpwd = allpwd;
+		this.encrypttype = encrypttype;
+		this.issyncgroup = issyncgroup;
+		this.orderid = orderid;
+		this.isshow = isshow;
+		this.islogoff = islogoff;
+		this.isunifyregister = isunifyregister;
+		this.logoffurl = logoffurl;
+		this.nettype = nettype;
 	}
 
+	// Property accessors
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "IID", unique = true, nullable = false)
+	@GeneratedValue(strategy = IDENTITY)
+	@Column(name = "iid", unique = true, nullable = false)
 	public Integer getIid() {
-		return iid;
+		return this.iid;
 	}
 
 	public void setIid(Integer iid) {
 		this.iid = iid;
 	}
 
-	@Column(name = "NAME")
+	@Column(name = "name", length = 60)
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	@Column(name = "MARK")
+	@Column(name = "mark", length = 50)
 	public String getMark() {
-		return mark;
+		return this.mark;
 	}
 
 	public void setMark(String mark) {
 		this.mark = mark;
 	}
 
-	@Column(name = "SPEC")
+	@Column(name = "spec")
 	public String getSpec() {
-		return spec;
+		return this.spec;
 	}
 
 	public void setSpec(String spec) {
 		this.spec = spec;
 	}
 
-	@Column(name = "ENCRYPTKEY")
-	public String getEncryptKey() {
-		return encryptKey;
+	@Column(name = "transtype")
+	public Integer getTranstype() {
+		return this.transtype;
 	}
 
-	public void setEncryptKey(String encryptKey) {
-		this.encryptKey = encryptKey;
+	public void setTranstype(Integer transtype) {
+		this.transtype = transtype;
 	}
 
-	@Column(name = "ICON")
+	@Column(name = "encryptkey", length = 20)
+	public String getEncryptkey() {
+		return this.encryptkey;
+	}
+
+	public void setEncryptkey(String encryptkey) {
+		this.encryptkey = encryptkey;
+	}
+
+	@Column(name = "icon")
 	public String getIcon() {
-		return icon;
+		return this.icon;
 	}
 
 	public void setIcon(String icon) {
 		this.icon = icon;
 	}
 
-	@Column(name = "SYNUSER")
-	public Integer getSynUser() {
-		return synUser;
+	@Column(name = "logintype")
+	public Integer getLogintype() {
+		return this.logintype;
 	}
 
-	public void setSynUser(Integer synUser) {
-		this.synUser = synUser;
+	public void setLogintype(Integer logintype) {
+		this.logintype = logintype;
 	}
 
-	@Column(name = "LOGINTYPE")
-	public Integer getLoginType() {
-		return loginType;
+	@Column(name = "appurl")
+	public String getAppurl() {
+		return this.appurl;
 	}
 
-	public void setLoginType(Integer loginType) {
-		this.loginType = loginType;
+	public void setAppurl(String appurl) {
+		this.appurl = appurl;
 	}
 
-	@Column(name = "USERDEFINED")
-	public Integer getUserDefined() {
-		return userDefined;
+	@Column(name = "ssourl")
+	public String getSsourl() {
+		return this.ssourl;
 	}
 
-	public void setUserDefined(Integer userDefined) {
-		this.userDefined = userDefined;
+	public void setSsourl(String ssourl) {
+		this.ssourl = ssourl;
 	}
 
-	@Column(name = "ALLLOGINIID")
-	public String getAllLoginIid() {
-		return allLoginIid;
+	@Column(name = "userdefined")
+	public Integer getUserdefined() {
+		return this.userdefined;
 	}
 
-	public void setAllLoginIid(String allLoginIid) {
-		this.allLoginIid = allLoginIid;
+	public void setUserdefined(Integer userdefined) {
+		this.userdefined = userdefined;
 	}
 
-	@Column(name = "ALLPWD")
-	public String getAllPwd() {
-		return allPwd;
+	@Column(name = "allloginiid", length = 50)
+	public String getAllloginiid() {
+		return this.allloginiid;
 	}
 
-	public void setAllPwd(String allPwd) {
-		this.allPwd = allPwd;
+	public void setAllloginiid(String allloginiid) {
+		this.allloginiid = allloginiid;
 	}
 
-	@Column(name = "ENCRYPTTYPE")
-	public Integer getEncryptType() {
-		return encryptType;
+	@Column(name = "allpwd", length = 50)
+	public String getAllpwd() {
+		return this.allpwd;
 	}
 
-	public void setEncryptType(Integer encryptType) {
-		this.encryptType = encryptType;
+	public void setAllpwd(String allpwd) {
+		this.allpwd = allpwd;
 	}
 
-	@Column(name = "ISSYNCGROUP")
-	public Integer getIsSyncGroup() {
-		return isSyncGroup;
+	@Column(name = "encrypttype")
+	public Integer getEncrypttype() {
+		return this.encrypttype;
 	}
 
-	public void setIsSyncGroup(Integer isSyncGroup) {
-		this.isSyncGroup = isSyncGroup;
+	public void setEncrypttype(Integer encrypttype) {
+		this.encrypttype = encrypttype;
 	}
 
-	@Column(name = "ORDERID")
-	public Integer getOrderId() {
-		return orderId;
+	@Column(name = "issyncgroup")
+	public Integer getIssyncgroup() {
+		return this.issyncgroup;
 	}
 
-	public void setOrderId(Integer orderId) {
-		this.orderId = orderId;
+	public void setIssyncgroup(Integer issyncgroup) {
+		this.issyncgroup = issyncgroup;
 	}
 
-	@Column(name = "APPURL")
-	public String getAppUrl() {
-		return appUrl;
+	@Column(name = "orderid")
+	public Integer getOrderid() {
+		return this.orderid;
 	}
 
-	public void setAppUrl(String appUrl) {
-		this.appUrl = appUrl;
+	public void setOrderid(Integer orderid) {
+		this.orderid = orderid;
 	}
 
-	@Column(name = "SSOURL")
-	public String getSsoUrl() {
-		return ssoUrl;
+	@Column(name = "isshow")
+	public Integer getIsshow() {
+		return this.isshow;
 	}
 
-	public void setSsoUrl(String ssoUrl) {
-		this.ssoUrl = ssoUrl;
+	public void setIsshow(Integer isshow) {
+		this.isshow = isshow;
 	}
 
-	@Column(name = "ISSHOW")
-	public Integer getIsShow() {
-		return isShow;
+	@Column(name = "islogoff")
+	public Integer getIslogoff() {
+		return this.islogoff;
 	}
 
-	@ManyToOne
-	@JoinColumn(name = "GROUPID")
-	public ComplatGroup getComplatGroup() {
-		return complatGroup;
+	public void setIslogoff(Integer islogoff) {
+		this.islogoff = islogoff;
 	}
 
-	public void setComplatGroup(ComplatGroup complatGroup) {
-		this.complatGroup = complatGroup;
+	@Column(name = "isunifyregister")
+	public Integer getIsunifyregister() {
+		return this.isunifyregister;
 	}
 
-	public void setIsShow(Integer isShow) {
-		this.isShow = isShow;
-	}
-	
-	@Column(name = "TRANSTYPE")
-	public Integer getTransType() {
-		return transType;
+	public void setIsunifyregister(Integer isunifyregister) {
+		this.isunifyregister = isunifyregister;
 	}
 
-	public void setTransType(Integer transType) {
-		this.transType = transType;
+	@Column(name = "logoffurl")
+	public String getLogoffurl() {
+		return this.logoffurl;
 	}
 
-	@Column(name = "ISLOGOFF")
-	public Integer getIsLogOff() {
-		return isLogOff;
+	public void setLogoffurl(String logoffurl) {
+		this.logoffurl = logoffurl;
 	}
 
-	public void setIsLogOff(Integer isLogOff) {
-		this.isLogOff = isLogOff;
+	@Column(name = "nettype")
+	public Integer getNettype() {
+		return this.nettype;
 	}
 
-	@Column(name = "ISUNIFYREGISTER")
-	public Integer getIsUnifyRegister() {
-		return isUnifyRegister;
+	public void setNettype(Integer nettype) {
+		this.nettype = nettype;
 	}
 
-	public void setIsUnifyRegister(Integer isUnifyRegister) {
-		this.isUnifyRegister = isUnifyRegister;
-	}
-
-	@Column(name = "LOGOFFURL")
-	public String getLogOffUrl() {
-		return logOffUrl;
-	}
-
-	public void setLogOffUrl(String logOffUrl) {
-		this.logOffUrl = logOffUrl;
-	}
-
-	@Column(name = "NETTYPE")
-	public Integer getNetType() {
-		return netType;
-	}
-
-	public void setNetType(Integer netType) {
-		this.netType = netType;
-	}
 }
