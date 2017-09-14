@@ -61,7 +61,7 @@ import com.gsww.uids.service.JisSysviewHistoryService;
 				Map<Integer,Object> applicationMap = new HashMap<Integer,Object>();
 				Map<Integer,Object> paraMap = new HashMap<Integer,Object>();
 				applicationList=jisApplicationService.getJisApplicationList();
-				paraList=sysParaService.getParaList();
+				paraList=sysParaService.getParaList("OPT_RESULT");
 				for(Map<String,Object> application:applicationList){
 					applicationMap.put((Integer) application.get("iid"), application.get("name"));
 				}			

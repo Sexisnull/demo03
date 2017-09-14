@@ -24,6 +24,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.web.Servlets;
 
@@ -84,7 +85,7 @@ public class JisSysviewCurrentController extends BaseController{
 			Map<Integer,Object> applicationMap = new HashMap<Integer,Object>();
 			Map<Integer,Object> paraMap = new HashMap<Integer,Object>();
 			applicationList=jisApplicationService.getJisApplicationList();
-			paraList=sysParaService.getParaList();
+			paraList=sysParaService.getParaList("OPT_RESULT");
 			for(Map<String,Object> application:applicationList){
 				applicationMap.put((Integer) application.get("iid"), application.get("name"));
 			}			
@@ -133,5 +134,29 @@ public class JisSysviewCurrentController extends BaseController{
 			return  new ModelAndView("redirect:/uids/jisCurList");
 		}
 		
+	}
+	
+	@RequestMapping(value="/getApplications",method = RequestMethod.GET)
+	@ResponseBody
+	public List<Map<String, Object>> getApplications(){
+		List<Map<String, Object>> appMap = null;
+		try {
+			appMap = jisApplicationService.getJisApplicationList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return appMap;
+	}
+	
+	@RequestMapping(value="/getOptresult",method = RequestMethod.GET)
+	@ResponseBody
+	public List<Map<String, Object>> getOptresult(){
+		List<Map<String, Object>> appMap = null;
+		try {
+			appMap = jisApplicationService.getJisApplicationList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return appMap;
 	}
 }
