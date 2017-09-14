@@ -13,8 +13,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- * Title: OutsideUser.java 
- * Description: 个人用户实体类
+ * Title: OutsideUser.java Description: 个人用户实体类
+ * 
  * @author yangxia
  * @created 2017年9月8日 下午7:51:33
  */
@@ -69,6 +69,10 @@ public class ComplatOutsideuser implements Serializable {
 	private String plivingAreaId; // 常住地市
 	private String gplivingAreaId; // 常住地省
 	private String livingAreaDetail;// 常住详细地
+	private Date modifyTime;// 修改时间
+	private Integer synState;
+	private Integer operSign;
+	private Integer isCellphoneVerified;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -488,14 +492,51 @@ public class ComplatOutsideuser implements Serializable {
 		this.livingAreaDetail = livingAreaDetail;
 	}
 
-	public ComplatOutsideuser(Integer iid, String uuid, String loginName, String pwd, String name, Integer age, String sex,
-			Integer enable, String degree, String pinyin, Integer papersType, String papersNumber, String description,
-			String mobile, String phone, String fax, String email, String qq, String msn, String address, String post,
-			String workUnit, String headShip, Date birthDate, Date loginTime, String loginIp, String regIp,
-			Date createTime, String regSite, Integer isAuth, Integer authState, String headPic, String bodyPic,
-			Integer isUpload, String compTel, String rejectReason, String headRenamePic, String bodyRenamePic,
-			String residenceId, String presidenceId, String gpresidenceId, String residenceDetail, String livingAreaId,
-			String plivingAreaId, String gplivingAreaId, String livingAreaDetail) {
+	@Column(name = "MODIFYTIME")
+	public Date getModifyTime() {
+		return modifyTime;
+	}
+
+	public void setModifyTime(Date modifyTime) {
+		this.modifyTime = modifyTime;
+	}
+
+	@Column(name = "SYNSTATE")
+	public Integer getSynState() {
+		return synState;
+	}
+
+	public void setSynState(Integer synState) {
+		this.synState = synState;
+	}
+
+	@Column(name = "OPERSIGN")
+	public Integer getOperSign() {
+		return operSign;
+	}
+
+	public void setOperSign(Integer operSign) {
+		this.operSign = operSign;
+	}
+
+	@Column(name = "ISCELLPHONEVERIFIED")
+	public Integer getIsCellphoneVerified() {
+		return isCellphoneVerified;
+	}
+
+	public void setIsCellphoneVerified(Integer isCellphoneVerified) {
+		this.isCellphoneVerified = isCellphoneVerified;
+	}
+
+	public ComplatOutsideuser(Integer iid, String uuid, String loginName, String pwd, String name, Integer age,
+			String sex, Integer enable, String degree, String pinyin, Integer papersType, String papersNumber,
+			String description, String mobile, String phone, String fax, String email, String qq, String msn,
+			String address, String post, String workUnit, String headShip, Date birthDate, Date loginTime,
+			String loginIp, String regIp, Date createTime, String regSite, Integer isAuth, Integer authState,
+			String headPic, String bodyPic, Integer isUpload, String compTel, String rejectReason, String headRenamePic,
+			String bodyRenamePic, String residenceId, String presidenceId, String gpresidenceId, String residenceDetail,
+			String livingAreaId, String plivingAreaId, String gplivingAreaId, String livingAreaDetail, Date modifyTime,
+			Integer synState, Integer operSign, Integer isCellphoneVerified) {
 		super();
 		this.iid = iid;
 		this.uuid = uuid;
@@ -543,6 +584,10 @@ public class ComplatOutsideuser implements Serializable {
 		this.plivingAreaId = plivingAreaId;
 		this.gplivingAreaId = gplivingAreaId;
 		this.livingAreaDetail = livingAreaDetail;
+		this.modifyTime = modifyTime;
+		this.synState = synState;
+		this.operSign = operSign;
+		this.isCellphoneVerified = isCellphoneVerified;
 	}
 
 	public ComplatOutsideuser() {

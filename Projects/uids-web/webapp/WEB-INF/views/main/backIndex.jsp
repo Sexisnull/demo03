@@ -60,7 +60,7 @@
                     <li class="speaker modify-msgs">
                     	<p>账户设置</p>
                     </li>
-                    <li class="pwd modify-pwd">
+                    <li class="pwd modify-pwd"  onclick="javascript:window.location.href='${ctx}/jisLog/countUser'">
                         <p>在线用户</p>
                     </li>
                     

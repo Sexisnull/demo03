@@ -13,7 +13,16 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * JisLog entity. @author MyEclipse Persistence Tools
+ * 
+ * <p>Copyright: Copyright (c) 2011</p>
+ * <p>公司名称 : 中国电信甘肃万维公司</p>
+ * <p>项目名称 : jup-entity</p>
+ * <p>创建时间 : 2017-09-07 上午09:46:34</p>
+ * <p>类描述 : 在线用户管理实体类        </p>
+ *
+ *
+ * @version 1.0.0
+ * @author <a href=" ">yaoxi</a>
  */
 @Entity
 @Table(name = "jis_log")
