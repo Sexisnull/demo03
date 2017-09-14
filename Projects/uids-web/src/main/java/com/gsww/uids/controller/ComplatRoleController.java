@@ -1,5 +1,6 @@
 package com.gsww.uids.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -7,6 +8,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
+import com.gsww.jup.entity.sys.SysUserSession;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.jup.util.StringHelper;
 import com.gsww.uids.entity.ComplatRole;
@@ -132,5 +135,70 @@ public class ComplatRoleController extends BaseController{
 			return  new ModelAndView("redirect:/complat/croleList");
 		}
 		
+	}
+	//账号是否被使用
+	@RequestMapping(value="/ccheckcRole", method = RequestMethod.GET)
+	public void checkRole(HttpServletRequest request,HttpServletResponse response)throws Exception {
+		try {
+			String roleNameInput=StringUtils.trim((String)request.getParameter("name"));
+			String roleNameold=StringUtils.trim((String)request.getParameter("oldRoleName"));
+			if(!roleNameInput.equals(roleNameold)){
+				List<ComplatRole> cRoleList = roleService.findByName(roleNameInput);
+				if(cRoleList!=null && cRoleList.size()>0){
+					response.getWriter().write("0");
+				}else{
+					response.getWriter().write("1");
+				}
+			}else{
+				response.getWriter().write("1");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	//获取权限弹出窗
+	@RequestMapping(value="/croleAuthorizeShow",method = RequestMethod.GET)
+	public String roleAuthorizeShow(String roleId,HttpServletRequest request,HttpServletResponse response,Model model)  throws Exception {
+		try {
+			model.addAttribute("roleId", roleId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "sys/role_authorize";
+	}
+	//获取权限树json
+	@RequestMapping(value="/croleAuthorizeList",method = RequestMethod.POST)
+	public void roleAuthorizeList(String roleId,HttpServletRequest request,HttpServletResponse response,Model model)  throws Exception {
+		try {
+			//SysUserSession sysUserSession = (SysUserSession) request.getSession().getAttribute("sysUserSession");
+			String treeJson= roleService.getAuthorizeTree(roleId);
+			response.setCharacterEncoding("UTF-8");
+			response.setHeader("Content-type", "text/html;charset=UTF-8");
+			response.getWriter().write(treeJson);
+			response.flushBuffer();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	//保存权限
+	@RequestMapping(value="/roleAuthorizeSave",method = RequestMethod.POST)
+	public void roleAuthorizeSave(String roleId,String keys,String types,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+		try {
+			response.setCharacterEncoding("UTF-8");
+			response.setHeader("Content-type", "text/html;charset=UTF-8");
+			if (roleId == null || keys == null || types == null) {
+				response.getWriter().write("error");
+			} else {
+				roleService.saveAuthorize(roleId, keys.trim(), types.trim());
+				response.getWriter().write("success");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			try {
+				response.getWriter().write("error");
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
 	}
 }

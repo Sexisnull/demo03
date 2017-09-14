@@ -4,87 +4,191 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 
 <html>
-<head>
-<META http-equiv="X-UA-Compatible" content="IE=9" > </META>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" href="${ctx}/res/plugin/bootstrap/2.3.2/css/bootstrap.css" type="text/css"></link>
-<link rel="stylesheet" href="${ctx}/res/skin/default/css/login.css" type="text/css"></link>
-<link rel="stylesheet" href="${ctx}/res/skin/default/css/reset.css" type="text/css"></link>
-<link rel="stylesheet" href="${ctx}/res/plugin/jquery.poshytip/tip-yellow/tip-yellow.css" type="text/css">
-<title>${systemMap.title }</title>
-</head>
-<body>
-	<div class="nav-bar">
-		<div class="logo-container">
-			<div class="row">
-				<div class="col-md-3">
-				<div class="header-left clearfix">
-					<div class="logo"></div>
-					<div class="logo1">
-					</div>
-					<div class="title">
-                    </div>
-				</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="main-swap">
-		<div class="container">
-			<div class="row">
-			<div class="col-md-3" style="height: 40px;"></div>
-			<div class="col-md-9">
-				<form id="loginForm" action="${ctx}/login" method="post" class="form-horizontal">
-				<div class="login-swap">
-					<fieldset>
-				    <legend>用户登录</legend>
-				    <div class="control-group">
-			    		<label class="control-label" for="inputUser">用户名：</label>
-			    		<div class="controls">
-			      			<input type="text" class="input-large" id="userName" name="userName" maxlength="32" placeholder="请输入用户名" >
-			    		</div>
-			  		</div>
-			  		<div class="control-group">
-			    		<label class="control-label" for="inputPassword">密码：</label>
-			    		<div class="controls">
-			      			<input type="password" class="input-large" id="passWord" name="passWord" maxlength="32" placeholder="请输入密码" >
-			    		</div>
-			  		</div>
-			  		<div class="control-group">
-			  			<label class="control-label">验证码：</label>
-			    		<div class="controls">
-				      		<input type="text" class="input-medium" id="authCode" name="authCode" maxlength="4" placeholder="请输入验证码">
-			    			<img id="code_" src="kaptcha/image" alt="点击更换验证码" onclick="chimg();" style="width: 53px;height: 25px;cursor: pointer;"/>
-			    		</div>
-			  		</div>
-			  		<div class="control-group">
-			  			<div class="controls">
-			    		<input type="checkbox" class="pass_box" id="rememberme" >&nbsp;<label class="checkLabel" for="rememberme">&nbsp;记住密码</label></input>
-                		<!--<input type="checkbox" class="pass_box" id="autologin" style="margin-left: 42px;">&nbsp;<label class="checkLabel" for="autologin">&nbsp;自动登录</label></input>
-			    		--></div>
-			    	</div>
-			  		<hr style="margin-bottom: 5px;"/>
-			  		<div class="control-group">
-			    		<div class="controls">
-			      		<a id="btn_reset" class="btn" href="#"><i class="icon-repeat"></i> 重置</a>
-			      		<a id="btn_submit" class="btn btn-primary" href="#" onclick="login();"><i class="icon-lock icon-white"></i> 登录</a>
-			      		<%--<a href="http://127.0.0.1:8081/sso-web/login">返回</a>
-			    		--%>
-			    		</div>
-			    	</div>
-			  		</fieldset>
-				</div>
-			    </form>
-			</div>
-			</div>
-		</div>
-	</div>
-	<div class="footer">技术支持 甘肃万维信息技术有限责任公司</div>
+	<head>
+		<META http-equiv="X-UA-Compatible" content="IE=9">
+		</META>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />		
+		<!-- Jquery类库 -->
+		<script type="text/javascript" src="${ctx}/res/plugin/jquery/jquery-1.8.3.min.js"></script>
+		<script type="text/javascript" src="${ctx}/res/plugin/jquery.poshytip/jquery.poshytip.js"></script>
+		<link rel="stylesheet" href="${ctx}/res/plugin/bootstrap/2.3.2/css/bootstrap.css" type="text/css"></link>
+		<link rel="stylesheet" href="${ctx}/res/skin/default/css/login.css" type="text/css"></link>
+		<link rel="stylesheet" href="${ctx}/res/skin/default/css/reset.css" type="text/css"></link>
+		<link rel="stylesheet" href="${ctx}/res/plugin/jquery.poshytip/tip-yellow/tip-yellow.css" type="text/css">
 
-<!-- Jquery类库 -->
-<script type="text/javascript" src="${ctx}/res/plugin/jquery/jquery-1.8.3.min.js"></script>
-<script type="text/javascript" src="${ctx}/res/plugin/jquery.poshytip/jquery.poshytip.js"></script>
-<script type="text/javascript">
+
+		<link type="text/css" rel="stylesheet" href="${ctx}/res/skin/login/css/menu.css" />
+		<script type="text/javascript" src="${ctx}/res/skin/login/js/menu.js"></script>
+		<link type="text/css" rel="stylesheet" href="${ctx}/res/jslib/ztree/css/zTreeStyle/zTreeStyle.css" />
+		<link type="text/css" rel="stylesheet" href="${ctx}/res/skin/login/css/tree.css" />
+		<script type="text/javascript" src="${ctx}/res/jslib/ztree/js/jquery.ztree.all-3.5.min.js"></script>
+		<script type="text/javascript" src="${ctx}/res/skin/login/js/tree.js"></script>
+
+		<script type="text/javascript">
+$(function(){
+	var groupMenu = [{"name":"单位选择","id":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
+
+	$('#groupname').menu({
+		tree : 'groupmenu',
+		height : 200,
+		init : function() {
+			setting('groupmenu', onClickGroup, onDbClickGroup, groupMenu);
+		}
+	});
+
+
+
+});
+function hideGroupMenu(){
+	$('#groupname_menu').css('display','none');
+}
+function onClickGroup(event, treeId, treeNode) {
+	$('#groupid').val(treeNode.id);
+	$('#groupname').val(treeNode.name);
+	hideGroupMenu();
+}
+function onDbClickGroup(event, treeId, treeNode) {
+	if(treeNode == null){
+		return;
+	}
+	if (treeNode.isDisabled )//根节点及失效节点双击无效
+		return;
+	$('#groupid').val(treeNode.id);
+	$('#groupname').val(treeNode.name);
+	$('#groupname_menu').fadeOut(50);
+}
+
+/**
+ *	初始化树
+ */
+function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
+	var setting = {
+		async : {
+			enable : true,
+			url : 'login/getGroup',
+			autoParam : [ "id=groupId", "isDisabled" ]
+		},
+		callback : {
+			beforeClick : beforeClick,
+			onClick : onClickFunction,
+			onDblClick : onDblClickFunction
+		}
+	};
+	console.log("-----"+treeName);
+	$("#" + treeName).tree(setting, rootNode);
+//	$("#" + treeName).tree().refreshNode('');
+}
+/**
+ *	机构选择节点点击前回调
+ */
+function beforeClick(treeId, treeNode, clickFlag) {
+	if (treeNode.isDisabled)
+		return false;
+	return (treeNode.id != 0);
+}
+function resetform() {
+	$('form').find(':input').not(':button,:hidden,:submit,:reset').val('');
+}
+
+
+
+</script>
+
+		<title>${systemMap.title }</title>
+	</head>
+	<body>
+		<div class="nav-bar">
+			<div class="logo-container">
+				<div class="row">
+					<div class="col-md-3">
+						<div class="header-left clearfix">
+							<div class="logo"></div>
+							<div class="logo1">
+							</div>
+							<div class="title">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="main-swap">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-3" style="height: 20px;"></div>
+					<div class="col-md-9">
+						<form id="loginForm" action="${ctx}/login" method="post" class="form-horizontal">
+							<input type="hidden" name="groupid" id="groupid" value="128">
+							<div class="login-swap">
+								<fieldset>
+									<legend>
+										用户登录
+									</legend>
+									<div class="control-group">
+										<label class="control-label" for="inputUser">
+											机构：
+										</label>
+										<div class="controls">
+											<input name="groupname" id="groupname" value="甘肃省" type="text" style="cursor: pointer;"/>
+										</div>
+									</div>
+									<div class="control-group">
+										<label class="control-label" for="inputUser">
+											用户名：
+										</label>
+										<div class="controls">
+											<input type="text" class="input-large" id="userName" name="userName" maxlength="32" placeholder="请输入用户名">
+										</div>
+									</div>
+									<div class="control-group">
+										<label class="control-label" for="inputPassword">
+											密码：
+										</label>
+										<div class="controls">
+											<input type="password" class="input-large" id="passWord" name="passWord" maxlength="32" placeholder="请输入密码">
+										</div>
+									</div>
+									<div class="control-group">
+										<label class="control-label">
+											验证码：
+										</label>
+										<div class="controls">
+											<input type="text" class="input-medium" id="authCode" name="authCode" maxlength="4" placeholder="请输入验证码">
+											<img id="code_" src="kaptcha/image" alt="点击更换验证码" onclick="chimg();" style="width: 53px; height: 25px; cursor: pointer;" />
+										</div>
+									</div>
+									<div class="control-group">
+										<div class="controls">
+											<input type="checkbox" class="pass_box" id="rememberme">
+											&nbsp;
+											<label class="checkLabel" for="rememberme">
+												&nbsp;记住密码
+											</label>
+											</input>
+											<!--<input type="checkbox" class="pass_box" id="autologin" style="margin-left: 42px;">&nbsp;<label class="checkLabel" for="autologin">&nbsp;自动登录</label></input>
+			    		-->
+										</div>
+									</div>
+									<hr style="margin-bottom: 5px;" />
+									<div class="control-group">
+										<div class="controls">
+											<a id="btn_reset" class="btn" href="#"><i class="icon-repeat"></i> 重置</a>
+											<a id="btn_submit" class="btn btn-primary" href="#" onclick="login();"><i class="icon-lock icon-white"></i> 登录</a>
+											<%--<a href="http://127.0.0.1:8081/sso-web/login">返回</a>
+			    		--%>
+										</div>
+									</div>
+								</fieldset>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="footer">
+			技术支持 甘肃万维信息技术有限责任公司
+		</div>
+		<script type="text/javascript">
 	function resizeWindow() {
 		var winHeight = $(window).height();
 		var topHeight = (winHeight - 400)/2-150;
@@ -163,6 +267,7 @@
 	function login() {
 		var userName = $("#userName").val();
 		var passWord = $("#passWord").val();
+		var groupid = $("#groupid").val();
 		var authCode = $("#authCode").val();
 		var loginURL = '${ctx}/login/sysLogin';
 		var indexURL = '${ctx}/frontIndex';
@@ -182,6 +287,15 @@
 		} else {
 			$("#passWord").poshytip('hide');;
 		}
+		if (!groupid || groupid == '') {
+			$("#groupid").poshytip('update', '请选择所属机构!');
+			$("#groupid").poshytip('show');
+			$("#groupid").focus();
+			chimg();
+			return false;
+		}else{
+			$("#authCode").poshytip('hide');
+		}
 		if (!authCode || authCode == '') {
 			$("#authCode").poshytip('update', '验证码不能为空!');
 			$("#authCode").poshytip('show');
@@ -195,13 +309,14 @@
 		$.ajax({
 			type : "POST",
 			url : loginURL,
-			data : "userName=" + userName + "&passWord=" + passWord+"&kaptcha="+authCode,
+			data : "userName=" + userName + "&passWord=" + passWord+"&groupid="+groupid+"&kaptcha="+authCode,
 			dataType : "json",
 			success : function(msg) {
 				if (msg.ret == 0) {
 					if (getCookie('rememberme') == 'YES') {
 						SetCookie("userName", userName);
 						SetCookie("passWord", passWord);
+						SetCookie("groupId", groupid);
 						SetCookie("authCode", authCode);
 					}
 					window.location.href = indexURL;
@@ -297,5 +412,5 @@
 		$("#authCode").val("");
 	}
 </script>
-</body>
+	</body>
 </html>

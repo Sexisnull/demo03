@@ -11,10 +11,10 @@
 <script type="text/javascript"> 
 	$(function(){
 		//高级搜索按钮点击事件
-		$("#advanced-btn").on('click',function(){
+		$('#advanced-btn').on('click',function(){
 			$('.advanced-content').toggle('fast');
 		});
-		$("#advancedSearch").click(function(){
+		$("#advanced-search-btn").click(function(){
 			$("#form2").submit();
 		});
 		//阻止按键盘Enter键提交表单
@@ -24,9 +24,9 @@
 		    if (key == 13) {
 		        return false;
 		    }
-		});	
-		
+		});
 	});
+	
 
 	function checkSubmitForm(){
 		var loginNameSearch = $("#loginNameSearch").val();
@@ -76,66 +76,55 @@
 			</li>
     	</ol>
     </div>
-    
+    <div class="search-content">
+		<form id="form1" name="pageForm" action="${ctx}/complat/outsideuserList" method="get">
+			<table class="advanced-content">
+				<tr>
+					<th>用户登录名：</th>
+						<td width="20%">
+							<input type="text" placeholder="用户登录名" value="${sParams['LIKE_loginName']}" id="loginNameSearch" name="search_LIKE_loginName" class="input"/>
+						</td>
+					<td class="btn-group"> <a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a></td>
+					<td class="btn-group"> <a id="advanced-btn" class="btnSearch" >高级搜索</a></td>
+				</tr>
+			</table>
+		</form>
+		<!-- 高级探索表单 -->
+		<form id="form2" name="form2" action="${ctx}/complat/corporationList">
+      			<table class="advanced-content" style="display: none">
+      				<tr>
+					<th>姓名:</th>
+					<td width="15%">
+						<input type="text" class="input" name="search_LIKE_realName" value="${sParams['LIKE_realName']}"/>
+					</td>
+					<th>登录名:</th>
+					<td width="15%">
+              				<input type="text" class="input" name="search_LIKE_loginName" value="${sParams['LIKE_loginName']}"/>
+					</td>
+					<th>企业或机构名称:</th>
+					<td width="15%">
+						<input type="text" class="input" name="search_LIKE_name" value="${sParams['LIKE_name']}"/>
+					</td>
+					<th>身份证号码:</th>
+					<td width="15%">
+						<input type="text" class="input" name="search_LIKE_cardNumber" value="${sParams['LIKE_cardNumber']}"/>
+					</td>
+					<td class="btn-group"> <a class="btnSearch" id="advanced-search-btn">搜索</a></td>
+				</tr>
+      		</table>  
+     	</form>
+	</div>
 	<!--列表内容区域-->
 	<div class="list">
 		<input type="hidden" id="orderField" name="orderField" value="${orderField}"/> 
 		<input type="hidden" id="orderSort" name="orderSort" value="${orderSort}"/>
         <div class="list-topBar">
-        	<div class="search-content">
-				<form id="form1" name="pageForm" action="${ctx}/complat/corporationList" method="get">
-					<table class="">
-						<tr>
-							<th>用户登录名：</th>
-								<td width="20%">
-									<input type="text" placeholder="用户登录名" value="${sParams['LIKE_loginName']}" id="loginNameSearch" name="search_LIKE_loginName" class="input"/>
-								</td>
-							<td class="btn-group"> <a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a></td>
-							<td class="btn-group"> <a class="btnSearch" onclick="javascript:checkSubmitForm2()" id="advanced-btn">高级搜索</a></td>
-						</tr>
-					</table>
-				</form>
-			</div>
         	 <div class="list-toolbar">
              <!-- 操作按钮开始  测试：8a92e1025e5672aa015e56798c830001  本地:402880e85e5c3efe015e5c43d4da0001-->	 
 	             <gsww:opTag menuId="8a92e1025e5672aa015e56798c830001" tabIndex="1" operatorType="1"></gsww:opTag>
             </div> 
         </div>
-        <div class="list">
-        	<input type="hidden"  name="orderField" value="${orderField}"/> 
-			<input type="hidden"  name="orderSort" value="${orderSort}"/>
-			<div class="list-topBar">
-				<div class="search-content">
-					<form id="form2" name="form2" action="${ctx}/complat/corporationList">
-		        		
-		        			<table class="advanced-content" style="display: none">
-		        				<tr>
-									<th>姓名:</th>
-									<td width="20%">
-										<input type="text" class="input" name="search_LIKE_realName" value="${sParams['LIKE_realName']}"/>
-									</td>
-									<th>登录名:</th>
-									<td width="20%">
-		                				<input type="text" class="input" name="search_LIKE_loginName" value="${sParams['LIKE_loginName']}"/>
-									</td>
-								</tr>
-								<tr>
-									<th>企业或机构名称:</th>
-									<td width="20%">
-										<input type="text" class="input" name="search_LIKE_name" value="${sParams['LIKE_name']}"/>
-									</td>
-									<th>身份证号码:</th>
-									<td width="20%">
-										<input type="text" class="input" name="search_LIKE_cardNumber" value="${sParams['LIKE_cardNumber']}"/>
-									</td>
-									<td class="btn-group"> <a class="btnSearch" id="advancedSearch">搜索</a></td>
-								</tr>
-		        			</table>  
-
-	       			</form>
-				</div>
-			</div>
-        </div>
+        
         <!-- 提示信息开始 -->
          <div class="form-alert;" >
          	<tags:message msgMap="${msgMap}"></tags:message>
