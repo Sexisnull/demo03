@@ -171,7 +171,7 @@ color: rgb(119, 119, 119);
 	            </td>
 	        	<th><b class="mustbe">*</b>密码：</th>
 				<td>
-					<input type="password"  class="pwd" name="pwd" value="${outsideUser.pwd}" />
+					<input type="password"  class="pwd" name="pwd" value="${outsideUser.pwd}" onkeyup="javascript:EvalPwd(this.value);"/>
 				</td>
 			</tr>
 			<tr>
