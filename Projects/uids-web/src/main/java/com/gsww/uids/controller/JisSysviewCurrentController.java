@@ -19,6 +19,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,12 +37,17 @@ import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
 import com.gsww.jup.controller.sys.SysAccountController;
+import com.gsww.jup.entity.sys.SysAccount;
+import com.gsww.jup.entity.sys.SysRole;
 import com.gsww.jup.service.sys.SysParaService;
 import com.gsww.jup.util.PageUtils;
+import com.gsww.jup.util.StringHelper;
 import com.gsww.uids.entity.JisSysview;
 import com.gsww.uids.entity.JisSysviewCurrent;
+import com.gsww.uids.entity.JisSysviewDetail;
 import com.gsww.uids.service.JisApplicationService;
 import com.gsww.uids.service.JisSysviewCurrentService;
+import com.gsww.uids.service.JisSysviewDetailService;
 import com.gsww.uids.service.JisSysviewService;
 
 @Controller
@@ -56,6 +62,8 @@ public class JisSysviewCurrentController extends BaseController{
 	private JisApplicationService jisApplicationService;
 	@Autowired
 	private SysParaService sysParaService;
+	@Autowired
+	private JisSysviewDetailService jisSysviewDetailService;
 	
 	@RequestMapping(value="/jisCurList",method = RequestMethod.GET)
 	public String jisCurList(@RequestParam(value = "page", defaultValue = "1") int pageNo,
@@ -158,28 +166,6 @@ public class JisSysviewCurrentController extends BaseController{
 	}
 	
 	/**
-	 * 同步详情
-	 * @param iid
-	 * @param request
-	 * @param response
-	 * @return
-	 */
-	@RequestMapping(value="/sysViewdetail")
-	public ModelAndView sysViewdetail(int iid, HttpServletRequest request,HttpServletResponse response){
-		
-		try {
-			JisSysviewCurrent sysviewCurrent = jisSysviewCurrentService.findByIid(iid);
-			Map<String,Object> map = convertBean(sysviewCurrent);
-			JisSysview sysview = (JisSysview)convertMap(JisSysview.class,map);
-			jisSysviewService.save(sysview);
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return  new ModelAndView("redirect:/uids/jisCurList");
-	}
-	
-	/**
 	 * 同步
 	 * @param iid
 	 * @param request
@@ -226,6 +212,39 @@ public class JisSysviewCurrentController extends BaseController{
 		return  new ModelAndView("redirect:/uids/jisCurList");
 	}
 	
+	/**
+	 * 同步详情
+	 * @param iid
+	 * @param model
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/sysviewDetail", method = RequestMethod.GET)
+	public String accountEdit(int iid,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+		
+		JisSysviewCurrent sysviewCurrent = jisSysviewCurrentService.findByIid(iid); 
+		JisSysviewDetail jisSysviewDetail = jisSysviewDetailService.findByIid(iid);
+		
+		//map放入
+		List<Map<String, Object>> applicationList =new ArrayList<Map<String,Object>>() ;
+		List<Map<String, Object>> paraList =new ArrayList<Map<String,Object>>() ;
+		Map<Integer,Object> applicationMap = new HashMap<Integer,Object>();
+		Map<Integer,Object> paraMap = new HashMap<Integer,Object>();
+		applicationList=jisApplicationService.getJisApplicationList();
+		paraList=sysParaService.getParaList("OPT_RESULT");
+		for(Map<String,Object> application:applicationList){
+			applicationMap.put((Integer) application.get("iid"), application.get("name"));
+		}			
+		for(Map<String,Object> para:paraList){
+			paraMap.put(Integer.parseInt((String) para.get("PARA_CODE")),  para.get("PARA_NAME"));
+		}
+		
+		model.addAttribute("jisSysviewCurrent",sysviewCurrent);
+		model.addAttribute("jisSysviewDetail",jisSysviewDetail);
+		return "users/sysview/jis_sysview_detail";
+	} 
 	
     /**  
      * 将一个 JavaBean 对象转化为一个  Map  
