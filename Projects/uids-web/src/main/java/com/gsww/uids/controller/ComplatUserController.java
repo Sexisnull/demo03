@@ -1,4 +1,5 @@
 
+
 package com.gsww.uids.controller;
 
 import java.io.BufferedInputStream;
@@ -46,10 +47,17 @@ import org.springside.modules.web.Servlets;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.gsww.jup.controller.BaseController;
+import com.gsww.jup.entity.sys.SysUserSession;
 import com.gsww.jup.util.ExcelUtil;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.jup.util.StringHelper;
+import com.gsww.jup.util.TimeHelper;
+import com.gsww.uids.entity.ComplatGroup;
+import com.gsww.uids.entity.ComplatRole;
+import com.gsww.uids.entity.ComplatRolerelation;
 import com.gsww.uids.entity.ComplatUser;
+import com.gsww.uids.service.ComplatGroupService;
+import com.gsww.uids.service.ComplatRoleService;
 import com.gsww.uids.service.ComplatUserService;
 
 /**
@@ -72,7 +80,12 @@ public class ComplatUserController extends BaseController{
 
 	@Autowired
 	private ComplatUserService complatUserService;
-
+	
+	@Autowired
+	private ComplatGroupService complatGroupService;
+	
+	@Autowired
+	private ComplatRoleService complatRoleService;
 	/**
 	 * 获取政府用户列表
 	 * @param pageNumber
@@ -377,7 +390,88 @@ public class ComplatUserController extends BaseController{
 
 	}				
 		
-
+	/**
+	 * 用户设置模块,点击用户设置按钮，页面跳转
+	 * @param model
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 * @author <a href=" ">yaoxi</a>
+	 */
+	@RequestMapping(value="/userSetUpEdit",method = RequestMethod.GET)
+	public ModelAndView userSetUpEdit(Model model,HttpServletRequest request,HttpServletResponse response) throws Exception{
+		
+		ModelAndView mav = new ModelAndView("users/sysview/user_setup");
+		try{
+			//获取系统当前登录用户
+			SysUserSession sysUserSession = (SysUserSession) request.getSession().getAttribute("sysUserSession");
+			String userSid = sysUserSession.getAccountId();
+			if(StringHelper.isNotBlack(sysUserSession.getAccountId())){
+				
+				//查询用户信息
+				ComplatUser complatUser = complatUserService.findByKey(Integer.parseInt(userSid));
+				model.addAttribute("complatUser",complatUser);
+				
+				//根据用户ID查询所属机构
+				ComplatGroup complatGroup = complatGroupService.findByIid(complatUser.getGroupid());
+				model.addAttribute("complatGroup",complatGroup);
+				
+				//根据用户ID从ComplatRolerelation获取对应的角色ID，再根据角色ID从ComplatRole中获取对应的角色
+				List<ComplatRolerelation> roleRelationList = complatRoleService.findByUserId(Integer.parseInt(userSid));
+				List<ComplatRole> roleList = new ArrayList<ComplatRole>();
+				for(int i = 0;i < roleRelationList.size();i++){
+					Integer roleId = roleRelationList.get(i).getRoleId();
+					ComplatRole complatRole = complatRoleService.findByKey(roleId);
+					roleList.add(complatRole);
+					model.addAttribute("roleList",roleList);
+				}
+			}
+		}catch(Exception exception){
+			exception.printStackTrace();
+		}
+		return mav;
+	}
+	
+	
+	/**
+	 * 保存用户设置
+	 *@param complatUser
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 * @author <a href=" ">yaoxi</a>
+	 */
+	
+	@SuppressWarnings("finally")
+	@RequestMapping(value = "/userSetUpSave", method = RequestMethod.POST)
+	public ModelAndView userSetUpSave(ComplatUser complatUser,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+		try {
+			String pwd = request.getParameter("pwd");
+			if(complatUser != null){
+				Integer iid = complatUser.getIid();
+				String name = complatUser.getName();
+				String headShip = complatUser.getHeadship();
+				String phone = complatUser.getPhone();//固定电话
+				String mobile = complatUser.getMobile();//移动电话
+				String fax = complatUser.getFax();
+				String email = complatUser.getEmail();
+				String qq = complatUser.getQq();
+				String time = TimeHelper.getCurrentTime();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				Date modifyTime = sdf.parse(time);
+				complatUserService.updateUser(iid,name,headShip,phone,mobile,fax,email,qq,modifyTime,pwd);
+				returnMsg("success","保存成功",request);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			returnMsg("error","保存失败",request);
+		} finally{
+			return  new ModelAndView("redirect:/complat/complatList");
+		}
+		
+	}
 	
 	
 	

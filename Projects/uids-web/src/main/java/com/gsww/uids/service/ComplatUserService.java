@@ -1,5 +1,6 @@
 package com.gsww.uids.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -54,5 +55,12 @@ public interface ComplatUserService {
 	 * 根据用户名查询用户信息
 	 */
 	List<ComplatUser> findByUserName(String name);
+	
+	
+	/**
+	 * 用户设置 保存      add by yaoxi
+	 */
+	void updateUser(Integer iid,String name,String headShip,String phone,String mobile,String fax,
+			String email,String qq, Date modifyTime,String pwd) throws Exception;
 
 }

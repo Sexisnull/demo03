@@ -1,6 +1,7 @@
 package com.gsww.uids.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +66,18 @@ public class ComplatUserServiceImpl implements ComplatUserService{
 		return list;
 	}
 	
-
+	
+	/**
+	 * 用户设置保存  
+	 * @author yaoxi 
+	 */
+	@Override
+	public void updateUser(Integer iid,String name, String headShip, String phone,
+			String mobile, String fax, String email, String qq,
+			Date modifyTime,String pwd) throws Exception {
+	
+		complatUserDao.updateUser(iid,name,headShip,phone,mobile,fax,email,qq,modifyTime,pwd);
+	}
 
 
 }
