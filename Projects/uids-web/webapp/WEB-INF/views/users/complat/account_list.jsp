@@ -47,7 +47,24 @@
     border-radius:3px;
     cursor: pointer;
 }
-
+.startUsersPower{
+    width:60px;
+    height:25px;
+    background:#659be0;
+    color:#fff;
+    border:1px solid #659be0;
+    border-radius:3px;
+    cursor: pointer;
+}
+.stopUsersPower{
+    width:60px;
+    height:25px;
+    background:#659be0;
+    color:#fff;
+    border:1px solid #659be0;
+    border-radius:3px;
+    cursor: pointer;
+}
 /*设置弹出层样式*/
 .alert_tb {	
 	left:180px;
@@ -59,6 +76,12 @@
 	z-index:1000;
 	position:absolute;
 } 
+.alert_tb p span .close {
+	margin-left:550px;
+	font-weight:500;
+	cursor:pointer;
+	font-size:16px;
+}
 .userForm{
    height: 0px;
 }
@@ -80,25 +103,6 @@
     display: inline;
     list-style-type: none;
 }
-
-
-.input_three{
-  height:40px;
-  background-color:#fbedce;
-}
-.input_three p{
-   line-height:40px;
-   background-color:#fbedce;
-   text-align:center;
-   
-}
-.input_three p .input,.cancel{
-  line-height:20px;
-  margin:0px 30px 0px 30px;
-   
-}
-
-
 .alert_tb p span {
 	float:left;
 }
@@ -169,8 +173,9 @@ function addComplatUser(){
      window.location.href="${ctx}/complat/complatUserEdit";
 }
 
-/***删除***/
+
 $(function(){
+/***删除***/
  $("#deleteUser").click(function(url,parm){
 		if($(".boxOne:checked").length == 0&&$('#list-table input:checkbox:checked').length == 0){
         	alert("请先选择要删除的数据");
@@ -184,6 +189,44 @@ $(function(){
            window.location.href="${ctx}/complat/complatUserDelete?complatUserId="+ids;             						       
         } 			
 	});
+	
+	
+	
+	/*批量启用*/
+     $("#startUsersPower").click(function(url,parm){	
+          var enable= 1;
+         if($(".boxOne:checked").length == 0&&$('#list-table input:checkbox:checked').length == 0){
+        	alert("请先选择要启用的用户");
+        }else if($("input[type=checkbox]:checked").length >= 1){      
+          	var ids = "";
+				$('#list-table tbody input[type=checkbox]').each(function(i, o) {
+					if($(o).attr('checked')) {
+						ids += $(o).val() + ",";
+					}
+				});		                     
+           window.location.href="${ctx}/complat/changeUserEnable?complatUserId="+ids+"&Enable="+enable;             						       
+        }
+     });
+
+
+    /*批量停用*/
+    $("#stopUsersPower").click(function(url,parm){	
+         var enable= 0;
+         if($(".boxOne:checked").length == 0&&$('#list-table input:checkbox:checked').length == 0){
+        	alert("请先选择要停用的用户");
+        }else if($("input[type=checkbox]:checked").length >= 1){      
+          	var ids = "";
+				$('#list-table tbody input[type=checkbox]').each(function(i, o) {
+					if($(o).attr('checked')) {
+						ids += $(o).val() + ",";
+					}
+				});		                     
+           window.location.href="${ctx}/complat/changeUserEnable?complatUserId="+ids+"&Enable="+enable;             						       
+        }
+    });
+
+
+
 });
 
 
@@ -255,23 +298,38 @@ function fileUpload(){
 
 
 /***导出***/
-function outPutComplatUser(){
-  /* if($("input[type=checkbox]:checked").length == 0){      
+/*function outPutComplatUser(){
+   if($("input[type=checkbox]:checked").length == 0){      
        var ids = "";
 	   $('#list-table tbody input[type=checkbox]').each(function(i, o) {
 			if($(o).attr('')) {
 				ids += $(o).val() + ",";
 			}
 	   });	
-	   console.log(ids);*/	                     
+	   console.log(ids);	                     
        window.location.href="${ctx}/complat/complatExport"; 
        alert("==========");            						       
-     //}   
+     }   
+}
+*/
+
+function outPutComplatUser() {
+     if($(".boxOne:checked").length == 0&&$('#list-table input:checkbox:checked').length == 0){
+        	alert("请先选择要导出的用户数据");
+        }else if($("input[type=checkbox]:checked").length >= 1){      
+          	var ids = "";
+				$('#list-table tbody input[type=checkbox]').each(function(i, o) {
+					if($(o).attr('checked')) {
+						ids += $(o).val() + ",";
+					}
+				});		                     
+           window.location.href="${ctx}/complat/complatExport?complatUserId="+ids;             						       
+        }
 }
 
 
 
-	
+
 </script>
 
 </head>
@@ -341,12 +399,14 @@ function outPutComplatUser(){
 	<input type="hidden" id="orderField" name="orderField" value="${orderField}"/> 
 	<input type="hidden" id="orderSort" name="orderSort" value="${orderSort}"/>
         <div class="list-topBar  advanced-search">
-        	<div class="list-toolbar" style="margin-left:860px;height:30px;">
+        	<div class="list-toolbar" style="margin-left:730px;height:30px;">
              <!--  操作按钮开始 	    -->   
               <button class="addUser" onclick="addComplatUser()"><i class="btn_icon3"></i><span>新 增</span></button>
               <button class="deleteUser" id="deleteUser"><i class="btn_icon4"></i><span>删 除</span></button>
               <button class="userInput"  id="userInput" onclick="intPutComplatUser()"><i class="btn_icon4"></i><span>用户导入</span></button>
-              <button class="userOutput"  id="userOutput"" onclick="outPutComplatUser()"><i class="btn_icon4"></i><span>用户导出</span></button>  
+              <button class="userOutput"  id="userOutput" onclick="outPutComplatUser()"><i class="btn_icon4"></i><span>用户导出</span></button>  
+              <button class="startUsersPower" id="startUsersPower"><i class="btn_icon4"></i><span>批量启用</span></button>
+              <button class="stopUsersPower" id="stopUsersPower"><i class="btn_icon4"></i><span>批量停用</span></button>
            <!--   操作按钮结束  --> 
         	 <div class="list-toolbar">
             <!-- 操作按钮开始 -->	 
@@ -377,15 +437,15 @@ function outPutComplatUser(){
                 	
                 	
                 	<th width="10%" style="text-align: center;">姓名</th>
-                    <th width="10%" style="text-align: center;">登录名</th>
+                    <th width="8%" style="text-align: center;">登录名</th>
                     <th width="10%" style="text-align: center;">登录全名</th>
                     <th width="15%" style="text-align: center;">手机号码</th>
-                    <th width="20%" style="text-align: center;">邮箱</th>
+                    <th width="10%" style="text-align: center;">邮箱</th>
                     <th width="5%" style="text-align: center;">账号开启</th>                                                     
                     <!--<th width="15%" class="alignL" style="text-align: center;">用户职务</th>-->
-                    <th width="15%" class="alignL" style="text-align: center;">注册时间</th>    
+                    <th width="17%" class="alignL" style="text-align: center;">注册时间</th>    
                     <!--<th width="5%" style="text-align: center;">办公电话</th> -->
-                    <th width="15%" style="text-align: center;">操作</th> 
+                    <th width="25%" style="text-align: center;">操作</th> 
                 </tr>
             </thead> 
             <tbody>
@@ -414,7 +474,7 @@ function outPutComplatUser(){
 	                    <td style="text-align: center;">
 	                    	<div class="alignL">
 	                    		<div class="list-longtext">
-	                    			<c:if test="${complatUser.enable == '0'}"><font color="red">禁用</font></c:if>
+	                    			<c:if test="${complatUser.enable == '0'}"><font color="red">未启用</font></c:if>
 	                           		<c:if test="${complatUser.enable == '1'}"><font color="#32CD32">启用</font></c:if>
 	                    		</div>
 	                        </div>
@@ -444,7 +504,7 @@ function outPutComplatUser(){
            <div class="input_one">
                <p>
                   <span id="inputUser">用户导入</span>
-                 <!--     <span id="close">X</span>   -->                                   
+                  <span><a class="close" href="${ctx}/complat/complatList">关闭</a></span>                                    
                </p>  
            </div>    
            <div class="input_two">
@@ -454,17 +514,14 @@ function outPutComplatUser(){
 		            	<label style="width:300px; padding-left: 50px;">选择文件：</label>
 		                <input type="file" id="excelFile" class="required" name="excelFile" style="width:300px;height:22px; background: #659be0;cursor: pointer;border: none;font-size: 12px;"/>
 		            </li>  	            
-		            <li><input style="width:60px;height:25px;background:#f79638;color:#fff;border:1px solid #f79638;border-radius:3px;cursor: pointer;" type="button" value="下载模板" onclick= "downloadTemplate();" /></li>
-		            <li><input style="width:60px;height:25px;background:#659be0;color:#fff;border:1px solid #f79638;border-radius:3px;cursor: pointer;" type="button" class="input"  id="excel_button" value="导入" onclick="fileUpload()" /></li>
+		            <!--<li><input style="width:60px;height:25px;background:#f79638;color:#fff;border:1px solid #f79638;border-radius:3px;cursor: pointer;" type="button" value="下载模板" onclick= "downloadTemplate();" /></li>-->		            
+		            <li><a class="advanced-btn" href="${ctx}/uploadFile/complat/userList.xlsx" target="_blank">模板下载</a></li>
+		            
+		            <li><input style="width:60px;height:25px;background:#f79638;color:#fff;border:1px solid #f79638;border-radius:3px;cursor: pointer;" type="button" class="input"  id="excel_button" value="导入" onclick="fileUpload()" /></li>
 		        </ul>
              </form>
              
-           </div>  	  
-           <div class="input_three">            
-                <p>
-                   <button style="width:60px;height:25px;background:#f79638;color:#fff;border:1px solid #f79638;border-radius:3px;cursor: pointer;" type="button" class="cancel" id="cancel" onclick="javascript:window.location.href='${ctx}/complat/complatList'">取消</button>
-                </p>	 		      	 		     
-          </div>  	              	             	  
+           </div>  	               	              	             	  
         </div>
 </div>
 </body>

@@ -63,4 +63,6 @@ public interface ComplatUserService {
 	void updateUser(Integer iid,String name,String headShip,String phone,String mobile,String fax,
 			String email,String qq, Date modifyTime,String pwd) throws Exception;
 
+	
+	
 }
