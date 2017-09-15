@@ -241,6 +241,8 @@ public class JisSysviewCurrentController extends BaseController{
 			paraMap.put(Integer.parseInt((String) para.get("PARA_CODE")),  para.get("PARA_NAME"));
 		}
 		
+		model.addAttribute("applicationMap", applicationMap);
+		model.addAttribute("paraMap", paraMap);
 		model.addAttribute("jisSysviewCurrent",sysviewCurrent);
 		model.addAttribute("jisSysviewDetail",jisSysviewDetail);
 		return "users/sysview/jis_sysview_detail";

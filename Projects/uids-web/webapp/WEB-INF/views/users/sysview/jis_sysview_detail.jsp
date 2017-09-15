@@ -61,7 +61,7 @@
 				<th> 应用名称：</th>
 				
 				<td>
-					<input type="text" id="appid" value="${jisSysviewCurrent.appid}" readonly="readonly"/>
+					<input type="text" id="appid" value="${applicationMap[jisSysviewCurrent.appid]}" readonly="readonly"/>
 				</td>
 			</tr>
 			<tr style="border-bottom:1px solid #c6e6ff">
@@ -71,7 +71,7 @@
 	            </td>
 	        	<th>同步结果：</th>
 	        	<td>
-	        		<input type="text" class="input" id="optresult" value="${jisSysviewCurrent.optresult}" readonly="readonly"/>
+	        		<input type="text" class="input" id="optresult" value="${paraMap[jisSysviewCurrent.optresult]}" readonly="readonly"/>
 	            	<i class="form-icon-clear"></i>
 	        	</td>
 			</tr>
@@ -93,7 +93,7 @@
     <div style="clear:both;"></div>
     <!--表单的按钮组区域-->
     <div class="form-btn">
-        <input type="button" tabindex="16" value="返回" onclick="javascript:window.location.href='${ctx}/sys/accountList?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}'" class="btn gray"/>
+        <input type="button" tabindex="16" value="返回" onclick="javascript:window.location.href='${ctx}/uids/jisCurList?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}'" class="btn gray"/>
     </div>
     </form>
     <!--表单的底部区域-->
