@@ -163,7 +163,6 @@ public class ComplatGroupController extends BaseController{
 	@RequestMapping(value = "/complatgroupSave", method = RequestMethod.POST)
 	public ModelAndView complatgroupSave(String iid,ComplatGroup complatGroup,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		try {
-			complatGroup.setSynState(2);
 			if(StringHelper.isNotBlack(iid)){
 				complatGroup.setModifytime(Timestamp.valueOf(TimeHelper.getCurrentTime()));
 			}else{
