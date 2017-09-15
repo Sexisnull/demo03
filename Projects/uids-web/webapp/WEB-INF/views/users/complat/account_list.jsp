@@ -443,9 +443,9 @@ function outPutComplatUser() {
                     <th width="10%" style="text-align: center;">邮箱</th>
                     <th width="5%" style="text-align: center;">账号开启</th>                                                     
                     <!--<th width="15%" class="alignL" style="text-align: center;">用户职务</th>-->
-                    <th width="17%" class="alignL" style="text-align: center;">注册时间</th>    
+                    <th width="22%" class="alignL" style="text-align: center;">注册时间</th>    
                     <!--<th width="5%" style="text-align: center;">办公电话</th> -->
-                    <th width="25%" style="text-align: center;">操作</th> 
+                    <th width="20%" style="text-align: center;">操作</th> 
                 </tr>
             </thead> 
             <tbody>

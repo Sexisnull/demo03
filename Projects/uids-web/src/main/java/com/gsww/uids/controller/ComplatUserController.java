@@ -2,13 +2,6 @@
 
 package com.gsww.uids.controller;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -42,7 +35,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.web.Servlets;
 import org.springframework.web.multipart.MultipartFile;
@@ -211,7 +203,7 @@ public class ComplatUserController extends BaseController{
 	
 	
 	/**
-	 * 删除用户信息
+	 * 批量删除用户信息
 	 */
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/complatUserDelete", method = RequestMethod.GET)
@@ -516,7 +508,7 @@ public class ComplatUserController extends BaseController{
 	 * @param response
 	 * @return
 	 * @throws Exception
-	 * @author <a href=" ">yaoxi</a>
+	 * @author <a href=" ">shenxh</a>
 	 */
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/changeUserEnable", method = RequestMethod.GET)
@@ -567,19 +559,111 @@ public class ComplatUserController extends BaseController{
 	
 	
 	/**
-	 * 修改用户启用状态--单条记录
+	 * 启用--单条记录
 	 *@param complatUser
 	 * @param request
 	 * @param response
 	 * @return
 	 * @throws Exception
-	 * @author <a href=" ">yaoxi</a>
+	 * @author <a href=" ">shenxh</a>
 	 */
 	@SuppressWarnings("finally")
-	@RequestMapping(value = "/changeEnable", method = RequestMethod.GET)
-	public ModelAndView changeEnable(String complatUserId,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+	@RequestMapping(value = "/EnableStart", method = RequestMethod.GET)
+	public ModelAndView EnableStart(String iid,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+		System.out.println("修改iid============"+iid);
+		ComplatUser complatUser = null;
+		try{			
+			if (StringHelper.isNotBlack(iid)) {
+				complatUser = complatUserService.findByKey(Integer.parseInt(iid));
+				System.out.println("修改complatUser==================="+complatUser);
+			int enable = complatUser.getEnable(); 
+				if(enable==0){
+					enable=1;
+					complatUser.setEnable(enable);
+					complatUserService.save(complatUser);
+					returnMsg("success", "启用成功！", request);
+				}else if(enable==1){
+					enable=0;
+					complatUser.setEnable(enable);
+					complatUserService.save(complatUser);
+					returnMsg("success", "停用成功！", request);
+				}
+			}								
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			return  new ModelAndView("redirect:/complat/complatList");
+		}
+		
+	}
+	
+	
+	
+	
+	/**
+	 * 停用--单条记录
+	 *@param complatUser
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 * @author <a href=" ">shenxh</a>
+	 */
+	@SuppressWarnings("finally")
+	@RequestMapping(value = "/EnableStop", method = RequestMethod.GET)
+	public ModelAndView EnableStop(String iid,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+		System.out.println("修改iid============"+iid);
+		ComplatUser complatUser = null;
+		try{			
+			if (StringHelper.isNotBlack(iid)) {
+				complatUser = complatUserService.findByKey(Integer.parseInt(iid));
+				System.out.println("修改complatUser==================="+complatUser);
+				int enable = complatUser.getEnable(); 
+				if(enable==0){
+					enable=1;
+					complatUser.setEnable(enable);
+					complatUserService.save(complatUser);
+					returnMsg("success", "启用成功！", request);
+				}else if(enable==1){
+					enable=0;
+					complatUser.setEnable(enable);
+					complatUserService.save(complatUser);
+					returnMsg("success", "停用成功！", request);
+				}
+			}								
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			return  new ModelAndView("redirect:/complat/complatList");
+		}
+		
+	}
+	
+	
+	
+	
+	/**
+	 * 删除政府用户--单条记录
+	 *@param complatUser
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 * @author <a href=" ">shenxh</a>
+	 */
+	@RequestMapping(value = "/deleteComplatUser", method = RequestMethod.GET)
+	public ModelAndView deleteComplatUser(String iid,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+		System.out.println("删除iid============"+iid);
+		ComplatUser complatUser = null;
 		try{
-			
+			if (StringHelper.isNotBlack(iid)) {
+				complatUser = complatUserService.findByKey(Integer.parseInt(iid));
+				System.out.println("删除complatUser==================="+complatUser);
+				if(complatUser != null){
+					complatUserService.delete(complatUser);
+					returnMsg("success", "删除成功", request);
+				}
+			}			
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
