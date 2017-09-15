@@ -1,4 +1,3 @@
-
 <%@ page language="java" pageEncoding="utf-8"%>
 <!DOCTYPE html>
 <html>
@@ -8,7 +7,7 @@
 <head>
 <title>甘肃万维JUP课题</title>
 <script type="text/javascript">
-	$().ready(function() {
+$().ready(function() {
 
 //表单校验
 var corNameInput=$("#name").val();
@@ -63,9 +62,51 @@ var corNameInput=$("#name").val();
 		nation.append("<option value='nations[i]'>"+nations[i]+"</option>");
 	}
 });
-	
-</script>
 
+$(function(){
+	// Ajax重命名校验
+	$.uniqueValidate('uniqueLoginAccount', '${ctx}/sys/checkAccount', ['loginAccount','oldLoginAccount'], '对不起，这个账号重复了');
+	$("#roleNames").Popup($(".ulRoleList"), { width: "auto" });
+	//
+	$(".icon-date-r").click(function(){ $(this).prev("input").click(); });
+});
+
+
+</script>
+<style>
+.form-table td{
+width: 0;
+color: rgb(119, 119, 119);
+}
+.form-table th:first-child {
+    padding-left: 0px;
+	width:130px;
+}
+.form-table td {
+    height: 32px;
+    line-height: 32px;
+    white-space: nowrap;
+    padding: 2px 2px;
+}
+.td_1 {
+	border-bottom : 1px solid #C6E6FF;
+	border-right : 1px solid #C6E6FF;
+}
+.td_2 {
+	border-right : 1px solid #C6E6FF;
+}
+.td_3 {
+	border-bottom : 1px solid #C6E6FF;
+}
+.td_4 {
+	border-bottom : 1px solid #C6E6FF;
+}
+.td_5 {
+	border-bottom : 1px solid #C6E6FF;
+}
+.td_6 {
+	border-bottom : 1px solid #C6E6FF;
+</style>
 </head>
 <body>
 <div class="form-warper">
@@ -77,9 +118,13 @@ var corNameInput=$("#name").val();
 			</li>
 			<li class="split"></li>
 			<li>
-				<a>用户设置</a>
+				<a>法人管理</a>
 			</li>
 			<li class="split"></li>
+			<li class="active">
+				<c:if test="${corporation.iid==null}">用户新增</c:if>
+				<c:if test="${corporation.iid!=null}">用户编辑</c:if>
+			</li>
    		</ol>
     </div>
 	<!--表单的标题区域--> 
@@ -91,118 +136,109 @@ var corNameInput=$("#name").val();
         <input type="hidden" id="authState" name="authState" value="${corporation.authState}"/>
     	<input type="hidden" id="isAuth" name="isAuth" value="${corporation.isAuth}"/>
     	<input type="hidden" id="time" name="time" value="${time}">
-    	<input type="hidden" id="operSign" name="operSign" value="${corporation.operSign}"/>
     </div>
     
     <!--表单的主内容区域-->
-    <div style="height:400px;width:1100px; border:solid 1px #C6E6FF; padding: 5px;">
-    	<div style="width: 1000px;margin: 10px;">
-		 	<table style="float: left;width: 20%;line-height: 100px">
-		 		<tr>
-		 			<th>基本属性</th>
-		 		</tr>
-		 	</table>
-		 	<table class="form-table" border="1" cellspacing="1" cellpadding="0" frame=box rules=none style=" border-color:#C6E6FF;float: left;width: 80%;line-height: 25px;">
-		    		<tr>
-			        	 <th> 法人类型：</th>
-			        	 <td>
-			        	 	<gsww:checkboxTag name="type" defaultValue="1" type="corporationType" inputType="radio" value="${corporation.type}"></gsww:checkboxTag>
-			        	 </td>
-					</tr>
-		    		<tr>
-		    			<th><b class="mustbe">*</b> 企业名称：</th>
-						 <td width="20%">
-							<input type="text" id="name" name="name" value="${corporation.name}" />
-						</td>
-			        	<th><b class="mustbe">*</b> 企业法人姓名：</th>
-		                <td>
-		                	<input type="text"  id="realName" name="realName" maxlength="33" value="${corporation.realName}" />
-		                </td> 
-					</tr>
-					<tr>
-						<th><b class="mustbe">*</b> 企业法人身份证号：</th>
-						<td>
-							<input type="text" id="cardNumber" name="cardNumber" value="${corporation.cardNumber}"">
-			            </td>
-						<th> 企业法人民族：</th>
-						<td>
-							<select id="nation" name="nation">
-								<option value="">请选择</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<th><b class="mustbe">*</b>工商注册号/社会信用代码：</th>
-			        	 <td>
-							<input type="text" id="regNumber" name="regNumber" value="${corporation.regNumber}" />
-						</td>
-			            <c:if test="${corporation.iid==null}">
-							<th> 组织机构代码：</th>
-							<td>
-								<input type="text"  id="orgNumber" name="orgNumber" value="${corporation.orgNumber}" style=""/>
-							</td>
-						</c:if>
-					</tr>
+    <div class="form-content">
+    <table class="form-table">
+		<tr>
+			<td class="td_1" rowspan="4" style="max-width:0px;width:100px;ont-weight:bold;" align="center">基本属性</td>
+			<th> 法人类型：</th>
+	       	<td>
+	       	 <gsww:checkboxTag name="type" defaultValue="1" type="corporationType" inputType="radio" value="${corporation.type}"></gsww:checkboxTag>
+	       	</td>
+	       	<th></th>
+			<td></td>
+		</tr>
+		<tr>
+			<th><b class="mustbe">*</b> 企业名称：</th>
+			 <td width="20%">
+				<input type="text" id="name" name="name" value="${corporation.name}" />
+			</td>
+        	<th><b class="mustbe">*</b> 企业法人姓名：</th>
+               <td>
+               	<input type="text"  id="realName" name="realName" maxlength="33" value="${corporation.realName}" />
+               </td> 
+		</tr>
+		<tr>
+			<th><b class="mustbe">*</b> 企业法人身份证号：</th>
+				<td>
+					<input type="text" id="cardNumber" name="cardNumber" value="${corporation.cardNumber}"">
+	            </td>
+				<th> 企业法人民族：</th>
+				<td>
+					<select id="nation" name="nation">
+						<option value="">请选择</option>
+					</select>
+				</td>
+		</tr>
+		<tr>
+			<th class="td_3"><b class="mustbe">*</b>工商注册号/社会信用代码：</th>
+	        	 <td class="td_4">
+					<input type="text" id="regNumber" name="regNumber" value="${corporation.regNumber}" />
+				</td>
+	            <c:if test="${corporation.iid==null}">
+					<th class="td_5"> 组织机构代码：</th>
+					<td class="td_6">
+						<input type="text"  id="orgNumber" name="orgNumber" value="${corporation.orgNumber}" style=""/>
+					</td>
+				</c:if>
+		</tr>
+		
+		
+		<tr>
+			<td class="td_2" rowspan="4" tyle="max-width:0px;width:100px;ont-weight:bold;" align="center"">账户信息</td>
+			<th><b class="mustbe">*</b>用户名：</th>
+			<td>
+				<input type="text"  class="loginName" name="loginName" value="${corporation.loginName}" />
+            	
+            </td>
+        	<th><b class="mustbe">*</b> 手机号码：</th>
+        	<td>
+        		<input type="text" id="mobile" name="mobile" value="${corporation.mobile}" />
+        	</td>
+		</tr>
+		<tr>
+			<th> 密码：</th>
+        	<td>
+        		<input type="password" id="pwd" name="pwd" value="${corporation.pwd}" 
+        		onkeyup="javascript:EvalPwd(this.value);"/>
+            	
+        	</td>
+			<th>邮箱：</th>
+			<td>
+				<input type="text" class="input" id="email" name="email" value="${corporation.email}" />
+            	<i class="form-icon-clear"></i>
+			</td>
+		</tr>
+		<tr>
+			<th>密码强度：</th>
+			<td>
+				<table id="pwdpower" title="字母加数字加符号就会强" style="width: 100%" cellspacing="0"
+				cellpadding="0" border="0">
+					<tbody>
+						<tr>
+							<td id="pweak" style="">弱</td>
+							<td id="pmedium" style="">中</td>
+							<td id="pstrong" style="">强</td>
+						</tr>
+					</tbody>
 				</table>
-		</div>
-		<div style="width: 1000px; margin: 10px;">
-			<table style="float: left;width: 20%;line-height: 100px">
-	   			<tr>
-					<th>账户信息</th>
-				</tr>
-	    	</table>
-	    	<table class="form-table" border="1" cellspacing="1" cellpadding="0" frame=box rules=none style="border:solid 1px #C6E6FF;float: left;margin-top: 10px;width: 80%">
-				<tr>
-					<th><b class="mustbe">*</b>用户名：</th>
-					<td>
-						<input type="text"  class="loginName" name="loginName" value="${corporation.loginName}" />
-		            	
-		            </td>
-		        	<th><b class="mustbe">*</b> 手机号码：</th>
-		        	<td>
-		        		<input type="text" id="mobile" name="mobile" value="${corporation.mobile}" />
-		        	</td>
-				</tr>
-				<tr>
-					<th> 密码：</th>
-		        	<td>
-		        		<input type="password" id="pwd" name="pwd" value="${corporation.pwd}" 
-		        		onkeyup="javascript:EvalPwd(this.value);"/>
-		            	
-		        	</td>
-					<th>邮箱：</th>
-					<td>
-						<input type="text" class="input" id="email" name="email" value="${corporation.email}" />
-		            	<i class="form-icon-clear"></i>
-					</td>
-				</tr>
-				<tr>
-					<th>密码强度：</th>
-					<td>
-						<table id="pwdpower" title="字母加数字加符号就会强" style="width: 100%" cellspacing="0"
-						cellpadding="0" border="0">
-							<tbody>
-								<tr>
-									<td id="pweak" style="">弱</td>
-									<td id="pmedium" style="">中</td>
-									<td id="pstrong" style="">强</td>
-								</tr>
-							</tbody>
-						</table>
-					</td>
-					<th>办公电话：</th>
-					<td>
-						<input type="text" id="phone" name="phone" value="${corporation.phone}" />
-					</td>
-				</tr>
-				<tr>
-					<th>经营范围：</th>
-					<td>
-						<input type="text"  class="input" id="scope" name="scope" value="${corporation.scope}"  />
-					</td>
-				</tr>
-		</table>
-	</div>
+			</td>
+			<th>办公电话：</th>
+			<td>
+				<input type="text" id="phone" name="phone" value="${corporation.phone}" />
+			</td>
+		</tr>
+		<tr>
+			<th>经营范围：</th>
+			<td>
+				<input type="text"  class="input" id="scope" name="scope" value="${corporation.scope}"  />
+			</td>
+			<th></th>
+			<td></td>
+		</tr>
+	</table>
 	</div>
     
     <div style="clear:both;"></div>

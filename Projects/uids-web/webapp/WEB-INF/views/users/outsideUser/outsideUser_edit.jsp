@@ -3,7 +3,7 @@
 <html>
 
 <%@ include file="/include/meta.jsp"%> 
-
+<script type="text/javascript" src="${ctx}/res/js/region/checkpwd.js"></script>
 <head>
 <title>甘肃万维JUP课题</title>
 <script type="text/javascript">
@@ -109,6 +109,26 @@ color: rgb(119, 119, 119);
     white-space: nowrap;
     padding: 2px 2px;
 }
+
+.td_1 {
+	border-bottom : 1px solid #C6E6FF;
+	border-right : 1px solid #C6E6FF;
+}
+.td_2 {
+	border-right : 1px solid #C6E6FF;
+}
+.td_3 {
+	border-bottom : 1px solid #C6E6FF;
+}
+.td_4 {
+	border-bottom : 1px solid #C6E6FF;
+}
+.td_5 {
+	border-bottom : 1px solid #C6E6FF;
+}
+.td_6 {
+	border-bottom : 1px solid #C6E6FF;
+}  
 </style>
 </head>
 <body>
@@ -142,191 +162,169 @@ color: rgb(119, 119, 119);
     
     <!--表单的主内容区域-->
     <div class="form-content">
-    	<!-- <div align="center">基本属性</div> -->
     	<table class="form-table">
 			<tr>
-				<td  style="max-width:0px;width:100px;ont-weight:bold;" align="center">基本属性</td>
+				<td class="td_1" rowspan="5" style="max-width:0px;width:100px;ont-weight:bold;" align="center">基本属性</td>
+				<th><b class="mustbe">*</b>登录名：</th>
 				<td>
-					<table class="form-table" style="border:solid 1px #C6E6FF; padding:2px" >
-			    		<tr>
-							<th><b class="mustbe">*</b>登录名：</th>
-							<td>
-								<input type="text"  class="loginName" name="loginName" value="${outsideUser.loginName}" />
-				            </td>
-				        	<th><b class="mustbe">*</b>密码：</th>
-							<td>
-								<input type="password"  class="pwd" name="pwd" value="${outsideUser.pwd}" />
-							</td>
-							<!-- <th>密码强度</th>
-							<td>
-								<table id="pwdpower" title="字母加数字加符号就会强" style="width: 100%" cellspacing="0"
-								cellpadding="0" border="0">
-									<tbody>
-										<tr>
-											<td id="pweak" style="">弱</td>
-											<td id="pmedium" style="">中</td>
-											<td id="pstrong" style="">强</td>
-										</tr>
-									</tbody>
-								</table>
-							</td> -->
-						</tr>
-						<tr>
-							<th><b class="mustbe">*</b>姓名：</th>
-							<td>
-								<input type="text"  class="name" name="name" value="${outsideUser.name}" />
-							</td>
-							<th><b class="mustbe">*</b>邮箱：</th>
-							<td>
-								<input type="text"  class="email" name="email" value="${outsideUser.email}" />
-							</td>
-						</tr>
-			    		<tr>
-							<th><b class="mustbe">*</b>手机号码：</th>
-							<td>
-								<input type="text"  class="mobile" name="mobile" value="${outsideUser.mobile}" />
-							</td>
-							<th><!-- <b class="mustbe">*</b> -->户籍省市区：</th>
-							<td>
-								<%-- <select name="degree" value="${outsideUser.gpresidenceId}">
-									<option value="">请选择</option>
-									<option value="">甘肃省</option>
-								</select>
-								<select name="degree" value="${outsideUser.presidenceId}">
-									<option value="">请选择</option>
-								</select>
-								<select name="degree" value="${outsideUser.residenceId}">
-									<option value="">请选择</option>
-								</select> --%>
-								<input type="text"  class="" name="null" value="" />
-							</td>
-						</tr>
-						<tr>
-							<th><b class="mustbe">*</b>户籍详细地址：</th>
-							<td>
-								<input type="text"  class="residenceDetail" name="residenceDetail" value="${outsideUser.residenceDetail}" />
-				            </td>
-				        	<th><!-- <b class="mustbe">*</b> -->居住地省市区：</th>
-							<td>
-								<%-- <select name="degree" value="${outsideUser.gplivingAreaId}">
-									<option value="">请选择</option>
-									<option value="">甘肃省</option>
-								</select>
-								<select name="degree" value="${outsideUser.plivingAreaId}">
-									<option value="">请选择</option>
-								</select>
-								<select name="degree" value="${outsideUser.livingAreaId}">
-									<option value="">请选择</option>
-								</select> --%>
-								<input type="text"  class="" name="null" value="" />
-							</td>
-						</tr>
-						<tr>
-							<th><b class="mustbe">*</b>居住地详细地址：</th>
-							<td>
-								<input type="text"  class="livingAreaDetail" name="livingAreaDetail" value="${outsideUser.livingAreaDetail}" />
-							</td>
-							<th></th>
-							<td></td>
-						</tr>
+					<input type="text"  class="loginName" name="loginName" value="${outsideUser.loginName}" />
+	            </td>
+	        	<th><b class="mustbe">*</b>密码：</th>
+				<td>
+					<input type="password"  class="pwd" name="pwd" value="${outsideUser.pwd}" onkeyup="javascript:EvalPwd(this.value);"/>
+				</td>
+			</tr>
+			<tr>
+				<th><b class="mustbe">*</b>姓名：</th>
+				<td>
+					<input type="text"  class="name" name="name" value="${outsideUser.name}" />
+				</td>
+				<th>密码强度：</th>
+				<td>
+					<table id="pwdpower" title="字母加数字加符号就会强" style="width: 100%" cellspacing="0"
+					cellpadding="0" border="0">
+						<tbody>
+							<tr>
+								<td id="pweak" style="">弱</td>
+								<td id="pmedium" style="">中</td>
+								<td id="pstrong" style="">强</td>
+							</tr>
+						</tbody>
 					</table>
+				</td>
+			</tr>
+			<tr>
+				<th><b class="mustbe">*</b>邮箱：</th>
+				<td>
+					<input type="text"  class="email" name="email" value="${outsideUser.email}" />
+				</td>
+				<th><b class="mustbe">*</b>手机号码：</th>
+				<td>
+					<input type="text"  class="mobile" name="mobile" value="${outsideUser.mobile}" />
+				</td>
+			</tr>
+			<tr>
+				<th><!-- <b class="mustbe">*</b> -->户籍省市区：</th>
+				<td>
+					<%-- <select name="degree" value="${outsideUser.gpresidenceId}">
+						<option value="">请选择</option>
+						<option value="">甘肃省</option>
+					</select>
+					<select name="degree" value="${outsideUser.presidenceId}">
+						<option value="">请选择</option>
+					</select>
+					<select name="degree" value="${outsideUser.residenceId}">
+						<option value="">请选择</option>
+					</select> --%>
+					<input type="text"  class="" name="null" value="" />
+				</td>
+				<th><b class="mustbe">*</b>户籍详细地址：</th>
+				<td>
+					<input type="text"  class="residenceDetail" name="residenceDetail" value="${outsideUser.residenceDetail}" />
+	            </td>
+			</tr>
+			<tr>
+				<th class="td_5"><!-- <b class="mustbe">*</b> -->居住地省市区：</th>
+				<td class="td_3">
+					<%-- <select name="degree" value="${outsideUser.gplivingAreaId}">
+						<option value="">请选择</option>
+						<option value="">甘肃省</option>
+					</select>
+					<select name="degree" value="${outsideUser.plivingAreaId}">
+						<option value="">请选择</option>
+					</select>
+					<select name="degree" value="${outsideUser.livingAreaId}">
+						<option value="">请选择</option>
+					</select> --%>
+					<input type="text"  class="" name="null" value="" />
+				</td>
+				<th class="td_6"><b class="mustbe">*</b>居住地详细地址：</th>
+				<td class="td_4">
+					<input type="text"  class="livingAreaDetail" name="livingAreaDetail" value="${outsideUser.livingAreaDetail}" />
 				</td>
 			</tr>
 			
 			<tr>
-				
-				<td tyle="max-width:0px;width:100px;ont-weight:bold;" align="center"">详细属性</td>
+				<td class="td_2" rowspan="7" tyle="max-width:0px;width:100px;ont-weight:bold;" align="center"">详细属性</td>
+				<th><b class="mustbe">*</b>性别：</th>
 				<td>
-					<table class="form-table" style="border:solid 1px #C6E6FF; padding:2px" >	
-			    		<tr>
-							<th><b class="mustbe">*</b>性别：</th>
-							<td>
-								<input type="radio" name="sex" value = '男' <c:if test="${outsideUser.sex == '男'}">checked="checked" </c:if>>男&nbsp&nbsp&nbsp
-			    				<input type="radio" name="sex" value = '女' <c:if test="${outsideUser.sex == '女'}">checked="checked" </c:if>>女
-							</td>
-							<%-- <td>
-								<input type="text"  class="sex" name="sex" value="${outsideUser.sex}" />
-				            </td> --%>
-				        	<th>年龄：</th>
-							<td>
-								<input type="text"  class="age" name="age" value="${outsideUser.age}" />
-							</td>
-						</tr>
-						<tr>
-							<th><b class="mustbe">*</b>身份证号：</th>
-							<td>
-								<input type="text"  class="papersNumber" name="papersNumber" value="${outsideUser.papersNumber}" />
-							</td>
-							<th>学历：</th>
-							<td>
-								<select name="degree" value="${outsideUser.degree}">
-									<option value="">请选择学历</option>
-									<option value='其他' <c:if test="${outsideUser.degree == '其他'}">selected</c:if>>其他</option>
-									<option value='小学' <c:if test="${outsideUser.degree == '小学'}">selected</c:if>>小学</option>
-									<option value='初中' <c:if test="${outsideUser.degree == '初中'}">selected</c:if>>初中</option>
-									<option value='高中' <c:if test="${outsideUser.degree == '高中'}">selected</c:if>>高中</option>
-									<option value='专科' <c:if test="${outsideUser.degree == '专科'}">selected</c:if>>专科</option>
-									<option value='大学' <c:if test="${outsideUser.degree == '大学'}">selected</c:if>>大学</option>
-									<option value='硕士' <c:if test="${outsideUser.degree == '硕士'}">selected</c:if>>硕士</option>
-									<option value='博士' <c:if test="${outsideUser.degree == '博士'}">selected</c:if>>博士</option>
-								</select>
-							</td>
-						</tr>
-			    		<tr>
-							<th>工作单位：</th>
-							<td>
-								<input type="text"  class="workUnit" name="workUnit" value="${outsideUser.workUnit}" />
-							</td>
-							<th>职务：</th>
-							<td>
-								<input type="text"  class="headShip" name="headShip" value="${outsideUser.headShip}" />
-							</td>
-						</tr>
-						<tr>
-							<th>传真：</th>
-							<td>
-								<input type="text"  class="fax" name="fax" value="${outsideUser.fax}" />
-							</td>
-							<th>固定电话：</th>
-							<td>
-								<input type="text"  class="phone" name="phone" value="${outsideUser.phone}" />
-							</td>
-						</tr>
-						<tr>
-							<th>办公电话：</th>
-							<td>
-								<input type="text"  class="compTel" name="compTel" value="${outsideUser.compTel}" />
-							</td>
-							<th>QQ：</th>
-							<td>
-								<input type="text"  class="qq" name="qq" value="${outsideUser.qq}" />
-							</td>
-						</tr>
-						<tr>
-							<th>MSN：</th>
-							<td>
-								<input type="text"  class="msn" name="msn" value="${outsideUser.msn}" />
-							</td>
-							<th>邮编：</th>
-							<td>
-								<input type="text"  class="post" name="post" value="${outsideUser.post}" />
-							</td>
-						</tr>
-						<tr>
-							<th>联系地址：</th>
-							<td>
-								<input type="text"  class="address" name="address" value="${outsideUser.address}" />
-							</td>
-							<th></th>
-							<td></td>
-						</tr>
-					</table>
+					<input type="radio" name="sex" value = '男' <c:if test="${outsideUser.sex == '男'}">checked="checked" </c:if>>男&nbsp&nbsp&nbsp
+    				<input type="radio" name="sex" value = '女' <c:if test="${outsideUser.sex == '女'}">checked="checked" </c:if>>女
+				</td>
+				<th>年龄：</th>
+				<td>
+					<input type="text"  class="age" name="age" value="${outsideUser.age}" />
 				</td>
 			</tr>
+			<tr>
+				<th><b class="mustbe">*</b>身份证号：</th>
+				<td>
+					<input type="text"  class="papersNumber" name="papersNumber" value="${outsideUser.papersNumber}" />
+				</td>
+				<th>学历：</th>
+				<td>
+					<select name="degree" value="${outsideUser.degree}">
+						<option value="">请选择学历</option>
+						<option value='其他' <c:if test="${outsideUser.degree == '其他'}">selected</c:if>>其他</option>
+						<option value='小学' <c:if test="${outsideUser.degree == '小学'}">selected</c:if>>小学</option>
+						<option value='初中' <c:if test="${outsideUser.degree == '初中'}">selected</c:if>>初中</option>
+						<option value='高中' <c:if test="${outsideUser.degree == '高中'}">selected</c:if>>高中</option>
+						<option value='专科' <c:if test="${outsideUser.degree == '专科'}">selected</c:if>>专科</option>
+						<option value='大学' <c:if test="${outsideUser.degree == '大学'}">selected</c:if>>大学</option>
+						<option value='硕士' <c:if test="${outsideUser.degree == '硕士'}">selected</c:if>>硕士</option>
+						<option value='博士' <c:if test="${outsideUser.degree == '博士'}">selected</c:if>>博士</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<th>工作单位：</th>
+				<td>
+					<input type="text"  class="workUnit" name="workUnit" value="${outsideUser.workUnit}" />
+				</td>
+				<th>职务：</th>
+				<td>
+					<input type="text"  class="headShip" name="headShip" value="${outsideUser.headShip}" />
+				</td>
+			</tr>
+			<tr>
+				<th>传真：</th>
+				<td>
+					<input type="text"  class="fax" name="fax" value="${outsideUser.fax}" />
+				</td>
+				<th>固定电话：</th>
+				<td>
+					<input type="text"  class="phone" name="phone" value="${outsideUser.phone}" />
+				</td>
+			</tr>
+			<tr>
+				<th>办公电话：</th>
+				<td>
+					<input type="text"  class="compTel" name="compTel" value="${outsideUser.compTel}" />
+				</td>
+				<th>QQ：</th>
+				<td>
+					<input type="text"  class="qq" name="qq" value="${outsideUser.qq}" />
+				</td>
+			</tr>
+			<tr>
+				<th>MSN：</th>
+				<td>
+					<input type="text"  class="msn" name="msn" value="${outsideUser.msn}" />
+				</td>
+				<th>邮编：</th>
+				<td>
+					<input type="text"  class="post" name="post" value="${outsideUser.post}" />
+				</td>
+			</tr>
+			<tr>
+				<th>联系地址：</th>
+				<td>
+					<input type="text"  class="address" name="address" value="${outsideUser.address}" />
+				</td>
+				<th></th>
+				<td></td>
+			</tr>
 		</table>
-    	
-		<!-- <div align="center">详细属性</div> -->
-		
     </div>
     <div style="clear:both;"></div>
     <!--表单的按钮组区域-->
