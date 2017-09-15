@@ -41,7 +41,7 @@ public interface ComplatCorporationService {
 	void save(ComplatCorporation corporation) throws Exception;
 	
 	/**
-	 * 删除
+	 * 修改
 	 */
-	void delete(ComplatCorporation corporation) throws Exception;
+	void updateCorporation(Integer iid) throws Exception;
 }

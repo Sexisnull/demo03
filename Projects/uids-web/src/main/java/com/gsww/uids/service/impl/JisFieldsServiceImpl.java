@@ -60,4 +60,5 @@ public class JisFieldsServiceImpl implements JisFieldsService {
 		}
 		return jisFieldsList;
 	}
+
 }

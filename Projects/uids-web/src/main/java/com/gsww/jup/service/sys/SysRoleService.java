@@ -6,6 +6,8 @@ package com.gsww.jup.service.sys;
 
 import java.util.List;
 
+import net.sf.json.JSONArray;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;

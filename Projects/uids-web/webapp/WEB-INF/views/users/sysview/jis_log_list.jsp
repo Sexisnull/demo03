@@ -52,7 +52,7 @@
 				<div class="list-topBar">
 					<!-- 搜索内容开始 -->
 					<div class="search-content">
-						<form id="form1" name="pageForm" action="${ctx}/uids/logList"
+						<form id="form1" name="pageForm" action="${ctx}/jisLog/logList"
 							method="get">
 							<table class="">
 								<tr>

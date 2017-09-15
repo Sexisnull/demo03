@@ -77,7 +77,7 @@
     	</ol>
     </div>
     <div class="search-content">
-		<form id="form1" name="pageForm" action="${ctx}/complat/outsideuserList" method="get">
+		<form id="form1" name="pageForm" action="${ctx}/complat/corporationList" method="get">
 			<table class="advanced-content">
 				<tr>
 					<th>用户登录名：</th>

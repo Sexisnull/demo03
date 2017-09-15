@@ -1,3 +1,4 @@
+
 package com.gsww.uids.service;
 
 import java.util.List;
@@ -28,5 +29,10 @@ public interface ComplatRoleService {
 	public String getAuthorizeTree(String id) throws Exception;
 	//保存授权书
 	public void saveAuthorize(String id,String keys,String types);
+	
+	/**
+	 * 根据用户ID查询对应的角色信息
+	 */
+	public List<ComplatRolerelation> findByUserId(Integer userId) throws Exception;
 
 }

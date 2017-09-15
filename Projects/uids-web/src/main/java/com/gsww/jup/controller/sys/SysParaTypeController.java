@@ -4,12 +4,14 @@
  */
 package com.gsww.jup.controller.sys;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -165,6 +167,32 @@ public class SysParaTypeController extends BaseController{
 			return  new ModelAndView("redirect:/sys/paraTypeList");
 		}
 		
+	}
+	/**
+	 * 参数编码是否已使用
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/checkParaTypeName", method = RequestMethod.GET)
+	public void checkParaCode(String paraTypeName,HttpServletRequest request,HttpServletResponse response)throws Exception {
+		try {
+			SysParaType sysParaType = null;
+			String paraTypeNameInput=StringUtils.trim((String)request.getParameter("paraTypeName"));
+			String oldParaTypeName=StringUtils.trim((String)request.getParameter("oldParaTypeName"));
+			if(!paraTypeNameInput.equals(oldParaTypeName)){
+				sysParaType = sysParaTypeService.checkParaTypeName(paraTypeName);
+				if(sysParaType!=null){
+					response.getWriter().write("0");
+				}else{
+					response.getWriter().write("1");
+				}
+			}else{
+				response.getWriter().write("1");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

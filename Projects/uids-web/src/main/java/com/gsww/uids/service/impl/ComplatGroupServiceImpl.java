@@ -1,19 +1,23 @@
 package com.gsww.uids.service.impl;
 
-import com.gsww.uids.dao.ComplatGroupDao;
-import com.gsww.uids.entity.ComplatGroup;
-import com.gsww.uids.service.ComplatGroupService;
-import net.sf.json.JSONObject;
-import org.apache.commons.collections.CollectionUtils;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import com.gsww.uids.dao.ComplatGroupDao;
+import com.gsww.uids.entity.ComplatGroup;
+import com.gsww.uids.service.ComplatGroupService;
+
+import net.sf.json.JSONObject;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
+
 
 @Transactional
 @Service("complatGroupService")
@@ -49,7 +53,7 @@ public class ComplatGroupServiceImpl implements ComplatGroupService{
     //根据机构主键查询机构信息
 	@Override
 	public ComplatGroup findByKey(String pk) throws Exception {
-		ComplatGroup complatGroup=complatGroupDao.findByIid(Integer.parseInt(pk));
+		ComplatGroup complatGroup=complatGroupDao.findByIid(Integer.valueOf(pk));
 		return complatGroup;
 	}
 	@Override
@@ -88,13 +92,13 @@ public class ComplatGroupServiceImpl implements ComplatGroupService{
 		}
 	}	
 	
-	/**
-	 *同步用户 1
-	 */
-	@Override
-	public ComplatGroup saveUser(ComplatGroup complatGroup){				
-		return complatGroupDao.save(complatGroup);
-	}
+//	/**
+//	 *同步用户 1
+//	 */
+//	@Override
+//	public ComplatGroup saveUser(ComplatGroup complatGroup){				
+//		return complatGroupDao.save(complatGroup);
+//	}
 
 	/**
 	 *查找用户是否存在

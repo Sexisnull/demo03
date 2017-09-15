@@ -42,7 +42,6 @@ public interface JisFieldsService {
 	 * @param jisFields
 	 */
 	void delete(JisFields jisFields);
-	
 	/**
 	 * @discription 查询所有用户扩展属性实体   
 	 * @return

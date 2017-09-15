@@ -51,5 +51,5 @@ public interface SysParaTypeDao extends PagingAndSortingRepository<SysParaType, 
 	void updateState(String paraTypeState, String paraTypeId);
 	SysParaType findByParaTypeNameAndParaTypeState(String typeName,
 			String string);
-	
+	SysParaType findByParaTypeName(String paraTypeName);
 }

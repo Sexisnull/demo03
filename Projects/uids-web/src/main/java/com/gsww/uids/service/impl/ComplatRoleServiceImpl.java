@@ -13,7 +13,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.gsww.jup.dao.sys.SysMenuDao;
 import com.gsww.jup.dao.sys.SysOperatorDao;
 import com.gsww.jup.dao.sys.SysRoleMenuRelDao;
@@ -22,6 +21,7 @@ import com.gsww.jup.entity.sys.SysResourceTree;
 import com.gsww.jup.entity.sys.SysRoleMenuRel;
 import com.gsww.jup.entity.sys.SysRoleOperRel;
 import com.gsww.jup.util.NullHelper;
+import com.gsww.jup.util.StringHelper;
 import com.gsww.uids.dao.ComplatRoleDao;
 import com.gsww.uids.dao.ComplatRoleRelationDao;
 import com.gsww.uids.entity.ComplatRole;
@@ -218,6 +218,26 @@ public class ComplatRoleServiceImpl implements ComplatRoleService{
 		List<ComplatRole> list=new ArrayList<ComplatRole>();
 		list=roleDao.findAll();
 		return list;
+	}
+	
+	/**
+	 * 根据用户ID查询对应角色ID
+	 */
+	@Override
+	public List<ComplatRolerelation> findByUserId(Integer userId) throws Exception {
+		String getRoleSql = "select t.roleId from complat_rolerelation t where userId = ?";
+		List<Map<String, Object>> roleRelationMap = jdbcTemplate.queryForList(getRoleSql, new Integer[] {userId});
+		List<ComplatRolerelation> roleRelationList = new ArrayList<ComplatRolerelation>();
+		for (Map<String, Object> map : roleRelationMap) {
+			ComplatRolerelation roleRelation = new ComplatRolerelation();
+			String roleId = map.get("ROLEID").toString();
+			if(StringHelper.isNotBlack(roleId)){
+				roleRelation.setRoleId(Integer.parseInt(roleId));
+				roleRelationList.add(roleRelation);
+			}
+		}
+		
+		return roleRelationList;
 	}
 
 }

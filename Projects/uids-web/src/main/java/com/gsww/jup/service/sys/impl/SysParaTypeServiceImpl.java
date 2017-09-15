@@ -72,6 +72,12 @@ public class SysParaTypeServiceImpl implements SysParaTypeService {
 		sysParaTypeDao.updateState("0", paraTypeId);
 	}
 
+	@Override
+	public SysParaType checkParaTypeName(String paraTypeName) throws Exception {
+		// TODO Auto-generated method stub
+		return sysParaTypeDao.findByParaTypeName(paraTypeName);
+	}
+
 
 
 

@@ -1,9 +1,6 @@
 package com.gsww.jup.service.sys.impl;
 
 
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,10 +8,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.gsww.jup.dao.sys.SysOperatorDao;
 import com.gsww.jup.entity.sys.SysOperator;
 import com.gsww.jup.service.sys.SysOperatorService;
+import java.util.*;
 @Transactional
 @Service("sysOperatorService")
 public class SysOperatorServiceImpl implements SysOperatorService{

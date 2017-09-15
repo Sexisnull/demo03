@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gsww.uids.dao.JisSysviewDao;
 import com.gsww.uids.entity.JisSysview;
+import com.gsww.uids.entity.JisSysviewCurrent;
 import com.gsww.uids.service.JisSysviewService;
 
 @Transactional
@@ -25,5 +26,10 @@ public class JisSysviewServiceImpl implements JisSysviewService{
 	@Override
 	public JisSysview findByIid(Integer iid) throws Exception {
 		return jisSysviewDao.findByIid(iid);
+	}
+
+	@Override
+	public void save(JisSysview sysview) {
+		jisSysviewDao.save(sysview);
 	}
 }
