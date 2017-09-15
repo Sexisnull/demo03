@@ -2,11 +2,11 @@ package com.gsww.uids.service;
 
 import java.util.List;
 
+import com.gsww.jup.entity.sys.SysMenu;
+import com.gsww.uids.entity.ComplatGroup;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
-
-import com.gsww.uids.entity.ComplatGroup;
 
 public interface ComplatGroupService {
 	
@@ -61,13 +61,7 @@ public interface ComplatGroupService {
 	 */
 	public ComplatGroup queryNameIsUsed(String name)throws Exception;
 	
-	/**
-	 * 同步用户
-	 * @param sysAccount
-	 * @throws Exception
-	 * @author anhang
-	 */
-	public ComplatGroup saveUser(ComplatGroup complatGroup);
+
 	/**
 	 * 查找机构是否存在
 	 * @param loginAccount
