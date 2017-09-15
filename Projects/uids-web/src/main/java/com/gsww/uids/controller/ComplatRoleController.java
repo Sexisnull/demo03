@@ -42,15 +42,12 @@ public class ComplatRoleController extends BaseController{
 
 	private static Logger logger = LoggerFactory.getLogger(ComplatRoleController.class);
 	@Autowired
-	private ComplatRoleService roleService;
+	private ComplatRoleService complatRoleService;
 	@Autowired
 	private JisApplicationService jisApplicationService;
 	@Autowired
 	private JisRoleobjectService jisRoleobjectService;
-	
-	
-	
-	
+
 	@RequestMapping(value="/croleList",method = RequestMethod.GET)
 	public String roleList(@RequestParam(value = "page", defaultValue = "1") int pageNo,
 			@RequestParam(value = "page.size", defaultValue = PAGE_SIZE) int pageSize,
@@ -68,7 +65,7 @@ public class ComplatRoleController extends BaseController{
 			Specification<ComplatRole>  spec=super.toSpecification(searchParams, ComplatRole.class);
 			
 			//分页
-			Page<ComplatRole> pageInfo = roleService.getRolePage(spec, pageRequest);
+			Page<ComplatRole> pageInfo = complatRoleService.getRolePage(spec, pageRequest);
 			model.addAttribute("pageInfo", pageInfo);
 			// 将搜索条件编码成字符串，用于排序，分页的URL
 			model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
@@ -88,7 +85,7 @@ public class ComplatRoleController extends BaseController{
 		try {
 			ComplatRole cRole = null;
 			if(StringHelper.isNotBlack(croleId)){
-				cRole = roleService.findByKey(Integer.parseInt(croleId));
+				cRole = complatRoleService.findByKey(Integer.parseInt(croleId));
 			}else{
 				cRole = new ComplatRole();
 			}
@@ -110,7 +107,7 @@ public class ComplatRoleController extends BaseController{
 			}
 			role.setName(cRole.getName());
 			role.setSpec(cRole.getSpec());*/
-			roleService.save(cRole);
+			complatRoleService.save(cRole);
 			returnMsg("success","保存成功",request);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -128,12 +125,12 @@ public class ComplatRoleController extends BaseController{
 		try {
 			String[] para=croleId.split(",");
 			for(int i=0;i<para.length;i++){
-				List<ComplatRolerelation> acct = roleService.findAcctByroleId(Integer.parseInt(para[i].trim()));
-				ComplatRole role = roleService.findByKey(Integer.parseInt(para[i].trim()));
+				List<ComplatRolerelation> acct = complatRoleService.findAcctByroleId(Integer.parseInt(para[i].trim()));
+				ComplatRole role = complatRoleService.findByKey(Integer.parseInt(para[i].trim()));
 				if(acct!=null && acct.size()>0){
 					resMsg += "名称为“"+role.getName()+"”的角色下存在用户，不能删除！   </br>   ";
 				}else{
-					roleService.delete(Integer.parseInt(para[i].trim()));
+					complatRoleService.delete(Integer.parseInt(para[i].trim()));
 				}
 			}
 		} catch (Exception e) {
@@ -156,7 +153,7 @@ public class ComplatRoleController extends BaseController{
 			String roleNameInput=StringUtils.trim((String)request.getParameter("name"));
 			String roleNameold=StringUtils.trim((String)request.getParameter("oldRoleName"));
 			if(!roleNameInput.equals(roleNameold)){
-				List<ComplatRole> cRoleList = roleService.findByName(roleNameInput);
+				List<ComplatRole> cRoleList = complatRoleService.findByName(roleNameInput);
 				if(cRoleList!=null && cRoleList.size()>0){
 					response.getWriter().write("0");
 				}else{
@@ -247,7 +244,7 @@ public class ComplatRoleController extends BaseController{
 	public void roleAuthorizeList(String roleId,HttpServletRequest request,HttpServletResponse response,Model model)  throws Exception {
 		try {
 			//SysUserSession sysUserSession = (SysUserSession) request.getSession().getAttribute("sysUserSession");
-			String treeJson= roleService.getAuthorizeTree(roleId);
+			String treeJson= complatRoleService.getAuthorizeTree(roleId);
 			response.setCharacterEncoding("UTF-8");
 			response.setHeader("Content-type", "text/html;charset=UTF-8");
 			response.getWriter().write(treeJson);
@@ -265,7 +262,7 @@ public class ComplatRoleController extends BaseController{
 			if (roleId == null || keys == null || types == null) {
 				response.getWriter().write("error");
 			} else {
-				roleService.saveAuthorize(roleId, keys.trim(), types.trim());
+				complatRoleService.saveAuthorize(roleId, keys.trim(), types.trim());
 				response.getWriter().write("success");
 			}
 		} catch (Exception e) {

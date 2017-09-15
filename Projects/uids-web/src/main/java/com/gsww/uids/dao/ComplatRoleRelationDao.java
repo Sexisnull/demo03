@@ -17,4 +17,5 @@ JpaSpecificationExecutor<ComplatRolerelation>{
 	List<ComplatRolerelation> findByUserId(Integer userId);
 
 	List<ComplatRolerelation> findByRoleId(Integer roleId);
+	//删除
 }
