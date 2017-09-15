@@ -1,15 +1,11 @@
-
 package com.gsww.uids.service;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 
-import com.gsww.jup.entity.sys.SysAccount;
-import com.gsww.uids.entity.ComplatCorporation;
 import com.gsww.uids.entity.ComplatUser;
 
 /**
@@ -39,23 +35,24 @@ public interface ComplatUserService {
 	
 	
 	/**
-	 * 根据主键查询法人信息
+	 * 根据主键查询用户信息
 	 */
 	ComplatUser findByKey(Integer iid) throws Exception;
 	
 	/**
 	 * 保存
 	 */
-	void save(ComplatUser complatUser) throws Exception;
+	void save(ComplatUser complatUser);
 	
 	/**
 	 * 删除
 	 */
 	void delete(ComplatUser complatUser) throws Exception;
 	
+	
 	/**
-	 * 修改
+	 * 根据用户名查询用户信息
 	 */
-	void updateUser(Integer iid,String name,String headShip,String phone,String mobile,String fax,
-			String email,String qq, Date modifyTime,String pwd) throws Exception;
+	List<ComplatUser> findByUserName(String name);
+
 }
