@@ -58,7 +58,8 @@ public interface ComplatUserService {
 	
 	
 	/**
-	 * 用户设置 保存      add by yaoxi
+	 * 用户设置 保存     
+	 * @author yaoxi
 	 */
 	void updateUser(Integer iid,String name,String headShip,String phone,String mobile,String fax,
 			String email,String qq, Date modifyTime,String pwd) throws Exception;

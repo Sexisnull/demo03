@@ -15,12 +15,61 @@
 		<link href="${ctx}/res/skin/${theme }/css/reset.css" rel="stylesheet" type="text/css" />
 		<link href="${ctx}/res/skin/${theme }/css/index.css" rel="stylesheet" type="text/css" />
 		<link rel="stylesheet" type="text/css" href="${ctx}/res/plugin/scroll/jquery.mCustomScrollbar.css" />
-	
 		
 		<title>统一身份认证系统</title>
 		<script>
 			$(document).ready(function(){
-				$('#calltest').removeClass();
+				//表单校验
+				var userNameInput=$("#name").val();
+				 $("#editForm").validate({
+				    rules: {
+					   name: {
+					    required: true,
+					    cnRangelength: [0,33],
+					    stringCheck:userNameInput  
+					   },
+					   loginname:{
+					   	required: true,
+					   	cnRangelength:[0,33]
+					   },
+					   pwd:{
+					   	required:true
+					   },
+					   confPwd:{
+					   	required:true,
+					   	equalTo:"#pwd"
+					   },
+					   cardid:{
+					   	isIdCardNo:true,
+					   	 maxlength: 18
+					   },
+					   mobile:{
+					   	isMobile:true
+					   },
+					   pwd:{
+					   	required: true
+					   },
+					   email:{
+					   	email:true
+					   },
+					   phone:{
+					   	isPhone:true
+					   }
+					  }
+				    });
+				    
+				    
+				    //用户扩展属性
+				   var fileds = $(".form-table");
+				   for(var i= 0 ;i <= 8;i++){
+				   	if(i%2 == 0){
+				   		fileds.append("<tr><th>yaoxi2：</th><td><input type='text' id='yaox' name='yaox'></td>"+
+				  		    "<th>yaoxi4：</th><td><input type='text' id='yaox' name='yaox'></td></tr>");
+				   	}else{
+				   		fileds.append("<tr><th>yaoxi1：</th><td><input type='text' id='yaox' name='yaox'></td></tr>");
+				   	}
+				   		
+				   }
 			});
 		</script>
 		<style type="text/css">
@@ -99,19 +148,20 @@
 	    
 		    <div style="display:none;">
 		    	<input type="hidden" id="iid" name="iid" value="${complatUser.iid}"/>
+		    	<input type="hidden" id="userDetailIid" name="userDetailIid" value="${userDetail.iid}">
 		    </div>
 		    
 		    <!--表单的主内容区域-->
 		    <div class="form-content">
 		    	<table class="form-table">
 		    		<tr>
-			        	 <th><b class="mustbe">*</b> 姓名：</th>
+			        	 <th><b class="mustbe">*</b>姓名：</th>
 			        	 <td>
-							<input type="text" id="name" name="name" value="${complatUser.name}" />
+							<input type="text" id="name" name="name" value="${complatUser.name}" maxlength="33"/>
 						</td>
 						<th>登录名：</th>
 						<td>
-							<input type="text" id="loginname" name="loginname" value="${complatUser.loginname}" readonly="readonly"/>
+							<input type="text" id="loginname" name="loginname" value="${complatUser.loginname}" readonly="readonly"  maxlength="33"/>
 						</td>
 					</tr>
 					<tr>
@@ -149,7 +199,7 @@
 			            </td>
 			            <th>身份证号：</th>
 						<td>
-							<input type="text"  class="input" name="" id="" value=""  />
+							<input type="text"  class="input" name="cardid" id="cardid" value="${userDetail.cardid}"  />
 						</td>
 					</tr>
 					<tr>
@@ -206,6 +256,8 @@
 	    <!-- 滚动条组件 -->
 	    <script type="text/javascript" src="${ctx}/res/plugin/scroll/jquery.mCustomScrollbar.concat.min.js"></script>
 		<script type="text/javascript" src="${ctx}/res/skin/login/js/login.js"></script>
+		<!-- 密码强度校验 -->
+		<script type="text/javascript" src="${ctx}/res/js/region/checkpwd.js"></script>
     	<script type="text/javascript">
 			
 		

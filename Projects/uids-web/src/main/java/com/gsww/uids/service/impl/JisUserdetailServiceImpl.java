@@ -1,31 +1,48 @@
 package com.gsww.uids.service.impl;
 
+
 import com.gsww.jup.dao.JdbcDAO;
 import com.gsww.uids.service.JisUserdetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * JisUserdetailServiceImpl
- * com.gsww.uids.service.impl
- *
- * @author xiaoyy
- * @Date 2017-09-15 下午2:50
- * The word 'impossible' is not in my dictionary.
- */
+
+import com.gsww.uids.dao.JisUserdetailDao;
+import com.gsww.uids.entity.JisUserdetail;
+
+
 @Transactional
-@Service("jisUserdetailService")
-public class JisUserdetailServiceImpl implements JisUserdetailService{
-
-    @Autowired
+@Service("JisUserdetailService")
+public class JisUserdetailServiceImpl implements JisUserdetailService {
+	
+	@Autowired
+	private JisUserdetailDao jisUserdetailDao;
+	
+	@Autowired
     private JdbcDAO jdbcDAO;
+	
+	@Override
+	public JisUserdetail findByUserid(Integer userId) throws Exception{
+		
+		return jisUserdetailDao.findByUserid(userId);
+	}
 
+	@Override
+	public void save(JisUserdetail jisUserdetail) throws Exception{
+		
+		jisUserdetailDao.save(jisUserdetail);
+	}
 
-    /**
+	@Override
+	public void update(Integer iid, String cardId) throws Exception{
+		jisUserdetailDao.update(iid,cardId);
+	}
+	
+	/**
      * @param fieldName
      * @Description 动态addUserField
-     * @author Xander
+     * @author xiaoyy
      * @Date 2017/9/15 下午3:12
      * The word 'impossible' is not in my dictionary.
      */
@@ -44,7 +61,7 @@ public class JisUserdetailServiceImpl implements JisUserdetailService{
     /**
      * @param fieldName
      * @Description 动态delete UserField
-     * @author Xander
+     * @author xiaoyy
      * @Date 2017/9/15 下午3:12
      * The word 'impossible' is not in my dictionary.
      */

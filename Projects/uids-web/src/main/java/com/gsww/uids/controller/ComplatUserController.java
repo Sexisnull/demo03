@@ -57,9 +57,11 @@ import com.gsww.uids.entity.ComplatGroup;
 import com.gsww.uids.entity.ComplatRole;
 import com.gsww.uids.entity.ComplatRolerelation;
 import com.gsww.uids.entity.ComplatUser;
+import com.gsww.uids.entity.JisUserdetail;
 import com.gsww.uids.service.ComplatGroupService;
 import com.gsww.uids.service.ComplatRoleService;
 import com.gsww.uids.service.ComplatUserService;
+import com.gsww.uids.service.JisUserdetailService;
 
 /**
  * <p>Copyright: Copyright (c) 2014</p>
@@ -87,6 +89,9 @@ public class ComplatUserController extends BaseController{
 	
 	@Autowired
 	private ComplatRoleService complatRoleService;
+	
+	@Autowired
+	private JisUserdetailService jisUserdetailService;
 	/**
 	 * 获取政府用户列表
 	 * @param pageNumber
@@ -427,6 +432,9 @@ public class ComplatUserController extends BaseController{
 				ComplatUser complatUser = complatUserService.findByKey(Integer.parseInt(userSid));
 				model.addAttribute("complatUser",complatUser);
 				
+				//查询用户身份证号
+				JisUserdetail userDetail = jisUserdetailService.findByUserid(Integer.parseInt(userSid));
+				model.addAttribute("userDetail",userDetail);
 				//根据用户ID查询所属机构
 				ComplatGroup complatGroup = complatGroupService.findByIid(complatUser.getGroupid());
 				model.addAttribute("complatGroup",complatGroup);
@@ -462,10 +470,11 @@ public class ComplatUserController extends BaseController{
 	@RequestMapping(value = "/userSetUpSave", method = RequestMethod.POST)
 	public ModelAndView userSetUpSave(ComplatUser complatUser,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		try {
-			String pwd = request.getParameter("pwd");
+			Integer userId = null;
 			if(complatUser != null){
-				Integer iid = complatUser.getIid();
+				userId = complatUser.getIid();
 				String name = complatUser.getName();
+				String pwd = complatUser.getPwd();
 				String headShip = complatUser.getHeadship();
 				String phone = complatUser.getPhone();//固定电话
 				String mobile = complatUser.getMobile();//移动电话
@@ -475,9 +484,20 @@ public class ComplatUserController extends BaseController{
 				String time = TimeHelper.getCurrentTime();
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				Date modifyTime = sdf.parse(time);
-				complatUserService.updateUser(iid,name,headShip,phone,mobile,fax,email,qq,modifyTime,pwd);
-				returnMsg("success","保存成功",request);
+				complatUserService.updateUser(userId,name,headShip,phone,mobile,fax,email,qq,modifyTime,pwd);
+				
+				//身份证号处理 JisUserdetail
+				String cardId = request.getParameter("cardid");
+				JisUserdetail jisUserdetail = jisUserdetailService.findByUserid(userId);
+				if(jisUserdetail.getIid() == null){
+					jisUserdetailService.save(jisUserdetail);
+				}else{
+					jisUserdetailService.update(jisUserdetail.getIid(),cardId);
+				}
+				
 			}
+			
+			returnMsg("success","保存成功",request);
 		} catch (Exception e) {
 			e.printStackTrace();
 			returnMsg("error","保存失败",request);
