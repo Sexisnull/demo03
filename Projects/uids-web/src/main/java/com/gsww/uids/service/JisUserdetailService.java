@@ -15,9 +15,16 @@ import com.gsww.uids.entity.JisUserdetail;
  */
 public interface JisUserdetailService {
 	
-	JisUserdetail findByUserid(Integer userId);
+	JisUserdetail findByUserid(Integer userId) throws Exception;
 	
-	void save(JisUserdetail jisUserdetail);
+	void save(JisUserdetail jisUserdetail) throws Exception;
 	
-	void update(Integer iid,String cardId);
+	void update(Integer iid,String cardId) throws Exception;
+	
+    //动态addUserField
+    public void addUserField(String fieldName) throws Exception;
+
+    //动态delete UserField
+    public void delUserField(String fieldName) throws Exception;
+
 }

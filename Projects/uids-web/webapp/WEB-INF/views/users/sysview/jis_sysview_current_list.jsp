@@ -2,12 +2,12 @@
 <!doctype html>
 <html>
 <%@ include file="/include/meta.jsp"%>
-<head>
-<meta charset="utf-8" />
-<title>同步历史数据</title>
 <script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgcore.lhgdialog.min.js"></script>
+<head>
+<meta charset="utf-8"/>
+<title>甘肃万维JUP课题</title>
+
 <script type="text/javascript">
-	
 $(function(){	
     //高级搜索按钮点击事件
 		$('#advanced-btn').on('click',function(){
@@ -67,7 +67,8 @@ $(function(){
 	
 });
 
-/**根据值选中下拉列表*/
+
+    /**根据值选中下拉列表*/
     function selectItemByValue(objSelect,objItemText) { 
         for(var i=1;i<objSelect.options.length+1;i++) {  
             if(objSelect.options[i].value == objItemText) {  
@@ -77,7 +78,7 @@ $(function(){
         }  
     } 
 
-/**搜索表单校验**/
+    /**搜索表单校验**/
 	function checkSubmitForm() {
 		var objectnameSearch = $("#objectnameSearch").val();
 		if (objectnameSearch == '' || isChinaOrNumbOrLett(objectnameSearch)) {
@@ -86,17 +87,9 @@ $(function(){
 			$.validator.errorShow($("#objectNameSearch"), '只能包括中英文、数字、@和下划线');
 		}
 	}
-	/**删除单条信息**/
-    function delSingle(obj){
-		var singleId=$(obj).parent().parent().parent().parent().find('td:first').find('input').attr('id'); 
-		var objectId=$(".objectId").val();
-		$.dialog.confirm('您确认要删除吗？',function(){
-		    window.location.href="${ctx}/uids/jisCurDelete?objectId="+singleId+"&objectId="+objectId;
-		});
-	}
     /**删除多条**/
-    function delSome(){
-	var iid=$(".objectId").val();
+ function delSome(){
+	var iid=$(".iid").val();
 	if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checked').length!=0){
 		$.dialog.confirm('您确认要删除吗？',function(){
 			var ids = "";
@@ -105,7 +98,7 @@ $(function(){
 					ids += $(o).val() + ",";
 				}
 			});
-			window.location.href="${ctx}/uids/jisCurDelete?objectId="+ids.substring(0,ids.length-1);
+			window.location.href="${ctx}/uids/jisCurDelete?iid="+ids.substring(0,ids.length-1);
 		});
 		
 	}else{
@@ -113,8 +106,34 @@ $(function(){
 	    return null;
 	    });
 	}
+}
 	
-	function sync(){
+ /**同步**/
+ function sync(url,obj){
+	var singleId = $(obj).parents("td").parent().find('td:first').find('input').attr('id');
+	$.dialog.confirm('您确认要同步吗？',function(){
+		window.location.href="${ctx}/"+url+"?iid="+singleId;
+	});
+}
+
+    /**批量同步**/
+function batchSync(url){
+	//var iid=$(".iid").val();
+	if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checked').length!=0){
+		$.dialog.confirm('您确认要同步吗？',function(){
+			var ids = "";
+			$('.list-table tbody input[type=checkbox]').each(function(i, o) {
+				if($(o).attr('checked')) {
+					ids += $(o).val() + ",";
+				}
+			});
+			window.location.href="${ctx}/"+url+"?iid="+ids.substring(0,ids.length-1);
+		});
+		
+	}else{
+	$.dialog.confirm('请您至少选择一条数据',function(){
+	    return null;
+	    });
 	}
 }
 </script>
@@ -124,17 +143,20 @@ font-size: 12px;
 border: 1px solid #dddddd;
 padding: 3px 8px;
 height: 30px;
-width: 200px;
+width: 254px;
 }
-.advanced-content input[type="text"]{
-width: 182px !important;
+#objectnameSearch{
+width: 235px !important;
+}
+.syncTime{
+width: 100px !important;
 }
 </style>
 </head>
-	<body>
+<body>
 
-		<div class="list-warper">
-			<!--列表的面包屑区域-->
+<div class="list-warper">
+	<!--列表的面包屑区域-->
 			<div class="position">
 				<ol class="breadcrumb">
 					<li>
@@ -142,7 +164,7 @@ width: 182px !important;
 					</li>
 					<li class="split"></li>
 					<li>
-						<a href="#">系统管理</a>
+						<a href="#">同步管理</a>
 					</li>
 					<li class="split"></li>
 					<li class="active">
@@ -150,8 +172,8 @@ width: 182px !important;
 					</li>
 				</ol>
 			</div>
-
-			<div class="search-content">
+			
+    <div class="search-content">
 				<form id="form1" name="pageForm" action="${ctx}/uids/jisCurList" method="get">
 						<table class="advanced-content">
 							<tr>
@@ -196,7 +218,7 @@ width: 182px !important;
 							<tr>
 							    <th>操作时间：</th>
 								<td>
-									<input type="text" id="synctimeSearch" name="search_LIKE_synctime" placeholder="时间" value="${sParams['LIKE_synctime']}" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+									<input type="text" class="syncTime" id="synctimeSearchStart" name="search_GTE_synctime" placeholder="起始时间" value="${sParams['GTE_synctime']}" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" /> -- <input class="syncTime" type="text" id="synctimeSearchEnd" name="search_LTE_synctime" placeholder="结束时间" value="${sParams['LTE_synctime']}" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" />
 									<!-- search_LIKE_ -->
 								</td>
 							    <th>操作对象名称：</th>
@@ -212,22 +234,23 @@ width: 182px !important;
 						</table>
 				</form>
 			</div>
-			
-			<!-- 搜索内容结束 -->
-			<!-- 操作按钮开始 -->
-			<div class="list-toolbar">
-				<gsww:opTag menuId="297e40e05e5f7a4f015e5f93f7b20002" tabIndex="2"
-					operatorType="1"></gsww:opTag>
-			</div>
-			<!-- 操作按钮结束 -->
-
-		</div>
-		<!-- 提示信息开始 -->
-		<div class="form-alert;">
-			<tags:message msgMap="${msgMap}"></tags:message>
-		</div>
-		<!-- 提示信息结束 -->
-		<!-- 列表开始 -->
+	<!--列表内容区域-->
+	<div class="list">
+		<input type="hidden" id="orderField" name="orderField" value="${orderField}"/> 
+		<input type="hidden" id="orderSort" name="orderSort" value="${orderSort}"/>
+        <div class="list-topBar">
+        	 <div class="list-toolbar">
+	             <gsww:opTag menuId="297e40e05e5f7a4f015e5f93f7b20002" tabIndex="1" operatorType="1"></gsww:opTag>
+            </div> 
+        </div>
+        
+        <!-- 提示信息开始 -->
+         <div class="form-alert;" >
+         	<tags:message msgMap="${msgMap}"></tags:message>
+    	</div>
+    	<!-- 提示信息结束 -->
+    	<!-- 列表开始 -->
+        <!-- 列表开始 -->
 		<table cellpadding="0" cellspacing="0" border="0" width="100%"
 			class="list-table">
 			<thead>
@@ -265,13 +288,11 @@ width: 182px !important;
 			<tbody>
 				<c:forEach items="${pageInfo.content}" var="jisCurrent">
 					<tr>
-						<td>
-							<div class="label">
-								<i class="check_btn"></i>
-								<input id="${jisCurrent.iid}" value="${jisCurrent.iid}"
-									type="checkbox" class="check_btn" style="display: none;" />
-							</div>
-						</td>
+					    <td>
+	                    	<div class="label">
+	                            <i class="check_btn"></i><input id="${jisCurrent.iid}" value="${jisCurrent.iid}" type="checkbox" class="check_btn" style="display:none;"/>
+	                        </div>
+	                    </td>
 						<td>
 							${jisCurrent.objectname}
 						</td>
@@ -310,10 +331,9 @@ width: 182px !important;
 			</tbody>
 		</table>
 		<!-- 列表结束 -->
-		</div>
-		<!-- 分页 -->
-		<tags:pagination page="${pageInfo}" paginationSize="5" />
-		</div>
-	</body>
+    </div>
+    <!-- 分页 -->
+   <tags:pagination page="${pageInfo}" paginationSize="5"/> 
+</div>
+</body>
 </html>
-		

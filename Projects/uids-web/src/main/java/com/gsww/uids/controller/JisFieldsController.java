@@ -7,6 +7,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.gsww.uids.service.JisUserdetailService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +42,8 @@ public class JisFieldsController extends BaseController {
 
 	@Autowired
 	private JisFieldsService jisFieldsService;
+	@Autowired
+	private JisUserdetailService jisUserdetailService;
 
 	/**
 	 * @discription 用户扩展属性展示列表
@@ -142,6 +145,7 @@ public class JisFieldsController extends BaseController {
 					jisFields.setIssys(1);//是否为系统字段
 					jisFields.setIswrite(0);//是否必填
 					jisFieldsService.save(jisFields);
+					jisUserdetailService.addUserField(jisFields.getFieldname());
 					returnMsg("success", "保存成功", request);
 				} else { // 编辑
 					jisFieldsService.save(jisFields);
@@ -176,6 +180,7 @@ public class JisFieldsController extends BaseController {
 				jisFields = jisFieldsService.findByKey(iid);
 				if (jisFields != null) {
 					jisFieldsService.delete(jisFields);
+					jisUserdetailService.delUserField(jisFields.getFieldname());
 					returnMsg("success", "删除成功", request);
 				}
 			}
