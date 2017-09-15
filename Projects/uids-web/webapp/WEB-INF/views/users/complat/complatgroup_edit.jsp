@@ -80,6 +80,15 @@ $("#editForm").validate({
     
     <div style="display:none;">
           <input type="hidden" id="iid" name="iid" value="${complatGroup.iid}"/>
+          <input type="hidden" id="codeid" name="codeid" value="${complatGroup.codeid}"/>
+          <input type="hidden" id="pid" name="pid" value="${complatGroup.pid}"/>
+          <input type="hidden" id="orderid" name="orderid" value="${complatGroup.orderid}"/>
+          <input type="hidden" id="pinyin" name="pinyin" value="${complatGroup.pinyin}"/>
+          <input type="hidden" id="iscombine" name="iscombine" value="${complatGroup.iscombine}"/>
+          <input type="hidden" id="opersign" name="opersign" value="${complatGroup.opersign}"/>
+          <input type="hidden" id="createtime" name="createtime" value="${complatGroup.createtime}"/>
+          <input type="hidden" id="modifytime" name="modifytime" value="${complatGroup.modifytime}"/>
+          <input type="hidden" id="synState" name="synState" value="${complatGroup.synState}"/>
           <input type="hidden" id="orderField" name="orderField" value="${orderField}"/> 
 		  <input type="hidden" id="orderSort" name="orderSort" value="${orderSort}"/>
     </div>
@@ -102,23 +111,20 @@ $("#editForm").validate({
 			<tr>
 				<th><b class="mustbe">*</b> 请选择节点类型：</th>
                 <td>
-					<select name="nodetype" value="${complatGroup.nodetype}">
-						<option value="">请选择</option>
-						<option value='1' <c:if test="${complatGroup.nodetype == 1}">selected</c:if>>区域</option>
-						<option value='2' <c:if test="${complatGroup.nodetype == 2}">selected</c:if>>单位</option>
-						<option value='3' <c:if test="${complatGroup.nodetype == 3}">selected</c:if>>部门或处室</option>
-						<option value='4' <c:if test="${complatGroup.nodetype == 4}">selected</c:if>>下属单位</option>
+					<select name="nodetype" id="nodetype" class="input-select" >
+						<option value="">---请选择---</option>
+						<c:forEach var="nodetype" items="${nodetypeMap}">
+							<option value="${nodetype.key}"<c:if test="${complatGroup.nodetype==nodetype.key}">selected</c:if>>${nodetype.value}</option>
+		                </c:forEach>
 					</select>
 				</td>
 				<th><b class="mustbe">*</b> 请选择区域类型：</th>
 				<td>
-					<select name="areatype" value="${complatGroup.areatype}">
-						<option value="">请选择</option>
-						<option value='1' <c:if test="${complatGroup.areatype == 1}">selected</c:if>>省级</option>
-						<option value='2' <c:if test="${complatGroup.areatype == 2}">selected</c:if>>市（州）级</option>
-						<option value='3' <c:if test="${complatGroup.areatype == 3}">selected</c:if>>区县</option>
-						<option value='4' <c:if test="${complatGroup.areatype == 4}">selected</c:if>>乡镇街道</option>
-						<option value='5' <c:if test="${complatGroup.areatype == 5}">selected</c:if>>其他</option>
+					<select name="areatype" id="areatype" class="input-select" >
+						<option value="">---请选择---</option>
+						<c:forEach var="areatype" items="${areatypeMap}">
+							<option value="${areatype.key}"<c:if test="${complatGroup.areatype==areatype.key}">selected</c:if>>${areatype.value}</option>
+		                </c:forEach>
 					</select>
 				</td>
 			</tr>

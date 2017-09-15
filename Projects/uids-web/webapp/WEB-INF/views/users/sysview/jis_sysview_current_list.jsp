@@ -109,10 +109,10 @@ $(function(){
 }
 	
  /**同步**/
- function sync(url,obj){
+function sync(url,param,obj){
 	var singleId = $(obj).parents("td").parent().find('td:first').find('input').attr('id');
 	$.dialog.confirm('您确认要同步吗？',function(){
-		window.location.href="${ctx}/"+url+"?iid="+singleId;
+		window.location.href="${ctx}/"+url+"?"+param+"="+singleId;
 	});
 }
 
@@ -135,6 +135,11 @@ function batchSync(url){
 	    return null;
 	    });
 	}
+}
+
+function detail(url,param,obj){
+  var singleId = $(obj).parents("td").parent().find('td:first').find('input').attr('id');
+  window.location.href="${ctx}/"+url+"?"+param+"="+singleId;
 }
 </script>
 <style type="text/css">

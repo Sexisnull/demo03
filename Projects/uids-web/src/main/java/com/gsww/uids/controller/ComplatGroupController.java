@@ -10,9 +10,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONException;
-
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,14 +25,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.web.Servlets;
 
-import com.google.common.collect.Maps;
 import com.gsww.jup.controller.BaseController;
-import com.gsww.jup.entity.sys.SysAccount;
-import com.gsww.jup.entity.sys.SysDepartment;
-import com.gsww.jup.entity.sys.SysMenu;
-import com.gsww.jup.entity.sys.SysRole;
-import com.gsww.jup.entity.sys.SysUserSession;
-import com.gsww.jup.util.MD5;
+import com.gsww.jup.service.sys.SysParaService;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.jup.util.StringHelper;
 import com.gsww.jup.util.TimeHelper;
@@ -48,7 +39,12 @@ public class ComplatGroupController extends BaseController{
 	private static Logger logger = LoggerFactory.getLogger(ComplatGroupController.class);
 	@Autowired
 	private ComplatGroupService complatGroupService;
-//	private Map<String,String> resMap=new HashMap<String,String>();
+	@Autowired
+	private SysParaService sysParaService;
+    //节点类型下拉选择集合
+	private Map<Integer, Object> nodetypeMap = new HashMap<Integer, Object>();
+	//区域类型下拉选择集合
+	private Map<Integer, Object> areatypeMap = new HashMap<Integer, Object>();
 
 	/**
 	 * 获取用户列表
@@ -93,8 +89,23 @@ public class ComplatGroupController extends BaseController{
 					parentNameMap.put(null,complatGroup.getName());
 				}
 			}
+			//下拉选择查询
+			//节点类型
+			List<Map<String, Object>> nodetypeList = new ArrayList<Map<String, Object>>();
+			nodetypeList = sysParaService.getParaList("JGJDLX");
+			for (Map<String, Object> para : nodetypeList) {
+				nodetypeMap.put(Integer.parseInt((String) para.get("PARA_CODE")), para.get("PARA_NAME"));
+			}
+			//区域类型
+			List<Map<String, Object>> areatypeList = new ArrayList<Map<String, Object>>();
+			areatypeList = sysParaService.getParaList("JGQYLX");
+			for (Map<String, Object> para : areatypeList) {
+				areatypeMap.put(Integer.parseInt((String) para.get("PARA_CODE")), para.get("PARA_NAME"));
+			}
 			model.addAttribute("pageInfo", pageInfo);
 			model.addAttribute("parentNameMap", parentNameMap);
+			model.addAttribute("nodetypeMap", nodetypeMap);
+			model.addAttribute("areatypeMap", areatypeMap);
 			model.addAttribute("sortType", orderField);
 			model.addAttribute("orderField", orderField);
 			model.addAttribute("orderSort", orderSort);
@@ -136,6 +147,8 @@ public class ComplatGroupController extends BaseController{
 			}else{
 				complatGroup = new ComplatGroup();
 			}
+			model.addAttribute("nodetypeMap", nodetypeMap);
+			model.addAttribute("areatypeMap", areatypeMap);
 			model.addAttribute("complatGroup", complatGroup);		
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -148,10 +161,9 @@ public class ComplatGroupController extends BaseController{
 	 */
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/complatgroupSave", method = RequestMethod.POST)
-	public ModelAndView complatgroupSave(ComplatGroup complatGroup,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+	public ModelAndView complatgroupSave(String iid,ComplatGroup complatGroup,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		try {
-			complatGroup.setSynState(2);
-			if(complatGroup.getIid() != null){
+			if(StringHelper.isNotBlack(iid)){
 				complatGroup.setModifytime(Timestamp.valueOf(TimeHelper.getCurrentTime()));
 			}else{
 				complatGroup.setCreatetime(Timestamp.valueOf(TimeHelper.getCurrentTime()));
