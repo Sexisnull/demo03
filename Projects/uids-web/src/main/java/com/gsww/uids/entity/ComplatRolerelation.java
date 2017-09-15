@@ -22,16 +22,8 @@ public class ComplatRolerelation implements Serializable{
 	private int roleId;
 	private int userId;
 	private int groupId;
-	public ComplatRolerelation() {
-		super();
-	}
-	public ComplatRolerelation(int iid, int roleId, int userId, int groupId) {
-		super();
-		this.iid = iid;
-		this.roleId = roleId;
-		this.userId = userId;
-		this.groupId = groupId;
-	}
+	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)  
 	@Column(name = "IID", unique = true, nullable = false)
@@ -60,6 +52,16 @@ public class ComplatRolerelation implements Serializable{
 		return groupId;
 	}
 	public void setGroupId(int groupId) {
+		this.groupId = groupId;
+	}
+	public ComplatRolerelation() {
+		super();
+	}
+	public ComplatRolerelation(int iid, int roleId, int userId, int groupId) {
+		super();
+		this.iid = iid;
+		this.roleId = roleId;
+		this.userId = userId;
 		this.groupId = groupId;
 	}
 

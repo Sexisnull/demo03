@@ -50,7 +50,7 @@
 	function accreditSubmit() {
 		$.ajax({
 			type : "POST",
-			url : '${ctx}/sys/roleAuthorizeSave',
+			url : '${ctx}/complat/roleAuthorizeSave',
 			data : 'roleId=${roleId}&keys=' + tree.val("id") + '&types=' + tree.val("customType"),
 			async : false,
 			success : function(msg) {
