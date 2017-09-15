@@ -99,5 +99,11 @@
 	<aop:aspectj-autoproxy proxy-target-class="true" />
 	<!-- SpringContextHandler定义 -->
 	<bean class="com.gsww.jup.SpringContextHolder" lazy-init="false" />
+	<bean id="multipartResolver"  class="org.springframework.web.multipart.commons.CommonsMultipartResolver">  
+	       <!-- 设置上传文件的最大尺寸为1MB -->  
+	    <property name="maxUploadSize">  
+	        <value>10048576</value>  
+	   </property>  
+	</bean>
 	
 </beans>
