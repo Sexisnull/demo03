@@ -1,5 +1,9 @@
 package com.gsww.uids.service.impl;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -41,6 +45,20 @@ public class JisFieldsServiceImpl implements JisFieldsService {
 	@Override
 	public void delete(JisFields jisFields) {
 		jisFieldsDao.delete(jisFields);
+	}
+
+	@Override
+	public List<JisFields> findAllJisFields() {
+		List<JisFields> jisFieldsList = new ArrayList<JisFields>();
+		Iterable<JisFields> jisFieldsIterables = jisFieldsDao.findAll();
+		Iterator<JisFields> jisFieldsIterable = jisFieldsIterables.iterator();
+		while (jisFieldsIterable.hasNext()) {
+			JisFields jisFields = (JisFields) jisFieldsIterable.next();
+			if (jisFields.getIssys() == 1) {
+				jisFieldsList.add(jisFields);
+			}
+		}
+		return jisFieldsList;
 	}
 
 }
