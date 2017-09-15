@@ -1,3 +1,4 @@
+
 <%@page language="java" pageEncoding="UTF-8"%>
 <!doctype html>
 <%@ include file="/include/meta.jsp"%>
@@ -178,9 +179,9 @@
 						</td>
 						<th>角色：</th>
 						<td>
-							<textarea rows="5" cols="5" id="roles" name="roles" readonly="readonly">
+							<textarea rows="3" cols="3" id="roles" name="roles" readonly="readonly">
 								<c:forEach items="${roleList}" var="complatRole">
-									<span style="background: blue;">${complatRole.name}</span>&nbsp;
+									${complatRole.name}&nbsp;&nbsp;
 								</c:forEach>
 							</textarea>
 			            </td>
