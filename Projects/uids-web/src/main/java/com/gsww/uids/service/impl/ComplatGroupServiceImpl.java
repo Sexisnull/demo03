@@ -1,6 +1,7 @@
 package com.gsww.uids.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -112,6 +113,13 @@ public class ComplatGroupServiceImpl implements ComplatGroupService{
 	}else{
 		return false;	
 		}	
+	}
+	
+	@Override
+	public List<Map<String, Object>> getComplatGroupList() throws Exception {
+		String sql ="select g.iid,g.name from complat_group g";
+		List<Map<String, Object>> mapList = jdbcTemplate.queryForList(sql, new Object[]{});
+		return mapList;
 	}
 	
 }
