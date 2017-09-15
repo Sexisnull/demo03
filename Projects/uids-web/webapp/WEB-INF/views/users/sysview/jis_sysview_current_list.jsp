@@ -88,7 +88,7 @@ $(function(){
 		}
 	}
     /**删除多条**/
-    function delSome(){
+ function delSome(){
 	var iid=$(".iid").val();
 	if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checked').length!=0){
 		$.dialog.confirm('您确认要删除吗？',function(){
@@ -109,15 +109,15 @@ $(function(){
 }
 	
  /**同步**/
- function sync(url,parm,obj){
+ function sync(url,obj){
 	var singleId = $(obj).parents("td").parent().find('td:first').find('input').attr('id');
 	$.dialog.confirm('您确认要同步吗？',function(){
-		window.location.href="${ctx}/uids/syncSysview?iid="+singleId;
+		window.location.href="${ctx}/"+url+"?iid="+singleId;
 	});
 }
 
     /**批量同步**/
-function batchSync(){
+function batchSync(url){
 	//var iid=$(".iid").val();
 	if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checked').length!=0){
 		$.dialog.confirm('您确认要同步吗？',function(){
@@ -127,7 +127,7 @@ function batchSync(){
 					ids += $(o).val() + ",";
 				}
 			});
-			window.location.href="${ctx}/uids/batchSyncSysview?iid="+ids.substring(0,ids.length-1);
+			window.location.href="${ctx}/"+url+"?iid="+ids.substring(0,ids.length-1);
 		});
 		
 	}else{
@@ -143,10 +143,13 @@ font-size: 12px;
 border: 1px solid #dddddd;
 padding: 3px 8px;
 height: 30px;
-width: 200px;
+width: 254px;
 }
-.advanced-content input[type="text"]{
-width: 182px !important;
+#objectnameSearch{
+width: 235px !important;
+}
+.syncTime{
+width: 100px !important;
 }
 </style>
 </head>
@@ -215,7 +218,7 @@ width: 182px !important;
 							<tr>
 							    <th>操作时间：</th>
 								<td>
-									<input type="text" id="synctimeSearch" name="search_LIKE_synctime" placeholder="时间" value="${sParams['LIKE_synctime']}" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+									<input type="text" class="syncTime" id="synctimeSearchStart" name="search_GTE_synctime" placeholder="起始时间" value="${sParams['GTE_synctime']}" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" /> -- <input class="syncTime" type="text" id="synctimeSearchEnd" name="search_LTE_synctime" placeholder="结束时间" value="${sParams['LTE_synctime']}" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" />
 									<!-- search_LIKE_ -->
 								</td>
 							    <th>操作对象名称：</th>
