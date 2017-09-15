@@ -14,6 +14,7 @@ public interface ComplatGroupService {
 	
 	public List<ComplatGroup> findAll();
 	
+	
 	/**
 	 * 保存或修改对象
 	 * @param userInfo
