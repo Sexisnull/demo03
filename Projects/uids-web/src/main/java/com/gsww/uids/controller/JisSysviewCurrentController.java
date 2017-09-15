@@ -1,5 +1,11 @@
 package com.gsww.uids.controller;
 
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -32,16 +38,20 @@ import com.gsww.jup.controller.BaseController;
 import com.gsww.jup.controller.sys.SysAccountController;
 import com.gsww.jup.service.sys.SysParaService;
 import com.gsww.jup.util.PageUtils;
+import com.gsww.uids.entity.JisSysview;
 import com.gsww.uids.entity.JisSysviewCurrent;
 import com.gsww.uids.service.JisApplicationService;
 import com.gsww.uids.service.JisSysviewCurrentService;
+import com.gsww.uids.service.JisSysviewService;
 
 @Controller
 @RequestMapping(value = "/uids")
 public class JisSysviewCurrentController extends BaseController{
-	private static Logger logger = LoggerFactory.getLogger(SysAccountController.class);
+	private static Logger logger = LoggerFactory.getLogger(JisSysviewCurrentController.class);
 	@Autowired
 	private JisSysviewCurrentService jisSysviewCurrentService;
+	@Autowired
+	private JisSysviewService jisSysviewService;
 	@Autowired
 	private JisApplicationService jisApplicationService;
 	@Autowired
@@ -99,18 +109,19 @@ public class JisSysviewCurrentController extends BaseController{
 
 	
 	/**
-	 * 删除参数信息
+	 * 删除同步信息
 	 */
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/jisCurDelete", method = RequestMethod.GET)
-	public ModelAndView jisCurDelete(String objectId, HttpServletRequest request,HttpServletResponse response)  throws Exception {
+	public ModelAndView jisCurDelete(String iid, HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		try {
-			String[] para=objectId.split(",");
+			String[] para=iid.split(",");
 			JisSysviewCurrent jisCurrent = null;
 			for(int i=0;i<para.length;i++){
 				Integer Iid = Integer.parseInt(para[i].trim());
 				jisCurrent=jisSysviewCurrentService.findByIid(Iid);
 				jisSysviewCurrentService.delete(jisCurrent);
+				//级联删除明细
 			}
 			returnMsg("success","删除成功",request);
 		} catch (Exception e) {
@@ -146,12 +157,143 @@ public class JisSysviewCurrentController extends BaseController{
 		return paraMap;
 	}
 	
-	/*@RequestMapping(value="syncSysview")
-	public ModelAndView syncSysview(int iid, HttpServletRequest request,HttpServletResponse response){
-		//String[] iids = iid.split(",");
-		for(String id:iids){
-			jisSysviewCurrentService.findByIid(iid);
+	/**
+	 * 同步详情
+	 * @param iid
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value="/sysViewdetail")
+	public ModelAndView sysViewdetail(int iid, HttpServletRequest request,HttpServletResponse response){
+		
+		try {
+			JisSysviewCurrent sysviewCurrent = jisSysviewCurrentService.findByIid(iid);
+			Map<String,Object> map = convertBean(sysviewCurrent);
+			JisSysview sysview = (JisSysview)convertMap(JisSysview.class,map);
+			jisSysviewService.save(sysview);
+		}catch (Exception e) {
+			e.printStackTrace();
 		}
-		return null;
-	}*/
+		
+		return  new ModelAndView("redirect:/uids/jisCurList");
+	}
+	
+	/**
+	 * 同步
+	 * @param iid
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value="/syncSysview")
+	public ModelAndView syncSysview(int iid, HttpServletRequest request,HttpServletResponse response){
+		
+		try {
+			JisSysviewCurrent sysviewCurrent = jisSysviewCurrentService.findByIid(iid);
+			Map<String,Object> map = convertBean(sysviewCurrent);
+			JisSysview sysview = (JisSysview)convertMap(JisSysview.class,map);
+			jisSysviewService.save(sysview);
+			jisSysviewCurrentService.delete(sysviewCurrent);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return  new ModelAndView("redirect:/uids/jisCurList");
+	}
+	
+	/**
+	 * 批量同步
+	 * @param iid
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value="/batchSyncSysview")
+	public ModelAndView batchSyncSysview(String iid, HttpServletRequest request,HttpServletResponse response){
+		try {
+			String[] para=iid.split(",");
+			for(int i=0;i<para.length;i++){
+				JisSysviewCurrent sysviewCurrent = jisSysviewCurrentService.findByIid(Integer.valueOf(para[i]));
+				Map<String,Object> map = convertBean(sysviewCurrent);
+				JisSysview sysview = (JisSysview)convertMap(JisSysview.class,map);
+				jisSysviewService.save(sysview);
+				jisSysviewCurrentService.delete(sysviewCurrent);
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return  new ModelAndView("redirect:/uids/jisCurList");
+	}
+	
+	
+    /**  
+     * 将一个 JavaBean 对象转化为一个  Map  
+     * @param bean 要转化的JavaBean 对象  
+     * @return 转化出来的  Map 对象  
+     * @throws IntrospectionException 如果分析类属性失败  
+     * @throws IllegalAccessException 如果实例化 JavaBean 失败  
+     * @throws InvocationTargetException 如果调用属性的 setter 方法失败  
+     */    
+    @SuppressWarnings({ "rawtypes", "unchecked" })    
+    public static Map convertBean(Object bean)    
+            throws IntrospectionException, IllegalAccessException, InvocationTargetException {    
+        Class type = bean.getClass();    
+        Map returnMap = new HashMap();    
+        BeanInfo beanInfo = Introspector.getBeanInfo(type);    
+    
+        PropertyDescriptor[] propertyDescriptors =  beanInfo.getPropertyDescriptors();    
+        for (int i = 0; i< propertyDescriptors.length; i++) {    
+            PropertyDescriptor descriptor = propertyDescriptors[i];    
+            String propertyName = descriptor.getName();    
+            if (!propertyName.equals("class")) {    
+                Method readMethod = descriptor.getReadMethod();    
+                Object result = readMethod.invoke(bean, new Object[0]);    
+                if (result != null) {    
+                    returnMap.put(propertyName, result);    
+                } else {    
+                    returnMap.put(propertyName, "");    
+                }    
+            }    
+        }    
+        return returnMap;    
+    }  
+  
+  
+  
+/**  
+     * 将一个 Map 对象转化为一个 JavaBean  
+     * @param type 要转化的类型  
+     * @param map 包含属性值的 map  
+     * @return 转化出来的 JavaBean 对象  
+     * @throws IntrospectionException 如果分析类属性失败  
+     * @throws IllegalAccessException 如果实例化 JavaBean 失败  
+     * @throws InstantiationException 如果实例化 JavaBean 失败  
+     * @throws InvocationTargetException 如果调用属性的 setter 方法失败  
+     */    
+    @SuppressWarnings("rawtypes")    
+    public static Object convertMap(Class type, Map map)    
+            throws IntrospectionException, IllegalAccessException,    
+            InstantiationException, InvocationTargetException {    
+        BeanInfo beanInfo = Introspector.getBeanInfo(type); // 获取类属性    
+        Object obj = type.newInstance(); // 创建 JavaBean 对象    
+    
+        // 给 JavaBean 对象的属性赋值    
+        PropertyDescriptor[] propertyDescriptors =  beanInfo.getPropertyDescriptors();    
+        for (int i = 0; i< propertyDescriptors.length; i++) {    
+            PropertyDescriptor descriptor = propertyDescriptors[i];    
+            String propertyName = descriptor.getName();    
+    
+            if (map.containsKey(propertyName)) {    
+                // 下面一句可以 try 起来，这样当一个属性赋值失败的时候就不会影响其他属性赋值。    
+                Object value = map.get(propertyName);    
+    
+                Object[] args = new Object[1];    
+                args[0] = value;    
+    
+                descriptor.getWriteMethod().invoke(obj, args);    
+            }    
+        }    
+        return obj;    
+    }  
 }
