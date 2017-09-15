@@ -78,4 +78,10 @@ public class JisApplicationServiceImpl implements JisApplicationService {
 		List<Map<String, Object>> mapList = jdbcTemplate.queryForList(sql, new Object[]{});
 		return mapList;
 	}
+	
+	@Override
+	public List<JisApplication> findAll() {
+		// TODO Auto-generated method stub
+		return jisApplicationDao.findAll();
+	}
 }

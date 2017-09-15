@@ -78,4 +78,11 @@ public interface JisApplicationService {
 	 * @throws Exception
 	 */
 	public List<Map<String, Object>> getJisApplicationList() throws Exception;
+		
+	/**
+	 * 查询所有应用
+	 * @return
+	 * @throws Exception
+	 */
+	public List<JisApplication> findAll();
 }

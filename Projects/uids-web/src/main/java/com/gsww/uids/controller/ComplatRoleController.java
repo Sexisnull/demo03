@@ -1,6 +1,8 @@
 package com.gsww.uids.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,12 +26,16 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
-import com.gsww.jup.entity.sys.SysUserSession;
+import com.gsww.jup.util.JSONUtil;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.jup.util.StringHelper;
 import com.gsww.uids.entity.ComplatRole;
 import com.gsww.uids.entity.ComplatRolerelation;
+import com.gsww.uids.entity.JisApplication;
+import com.gsww.uids.entity.JisRoleobject;
 import com.gsww.uids.service.ComplatRoleService;
+import com.gsww.uids.service.JisApplicationService;
+import com.gsww.uids.service.JisRoleobjectService;
 @Controller
 @RequestMapping(value="/complat")
 public class ComplatRoleController extends BaseController{
@@ -37,6 +43,13 @@ public class ComplatRoleController extends BaseController{
 	private static Logger logger = LoggerFactory.getLogger(ComplatRoleController.class);
 	@Autowired
 	private ComplatRoleService roleService;
+	@Autowired
+	private JisApplicationService jisApplicationService;
+	@Autowired
+	private JisRoleobjectService jisRoleobjectService;
+	
+	
+	
 	
 	@RequestMapping(value="/croleList",method = RequestMethod.GET)
 	public String roleList(@RequestParam(value = "page", defaultValue = "1") int pageNo,
@@ -156,7 +169,17 @@ public class ComplatRoleController extends BaseController{
 			e.printStackTrace();
 		}
 	}
-	//获取权限弹出窗
+	//用户机构权限
+	@RequestMapping(value="/roleorganizationShow",method = RequestMethod.GET)
+	public String roleAuthorizeShow1(String roleId,HttpServletRequest request,HttpServletResponse response,Model model)  throws Exception {
+		try {
+			model.addAttribute("roleId", roleId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "users/complatrole/application";
+	}
+	//系统权限
 	@RequestMapping(value="/croleAuthorizeShow",method = RequestMethod.GET)
 	public String roleAuthorizeShow(String roleId,HttpServletRequest request,HttpServletResponse response,Model model)  throws Exception {
 		try {
@@ -164,8 +187,61 @@ public class ComplatRoleController extends BaseController{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "sys/role_authorize";
+		return "users/complatrole/role_authorize";
 	}
+	//应用权限
+	@RequestMapping(value="/appAuthorizeShow",method = RequestMethod.GET)
+	public String appAuthorizeShow(String roleId,HttpServletRequest request,HttpServletResponse response,Model model)  throws Exception {
+		try {
+			
+			List<JisRoleobject> objects = jisRoleobjectService.findByRoleIdAndType(Integer.parseInt(roleId), 3);
+			List<JisApplication> apps = jisApplicationService.findAll();
+			List<Map<String,Object>> show = new ArrayList<Map<String,Object>>();
+			for(JisApplication app : apps){
+				Map<String,Object> values = new HashMap<String,Object>();
+				values.put("name", app.getName());
+				values.put("iid", app.getIid());
+				values.put("approleid", 0);
+				for(JisRoleobject object : objects){
+					if(app.getIid().equals(object.getObjectid())){
+						values.put("approleid", 1);
+					}
+					
+				}
+				show.add(values);
+			}
+			
+			model.addAttribute("appList", show);
+			model.addAttribute("iid", roleId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "users/complatrole/app_authorize";
+	}
+	
+	@RequestMapping(value="/modifyApps",method = RequestMethod.POST)
+	public void submitModifyApps(String iid, String apps,HttpServletRequest request,HttpServletResponse response){
+		if(apps==null){
+			apps = "";
+		}
+		boolean flag = jisRoleobjectService.modifyRoleApps(Integer.parseInt(iid), apps);
+		try {
+		Map<String,Object> result = new HashMap<String,Object>();
+		if(flag){
+			result.put("success", true);
+		}else{
+			result.put("success", false);
+		}
+		response.setContentType("text/json");
+		response.setCharacterEncoding("UTF-8"); 
+		response.getWriter().write(JSONUtil.writeMapJSON(result));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
 	//获取权限树json
 	@RequestMapping(value="/croleAuthorizeList",method = RequestMethod.POST)
 	public void roleAuthorizeList(String roleId,HttpServletRequest request,HttpServletResponse response,Model model)  throws Exception {
@@ -201,4 +277,5 @@ public class ComplatRoleController extends BaseController{
 			}
 		}
 	}
+
 }
