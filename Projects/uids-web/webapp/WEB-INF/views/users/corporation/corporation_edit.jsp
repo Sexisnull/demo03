@@ -16,7 +16,7 @@ var corNameInput=$("#name").val();
 	   name: {
 	    required: true,
 	    cnRangelength: [0,33],
-	    corNameInput  
+	    stringCheck:corNameInput  
 	   },
 	   realName:{
 	   	required: true	
@@ -145,7 +145,7 @@ color: rgb(119, 119, 119);
 			<td class="td_1" rowspan="4" style="max-width:0px;width:100px;ont-weight:bold;" align="center">基本属性</td>
 			<th> 法人类型：</th>
 	       	<td>
-	       	 <gsww:checkboxTag name="type" defaultValue="1" type="corporationType" inputType="radio" value="${corporation.type}"></gsww:checkboxTag>
+	       	 <gsww:checkboxTag name="type" defaultValue="1" type="FRLX" inputType="radio" value="${corporation.type}"></gsww:checkboxTag>
 	       	</td>
 	       	<th></th>
 			<td></td>

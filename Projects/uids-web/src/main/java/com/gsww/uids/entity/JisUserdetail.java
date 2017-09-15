@@ -16,6 +16,10 @@ public class JisUserdetail implements java.io.Serializable {
 
 	// Fields
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6677370036147629509L;
 	private Integer iid;
 	private Integer userid;
 	private String comptel;
