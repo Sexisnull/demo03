@@ -1,6 +1,7 @@
 package com.gsww.uids.dao;
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
@@ -26,6 +27,7 @@ public interface ComplatCorporationDao extends  PagingAndSortingRepository<Compl
 	/**
 	 * 删除为假删
 	 */
+	@Modifying
 	@Query("update ComplatCorporation t set t.operSign = 3 where t.iid = ?")
 	public void updateCorporation(Integer iid);
 }
