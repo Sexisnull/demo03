@@ -100,7 +100,7 @@ $(document).on("change",'select#fieldsType',function(){
 			<tr>
 				<th><b class="mustbe">*</b>字段名：</th>
 				<td>
-					<input type="text"  class="fieldname" name="fieldname" <c:if test="${jisFields.fieldname == '' || jisFields.fieldname == null}">value="ex_"</c:if> value="${jisFields.fieldname}" />
+					<input type="text"  class="fieldname" name="fieldname" <c:if test="${jisFields.fieldname == '' || jisFields.fieldname == null}">value="ex_"</c:if> value="${jisFields.fieldname}" readonly="readonly"/>
 				</td>
 				<th></th>
 				<td></td>
