@@ -80,4 +80,5 @@ public interface ComplatGroupService {
 	 */
 	public List<Map<String, Object>> getComplatGroupList() throws Exception;
 	
+
 }

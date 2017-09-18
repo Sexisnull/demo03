@@ -142,6 +142,10 @@ public class ComplatGroupController extends BaseController{
 					orderSort=(String)request.getParameter("orderSort");
 				}
 				complatGroup = complatGroupService.findByKey(iid);
+				if(complatGroup.getPid() != null){
+					String parentName = complatGroupService.findByKey(String.valueOf(complatGroup.getPid())).getName();
+					complatGroup.setParentName(parentName);
+				}
 				model.addAttribute("orderField", orderField);
 				model.addAttribute("orderSort", orderSort);
 			}else{
@@ -168,6 +172,8 @@ public class ComplatGroupController extends BaseController{
 			}else{
 				complatGroup.setCreatetime(Timestamp.valueOf(TimeHelper.getCurrentTime()));
 			}
+			Integer pid = complatGroupService.findByName(complatGroup.getParentName()).getIid();
+			complatGroup.setPid(pid);
 			complatGroup = complatGroupService.save(complatGroup);
 			returnMsg("success","保存成功",request);
 		} catch (Exception e) {

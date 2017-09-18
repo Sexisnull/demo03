@@ -8,103 +8,55 @@
 <title>甘肃万维JUP课题</title>
 
 <script type="text/javascript">
-$(function(){	
-    //高级搜索按钮点击事件
-		$('#advanced-btn').on('click',function(){
-			$('.advanced-content').toggle('fast');
-		});
-		$("#advanced-search-btn").click(function(){
-			$("#form2").submit();
-		});
-		//阻止按键盘Enter键提交表单
-		var $inp = $('input');
-		$inp.keypress(function (e) { 
-		    var key = e.which; 
-		    if (key == 13) {
-		        return false;
-		    }
-		});	
-    /**应用下拉框初始化*/
-    var appSearch = $("#appSearch");
-    $.get("${ctx}/uids/getApplications", {}, function (data) {
-        if (data != null) {
-            for(var i=0;i<data.length;i++){
-                 appSearch.append("<option value='"+data[i].iid+"'>"+data[i].name+"</option>");
-            }
+
+$(document).ready(function(){	
+    
+	 //高级搜索按钮点击事件
+	$("#advanced-btn").on('click',function(){
+		$('.advanced-content').toggle('fast');
+	});
+	$("#advanced-search-btn").click(function(){
+		$("#form2").submit();
+	});
+	//阻止按键盘Enter键提交表单
+	var $inp = $('input');
+	$inp.keypress(function (e) { 
+		var key = e.which; 
+		if (key == 13) {
+		    return false;
 		}
-    })
-    var oldAppSearch = $("#oldAppSearch").val();
-	if(oldAppSearch!=null && oldAppSearch!=""){
-	    selectItemByValue(document.getElementById("appSearch"),oldAppSearch);
-	}
+	});	
 	
-    /**操作类型下拉列表初始化*/
+	/**操作类型下拉列表初始化*/
 	var operatetypes = ["新增机构","修改机构","删除机构","新增用户","修改用户","删除用户","启用用户","停用用户"];
 	var operatetype = $("#operatetypeSearch");
 	for(var i=0;i<operatetypes.length;i++){
 		operatetype.append("<option value='"+operatetypes[i]+"'>"+operatetypes[i]+"</option>");
 	}
+	
 	var oldOperatetype = $("#oldOperatetypeSearch").val();
     if(oldOperatetype!=null && oldOperatetype !=""){
         selectItemByValue(document.getElementById("operatetypeSearch"),oldOperatetype);
     }
-	
-	/**同步结果下拉列表初始化,数据库读值，此处暂时写固定值*/
-	//var optresults = ["未同步","同步成功","同步失败","网络不通"];
-	var optresult = $("#optresultSearch");
-	
-	$.get("${ctx}/uids/getOptresult", {}, function (data) {
-        if (data != null) {
-              for(var i=0;i<data.length;i++){
-                optresult.append("<option value='"+data[i].PARA_CODE+"'>"+data[i].PARA_NAME+"</option>");
-              }
-         }
-    })
-	var oldOptresult = $("#oldOptresultSearch").val();
-	if(oldOptresult!=null && oldOptresult!=""){
-	    selectItemByValue(document.getElementById("optresultSearch"),oldOptresult);
-	}
-	
 });
 
-
-    /**根据值选中下拉列表*/
-    function selectItemByValue(objSelect,objItemText) { 
-        for(var i=1;i<objSelect.options.length+1;i++) {  
-            if(objSelect.options[i].value == objItemText) {  
-                objSelect.options[i].selected = true;  
-                break;  
-            }  
+/**根据值选中下拉列表*/
+function selectItemByValue(objSelect,objItemText) { 
+    for(var i=1;i<objSelect.options.length+1;i++) {  
+        if(objSelect.options[i].value == objItemText) {  
+            objSelect.options[i].selected = true;  
+            break;  
         }  
-    } 
+    }  
+}
 
-    /**搜索表单校验**/
-	function checkSubmitForm() {
-		var objectnameSearch = $("#objectnameSearch").val();
-		if (objectnameSearch == '' || isChinaOrNumbOrLett(objectnameSearch)) {
-			form1.submit();
-		} else {
-			$.validator.errorShow($("#objectNameSearch"), '只能包括中英文、数字、@和下划线');
-		}
-	}
-    /**删除多条**/
- function delSome(){
-	var iid=$(".iid").val();
-	if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checked').length!=0){
-		$.dialog.confirm('您确认要删除吗？',function(){
-			var ids = "";
-			$('.list-table tbody input[type=checkbox]').each(function(i, o) {
-				if($(o).attr('checked')) {
-					ids += $(o).val() + ",";
-				}
-			});
-			window.location.href="${ctx}/uids/jisCurDelete?iid="+ids.substring(0,ids.length-1);
-		});
-		
-	}else{
-	$.dialog.confirm('请您至少选择一条数据',function(){
-	    return null;
-	    });
+/**搜索表单校验**/
+function checkSubmitForm() {
+	var objectnameSearch = $("#objectnameSearch").val();
+	if (objectnameSearch == '' || isChinaOrNumbOrLett(objectnameSearch)) {
+		form1.submit();
+	} else {
+		$.validator.errorShow($("#objectNameSearch"), '只能包括中英文、数字、@和下划线');
 	}
 }
 	
@@ -117,7 +69,7 @@ function sync(url,param,obj){
 }
 
     /**批量同步**/
-function batchSync(url){
+function batchSync(url,param){
 	//var iid=$(".iid").val();
 	if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checked').length!=0){
 		$.dialog.confirm('您确认要同步吗？',function(){
@@ -127,7 +79,7 @@ function batchSync(url){
 					ids += $(o).val() + ",";
 				}
 			});
-			window.location.href="${ctx}/"+url+"?iid="+ids.substring(0,ids.length-1);
+			window.location.href="${ctx}/"+url+"?"+param+"="+ids.substring(0,ids.length-1);
 		});
 		
 	}else{
@@ -137,6 +89,7 @@ function batchSync(url){
 	}
 }
 
+/**详情*/
 function detail(url,param,obj){
   var singleId = $(obj).parents("td").parent().find('td:first').find('input').attr('id');
   window.location.href="${ctx}/"+url+"?"+param+"="+singleId;
@@ -173,19 +126,20 @@ width: 100px !important;
 					</li>
 					<li class="split"></li>
 					<li class="active">
-						同步列表
+						当前同步列表
 					</li>
 				</ol>
 			</div>
 			
     <div class="search-content">
-				<form id="form1" name="pageForm" action="${ctx}/uids/jisCurList" method="get">
+				<form id="form1" name="pageForm" action="${ctx}/sysviewCurr/jisCurList" method="get">
 						<table class="advanced-content">
 							<tr>
 								<th style="padding-left: 600px">操作对象名称：</th>
 								<td>
 									<input type="text" id="objectnameSearch" name="search_LIKE_objectname" placeholder="操作对象名称" value="${sParams['LIKE_objectname']}" class="input" />
 								</td>
+								
 								<td class="btn-group">
 									<a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a>
 								</td>
@@ -193,14 +147,24 @@ width: 100px !important;
 							</tr>
 						</table>
 				</form>
-				<form id="form2" name="form2" action="${ctx}/uids/jisCurList" >
+				<form id="form2" name="form2" action="${ctx}/sysviewCurr/jisCurList" >
 				        <table class="advanced-content" style="display: none;">
 							<tr>
 				                <th>所属应用：</th>
-								<td><input id="oldAppSearch" type="hidden" value="${sParams['EQ_appid']}">
+								<td>
+								    <!--<input id="oldAppSearch" type="hidden" value="${sParams['EQ_appid']}">
 									<select id="appSearch" name="search_EQ_appid" class="select">
 										<option value="">--请选择--</option>
-									</select>
+									</select>-->
+									
+			                        <select name="search_EQ_appid" id="appSearch" class="select">
+					                     <option value="">--请选择--</option>
+					                     <c:forEach items="${applications}" var="application">
+						                     <option value="${application.iid}"
+							              <c:if test="${sParams['EQ_appid']==application.iid}">selected </c:if>>${application.name}</option>
+					                     </c:forEach>
+				                     </select>
+				                     
 								</td>
 
 								<th>操作类型：</th>
@@ -213,10 +177,19 @@ width: 100px !important;
 
 								<th>同步结果：</th>
 								<td>
-									<input id="oldOptresultSearch" type="hidden" value="${sParams['EQ_optresult']}">
+									<!--<input id="oldOptresultSearch" type="hidden" value="${sParams['EQ_optresult']}">
 									<select id="optresultSearch" name="search_EQ_optresult" class="select">
 										<option value="">--请选择--</option>
-									</select>
+									</select>-->
+									
+									<select name="search_EQ_optresult" id="optresultSearch" class="select">
+					                     <option value="">--请选择--</option>
+					                     <c:forEach items="${parameters}" var="parameter">
+						                     <option value="${parameter.PARA_CODE}"
+							              <c:if test="${sParams['EQ_optresult']==parameter.PARA_CODE}">selected </c:if>>${parameter.PARA_NAME}</option>
+					                     </c:forEach>
+				                     </select>
+									
 								</td>
 							</tr>
 							<tr height="10px"></tr>
@@ -266,10 +239,10 @@ width: 100px !important;
 							<input type="checkbox" class="check_btn" style="display: none;" />
 						</div>
 					</th>
-					<th width="15%">
+					<th width="15%" style="text-align: center">
 						操作对象名称
 					</th>
-					<th width="15%">
+					<th width="15%" style="text-align: center">
 						机构编码
 					</th>
 					<th width="10%" class="alignL" style="text-align: center">

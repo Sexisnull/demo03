@@ -2,13 +2,7 @@
 
 package com.gsww.uids.controller;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.URLEncoder;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
@@ -41,7 +35,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.web.Servlets;
 import org.springframework.web.multipart.MultipartFile;
@@ -214,7 +207,7 @@ public class ComplatUserController extends BaseController{
 	
 	
 	/**
-	 * 删除用户信息
+	 * 批量删除用户信息
 	 */
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/complatUserDelete", method = RequestMethod.GET)
@@ -249,7 +242,7 @@ public class ComplatUserController extends BaseController{
 	 * @param response
 	 * @throws IOException
 	 */
-	@RequestMapping("/downloadComplaUserTemplate")
+/*	@RequestMapping("/downloadComplaUserTemplate")
 	public void downloadComplaUserTemplate(HttpServletRequest request,HttpServletResponse response) throws IOException {
 		String realPath = request.getSession().getServletContext().getRealPath("/uploadFile/complat")+ "/";// 取系统当前路径
 		String realName = "政府用户信息统计列表.xlsx";
@@ -293,7 +286,7 @@ public class ComplatUserController extends BaseController{
 			output = null;
 		}
 	}
-	
+	*/
 	
 	
 	
@@ -314,7 +307,7 @@ public class ComplatUserController extends BaseController{
 			HttpServletRequest request,Model model,
 			HttpServletResponse response) throws Exception {				
         Map<String,String> fileMap = new HashMap<String, String>();//返回Map
-		final String UPLOAD_EXCEL_PATH = "E:\\demo\\complat\\";
+		final String UPLOAD_EXCEL_PATH = "uploadFile\\complat\\";
 		String absoluteFilePath = request.getSession().getServletContext().getRealPath(UPLOAD_EXCEL_PATH);
 		String fileName = multipartFile.getOriginalFilename();
 		System.out.println("fileName==="+fileName);
@@ -328,16 +321,22 @@ public class ComplatUserController extends BaseController{
 		fieldMap.put("2", "loginallname");
 		fieldMap.put("3", "mobile");
 		fieldMap.put("4", "email");
-		fieldMap.put("5", "enable");
-		fieldMap.put("6", "createtime");
-		List<ComplatUser> users= ExcelUtil.readXls(absoluteFilePath+"/"+uuidFileName,ComplatUser.class,fieldMap);
-		
+		//List<ComplatUser> users= ExcelUtil.readXls(absoluteFilePath+"/"+uuidFileName,ComplatUser.class,fieldMap);
+		List<ComplatUser> users= ExcelUtil.readXls(absoluteFilePath+"/"+fileName,ComplatUser.class,fieldMap);
 		try {
 			for(ComplatUser complatUser:users){
 				List<ComplatUser> list = complatUserService.findByUserName(complatUser.getName());
+				String mobile=complatUser.getMobile();
+				System.out.println("手机号============"+mobile);
 				if(null != list && list.size()>0){
 					fileMap.put("flag", "0");
 				}else{
+					complatUser.setEnable(0);
+					Date date=new Date();
+					DateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					String time=format.format(date);
+					Date createTime = sdf.parse(time);
+					complatUser.setCreatetime(createTime);
 					complatUserService.save(complatUser);
 					fileMap.put("flag", "1");
 				}
@@ -348,7 +347,6 @@ public class ComplatUserController extends BaseController{
 		}
 		String returnMsg = JSONObject.fromObject(fileMap).toString();
 		return new ModelAndView("redirect:/complat/complatList");
-		//return "users/complat/account_list";
 	}
 	
 	
@@ -362,12 +360,14 @@ public class ComplatUserController extends BaseController{
 	 * @return
 	 * @throws Exception
 	 */	
-	@RequestMapping(value = "/complatExport", method = RequestMethod.POST)
-	public void complatExport(@RequestParam("excelFile") MultipartFile file,
-			String complatUserId,Model model, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {	
+	@RequestMapping(value = "/complatExport", method = RequestMethod.GET)
+	public ModelAndView complatExport(Model model, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		String complatUserId = request.getParameter("complatUserId");
 		String[] complatUserIds = complatUserId.split(",");		
-		String fileName = "政府用户信息统计列表.xlsx";
+		String data = request.getParameter("data");
+		//String title = request.getParameter("title");
+		String fileName = "政府用户信息统计列表";
 		Map<String,Object> map = new HashMap<String,Object>(); 
 		List headList = new ArrayList();//表头数据  
         headList.add("用户姓名");
@@ -387,16 +387,22 @@ public class ComplatUserController extends BaseController{
 			treeMap.put("2", complatUser.getLoginname());
 			treeMap.put("3", complatUser.getLoginallname());
 			treeMap.put("4", complatUser.getMobile());
-			treeMap.put("5", complatUser.getEmail());			
-			treeMap.put("6", complatUser.getEnable());
-			treeMap.put("7", complatUser.getCreatetime());
+			treeMap.put("5", complatUser.getEmail());	
+			int enable = complatUser.getEnable();
+			if(enable==0){
+				treeMap.put("6","未启用");
+			}else{
+				treeMap.put("6","已启用");
+			}
 			
+			treeMap.put("7", complatUser.getCreatetime());			
 			dataList.add(treeMap);
 		}
 		map.put(ExcelUtil.HEADERINFO, headList);  
         map.put(ExcelUtil.DATAINFON, dataList); 
-        ExcelUtil.writeExcel(map, wb,response, fileName);
-
+        ExcelUtil.writeExcel(map, wb,response,fileName);
+        
+		return new ModelAndView("redirect:/complat/complatList");
 	}				
 		
 	/**
@@ -512,6 +518,176 @@ public class ComplatUserController extends BaseController{
 	
 	
 	
+	/**
+	 * 批量修改用户启用状态
+	 *@param complatUser
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 * @author <a href=" ">shenxh</a>
+	 */
+	@SuppressWarnings("finally")
+	@RequestMapping(value = "/changeUserEnable", method = RequestMethod.GET)
+	public ModelAndView changeUserEnable(String complatUserId,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+		//int Enable = Integer.parseInt(request.getParameter("Enable"));
+		/*Map<String, String> returnMsg = new HashMap<String, String>();
+		returnMsg.put("code", "1");*/
+		String enable = request.getParameter("Enable");		
+		Integer Enable = null;
+		int count = 0;
+		try {
+			if("0".equals(enable)){//未启用状态
+				enable="1";
+				Enable = Integer.parseInt(enable);
+			}
+			if("1".equals(enable)){//已启用状态
+				enable="0";
+				Enable = Integer.parseInt(enable);
+			}
+			String[] para=complatUserId.split(",");
+			ComplatUser complatUser = null;
+			for(int i=0;i<para.length;i++){
+				Integer corId = Integer.parseInt(para[i].trim());
+				complatUser=complatUserService.findByKey(corId);
+				if(complatUser.getEnable()==1){
+					complatUser.setEnable(0); 
+					//complatUserService.changeComplatEnable(corId,Enable);
+					complatUserService.save(complatUser);
+					returnMsg("success", "停用成功", request);
+					count++;
+				}else if(complatUser.getEnable()==0){
+					complatUser.setEnable(1); 
+					//complatUserService.changeComplatEnable(corId,Enable);
+					complatUserService.save(complatUser);
+					returnMsg("success", "启用成功", request);
+					count++;
+				}
+			}
+			
+		}catch(Exception e){
+			e.printStackTrace();			
+		} finally{
+			return  new ModelAndView("redirect:/complat/complatList");
+		}	
+		
+	}
+	
+	
+	
+	/**
+	 * 启用--单条记录
+	 *@param complatUser
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 * @author <a href=" ">shenxh</a>
+	 */
+	@SuppressWarnings("finally")
+	@RequestMapping(value = "/EnableStart", method = RequestMethod.GET)
+	public ModelAndView EnableStart(String iid,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+		System.out.println("修改iid============"+iid);
+		ComplatUser complatUser = null;
+		try{			
+			if (StringHelper.isNotBlack(iid)) {
+				complatUser = complatUserService.findByKey(Integer.parseInt(iid));
+				System.out.println("修改complatUser==================="+complatUser);
+			int enable = complatUser.getEnable(); 
+				if(enable==0){
+					enable=1;
+					complatUser.setEnable(enable);
+					complatUserService.save(complatUser);
+					returnMsg("success", "启用成功！", request);
+				}else if(enable==1){
+					enable=0;
+					complatUser.setEnable(enable);
+					complatUserService.save(complatUser);
+					returnMsg("success", "停用成功！", request);
+				}
+			}								
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			return  new ModelAndView("redirect:/complat/complatList");
+		}
+		
+	}
+	
+	
+	
+	
+	/**
+	 * 停用--单条记录
+	 *@param complatUser
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 * @author <a href=" ">shenxh</a>
+	 */
+	@SuppressWarnings("finally")
+	@RequestMapping(value = "/EnableStop", method = RequestMethod.GET)
+	public ModelAndView EnableStop(String iid,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+		System.out.println("修改iid============"+iid);
+		ComplatUser complatUser = null;
+		try{			
+			if (StringHelper.isNotBlack(iid)) {
+				complatUser = complatUserService.findByKey(Integer.parseInt(iid));
+				System.out.println("修改complatUser==================="+complatUser);
+				int enable = complatUser.getEnable(); 
+				if(enable==0){
+					enable=1;
+					complatUser.setEnable(enable);
+					complatUserService.save(complatUser);
+					returnMsg("success", "启用成功！", request);
+				}else if(enable==1){
+					enable=0;
+					complatUser.setEnable(enable);
+					complatUserService.save(complatUser);
+					returnMsg("success", "停用成功！", request);
+				}
+			}								
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			return  new ModelAndView("redirect:/complat/complatList");
+		}
+		
+	}
+	
+	
+	
+	
+	/**
+	 * 删除政府用户--单条记录
+	 *@param complatUser
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 * @author <a href=" ">shenxh</a>
+	 */
+	@RequestMapping(value = "/deleteComplatUser", method = RequestMethod.GET)
+	public ModelAndView deleteComplatUser(String iid,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+		System.out.println("删除iid============"+iid);
+		ComplatUser complatUser = null;
+		try{
+			if (StringHelper.isNotBlack(iid)) {
+				complatUser = complatUserService.findByKey(Integer.parseInt(iid));
+				System.out.println("删除complatUser==================="+complatUser);
+				if(complatUser != null){
+					complatUserService.delete(complatUser);
+					returnMsg("success", "删除成功", request);
+				}
+			}			
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			return  new ModelAndView("redirect:/complat/complatList");
+		}
+		
+	}
 }
 
 

@@ -3,56 +3,83 @@
 <html>
 
 <%@ include file="/include/meta.jsp"%> 
-
+<script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgcore.lhgdialog.min.js"></script>
+	<script type="text/javascript" src="${ctx}/res/plugin/ztree/js/jquery.ztree.all-3.5.js"></script>
+	<link rel="stylesheet" href="${ctx}/res/plugin/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css"></link>
 <head>
 <title>甘肃万维JUP课题</title>
-<link rel="stylesheet" href="${ctx}/res/skin/default/plugin/z-tree/css/zTreeStyle/zTreeStyle.css" type="text/css"/>
-<script type="text/javascript" src="${ctx}/res/skin/default/plugin/z-tree/js/jquery.ztree.core-3.5.min.js"></script>
 <script type="text/javascript" src="${ctx}/res/plugin/uploadify/js/jquery.uploadify-3.1.min.js"></script>
-<style type="text/css">
-.ztree {margin-top: 10px;border: 1px solid #cfd9db; display:none;background: #f0f6e4;height:360px;overflow-y:scroll;overflow-x:auto;}
-</style>
+<link type="text/css" rel="stylesheet" href="${ctx}/res/skin/login/css/menu.css" />
+	<script type="text/javascript" src="${ctx}/res/skin/login/js/menu.js"></script>
+	<link type="text/css" rel="stylesheet" href="${ctx}/res/jslib/ztree/css/zTreeStyle/zTreeStyle.css" />
+	<link type="text/css" rel="stylesheet" href="${ctx}/res/skin/login/css/tree.css" />
+	<script type="text/javascript" src="${ctx}/res/jslib/ztree/js/jquery.ztree.all-3.5.min.js"></script>
+	<script type="text/javascript" src="${ctx}/res/skin/login/js/tree.js"></script>
+
 <script type="text/javascript">
-$().ready(function() {
-//表单校验
-var outisideUserNameInput=$("#name").val();
-$("#editForm").validate({
-	rules: {
-		name : {
-			required: true,
-			cnRangelength: [0,127]
-		},
-	   	groupallname : {
-			required: true,
-			cnRangelength: [0,127]
-		},
-		nodetype : {
-			required: true
-		},
-		areatype : {
-			required: true
-		},
-		areacode : {
-			required: true
-		},
-		suffix : {
-			required: true
-		},
-		orgcode : {
-			maxlength: 50
-		},
-		pname : {
-			maxlength: 50
-		},
-		spec:{
-	   		cnRangelength: [0,255]
-	   	},
-	   	submitHandler:function(form){
-			form.submit();
+
+
+$(function(){
+	var groupMenu = [{"name":"单位选择","id":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
+
+	$('#groupname').menu({
+		tree : 'groupmenu',
+		height : 200,
+		init : function() {
+			setting('groupmenu', onClickGroup, onDbClickGroup, groupMenu);
 		}
+	});
+});
+function hideGroupMenu(){
+	$('#groupname_menu').css('display','none');
+}
+function onClickGroup(event, treeId, treeNode) {
+	$('#groupid').val(treeNode.id);
+	$('#groupname').val(treeNode.name);
+	hideGroupMenu();
+}
+function onDbClickGroup(event, treeId, treeNode) {
+	if(treeNode == null){
+		return;
 	}
-});
-});
+	if (treeNode.isDisabled )//根节点及失效节点双击无效
+		return;
+	$('#groupid').val(treeNode.id);
+	$('#groupname').val(treeNode.name);
+	$('#groupname_menu').fadeOut(50);
+}
+
+/**
+ *	初始化树
+ */
+function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
+	var setting = {
+		async : {
+			enable : true,
+			url : '../login/getGroup',
+			autoParam : [ "id=groupId", "isDisabled" ]
+		},
+		callback : {
+			beforeClick : beforeClick,
+			onClick : onClickFunction,
+			onDblClick : onDblClickFunction
+		}
+	};
+	console.log("-----"+treeName);
+	$("#" + treeName).tree(setting, rootNode);
+//	$("#" + treeName).tree().refreshNode('');
+}
+/**
+ *	机构选择节点点击前回调
+ */
+function beforeClick(treeId, treeNode, clickFlag) {
+	if (treeNode.isDisabled)
+		return false;
+	return (treeNode.id != 0);
+}
+function resetform() {
+	$('form').find(':input').not(':button,:hidden,:submit,:reset').val('');
+}
 </script>
 </head>
 <body>
@@ -86,8 +113,8 @@ $("#editForm").validate({
           <input type="hidden" id="pinyin" name="pinyin" value="${complatGroup.pinyin}"/>
           <input type="hidden" id="iscombine" name="iscombine" value="${complatGroup.iscombine}"/>
           <input type="hidden" id="opersign" name="opersign" value="${complatGroup.opersign}"/>
-          <input type="hidden" id="createtime" name="createtime" value="${complatGroup.createtime}"/>
-          <input type="hidden" id="modifytime" name="modifytime" value="${complatGroup.modifytime}"/>
+      <!--<input type="hidden" id="createtime" name="createtime" value="${complatGroup.createtime}"/>
+          <input type="hidden" id="modifytime" name="modifytime" value="${complatGroup.modifytime}"/>--> 
           <input type="hidden" id="synState" name="synState" value="${complatGroup.synState}"/>
           <input type="hidden" id="orderField" name="orderField" value="${orderField}"/> 
 		  <input type="hidden" id="orderSort" name="orderSort" value="${orderSort}"/>
@@ -145,8 +172,7 @@ $("#editForm").validate({
 	            </td>
 	        	<th>请输入上级机构：</th>
 	        	<td>
-	        		<input type="text"  class="input" name="pname"  />
-	            	<i class="form-icon-clear"></i>
+	        		<input name="groupname" id="groupname" type="text" style="cursor: pointer;" class="input" value="${complatGroup.parentName}"/> 
 	        	</td>
 			</tr>
 			<tr>
@@ -182,6 +208,5 @@ $("#editForm").validate({
 	
 </div>
 </div>
-
 </body>
 </html>

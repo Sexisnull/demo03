@@ -51,7 +51,7 @@ import com.gsww.uids.service.JisSysviewDetailService;
 import com.gsww.uids.service.JisSysviewService;
 
 @Controller
-@RequestMapping(value = "/uids")
+@RequestMapping(value = "/sysviewCurr")
 public class JisSysviewCurrentController extends BaseController{
 	private static Logger logger = LoggerFactory.getLogger(JisSysviewCurrentController.class);
 	@Autowired
@@ -78,7 +78,6 @@ public class JisSysviewCurrentController extends BaseController{
 			PageRequest pageRequest=super.buildPageRequest(hrequest,pageUtils,JisSysviewCurrent.class,findNowPage);
 			
 			//搜索属性初始化
-			//String synctime = hrequest.getParameter("synctime");
 			
 			Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 			Specification<JisSysviewCurrent>  spec=super.toSpecification(searchParams, JisSysviewCurrent.class);
@@ -96,12 +95,18 @@ public class JisSysviewCurrentController extends BaseController{
 			for(Map<String,Object> para:paraList){
 				paraMap.put(Integer.parseInt((String) para.get("PARA_CODE")),  para.get("PARA_NAME"));
 			}
+			model.addAttribute("applicationMap", applicationMap);
+			model.addAttribute("paraMap", paraMap);
+			
+			/**下拉列表初始化*/
+			List<Map<String, Object>> applications = jisApplicationService.getJisApplicationList();
+			List<Map<String, Object>> parameters = sysParaService.getParaList("OPT_RESULT");
+			model.addAttribute("applications", applications);
+			model.addAttribute("parameters", parameters);
 		
 			//分页
 			Page<JisSysviewCurrent> pageInfo = jisSysviewCurrentService.getJisPage(spec,pageRequest);
 			model.addAttribute("pageInfo", pageInfo);
-			model.addAttribute("applicationMap", applicationMap);
-			model.addAttribute("paraMap", paraMap);
 
 			// 将搜索条件编码成字符串，用于排序，分页的URL
 			model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
@@ -141,30 +146,6 @@ public class JisSysviewCurrentController extends BaseController{
 		
 	}
 	
-	@RequestMapping(value="/getApplications",method = RequestMethod.GET)
-	@ResponseBody
-	public List<Map<String, Object>> getApplications(){
-		List<Map<String, Object>> appMap = null;
-		try {
-			appMap = jisApplicationService.getJisApplicationList();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return appMap;
-	}
-	
-	@RequestMapping(value="/getOptresult",method = RequestMethod.GET)
-	@ResponseBody
-	public List<Map<String, Object>> getOptresult(){
-		List<Map<String, Object>> paraMap = null;
-		try {
-			paraMap = sysParaService.getParaList("OPT_RESULT");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return paraMap;
-	}
-	
 	/**
 	 * 同步
 	 * @param iid
@@ -177,10 +158,13 @@ public class JisSysviewCurrentController extends BaseController{
 		
 		try {
 			JisSysviewCurrent sysviewCurrent = jisSysviewCurrentService.findByIid(iid);
-			Map<String,Object> map = convertBean(sysviewCurrent);
-			JisSysview sysview = (JisSysview)convertMap(JisSysview.class,map);
-			jisSysviewService.save(sysview);
-			jisSysviewCurrentService.delete(sysviewCurrent);
+			if(null != sysviewCurrent){
+				//Map<String,Object> map = convertBean(sysviewCurrent);
+				//JisSysview sysview = (JisSysview)convertMap(JisSysview.class,map);
+				JisSysview sysview = convertToJisSysview(sysviewCurrent);
+				jisSysviewService.save(sysview);
+				jisSysviewCurrentService.delete(sysviewCurrent);
+			}
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -201,10 +185,13 @@ public class JisSysviewCurrentController extends BaseController{
 			String[] para=iid.split(",");
 			for(int i=0;i<para.length;i++){
 				JisSysviewCurrent sysviewCurrent = jisSysviewCurrentService.findByIid(Integer.valueOf(para[i]));
-				Map<String,Object> map = convertBean(sysviewCurrent);
-				JisSysview sysview = (JisSysview)convertMap(JisSysview.class,map);
-				jisSysviewService.save(sysview);
-				jisSysviewCurrentService.delete(sysviewCurrent);
+				if(sysviewCurrent!=null){
+					//Map<String,Object> map = convertBean(sysviewCurrent);
+					//JisSysview sysview = (JisSysview)convertMap(JisSysview.class,map);
+					JisSysview sysview = convertToJisSysview(sysviewCurrent);
+					jisSysviewService.save(sysview);
+					jisSysviewCurrentService.delete(sysviewCurrent);
+				}
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -212,8 +199,28 @@ public class JisSysviewCurrentController extends BaseController{
 		return  new ModelAndView("redirect:/uids/jisCurList");
 	}
 	
+	public JisSysview convertToJisSysview(JisSysviewCurrent sysviewCurrent){
+		JisSysview jisSysview = null;
+		if(null!=sysviewCurrent){
+			jisSysview = new JisSysview();
+			jisSysview.setIid(sysviewCurrent.getIid());
+			jisSysview.setObjectid(sysviewCurrent.getObjectid());
+			jisSysview.setObjectname(sysviewCurrent.getObjectname());
+			jisSysview.setState(sysviewCurrent.getState());
+			jisSysview.setResult(sysviewCurrent.getResult());
+			jisSysview.setOptresult(sysviewCurrent.getOptresult());
+			jisSysview.setSynctime(sysviewCurrent.getSynctime());
+			jisSysview.setAppid(sysviewCurrent.getAppid());
+			jisSysview.setCodeid(sysviewCurrent.getCodeid());
+			jisSysview.setOperatetype(sysviewCurrent.getOperatetype());
+			jisSysview.setTimes(sysviewCurrent.getTimes());
+			jisSysview.setErrorspec(sysviewCurrent.getErrorspec());
+		}
+		return jisSysview;
+	}
+	
 	/**
-	 * 同步详情
+	 * 查看同步详情
 	 * @param iid
 	 * @param model
 	 * @param request
@@ -241,80 +248,15 @@ public class JisSysviewCurrentController extends BaseController{
 			paraMap.put(Integer.parseInt((String) para.get("PARA_CODE")),  para.get("PARA_NAME"));
 		}
 		
+		Map<String,String> detailMap = new HashMap<String, String>();
+		detailMap.put("returnUrl", "sysviewCurr/jisCurList");
+		detailMap.put("syncType", "current");
+		model.addAttribute("detailMap",detailMap);
 		model.addAttribute("applicationMap", applicationMap);
 		model.addAttribute("paraMap", paraMap);
-		model.addAttribute("jisSysviewCurrent",sysviewCurrent);
+		model.addAttribute("jisSysview",sysviewCurrent);
 		model.addAttribute("jisSysviewDetail",jisSysviewDetail);
 		return "users/sysview/jis_sysview_detail";
 	} 
 	
-    /**  
-     * 将一个 JavaBean 对象转化为一个  Map  
-     * @param bean 要转化的JavaBean 对象  
-     * @return 转化出来的  Map 对象  
-     * @throws IntrospectionException 如果分析类属性失败  
-     * @throws IllegalAccessException 如果实例化 JavaBean 失败  
-     * @throws InvocationTargetException 如果调用属性的 setter 方法失败  
-     */    
-    @SuppressWarnings({ "rawtypes", "unchecked" })    
-    public static Map convertBean(Object bean)    
-            throws IntrospectionException, IllegalAccessException, InvocationTargetException {    
-        Class type = bean.getClass();    
-        Map returnMap = new HashMap();    
-        BeanInfo beanInfo = Introspector.getBeanInfo(type);    
-    
-        PropertyDescriptor[] propertyDescriptors =  beanInfo.getPropertyDescriptors();    
-        for (int i = 0; i< propertyDescriptors.length; i++) {    
-            PropertyDescriptor descriptor = propertyDescriptors[i];    
-            String propertyName = descriptor.getName();    
-            if (!propertyName.equals("class")) {    
-                Method readMethod = descriptor.getReadMethod();    
-                Object result = readMethod.invoke(bean, new Object[0]);    
-                if (result != null) {    
-                    returnMap.put(propertyName, result);    
-                } else {    
-                    returnMap.put(propertyName, "");    
-                }    
-            }    
-        }    
-        return returnMap;    
-    }  
-  
-  
-  
-/**  
-     * 将一个 Map 对象转化为一个 JavaBean  
-     * @param type 要转化的类型  
-     * @param map 包含属性值的 map  
-     * @return 转化出来的 JavaBean 对象  
-     * @throws IntrospectionException 如果分析类属性失败  
-     * @throws IllegalAccessException 如果实例化 JavaBean 失败  
-     * @throws InstantiationException 如果实例化 JavaBean 失败  
-     * @throws InvocationTargetException 如果调用属性的 setter 方法失败  
-     */    
-    @SuppressWarnings("rawtypes")    
-    public static Object convertMap(Class type, Map map)    
-            throws IntrospectionException, IllegalAccessException,    
-            InstantiationException, InvocationTargetException {    
-        BeanInfo beanInfo = Introspector.getBeanInfo(type); // 获取类属性    
-        Object obj = type.newInstance(); // 创建 JavaBean 对象    
-    
-        // 给 JavaBean 对象的属性赋值    
-        PropertyDescriptor[] propertyDescriptors =  beanInfo.getPropertyDescriptors();    
-        for (int i = 0; i< propertyDescriptors.length; i++) {    
-            PropertyDescriptor descriptor = propertyDescriptors[i];    
-            String propertyName = descriptor.getName();    
-    
-            if (map.containsKey(propertyName)) {    
-                // 下面一句可以 try 起来，这样当一个属性赋值失败的时候就不会影响其他属性赋值。    
-                Object value = map.get(propertyName);    
-    
-                Object[] args = new Object[1];    
-                args[0] = value;    
-    
-                descriptor.getWriteMethod().invoke(obj, args);    
-            }    
-        }    
-        return obj;    
-    }  
 }
