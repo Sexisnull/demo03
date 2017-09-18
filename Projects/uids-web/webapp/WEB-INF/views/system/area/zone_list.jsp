@@ -459,7 +459,7 @@ background: #249bf3;color: #fff;border: 1px solid #249BF3;}
         	<!--,nameCheck: true,isUnique:true,cnRangelength:[1,64] -->
         	 <li><b class="mustbe">*</b>区域名称</li>
             <li>
-            	<input type="text" style="background:#F0F0F0;" class="input" id="regionName1" name="name1" value="${complatZone.name}"  />
+            	<input type="text" disabled="disabled" style="background:#F0F0F0;" class="input" id="regionName1" name="name1" value="${complatZone.name}"  />
             	 <input type="hidden" class="input" id="regionName" name="name" value="${complatZone.name}"  />
             	<input type="hidden" id="oldDeptName" name="oldName" value="${complatZone.name}"  />
             	<i class="form-icon-clear"></i>
@@ -473,15 +473,13 @@ background: #249bf3;color: #fff;border: 1px solid #249BF3;}
             </li> 
             <li>区域类型</li>
             <li>
-            	<c:if test="${complatZone.type == '' || complatZone.type == null}"><input type="radio" name="type" value = '0' checked="checked" >省</c:if>
-            	<c:if test="${complatZone.type == '0'}"><input type="radio" name="type" value = '0' checked="checked" >省</c:if>
-            	<c:if test="${complatZone.type == '1'}"><input type="radio" name="type" value = '1' checked="checked" >市</c:if>
-            	<c:if test="${complatZone.type == '2'}"><input type="radio" name="type" value = '2' checked="checked" >区县</c:if>
+            	<input type="radio" name="type" checked="checked" ><span id="typeName"></span>
             	<i class="form-icon-clear"></i>
             </li> 
             <li>上级区域</li>
             <li>
-            	<input disabled="disabled" style="background:#F0F0F0;" type="text" class="input parentDeptName" id="pid" name="pid" value="${sysDept.pid}" />
+            	<input disabled="disabled" style="background:#F0F0F0;" type="text" class="input parentDeptName" id="pName" name="pName" value="${complatZone.name}" />
+            	<input style="background:#F0F0F0;" type="hidden" class="input parentDeptName" id="pid" name="pid" value="${complatZone.pid}" />
             	<i class="form-icon-clear"></i>
             </li>
          </ul>
