@@ -11,7 +11,7 @@ import javax.persistence.Table;
  * JisOutsideuserdetail entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "jis_outsideuserdetail", catalog = "uidsdx")
+@Table(name = "jis_outsideuserdetail")
 public class JisOutsideuserdetail implements java.io.Serializable {
 
 	// Fields

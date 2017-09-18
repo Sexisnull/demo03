@@ -11,7 +11,7 @@ import javax.persistence.Table;
  * JisRelation entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "jis_relation", catalog = "uidsdx")
+@Table(name = "jis_relation")
 public class JisRelation implements java.io.Serializable {
 
 	// Fields

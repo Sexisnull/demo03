@@ -263,7 +263,7 @@ function addHoverDom(treeId, treeNode) {    				//用于当鼠标移动到节点
 			$.ajax({
 				type : "POST",
 				url : "saveZone",
-				data : "seq=" + seq + "&name=" + name + "&parId=" + treeNode.id + "&dcode=" + dcode,
+				data : "seq=" + seq + "&name=" + name + "&parId=" + treeNode.tld + "&dcode=" + dcode + "&type=" + treeNode.level,
 				dataType : "json",
 				success : function(data) {
 					if (data.ret == 1) {
@@ -273,7 +273,7 @@ function addHoverDom(treeId, treeNode) {    				//用于当鼠标移动到节点
 							tld : data.id,
 							name : name,
 							title : name,
-							seq : seq,
+							seq : seq
 						});
 						$("#" + treeNode.tId + "_remove").remove();
 						alert("区域添加成功！");
@@ -344,11 +344,31 @@ function onClick(e, treeId, treeNode, clickFlag) {			//点击区域将数据填�
 						$("#regionName").attr("value", jsonStr.name);
 						$("#regionName1").attr("value", jsonStr.name);
 					}
+					$.ajax({
+						type : "POST",
+						url : "getZonePname",
+						data : "pid=" + jsonStr.pid,
+						dataType : "json",
+						success : function(data) {
+							$("#pName").attr("value", data.name);
+						}
+					});
 					$("#regionCode").attr("value", jsonStr.codeId);
 					$("#regionCode1").attr("value", jsonStr.codeId);
 					$("#iid").attr("value", jsonStr.iid);
 					$("#pid").attr("value", jsonStr.pid);
-					$("#type").attr("value", jsonStr.type);
+					/*$("#type").attr("value", jsonStr.type);*/
+					if(jsonStr.type == 0) {
+						$("#typeName").html("省");
+					} else if(jsonStr.type == 1) {
+						$("#typeName").html("市");
+					} else if(jsonStr.type == 2) {
+						$("#typeName").html("区县");
+					} else if(jsonStr.type == 3) {
+						$("#typeName").html("乡镇");
+					} else {
+						$("#typeName").html("");
+					}
 				}
 			});
 		} else {

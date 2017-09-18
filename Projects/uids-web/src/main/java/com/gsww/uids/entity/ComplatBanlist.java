@@ -12,7 +12,7 @@ import javax.persistence.Table;
  * ComplatBanlist entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "complat_banlist", catalog = "uidsdx")
+@Table(name = "complat_banlist")
 public class ComplatBanlist implements java.io.Serializable {
 
 	// Fields

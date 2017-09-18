@@ -28,7 +28,7 @@
 			</li>
 			<li class="split"></li>
 			<li>
-				<a ><c:if test="${detailMap.syncType} == 'sysview'">实时</c:if><c:if test="${detailMap.syncType} == 'current'">当前</c:if><c:if test="${detailMap.syncType} == 'history'">历史</c:if>同步列表</a>
+				<a ><c:if test="${detailMap.syncType == 'sysview'}">实时</c:if><c:if test="${detailMap.syncType == 'current'}">当前</c:if><c:if test="${detailMap.syncType == 'history'}">历史</c:if>同步列表</a>
 			</li>
 			<li class="split"></li>
 			<li class="active">
@@ -44,11 +44,11 @@
         <table class="form-table" style="border-bottom:1px solid #c6e6ff">
     		<tr>
     		     <th rowspan="3" style="border-right:1px solid #c6e6ff;" width="3%" align="left">同步基本信息</th>
-	        	 <th width="3%"> 操作对象名称：</th>
+	        	 <th> 操作对象名称：</th>
 	        	 <td>
 					<input type="text" id="objectname" value="${jisSysview.objectname}" readonly="readonly"/>
 				</td>
-				<th width="3%">机构编码：</th>
+				<th>机构编码：</th>
 				<td>
 					<input type="text" id="codeid" value="${jisSysview.codeid}" readonly="readonly"/>
 				</td>
@@ -78,13 +78,13 @@
     		<tr style="border-bottom:1px solid #c6e6ff">
     		     <th rowspan="1" style="border-right:1px solid #c6e6ff;" width="3%">请求报文</th>
 	        	 <td colspan="4" align="center">
-					<textarea rows="3" cols="50" readonly="readonly">${jisSysviewDetail.sendmsg}</textarea>
+					<textarea rows="5" cols="50" readonly="readonly" style="width: 87%;">${jisSysviewDetail.sendmsg}</textarea>
 				</td>
 			</tr>
     		<tr>
     		     <th rowspan="1" style="border-right:1px solid #c6e6ff;" width="3%">响应报文</th>
 				<td colspan="4" align="center">
-					<textarea rows="3" cols="50" readonly="readonly">${jisSysviewDetail.sendmsg}</textarea>
+					<textarea rows="5" cols="50" readonly="readonly" style="width: 87%;">${jisSysviewDetail.sendmsg}</textarea>
 				</td>
 			</tr>
 		</table>

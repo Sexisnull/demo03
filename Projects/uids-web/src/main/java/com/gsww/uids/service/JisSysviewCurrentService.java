@@ -8,6 +8,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import com.gsww.jup.entity.sys.SysParaType;
 import com.gsww.uids.entity.JisSysviewCurrent;
+import com.gsww.uids.entity.JisSysviewDetail;
 
 public interface JisSysviewCurrentService {
 
@@ -18,16 +19,7 @@ public interface JisSysviewCurrentService {
 	 * @return
 	 * @throws Exception
 	 */
-	
-	/**
-	 * 查询所有参数类型列表
-	 * @return
-	 * @throws Exception
-	 */
 	public List<JisSysviewCurrent> findJisCurList() throws Exception;
-	
-	
-	
 	
 	public void delete(JisSysviewCurrent entity) throws Exception;
 	

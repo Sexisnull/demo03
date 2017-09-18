@@ -12,7 +12,7 @@ import javax.persistence.Table;
  * JisAuthlog entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "jis_authlog", catalog = "uidsdx")
+@Table(name = "jis_authlog")
 public class JisAuthlog implements java.io.Serializable {
 
 	// Fields

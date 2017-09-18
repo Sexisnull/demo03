@@ -20,6 +20,10 @@ public class JisSysviewDetailServiceImpl implements JisSysviewDetailService{
 	public JisSysviewDetail findByIid(int iid) { 
 		return sysviewDetailDao.findByIid(iid);
 	}
-	
+
+	@Override
+	public void delete(JisSysviewDetail jisSysviewDetail) {
+		sysviewDetailDao.delete(jisSysviewDetail);
+	}
 	
 }

@@ -59,16 +59,49 @@ function checkSubmitForm() {
 		$.validator.errorShow($("#objectNameSearch"), '只能包括中英文、数字、@和下划线');
 	}
 }
-	
- /**同步**/
+
+/**同步*/
 function sync(url,param,obj){
-	var singleId = $(obj).parents("td").parent().find('td:first').find('input').attr('id');
-	$.dialog.confirm('您确认要同步吗？',function(){
-		window.location.href="${ctx}/"+url+"?"+param+"="+singleId;
+    var singleId = $(obj).parents("td").parent().find('td:first').find('input').attr('id');
+    $.dialog.confirm('您确认要同步吗？',function(){
+		 window.location.href="${ctx}/"+url+"?"+param+"="+singleId;
 	});
 }
+	
+ /**同步+校验**/
+function sync1(url,param,obj){
+    var singleId = $(obj).parents("td").parent().find('td:first').find('input').attr('id');
+    $.get("${ctx}/sysviewCurr/checkSyncState", {"iid":singleId,"optresult":2}, function (data) {
+        if (data != null) {
+            if(data.success == 'true'){
+                $.dialog.alert('已同步成功，不能再次同步！',function(){ 
+				     return null;
+			    }); 
+            }else if(data.success == 'false'){
+                $.dialog.confirm('您确认要同步吗？',function(){
+		             window.location.href="${ctx}/"+url+"?"+param+"="+singleId;
+	            });
+            }
+        }
+    });
+}
 
-    /**批量同步**/
+/**校验是否已同步*/
+function checkSyncState(obj){
+    var singleId = $(obj).parents("td").parent().find('td:first').find('input').attr('id');
+     $.get("${ctx}/sysviewCurr/checkSyncState", {"iid":singleId,"optresult":2}, function (data) {
+         if (data != null) {
+            if(data.success == 'true'){
+                $.dialog.alert('已同步成功，不能删除和再次同步！',function(){ 
+				     $(obj).removeClass("active");
+				     var checkbok = $(obj).parents("td").parent().find('td:first').find('input').attr("checked",false);
+			    }); 
+            }
+        }
+     });
+}
+
+/**批量同步**/
 function batchSync(url,param){
 	//var iid=$(".iid").val();
 	if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checked').length!=0){
@@ -94,6 +127,8 @@ function detail(url,param,obj){
   var singleId = $(obj).parents("td").parent().find('td:first').find('input').attr('id');
   window.location.href="${ctx}/"+url+"?"+param+"="+singleId;
 }
+
+
 </script>
 <style type="text/css">
 .select{
@@ -148,6 +183,7 @@ width: 100px !important;
 						</table>
 				</form>
 				<form id="form2" name="form2" action="${ctx}/sysviewCurr/jisCurList" >
+				    <input type="hidden" name="ishigh" value=""/>
 				        <table class="advanced-content" style="display: none;">
 							<tr>
 				                <th>所属应用：</th>
@@ -169,7 +205,7 @@ width: 100px !important;
 
 								<th>操作类型：</th>
 								<td>
-									<input id="oldOperatetypeSearch" type="hidden" value="${sParams['EQ_operatetype']}">
+									<input id="oldOperatetypeSearch" type="hidden" value="${sParams['EQ_operatetype']}"/>
 									<select id="operatetypeSearch" name="search_EQ_operatetype" class="select">
 										<option value="">--请选择--</option>
 									</select>
@@ -196,7 +232,8 @@ width: 100px !important;
 							<tr>
 							    <th>操作时间：</th>
 								<td>
-									<input type="text" class="syncTime" id="synctimeSearchStart" name="search_GTE_synctime" placeholder="起始时间" value="${sParams['GTE_synctime']}" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" /> -- <input class="syncTime" type="text" id="synctimeSearchEnd" name="search_LTE_synctime" placeholder="结束时间" value="${sParams['LTE_synctime']}" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+									<input type="text" class="syncTime Wdate" id="synctimeSearchStart" name="search_GTE_synctime" placeholder="起始时间" value="${sParams['GTE_synctime']}" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+									 至 <input class="syncTime Wdate" type="text" id="synctimeSearchEnd" name="search_LTE_synctime" placeholder="结束时间" value="${sParams['LTE_synctime']}" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" />
 									<!-- search_LIKE_ -->
 								</td>
 							    <th>操作对象名称：</th>
@@ -268,7 +305,8 @@ width: 100px !important;
 					<tr>
 					    <td>
 	                    	<div class="label">
-	                            <i class="check_btn"></i><input id="${jisCurrent.iid}" value="${jisCurrent.iid}" type="checkbox" class="check_btn" style="display:none;"/>
+	                    	<!--onclick="checkSyncState(this);"-->
+	                    	 <i class="check_btn"></i><input id="${jisCurrent.iid}" value="${jisCurrent.iid}" type="checkbox" class="check_btn" style="display:none;"/>
 	                        </div>
 	                    </td>
 						<td>

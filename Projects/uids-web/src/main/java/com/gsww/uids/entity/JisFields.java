@@ -11,7 +11,7 @@ import javax.persistence.Table;
  * JisFields entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "JIS_FIELDS", catalog = "uidsdx")
+@Table(name = "JIS_FIELDS")
 public class JisFields implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	

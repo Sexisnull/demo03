@@ -26,6 +26,7 @@ import org.springside.modules.web.Servlets;
 import com.gsww.jup.controller.BaseController;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.jup.util.StringHelper;
+import com.gsww.uids.entity.ComplatZone;
 import com.gsww.uids.entity.JisFields;
 import com.gsww.uids.service.JisFieldsService;
 
@@ -225,5 +226,31 @@ public class JisFieldsController extends BaseController {
 			returnMsg("error", "设置失败", request);
 		}
 		return "redirect:/jis/fieldsList";
+	}
+	
+	@RequestMapping(value = "/checkFieldname", method = RequestMethod.GET)
+	public void checkFieldname(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		try {
+			boolean flag = true;
+			String fieldname = StringUtils.trim((String) request.getParameter("fieldname"));
+			if (fieldname != "null") {
+				List<JisFields> jisFieldsList = jisFieldsService.findAllJisFields();
+				for (JisFields jisFields : jisFieldsList) {
+					if (fieldname.equals(jisFields.getFieldname())) {
+						flag = false;
+						break;
+					}
+				}
+			} else {
+				
+			} 
+			if (flag) {
+				response.getWriter().write("1");
+			} else {
+				response.getWriter().write("0");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

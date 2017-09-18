@@ -24,7 +24,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
-import com.gsww.jup.entity.sys.SysAccount;
 import com.gsww.jup.entity.sys.SysMenu;
 import com.gsww.jup.entity.sys.SysOperator;
 import com.gsww.jup.service.sys.SysMenuService;
@@ -70,7 +69,7 @@ public class SysOperatorController extends BaseController{
 		try{
 			//初始化分页数据
 			PageUtils pageUtils=new PageUtils(pageNo,pageSize,orderField,orderSort);
-			PageRequest pageRequest=super.buildPageRequest(hrequest,pageUtils,SysAccount.class,findNowPage);
+			PageRequest pageRequest=super.buildPageRequest(hrequest,pageUtils,SysOperator.class,findNowPage);
 			request.setCharacterEncoding("UTF-8");
 			hrequest.setCharacterEncoding("UTF-8");
 			//搜索属性初始化

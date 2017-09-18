@@ -1,16 +1,6 @@
 package com.gsww.uids.controller;
 
-import java.beans.BeanInfo;
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +9,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,12 +25,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
-import com.gsww.jup.controller.sys.SysAccountController;
-import com.gsww.jup.entity.sys.SysAccount;
-import com.gsww.jup.entity.sys.SysRole;
 import com.gsww.jup.service.sys.SysParaService;
 import com.gsww.jup.util.PageUtils;
-import com.gsww.jup.util.StringHelper;
 import com.gsww.uids.entity.JisSysview;
 import com.gsww.uids.entity.JisSysviewCurrent;
 import com.gsww.uids.entity.JisSysviewDetail;
@@ -115,7 +100,7 @@ public class JisSysviewCurrentController extends BaseController{
 			ex.printStackTrace();
 			logger.error("列表打开失败："+ex.getMessage());
 			returnMsg("error","列表打开失败",(HttpServletRequest) request);
-			return "redirect:/uids/jisCurList";
+			return "redirect:/sysviewCurr/jisCurList";
 		}
 		return "users/sysview/jis_sysview_current_list";
 	}
@@ -135,13 +120,15 @@ public class JisSysviewCurrentController extends BaseController{
 				jisCurrent=jisSysviewCurrentService.findByIid(Iid);
 				jisSysviewCurrentService.delete(jisCurrent);
 				//级联删除明细
+			    JisSysviewDetail sysviewDetail = jisSysviewDetailService.findByIid(Iid);
+			    jisSysviewDetailService.delete(sysviewDetail);
 			}
 			returnMsg("success","删除成功",request);
 		} catch (Exception e) {
 			e.printStackTrace();
 			returnMsg("error", "删除失败",request);		
 		} finally{
-			return  new ModelAndView("redirect:/uids/jisCurList");
+			return  new ModelAndView("redirect:/sysviewCurr/jisCurList");
 		}
 		
 	}
@@ -159,8 +146,6 @@ public class JisSysviewCurrentController extends BaseController{
 		try {
 			JisSysviewCurrent sysviewCurrent = jisSysviewCurrentService.findByIid(iid);
 			if(null != sysviewCurrent){
-				//Map<String,Object> map = convertBean(sysviewCurrent);
-				//JisSysview sysview = (JisSysview)convertMap(JisSysview.class,map);
 				JisSysview sysview = convertToJisSysview(sysviewCurrent);
 				jisSysviewService.save(sysview);
 				jisSysviewCurrentService.delete(sysviewCurrent);
@@ -169,7 +154,7 @@ public class JisSysviewCurrentController extends BaseController{
 			e.printStackTrace();
 		}
 		
-		return  new ModelAndView("redirect:/uids/jisCurList");
+		return  new ModelAndView("redirect:/sysviewCurr/jisCurList");
 	}
 	
 	/**
@@ -186,8 +171,6 @@ public class JisSysviewCurrentController extends BaseController{
 			for(int i=0;i<para.length;i++){
 				JisSysviewCurrent sysviewCurrent = jisSysviewCurrentService.findByIid(Integer.valueOf(para[i]));
 				if(sysviewCurrent!=null){
-					//Map<String,Object> map = convertBean(sysviewCurrent);
-					//JisSysview sysview = (JisSysview)convertMap(JisSysview.class,map);
 					JisSysview sysview = convertToJisSysview(sysviewCurrent);
 					jisSysviewService.save(sysview);
 					jisSysviewCurrentService.delete(sysviewCurrent);
@@ -196,9 +179,16 @@ public class JisSysviewCurrentController extends BaseController{
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-		return  new ModelAndView("redirect:/uids/jisCurList");
+		return  new ModelAndView("redirect:/sysviewCurr/jisCurList");
 	}
 	
+	
+	
+	/**
+	 * JisSysviewCurrent转换JisSysview
+	 * @param sysviewCurrent
+	 * @return
+	 */
 	public JisSysview convertToJisSysview(JisSysviewCurrent sysviewCurrent){
 		JisSysview jisSysview = null;
 		if(null!=sysviewCurrent){
@@ -258,5 +248,28 @@ public class JisSysviewCurrentController extends BaseController{
 		model.addAttribute("jisSysviewDetail",jisSysviewDetail);
 		return "users/sysview/jis_sysview_detail";
 	} 
+	
+	/**
+	 * 是否同步成功校验
+	 * @param iid
+	 * @param optresult 要筛选的同步成功的状态
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/checkSyncState",method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String,Object> checkSyncState(@RequestParam("iid")int iid,@RequestParam("optresult")int optresult,Model model) throws Exception{
+		Map<String,Object> returnMap = new HashMap<String, Object>();
+		JisSysviewCurrent jisSysviewCurrent = jisSysviewCurrentService.findByIid(iid);
+		if(null!=jisSysviewCurrent){
+			if(optresult == jisSysviewCurrent.getOptresult()){
+				returnMap.put("success", "true") ;
+			}else{
+				returnMap.put("success", "false") ;
+			}
+		}
+		return returnMap;
+	}
 	
 }
