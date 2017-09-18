@@ -1,16 +1,6 @@
 package com.gsww.uids.controller;
 
-import java.beans.BeanInfo;
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +9,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,12 +25,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
-import com.gsww.jup.controller.sys.SysAccountController;
-import com.gsww.jup.entity.sys.SysAccount;
-import com.gsww.jup.entity.sys.SysRole;
 import com.gsww.jup.service.sys.SysParaService;
 import com.gsww.jup.util.PageUtils;
-import com.gsww.jup.util.StringHelper;
 import com.gsww.uids.entity.JisSysview;
 import com.gsww.uids.entity.JisSysviewCurrent;
 import com.gsww.uids.entity.JisSysviewDetail;
@@ -258,5 +243,22 @@ public class JisSysviewCurrentController extends BaseController{
 		model.addAttribute("jisSysviewDetail",jisSysviewDetail);
 		return "users/sysview/jis_sysview_detail";
 	} 
+	
+	
+	@RequestMapping(value="/checkSyncState",method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String,Object> checkSyncState(@RequestParam("iid")int iid,@RequestParam("optresult")int optresult,Model model) throws Exception{
+		Map<String,Object> returnMap = new HashMap<String, Object>();
+		JisSysviewCurrent jisSysviewCurrent = jisSysviewCurrentService.findByIid(iid);
+		if(null!=jisSysviewCurrent){
+			if(optresult == jisSysviewCurrent.getOptresult()){
+				returnMap.put("success", "true") ;
+			}else{
+				returnMap.put("success", "false") ;
+			}
+		}
+		return returnMap;
+		//model.addAttribute("returnMap", returnMap);
+	}
 	
 }
