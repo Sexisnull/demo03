@@ -3,11 +3,14 @@ package com.gsww.uids.service.impl;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gsww.jup.util.ReflectionUtils;
+import com.gsww.jup.util.StringHelper;
 import com.gsww.uids.dao.ComplatGroupDao;
 import com.gsww.uids.entity.ComplatGroup;
 import com.gsww.uids.service.ComplatGroupService;
@@ -70,8 +73,17 @@ public class ComplatGroupServiceImpl implements ComplatGroupService{
 	}
 
 	@Override
-	public ComplatGroup save(ComplatGroup entity) throws Exception {
-		return complatGroupDao.save(entity);
+	public ComplatGroup save(ComplatGroup complatGroup) throws Exception {
+		if(StringHelper.isNotBlack(String.valueOf(complatGroup.getIid()))){
+			ComplatGroup groupTemp = complatGroupDao.findByIid(complatGroup.getIid());
+			//将表单未携带的信息取出保存
+			BeanUtils.copyProperties(complatGroup, groupTemp, ReflectionUtils.getNullPropertyNames(complatGroup));
+			return complatGroupDao.save(groupTemp);
+		}else{
+			
+			return complatGroupDao.save(complatGroup);
+		}
+		
 	}
 
 	@Override

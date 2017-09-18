@@ -1,5 +1,6 @@
 package com.gsww.jup.util;
 
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -9,7 +10,9 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -17,6 +20,8 @@ import org.apache.commons.beanutils.converters.DateConverter;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 
 /**
  * 
@@ -292,5 +297,17 @@ public class ReflectionUtils {
 			return (RuntimeException) e;
 		}
 		return new RuntimeException("Unexpected Checked Exception.", e);
+	}
+	public static String[] getNullPropertyNames(final Object source) {
+		final BeanWrapper src = new BeanWrapperImpl(source);
+		PropertyDescriptor[] propertyDescriptors = src.getPropertyDescriptors();
+		Set<String> nullValueFieldNames = new HashSet<String>();
+		for (PropertyDescriptor each : propertyDescriptors) {
+			Object value = src.getPropertyValue(each.getName());
+			if (null == value) {
+				nullValueFieldNames.add(each.getName());
+			}
+		}
+		return nullValueFieldNames.toArray(new String[nullValueFieldNames.size()]);
 	}
 }

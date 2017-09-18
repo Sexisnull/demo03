@@ -80,13 +80,10 @@ public class ComplatGroupController extends BaseController{
 			//分页
 			Page<ComplatGroup> pageInfo = complatGroupService.getUserPage(spec,pageRequest);
 			//查询上级机构名称
-			Map<Integer,String> parentNameMap=new HashMap<Integer,String>();
 			for(ComplatGroup complatGroup:pageInfo.getContent()){				
 				if(null != complatGroup.getPid()){
-					String name = complatGroupService.findByKey(String.valueOf(complatGroup.getPid())).getName();
-					parentNameMap.put(complatGroup.getPid(), name);
-				}else{
-					parentNameMap.put(null,complatGroup.getName());
+					String parentName = complatGroupService.findByKey(String.valueOf(complatGroup.getPid())).getName();
+					complatGroup.setParentName(parentName);
 				}
 			}
 			//下拉选择查询
@@ -103,7 +100,6 @@ public class ComplatGroupController extends BaseController{
 				areatypeMap.put(Integer.parseInt((String) para.get("PARA_CODE")), para.get("PARA_NAME"));
 			}
 			model.addAttribute("pageInfo", pageInfo);
-			model.addAttribute("parentNameMap", parentNameMap);
 			model.addAttribute("nodetypeMap", nodetypeMap);
 			model.addAttribute("areatypeMap", areatypeMap);
 			model.addAttribute("sortType", orderField);
@@ -141,6 +137,7 @@ public class ComplatGroupController extends BaseController{
 				if(StringUtils.isNotBlank(request.getParameter("orderSort"))){
 					orderSort=(String)request.getParameter("orderSort");
 				}
+				//将pid转换为parentName在编辑框中显示
 				complatGroup = complatGroupService.findByKey(iid);
 				if(complatGroup.getPid() != null){
 					String parentName = complatGroupService.findByKey(String.valueOf(complatGroup.getPid())).getName();
@@ -168,12 +165,19 @@ public class ComplatGroupController extends BaseController{
 	public ModelAndView complatgroupSave(String iid,ComplatGroup complatGroup,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		try {
 			if(StringHelper.isNotBlack(iid)){
+				//编辑状态改变操作状态位（opersign）和修改时间（modifytime）
+				complatGroup.setOpersign(2);
 				complatGroup.setModifytime(Timestamp.valueOf(TimeHelper.getCurrentTime()));
 			}else{
+				//新增状态改变操作状态位（opersign）和创建时间（modifytime）
+				complatGroup.setOpersign(1);
 				complatGroup.setCreatetime(Timestamp.valueOf(TimeHelper.getCurrentTime()));
 			}
-			Integer pid = complatGroupService.findByName(complatGroup.getParentName()).getIid();
-			complatGroup.setPid(pid);
+			//将上级机构名称转换成pid
+			String parentName = request.getParameter("groupname");
+			if(StringHelper.isNotBlack(parentName)){
+				complatGroup.setPid(complatGroupService.findByName(parentName).getIid());
+			}
 			complatGroup = complatGroupService.save(complatGroup);
 			returnMsg("success","保存成功",request);
 		} catch (Exception e) {
@@ -196,6 +200,8 @@ public class ComplatGroupController extends BaseController{
 			boolean flag=false;
 			for(int i=0;i<para.length;i++){
 				complatGroup=complatGroupService.findByKey(para[i].trim());
+				//将操作状态位改为3
+				complatGroup.setOpersign(3);
 				complatGroupService.delete(complatGroup);
 				flag=true;
 			}

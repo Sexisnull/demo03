@@ -12,6 +12,7 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.gsww.jup.entity.sys.SysAccount;
 
 /**
  * 组织机构实体
@@ -47,7 +48,7 @@ public class ComplatGroup implements java.io.Serializable{
     private Timestamp createtime; //创建时间(yyyy-MM-dd HH:mm:ss)
     private Timestamp modifytime; //修改时间(yyyy-MM-dd HH:mm:ss)
     private Integer synState;     //0-未备份1-备份失败2-备份成功
-    private String parentName;
+    private String parentName;    //上级机构名称
 
 
    // Constructors

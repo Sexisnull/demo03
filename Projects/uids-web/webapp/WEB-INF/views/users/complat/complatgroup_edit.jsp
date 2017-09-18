@@ -107,15 +107,15 @@ function resetform() {
     
     <div style="display:none;">
           <input type="hidden" id="iid" name="iid" value="${complatGroup.iid}"/>
-          <input type="hidden" id="codeid" name="codeid" value="${complatGroup.codeid}"/>
+<%--           <input type="hidden" id="codeid" name="codeid" value="${complatGroup.codeid}"/>
           <input type="hidden" id="pid" name="pid" value="${complatGroup.pid}"/>
           <input type="hidden" id="orderid" name="orderid" value="${complatGroup.orderid}"/>
           <input type="hidden" id="pinyin" name="pinyin" value="${complatGroup.pinyin}"/>
           <input type="hidden" id="iscombine" name="iscombine" value="${complatGroup.iscombine}"/>
           <input type="hidden" id="opersign" name="opersign" value="${complatGroup.opersign}"/>
-      <!--<input type="hidden" id="createtime" name="createtime" value="${complatGroup.createtime}"/>
-          <input type="hidden" id="modifytime" name="modifytime" value="${complatGroup.modifytime}"/>--> 
-          <input type="hidden" id="synState" name="synState" value="${complatGroup.synState}"/>
+          <input type="hidden" id="createtime" name="createtime" value="${complatGroup.createtime}"/>
+          <input type="hidden" id="modifytime" name="modifytime" value="${complatGroup.modifytime}"/>
+          <input type="hidden" id="synState" name="synState" value="${complatGroup.synState}"/> --%>
           <input type="hidden" id="orderField" name="orderField" value="${orderField}"/> 
 		  <input type="hidden" id="orderSort" name="orderSort" value="${orderSort}"/>
     </div>
@@ -158,7 +158,7 @@ function resetform() {
 			<tr>
 				<th><b class="mustbe">*</b> 请输入区域编码：</th>
 				<td>
-					<input type="text" placeholder="请选择区域编码" class="input" name="areacode" value="${complatGroup.areacode}" />
+					<input type="text" placeholder="请输入区域编码" class="input" name="areacode" value="${complatGroup.areacode}" />
 				</td>
 	        	<th><b class="mustbe">*</b> 请输入机构后缀：</th>
 	        	<td>
@@ -172,7 +172,7 @@ function resetform() {
 	            </td>
 	        	<th>请输入上级机构：</th>
 	        	<td>
-	        		<input name="groupname" id="groupname" type="text" style="cursor: pointer;" class="input" value="${complatGroup.parentName}"/> 
+	        		<input name="groupname" id="groupname" type="text" style="cursor: pointer;" value="${complatGroup.parentName}"/> 
 	        	</td>
 			</tr>
 			<tr>
