@@ -148,6 +148,7 @@ width: 100px !important;
 						</table>
 				</form>
 				<form id="form2" name="form2" action="${ctx}/sysviewCurr/jisCurList" >
+				    <input type="hidden" name="ishigh" value=""/>
 				        <table class="advanced-content" style="display: none;">
 							<tr>
 				                <th>所属应用：</th>
@@ -169,7 +170,7 @@ width: 100px !important;
 
 								<th>操作类型：</th>
 								<td>
-									<input id="oldOperatetypeSearch" type="hidden" value="${sParams['EQ_operatetype']}">
+									<input id="oldOperatetypeSearch" type="hidden" value="${sParams['EQ_operatetype']}"/>
 									<select id="operatetypeSearch" name="search_EQ_operatetype" class="select">
 										<option value="">--请选择--</option>
 									</select>
@@ -196,7 +197,8 @@ width: 100px !important;
 							<tr>
 							    <th>操作时间：</th>
 								<td>
-									<input type="text" class="syncTime" id="synctimeSearchStart" name="search_GTE_synctime" placeholder="起始时间" value="${sParams['GTE_synctime']}" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" /> -- <input class="syncTime" type="text" id="synctimeSearchEnd" name="search_LTE_synctime" placeholder="结束时间" value="${sParams['LTE_synctime']}" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+									<input type="text" class="syncTime Wdate" id="synctimeSearchStart" name="search_GTE_synctime" placeholder="起始时间" value="${sParams['GTE_synctime']}" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+									 至 <input class="syncTime Wdate" type="text" id="synctimeSearchEnd" name="search_LTE_synctime" placeholder="结束时间" value="${sParams['LTE_synctime']}" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" />
 									<!-- search_LIKE_ -->
 								</td>
 							    <th>操作对象名称：</th>
