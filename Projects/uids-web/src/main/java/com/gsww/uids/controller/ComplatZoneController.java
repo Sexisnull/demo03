@@ -2,6 +2,7 @@ package com.gsww.uids.controller;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,7 @@ import com.google.common.collect.Maps;
 import com.gsww.jup.controller.BaseController;
 import com.gsww.jup.entity.sys.SysUserSession;
 import com.gsww.jup.util.PageUtils;
+import com.gsww.uids.entity.ComplatOutsideuser;
 import com.gsww.uids.entity.ComplatZone;
 import com.gsww.uids.service.ComplatZoneService;
 
@@ -383,6 +385,31 @@ public class ComplatZoneController extends BaseController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	/**
+     * @discription  表单修改保存  
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+	 */
+	@SuppressWarnings("finally")
+	@RequestMapping(value = "/zoneFormSave", method = RequestMethod.POST)
+	public ModelAndView zoneFormSave(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		try {
+			String deptIid = StringUtils.trim((String) request.getParameter("iid"));
+			String deptCode = StringUtils.trim((String) request.getParameter("deptCode1"));
+			ComplatZone complatZone = complatZoneService.fingByKey(Integer.parseInt(deptIid));
+			complatZone.setCodeId(deptCode);
+			complatZoneService.save(complatZone);
+		} catch (Exception e) {
+			e.printStackTrace();
+			returnMsg("error", "保存失败", request);
+		} finally {
+			return new ModelAndView("redirect:/complat/zoneList");
 		}
 	}
 }

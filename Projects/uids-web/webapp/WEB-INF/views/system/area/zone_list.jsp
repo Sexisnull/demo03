@@ -16,7 +16,7 @@ var deptCode=$("#regionCode").val();
 	   name: {
 	    required: true,
 	    maxlength: 32,
-	    uniqueName : true,
+	    /* uniqueName : true, */
 	    stringCheck:deptNameInput
 	   }
 	  },submitHandler:function(form){  
@@ -80,7 +80,7 @@ var deptCode=$("#regionCode").val();
 		//if (v.length > 0 ) v = v.substring(0, v.length-1);
 		var cityObj = $("#deptName");
 		cityObj.html(v);
-		$("#regionId").val(nodes[0].id);
+		$("#regionId").val(nodes[0].tld);
 		//收起下拉框
 		$('#treeRegion').slideUp('fast');
 	}
@@ -449,7 +449,7 @@ background: #249bf3;color: #fff;border: 1px solid #249BF3;}
 	<!--表单的标题区域--> 
 	<div class="form-title">区域编辑</div>
     <!--表单的选项卡切换-->
-    <form id="editForm" method="post" action="${ctx}/complat/saveZone">
+    <form id="editForm" method="post" action="${ctx}/complat/zoneFormSave">
     <div style="display:none;">
     	<input type="hidden" id="iid" name="iid" value="${complatZone.iid}"/>
     </div>
@@ -467,7 +467,7 @@ background: #249bf3;color: #fff;border: 1px solid #249BF3;}
 																
             <li>区域编码</li>
             <li>
-            	<input type="text" style="background:#F0F0F0;" disabled="disabled" class="input regionCode" id="regionCode1" name="deptCode1" value="${complatZone.codeId}" />
+            	<input type="text" style="background:#F0F0F0;" class="input regionCode" id="regionCode1" name="deptCode1" value="${complatZone.codeId}" />
             	<input type="hidden" class="input regionCode" id="regionCode" name="deptCode" value="${complatZone.codeId}" />
             	<i class="form-icon-clear"></i>
             </li> 
