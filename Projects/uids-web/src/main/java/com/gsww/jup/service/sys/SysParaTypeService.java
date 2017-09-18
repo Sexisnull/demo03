@@ -78,5 +78,13 @@ public interface SysParaTypeService {
 	 * @throws Exception
 	 */
 	public void stopParaType(String paraTypeId) throws Exception;
+	/**
+	 * 根据参数类型名称获取数据
+	 * @param paraTypeName
+	 * @throws Exception
+	 */
+	public SysParaType checkParaTypeName(String paraTypeName) throws Exception;
+	
+	
 
 }

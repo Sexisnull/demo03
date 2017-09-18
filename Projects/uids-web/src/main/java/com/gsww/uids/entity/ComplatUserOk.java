@@ -12,7 +12,7 @@ import javax.persistence.Table;
  * ComplatUserOk entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "complat_user-ok", catalog = "uidsdx")
+@Table(name = "complat_user-ok")
 public class ComplatUserOk implements java.io.Serializable {
 
 	// Fields

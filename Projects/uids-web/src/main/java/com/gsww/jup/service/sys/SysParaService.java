@@ -5,6 +5,7 @@
 package com.gsww.jup.service.sys;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -120,4 +121,8 @@ public interface SysParaService {
 	public void updateStateBySysParaType(SysParaType sysParaType) throws Exception;
 	
 	public List<SysPara> findByParaType(String type);
+	
+	
+
+	public List<Map<String, Object>> getParaList(String paraTypeName)throws Exception;
 }

@@ -1,31 +1,48 @@
 package com.gsww.uids.entity;
 
-import java.sql.Timestamp;
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import static javax.persistence.GenerationType.IDENTITY;
+import javax.persistence.GenerationType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * JisLog entity. @author MyEclipse Persistence Tools
+ * 
+ * <p>Copyright: Copyright (c) 2011</p>
+ * <p>公司名称 : 中国电信甘肃万维公司</p>
+ * <p>项目名称 : jup-entity</p>
+ * <p>创建时间 : 2017-09-07 上午09:46:34</p>
+ * <p>类描述 : 在线用户管理实体类        </p>
+ *
+ *
+ * @version 1.0.0
+ * @author <a href=" ">yaoxi</a>
  */
 @Entity
-@Table(name = "jis_log", catalog = "uidsdx")
+@Table(name = "jis_log")
 public class JisLog implements java.io.Serializable {
 
-	// Fields
+	private static final long serialVersionUID = 2145799659997031679L;
 
-	private Integer iid;
-	private String userid;
-	private String ip;
-	private Timestamp operatetime;
-	private Integer operatetype;
-	private Integer modulename;
-	private String spec;
-	private String os;
-	private String browser;
+	/**
+	 * 
+	 */
+	
+	private Integer iid;  //主键ID
+	private String userId;//操作人ID
+	private String ip;//操作IP
+	private Date operateTime;//操作时间
+	private Integer operateType;//操作类型
+	private Integer moduleName;//模块名称
+	private String spec;//操作描述
+	private String os;//操作系统
+	private String browser;//浏览器
 
 	// Constructors
 
@@ -34,23 +51,22 @@ public class JisLog implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public JisLog(String userid, String ip, Timestamp operatetime,
-			Integer operatetype, Integer modulename, String spec, String os,
+	public JisLog(String userId, String ip, Date operateTime,
+			Integer operateType, Integer moduleName, String spec, String os,
 			String browser) {
-		this.userid = userid;
+		this.userId = userId;
 		this.ip = ip;
-		this.operatetime = operatetime;
-		this.operatetype = operatetype;
-		this.modulename = modulename;
+		this.operateTime = operateTime;
+		this.operateType = operateType;
+		this.moduleName = moduleName;
 		this.spec = spec;
 		this.os = os;
 		this.browser = browser;
 	}
 
-	// Property accessors
 	@Id
-	@GeneratedValue(strategy = IDENTITY)
-	@Column(name = "iid", unique = true, nullable = false)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "iid")
 	public Integer getIid() {
 		return this.iid;
 	}
@@ -60,12 +76,12 @@ public class JisLog implements java.io.Serializable {
 	}
 
 	@Column(name = "userid")
-	public String getUserid() {
-		return this.userid;
+	public String getUserId() {
+		return this.userId;
 	}
 
-	public void setUserid(String userid) {
-		this.userid = userid;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
 	@Column(name = "ip")
@@ -78,30 +94,30 @@ public class JisLog implements java.io.Serializable {
 	}
 
 	@Column(name = "operatetime", length = 0)
-	public Timestamp getOperatetime() {
-		return this.operatetime;
+	public Date getOperateTime() {
+		return this.operateTime;
 	}
 
-	public void setOperatetime(Timestamp operatetime) {
-		this.operatetime = operatetime;
+	public void setOperateTime(Date operateTime) {
+		this.operateTime = operateTime;
 	}
 
 	@Column(name = "operatetype")
-	public Integer getOperatetype() {
-		return this.operatetype;
+	public Integer getOperateType() {
+		return this.operateType;
 	}
 
-	public void setOperatetype(Integer operatetype) {
-		this.operatetype = operatetype;
+	public void setOperateType(Integer operateType) {
+		this.operateType = operateType;
 	}
 
 	@Column(name = "modulename")
-	public Integer getModulename() {
-		return this.modulename;
+	public Integer getModuleName() {
+		return this.moduleName;
 	}
 
-	public void setModulename(Integer modulename) {
-		this.modulename = modulename;
+	public void setModuleName(Integer moduleName) {
+		this.moduleName = moduleName;
 	}
 
 	@Column(name = "spec")
@@ -130,5 +146,5 @@ public class JisLog implements java.io.Serializable {
 	public void setBrowser(String browser) {
 		this.browser = browser;
 	}
-
+	
 }

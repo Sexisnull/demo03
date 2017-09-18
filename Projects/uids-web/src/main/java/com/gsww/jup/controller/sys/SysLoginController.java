@@ -5,7 +5,9 @@
 package com.gsww.jup.controller.sys;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletRequest;
@@ -24,14 +26,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.code.kaptcha.Constants;
-import com.gsww.jup.entity.sys.SysLog;
+import com.gsww.jup.controller.BaseController;
 import com.gsww.jup.entity.sys.SysUserSession;
-import com.gsww.jup.service.sys.SysLogService;
 import com.gsww.jup.service.sys.SysLoginService;
 import com.gsww.jup.service.sys.SysMenuService;
-import com.gsww.jup.util.MD5;
+import com.gsww.jup.util.JSONUtil;
 import com.gsww.jup.util.TimeHelper;
+import com.gsww.uids.entity.ComplatGroup;
 import com.gsww.uids.entity.ComplatUser;
+import com.gsww.uids.service.ComplatGroupService;
 import com.gsww.uids.service.ComplatUserService;
 
 /**
@@ -46,16 +49,19 @@ import com.gsww.uids.service.ComplatUserService;
  * @author <a href=" ">lzxij</a>
  */
 @Controller
-public class SysLoginController {
+public class SysLoginController extends BaseController{
 	
 	@Autowired
 	private ComplatUserService complatUserService;
 	@Autowired
 	private SysLoginService sysLoginService;
-	@Autowired
-	private SysLogService sysLogService;
+//	@Autowired
+//	private SysLogService sysLogService;
 	@Autowired
 	private SysMenuService sysMenuService;
+	@Autowired
+	private ComplatGroupService complatGroupService;
+	
 	private static Logger logger = LoggerFactory.getLogger(SysLoginController.class);
 
 	/**
@@ -69,6 +75,7 @@ public class SysLoginController {
 	public void login(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String userName = (String) request.getParameter("userName");
 		String passWord = (String) request.getParameter("passWord");
+		String group = (String) request.getParameter("groupid");
 		String inputKaptcha = (String) request.getParameter("kaptcha");
 		String sessionKaptcha = (String) request.getSession().getAttribute(Constants.KAPTCHA_SESSION_KEY);
 		Map<String, Object> resMap = new HashMap<String, Object>();
@@ -78,7 +85,7 @@ public class SysLoginController {
 		if (sessionKaptcha.equals(inputKaptcha)) {
 			// 验证码正确，检查用户名和密码
 			try {
-				SysUserSession sysUserSession = sysLoginService.login(userName, passWord, loginIp);
+				SysUserSession sysUserSession = sysLoginService.login(userName,passWord,group,loginIp);
 				if (sysUserSession != null) {
 					if(sysUserSession.getUserState().equals("1")){
 						request.getSession().setAttribute("sysUserSession", sysUserSession);
@@ -87,15 +94,15 @@ public class SysLoginController {
 						response.getWriter().write(JSONObject.toJSONString(resMap));
 						try {
 							// 登录日志
-							SysLog log = new SysLog();
-							log.setUserAcctId(sysUserSession.getAccountId());
-							log.setLogIp(sysUserSession.getUserIp());
-							log.setLogModel("系统登录");
-							log.setLogModelOperator(userName);
-							log.setLogType("1");
-							log.setLogContent("成功");
-							log.setOperatorTime(TimeHelper.getCurrentTime());
-							sysLogService.logInsert(log);
+//							SysLog log = new SysLog();
+//							log.setUserAcctId(sysUserSession.getAccountId());
+//							log.setLogIp(sysUserSession.getUserIp());
+//							log.setLogModel("系统登录");
+//							log.setLogModelOperator(userName);
+//							log.setLogType("1");
+//							log.setLogContent("成功");
+//							log.setOperatorTime(TimeHelper.getCurrentTime());
+//							sysLogService.logInsert(log);
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -105,15 +112,15 @@ public class SysLoginController {
 						response.getWriter().write(JSONObject.toJSONString(resMap));
 						try {
 							// 登录日志
-							SysLog log = new SysLog();
-							log.setUserAcctId(sysUserSession.getAccountId());
-							log.setLogIp(sysUserSession.getUserIp());
-							log.setLogModel("系统登录");
-							log.setLogModelOperator(userName);
-							log.setLogType("1");
-							log.setLogContent("失败");
-							log.setOperatorTime(TimeHelper.getCurrentTime());
-							sysLogService.logInsert(log);
+//							SysLog log = new SysLog();
+//							log.setUserAcctId(sysUserSession.getAccountId());
+//							log.setLogIp(sysUserSession.getUserIp());
+//							log.setLogModel("系统登录");
+//							log.setLogModelOperator(userName);
+//							log.setLogType("1");
+//							log.setLogContent("失败");
+//							log.setOperatorTime(TimeHelper.getCurrentTime());
+//							sysLogService.logInsert(log);
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -124,15 +131,15 @@ public class SysLoginController {
 					response.getWriter().write(JSONObject.toJSONString(resMap));
 					try {
 						// 登录日志
-						SysLog log = new SysLog();
-						log.setUserAcctId("-999");
-						log.setLogIp(loginIp);
-						log.setLogModel("系统登录");
-						log.setLogModelOperator(userName);
-						log.setLogType("1");
-						log.setLogContent("失败");
-						log.setOperatorTime(TimeHelper.getCurrentTime());
-						sysLogService.logInsert(log);
+//						SysLog log = new SysLog();
+//						log.setUserAcctId("-999");
+//						log.setLogIp(loginIp);
+//						log.setLogModel("系统登录");
+//						log.setLogModelOperator(userName);
+//						log.setLogType("1");
+//						log.setLogContent("失败");
+//						log.setOperatorTime(TimeHelper.getCurrentTime());
+//						sysLogService.logInsert(log);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -177,30 +184,30 @@ public class SysLoginController {
 						response.getWriter().write(JSONObject.toJSONString(resMap));
 						try {
 							// 登录日志
-							SysLog log = new SysLog();
-							log.setUserAcctId(sysUserSession.getAccountId());
-							log.setLogIp(sysUserSession.getUserIp());
-							log.setLogModel("系统登录");
-							log.setLogModelOperator(userName);
-							log.setLogType("1");
-							log.setLogContent("成功");
-							log.setOperatorTime(TimeHelper.getCurrentTime());
-							sysLogService.logInsert(log);
+//							SysLog log = new SysLog();
+//							log.setUserAcctId(sysUserSession.getAccountId());
+//							log.setLogIp(sysUserSession.getUserIp());
+//							log.setLogModel("系统登录");
+//							log.setLogModelOperator(userName);
+//							log.setLogType("1");
+//							log.setLogContent("成功");
+//							log.setOperatorTime(TimeHelper.getCurrentTime());
+//							sysLogService.logInsert(log);
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
 					}else{
 						try {
 							// 登录日志
-							SysLog log = new SysLog();
-							log.setUserAcctId(sysUserSession.getAccountId());
-							log.setLogIp(sysUserSession.getUserIp());
-							log.setLogModel("CAS系统登录");
-							log.setLogModelOperator(userName);
-							log.setLogType("1");
-							log.setLogContent("失败");
-							log.setOperatorTime(TimeHelper.getCurrentTime());
-							sysLogService.logInsert(log);
+//							SysLog log = new SysLog();
+//							log.setUserAcctId(sysUserSession.getAccountId());
+//							log.setLogIp(sysUserSession.getUserIp());
+//							log.setLogModel("CAS系统登录");
+//							log.setLogModelOperator(userName);
+//							log.setLogType("1");
+//							log.setLogContent("失败");
+//							log.setOperatorTime(TimeHelper.getCurrentTime());
+//							sysLogService.logInsert(log);
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -208,15 +215,15 @@ public class SysLoginController {
 				} else {
 					try {
 						// 登录日志
-						SysLog log = new SysLog();
-						log.setUserAcctId("-999");
-						log.setLogIp(loginIp);
-						log.setLogModel("系统登录");
-						log.setLogModelOperator(userName);
-						log.setLogType("1");
-						log.setLogContent("失败");
-						log.setOperatorTime(TimeHelper.getCurrentTime());
-						sysLogService.logInsert(log);
+//						SysLog log = new SysLog();
+//						log.setUserAcctId("-999");
+//						log.setLogIp(loginIp);
+//						log.setLogModel("系统登录");
+//						log.setLogModelOperator(userName);
+//						log.setLogType("1");
+//						log.setLogContent("失败");
+//						log.setOperatorTime(TimeHelper.getCurrentTime());
+//						sysLogService.logInsert(log);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -240,46 +247,6 @@ public class SysLoginController {
 		if (null !=sysUserSession ) {
 			request.getSession().removeAttribute("sysUserSession");
 		}
-	}
-
-	/**
-	 * 首页index页面加载
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/frontIndex")
-	public String getSysIndex(HttpServletRequest request) {
-		try {
-			request.getSession().removeAttribute("theme");
-			String theme = request.getParameter("theme");
-			if(StringUtils.isBlank(theme)) {
-				theme = "default";
-			}
-			request.getSession().setAttribute("theme", theme);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return "main/frontIndex";
-	}
-	
-	@RequestMapping(value = "/backIndex")
-	public String toBackIndex(HttpServletRequest request) {
-		try {
-			
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return "main/backIndex";
-	}
-	
-	@RequestMapping(value = "/appSetting")
-	public String appSetting(HttpServletRequest request) {
-		try {
-			
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return "main/appSetting";
 	}
 	
 	@RequestMapping(value = "/iframe")
@@ -367,7 +334,7 @@ public class SysLoginController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "/login/getPwd")
+	/*@RequestMapping(value = "/login/getPwd")
 	public String getPwd(HttpServletRequest request) {
 		try {
 			request.setAttribute("sysUserSession", request.getSession().getAttribute("sysUserSession"));
@@ -375,7 +342,7 @@ public class SysLoginController {
 			ex.printStackTrace();
 		}
 		return "main/pwd";
-	}
+	}*/
 	
 	/**
 	 * 修改用户密码
@@ -383,7 +350,7 @@ public class SysLoginController {
 	 * @param response
 	 * @return 
 	 */
-	@RequestMapping(value = "/login/changePwd", method = RequestMethod.POST)
+	/*@RequestMapping(value = "/login/changePwd", method = RequestMethod.POST)
 	public void changePwd(HttpServletRequest request, HttpServletResponse response) {
 		String returnStr = "chanePwdSuccess";
 		String oldPwd, newPwd, passWord;
@@ -406,7 +373,7 @@ public class SysLoginController {
 			returnStr = "没有找到用户或存在同名账号的用户，请联系管理员！";
 			e.printStackTrace();
 		}
-	}
+	}*/
 	
 	/**
 	 * 获取登陆IP
@@ -426,6 +393,68 @@ public class SysLoginController {
 			ip = request.getRemoteAddr();
 		}
 		return ip;
+	}
+	
+	/**
+	 * 加载组织机构页面
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/login/getGroup",method = RequestMethod.POST)
+	public void getGroup(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			String groupId = request.getParameter("groupId");
+			String isDisabled = request.getParameter("isDisabled");
+
+			List<ComplatGroup> list = new ArrayList<ComplatGroup>();
+			
+			if(!"0".equals(groupId)){
+				list = complatGroupService.findByPid(Integer.parseInt(groupId));
+			}else{
+				list.add(complatGroupService.findByIid(128));
+			}
+			
+			List<Map<String,Object>> result = new ArrayList<Map<String,Object>>();
+			for(ComplatGroup c:list){
+				Map<String,Object> map = new HashMap<String,Object>();
+				map.put("id", c.getIid()+"");
+				map.put("name", c.getName());
+				map.put("icon", null);
+				map.put("target", "page");
+				map.put("url", null);
+				//List<ComplatGroup> sets = complatGroupService.findByPid(c.getIid());
+				/*if(sets.isEmpty()){
+					map.put("isParent", false);
+				}else{
+					map.put("isParent", true);
+				}*/
+				map.put("isParent", true);
+				map.put("isDisabled", false);
+				map.put("open", true);
+				map.put("nocheck",false);
+				map.put("click", null);
+				map.put("checked", false);
+				map.put("iconClose", null);
+				map.put("iconOpen", null);
+				map.put("iconSkin", null);
+				map.put("pId", c.getPid());
+				map.put("chkDisabled", false);
+				map.put("halfCheck", false);
+				map.put("dynamic", null);
+				map.put("moduleId", null);
+				map.put("functionId", null);
+				map.put("allowedAdmin", null);
+				map.put("allowedGroup", null);
+				result.add(map);
+			}
+			String groups = JSONUtil.writeListMapJSONMap(result);
+			response.setContentType("text/json"); 
+			response.setCharacterEncoding("UTF-8"); 
+			response.getWriter().write(groups);
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
 }

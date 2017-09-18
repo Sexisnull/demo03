@@ -11,11 +11,11 @@ import javax.persistence.Table;
  * JisFields entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "jis_fields", catalog = "uidsdx")
+@Table(name = "JIS_FIELDS")
 public class JisFields implements java.io.Serializable {
-
+	private static final long serialVersionUID = 1L;
+	
 	// Fields
-
 	private Integer iid;
 	private String showname;
 	private String fieldname;
@@ -49,7 +49,7 @@ public class JisFields implements java.io.Serializable {
 	// Property accessors
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-	@Column(name = "iid", unique = true, nullable = false)
+	@Column(name = "IID", unique = true, nullable = false)
 	public Integer getIid() {
 		return this.iid;
 	}
@@ -58,7 +58,7 @@ public class JisFields implements java.io.Serializable {
 		this.iid = iid;
 	}
 
-	@Column(name = "showname", length = 100)
+	@Column(name = "SHOWNAME", length = 100)
 	public String getShowname() {
 		return this.showname;
 	}
@@ -67,7 +67,7 @@ public class JisFields implements java.io.Serializable {
 		this.showname = showname;
 	}
 
-	@Column(name = "fieldname", length = 50)
+	@Column(name = "FIELDNAME", length = 50)
 	public String getFieldname() {
 		return this.fieldname;
 	}
@@ -76,7 +76,7 @@ public class JisFields implements java.io.Serializable {
 		this.fieldname = fieldname;
 	}
 
-	@Column(name = "type")
+	@Column(name = "TYPE")
 	public Integer getType() {
 		return this.type;
 	}
@@ -85,7 +85,7 @@ public class JisFields implements java.io.Serializable {
 		this.type = type;
 	}
 
-	@Column(name = "issys")
+	@Column(name = "ISSYS")
 	public Integer getIssys() {
 		return this.issys;
 	}
@@ -94,7 +94,7 @@ public class JisFields implements java.io.Serializable {
 		this.issys = issys;
 	}
 
-	@Column(name = "iswrite")
+	@Column(name = "ISWRITE")
 	public Integer getIswrite() {
 		return this.iswrite;
 	}
@@ -103,7 +103,7 @@ public class JisFields implements java.io.Serializable {
 		this.iswrite = iswrite;
 	}
 
-	@Column(name = "defvalue", length = 50)
+	@Column(name = "DEFVALUE", length = 50)
 	public String getDefvalue() {
 		return this.defvalue;
 	}
@@ -112,7 +112,7 @@ public class JisFields implements java.io.Serializable {
 		this.defvalue = defvalue;
 	}
 
-	@Column(name = "fieldkeys", length = 1000)
+	@Column(name = "FIELDKEYS", length = 1000)
 	public String getFieldkeys() {
 		return this.fieldkeys;
 	}
@@ -121,7 +121,7 @@ public class JisFields implements java.io.Serializable {
 		this.fieldkeys = fieldkeys;
 	}
 
-	@Column(name = "fieldvalues", length = 2000)
+	@Column(name = "FIELDVALUES", length = 2000)
 	public String getFieldvalues() {
 		return this.fieldvalues;
 	}

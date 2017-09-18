@@ -1,0 +1,103 @@
+@CHARSET "UTF-8";
+
+.datagrid-toolbar-btn-wrap {
+	float: left;
+}
+
+.datagrid-toolbar-search-wrap {
+	float: right;
+}
+
+.datagrid-toolbar {
+	background-color: #FFF;
+	height: 46px;
+}
+
+a.datagrid-toolbar-btn {
+	text-decoration: none;
+	display: inline-block;
+	height: 36px;
+	line-height: 36px;
+	padding: 0 10px;
+	margin-right: 5px;
+	border-radius: 4px;
+	background-color: #43BBEF;
+	color: #FFF;
+	cursor: pointer;
+	background: -moz-linear-gradient(top, #43BBEF 0%, #4291F6 100%);
+	background: -webkit-linear-gradient(top, #43BBEF 0%, #4291F6 100%);
+	background: -o-linear-gradient(top, #43BBEF 0%, #4291F6 100%);
+	background: -ms-linear-gradient(top, #43BBEF 0%, #4291F6 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(    startColorstr='#43BBEF',
+		endColorstr='#4291F6', GradientType=0);
+	background: linear-gradient(top, #43BBEF 0%, #4291F6 100%);
+}
+
+a.datagrid-toolbar-btn:hover {
+	background-color: #3498DB;
+}
+
+.datagrid-toolbar-btn i {
+	margin-right: 5px;
+}
+
+.panel,.datagrid-header,.datagrid-cell,.datagrid-cell-group,.datagrid-header-rownumber,.datagrid-cell-rownumber
+	{
+	font-size: 14px;
+}
+
+.datagrid-header-row,.datagrid-row {
+	height: 36px;
+}
+
+.datagrid-header td,.datagrid-body td,.datagrid-footer td {
+	border-style: solid;
+	border-color: #DFDFDF;
+}
+
+.pagination-info {
+	font-size: 14px;
+}
+
+.datagrid-view {
+	border-left: 1px solid #DFDFDF;
+	border-right: 1px solid #DFDFDF;
+}
+
+.pagination table {
+	height: 36px;
+}
+.datagrid-toolbar-simple-search{
+	display: inline;
+}
+.datagrid-toolbar-simple-search form{
+	display: inline;
+}
+.grid-simple-search{
+	display: none;
+}
+.grid-advsearch {
+	display: none;
+}
+
+.grid-advsearch .line-dotted {
+	margin: 20px 0;
+}
+
+.datagrid-toolbar-btn-wrap .icon-caret-down {
+	margin: 0 0 0 5px;
+}
+
+.datagrid-row-selected {
+	background-color: #E6F2FF;
+}
+
+.datagrid-cell i {
+	/* 	margin: 0; */
+	
+}
+
+.datagrid-cell .btn {
+	height: 24px;
+	line-height: 24px;
+}

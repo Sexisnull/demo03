@@ -3,15 +3,133 @@
 <html>
 
 <%@ include file="/include/meta.jsp"%> 
-
+<script type="text/javascript" src="${ctx}/res/js/region/checkpwd.js"></script>
 <head>
 <title>甘肃万维JUP课题</title>
-<style type="text/css">
-.ztree {margin-top: 10px;border: 1px solid #cfd9db; display:none;background: #f0f6e4;height:360px;overflow-y:scroll;overflow-x:auto;}
-</style>
 <script type="text/javascript">
+$().ready(function() {
+//表单校验
+var outisideUserNameInput=$("#name").val();
+$("#editForm").validate({
+	rules: {
+		loginName : {//重命名校验*
+			required: true,
+			cnRangelength: [0,127]
+		},
+	   	pwd : {
+			required: true,
+			cnRangelength: [0,127]
+		},
+		name : {
+			required: true,
+			cnRangelength: [0,32],
+	    	stringCheck: outisideUserNameInput
+		},
+		email : {//email校验
+			required: true,
+			email:true,
+	   		maxlength: 64
+		},
+		mobile : {//固定电话
+			required: true,
+			isPhone:true,
+	   		maxlength: 16
+		},
+		residenceDetail : {
+			required: true,
+			cnRangelength: [0,127]
+		},
+		livingAreaDetail : {
+			required: true,
+			cnRangelength: [0,127]
+		},
+		sex : {
+			required: true
+		},
+		papersNumber : {
+			required: true,
+			isIdCardNo:true,
+	   	 	maxlength: 18
+		},
+		age:{
+	   		cnRangelength: [0,64]
+	   	},
+		degree:{//学历
+	   		cnRangelength: [0,64]
+	   	},
+		workUnit:{
+	   		cnRangelength: [0,64]
+	   	},
+		headShip:{
+	   		cnRangelength: [0,64]
+	   	},
+		fax:{
+	   		cnRangelength: [0,64]
+	   	},
+		phone:{
+	   		isMobile:true,
+	   		maxlength: 16
+	   	},
+		compTel:{
+	   		isPhone:true,
+	   		maxlength: 16
+	   	},
+		qq:{
+	   		maxlength: 11
+	   	},
+		msn:{
+	   		cnRangelength: [0,64]
+	   	},
+		post:{
+	   		maxlength: 6
+	   	},
+		address:{
+	   		cnRangelength: [0,127]
+	   	},
+	   	submitHandler:function(form){
+			form.submit();
+		}
+	}
+});
+});
 </script>
 
+<style>
+.form-table td{
+width: 0;
+color: rgb(119, 119, 119);
+}
+.form-table th:first-child {
+    padding-left: 0px;
+	width:130px;
+}
+.form-table td {
+    height: 32px;
+    line-height: 32px;
+    white-space: nowrap;
+    padding: 2px 2px;
+}
+
+.td_1 {
+	border-bottom : 1px solid #C6E6FF;
+	border-right : 1px solid #C6E6FF;
+}
+.td_2 {
+	border-right : 1px solid #C6E6FF;
+}
+.td_3 {
+	border-bottom : 1px solid #C6E6FF;
+}
+.td_4 {
+	border-bottom : 1px solid #C6E6FF;
+}
+.td_5 {
+	border-bottom : 1px solid #C6E6FF;
+}
+.td_6 {
+	border-bottom : 1px solid #C6E6FF;
+}  
+</style>
 </head>
 <body>
 <div class="form-warper">
@@ -35,23 +153,25 @@
     <form id="editForm" method="post" action="${ctx}/complat/outsideuserSave">
     
     <div style="display:none;">
-    	<input type="hidden" id="outsideUserId" name="outsideUserId" value="${outsideUser.uuid}"/>
+    	<input type="hidden" id="iid" name="iid" value="${outsideUser.iid}"/>
+    	<input type="hidden" id="enable" name="enable" value="${outsideUser.enable}"/>
+    	<input type="hidden" id="authState" name="authState" value="${outsideUser.authState}"/>
+    	<input type="hidden" id="isAuth" name="isAuth" value="${outsideUser.isAuth}"/>
+    	<input type="text" id="time" name="time" value="${time}"/>
     </div>
     
     <!--表单的主内容区域-->
     <div class="form-content">
     	<table class="form-table">
-    		<tr>
-    			<th>基本属性</th>
-    		</tr>
-    		<tr>
+			<tr>
+				<td class="td_1" rowspan="5" style="max-width:0px;width:100px;ont-weight:bold;" align="center">基本属性</td>
 				<th><b class="mustbe">*</b>登录名：</th>
 				<td>
 					<input type="text"  class="loginName" name="loginName" value="${outsideUser.loginName}" />
 	            </td>
 	        	<th><b class="mustbe">*</b>密码：</th>
 				<td>
-					<input type="password"  class="pwd" name="pwd" value="${outsideUser.pwd}" />
+					<input type="password"  class="pwd" name="pwd" value="${outsideUser.pwd}" onkeyup="javascript:EvalPwd(this.value);"/>
 				</td>
 			</tr>
 			<tr>
@@ -59,17 +179,32 @@
 				<td>
 					<input type="text"  class="name" name="name" value="${outsideUser.name}" />
 				</td>
+				<th>密码强度：</th>
+				<td>
+					<table id="pwdpower" title="字母加数字加符号就会强" style="width: 100%" cellspacing="0"
+					cellpadding="0" border="0">
+						<tbody>
+							<tr>
+								<td id="pweak" style="">弱</td>
+								<td id="pmedium" style="">中</td>
+								<td id="pstrong" style="">强</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+			<tr>
 				<th><b class="mustbe">*</b>邮箱：</th>
 				<td>
 					<input type="text"  class="email" name="email" value="${outsideUser.email}" />
 				</td>
-			</tr>
-    		<tr>
 				<th><b class="mustbe">*</b>手机号码：</th>
 				<td>
 					<input type="text"  class="mobile" name="mobile" value="${outsideUser.mobile}" />
 				</td>
-				<th><b class="mustbe">*</b>户籍省市区：</th>
+			</tr>
+			<tr>
+				<th><!-- <b class="mustbe">*</b> -->户籍省市区：</th>
 				<td>
 					<%-- <select name="degree" value="${outsideUser.gpresidenceId}">
 						<option value="">请选择</option>
@@ -81,16 +216,16 @@
 					<select name="degree" value="${outsideUser.residenceId}">
 						<option value="">请选择</option>
 					</select> --%>
-					<input type="text"  class="" name="null" value="${outsideUser.name}" />
+					<input type="text"  class="" name="null" value="" />
 				</td>
-			</tr>
-			<tr>
 				<th><b class="mustbe">*</b>户籍详细地址：</th>
 				<td>
 					<input type="text"  class="residenceDetail" name="residenceDetail" value="${outsideUser.residenceDetail}" />
 	            </td>
-	        	<th><b class="mustbe">*</b>居住地省市区：</th>
-				<td>
+			</tr>
+			<tr>
+				<th class="td_5"><!-- <b class="mustbe">*</b> -->居住地省市区：</th>
+				<td class="td_3">
 					<%-- <select name="degree" value="${outsideUser.gplivingAreaId}">
 						<option value="">请选择</option>
 						<option value="">甘肃省</option>
@@ -101,28 +236,22 @@
 					<select name="degree" value="${outsideUser.livingAreaId}">
 						<option value="">请选择</option>
 					</select> --%>
-					<input type="text"  class="" name="null" value="${outsideUser.name}" />
+					<input type="text"  class="" name="null" value="" />
 				</td>
-			</tr>
-			<tr>
-				<th><b class="mustbe">*</b>居住地详细地址：</th>
-				<td>
+				<th class="td_6"><b class="mustbe">*</b>居住地详细地址：</th>
+				<td class="td_4">
 					<input type="text"  class="livingAreaDetail" name="livingAreaDetail" value="${outsideUser.livingAreaDetail}" />
 				</td>
 			</tr>
+			
 			<tr>
-    			<th>详细属性</th>
-    		</tr>
-    		<tr>
+				<td class="td_2" rowspan="7" tyle="max-width:0px;width:100px;ont-weight:bold;" align="center"">详细属性</td>
 				<th><b class="mustbe">*</b>性别：</th>
 				<td>
 					<input type="radio" name="sex" value = '男' <c:if test="${outsideUser.sex == '男'}">checked="checked" </c:if>>男&nbsp&nbsp&nbsp
     				<input type="radio" name="sex" value = '女' <c:if test="${outsideUser.sex == '女'}">checked="checked" </c:if>>女
 				</td>
-				<%-- <td>
-					<input type="text"  class="sex" name="sex" value="${outsideUser.sex}" />
-	            </td> --%>
-	        	<th>年龄</th>
+				<th>年龄：</th>
 				<td>
 					<input type="text"  class="age" name="age" value="${outsideUser.age}" />
 				</td>
@@ -147,7 +276,7 @@
 					</select>
 				</td>
 			</tr>
-    		<tr>
+			<tr>
 				<th>工作单位：</th>
 				<td>
 					<input type="text"  class="workUnit" name="workUnit" value="${outsideUser.workUnit}" />
@@ -192,6 +321,8 @@
 				<td>
 					<input type="text"  class="address" name="address" value="${outsideUser.address}" />
 				</td>
+				<th></th>
+				<td></td>
 			</tr>
 		</table>
     </div>

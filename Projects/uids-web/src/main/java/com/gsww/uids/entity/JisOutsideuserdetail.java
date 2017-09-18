@@ -11,11 +11,15 @@ import javax.persistence.Table;
  * JisOutsideuserdetail entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "jis_outsideuserdetail", catalog = "uidsdx")
+@Table(name = "jis_outsideuserdetail")
 public class JisOutsideuserdetail implements java.io.Serializable {
 
 	// Fields
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -403173206924352981L;
 	private Integer iid;
 	private Integer userid;
 	private String comptel;

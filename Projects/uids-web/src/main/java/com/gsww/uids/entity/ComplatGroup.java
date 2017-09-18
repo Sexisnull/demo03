@@ -5,10 +5,13 @@ import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
+
 
 /**
  * 组织机构实体
@@ -25,27 +28,26 @@ public class ComplatGroup implements java.io.Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private Integer iid;
-    private String name;
-    private Integer nodetype;
-    private String codeid;
-    private String orgcode;
-    private String orgtype;
-    private Integer areatype;
-    private String areacode;
-    private String suffix;
-    private String spec;
-    private Integer pid;
-    private Integer orderid;
-    private String pinyin;
-    private Integer iscombine;
-    private String groupallname;
-    private Integer opersign;
-    private Timestamp createtime;
-    private Timestamp modifytime;
-    private Integer synState;
-    private String syncSign;
-    private String syncDate;
+	private Integer iid;          //机构Id
+    private String name;          //机构名称
+    private Integer nodetype;     //节点类型(1-区域2-单位3-部门或处室4-下属单位)
+    private String codeid;        //机构编码顶级目录为”001” (如:甘肃省卫生厅编码为 001002，每3位数字代表一个组织.001代表甘肃省，002代表卫生厅)
+    private String orgcode;       //组织机构代码(如甘肃省发展和改革委员会为013896483)
+    private String orgtype;       //组织机构类型参考《GB/T 20091-2006 组织机构类型》
+    private Integer areatype;     //区域类型(1-省级2-市（州）级3-区县4-乡镇街道5-其他)
+    private String areacode;      //区域编码12位(如兰州市为620200000000)
+    private String suffix;        //机构后缀 (如: 甘肃公安厅gat.gs)
+    private String spec;          //机构描述
+    private Integer pid;          //父机构id
+    private Integer orderid;      //排序号
+    private String pinyin;        //拼音首字母
+    private Integer iscombine;    //是否为合并机构(0-否 1-是)
+    private String groupallname;  //机构全名
+    private Integer opersign;     //操作状态位(1-插入2-修改3-删除)
+    private Timestamp createtime; //创建时间(yyyy-MM-dd HH:mm:ss)
+    private Timestamp modifytime; //修改时间(yyyy-MM-dd HH:mm:ss)
+    private Integer synState;     //0-未备份1-备份失败2-备份成功
+    private String parentName;
 
 
    // Constructors
@@ -56,8 +58,8 @@ public class ComplatGroup implements java.io.Serializable{
 
    
    /** full constructor */
-   public ComplatGroup(String name, Integer nodetype, String codeid, String orgcode, String orgtype, Integer areatype, String areacode, String suffix, String spec, Integer pid, Integer orderid, String pinyin, Integer iscombine, String groupallname, Integer opersign, Timestamp createtime, Timestamp modifytime, Integer synState, String syncSign, String syncDate) {
-       this.name = name;
+   public ComplatGroup(String name, Integer nodetype, String codeid, String orgcode, String orgtype, Integer areatype, String areacode, String suffix, String spec, Integer pid, Integer orderid, String pinyin, Integer iscombine, String groupallname, Integer opersign, Timestamp createtime, Timestamp modifytime, Integer synState) {
+	   this.name = name;
        this.nodetype = nodetype;
        this.codeid = codeid;
        this.orgcode = orgcode;
@@ -75,16 +77,13 @@ public class ComplatGroup implements java.io.Serializable{
        this.createtime = createtime;
        this.modifytime = modifytime;
        this.synState = synState;
-       this.syncSign = syncSign;
-       this.syncDate = syncDate;
    }
 
   
-   // Property accessors
-   @GenericGenerator(name="generator", strategy="uuid.hex")@Id @GeneratedValue(generator="generator")
    
+   @GeneratedValue(strategy = GenerationType.IDENTITY)  
+   @Id 
    @Column(name="iid", unique=true, nullable=false)
-
    public Integer getIid() {
        return this.iid;
    }
@@ -263,7 +262,7 @@ public class ComplatGroup implements java.io.Serializable{
        this.modifytime = modifytime;
    }
    
-   @Column(name="synState")
+   @Column(name="synstate")
 
    public Integer getSynState() {
        return this.synState;
@@ -273,24 +272,12 @@ public class ComplatGroup implements java.io.Serializable{
        this.synState = synState;
    }
    
-   @Column(name="SYNC_SIGN", length=1)
+   @Transient
+	public String getParentName() {
+		return parentName;
+	}
 
-   public String getSyncSign() {
-       return this.syncSign;
-   }
-   
-   public void setSyncSign(String syncSign) {
-       this.syncSign = syncSign;
-   }
-   
-   @Column(name="SYNC_DATE", length=19)
-
-   public String getSyncDate() {
-       return this.syncDate;
-   }
-   
-   public void setSyncDate(String syncDate) {
-       this.syncDate = syncDate;
-   }
-  
+	public void setParentName(String parentName) {
+		this.parentName = parentName;
+	}
 }

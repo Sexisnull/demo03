@@ -1,3 +1,4 @@
+
 <!doctype html>
 		<%@ page language="java" pageEncoding="UTF-8"%>
 		<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -57,10 +58,10 @@
                     <li class="home" onclick="toFront();">
                         <p>返回首页</p>
                     </li>
-                    <li class="speaker modify-msgs">
+                    <li class="speaker modify-msgs" onclick="javascript:window.location.href='${ctx}/complat/userSetUpEdit'">
                     	<p>账户设置</p>
                     </li>
-                    <li class="pwd modify-pwd">
+                    <li class="pwd modify-pwd"  onclick="javascript:window.location.href='${ctx}/jisLog/countUser'">
                         <p>在线用户</p>
                     </li>
                     

@@ -40,9 +40,9 @@ public class SysLoginServiceImpl implements SysLoginService {
 	private SysRoleDao sysRoleDao;
 	
 	@Override
-	public SysUserSession login(String userName, String password, String ip) throws Exception {
+	public SysUserSession login(String userName, String password,String groupId, String ip) throws Exception {
 		
-		List<ComplatUser> userList = complatUserDao.findByLoginnameAndPwd(userName,password);
+		List<ComplatUser> userList = complatUserDao.findByLoginnameAndPwdAndGroupid(userName,password,Integer.parseInt(groupId));
 		if (userList != null && userList.size() == 1) {
 			ComplatUser user = userList.get(0);
 			SysUserSession sysUserSession = new SysUserSession();

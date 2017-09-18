@@ -5,6 +5,7 @@
 package com.gsww.jup.service.sys.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +46,8 @@ public class SysParaServiceImpl implements SysParaService {
 /*	@Autowired
 	private SysParameterTypeDao sysRParameterTypeDao;
 */
+	@Autowired
+	private JdbcTemplate jdbcTemplate ;
 	@Autowired
 	private VSysParameterDao vSysParameterDao;
 	@Override
@@ -123,6 +127,15 @@ public class SysParaServiceImpl implements SysParaService {
 	@Override
 	public List<SysPara> findByParaType(String typeName) {
 		return sysParaDao.findBySysParaType(sysParaTypeDao.findByParaTypeNameAndParaTypeState(typeName,"1"));
+	}
+
+	@Override
+	public List<Map<String, Object>> getParaList(String paraTypeName) throws Exception {
+		String sql ="select sp.PARA_CODE,sp.PARA_NAME from sys_parameter sp where " +
+				"sp.PARA_TYPE_ID =(select t.PARA_TYPE_ID from sys_parameter_type t " +
+				"where t.PARA_TYPE_NAME ='"+paraTypeName+"' and t.PARA_TYPE_STATE !='0')";
+		List<Map<String, Object>> mapList = jdbcTemplate.queryForList(sql);
+		return mapList;
 	}
 
 

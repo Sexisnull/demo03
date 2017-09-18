@@ -1,76 +1,68 @@
 package com.gsww.uids.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import static javax.persistence.GenerationType.IDENTITY;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-/**
- * ComplatRolerelation entity. @author MyEclipse Persistence Tools
- */
+//用户角色实体
 @Entity
-@Table(name = "complat_rolerelation", catalog = "uidsdx")
-public class ComplatRolerelation implements java.io.Serializable {
+@Table(name="complat_rolerelation")
+public class ComplatRolerelation implements Serializable{
 
-	// Fields
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2796558422748048428L;
+	
+	private int iid;
+	private int roleId;
+	private int userId;
+	private int groupId;
+	
 
-	private Integer iid;
-	private Integer roleid;
-	private Integer userid;
-	private Integer groupid;
-
-	// Constructors
-
-	/** default constructor */
-	public ComplatRolerelation() {
-	}
-
-	/** full constructor */
-	public ComplatRolerelation(Integer roleid, Integer userid, Integer groupid) {
-		this.roleid = roleid;
-		this.userid = userid;
-		this.groupid = groupid;
-	}
-
-	// Property accessors
 	@Id
-	@GeneratedValue(strategy = IDENTITY)
-	@Column(name = "iid", unique = true, nullable = false)
-	public Integer getIid() {
-		return this.iid;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)  
+	@Column(name = "IID", unique = true, nullable = false)
+	public int getIid() {
+		return iid;
 	}
-
-	public void setIid(Integer iid) {
+	public void setIid(int iid) {
 		this.iid = iid;
 	}
-
-	@Column(name = "roleid")
-	public Integer getRoleid() {
-		return this.roleid;
+	@Column(name="ROLEID")
+	public int getRoleId() {
+		return roleId;
 	}
-
-	public void setRoleid(Integer roleid) {
-		this.roleid = roleid;
+	public void setRoleId(int roleId) {
+		this.roleId = roleId;
 	}
-
-	@Column(name = "userid")
-	public Integer getUserid() {
-		return this.userid;
+	@Column(name="USERID")
+	public int getUserId() {
+		return userId;
 	}
-
-	public void setUserid(Integer userid) {
-		this.userid = userid;
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
-
-	@Column(name = "groupid")
-	public Integer getGroupid() {
-		return this.groupid;
+	@Column(name="GROUPID")
+	public int getGroupId() {
+		return groupId;
 	}
-
-	public void setGroupid(Integer groupid) {
-		this.groupid = groupid;
+	public void setGroupId(int groupId) {
+		this.groupId = groupId;
+	}
+	public ComplatRolerelation() {
+		super();
+	}
+	public ComplatRolerelation(int iid, int roleId, int userId, int groupId) {
+		super();
+		this.iid = iid;
+		this.roleId = roleId;
+		this.userId = userId;
+		this.groupId = groupId;
 	}
 
 }

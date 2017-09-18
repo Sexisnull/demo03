@@ -10,7 +10,6 @@ import org.springframework.data.jpa.domain.Specification;
 import com.gsww.jup.entity.sys.SysAccount;
 import com.gsww.jup.entity.sys.SysDepartment;
 import com.gsww.jup.entity.sys.SysRole;
-import com.gsww.jup.entity.sys.SysUserApps;
 /**
  * <p>Copyright: Copyright (c) 2014</p>
  * <p>公司名称 : 中国电信甘肃万维公司</p>
@@ -144,7 +143,7 @@ public interface SysAccountService {
 	 * @throws Exception
 	 * @author anhang
 	 */
-	public SysUserApps saveSync(SysUserApps sysUserApps);	
+//	public SysUserApps saveSync(SysUserApps sysUserApps);	
 	/**
 	 * 查找用户是否存在
 	 * @param loginAccount
