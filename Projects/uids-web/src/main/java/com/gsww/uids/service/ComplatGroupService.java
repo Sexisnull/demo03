@@ -1,6 +1,7 @@
 package com.gsww.uids.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.gsww.jup.entity.sys.SysMenu;
 import com.gsww.uids.entity.ComplatGroup;
@@ -13,6 +14,7 @@ public interface ComplatGroupService {
 	public List<ComplatGroup> findByPid(Integer pid);
 	
 	public List<ComplatGroup> findAll();
+	
 	
 	/**
 	 * 保存或修改对象
@@ -70,4 +72,13 @@ public interface ComplatGroupService {
 	 */
 	public boolean getByName(String name) throws Exception;
 	
+	/**
+	 * 查询所有机构
+	 * @return
+	 * @throws Exception
+	 * @author Seven
+	 */
+	public List<Map<String, Object>> getComplatGroupList() throws Exception;
+	
+
 }

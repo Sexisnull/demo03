@@ -130,24 +130,21 @@ $(function(){
 				<tr>
 				    <th>节点类型:</th>
 					<td width="15%">
-					    <select name="search_LIKE_nodetype" value="${sParams['LIKE_nodetype']}">
-						     <option value="">请选择</option>
-						     <option value='1'>区域</option>
-						     <option value='2'>单位</option>
-						     <option value='3'>部门或处室</option>
-						     <option value='4'>下属单位</option>
-					    </select>
+	                <select id="search_EQ_nodetype"  name="search_EQ_nodetype"  style="width:198px;height:32px;font-size: 14px;">
+	                	<option value="">---请选择---</option>
+						<c:forEach var="nodetype" items="${nodetypeMap}">
+							<option value="${nodetype.key}">${nodetype.value}</option>
+						</c:forEach>
+	                </select>
 					</td>
 					<th>区域类型:</th>
 					<td width="15%">
-						<select name="search_LIKE_areatype" value="${sParams['LIKE_areatype']}">
-						     <option value="">请选择</option>
-						     <option value="1">省级</option>
-						     <option value="2">市（州）级</option>
-						     <option value="3">区县</option>
-						     <option value="4">乡镇街道</option>
-						     <option value="5">其他</option>
-					    </select>
+						<select id="search_EQ_areatype"  name="search_EQ_areatype" style="width:198px;height:32px;font-size: 14px;">
+	                		<option value="">---请选择---</option>
+							<c:forEach var="areatype" items="${areatypeMap}">
+								<option value="${areatype.key}">${areatype.value}</option>
+							</c:forEach>
+	                	</select>	
 					</td>
 				</tr>
       		</table>  
@@ -168,24 +165,7 @@ $(function(){
            </div> 
             
         </div>
-        <!-- 高级探索表单 
-        <form id="form2" name="form2" action="${ctx}/uids/complatgroupList">
         
-        <ul class="advanced-content" style="display:none;">
-        	<li>
-        		<input type="hidden"  name="orderField" value="${orderField}"/> 
-				<input type="hidden"  name="orderSort" value="${orderSort}"/>
-            	<label>用户账号:</label>
-                <input type="text" class="" name="search_LIKE_name" value="${sParams['LIKE_name']}"/>
-            </li>
-            <li>
-            	<label>用户姓名:</label>
-                <input type="text" class="" name="search_LIKE_name" value="${sParams['LIKE_name']}"/>
-            </li>          
-            <li class="advanced-search-btn">搜索</li>
-        </ul>
-        </form>
-        -->
          <div class="form-alert;" >
          	<tags:message msgMap="${msgMap}"></tags:message>
     	</div>

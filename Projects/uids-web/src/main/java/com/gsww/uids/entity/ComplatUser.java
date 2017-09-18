@@ -7,10 +7,14 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * <p>Copyright: Copyright (c) 2014</p>
@@ -115,7 +119,8 @@ public class ComplatUser implements java.io.Serializable{
 
 
 	@Id
-	@Column(name = "IId")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "IID")
 	public Integer getIid() {
 		return iid;
 	}
@@ -124,6 +129,8 @@ public class ComplatUser implements java.io.Serializable{
 		this.iid = iid;
 	}
 	
+	@GeneratedValue(generator = "system-uuid")
+	@GenericGenerator(name = "system-uuid", strategy = "uuid.hex")
 	@Column(name = "UUID")
 	public String getUuid() {
 		return uuid;

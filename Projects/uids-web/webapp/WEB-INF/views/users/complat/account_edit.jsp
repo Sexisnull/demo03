@@ -21,12 +21,32 @@ color: rgb(119, 119, 119);
     white-space: nowrap;
     padding: 2px 2px;
 }
+
+.td_1 {
+	border-bottom : 1px solid #C6E6FF;
+	border-right : 1px solid #C6E6FF;
+}
+.td_2 {
+	border-right : 1px solid #C6E6FF;
+}
+.td_3 {
+	border-bottom : 1px solid #C6E6FF;
+}
+.td_4 {
+	border-bottom : 1px solid #C6E6FF;
+}
+.td_5 {
+	border-bottom : 1px solid #C6E6FF;
+}
+.td_6 {
+	border-bottom : 1px solid #C6E6FF;
+}  
 </style>
 
 <script type="text/javascript">
 
 
-/*$().ready(function() {
+$().ready(function() {
 
 //表单校验
 var complatUserNameInput=$("#name").val();
@@ -92,7 +112,7 @@ var complatUserNameInput=$("#name").val();
      }
    });   
 
-});*/
+});
 
 
 
@@ -113,8 +133,7 @@ var complatUserNameInput=$("#name").val();
 			</li>
 			<li class="split"></li>
 			<li class="active">
-				<c:if test="${complatUser.iid==null}">用户新增</c:if>
-				<c:if test="${complatUser.iid!=null}">用户编辑</c:if>
+				<a class="last-position"><c:if test="${empty outsideUser.iid}">用户新增</c:if><c:if test="${not empty outsideUser.iid}">用户编辑</c:if></a>
 			</li>
    		</ol>
     </div>
@@ -132,132 +151,118 @@ var complatUserNameInput=$("#name").val();
      <div class="form-content">
 		 	<table class="form-table">
 		 		<tr>
-				  <td  style="max-width:0px;width:100px;ont-weight:bold;" align="center">基本属性</td>
-				<td>
-					<table class="form-table" style="border:solid 1px #C6E6FF; padding:2px" >		 
-    		           <tr>
-	        	          <th><b class="mustbe">*</b> 姓名：</th>
-	        	          <td>
-	        	             <input type="text" id="name" name="name" value="${complatUser.name}" />
-	        	             <input type="hidden" id="croleId" class="input" name="iid" value="${complatUser.iid}"  />	        	 	        	 
-	        	          </td>	        	        	
-	        	          <th><b class="mustbe">*</b> 性别：</th>				
-			              <td>
-				             <input type="radio" name="sex" value = 1 <c:if test="${complatUser.sex == 1}">checked="checked" </c:if>>男&nbsp&nbsp&nbsp
-    				         <input type="radio" name="sex" value = 0 <c:if test="${complatUser.sex == 0}">checked="checked" </c:if>>女					
-				          </td>
-			           </tr>
-			           <tr>
-    		              <th><b class="mustbe">*</b> 年龄：</th>
-				          <td>
-					         <input type="text" id="age" name="age" value="${complatUser.age}"">
-	                      </td>
-	        	          <th><b class="mustbe">*</b> 用户职务：</th>
-	        	          <td>
-					         <input type="text" id="headship" name="headship" value="${complatUser.headship}" />
-				          </td>				
-			           </tr>
-    		           <tr>
-    		              <th> 组织机构Id：</th>
-				          <td>
-					         <input type="text" id="groupid" name="groupid" value="${complatUser.groupid}"">
-	                      </td>
-	        	          <th>IP地址：</th>
-				          <td>
-					         <input type="text" class="input" id="ip" name="ip" value="${complatUser.ip}" />
-				          </td>				
-			           </tr>
-			           <tr>
-			              <th><b class="mustbe">*</b> 固定电话：</th>
-				          <td>
-					         <input type="text"  id="phone" name="phone" value="${complatUser.phone}" />
-				          </td>
-				          <th><b class="mustbe">*</b> 移动电话：</th>
-                          <td>
-                	         <input type="text"  id="mobile" name="mobile" value="${complatUser.mobile}" />
-                          </td>
-				
-			           </tr>
-			           <tr>
-				          <th> 传真：</th>
-				          <td>
-					         <input type="text" id="fax" name="fax" value="${complatUser.fax}" />
-				          </td>
-				          <th><b class="mustbe">*</b> Email：</th>				
-				          <td>
-					         <input type="text"  id="email" name="email" value="${complatUser.email}" />
-				          </td>
-			           </tr>
-			           <tr>
-				          <th> QQ：</th>
-				          <td>
-					         <input type="text" id="qq" name="qq" value="${complatUser.qq}" />
-				          </td>
-				          <th><b class="mustbe">*</b> MSN：</th>				
-				          <td>
-					         <input type="text"  id="msn" name="msn" value="${complatUser.msn}" />
-				          </td>
-			           </tr>
-			           <tr>
-				          <th><b class="mustbe">*</b> 地址：</th>
-				          <td>
-					         <input type="text" id="address" name="address" value="${complatUser.address}" />
-				          </td>
-				          <th><b class="mustbe">*</b> 邮编：</th>				
-				          <td>
-					         <input type="text"  id="post" name="post" value="${complatUser.post}" />
-				          </td>
-			           </tr>
-			   		</table>
+		 		  <td class="td_1" rowspan="7" style="max-width:0px;width:100px;ont-weight:bold;" align="center">基本属性</td>
+				  <th><b class="mustbe">*</b>姓名：</th>
+				  <td>
+					<input type="text" id="name" name="name" value="${complatUser.name}" />
+	        	    <input type="hidden" id="croleId" class="input" name="iid" value="${complatUser.iid}"  />	  
+	              </td>
+	        	  <th><b class="mustbe">*</b>性别：</th>
+				  <td>
+					<input type="radio" name="sex" value = 1 <c:if test="${complatUser.sex == 1}">checked="checked" </c:if>>男&nbsp&nbsp&nbsp
+    				<input type="radio" name="sex" value = 0 <c:if test="${complatUser.sex == 0}">checked="checked" </c:if>>女		
+				  </td>
+		 		</tr> 
+		 		<tr>  
+		 		  <th><b class="mustbe">*</b> 年龄：</th>
+				  <td>
+					<input type="text" id="age" name="age" value="${complatUser.age}"">
+	              </td>
+	        	  <th><b class="mustbe">*</b> 用户职务：</th>
+	        	  <td>
+					<input type="text" id="headship" name="headship" value="${complatUser.headship}" />
+				  </td>		 		    		              				
+			    </tr>
+			    <tr>
+    		      <th> 组织机构Id：</th>
+				  <td>
+					<input type="text" id="groupid" name="groupid" value="${complatUser.groupid}"">
+	              </td>
+	        	  <th>IP地址：</th>
+				  <td>
+				    <input type="text" class="input" id="ip" name="ip" value="${complatUser.ip}" />
+				  </td>				
+			    </tr>
+			    <tr>
+			      <th><b class="mustbe">*</b> 固定电话：</th>
+				  <td>
+					<input type="text"  id="phone" name="phone" value="${complatUser.phone}" />
+				  </td>
+				  <th><b class="mustbe">*</b> 移动电话：</th>
+                  <td>
+                	<input type="text"  id="mobile" name="mobile" value="${complatUser.mobile}" />
+                  </td>				
+			    </tr>
+			    <tr>
+				  <th> 传真：</th>
+				  <td>
+					<input type="text" id="fax" name="fax" value="${complatUser.fax}" />
+				  </td>
+				  <th><b class="mustbe">*</b> Email：</th>				
+				  <td>
+					<input type="text"  id="email" name="email" value="${complatUser.email}" />
+				  </td>
+			    </tr>
+			    <tr>
+				  <th> QQ：</th>
+				  <td>
+					<input type="text" id="qq" name="qq" value="${complatUser.qq}" />
+				  </td>
+				  <th><b class="mustbe">*</b> MSN：</th>				
+				  <td>
+					<input type="text"  id="msn" name="msn" value="${complatUser.msn}" />
+				  </td>
+			    </tr>
+			    <tr>
+			      <th class="td_5"><b class="mustbe">*</b>地址：</th>
+				  <td class="td_3">					
+					 <input type="text" id="address" name="address" value="${complatUser.address}" />
+				  </td>
+				  <th class="td_6"><b class="mustbe">*</b>邮编：</th>
+				  <td class="td_4">
+					  <input type="text"  id="post" name="post" value="${complatUser.post}" />
+				  </td>				
+			    </tr>			   		
+		        <tr>
+		           <td class="td_2" rowspan="3" style="max-width:0px;width:100px;ont-weight:bold;" align="center"">账号信息</td>
+                   <th><b class="mustbe">*</b>登录名：</th>
+                   <td>
+					  <input type="text"  class="loginname" name="loginname" value="${complatUser.loginname}" />
+	               </td>
+	        	   <th>姓名的首字母全称：</th>
+	        	   <td>
+	        		  <input type="text" id="loginallname" name="loginallname" value="${complatUser.loginallname}" />
+	        	   </td>
+			    </tr>	
+				<tr>		
+				   <th><b class="mustbe">*</b> 密码：</th>
+	        	   <td>
+	        		  <input type="password" id="pwd" name="pwd" value="${complatUser.pwd}" onkeyup="javascript:EvalPwd(this.value);"/>	            	
+	        	   </td>
+				   <th><b class="mustbe">*</b> 请设置密码找回问题：</th>
+				   <td>
+					  <input type="text"  class="input" id="pwdquestion" name="pwdquestion" value="${complatUser.pwdquestion}"  />
 				   </td>
 			    </tr>
-		        <tr>
-			       <td style="max-width:0px;width:100px;ont-weight:bold;" align="center">账号信息</td>
-				<td>
-					<table class="form-table" style="border:solid 1px #C6E6FF; padding:2px" >
-					    <tr>
-				             <th><b class="mustbe">*</b>登录名：</th>
-				             <td>
-					             <input type="text"  class="loginname" name="loginname" value="${complatUser.loginname}" />
-	            	
-	                         </td>
-	        	             <th> 姓名的首字母全称：</th>
-	        	             <td>
-	        		             <input type="text" id="loginallname" name="loginallname" value="${complatUser.loginallname}" />
-	        	             </td>
-			            </tr>	
-				        <tr>		
-				             <th><b class="mustbe">*</b> 密码：</th>
-	        	             <td>
-	        		             <input type="password" id="pwd" name="pwd" value="${complatUser.pwd}" onkeyup="javascript:EvalPwd(this.value);"/>	            	
-	        	             </td>
-				             <th><b class="mustbe">*</b> 请设置密码找回问题：</th>
-				             <td>
-					             <input type="text"  class="input" id="pwdquestion" name="pwdquestion" value="${complatUser.pwdquestion}"  />
-				             </td>
-			            </tr>
-			            <tr>				
-		                     <th> 密码强度：</th>
-			                 <td>			                 
-				                <table id="pwdpower" title="字母加数字加符号就会强" style="width: 100%" cellspacing="0" cellpadding="0" border="0">
-					               <tbody>
-							          <tr>
-							              <td id="pweak" style="">弱</td>
-						                  <td id="pmedium" style="">中</td>
-								          <td id="pstrong" style="">强</td>
-							          </tr>
-					               </tbody>
-				                </table>
-			                 </td>
-			                 <th><b class="mustbe">*</b> 请设置密码找回问题答案：</th>
-				             <td>
-					            <input type="text"  class="input" id="pwdanswer" name="pwdanswer" value="${complatUser.pwdanswer}"  />
-				             </td>
-			            </tr>	
-	    			</table>
-				</td>
-			</tr>
-		</table>
+			    <tr>				
+		           <th> 密码强度：</th>
+			       <td>			                 
+				      <table id="pwdpower" title="字母加数字加符号就会强" style="width: 100%" cellspacing="0" cellpadding="0" border="0">
+					      <tbody>
+							  <tr>
+							     <td id="pweak" style="">弱</td>
+						         <td id="pmedium" style="">中</td>
+								 <td id="pstrong" style="">强</td>
+							  </tr>
+					      </tbody>
+				      </table>
+			       </td>
+			       <th><b class="mustbe">*</b> 请设置密码找回问题答案：</th>
+				   <td>
+					  <input type="text"  class="input" id="pwdanswer" name="pwdanswer" value="${complatUser.pwdanswer}"  />
+				   </td>
+			    </tr>	
+	    </table>
   </div>  
     
     <div style="width: 1000px;margin: 10px; display:none;">
