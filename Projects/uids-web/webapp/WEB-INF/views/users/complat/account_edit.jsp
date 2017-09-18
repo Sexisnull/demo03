@@ -46,7 +46,7 @@ color: rgb(119, 119, 119);
 <script type="text/javascript">
 
 
-$().ready(function() {
+/*$().ready(function() {
 
 //表单校验
 var complatUserNameInput=$("#name").val();
@@ -112,7 +112,16 @@ var complatUserNameInput=$("#name").val();
      }
    });   
 
-});
+});*/
+
+
+//用户扩展属性
+   var html = $("#dataTable");
+   for(var i=0;i<4;i++){    
+      html.append("<tr><td>"+"扩展属性"+"</td><th>"+"shenxh"+"</th><td>"+"<input type='text'/>"+"</td><th>"+"shenxh"+"</th><td>"+"<input type='text'/>"+"</td></tr>");
+   }
+
+
 
 
 
@@ -133,7 +142,7 @@ var complatUserNameInput=$("#name").val();
 			</li>
 			<li class="split"></li>
 			<li class="active">
-				<a class="last-position"><c:if test="${empty outsideUser.iid}">用户新增</c:if><c:if test="${not empty outsideUser.iid}">用户编辑</c:if></a>
+				<a class="last-position"><c:if test="${empty complatUser.iid}">用户新增</c:if><c:if test="${not empty complatUser.iid}">用户编辑</c:if></a>
 			</li>
    		</ol>
     </div>
@@ -142,14 +151,14 @@ var complatUserNameInput=$("#name").val();
     
     <div style="display:none;">
     	<input type="hidden" id="iid" name="iid" value="${complatUser.iid}"/>
-    	<input type="hidden" id="enable" name="enable" value="${corporation.enable}"/>
+    	<input type="hidden" id="enable" name="enable" value="${complatUser.enable}"/>
     	<input type="hidden" id="time" name="time" value="${time}">
     </div>
 
     
     <!--表单的主内容区域-->
      <div class="form-content">
-		 	<table class="form-table">
+		 	<table class="form-table" id="dataTable">
 		 		<tr>
 		 		  <td class="td_1" rowspan="7" style="max-width:0px;width:100px;ont-weight:bold;" align="center">基本属性</td>
 				  <th><b class="mustbe">*</b>姓名：</th>
@@ -263,28 +272,7 @@ var complatUserNameInput=$("#name").val();
 				   </td>
 			    </tr>	
 	    </table>
-  </div>  
-    
-    <div style="width: 1000px;margin: 10px; display:none;">
-		 <table style="float: left;width: 20%;line-height: 100px">
-		 	<tr>
-		 		<th>扩展属性</th>
-		 	</tr>
-		</table>
-    </div>
-    
-    <div style="width: 1000px;margin: 10px; display:none;">
-		 <table style="float: left;width: 20%;line-height: 100px">
-		 	<tr>
-		 		<th>
-		 		   <span></span>
-		 		</th>
-		 		<td>
-		 		   <input type="text"  class="input" id="" name="" value=""  />
-		 		</td>
-		 	</tr>
-		</table>
-    </div>
+  </div> 
     
 
     <div style="clear:both;"></div>

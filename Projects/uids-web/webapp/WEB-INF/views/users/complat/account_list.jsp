@@ -23,7 +23,7 @@
 .deleteUser{
     width:60px;
     height:25px;
-    background:#659be0;
+    background:#ed6b75;
     color:#fff;
     border:1px solid #659be0;
     border-radius:3px;
@@ -50,7 +50,7 @@
 .startUsersPower{
     width:60px;
     height:25px;
-    background:#659be0;
+    background:#36c6d3;
     color:#fff;
     border:1px solid #659be0;
     border-radius:3px;
@@ -59,7 +59,7 @@
 .stopUsersPower{
     width:60px;
     height:25px;
-    background:#659be0;
+    background:#f1c40f;
     color:#fff;
     border:1px solid #659be0;
     border-radius:3px;
@@ -368,7 +368,6 @@ function outPutComplatUser() {
 		</form>
 		
 		 <!-- 高级探索表单 -->
-        <div class="search-content">
 			<form id="form2" name="form2" action="${ctx}/complat/complatList" method="get">
 				<table class="advanced-content" style="display:none;">
 					<tr>
@@ -389,7 +388,6 @@ function outPutComplatUser() {
 					</tr>
 				</table>
 			</form>
-		</div>
 	</div>
     
     
