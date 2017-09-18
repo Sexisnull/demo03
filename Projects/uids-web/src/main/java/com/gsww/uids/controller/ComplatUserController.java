@@ -2,6 +2,7 @@
 
 package com.gsww.uids.controller;
 
+import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -18,6 +19,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
@@ -40,6 +42,7 @@ import org.springside.modules.web.Servlets;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.gsww.jup.controller.BaseController;
+import com.gsww.jup.entity.sys.SysSsoSessToken;
 import com.gsww.jup.entity.sys.SysUserSession;
 import com.gsww.jup.util.ExcelUtil;
 import com.gsww.jup.util.PageUtils;
@@ -49,6 +52,7 @@ import com.gsww.uids.entity.ComplatGroup;
 import com.gsww.uids.entity.ComplatRole;
 import com.gsww.uids.entity.ComplatRolerelation;
 import com.gsww.uids.entity.ComplatUser;
+import com.gsww.uids.entity.JisFields;
 import com.gsww.uids.entity.JisUserdetail;
 import com.gsww.uids.service.ComplatGroupService;
 import com.gsww.uids.service.ComplatRoleService;
@@ -445,6 +449,7 @@ public class ComplatUserController extends BaseController{
 					model.addAttribute("roleList",roleList);
 				}
 			}
+			this.extendsAttr(model, request, response);
 		}catch(Exception exception){
 			exception.printStackTrace();
 		}
@@ -507,16 +512,42 @@ public class ComplatUserController extends BaseController{
 	 * 获取用户扩展属性
 	 * @author yaoxi
 	 */
-	public void extendAttr(Model model,HttpServletRequest request,HttpServletResponse response)throws Exception{
-		
-		//获取当前用户
+	private void extendsAttr(Model model,HttpServletRequest request,HttpServletResponse response) throws Exception{
+		List<List<Map<String,Object>>> fieldsListMap = new ArrayList<List<Map<String,Object>>>();
+		//判断是政府用户还是用户设置菜单，获取用户id。1-政府用户；2-用户设置
+		String userMenu = request.getParameter("userMenu");
+		userMenu = "2";
+		Integer userId = null;
 		SysUserSession sysUserSession = (SysUserSession) request.getSession().getAttribute("sysUserSession");
-		if(StringHelper.isNotBlack(sysUserSession.getAccountId())){
-			Integer userId = Integer.parseInt(sysUserSession.getAccountId());
+		String usersId = sysUserSession.getAccountId();
+		if(StringHelper.isNotBlack(usersId)){
+			userId = Integer.parseInt(usersId);
 		}
+		//1.查询类型 1-字符；2-枚举；3-固定值
+		List<Map<String, Object>> listMap = null;
+		List<JisFields> fieldsList = this.jisFieldsService.findAllJisFields();
+		List<Integer> typeList = this.jisFieldsService.findFieldsType();
+		for(int i=0;i<typeList.size();i++){
+			Integer type = typeList.get(i);
+			if(type == 1){
+				listMap = this.jisFieldsService.findExtendAttr(fieldsList, userId,type);
+				fieldsListMap.add(listMap);
+				model.addAttribute("type",type);
+				System.out.println(listMap.size());
+			}else if(type == 2){
+				listMap = this.jisFieldsService.findExtendAttr(fieldsList, userId,type);
+				fieldsListMap.add(listMap);
+				model.addAttribute("type",type);
+				System.out.println(listMap.size());
+			}
+		}
+		model.addAttribute("fieldsListMap",fieldsListMap);
+		/*JSONArray array = JSONArray.fromObject(fieldsListMap);
+		PrintWriter out = response.getWriter();
+		String json = array.toString();
+		System.out.println(json);
+		out.write(json);*/
 	}
-	
-	
 	
 	/**
 	 * 批量修改用户启用状态
@@ -688,6 +719,8 @@ public class ComplatUserController extends BaseController{
 		}
 		
 	}
+
+	
 }
 
 

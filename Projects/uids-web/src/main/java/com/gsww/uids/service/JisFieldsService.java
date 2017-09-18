@@ -1,12 +1,14 @@
 package com.gsww.uids.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.gsww.uids.entity.JisFields;
+import com.gsww.uids.entity.JisUserdetail;
 
 /**
  * Title: JisFieldsService.java Description: 用户扩展属性Service
@@ -47,4 +49,18 @@ public interface JisFieldsService {
 	 * @return
 	 */
 	List<JisFields> findAllJisFields();
+	
+	
+	/**
+	 * 获取用户扩展属性
+	 * @param fieldsList
+	 * @param userId
+	 * @return
+	 * @throws Exception
+	 * @author yaoxi
+	 */
+	List<Map<String, Object>> findExtendAttr(List<JisFields> fieldsList,Integer userId,Integer type) throws Exception;
+	
+	List<Integer> findFieldsType();
+	
 }

@@ -1,6 +1,9 @@
 package com.gsww.uids.dao;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.gsww.uids.entity.JisFields;
@@ -19,4 +22,8 @@ public interface JisFieldsDao
 	 * @return
 	 */
 	JisFields findByIid(Integer iid);
+	
+	@Query("select distinct t.type from JisFields t")
+	List<Integer> findFieldsType();
+	
 }
