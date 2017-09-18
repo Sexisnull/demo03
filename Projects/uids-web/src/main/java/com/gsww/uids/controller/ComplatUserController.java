@@ -60,6 +60,7 @@ import com.gsww.uids.entity.JisUserdetail;
 import com.gsww.uids.service.ComplatGroupService;
 import com.gsww.uids.service.ComplatRoleService;
 import com.gsww.uids.service.ComplatUserService;
+import com.gsww.uids.service.JisFieldsService;
 import com.gsww.uids.service.JisUserdetailService;
 
 /**
@@ -91,6 +92,9 @@ public class ComplatUserController extends BaseController{
 	
 	@Autowired
 	private JisUserdetailService jisUserdetailService;
+	
+	@Autowired
+	private JisFieldsService jisFieldsService;
 	/**
 	 * 获取政府用户列表
 	 * @param pageNumber
@@ -491,6 +495,19 @@ public class ComplatUserController extends BaseController{
 			return  new ModelAndView("redirect:/complat/complatList");
 		}
 		
+	}
+	
+	/**
+	 * 获取用户扩展属性
+	 * @author yaoxi
+	 */
+	public void extendAttr(Model model,HttpServletRequest request,HttpServletResponse response)throws Exception{
+		
+		//获取当前用户
+		SysUserSession sysUserSession = (SysUserSession) request.getSession().getAttribute("sysUserSession");
+		if(StringHelper.isNotBlack(sysUserSession.getAccountId())){
+			Integer userId = Integer.parseInt(sysUserSession.getAccountId());
+		}
 	}
 	
 	
