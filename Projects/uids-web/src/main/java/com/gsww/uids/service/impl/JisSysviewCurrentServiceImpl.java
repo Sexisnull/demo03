@@ -26,7 +26,7 @@ public class JisSysviewCurrentServiceImpl implements JisSysviewCurrentService{
 	}
 
 	
-
+	
 	@Override
 	public List<JisSysviewCurrent> findJisCurList() throws Exception {
 		return jisSysviewCurrentDao.findAll();

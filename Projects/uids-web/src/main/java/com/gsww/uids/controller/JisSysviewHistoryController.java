@@ -94,7 +94,7 @@ import com.gsww.uids.service.JisSysviewHistoryService;
 				ex.printStackTrace();
 				logger.error("列表打开失败："+ex.getMessage());
 				returnMsg("error","列表打开失败",(HttpServletRequest) request);
-				return "redirect:/uids/jisHisList";
+				return "redirect:/sysviewHis/jisHisList";
 			}
 			return "users/sysview/jis_sysview_history_list";
 		}
