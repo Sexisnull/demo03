@@ -27,6 +27,7 @@ import org.springside.modules.web.Servlets;
 import com.gsww.jup.controller.BaseController;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.uids.entity.JisApplication;
+import com.gsww.uids.service.ComplatGroupService;
 import com.gsww.uids.service.JisApplicationService;
 /**
  * 应用管理控制器
@@ -40,6 +41,8 @@ public class JisApplicationController extends BaseController{
 	private static Logger logger = LoggerFactory.getLogger(JisApplicationController.class);
 	@Autowired
 	private JisApplicationService jisApplicationService ;
+	@Autowired
+	private ComplatGroupService complatGroupService ;
 	
 	/**
 	 * 获取应用列表
@@ -72,11 +75,22 @@ public class JisApplicationController extends BaseController{
 			Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 			Specification<JisApplication>  spec=super.toNewSpecification(searchParams, JisApplication.class);
 			
+			// map放入
+			List<Map<String, Object>> groupList = new ArrayList<Map<String, Object>>();
+			Map<Integer, Object> groupMap = new HashMap<Integer, Object>();
+			groupList = complatGroupService.getComplatGroupList();
+			for (Map<String, Object> group : groupList) {
+				groupMap.put((Integer) group.get("iid"), group.get("name"));
+			}
+			
 			//分页
 			Page<JisApplication> pageInfo = jisApplicationService.getApplicationPage(spec,pageRequest);
 			model.addAttribute("pageInfo", pageInfo);
+			model.addAttribute("groupMap", groupMap);
 			
 			// 将搜索条件编码成字符串，用于排序，分页的URL
+			String groupName=request.getParameter("groupname");
+			model.addAttribute("groupName", groupName);
 			model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
 			model.addAttribute("sParams", searchParams);			
 			
