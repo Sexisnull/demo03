@@ -16,36 +16,6 @@
 <script type="text/javascript" src="${ctx}/res/plugin/jqtree/jquery.js"></script>
 <script type="text/javascript" src="${ctx}/res/plugin/jqtree/jqtree.js"></script>
 <script type="text/javascript">
-	/*//授权树提交按钮添加事件处理
-	function accreditSubmit() {
-		$.ajax({
-			type : "POST",
-			url : '../sys/roleAuthorizeSave',
-			data : 'roleId=${roleId}&keys=' + tree.val("id") + '&types=' + tree.val("customType"),
-			async : false,
-			success : function(msg) {
-				if (msg.indexOf('success') >= 0) {
-					alert('授权成功');
-					location.href = '/sys/roleList';
-				} else {
-					alert('授权失败');
-					location.href = '/sys/roleList';
-				}
-			}
-		});
-	}
-	$(function() {
-		alert("ddddsss");
-		//展现授权树
-		tree = $('#accreditDiv').jqTree({
-			path : '../res/skin/default/plugin/jqtree/', // 相对于页面的js文件根路径
-			loadUrl : '../sys/roleAuthorizeList?roleId=${roleId}', // 请求路径
-			timeout : 10000, // 超时时间
-			indent : 30, // 节点缩进距离
-			treeType : 'checkbox' // 树类型 ['normal', 'checkbox', 'radio']，默认值normal
-		});
-	});*/
-	
 	//授权树提交按钮添加事件处理
 	function accreditSubmit() {
 		$.ajax({

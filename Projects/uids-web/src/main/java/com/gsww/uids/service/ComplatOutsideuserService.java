@@ -1,5 +1,8 @@
 package com.gsww.uids.service;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -42,4 +45,13 @@ public interface ComplatOutsideuserService {
 	 * @return
 	 */
 	void delete(ComplatOutsideuser outsideUser);
+
+	public List<ComplatOutsideuser> findAll();
+	
+	/**
+	 * 关键字查询
+	 * @param keyword
+	 * @return
+	 */
+	public List<Map<String, Object>> findByNameOrPinYin(String keyword);
 }

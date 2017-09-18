@@ -22,7 +22,8 @@ public class ComplatUserServiceImpl implements ComplatUserService{
 
 	@Autowired
 	private ComplatUserDao complatUserDao;
-	
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
 	
 	/**
 	 * 查询用户列表
@@ -81,7 +82,28 @@ public class ComplatUserServiceImpl implements ComplatUserService{
 
 
 
+		@Override
+	public List<Map<String,Object>> findByGroupIds(String id) {
+		if(StringHelper.isEmpty(id)){
+			return null;
+		}
+		String [] ids = id.split(",");
+		String groupIds="";
+		for(String s :ids){
+			groupIds+=s+",";
+		}
+		groupIds = groupIds.substring(0,groupIds.length()-1);
+		String sql = "SELECT a.iid, a.name as ANAME,a.loginname,a.loginallname, a.pwd, a.groupid, b.name AS groupname, a.headship, a.mobile, a.mobile, a.fax, a.email, a.qq, a.msn, a.address, a.orderid,a.modifyPassTime, b.codeid, b.name, (SELECT name FROM complat_group WHERE iid = b.pid) pargroupname  FROM complat_user a, complat_group b  WHERE a.groupid = b.iid  AND a.groupid IN ("+groupIds+") AND a.opersign <>3 ORDER BY a.orderid DESC,a.iid DESC ";
+		
+		return jdbcTemplate.queryForList(sql);
+	}	
 	
+	@Override
+	public List<Map<String, Object>> findByNameOrPinYin(String keyword) {
+		String sql = "SELECT iid, name, loginname FROM complat_user" +
+				" WHERE name LIKE '%"+keyword+"%' OR pinyin LIKE '%"+keyword+"%' ";
+		return jdbcTemplate.queryForList(sql);
+	}
 
 
 }

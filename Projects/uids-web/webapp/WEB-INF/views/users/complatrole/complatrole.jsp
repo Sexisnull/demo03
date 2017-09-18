@@ -12,7 +12,7 @@
 		<script type="text/javascript">
 		
 		function btnAuthorize(obj) {
-		
+		console.log(obj);
 		$(".list-page").css({'position':'absolute'});
 		$(".list-page").css({'bottom':'-100px'});
 		$("#list-warper").addClass("window-mask");
@@ -24,7 +24,7 @@
 		
 		var xyqx = "${ctx}/complat/croleAuthorizeShow?roleId=" + roleId;
 		var yyqx = "${ctx}/complat/appAuthorizeShow?roleId=" + roleId;
-		var yhjg = "${ctx}/complat/roleorganizationShow";
+		var yhjg = "${ctx}/complat/roleorganizationShow?roleId=" + roleId;
 		
 		$("#xtqx").attr("href",xyqx);
 		$("#yyqx").attr("href",yyqx);
@@ -114,7 +114,7 @@
 
 				</div>
 				<!-- 提示信息开始 -->
-				<div class="form-alert;">
+				<div class="form-alert">
 					<tags:message msgMap="${msgMap}"></tags:message>
 				</div>
 				<!-- 提示信息结束 -->
@@ -125,7 +125,7 @@
 							<th width="3%">
 								<div class="label">
 									<i class="check_btn check_all"></i>
-									<input id="${complatRole.iid}" value="${complatRole.iid}" type="checkbox" class="check_btn" style="display: none;" />
+									<input type="checkbox" class="check_btn" style="display: none;" />
 								</div>
 							</th>
 							<th width="80px" style="text-align: center">
@@ -192,7 +192,7 @@
 			<tags:pagination page="${pageInfo}" paginationSize="5" />
 		</div>
 	
-<div id="tabs" style="display:none;width: 65%;margin: auto;position: absolute;left: 165px;top: 104.5px">
+<div id="tabs" style="display:none;width: 65%;margin: auto;position: absolute;left: 165px;top: 50.5px">
  	<ul style="text-align: center;">
 	    <li style="text-align: center;width: 32.7%;"><a id="yhjg" style="width: 90%;" href="">用户机构管理</a></li>
 	    <li style="text-align: center;width: 32.7%;"><a id="yyqx" style="width: 90%;" href="">应用权限设置</a></li>

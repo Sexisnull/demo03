@@ -134,4 +134,27 @@ public class ComplatGroupServiceImpl implements ComplatGroupService{
 		return mapList;
 	}
 	
+	@Override
+	public List<Map<String,Object>> findChildGroupByIid(Integer iid) {
+		
+		String sql = "SELECT a.iid, a.name, a.codeid, a.pid, CASE WHEN EXISTS(SELECT 1 FROM complat_group b WHERE b.pid = a.iid AND opersign <> '3') THEN 1 ELSE 0 END isparent,a.spec,a.orderid,a.pinyin  FROM complat_group a ";
+		if(iid!=null && iid>0){
+			sql = sql + "WHERE a.pid="+iid;
+		}else{
+			sql = sql + "WHERE a.pid IS NULL";
+		}
+		sql = sql + " AND opersign <> '3' ";
+	    sql = sql + " ORDER BY a.orderid ASC,a.iid ASC";
+	    
+		return jdbcTemplate.queryForList(sql);
+	}
+
+	@Override
+	public List<Map<String, Object>> findByNameOrPinYin(String keyword) {
+		// TODO Auto-generated method stub
+		String sql = "SELECT iid, name, codeid FROM complat_group WHERE name" +
+				" LIKE '%"+keyword+"%' OR pinyin LIKE '%"+keyword+"%' AND opersign <> '3' ";
+		
+		return jdbcTemplate.queryForList(sql);
+	}
 }

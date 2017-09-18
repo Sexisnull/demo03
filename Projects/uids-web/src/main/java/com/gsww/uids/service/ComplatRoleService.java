@@ -2,6 +2,7 @@
 package com.gsww.uids.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -34,5 +35,28 @@ public interface ComplatRoleService {
 	 * 根据用户ID查询对应的角色信息
 	 */
 	public List<ComplatRolerelation> findByUserId(Integer userId) throws Exception;
+	
+	/**
+	 * 查询角色所属用户
+	 * @param roleId
+	 * @param memberType
+	 * @param memberName
+	 * @return
+	 */
+	public List<Map<String, Object>> findRoleMember(String roleId,
+			String memberType, String memberName);
+	/**
+	 * 根据用户角色清空关联用户和机构
+	 * @param roleId
+	 */
+	public void deleteByRoleId(String roleId);
+	
+	/**
+	 * 删除与角色关联的相关用户和机构
+	 * @param roleId
+	 * @param users
+	 * @param groups
+	 */
+	public void deleteUsersByRoleId(String roleId,String[] users,String[] groups);
 
 }

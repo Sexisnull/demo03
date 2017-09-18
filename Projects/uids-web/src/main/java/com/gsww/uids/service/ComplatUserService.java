@@ -64,6 +64,13 @@ public interface ComplatUserService {
 	void updateUser(Integer iid,String name,String headShip,String phone,String mobile,String fax,
 			String email,String qq, Date modifyTime,String pwd) throws Exception;
 
-	
+	public List<Map<String,Object>> findByGroupIds(String id);
+
+	/**
+	 * 关键字查询
+	 * @param keyword
+	 * @return
+	 */
+	public List<Map<String, Object>> findByNameOrPinYin(String keyword);
 	
 }

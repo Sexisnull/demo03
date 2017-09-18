@@ -80,5 +80,14 @@ public interface ComplatGroupService {
 	 */
 	public List<Map<String, Object>> getComplatGroupList() throws Exception;
 	
+		public List<Map<String,Object>> findChildGroupByIid(Integer iid);
+	
+	/**
+	 * 关键字查询
+	 * @param keyword
+	 * @return
+	 */
+	public List<Map<String, Object>> findByNameOrPinYin(String keyword);
+	
 
 }

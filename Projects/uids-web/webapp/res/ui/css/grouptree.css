@@ -1,0 +1,197 @@
+@font-face{
+	font-family: 'gsww';
+	src:url('fonts/gsww.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
+
+}
+
+[data-icon]:before {
+	font-family: 'gsww';
+	content: attr(data-icon);
+	speak: none;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+}
+
+.icon-user, .icon-user-2, .icon-user-3, .icon-user-4, .icon-friends, .icon-users, .icon-user-5, .icon-plus-sign, .icon-minus-sign, .icon-remove-sign, .icon-ok-sign, .icon-plus, .icon-minus, .icon-checkmark, .icon-cancel, .icon-close, .icon-checkmark-2, .icon-trash, .icon-trash-2, .icon-trash-3, .icon-trashcan, .icon-trashcan-2, .icon-pen-alt-stroke, .icon-pen-alt-fill, .icon-pen, .icon-pencil, .icon-th-large, .icon-sitemap, .icon-treediagram, .icon-tree, .icon-download, .icon-upload, .icon-chevron-up, .icon-chevron-down, .icon-download-2, .icon-upload-2, .icon-folder-close, .icon-folder-open, .icon-check, .icon-checkbox, .icon-checkbox2, .icon-edit, .icon-edit-2, .icon-compose, .icon-reliability, .icon-list, .icon-list-2, .icon-menu, .icon-foldertree, .icon-download-3, .icon-upload-3, .icon-crop, .icon-crop-2, .icon-export, .icon-share, .icon-key, .icon-key-2, .icon-calendar, .icon-calendar-2, .icon-vcard, .icon-vcard-2, .icon-cog, .icon-wrench, .icon-websitebuilder, .icon-search, .icon-search-2, .icon-floppy, .icon-save, .icon-clock, .icon-stopwatch, .icon-alarm, .icon-locked, .icon-unlocked, .icon-qrcode, .icon-qrcode-2, .icon-barcode, .icon-briefcase, .icon-briefcase-2, .icon-plugin, .icon-puzzle, .icon-loop, .icon-refresh, .icon-print, .icon-shredder, .icon-copy, .icon-paste, .icon-forward, .icon-back, .icon-forward-2, .icon-reply, .icon-undo, .icon-reply-all, .icon-reply-all-2, .icon-forward-3, .icon-undo-2, .icon-redo, .icon-forward-4, .icon-reply-2, .icon-undo-3, .icon-redo-2, .icon-cut, .icon-scissors, .icon-addfriend, .icon-removefriend, .icon-user-6, .icon-user-7, .icon-users-2, .icon-download-4, .icon-upload-4, .icon-signin, .icon-signout, .icon-cloud-download, .icon-cloud-upload, .icon-upload-5, .icon-download-5, .icon-chart, .icon-chart-2, .icon-plug, .icon-fourohfour, .icon-inbox, .icon-icons, .icon-attachment, .icon-chat, .icon-filter, .icon-signup, .icon-ipcontrol, .icon-rubberstamp, .icon-sort, .icon-algorhythm, .icon-home, .icon-html5, .icon-database, .icon-question, .icon-remove {
+	font-family: 'gsww';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+}
+
+.icon-user-3:before {
+	content: "\23";
+}
+.icon-users:before {
+	content: "\26";
+}
+.icon-folder-close:before {
+	content: "\45";
+}
+
+.tree {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+.tree li {
+  white-space: nowrap;
+}
+.tree li ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.tree-node {
+  height: 18px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.tree-hit {
+  cursor: pointer;
+}
+.tree-expanded,
+.tree-collapsed,
+.tree-folder,
+.tree-file,
+.tree-checkbox,
+.tree-indent {
+  display: inline-block;
+  width: 16px;
+  height: 18px;
+  vertical-align: top;
+  overflow: hidden;
+}
+.tree-expanded {
+  background: url('images/tree_icons.png') no-repeat -18px 0px;
+}
+.tree-expanded-hover {
+  background: url('images/tree_icons.png') no-repeat -50px 0px;
+}
+.tree-collapsed {
+  background: url('images/tree_icons.png') no-repeat 0px 0px;
+}
+.tree-collapsed-hover {
+  background: url('images/tree_icons.png') no-repeat -32px 0px;
+}
+.tree-lines .tree-expanded,
+.tree-lines .tree-root-first .tree-expanded {
+  background: url('images/tree_icons.png') no-repeat -144px 0;
+}
+.tree-lines .tree-collapsed,
+.tree-lines .tree-root-first .tree-collapsed {
+  background: url('images/tree_icons.png') no-repeat -128px 0;
+}
+.tree-lines .tree-node-last .tree-expanded,
+.tree-lines .tree-root-one .tree-expanded {
+  background: url('images/tree_icons.png') no-repeat -80px 0;
+}
+.tree-lines .tree-node-last .tree-collapsed,
+.tree-lines .tree-root-one .tree-collapsed {
+  background: url('images/tree_icons.png') no-repeat -64px 0;
+}
+.tree-line {
+  background: url('images/tree_icons.png') no-repeat -176px 0;
+}
+.tree-join {
+  background: url('images/tree_icons.png') no-repeat -192px 0;
+}
+.tree-joinbottom {
+  background: url('images/tree_icons.png') no-repeat -160px 0;
+}
+.tree-folder {
+  background: url('images/tree_icons.png') no-repeat -208px 0;
+}
+.tree-folder-open {
+  background: url('images/tree_icons.png') no-repeat -224px 0;
+}
+.tree-file {
+  background: url('images/tree_icons.png') no-repeat -240px 0;
+}
+.tree-loading {
+  background: url('images/loading.gif') no-repeat center center;
+}
+.tree-checkbox0 {
+  background: url('images/tree_icons.png') no-repeat -208px -18px;
+}
+.tree-checkbox1 {
+  background: url('images/tree_icons.png') no-repeat -224px -18px;
+}
+.tree-checkbox2 {
+  background: url('images/tree_icons.png') no-repeat -240px -18px;
+}
+.tree-title {
+  font-size: 12px;
+  display: inline-block;
+  text-decoration: none;
+  vertical-align: top;
+  white-space: nowrap;
+  padding: 0 2px;
+  height: 18px;
+  line-height: 18px;
+}
+.tree-node-proxy {
+  font-size: 12px;
+  line-height: 20px;
+  padding: 0 2px 0 20px;
+  border-width: 1px;
+  border-style: solid;
+  z-index: 9900000;
+}
+.tree-dnd-icon {
+  display: inline-block;
+  position: absolute;
+  width: 16px;
+  height: 18px;
+  left: 2px;
+  top: 50%;
+  margin-top: -9px;
+}
+.tree-dnd-yes {
+  background: url('images/tree_icons.png') no-repeat -256px 0;
+}
+.tree-dnd-no {
+  background: url('images/tree_icons.png') no-repeat -256px -18px;
+}
+.tree-node-top {
+  border-top: 1px dotted red;
+}
+.tree-node-bottom {
+  border-bottom: 1px dotted red;
+}
+.tree-node-append .tree-title {
+  border: 1px dotted red;
+}
+.tree-editor {
+  border: 1px solid #ccc;
+  font-size: 12px;
+  height: 14px !important;
+  height: 18px;
+  line-height: 14px;
+  padding: 1px 2px;
+  width: 80px;
+  position: absolute;
+  top: 0;
+}
+.tree-node-proxy {
+  background-color: #ffffff;
+  color: #333;
+  border-color: #D4D4D4;
+}
+.tree-node-hover {
+  background: #E6F2FF;
+  color: #00438a;
+}
+.tree-node-selected {
+  background: #0081c2;
+  color: #fff;
+}
