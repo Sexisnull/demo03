@@ -4,8 +4,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -37,11 +35,11 @@ public class JisApplication implements java.io.Serializable {
 	private String appUrl;                 //应用地址
 	private String ssoUrl;                 //登录地址
 	private Integer isShow;                //是否在前台显示，0：否，1：是
-	private ComplatGroup complatGroup;     //所属机构
+	private Integer groupId;               //所属机构
 	private Integer transType;             //数据传送方式，1：HTTP，2：WebService
 	private Integer isLogOff;              //是否统一注销，0：否，1：是
 	private Integer isUnifyRegister;       //是否统一注册，0：否，1：是
-	private String logOffUrl;
+	private String logOffUrl;              //注销地址
 	private Integer netType;               //网络类型，0：外网，1：专网
 	
 	public JisApplication() {
@@ -53,7 +51,7 @@ public class JisApplication implements java.io.Serializable {
 			String encryptKey, String icon,Integer synUser,Integer loginType,
 			Integer userDefined, String allLoginIid, String allPwd,
 			Integer encryptType, Integer isSyncGroup, Integer orderId,
-			String appUrl, String ssoUrl, Integer isShow, ComplatGroup complatGroup,
+			String appUrl, String ssoUrl, Integer isShow, Integer groupId,
 			Integer transType,Integer isLogOff, Integer isUnifyRegister, 
 			String logOffUrl,Integer netType) {
 		super();
@@ -74,7 +72,7 @@ public class JisApplication implements java.io.Serializable {
 		this.appUrl = appUrl;
 		this.ssoUrl = ssoUrl;
 		this.isShow = isShow;
-		this.complatGroup = complatGroup;
+		this.groupId = groupId;
 		this.transType = transType;
 		this.isLogOff = isLogOff;
 		this.isUnifyRegister = isUnifyRegister;
@@ -233,20 +231,19 @@ public class JisApplication implements java.io.Serializable {
 		return isShow;
 	}
 
-	@ManyToOne
-	@JoinColumn(name = "GROUPID")
-	public ComplatGroup getComplatGroup() {
-		return complatGroup;
-	}
-
-	public void setComplatGroup(ComplatGroup complatGroup) {
-		this.complatGroup = complatGroup;
-	}
-
 	public void setIsShow(Integer isShow) {
 		this.isShow = isShow;
 	}
 	
+	@Column(name = "GROUPID")
+	public Integer getGroupId() {
+		return groupId;
+	}
+
+	public void setGroupId(Integer groupId) {
+		this.groupId = groupId;
+	}
+
 	@Column(name = "TRANSTYPE")
 	public Integer getTransType() {
 		return transType;

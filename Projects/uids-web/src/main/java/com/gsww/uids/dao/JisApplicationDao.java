@@ -34,7 +34,7 @@ public interface JisApplicationDao extends PagingAndSortingRepository<JisApplica
 	 * @param complatGroup
 	 * @return
 	 */
-	List<JisApplication> findByComplatGroup(ComplatGroup complatGroup);
+	List<JisApplication> findByGroupId(Integer groupId);
 	
 	/**
 	 * 查询所有对象

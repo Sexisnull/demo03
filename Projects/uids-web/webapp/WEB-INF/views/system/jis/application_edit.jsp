@@ -6,19 +6,45 @@
 
 <head>
 <title>甘肃万维JUP课题</title>
-<link rel="stylesheet" href="${ctx}/res/skin/default/plugin/z-tree/css/zTreeStyle/zTreeStyle.css" type="text/css"/>
-<script type="text/javascript" src="${ctx}/res/skin/default/plugin/z-tree/js/jquery.ztree.core-3.5.min.js"></script>
+<link rel="stylesheet" href="${ctx}/res/plugin/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css"/>
+<script type="text/javascript" src="${ctx}/res/plugin/ztree/js/jquery.ztree.all-3.5.min.js"></script>
 <script type="text/javascript" src="${ctx}/res/plugin/uploadify/js/jquery.uploadify-3.1.min.js"></script>
 <style type="text/css">
 .ztree {margin-top: 10px;border: 1px solid #cfd9db; display:none;background: #f0f6e4;height:360px;overflow-y:scroll;overflow-x:auto;}
 </style>
 	<link type="text/css" rel="stylesheet" href="${ctx}/res/skin/login/css/menu.css" />
 	<script type="text/javascript" src="${ctx}/res/skin/login/js/menu.js"></script>
-	<link type="text/css" rel="stylesheet" href="${ctx}/res/jslib/ztree/css/zTreeStyle/zTreeStyle.css" />
+	<%-- <link type="text/css" rel="stylesheet" href="${ctx}/res/jslib/ztree/css/zTreeStyle/zTreeStyle.css" /> --%>
 	<link type="text/css" rel="stylesheet" href="${ctx}/res/skin/login/css/tree.css" />
 	<script type="text/javascript" src="${ctx}/res/jslib/ztree/js/jquery.ztree.all-3.5.min.js"></script>
 	<script type="text/javascript" src="${ctx}/res/skin/login/js/tree.js"></script>
 <script type="text/javascript">
+function generateKey(){
+	$('#encryptKey').val(randomChar(12));
+}
+function randomChar(num) 	
+{
+		var jsSeed="0123456789qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
+		var jsTmp="";
+		if(num=='' || num<=0){
+			num=16;
+		}
+		for(var i=0;i<num;i++)  {
+		jsTmp+=jsSeed.charAt(Math.ceil(Math.random()*1000000)%jsSeed.length);
+		}
+		return jsTmp;
+}
+function selpic(){
+	var page="pic_show.do";
+	var pic = document.getElementById("icon").src;
+	var picsrc; 
+	openDialog('app/pic_show.do', 600, 350, {
+		title : '图标'
+	});
+}
+function cleariocn(){
+	$("#icon").attr("src","${contextPath}${app.icon}");
+}
 $(function(){
 	var groupMenu = [{"name":"单位选择","id":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
 
@@ -124,6 +150,7 @@ var userNameInput=$("#userName").val();
     
 
 });
+
 $(function(){
 //点击页面其它部分收缩选择角色下拉框
 	$('body').on('click',function(event){
@@ -168,32 +195,8 @@ $(function(){
 	$.uniqueValidate('uniqueRemark', '${ctx}/datacall/checkRemark', ['remark','oldRemark'], '对不起，此标识已存在');
 	/* $("#roleNames").Popup($(".ulRoleList"), { width: "auto" }); */
 	$(".icon-date-r").click(function(){ $(this).prev("input").click(); }); 
-	function generateKey(){
-		$('#encryptKey).val(randomChar(12));
-	}
-	function randomChar(num) 	
-	{
-			var jsSeed="0123456789qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
-			var jsTmp="";
-			if(num=='' || num<=0){
-				num=16;
-			}
-			for(var i=0;i<num;i++)  {
-			jsTmp+=jsSeed.charAt(Math.ceil(Math.random()*1000000)%jsSeed.length);
-			}
-			return jsTmp;
-	}
-	function selpic(){
-		var page="pic_show.do";
-		var pic = document.getElementById("icon").src;
-		var picsrc; 
-		openDialog('app/pic_show.do', 600, 350, {
-			title : '图标'
-		});
-	}
-	function cleariocn(){
-		$("#icon").attr("src","${contextPath}${app.icon}");
-	}
+	
+	
 	function fastwrite() { 
 		var transtype = $('input[name="transtype"]:checked').val(); 
 		openDialog('app/fastwrite_show.do?transtype='+transtype, 500, 300, {
@@ -282,7 +285,7 @@ $(function(){
 			<tr>
 				<th style="text-align:left;"><b class="mustbe">*</b> 所属机构：</th>
 				<td>
-					<input name="groupname" id="groupname" value="" type="text" style="cursor: pointer;"/> 
+					<input id="groupname" value="${groupName}" name="groupname" type="text" style="cursor: pointer;"/> 
 				</td>
 				<th style="text-align:center;"><b class="mustbe">*</b> 同步用户：</th>
                 <td>
@@ -347,16 +350,16 @@ $(function(){
 					<input type="text" id="encryptKey" name="encryptKey"
 						maxlength="16" value="${jisApplication.encryptKey}" />
 					<input type="button" name="button"
-						onclick="generateKey()" value="重新生成">
+						onclick="generateKey()" value="重新生成"/>
 				</td>
 				
 				<th style="text-align: center;"><b class="mustbe">*</b> 应用图标：</th>
-	        	<td><input id="icon" type="file"  name="icon" 
-						input-width="200">
-						<input id="icon" type="button" 
-						onclick="selpic()" value="选择图标">
-						<input style="display:none;" type="button" 
-							onclick="cleariocn()" value="默认图片">
+					<td><input id="iconFile" type="file" class="input-text" name="iconFile" 
+						input-width="200"/>
+						<input id="seletpic" type="button" class="btn btn-success btn-small" 
+						onclick="selpic()" value="选择图标"/>
+						<input style="display:none;" type="button" class="btn btn-success btn-small" 
+							onclick="cleariocn()" value="默认图片"/>
 					</td>
 			</tr>
 			<tr>
@@ -445,6 +448,12 @@ $(function(){
 						<input type="radio" name="isUnifyRegister" value="1"/>是&nbsp;&nbsp;
 						<input type="radio" name="isUnifyRegister" value="0"/>否
 					</c:if>
+				</td>
+			</tr>
+			<tr>
+				<th style="text-align: left;"><b class="mustbe">*</b> 注销地址：</th>
+	        	 <td>
+					<input type="text" id="logOffUrl" name="logOffUrl" value="${jisApplication.logOffUrl}" />
 				</td>
 			</tr>
 			<tr>
