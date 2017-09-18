@@ -28,7 +28,7 @@
 			</li>
 			<li class="split"></li>
 			<li>
-				<a >当前同步列表</a>
+				<a ><c:if test="${detailMap.syncType} == 'sysview'">实时</c:if><c:if test="${detailMap.syncType} == 'current'">当前</c:if><c:if test="${detailMap.syncType} == 'history'">历史</c:if>同步列表</a>
 			</li>
 			<li class="split"></li>
 			<li class="active">
@@ -46,32 +46,32 @@
     		     <th rowspan="3" style="border-right:1px solid #c6e6ff;" width="3%" align="left">同步基本信息</th>
 	        	 <th width="3%"> 操作对象名称：</th>
 	        	 <td>
-					<input type="text" id="objectname" value="${jisSysviewCurrent.objectname}" readonly="readonly"/>
+					<input type="text" id="objectname" value="${jisSysview.objectname}" readonly="readonly"/>
 				</td>
 				<th width="3%">机构编码：</th>
 				<td>
-					<input type="text" id="codeid" value="${jisSysviewCurrent.codeid}" readonly="readonly"/>
+					<input type="text" id="codeid" value="${jisSysview.codeid}" readonly="readonly"/>
 				</td>
 			</tr>
 			<tr>
 				<th> 操作类型：</th>
                 <td>
-                	<input type="text" id="operatetype" value="${jisSysviewCurrent.operatetype}" readonly="readonly"/>
+                	<input type="text" id="operatetype" value="${jisSysview.operatetype}" readonly="readonly"/>
                 </td>
 				<th> 应用名称：</th>
 				
 				<td>
-					<input type="text" id="appid" value="${applicationMap[jisSysviewCurrent.appid]}" readonly="readonly"/>
+					<input type="text" id="appid" value="${applicationMap[jisSysview.appid]}" readonly="readonly"/>
 				</td>
 			</tr>
 			<tr style="border-bottom:1px solid #c6e6ff">
 				<th> 创建时间：</th>
 				<td>
-					<input type="text" class="input" id="synctime" value="${jisSysviewCurrent.synctime}" readonly="readonly"/>
+					<input type="text" class="input" id="synctime" value="${jisSysview.synctime}" readonly="readonly"/>
 	            </td>
 	        	<th>同步结果：</th>
 	        	<td>
-	        		<input type="text" class="input" id="optresult" value="${paraMap[jisSysviewCurrent.optresult]}" readonly="readonly"/>
+	        		<input type="text" class="input" id="optresult" value="${paraMap[jisSysview.optresult]}" readonly="readonly"/>
 	            	<i class="form-icon-clear"></i>
 	        	</td>
 			</tr>
@@ -93,7 +93,7 @@
     <div style="clear:both;"></div>
     <!--表单的按钮组区域-->
     <div class="form-btn">
-        <input type="button" tabindex="16" value="返回" onclick="javascript:window.location.href='${ctx}/uids/jisCurList?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}'" class="btn gray"/>
+        <input type="button" tabindex="16" value="返回" onclick="javascript:window.location.href='${ctx}/${detailMap.returnUrl}?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}'" class="btn gray"/>
     </div>
     </form>
     <!--表单的底部区域-->

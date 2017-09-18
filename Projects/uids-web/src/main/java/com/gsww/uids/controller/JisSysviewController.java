@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,11 +28,15 @@ import com.gsww.jup.controller.sys.SysAccountController;
 import com.gsww.jup.service.sys.SysParaService;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.uids.entity.JisSysview;
+import com.gsww.uids.entity.JisSysviewCurrent;
+import com.gsww.uids.entity.JisSysviewDetail;
+import com.gsww.uids.entity.JisSysviewHistory;
 import com.gsww.uids.service.JisApplicationService;
+import com.gsww.uids.service.JisSysviewDetailService;
 import com.gsww.uids.service.JisSysviewService;
 
 @Controller
-@RequestMapping(value = "/uids")
+@RequestMapping(value = "/sysview")
 public class JisSysviewController extends BaseController {
 	private static Logger logger = LoggerFactory
 			.getLogger(SysAccountController.class);
@@ -41,6 +46,8 @@ public class JisSysviewController extends BaseController {
 	private JisApplicationService jisApplicationService;
 	@Autowired
 	private SysParaService sysParaService;
+	@Autowired
+	private JisSysviewDetailService jisSysviewDetailService;
 
 	@RequestMapping(value = "/jisSysviewList", method = RequestMethod.GET)
 	public String jisSysviewList(
@@ -51,33 +58,43 @@ public class JisSysviewController extends BaseController {
 			@RequestParam(value = "findNowPage", defaultValue = "false") String findNowPage,
 			Model model, ServletRequest request, HttpServletRequest hrequest) {
 		try {
-			// 初始化分页数据
-			PageUtils pageUtils = new PageUtils(pageNo, pageSize, orderField, orderSort);
-			PageRequest pageRequest = super.buildPageRequest(hrequest, pageUtils, JisSysview.class, findNowPage);
-
-			// 搜索属性初始化
+			//初始化分页数据
+			PageUtils pageUtils=new PageUtils(pageNo,pageSize,orderField,orderSort);
+			PageRequest pageRequest=super.buildPageRequest(hrequest,pageUtils,JisSysview.class,findNowPage);
+			
+			//搜索属性初始化
+			
 			Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
-			Specification<JisSysview> spec = super.toSpecification(searchParams, JisSysview.class);
-
-			// map放入
-			List<Map<String, Object>> applicationList = new ArrayList<Map<String, Object>>();
-			List<Map<String, Object>> paraList = new ArrayList<Map<String, Object>>();
-			Map<Integer, Object> applicationMap = new HashMap<Integer, Object>();
-			Map<Integer, Object> paraMap = new HashMap<Integer, Object>();
-			applicationList = jisApplicationService.getJisApplicationList();
-			paraList = sysParaService.getParaList("OPT_RESULT");
-			for (Map<String, Object> application : applicationList) {
+			Specification<JisSysview>  spec=super.toSpecification(searchParams, JisSysview.class);
+			
+			//map放入
+			List<Map<String, Object>> applicationList =new ArrayList<Map<String,Object>>() ;
+			List<Map<String, Object>> paraList =new ArrayList<Map<String,Object>>() ;
+			Map<Integer,Object> applicationMap = new HashMap<Integer,Object>();
+			Map<Integer,Object> paraMap = new HashMap<Integer,Object>();
+			applicationList=jisApplicationService.getJisApplicationList();
+			paraList=sysParaService.getParaList("OPT_RESULT");
+			for(Map<String,Object> application:applicationList){
 				applicationMap.put((Integer) application.get("iid"), application.get("name"));
+			}			
+			for(Map<String,Object> para:paraList){
+				paraMap.put(Integer.parseInt((String) para.get("PARA_CODE")),  para.get("PARA_NAME"));
 			}
-			for (Map<String, Object> para : paraList) {
-				paraMap.put(Integer.parseInt((String) para.get("PARA_CODE")), para.get("PARA_NAME"));
-			}
-
-			// 分页
-			Page<JisSysview> pageInfo = jisSysviewService.getJisPage(spec, pageRequest);
+			model.addAttribute("applicationMap", applicationMap);
+			model.addAttribute("paraMap", paraMap);
+		
+			/**下拉列表初始化*/
+			List<Map<String, Object>> applications = jisApplicationService.getJisApplicationList();
+			List<Map<String, Object>> parameters = sysParaService.getParaList("OPT_RESULT");
+			model.addAttribute("applications", applications);
+			model.addAttribute("parameters", parameters);
+			
+			//分页
+			Page<JisSysview> pageInfo = jisSysviewService.getJisPage(spec,pageRequest);
 			model.addAttribute("pageInfo", pageInfo);
 			model.addAttribute("applicationMap", applicationMap);
 			model.addAttribute("paraMap", paraMap);
+
 			// 将搜索条件编码成字符串，用于排序，分页的URL
 			model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
 			model.addAttribute("sParams", searchParams);
@@ -88,6 +105,46 @@ public class JisSysviewController extends BaseController {
 			return "redirect:/uids/jisSysviewList";
 		}
 		return "users/sysview/jis_sysview_list";
+	}
+
+	/**
+	 * 同步详情
+	 * @param iid
+	 * @param model
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/sysviewDetail", method = RequestMethod.GET)
+	public String accountEdit(int iid,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+		
+		JisSysview sysview = jisSysviewService.findByIid(iid); 
+		JisSysviewDetail jisSysviewDetail = jisSysviewDetailService.findByIid(iid);
+		
+		//map放入
+		List<Map<String, Object>> applicationList =new ArrayList<Map<String,Object>>() ;
+		List<Map<String, Object>> paraList =new ArrayList<Map<String,Object>>() ;
+		Map<Integer,Object> applicationMap = new HashMap<Integer,Object>();
+		Map<Integer,Object> paraMap = new HashMap<Integer,Object>();
+		applicationList=jisApplicationService.getJisApplicationList();
+		paraList=sysParaService.getParaList("OPT_RESULT");
+		for(Map<String,Object> application:applicationList){
+			applicationMap.put((Integer) application.get("iid"), application.get("name"));
+		}			
+		for(Map<String,Object> para:paraList){
+			paraMap.put(Integer.parseInt((String) para.get("PARA_CODE")),  para.get("PARA_NAME"));
+		}
+		
+		Map<String,String> detailMap = new HashMap<String, String>();
+		detailMap.put("returnUrl", "sysview/jisSysviewList");
+		detailMap.put("syncType", "sysview");
+		model.addAttribute("detailMap",detailMap);
+		model.addAttribute("applicationMap", applicationMap);
+		model.addAttribute("paraMap", paraMap);
+		model.addAttribute("jisSysview",sysview);
+		model.addAttribute("jisSysviewDetail",jisSysviewDetail);
+		return "users/sysview/jis_sysview_detail";
 	}
 
 }
