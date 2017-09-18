@@ -301,7 +301,6 @@ public class ComplatUserController extends BaseController{
 	 * @throws Exception
 	 * @RequestParam(value="excelFile")MultipartFile multipartFile,
 	 */
-	@SuppressWarnings("finally")
 	@RequestMapping(value = "/complatImport", method = RequestMethod.POST)
 	public ModelAndView complatImport(@RequestParam("excelFile")MultipartFile multipartFile,
 			HttpServletRequest request,Model model,
@@ -310,10 +309,6 @@ public class ComplatUserController extends BaseController{
 		final String UPLOAD_EXCEL_PATH = "uploadFile\\complat\\";
 		String absoluteFilePath = request.getSession().getServletContext().getRealPath(UPLOAD_EXCEL_PATH);
 		String fileName = multipartFile.getOriginalFilename();
-		System.out.println("fileName==="+fileName);
-		String uuid = UUID.randomUUID().toString().replace("-", "");
-		String uuidFileName = uuid + fileName;
-		System.out.println("uuidFileName==="+uuidFileName);
 		//FileUtil.upFile(multipartFile.getInputStream(), uuidFileName, absoluteFilePath);
 		LinkedHashMap<String, String> fieldMap = new LinkedHashMap<String, String>();
 		fieldMap.put("0", "name");
@@ -326,8 +321,7 @@ public class ComplatUserController extends BaseController{
 		try {
 			for(ComplatUser complatUser:users){
 				List<ComplatUser> list = complatUserService.findByUserName(complatUser.getName());
-				String mobile=complatUser.getMobile();
-				System.out.println("手机号============"+mobile);
+				//String mobile=complatUser.getMobile();
 				if(null != list && list.size()>0){
 					fileMap.put("flag", "0");
 				}else{
@@ -345,7 +339,6 @@ public class ComplatUserController extends BaseController{
 			e.printStackTrace();
 			fileMap.put("error", "1");
 		}
-		String returnMsg = JSONObject.fromObject(fileMap).toString();
 		return new ModelAndView("redirect:/complat/complatList");
 	}
 	
@@ -491,8 +484,7 @@ public class ComplatUserController extends BaseController{
 					jisUserdetailService.update(jisUserdetail.getIid(),cardId);
 				}
 				
-			}
-			
+			}			
 			returnMsg("success","保存成功",request);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -563,14 +555,12 @@ public class ComplatUserController extends BaseController{
 					returnMsg("success", "启用成功", request);
 					count++;
 				}
-			}
-			
+			}			
 		}catch(Exception e){
 			e.printStackTrace();			
 		} finally{
 			return  new ModelAndView("redirect:/complat/complatList");
-		}	
-		
+		}			
 	}
 	
 	
@@ -587,23 +577,16 @@ public class ComplatUserController extends BaseController{
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/EnableStart", method = RequestMethod.GET)
 	public ModelAndView EnableStart(String iid,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
-		System.out.println("修改iid============"+iid);
 		ComplatUser complatUser = null;
 		try{			
 			if (StringHelper.isNotBlack(iid)) {
 				complatUser = complatUserService.findByKey(Integer.parseInt(iid));
-				System.out.println("修改complatUser==================="+complatUser);
 			int enable = complatUser.getEnable(); 
 				if(enable==0){
 					enable=1;
 					complatUser.setEnable(enable);
 					complatUserService.save(complatUser);
-					returnMsg("success", "启用成功！", request);
-				}else if(enable==1){
-					enable=0;
-					complatUser.setEnable(enable);
-					complatUserService.save(complatUser);
-					returnMsg("success", "停用成功！", request);
+					returnMsg("success", "启用成功！", request);				
 				}
 			}								
 		}catch(Exception e){
@@ -629,19 +612,12 @@ public class ComplatUserController extends BaseController{
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/EnableStop", method = RequestMethod.GET)
 	public ModelAndView EnableStop(String iid,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
-		System.out.println("修改iid============"+iid);
 		ComplatUser complatUser = null;
 		try{			
 			if (StringHelper.isNotBlack(iid)) {
 				complatUser = complatUserService.findByKey(Integer.parseInt(iid));
-				System.out.println("修改complatUser==================="+complatUser);
 				int enable = complatUser.getEnable(); 
-				if(enable==0){
-					enable=1;
-					complatUser.setEnable(enable);
-					complatUserService.save(complatUser);
-					returnMsg("success", "启用成功！", request);
-				}else if(enable==1){
+				if(enable==1){
 					enable=0;
 					complatUser.setEnable(enable);
 					complatUserService.save(complatUser);
@@ -668,14 +644,13 @@ public class ComplatUserController extends BaseController{
 	 * @throws Exception
 	 * @author <a href=" ">shenxh</a>
 	 */
+	@SuppressWarnings("finally")
 	@RequestMapping(value = "/deleteComplatUser", method = RequestMethod.GET)
 	public ModelAndView deleteComplatUser(String iid,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
-		System.out.println("删除iid============"+iid);
 		ComplatUser complatUser = null;
 		try{
 			if (StringHelper.isNotBlack(iid)) {
 				complatUser = complatUserService.findByKey(Integer.parseInt(iid));
-				System.out.println("删除complatUser==================="+complatUser);
 				if(complatUser != null){
 					complatUserService.delete(complatUser);
 					returnMsg("success", "删除成功", request);
