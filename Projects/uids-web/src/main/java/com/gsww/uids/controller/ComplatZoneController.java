@@ -212,6 +212,28 @@ public class ComplatZoneController extends BaseController {
 	}
 
 	/**
+     * @discription   获取区域父节点名称 
+     * @param request
+     * @param response
+	 */
+	@RequestMapping(value = { "/getZonePname" }, method = {RequestMethod.POST })
+	public void getZonePname(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			String pidStr = request.getParameter("pid");
+			Integer pid = Integer.valueOf(Integer.parseInt(pidStr));
+			ComplatZone complatZone = this.complatZoneService.fingByKey(pid);
+			if (complatZone != null) {
+				net.sf.json.JSONObject object = net.sf.json.JSONObject.fromObject(complatZone);
+				PrintWriter out = response.getWriter();
+				String json = object.toString();
+				out.write(json);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
 	 * 在树结构上删除区域 （逻辑删除）
 	 * 
 	 * @param request
@@ -298,20 +320,31 @@ public class ComplatZoneController extends BaseController {
 			String name = request.getParameter("name");
 			String parId = request.getParameter("parId");
 			String dcode = request.getParameter("dcode");
-			Map<String, Object> resMap = new HashMap<String, Object>();
-			SysUserSession sysUserSession = (SysUserSession) ((HttpServletRequest) request).getSession()
-					.getAttribute("sysUserSession");
-			ComplatZone complatZone = new ComplatZone();
-			complatZone.setName(name);
-			complatZone.setPid(Integer.parseInt(parId));
-			complatZone.setCodeId(dcode);
-			complatZone.setOrderId(seq);
-			complatZone.setType(2);
-			complatZoneService.save(complatZone);
-			ComplatZone complatZoneSave = complatZoneService.fingByKey(complatZone.getIid());
-			resMap.put("ret", 1);
-			resMap.put("id", complatZoneSave.getIid());
-			response.getWriter().write(org.json.simple.JSONObject.toJSONString(resMap));
+			String typeStr = request.getParameter("type");
+			Integer type = 0;
+			if (typeStr != null) {
+				type = Integer.parseInt(typeStr) + 1;
+			}
+			if (type <= 3) {
+				Map<String, Object> resMap = new HashMap<String, Object>();
+				SysUserSession sysUserSession = (SysUserSession) ((HttpServletRequest) request).getSession()
+						.getAttribute("sysUserSession");
+				ComplatZone complatZone = new ComplatZone();
+				complatZone.setName(name);
+				complatZone.setPid(Integer.parseInt(parId));
+				complatZone.setCodeId(dcode);
+				complatZone.setOrderId(seq);
+				complatZone.setType(type);
+				complatZoneService.save(complatZone);
+				ComplatZone complatZoneSave = complatZoneService.fingByKey(complatZone.getIid());
+				resMap.put("ret", 1);
+				resMap.put("id", complatZoneSave.getIid());
+				response.getWriter().write(org.json.simple.JSONObject.toJSONString(resMap));
+			} else {
+				Map<String, Object> resMap = new HashMap<String, Object>();
+				resMap.put("ret", 0);
+				response.getWriter().write(org.json.simple.JSONObject.toJSONString(resMap));
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			try {
