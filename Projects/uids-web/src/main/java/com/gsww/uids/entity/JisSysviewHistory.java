@@ -12,7 +12,7 @@ import javax.persistence.Table;
  * JisSysviewHistory entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "jis_sysview_history", catalog = "uidsdx")
+@Table(name = "jis_sysview_history")
 public class JisSysviewHistory implements java.io.Serializable {
 
 	// Fields

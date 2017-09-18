@@ -12,7 +12,7 @@ import javax.persistence.TemporalType;
  * ComplatTempfile entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "complat_tempfile", catalog = "uidsdx")
+@Table(name = "complat_tempfile")
 public class ComplatTempfile implements java.io.Serializable {
 
 	// Fields
