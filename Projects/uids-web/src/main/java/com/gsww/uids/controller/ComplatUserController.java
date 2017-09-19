@@ -308,12 +308,8 @@ public class ComplatUserController extends BaseController{
 	@RequestMapping(value = "/complatImport", method = RequestMethod.POST)
 	public ModelAndView complatImport(@RequestParam("excelFile")MultipartFile multipartFile,
 			HttpServletRequest request,Model model,
-			HttpServletResponse response) throws Exception {				
-        Map<String,String> fileMap = new HashMap<String, String>();//返回Map
-		final String UPLOAD_EXCEL_PATH = "uploadFile\\complat\\";
-		String absoluteFilePath = request.getSession().getServletContext().getRealPath(UPLOAD_EXCEL_PATH);
-		String fileName = multipartFile.getOriginalFilename();
-		//FileUtil.upFile(multipartFile.getInputStream(), uuidFileName, absoluteFilePath);
+			HttpServletResponse response) throws Exception {				      
+		String fileName = multipartFile.getOriginalFilename();	
 		LinkedHashMap<String, String> fieldMap = new LinkedHashMap<String, String>();
 		fieldMap.put("0", "name");
 		fieldMap.put("1", "loginname");
@@ -321,14 +317,12 @@ public class ComplatUserController extends BaseController{
 		fieldMap.put("3", "mobile");
 		fieldMap.put("4", "email");
 		//List<ComplatUser> users= ExcelUtil.readXls(absoluteFilePath+"/"+uuidFileName,ComplatUser.class,fieldMap);
-		List<ComplatUser> users= ExcelUtil.readXls(absoluteFilePath+"/"+fileName,ComplatUser.class,fieldMap);
+		List<ComplatUser> users= ExcelUtil.readXls(fileName,multipartFile.getInputStream(),ComplatUser.class,fieldMap);
 		try {
 			for(ComplatUser complatUser:users){
-				List<ComplatUser> list = complatUserService.findByUserName(complatUser.getName());
+				List<ComplatUser> list = complatUserService.findByUserAllName(complatUser.getLoginallname());				
 				//String mobile=complatUser.getMobile();
-				if(null != list && list.size()>0){
-					fileMap.put("flag", "0");
-				}else{
+				if(list.size()==0){					
 					complatUser.setEnable(0);
 					Date date=new Date();
 					DateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -336,12 +330,10 @@ public class ComplatUserController extends BaseController{
 					Date createTime = sdf.parse(time);
 					complatUser.setCreatetime(createTime);
 					complatUserService.save(complatUser);
-					fileMap.put("flag", "1");
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			fileMap.put("error", "1");
 		}
 		return new ModelAndView("redirect:/complat/complatList");
 	}
@@ -358,7 +350,7 @@ public class ComplatUserController extends BaseController{
 	 * @throws Exception
 	 */	
 	@RequestMapping(value = "/complatExport", method = RequestMethod.GET)
-	public ModelAndView complatExport(Model model, HttpServletRequest request,
+	public void complatExport(Model model, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		String complatUserId = request.getParameter("complatUserId");
 		String[] complatUserIds = complatUserId.split(",");		
@@ -398,8 +390,6 @@ public class ComplatUserController extends BaseController{
 		map.put(ExcelUtil.HEADERINFO, headList);  
         map.put(ExcelUtil.DATAINFON, dataList); 
         ExcelUtil.writeExcel(map, wb,response,fileName);
-        
-		return new ModelAndView("redirect:/complat/complatList");
 	}				
 		
 	/**
@@ -544,7 +534,7 @@ public class ComplatUserController extends BaseController{
 	}
 	
 	/**
-	 * 批量修改用户启用状态
+	 * 批量启用用户状态
 	 *@param complatUser
 	 * @param request
 	 * @param response
@@ -553,19 +543,52 @@ public class ComplatUserController extends BaseController{
 	 * @author <a href=" ">shenxh</a>
 	 */
 	@SuppressWarnings("finally")
-	@RequestMapping(value = "/changeUserEnable", method = RequestMethod.GET)
-	public ModelAndView changeUserEnable(String complatUserId,HttpServletRequest request,HttpServletResponse response)  throws Exception {
-		//int Enable = Integer.parseInt(request.getParameter("Enable"));
-		/*Map<String, String> returnMsg = new HashMap<String, String>();
-		returnMsg.put("code", "1");*/
+	@RequestMapping(value = "/startUserEnable", method = RequestMethod.GET)
+	public ModelAndView startUserEnable(String complatUserId,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		String enable = request.getParameter("Enable");		
 		Integer Enable = null;
-		int count = 0;
 		try {
 			if("0".equals(enable)){//未启用状态
 				enable="1";
 				Enable = Integer.parseInt(enable);
-			}
+			}			
+			String[] para=complatUserId.split(",");
+			ComplatUser complatUser = null;
+			for(int i=0;i<para.length;i++){
+				Integer corId = Integer.parseInt(para[i].trim());
+				complatUser=complatUserService.findByKey(corId);
+				if(complatUser.getEnable()==0){
+					complatUser.setEnable(1); 
+					complatUserService.save(complatUser);
+					returnMsg("success", "启用成功", request);
+				}else if(complatUser.getEnable()==1){
+					returnMsg("success", "已启用,请先停用再重复操作", request);
+				}
+			}			
+		}catch(Exception e){
+			e.printStackTrace();			
+		} finally{
+			return  new ModelAndView("redirect:/complat/complatList");
+		}			
+	}
+	
+	
+	
+	/**
+	 * 批量停用用户状态
+	 *@param complatUser
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 * @author <a href=" ">shenxh</a>
+	 */
+	@SuppressWarnings("finally")
+	@RequestMapping(value = "/stopUserEnable", method = RequestMethod.GET)
+	public ModelAndView stopUserEnable(String complatUserId,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+		String enable = request.getParameter("Enable");		
+		Integer Enable = null;
+		try {
 			if("1".equals(enable)){//已启用状态
 				enable="0";
 				Enable = Integer.parseInt(enable);
@@ -580,13 +603,8 @@ public class ComplatUserController extends BaseController{
 					//complatUserService.changeComplatEnable(corId,Enable);
 					complatUserService.save(complatUser);
 					returnMsg("success", "停用成功", request);
-					count++;
 				}else if(complatUser.getEnable()==0){
-					complatUser.setEnable(1); 
-					//complatUserService.changeComplatEnable(corId,Enable);
-					complatUserService.save(complatUser);
-					returnMsg("success", "启用成功", request);
-					count++;
+					returnMsg("success", "已停用,请先启用再重复操作", request);
 				}
 			}			
 		}catch(Exception e){
@@ -595,6 +613,7 @@ public class ComplatUserController extends BaseController{
 			return  new ModelAndView("redirect:/complat/complatList");
 		}			
 	}
+	
 	
 	
 	

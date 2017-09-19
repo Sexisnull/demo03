@@ -16,7 +16,12 @@ $(document).ready(function(){
 		$('.advanced-content').toggle('fast');
 	});
 	$("#advanced-search-btn").click(function(){
-		$("#form2").submit();
+	    var objectnameSearch = $("#objectnameSearchHigh").val();
+	    if (objectnameSearch == '' || isChinaOrNumbOrLett(objectnameSearch)) {
+		    $("#form2").submit();
+	    } else {
+		    $.validator.errorShow($("#objectnameSearchHigh"), '只能包括中英文、数字、@和下划线');
+	    }
 	});
 	//阻止按键盘Enter键提交表单
 	var $inp = $('input');
@@ -52,7 +57,7 @@ function selectItemByValue(objSelect,objItemText) {
 
 /**搜索表单校验**/
 function checkSubmitForm() {
-	var objectnameSearch = $("#objectnameSearch").val();
+	var objectnameSearch = $("#objectNameSearch").val();
 	if (objectnameSearch == '' || isChinaOrNumbOrLett(objectnameSearch)) {
 		form1.submit();
 	} else {
@@ -138,7 +143,7 @@ padding: 3px 8px;
 height: 30px;
 width: 254px;
 }
-#objectnameSearch{
+#objectnameSearchHigh{
 width: 235px !important;
 }
 .syncTime{
@@ -170,9 +175,9 @@ width: 100px !important;
 				<form id="form1" name="pageForm" action="${ctx}/sysviewCurr/jisCurList" method="get">
 						<table class="advanced-content">
 							<tr>
-								<th style="padding-left: 600px">操作对象名称：</th>
+								<th style="padding-left: 350px">操作对象名称：</th>
 								<td>
-									<input type="text" id="objectnameSearch" name="search_LIKE_objectname" placeholder="操作对象名称" value="${sParams['LIKE_objectname']}" class="input" />
+									<input type="text" id="objectNameSearch" name="search_LIKE_objectname" placeholder="操作对象名称" value="${sParams['LIKE_objectname']}" class="input" />
 								</td>
 								
 								<td class="btn-group">
@@ -238,7 +243,7 @@ width: 100px !important;
 								</td>
 							    <th>操作对象名称：</th>
 								<td>
-									<input type="text" id="objectnameSearch" name="search_LIKE_objectname" placeholder="操作对象名称" value="${sParams['LIKE_objectname']}" class="input" />
+									<input type="text" id="objectnameSearchHigh" name="search_LIKE_objectname" placeholder="操作对象名称" value="${sParams['LIKE_objectname']}" class="input" />
 								</td>
 								<th></th>
 								<td >
@@ -260,7 +265,7 @@ width: 100px !important;
         </div>
         
         <!-- 提示信息开始 -->
-         <div class="form-alert;" >
+        <div class="form-alert;" >
          	<tags:message msgMap="${msgMap}"></tags:message>
     	</div>
     	<!-- 提示信息结束 -->

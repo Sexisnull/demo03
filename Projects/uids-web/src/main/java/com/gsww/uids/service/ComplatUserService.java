@@ -55,7 +55,7 @@ public interface ComplatUserService {
 	/**
 	 * 根据用户名查询用户信息
 	 */
-	List<ComplatUser> findByUserName(String name);
+	List<ComplatUser> findByUserAllName(String loginallname);
 	
 	
 	/**

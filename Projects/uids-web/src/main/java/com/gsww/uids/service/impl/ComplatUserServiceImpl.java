@@ -64,9 +64,9 @@ public class ComplatUserServiceImpl implements ComplatUserService{
 
 
 	@Override
-	public List<ComplatUser> findByUserName(String name) {
+	public List<ComplatUser> findByUserAllName(String loginallname) {
 		List<ComplatUser> list=new ArrayList<ComplatUser>();
-		list=complatUserDao.findByName(name);
+		list=complatUserDao.findByName(loginallname);
 		return list;
 	}
 	

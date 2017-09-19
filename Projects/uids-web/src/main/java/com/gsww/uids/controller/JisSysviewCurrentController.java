@@ -118,10 +118,14 @@ public class JisSysviewCurrentController extends BaseController{
 			for(int i=0;i<para.length;i++){
 				Integer Iid = Integer.parseInt(para[i].trim());
 				jisCurrent=jisSysviewCurrentService.findByIid(Iid);
-				jisSysviewCurrentService.delete(jisCurrent);
+				if(null != jisCurrent){
+					jisSysviewCurrentService.delete(jisCurrent);
+				}
 				//级联删除明细
 			    JisSysviewDetail sysviewDetail = jisSysviewDetailService.findByIid(Iid);
-			    jisSysviewDetailService.delete(sysviewDetail);
+			    if(null!=sysviewDetail){
+			    	jisSysviewDetailService.delete(sysviewDetail);
+			    }
 			}
 			returnMsg("success","删除成功",request);
 		} catch (Exception e) {

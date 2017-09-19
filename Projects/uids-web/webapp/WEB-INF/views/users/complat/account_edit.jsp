@@ -46,9 +46,9 @@ color: rgb(119, 119, 119);
 <script type="text/javascript">
 
 
-/*$().ready(function() {
+$().ready(function() {
 
-//表单校验
+/*//表单校验
 var complatUserNameInput=$("#name").val();
  $("#editForm").validate({
     rules: {
@@ -110,16 +110,25 @@ var complatUserNameInput=$("#name").val();
 				 form.submit();		
         } 
      }
-   });   
-
-});*/
+   });   */
 
 
-//用户扩展属性
+   //用户扩展属性
    var html = $("#dataTable");
-   for(var i=0;i<4;i++){    
-      html.append("<tr><td>"+"扩展属性"+"</td><th>"+"shenxh"+"</th><td>"+"<input type='text'/>"+"</td><th>"+"shenxh"+"</th><td>"+"<input type='text'/>"+"</td></tr>");
+   html.append("<tr><td class='td_2' rowspan='5' style='max-width:0px;width:100px;ont-weight:bold;' align='center'>"+"扩展属性"+"</td></tr>");
+   //var type;//1：字符型     2：枚举型
+   for(var i=0;i<5/2;i++){  
+       ///if(type=="1"){
+           //html.append("<tr id='kzsxTr'><th>"+"shenxh"+"</th><td>"+"<input type='text'/>"+"</td><th>"+"shenxh"+"</th><td>"+"<input type='text'/>"+"</td></tr>");   
+       //}else if(type=="2"){
+           html.append("<tr id='kzsxTr'><th>"+"shenxh"+"</th><td>"+"<input type='text'/>"+"</td><th>"+"shenxh"+"</th><td>"+"<input type='text'/>"+"</td></tr>"); 
+       //}     
    }
+
+});
+
+
+
 
 
 
@@ -254,8 +263,8 @@ var complatUserNameInput=$("#name").val();
 				   </td>
 			    </tr>
 			    <tr>				
-		           <th> 密码强度：</th>
-			       <td>			                 
+		           <th class="td_5"> 密码强度：</th>
+			       <td class="td_3">			                 
 				      <table id="pwdpower" title="字母加数字加符号就会强" style="width: 100%" cellspacing="0" cellpadding="0" border="0">
 					      <tbody>
 							  <tr>
@@ -266,8 +275,8 @@ var complatUserNameInput=$("#name").val();
 					      </tbody>
 				      </table>
 			       </td>
-			       <th><b class="mustbe">*</b> 请设置密码找回问题答案：</th>
-				   <td>
+			       <th class="td_6"><b class="mustbe">*</b> 请设置密码找回问题答案：</th>
+				   <td class="td_4">
 					  <input type="text"  class="input" id="pwdanswer" name="pwdanswer" value="${complatUser.pwdanswer}"  />
 				   </td>
 			    </tr>	
