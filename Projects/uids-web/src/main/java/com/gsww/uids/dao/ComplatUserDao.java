@@ -47,7 +47,7 @@ public interface ComplatUserDao extends PagingAndSortingRepository<ComplatUser, 
 	 * @author shenxh
 	 * @return
 	 */
-	public List<ComplatUser> findByName(String name);
+	public List<ComplatUser> findByName(String loginallname);
 	
 	
 	/**
