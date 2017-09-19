@@ -13,6 +13,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gsww.jup.util.StringHelper;
 import com.gsww.uids.dao.JisFieldsDao;
 import com.gsww.uids.entity.JisFields;
 import com.gsww.uids.entity.JisUserdetail;
@@ -74,40 +75,46 @@ public class JisFieldsServiceImpl implements JisFieldsService {
 		List<Map<String, Object>> listMap = null;
 		
 		String querySql = "";
-		//查出条件
+		//查出字段
 		String queryFieldsName = "";
 		//拼接查询条件
 		String whereFieldsName = "";
+		
+		String defValue = "";
+		String fieldkeys = "";
+		String fieldvalues = "";
 		if(type == 1){
 			for(int i=0;i<FieldsList.size();i++){
-				if(type == 1){
+				defValue = FieldsList.get(i).getDefvalue();
+				fieldkeys = FieldsList.get(i).getFieldkeys();
+				fieldvalues = FieldsList.get(i).getFieldvalues();
+				if(!StringHelper.isNotBlack(defValue) && !StringHelper.isNotBlack(fieldkeys) && !StringHelper.isNotBlack(fieldvalues)){
 					String fieldName = FieldsList.get(i).getFieldname();
-					if(i == FieldsList.size()-1){
-						queryFieldsName += fieldName;
-					}else{
-						queryFieldsName += fieldName + ",";
-					}
+					queryFieldsName += fieldName + ",";
 				}
 			}
+			queryFieldsName = queryFieldsName.substring(0,queryFieldsName.length()-1);
 			
 			for(int i=0;i<FieldsList.size();i++){
-				String fieldName = FieldsList.get(i).getFieldname();
-				if(i == FieldsList.size()-1){
-					whereFieldsName += "'"+fieldName+"'";
-				}else{
+				defValue = FieldsList.get(i).getDefvalue();
+				fieldkeys = FieldsList.get(i).getFieldkeys();
+				fieldvalues = FieldsList.get(i).getFieldvalues();
+				if(!StringHelper.isNotBlack(defValue) && !StringHelper.isNotBlack(fieldkeys) && !StringHelper.isNotBlack(fieldvalues)){
+					String fieldName = FieldsList.get(i).getFieldname();
 					whereFieldsName += "'"+fieldName + "',";
 				}
 			}
+			whereFieldsName = whereFieldsName.substring(0,whereFieldsName.length()-1);
 			
-			querySql = "select distinct b.userid,"+ queryFieldsName +" from jis_fields a ,jis_userdetail b where b.userId = '"+userId+"'" +
+			querySql = "select distinct b.userid,type,"+ queryFieldsName +" from jis_fields a ,jis_userdetail b where b.userId = '"+userId+"'" +
 			" and type = '1' and a.fieldname in("+whereFieldsName+")";
 			System.out.println("querySql:"+querySql);
 		}else if(type == 2){
-			querySql = "select a.fieldkeys,a.fieldvalues from jis_fields a where type = '2'";
+			querySql = "select a.fieldkeys,a.fieldvalues,type,a.fieldname from jis_fields a where type = '2'";
 			System.out.println("querySql:"+querySql);
 		}
 		listMap = jdbcTemplate.queryForList(querySql);
-		
+		//Map map = jdbcTemplate.queryForMap(querySql);
 		return listMap;
 	}
 

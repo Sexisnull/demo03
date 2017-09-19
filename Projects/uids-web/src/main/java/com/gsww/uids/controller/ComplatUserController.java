@@ -477,12 +477,14 @@ public class ComplatUserController extends BaseController{
 				System.out.println(listMap.size());
 			}
 		}
-		model.addAttribute("fieldsListMap",fieldsListMap);
-		/*JSONArray array = JSONArray.fromObject(fieldsListMap);
+		//model.addAttribute("fieldsListMap",fieldsListMap);
+		JSONArray array = JSONArray.fromObject(fieldsListMap);
 		PrintWriter out = response.getWriter();
 		String json = array.toString();
 		System.out.println(json);
-		out.write(json);*/
+		out.write(json);
+		model.addAttribute("fieldsListMap",json);
+		
 	}
 	
 	

@@ -61,6 +61,11 @@ public interface JisFieldsService {
 	 */
 	List<Map<String, Object>> findExtendAttr(List<JisFields> fieldsList,Integer userId,Integer type) throws Exception;
 	
+	/**
+	 * 获取扩展属性类型
+	 * @return
+	 */
 	List<Integer> findFieldsType();
+	
 	
 }
