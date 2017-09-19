@@ -194,7 +194,7 @@
 	                    <td style="text-align: center;">
 	                    	<div class="alignL">
 	                    		<div class="list-longtext">
-	                    			<c:if test="${outsideUser.enable == '0'}"><font color="red">禁用</font></c:if>
+	                    			<c:if test="${outsideUser.enable == '0'}"><font color="red">关闭</font></c:if>
 	                           		<c:if test="${outsideUser.enable == '1'}">开启</font></c:if>
 	                    		</div>
 	                        </div>

@@ -27,6 +27,7 @@ import com.gsww.jup.controller.BaseController;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.jup.util.StringHelper;
 import com.gsww.uids.entity.ComplatOutsideuser;
+import com.gsww.uids.entity.ComplatUser;
 import com.gsww.uids.service.ComplatOutsideuserService;
 
 /**
@@ -181,6 +182,69 @@ public class ComplatOutsideuserController extends BaseController {
 			returnMsg("error", "删除失败", request);
 		} finally {
 			return new ModelAndView("redirect:/complat/outsideuserList");
+		}
+	}
+	/**
+     * @discription  开启账号  
+     * @param iid
+     * @param model
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+	 */
+	@SuppressWarnings("finally")
+	@RequestMapping(value = "/outsideuserStart", method = RequestMethod.GET)
+	public ModelAndView outsideuserStart(String outsideuserIid,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+		ComplatOutsideuser complatOutsideuser = null;
+		try{			
+			if (StringHelper.isNotBlack(outsideuserIid)) {
+				complatOutsideuser = outsideUserService.findByKey(Integer.parseInt(outsideuserIid));
+			Integer enable = complatOutsideuser.getEnable(); 
+				if(enable == 0){
+					complatOutsideuser.setEnable(1);
+					outsideUserService.save(complatOutsideuser);
+					returnMsg("success", "启用成功！", request);				
+				} else {
+					returnMsg("success", "账号已启用！", request);
+				}
+			}								
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			return  new ModelAndView("redirect:/complat/outsideuserList");
+		}
+	}
+	
+	/**
+     * @discription   关闭账号
+     * @param iid
+     * @param model
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+	 */
+	@SuppressWarnings("finally")
+	@RequestMapping(value = "/outsideuserStop", method = RequestMethod.GET)
+	public ModelAndView outsideuserStop(String outsideuserIid,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+		ComplatOutsideuser complatOutsideuser = null;
+		try{			
+			if (StringHelper.isNotBlack(outsideuserIid)) {
+				complatOutsideuser = outsideUserService.findByKey(Integer.parseInt(outsideuserIid));
+			Integer enable = complatOutsideuser.getEnable(); 
+				if(enable == 1){
+					complatOutsideuser.setEnable(0);
+					outsideUserService.save(complatOutsideuser);
+					returnMsg("success", "关闭成功！", request);				
+				} else {
+					returnMsg("success", "账号已关闭！", request);
+				}
+			}								
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			return  new ModelAndView("redirect:/complat/outsideuserList");
 		}
 	}
 }
