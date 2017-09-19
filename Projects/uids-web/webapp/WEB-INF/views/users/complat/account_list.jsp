@@ -204,7 +204,7 @@ $(function(){
 						ids += $(o).val() + ",";
 					}
 				});		                     
-           window.location.href="${ctx}/complat/changeUserEnable?complatUserId="+ids+"&Enable="+enable;             						       
+           window.location.href="${ctx}/complat/startUserEnable?complatUserId="+ids+"&Enable="+enable;             						       
         }
      });
 
@@ -221,7 +221,7 @@ $(function(){
 						ids += $(o).val() + ",";
 					}
 				});		                     
-           window.location.href="${ctx}/complat/changeUserEnable?complatUserId="+ids+"&Enable="+enable;             						       
+           window.location.href="${ctx}/complat/stopUserEnable?complatUserId="+ids+"&Enable="+enable;             						       
         }
     });
 
@@ -368,7 +368,6 @@ function outPutComplatUser() {
 		</form>
 		
 		 <!-- 高级探索表单 -->
-        <div class="search-content">
 			<form id="form2" name="form2" action="${ctx}/complat/complatList" method="get">
 				<table class="advanced-content" style="display:none;">
 					<tr>
@@ -389,7 +388,6 @@ function outPutComplatUser() {
 					</tr>
 				</table>
 			</form>
-		</div>
 	</div>
     
     

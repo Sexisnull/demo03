@@ -9,7 +9,7 @@
 <script type="text/javascript">
 $().ready(function() {
 	//表单校验
-	var fieldName=$("#fieldname").val();
+	//var fieldName=$("#fieldname").val();
 	$("#editForm").validate({
 		rules: {
 			//校验内容
@@ -20,8 +20,8 @@ $().ready(function() {
 		    fieldname : {
 		     required: true,
 		     maxlength: 50,
-		     uniqueName : true,
-		     stringCheck:fieldName
+		     uniqueName : true
+		     //stringCheck:fieldName
 		    },
 			defvalue : {
 				cnRangelength: [0,25]
@@ -38,7 +38,7 @@ $().ready(function() {
 		}
 	});
 	// Ajax重命名校验
-		$.uniqueValidate('uniqueName', '${ctx}/jis/checkFieldname', ['fieldname'], '对不起，这个字段名称重复了');
+	$.uniqueValidate('uniqueName', '${ctx}/jis/checkFieldname', ['fieldname','iid'], '对不起，这个字段名称重复了');
 });
 
 $(document).on("change",'select#fieldsType',function(){

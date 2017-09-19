@@ -27,6 +27,7 @@ import com.gsww.jup.util.PageUtils;
 import com.gsww.jup.util.StringHelper;
 import com.gsww.jup.util.TimeHelper;
 import com.gsww.uids.entity.ComplatCorporation;
+import com.gsww.uids.entity.ComplatOutsideuser;
 import com.gsww.uids.service.ComplatCorporationService;
 /**
  * <p>Copyright: Copyright (c) 2014</p>
@@ -193,6 +194,70 @@ public class ComplatCorporationController extends BaseController{
 			return  new ModelAndView("redirect:/complat/corporationList");
 		}
 		
+	}
+	
+	/**
+     * @discription  开启账号  
+     * @param iid
+     * @param model
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+	 */
+	@SuppressWarnings("finally")
+	@RequestMapping(value = "/corporationStart", method = RequestMethod.GET)
+	public ModelAndView corporationStart(String corporationIid,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+		ComplatCorporation complatCorporation = null;
+		try{			
+			if (StringHelper.isNotBlack(corporationIid)) {
+				complatCorporation = complatCorporationService.findByKey(Integer.parseInt(corporationIid));
+			Integer enable = complatCorporation.getEnable(); 
+				if(enable == 0){
+					complatCorporation.setEnable(1);
+					complatCorporationService.save(complatCorporation);
+					returnMsg("success", "启用成功！", request);				
+				} else {
+					returnMsg("success", "账号已启用！", request);
+				}
+			}								
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			return  new ModelAndView("redirect:/complat/outsideuserList");
+		}
+	}
+	
+	/**
+     * @discription   关闭账号
+     * @param iid
+     * @param model
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+	 */
+	@SuppressWarnings("finally")
+	@RequestMapping(value = "/corporationStop", method = RequestMethod.GET)
+	public ModelAndView corporationStop(String corporationIid,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+		ComplatCorporation complatCorporation = null;
+		try{			
+			if (StringHelper.isNotBlack(corporationIid)) {
+				complatCorporation = complatCorporationService.findByKey(Integer.parseInt(corporationIid));
+			Integer enable = complatCorporation.getEnable(); 
+				if(enable == 1){
+					complatCorporation.setEnable(0);
+					complatCorporationService.save(complatCorporation);
+					returnMsg("success", "启用成功！", request);				
+				} else {
+					returnMsg("success", "账号已启用！", request);
+				}
+			}								
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			return  new ModelAndView("redirect:/complat/outsideuserList");
+		}
 	}
 	
 }
