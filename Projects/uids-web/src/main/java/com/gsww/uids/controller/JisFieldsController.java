@@ -230,15 +230,23 @@ public class JisFieldsController extends BaseController {
 	
 	@RequestMapping(value = "/checkFieldname", method = RequestMethod.GET)
 	public void checkFieldname(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		JisFields jisFieldsSame = null;
 		try {
-			boolean flag = true;
+			boolean flag = true;//true 不重名  false 重名
 			String fieldname = StringUtils.trim((String) request.getParameter("fieldname"));
+			String iidStr = StringUtils.trim((String) request.getParameter("iid"));
+			if (iidStr != null && iidStr != "") {
+				int iid = Integer.parseInt(iidStr);
+				jisFieldsSame = jisFieldsService.findByKey(iid);
+			}
 			if (fieldname != "null") {
 				List<JisFields> jisFieldsList = jisFieldsService.findAllJisFields();
 				for (JisFields jisFields : jisFieldsList) {
 					if (fieldname.equals(jisFields.getFieldname())) {
-						flag = false;
-						break;
+						if (!fieldname.equals(jisFieldsSame.getFieldname())) {
+							flag = false;
+							break;
+						}
 					}
 				}
 			} else {

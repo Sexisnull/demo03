@@ -1,5 +1,6 @@
 package com.gsww.uids.controller;
 
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -28,6 +29,7 @@ import com.gsww.jup.util.PageUtils;
 import com.gsww.jup.util.StringHelper;
 import com.gsww.uids.entity.ComplatOutsideuser;
 import com.gsww.uids.entity.ComplatUser;
+import com.gsww.uids.entity.ComplatZone;
 import com.gsww.uids.service.ComplatOutsideuserService;
 
 /**
@@ -245,6 +247,76 @@ public class ComplatOutsideuserController extends BaseController {
 			e.printStackTrace();
 		}finally{
 			return  new ModelAndView("redirect:/complat/outsideuserList");
+		}
+	}
+	
+	/**
+     * @discription   用户认证 
+     * @param outsideuserIid
+     * @param model
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+	 */
+	@SuppressWarnings("finally")
+	@RequestMapping(value = "/outsideuserAuth", method = RequestMethod.GET)
+	public ModelAndView outsideuserAuth(Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+		ComplatOutsideuser complatOutsideuser = null;
+		try{			
+			String iid = StringUtils.trim((String) request.getParameter("iid"));
+			String outsideUserType = StringUtils.trim((String) request.getParameter("outsideUserType"));
+			String rejectReason1 = StringUtils.trim((String) request.getParameter("rejectReason1"));
+			String rejectReason2 = StringUtils.trim((String) request.getParameter("rejectReason2"));
+			String name = StringUtils.trim((String) request.getParameter("name"));
+			int type = Integer.parseInt(outsideUserType);//1:通过  2：拒绝
+			complatOutsideuser = outsideUserService.findByKey(Integer.parseInt(iid));
+			if(type == 1) {
+				int isAuth = complatOutsideuser.getIsAuth();
+				if (isAuth == 0) {
+					complatOutsideuser.setIsAuth(1);
+					complatOutsideuser.setAuthState(1);
+					outsideUserService.save(complatOutsideuser);
+					returnMsg("success", "用户认证成功！", request);
+				} else {
+					returnMsg("success", "用户已认证！", request);
+				}
+			} else if (type == 0) {
+				complatOutsideuser.setIsAuth(0);
+				complatOutsideuser.setAuthState(2);
+				if (rejectReason2 != null) {
+					complatOutsideuser.setRejectReason(rejectReason2);
+				}
+				outsideUserService.save(complatOutsideuser);
+				returnMsg("success", "用户认证已拒绝！", request);
+			} 
+		}catch(Exception e){
+			e.printStackTrace();
+			returnMsg("error", "认证失败！", (HttpServletRequest) request);
+		}finally{
+			return  new ModelAndView("redirect:/complat/outsideuserList");
+		}
+	}
+	
+	/**
+     * @discription    获取认证用户信息
+     * @param request
+     * @param response
+	 */
+	@RequestMapping(value = { "/getOutsideuserInfo" }, method = {RequestMethod.POST })
+	public void getOutsideuserInfo(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			String pidStr = request.getParameter("iid");
+			Integer pid = Integer.valueOf(Integer.parseInt(pidStr));
+			ComplatOutsideuser complatOutsideuser = outsideUserService.findByKey(pid);
+			if (complatOutsideuser != null) {
+				net.sf.json.JSONObject object = net.sf.json.JSONObject.fromObject(complatOutsideuser);
+				PrintWriter out = response.getWriter();
+				String json = object.toString();
+				out.write(json);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }
