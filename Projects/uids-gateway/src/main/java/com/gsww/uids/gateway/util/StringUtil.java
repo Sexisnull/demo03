@@ -182,4 +182,14 @@ public class StringUtil {
 		
 	}
 
+	public static String getString(Object value) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static boolean isNotEmpty(Object string) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
