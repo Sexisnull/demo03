@@ -2,6 +2,7 @@ package com.gsww.uids.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -93,7 +94,6 @@ public class ComplatRoleController extends BaseController {
 					.encodeParameterStringWithPrefix(searchParams, "search_"));
 			model.addAttribute("cParams", searchParams);
 		} catch (Exception ex) {
-			ex.printStackTrace();
 			logger.error("列表打开失败：" + ex.getMessage());
 			returnMsg("msgMap", "列表打开失败", (HttpServletRequest) request);
 			return "redirect:/complat/roleList";
@@ -116,12 +116,33 @@ public class ComplatRoleController extends BaseController {
 			}
 			model.addAttribute("complatRole", cRole);
 		} catch (Exception e) {
-			e.printStackTrace();
 			logger.error("编辑页面打开失败：" + e.getMessage());
 		}
 		return mav;
 	}
-
+	
+	@RequestMapping(value = "/isdefault_modify", method = RequestMethod.POST)
+	public void isdefaultModify(String iid, String isDefault,HttpServletRequest request,
+			HttpServletResponse response){
+		if(!StringHelper.isNotBlack(iid)){
+			return;
+		}
+		try {
+			ComplatRole cr = complatRoleService.findByKey(Integer.parseInt(iid));
+			cr.setIsdeFault(Integer.parseInt(isDefault));
+			complatRoleService.save(cr);
+			Map<String,Object> result = new HashMap<String,Object>();
+			result.put("success", true);
+			response.setContentType("text/json");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().write(JSONUtil.writeMapJSON(result));
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
+		
+		
+	}
+	
 	// 保存信息
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/croleSave", method = RequestMethod.POST)
@@ -137,7 +158,7 @@ public class ComplatRoleController extends BaseController {
 			complatRoleService.save(cRole);
 			returnMsg("success", "保存成功", request);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(),e);
 			returnMsg("error", "保存失败", request);
 		} finally {
 			return new ModelAndView("redirect:/complat/croleList");
@@ -166,7 +187,7 @@ public class ComplatRoleController extends BaseController {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(),e);
 			resMsg = "删除失败";
 		} finally {
 			if (resMsg.equals("")) {
@@ -200,7 +221,7 @@ public class ComplatRoleController extends BaseController {
 				response.getWriter().write("1");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(),e);
 		}
 	}
 
@@ -229,7 +250,7 @@ public class ComplatRoleController extends BaseController {
 			model.addAttribute("orgType", "u,g");
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(),e);
 		}
 		return "users/complatrole/application";
 	}
@@ -253,7 +274,7 @@ public class ComplatRoleController extends BaseController {
 			response.setCharacterEncoding("UTF-8");
 			response.getWriter().write(JSONUtil.writeListMapJSONMap(result));
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(),e);
 		}
 	}
 
@@ -271,7 +292,7 @@ public class ComplatRoleController extends BaseController {
 			response.getWriter().write(JSONUtil.writeMapJSON(result));
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(),e);
 			result.put("result", false);
 			response.setContentType("text/json");
 			response.setCharacterEncoding("UTF-8");
@@ -279,7 +300,7 @@ public class ComplatRoleController extends BaseController {
 				response.getWriter().write(JSONUtil.writeMapJSON(result));
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				logger.error(e1.getMessage(),e1);
 			}
 		}
 
@@ -304,7 +325,7 @@ public class ComplatRoleController extends BaseController {
 			response.getWriter().write(JSONUtil.writeMapJSON(result));
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(),e);
 			result.put("result", false);
 			response.setContentType("text/json");
 			response.setCharacterEncoding("UTF-8");
@@ -312,7 +333,7 @@ public class ComplatRoleController extends BaseController {
 				response.getWriter().write(JSONUtil.writeMapJSON(result));
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				logger.error(e1.getMessage(),e1);
 			}
 		}
 
@@ -364,7 +385,7 @@ public class ComplatRoleController extends BaseController {
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage(),e);
 		}
 
 	}
@@ -468,7 +489,7 @@ public class ComplatRoleController extends BaseController {
 			response.setCharacterEncoding("UTF-8");
 			response.getWriter().write(JSONUtil.writeMapJSON(allNodes));
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(),e);
 		}
 
 	}
@@ -546,24 +567,32 @@ public class ComplatRoleController extends BaseController {
 					.write(JSONUtil.writeListMapJSONMap(groupNodes));
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(),e);
 		}
 	}
 
-	@RequestMapping(value = "group_search", method = RequestMethod.POST)
+	/**
+	 * 用户组织机构查询
+	 * 
+	 * @param keyword
+	 * @param roleid
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "/group_search", method = RequestMethod.POST)
 	public void searchGroupDate(String keyword, String roleid,
 			HttpServletRequest request, HttpServletResponse response) {
-		if (StringHelper.isNotBlack(keyword)) {
+		if (!StringHelper.isNotBlack(keyword)) {
 			return;
 		}
 		try {
 
 			Map<String, Object> allNode = new HashMap<String, Object>();
 			List<Map<String, Object>> groupNodes = new ArrayList<Map<String, Object>>();
-			HashMap<String, Object> groupNode = null;
-			List<Map<String, Object>> groupList = null;
+			HashMap<String, Object> groupNode = new HashMap<String, Object>();
+			List<Map<String, Object>> groupList = new ArrayList<Map<String, Object>>();
 			groupList = complatGroupService.findByNameOrPinYin(keyword);
-			HashMap<String, Object> group = null;
+			HashMap<String, Object> group = new HashMap<String, Object>();
 			if (Integer.parseInt(roleid) != 1 && Integer.parseInt(roleid) != 2) {
 				String strs = "前台用户qtyhQTYH";
 				if (strs.indexOf(keyword) != -1) {
@@ -578,17 +607,17 @@ public class ComplatRoleController extends BaseController {
 
 				for (Map<String, Object> map : groupList) {
 					groupNode = new HashMap<String, Object>();
-					groupNode.put("id", group.get("iid"));
-					groupNode.put("text", group.get("name"));
-					groupNode.put("ic", group.get("codeid"));
+					groupNode.put("id", map.get("iid"));
+					groupNode.put("text", map.get("name"));
+					groupNode.put("ic", map.get("codeid"));
 					groupNodes.add(groupNode);
 				}
 			} else {
 				for (Map<String, Object> g : groupList) {
 					groupNode = new HashMap<String, Object>();
-					groupNode.put("id", group.get("iid"));
-					groupNode.put("text", group.get("name"));
-					groupNode.put("ic", group.get("codeid"));
+					groupNode.put("id", g.get("iid"));
+					groupNode.put("text", g.get("name"));
+					groupNode.put("ic", g.get("codeid"));
 					groupNodes.add(groupNode);
 				}
 			}
@@ -597,89 +626,184 @@ public class ComplatRoleController extends BaseController {
 
 			response.setContentType("text/json");
 			response.setCharacterEncoding("UTF-8");
-			response.getWriter()
-					.write(JSONUtil.writeMapJSON(allNode));
+			response.getWriter().write(JSONUtil.writeMapJSON(allNode));
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(),e);
 		}
 	}
-	
-	@RequestMapping(value = "user_search", method = RequestMethod.POST)
+
+	/**
+	 * 用户组织机构查询
+	 * 
+	 * @param keyword
+	 * @param roleid
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "/user_search", method = RequestMethod.POST)
 	public void searchUserDate(String keyword, String roleid,
-			HttpServletRequest request, HttpServletResponse response){
-	    if (StringHelper.isNotBlack(keyword)) {
-	      return;
-	    }
-	    try {
-			
-		
-	    Map<String,Object> allNode = new HashMap<String,Object>();
+			HttpServletRequest request, HttpServletResponse response) {
+		if (!StringHelper.isNotBlack(keyword)) {
+			return;
+		}
+		try {
 
-	    List<Map<String,Object>> groupNodes = new ArrayList<Map<String,Object>>();
-	    List<Map<String,Object>> userNodes = new ArrayList<Map<String,Object>>();
-	    HashMap<String,Object> groupNode = null;
-	    HashMap<String,Object> userNode = null;
+			Map<String, Object> allNode = new HashMap<String, Object>();
 
-	    List<Map<String,Object>> groupList = complatGroupService.findByNameOrPinYin(keyword);
-	    HashMap<String, Object> group = null;
-		if (Integer.parseInt(roleid) != 1 && Integer.parseInt(roleid) != 2) {
-			String strs = "前台用户qtyhQTYH";
-			if (strs.indexOf(keyword) != -1) {
-				HashMap<String, Object> outNode = new HashMap<String, Object>();
-				groupNode = new HashMap<String, Object>();
-				outNode.put("id", Integer.valueOf(-1));
-				outNode.put("text",
-						"<span class='optionname'>前台用户</span> &lt;<span class='ic'>qtyh</span>&gt;");
-				outNode.put("state", "");
-				groupNodes.add(outNode);
+			List<Map<String, Object>> groupNodes = new ArrayList<Map<String, Object>>();
+			List<Map<String, Object>> userNodes = new ArrayList<Map<String, Object>>();
+			HashMap<String, Object> groupNode = new HashMap<String, Object>();
+			HashMap<String, Object> userNode = new HashMap<String, Object>();
+
+			List<Map<String, Object>> groupList = complatGroupService
+					.findByNameOrPinYin(keyword);
+			HashMap<String, Object> group = new HashMap<String, Object>();
+			if (Integer.parseInt(roleid) != 1 && Integer.parseInt(roleid) != 2) {
+				String strs = "前台用户qtyhQTYH";
+				if (strs.indexOf(keyword) != -1) {
+					HashMap<String, Object> outNode = new HashMap<String, Object>();
+					groupNode = new HashMap<String, Object>();
+					outNode.put("id", Integer.valueOf(-1));
+					outNode.put("text",
+							"<span class='optionname'>前台用户</span> &lt;<span class='ic'>qtyh</span>&gt;");
+					outNode.put("state", "");
+					groupNodes.add(outNode);
+				}
+
+				for (Map<String, Object> map : groupList) {
+					groupNode = new HashMap<String, Object>();
+					groupNode.put("id", map.get("iid"));
+					groupNode.put("text", map.get("name"));
+					groupNode.put("ic", map.get("codeid"));
+					groupNodes.add(groupNode);
+				}
+			} else {
+				for (Map<String, Object> g : groupList) {
+					groupNode = new HashMap<String, Object>();
+					groupNode.put("id", g.get("iid"));
+					groupNode.put("text", g.get("name"));
+					groupNode.put("ic", g.get("codeid"));
+					groupNodes.add(groupNode);
+				}
 			}
 
-			for (Map<String, Object> map : groupList) {
-				groupNode = new HashMap<String, Object>();
-				groupNode.put("id", group.get("iid"));
-				groupNode.put("text", group.get("name"));
-				groupNode.put("ic", group.get("codeid"));
-				groupNodes.add(groupNode);
+			List<Map<String, Object>> userList = complatUserService
+					.findByNameOrPinYin(keyword);
+			for (Map<String, Object> user : userList) {
+				userNode = new HashMap<String, Object>();
+				userNode.put("id", user.get("iid") + "_0");
+				userNode.put("text", user.get("name"));
+				userNode.put("ic", user.get("loginname"));
+				userNodes.add(userNode);
 			}
-		} else {
-			for (Map<String, Object> g : groupList) {
-				groupNode = new HashMap<String, Object>();
-				groupNode.put("id", group.get("iid"));
-				groupNode.put("text", group.get("name"));
-				groupNode.put("ic", group.get("codeid"));
-				groupNodes.add(groupNode);
+
+			List<Map<String, Object>> outUserList = complatOutsideuserService
+					.findByNameOrPinYin(keyword);
+			for (Map<String, Object> outuser : outUserList) {
+				userNode = new HashMap<String, Object>();
+				userNode.put("id", outuser.get("iid") + "_1");
+				userNode.put("text", outuser.get("name"));
+				userNode.put("ic", outuser.get("loginname"));
+				userNodes.add(userNode);
 			}
+
+			allNode.put("groups", groupNodes);
+			allNode.put("users", userNodes);
+			response.setContentType("text/json");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().write(JSONUtil.writeMapJSON(allNode));
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
+	}
+	/**
+	 * 保存用户机构角色关系
+	 * @param roleId
+	 * @param users
+	 * @param groups
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "/modify_submit", method = RequestMethod.POST)
+	public void modifySubmit(String roleId, String users, String groups,
+			HttpServletRequest request, HttpServletResponse response) {
+		if (!StringHelper.isNotBlack(roleId)) {
+			return;
+		}
+		List<String> groupList = new ArrayList<String>();
+		List<String> userIdList = new ArrayList<String>();
+		try {
+
+			if (StringHelper.isNotBlack(groups)) {
+				groupList = Arrays.asList(groups.split(","));
+			}
+			if (StringHelper.isNotBlack(users)) {
+				userIdList = Arrays.asList(users.split(","));
+			}
+			boolean isSuccess = true;
+			List<Integer> groupids = new ArrayList<Integer>();
+			List<Map<String, Object>> groupslist = complatGroupService
+					.findAllIidsAndName();
+			for (Map<String, Object> group : groupslist) {
+				groupids.add((Integer) group.get("iid"));
+			}
+			for (String groupid : groupList) {
+				if (Integer.parseInt(groupid) == 0) {
+					for (Integer gid : groupids) {
+						if (jisRoleobjectService.findObjectSize(
+								Integer.parseInt(roleId), gid.intValue(), 2) == 0) {
+							isSuccess = jisRoleobjectService
+									.add(Integer.parseInt(roleId),
+											gid.intValue(), 2);
+						}
+					}
+					break;
+				}
+				if (jisRoleobjectService.findObjectSize(
+						Integer.parseInt(roleId), Integer.parseInt(groupid), 2) == 0) {
+					isSuccess = jisRoleobjectService.add(
+							Integer.parseInt(roleId),
+							Integer.parseInt(groupid), 2);
+				}
+
+			}
+			for (String userid : userIdList) {
+				int tempindex = userid.indexOf("_");
+				int type = Integer.parseInt(userid.substring(tempindex + 1));
+				int userId = Integer.parseInt(userid.substring(0, tempindex));
+				if (type == 0) {
+					if (jisRoleobjectService.findObjectSize(
+							Integer.parseInt(roleId), userId, 0) == 0)
+						isSuccess = jisRoleobjectService.add(
+								Integer.parseInt(roleId), userId, 0);
+				} else if ((type == 1)
+						&& (jisRoleobjectService.findObjectSize(
+								Integer.parseInt(roleId), userId, 1) == 0)) {
+					isSuccess = jisRoleobjectService.add(
+							Integer.parseInt(roleId), userId, 1);
+				}
+			}
+			Map<String,Object> result = new HashMap<String,Object>();
+			if(isSuccess){
+				result.put("result", true);
+				response.setContentType("text/json");
+				response.setCharacterEncoding("UTF-8");
+				response.getWriter().write(JSONUtil.writeMapJSON(result));
+			}else{
+				result.put("result", false);
+				response.setContentType("text/json");
+				response.setCharacterEncoding("UTF-8");
+				response.getWriter().write(JSONUtil.writeMapJSON(result));
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.error(e.getMessage(),e);
 		}
 
-	    List <Map<String,Object>> userList = complatUserService.findByNameOrPinYin(keyword);
-	    for (Map<String,Object> user : userList) {
-	      userNode = new HashMap<String,Object>();
-	      userNode.put("id", user.get("") + "_0");
-	      userNode.put("text", user.get(""));
-	      userNode.put("ic", user.get(""));
-	      userNodes.add(userNode);
-	    }
-
-	    List<Map<String,Object>> outUserList = complatOutsideuserService.findByNameOrPinYin(keyword);
-	    for (Map<String,Object> outuser : outUserList) {
-	      userNode = new HashMap<String,Object>();
-	      userNode.put("id", outuser.get("") + "_1");
-	      userNode.put("text", outuser.get(""));
-	      userNode.put("ic", outuser.get(""));
-	      userNodes.add(userNode);
-	    }
-
-	    allNode.put("groups", groupNodes);
-	    allNode.put("users", userNodes);
-	    response.setContentType("text/json");
-		response.setCharacterEncoding("UTF-8");
-		response.getWriter()
-				.write(JSONUtil.writeMapJSON(allNode));
-	    } catch (Exception e) {
-			e.printStackTrace();
-		}
-	  }
-
+	};
+	
+	
+	
 	/**
 	 * 
 	 * 应用相关授权方法
@@ -712,7 +836,7 @@ public class ComplatRoleController extends BaseController {
 			model.addAttribute("appList", show);
 			model.addAttribute("iid", roleId);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(),e);
 		}
 		return "users/complatrole/app_authorize";
 	}
@@ -736,7 +860,7 @@ public class ComplatRoleController extends BaseController {
 			response.setCharacterEncoding("UTF-8");
 			response.getWriter().write(JSONUtil.writeMapJSON(result));
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(),e);
 		}
 	}
 
@@ -752,7 +876,7 @@ public class ComplatRoleController extends BaseController {
 		try {
 			model.addAttribute("roleId", roleId);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(),e);
 		}
 		return "users/complatrole/role_authorize";
 	}
@@ -770,7 +894,7 @@ public class ComplatRoleController extends BaseController {
 			response.getWriter().write(treeJson);
 			response.flushBuffer();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(),e);
 		}
 	}
 
@@ -790,11 +914,11 @@ public class ComplatRoleController extends BaseController {
 				response.getWriter().write("success");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(),e);
 			try {
 				response.getWriter().write("error");
 			} catch (IOException e1) {
-				e1.printStackTrace();
+				logger.error(e1.getMessage(),e1);
 			}
 		}
 	}

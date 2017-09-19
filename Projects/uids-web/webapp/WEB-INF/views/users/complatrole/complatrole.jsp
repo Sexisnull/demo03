@@ -41,6 +41,22 @@
 		      }
 		   });
 	};
+	
+	function modifyIsDefault(iid, checkbox) {
+		var isDefault = checkbox.checked ? 1 : 0; //切换当前角色缺省状态
+		console.log(checkbox.checked);
+		console.log(isDefault);
+		$.ajax({
+			type : "POST",
+			url : "${ctx}/complat/isdefault_modify",
+			data : "iid=" + iid + "&isDefault=" + isDefault,
+			success : function(result) {
+				if (!result.success)
+					alert(result.message);
+			}
+		});
+	}
+	
 	/**搜索表单校验**/
 	function checkSubmitForm() {
 		var nameSearch = $("#nameSearch").val();
@@ -158,7 +174,7 @@
 									${complatRole.spec}
 								</td>
 								<td style="text-align: center">
-									<input type="checkbox"/>
+									<input type="checkbox" <c:if test="${complatRole.isdeFault==1}">checked</c:if> onclick="modifyIsDefault(${complatRole.iid},this);"/>
 								</td>
 								<td class="position-content" style="text-align: center">
 									<div class="listOper">
