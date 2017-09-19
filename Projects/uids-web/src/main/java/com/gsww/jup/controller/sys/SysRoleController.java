@@ -28,7 +28,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
-import com.gsww.jup.entity.sys.SysAccount;
 import com.gsww.jup.entity.sys.SysRole;
 import com.gsww.jup.entity.sys.SysRoleAcctRel;
 import com.gsww.jup.entity.sys.SysUserSession;
