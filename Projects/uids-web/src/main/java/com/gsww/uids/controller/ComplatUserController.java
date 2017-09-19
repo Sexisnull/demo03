@@ -1,8 +1,5 @@
-
-
 package com.gsww.uids.controller;
 
-import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -13,14 +10,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.UUID;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -42,7 +35,6 @@ import org.springside.modules.web.Servlets;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.gsww.jup.controller.BaseController;
-import com.gsww.jup.entity.sys.SysSsoSessToken;
 import com.gsww.jup.entity.sys.SysUserSession;
 import com.gsww.jup.util.ExcelUtil;
 import com.gsww.jup.util.PageUtils;
@@ -164,6 +156,7 @@ public class ComplatUserController extends BaseController{
 			} else {
 				complatUser = new ComplatUser();
 			}
+			this.extendsAttr(model, request, response);
 			model.addAttribute("complatUser",complatUser);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -172,8 +165,17 @@ public class ComplatUserController extends BaseController{
 	}
 	
 	
+
+	
 	/**
-	 * 保存用户信息
+	 * 保存政府用户信息
+	 * 
+	 * @param file
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 * @author <a href=" ">shenxh</a>
 	 */
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/complatSave", method = RequestMethod.POST)
@@ -210,8 +212,17 @@ public class ComplatUserController extends BaseController{
 	}
 	
 	
+
+	
 	/**
 	 * 批量删除用户信息
+	 * 
+	 * @param file
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 * @author <a href=" ">shenxh</a>
 	 */
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/complatUserDelete", method = RequestMethod.GET)
@@ -235,63 +246,7 @@ public class ComplatUserController extends BaseController{
 		}
 		
 	}
-	
-	
-	
-	
-	/**
-	 * 模板下载
-	 * 
-	 * @param request
-	 * @param response
-	 * @throws IOException
-	 */
-/*	@RequestMapping("/downloadComplaUserTemplate")
-	public void downloadComplaUserTemplate(HttpServletRequest request,HttpServletResponse response) throws IOException {
-		String realPath = request.getSession().getServletContext().getRealPath("/uploadFile/complat")+ "/";// 取系统当前路径
-		String realName = "政府用户信息统计列表.xlsx";
-		// 设置response参数，可以打开下载页面
-		//response.setContentType("application/vnd.ms-excel;charset=utf-8");
-		response.setHeader("Content-Disposition","attachment;filename="+ URLEncoder.encode(realName, "utf-8"));
 
-		FileInputStream in = null;
-		BufferedInputStream binpu = null;
-		BufferedOutputStream bout = null;
-
-		OutputStream output = null;
-		output = response.getOutputStream();
-		FileInputStream fis = null;
-		try {
-			// 如果是中文路径，在此处抛出异常
-			File f = new File(realPath + realName);
-			if (f.exists()) {
-				in = new FileInputStream(realPath + realName);
-			}
-			binpu = new BufferedInputStream(in);
-			bout = new BufferedOutputStream(response.getOutputStream());
-			byte[] b = new byte[1024];
-
-			int i = 0;
-			while ((i = binpu.read(b, 0, b.length)) > 0) {
-				bout.write(b, 0, i);
-			}
-			bout.flush();
-			response.flushBuffer();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (fis != null) {
-				fis.close();
-				fis = null;
-			}
-		}
-		if (output != null) {
-			output.close();
-			output = null;
-		}
-	}
-	*/
-	
 	
 	
 
@@ -303,7 +258,7 @@ public class ComplatUserController extends BaseController{
 	 * @param response
 	 * @return
 	 * @throws Exception
-	 * @RequestParam(value="excelFile")MultipartFile multipartFile,
+	 * @author <a href=" ">shenxh</a>
 	 */
 	@RequestMapping(value = "/complatImport", method = RequestMethod.POST)
 	public ModelAndView complatImport(@RequestParam("excelFile")MultipartFile multipartFile,
@@ -316,12 +271,10 @@ public class ComplatUserController extends BaseController{
 		fieldMap.put("2", "loginallname");
 		fieldMap.put("3", "mobile");
 		fieldMap.put("4", "email");
-		//List<ComplatUser> users= ExcelUtil.readXls(absoluteFilePath+"/"+uuidFileName,ComplatUser.class,fieldMap);
 		List<ComplatUser> users= ExcelUtil.readXls(fileName,multipartFile.getInputStream(),ComplatUser.class,fieldMap);
 		try {
 			for(ComplatUser complatUser:users){
 				List<ComplatUser> list = complatUserService.findByUserAllName(complatUser.getLoginallname());				
-				//String mobile=complatUser.getMobile();
 				if(list.size()==0){					
 					complatUser.setEnable(0);
 					Date date=new Date();
@@ -348,6 +301,7 @@ public class ComplatUserController extends BaseController{
 	 * @param response
 	 * @return
 	 * @throws Exception
+	 * @author <a href=" ">shenxh</a>
 	 */	
 	@RequestMapping(value = "/complatExport", method = RequestMethod.GET)
 	public void complatExport(Model model, HttpServletRequest request,
@@ -531,6 +485,8 @@ public class ComplatUserController extends BaseController{
 		out.write(json);*/
 	}
 	
+	
+	
 	/**
 	 * 批量启用用户状态
 	 *@param complatUser
@@ -598,7 +554,6 @@ public class ComplatUserController extends BaseController{
 				complatUser=complatUserService.findByKey(corId);
 				if(complatUser.getEnable()==1){
 					complatUser.setEnable(0); 
-					//complatUserService.changeComplatEnable(corId,Enable);
 					complatUserService.save(complatUser);
 					returnMsg("success", "停用成功", request);
 				}else if(complatUser.getEnable()==0){

@@ -48,7 +48,7 @@ color: rgb(119, 119, 119);
 
 $().ready(function() {
 
-/*//表单校验
+//表单校验
 var complatUserNameInput=$("#name").val();
  $("#editForm").validate({
     rules: {
@@ -110,19 +110,21 @@ var complatUserNameInput=$("#name").val();
 				 form.submit();		
         } 
      }
-   });   */
+   });   
+
 
 
    //用户扩展属性
-   var html = $("#dataTable");
-   html.append("<tr><td class='td_2' rowspan='5' style='max-width:0px;width:100px;ont-weight:bold;' align='center'>"+"扩展属性"+"</td></tr>");
-   //var type;//1：字符型     2：枚举型
-   for(var i=0;i<5/2;i++){  
-       ///if(type=="1"){
-           //html.append("<tr id='kzsxTr'><th>"+"shenxh"+"</th><td>"+"<input type='text'/>"+"</td><th>"+"shenxh"+"</th><td>"+"<input type='text'/>"+"</td></tr>");   
-       //}else if(type=="2"){
-           html.append("<tr id='kzsxTr'><th>"+"shenxh"+"</th><td>"+"<input type='text'/>"+"</td><th>"+"shenxh"+"</th><td>"+"<input type='text'/>"+"</td></tr>"); 
-       //}     
+   var table = $("#dataTable");
+   var tr="";
+   table.append("<tr><td class='td_2' rowspan='5' style='max-width:0px;width:100px;ont-weight:bold;' align='center'>"+"扩展属性"+"</td></tr>");
+   var type="1";//1：字符型     2：枚举型
+   for(var i=0;i<5;i++){  
+        if(type=="1"){
+           tr=table.append("<tr id='kzsxTr'><th>"+"shenxh"+"</th><td>"+"<input type='text'/>"+"</td></tr>");   
+       }else if(type=="2"){
+           tr=table.append("<tr id='kzsxTr'><th>"+"shenxh"+"</th><td>"+"<select id=''><option>"+"政府干部"+"</option>"+"</td></tr>"); 
+       }     
    }
 
 });
