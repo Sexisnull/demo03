@@ -56,20 +56,75 @@
 					   	isPhone:true
 					   }
 					  }
-				    });
+				    }); 
 				    
-				    
-				    //用户扩展属性
-				   var fileds = $(".form-table");
-				   for(var i= 0 ;i <= 8;i++){
-				   	if(i%2 == 0){
-				   		fileds.append("<tr><th>yaoxi2：</th><td><input type='text' id='yaox' name='yaox'></td>"+
-				  		    "<th>yaoxi4：</th><td><input type='text' id='yaox' name='yaox'></td></tr>");
-				   	}else{
-				   		fileds.append("<tr><th>yaoxi1：</th><td><input type='text' id='yaox' name='yaox'></td></tr>");
-				   	}
-				   		
-				   }
+				    //获取用户扩展属性
+				    var htmlString=[];
+				    var count = 1;
+				    var table = $(".form-table");
+				    var fieldsListMap = eval('${fieldsListMap}');
+				    for(var i=0;i<fieldsListMap.length;i++){
+				    	var fieldsList = fieldsListMap[i];
+				    	for(var j = 0;j<fieldsList.length;j++){
+				    		var fields = fieldsList[j];
+				    		if(fields.type==1){
+				    		   for(var key in fields){
+				    			var value = fields[key];
+				    			if(key!='type' && key !='userid'){
+				    			    if(count%2==1){
+				    			       htmlString.push("<tr><th>"+key+"</th><td><input name='"+key+"' type='text' value='"+value+"'></td>");
+				    			    }
+				    			    if(count%2==0){
+				    			       htmlString.push("<th>"+key+"</th><td><input type='text' value='"+value+"'></td></tr>");
+				    			    }
+				    			    count++;
+				    			}
+				    		   } 
+				    		}
+				    		
+				    		var values;
+				    		var keys;
+				    		if(fields.type==2){
+				    		   for(var key in fields){
+				    			var value = fields[key];
+				    			if(key == 'fieldkeys'){
+				    				keys = value.split(",");
+				    			}
+				    			
+				    			if(key == 'fieldvalues'){
+				    				values = value.split(",");
+				    			}
+				    			
+				    			if(key!='type' && key !='userid'){
+				    			    if(key == 'fieldname'){
+				    			    if(count%2==1){
+				    			    alert("1111");
+				    			    	htmlString.push("<tr><th>"+value+"</th><td><select id= '"+value+"'>");
+				    			    	
+				    			    	//循环key；
+				    			        for(var i=0;i<keys.length;i++){
+				    					  htmlString.push("<option value='"+keys[i]+"'>"+values[i]+"</option>");
+				    				    }
+				    			       htmlString.push("</select></td>");
+				    			    }
+				    			    if(count%2==0){
+				    			    alert("0000000");
+				    			    	htmlString.push("<th>"+value+"</th><td><select id= '"+value+"'>");
+				    			    	
+				    			    	//循环key；
+				    			        for(var i=0;i<keys.length;i++){
+				    					  htmlString.push("<option value='"+keys[i]+"'>"+values[i]+"</option>");
+				    				    }
+				    			       htmlString.push("</select></td></tr>");
+				    			    }
+				    			    count++;
+				    			   	}
+				    			}
+				    		  } 
+				    		}
+				    	}
+				    }
+				    table.append(htmlString.join(""));
 			});
 		</script>
 		<style type="text/css">
@@ -258,6 +313,9 @@
 		<script type="text/javascript" src="${ctx}/res/skin/login/js/login.js"></script>
 		<!-- 密码强度校验 -->
 		<script type="text/javascript" src="${ctx}/res/js/region/checkpwd.js"></script>
+		
+		<!-- 用户扩展属性 -->
+		<script type="text/javascript" src="${ctx}/res/js/region/userFields.js"></script>
     	<script type="text/javascript">
 			
 		
