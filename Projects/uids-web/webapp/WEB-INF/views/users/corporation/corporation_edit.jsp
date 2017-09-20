@@ -32,7 +32,8 @@ var corNameInput=$("#name").val();
 	   	required: true
 	   },
 	   loginName:{
-	   	required: true
+	   	required: true,
+	   	uniqueLoginName:true
 	   },
 	   mobile:{
 	   	isMobile:true,
@@ -49,7 +50,8 @@ var corNameInput=$("#name").val();
 	   }
 	  }
     });
-    
+    // Ajax重命名校验
+	$.uniqueValidate('uniqueLoginName', '${ctx}/complat/checkCorporationLoginName', ['loginName','oldLoginName'], '对不起，这个账号重复了');
     //民族
 	var nations = ["汉族","壮族","回族","满族","维吾尔族","苗族","彝族","土家族","藏族","蒙古族",
 	               "侗族","布依族","瑶族","白族","朝鲜族","哈尼族","黎族","哈萨克族","傣族","畲族",
@@ -61,14 +63,6 @@ var corNameInput=$("#name").val();
 	for(var i=0;i<nations.length;i++){
 		nation.append("<option value='nations[i]'>"+nations[i]+"</option>");
 	}
-});
-
-$(function(){
-	// Ajax重命名校验
-	$.uniqueValidate('uniqueLoginAccount', '${ctx}/sys/checkAccount', ['loginAccount','oldLoginAccount'], '对不起，这个账号重复了');
-	$("#roleNames").Popup($(".ulRoleList"), { width: "auto" });
-	//
-	$(".icon-date-r").click(function(){ $(this).prev("input").click(); });
 });
 
 
@@ -190,8 +184,8 @@ color: rgb(119, 119, 119);
 			<td class="td_2" rowspan="4" tyle="max-width:0px;width:100px;ont-weight:bold;" align="center"">账户信息</td>
 			<th><b class="mustbe">*</b>用户名：</th>
 			<td>
-				<input type="text"  class="loginName" name="loginName" value="${corporation.loginName}" />
-            	
+				<input type="text"  id="loginName" name="loginName" value="${corporation.loginName}" />
+            	<input type="text"  id="oldLoginName" name="oldLoginName" value="${corporation.loginName}" />
             </td>
         	<th><b class="mustbe">*</b> 手机号码：</th>
         	<td>

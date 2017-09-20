@@ -24,6 +24,12 @@ http://www.mulesoft.org/schema/mule/servlet http://www.mulesoft.org/schema/mule/
             <component class="com.gsww.uids.gateway.service.HttpInterfaceService"/>
         </jersey:resources>
     </flow>
+    <flow name="aliOauthService" doc:name="aliOauthService">
+        <http:inbound-endpoint exchange-pattern="request-response" host="0.0.0.0" port="8088" doc:name="HTTP"/>
+        <jersey:resources doc:name="REST">
+            <component class="com.gsww.uids.gateway.rest.AliOauthService"/>
+        </jersey:resources>
+    </flow>
 <!-- WebService接口发布 -->
 	<!-- 个人获取票据认证接口 -->
 	<flow name="WsPerAuth" doc:name="WsPerAuth">
