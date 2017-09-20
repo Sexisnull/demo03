@@ -229,7 +229,58 @@ $(function(){
 
 });
 
-
+      /**停用单条数据**/
+	function stopSingle(url,parm,obj){
+	var singleId=$(obj).parent().parent().parent().parent().find('td:first').find('input').attr('id');
+		var flag=false;
+			$.ajax({
+				 type: "POST",
+				 url: "${ctx}/complat/enableStop",
+				 data: "iid=" + singleId,
+				 async:false,
+				 success: function (data) {
+				 if (data == "0") {
+					 flag=true;					 
+				 } else {
+					 flag=false;
+				 }
+				}
+             });
+			if(flag==true){
+				$.dialog.alert("该操作已经停用");
+				return false;
+			}else{
+				$.dialog.confirm('您确认要停用吗？',function(){
+					window.location.href="${ctx}/"+url+"?"+parm+"="+singleId;
+				});
+		}
+	}
+	/**启用单条数据**/
+	function startSingle(url,parm,obj){
+	var singleId=$(obj).parent().parent().parent().parent().find('td:first').find('input').attr('id'); 
+	var flag=false;
+			$.ajax({
+				 type: "POST",
+				 url: "${ctx}/complat/enableStop",
+				 data: "iid=" + singleId,
+				 async:false,
+				 success: function (data) {
+				 if (data == "1") {
+					 flag=true;					 
+				 } else {
+					 flag=false;
+				 }
+				}
+             });
+			if(flag==true){
+				$.dialog.alert("该操作已经启用");
+				return false;
+			}else{
+				$.dialog.confirm('您确认要启用吗？',function(){
+					window.location.href="${ctx}/"+url+"?"+parm+"="+singleId;
+				});
+		}
+	}
 
 
 
@@ -340,7 +391,7 @@ function outPutComplatUser() {
 	<div class="position">
 		<ol class="breadcrumb">
 			<li>
-				<a href="${ctx}/backIndex" target="_top">首页</a>
+				<a href="${ctx}/index" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
 			<li>

@@ -586,7 +586,7 @@ public class ComplatUserController extends BaseController{
 	 * @author <a href=" ">shenxh</a>
 	 */
 	@SuppressWarnings("finally")
-	@RequestMapping(value = "/EnableStart", method = RequestMethod.GET)
+	@RequestMapping(value = "/enableStart", method = RequestMethod.GET)
 	public ModelAndView EnableStart(String iid,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		ComplatUser complatUser = null;
 		try{			
@@ -621,7 +621,7 @@ public class ComplatUserController extends BaseController{
 	 * @author <a href=" ">shenxh</a>
 	 */
 	@SuppressWarnings("finally")
-	@RequestMapping(value = "/EnableStop", method = RequestMethod.GET)
+	@RequestMapping(value = "/enableStop", method = RequestMethod.GET)
 	public ModelAndView EnableStop(String iid,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		ComplatUser complatUser = null;
 		try{			
