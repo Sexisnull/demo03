@@ -29,7 +29,6 @@ import com.gsww.jup.util.PageUtils;
 import com.gsww.jup.util.StringHelper;
 import com.gsww.jup.util.TimeHelper;
 import com.gsww.uids.entity.ComplatCorporation;
-import com.gsww.uids.entity.ComplatOutsideuser;
 import com.gsww.uids.service.ComplatCorporationService;
 /**
  * <p>Copyright: Copyright (c) 2014</p>
@@ -278,9 +277,7 @@ public class ComplatCorporationController extends BaseController{
 		try{			
 			String iid = StringUtils.trim((String) request.getParameter("iid"));
 			String corporationType = StringUtils.trim((String) request.getParameter("outsideUserType"));
-			String rejectReason1 = StringUtils.trim((String) request.getParameter("rejectReason1"));
 			String rejectReason2 = StringUtils.trim((String) request.getParameter("rejectReason2"));
-			String name = StringUtils.trim((String) request.getParameter("name"));
 			int type = Integer.parseInt(corporationType);//1:通过  2：拒绝
 			complatCorporation = complatCorporationService.findByKey(Integer.parseInt(iid));
 			if(type == 1) {
@@ -332,5 +329,33 @@ public class ComplatCorporationController extends BaseController{
 		}
 	}
 	
-	
+	/**
+     * @discription    登录名唯一性校验
+     * @param loginName
+     * @param model
+     * @param request
+     * @param response  
+     * @throws Exception
+	 */
+	@RequestMapping(value="/checkCorporationLoginName", method = RequestMethod.GET)
+	public void checkLoginName(String loginName,Model model,HttpServletRequest request,HttpServletResponse response)throws Exception {
+		try {
+			ComplatCorporation complatCorporation = null;
+			String loginNameInput=StringUtils.trim((String)request.getParameter("loginName"));
+			String oldLoginName=StringUtils.trim((String)request.getParameter("oldLoginName"));
+			if(!loginNameInput.equals(oldLoginName)){
+				complatCorporation = complatCorporationService.findByLoginNameIsUsed(loginName);
+				if(complatCorporation!=null){					
+					response.getWriter().write("0");								
+				}else{
+					response.getWriter().write("1");
+				}
+			}else{
+				response.getWriter().write("1");
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
