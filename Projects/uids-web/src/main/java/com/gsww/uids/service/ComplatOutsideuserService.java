@@ -54,4 +54,10 @@ public interface ComplatOutsideuserService {
 	 * @return
 	 */
 	public List<Map<String, Object>> findByNameOrPinYin(String keyword);
+	
+	/**
+     * @discription   逻辑删除 
+     * @param iid
+	 */
+	void delete(Integer iid);
 }

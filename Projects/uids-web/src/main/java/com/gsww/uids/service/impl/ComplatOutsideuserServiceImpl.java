@@ -52,15 +52,18 @@ public class ComplatOutsideuserServiceImpl implements ComplatOutsideuserService 
 	
 	@Override
 	public List<ComplatOutsideuser> findAll() {
-		// TODO Auto-generated method stub
 		return outsideUserDao.findAll();
 	}
 	
 	@Override
 	public List<Map<String, Object>> findByNameOrPinYin(String keyword) {
-
 		String sql = "SELECT iid, name, loginname FROM complat_outsideuser" +
 				" WHERE name LIKE '%"+keyword+"%' OR pinyin LIKE '%"+keyword+"%' ";
 		return jdbcTemplate.queryForList(sql);
+	}
+
+	@Override
+	public void delete(Integer iid) {
+		outsideUserDao.updateOutsideuser(iid);
 	}
 }

@@ -361,22 +361,29 @@
 						</td>
 						<td></td>
 					</tr>
+					<tr id="input_three" class="input_three" style="display:none;" align = "center">
+						<th></th>
+						<td></td>
+						<td>
+							<p align = "right">
+								<input type="submit" class="btn btn-primary" value="保存"/> 
+								<input type="button" class="btn" value="取消" onclick="rejectCancel();" />
+							</p>
+						</td>
+					</tr>
+					<tr id="input_four" class="input_four" align = "center">
+						<th></th>
+						<td></td>
+						<td>
+						<p align = "center">
+							<input type="button" class="btn btn-primary" value="拒绝" onclick="regect();" /> 
+							<input type="submit" class="btn" value="通过"/>
+							<input type="button" class="btn" value="取消" onclick="javascript:window.location.href='${ctx}/complat/outsideuserList'" />
+						</p>
+						</td>
+					</tr>
 				</table>
 			</div>
-	        <!--表单按钮区-->
-			<div id="input_three" class="input_three" style="display:none;"> 
-				<p align = "right">
-					<input type="submit" class="btn btn-primary" value="保存"/> 
-					<input type="button" class="btn" value="取消" onclick="rejectCancel();" />
-				</p>
-			</div>
-			<div id="input_four" class="input_four"> 
-			<p align = "center">
-				<input type="button" class="btn btn-primary" value="拒绝" onclick="regect();" /> 
-				<input type="submit" class="btn" value="通过"/>
-				<input type="button" class="btn" value="取消" onclick="javascript:window.location.href='${ctx}/complat/outsideuserList'" />
-			</p>
-		</div>
 		</form>
       </div> 
     </div>
