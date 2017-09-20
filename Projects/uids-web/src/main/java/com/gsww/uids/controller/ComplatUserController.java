@@ -1,5 +1,6 @@
 package com.gsww.uids.controller;
 
+import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -51,6 +52,8 @@ import com.gsww.uids.service.ComplatRoleService;
 import com.gsww.uids.service.ComplatUserService;
 import com.gsww.uids.service.JisFieldsService;
 import com.gsww.uids.service.JisUserdetailService;
+
+import net.sf.json.JSONArray;
 
 /**
  * <p>Copyright: Copyright (c) 2014</p>
