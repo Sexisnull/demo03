@@ -66,7 +66,7 @@ $(function(){
 	<!--列表的面包屑区域-->
 	<ol class="breadcrumb">
 				<li>
-					<a href="${ctx}/index" target="_top">首页</a>
+					<a href="${ctx}/backIndex" target="_top">首页</a>
 				</li>
 				<li class="split"></li>
 				<li>

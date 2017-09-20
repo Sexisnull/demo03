@@ -86,7 +86,7 @@ width: 100px !important;
 			<div class="position">
 				<ol class="breadcrumb">
 					<li>
-						<a href="${ctx}/index" target="_top">首页</a>
+						<a href="${ctx}/backIndex" target="_top">首页</a>
 					</li>
 					<li class="split"></li>
 					<li>
