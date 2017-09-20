@@ -3,6 +3,7 @@ package com.gsww.uids.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +17,8 @@ public class JisRoleobjectServiceImpl implements JisRoleobjectService{
 	
 	@Autowired
 	private JisRoleobjectDao jisRoleobjectDao;
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
 	
 	@Override
 	public List<JisRoleobject> findByRoleIdAndType(Integer roleId, Integer type) {
@@ -50,6 +53,24 @@ public class JisRoleobjectServiceImpl implements JisRoleobjectService{
 			return false;
 		}
 		
+	}
+	
+	@Override
+	public boolean add(int roleid, int objectid, int type) {
+		JisRoleobject roleObject = new JisRoleobject();
+	    roleObject.setObjectid(Integer.valueOf(objectid));
+	    roleObject.setRoleid(Integer.valueOf(roleid));
+	    roleObject.setType(Integer.valueOf(type));
+	    
+	    return jisRoleobjectDao.save(roleObject)!=null;
+	}
+	
+	@Override
+	public int findObjectSize(int roleid, int objectid, int type) {
+		String sql = "SELECT COUNT(iid) FROM jis_roleobject " +
+				"WHERE roleid = "+roleid+" AND objectid = "+objectid+" AND type = "+type;
+		
+		return jdbcTemplate.queryForObject(sql,Integer.class);
 	}
 
 }

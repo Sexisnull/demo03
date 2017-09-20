@@ -89,5 +89,11 @@ public interface ComplatGroupService {
 	 */
 	public List<Map<String, Object>> findByNameOrPinYin(String keyword);
 	
+	/**
+	 * 查询所有组织机构iid和名称
+	 * @return
+	 */
+	public List<Map<String,Object>> findAllIidsAndName();
+	
 
 }

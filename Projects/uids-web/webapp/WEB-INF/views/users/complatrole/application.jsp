@@ -29,7 +29,6 @@
 		        spCodesTemp += (","+$(this).val());
 		       }
 		      });
-		      console.log(spCodesTemp);
 		      return spCodesTemp;
 		}
 		function toolbarAction(action) {
@@ -43,7 +42,7 @@
 			removeMembers(ids);
 			break;
 		case 'add':
-			
+			var tmp_id = 'dialog_id_' + new Date().getTime();
 			$("#dialogframe").dialog({
 				width : 800,
 				height : 500,
@@ -51,13 +50,8 @@
 				cache : false,
 				parentWindow : window,
 				modal:true,
-				title:'用户新增', 
-				buttons:{ 
-				'确定':function(){ 
-				}, 
-				'取消':function(){ 
-				$(this).dialog("close"); 
-				}}});
+				title:'用户新增'
+			});
 			break;
 		case 'clean':
 			if(confirm('您将清空当前角色下的所有成员\n是否继续？')){
@@ -65,33 +59,6 @@
 			}
 			break;
 		}
-	}
-
-	/**
-	 * 新增成员
-	 */
-	function addMembers(users, groups) {
-		var groupsArray = new Array();
-		var usersArray = new Array();
-
-		$.each(groups, function(id) {
-			groupsArray.push(id);
-		});
-
-		$.each(users, function(id) {
-			usersArray.push(id);
-		});
-
-		ajaxSubmit("modify_submit.do?roleId=${roleId}&users="
-				+ usersArray.join() + "&groups=" + groupsArray.join(), {
-			success : function(result) {
-				if (result.success) {
-					location.reload();
-				} else {
-					alert(result.message);
-				}
-			}
-		});
 	}
 
 	/**
@@ -296,7 +263,7 @@ body {
 	</head>
 	<body>
 		<div id="dialogframe" style="display:none;width:100%;height:100%;" class="dialog-wrap">
-			<iframe name="dialog_frame" src="${ctx}/complat/orgselect.do?orgType=${orgType}&roleId=${roleid}" style="width:100%;height:100%;" frameborder="0"> 
+			<iframe name="dialog_frame" data-dialog-id="xzjgyh"  src="${ctx}/complat/orgselect.do?orgType=${orgType}&roleId=${roleid}" style="width:100%;height:100%;" frameborder="0"> 
 			</iframe>
 		</div>
 	

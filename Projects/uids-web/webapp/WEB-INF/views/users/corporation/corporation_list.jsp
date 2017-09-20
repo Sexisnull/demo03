@@ -183,7 +183,7 @@
 	                	<td class="alignL" style="text-align: center;">
 	                		<div class="alignL">
 	                    		<div class="list-longtext">
-			                		<c:if test="${complatCorporation.enable=='0'}">禁用</c:if>
+			                		<c:if test="${complatCorporation.enable=='0'}">关闭</c:if>
 			                		<c:if test="${complatCorporation.enable=='1'}">开启</c:if>
 			                	</div>
 			                </div>
