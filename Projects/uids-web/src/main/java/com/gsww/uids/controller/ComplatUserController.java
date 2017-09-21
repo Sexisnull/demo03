@@ -691,7 +691,7 @@ public class ComplatUserController extends BaseController {
 					complatUserService.save(complatUser);
 					returnMsg("success", "启用成功", request);
 				} else if (complatUser.getEnable() == 1) {
-					returnMsg("success", "已启用,请先停用再重复操作", request);
+					returnMsg("success", "已启用", request);
 				}
 			}
 		} catch (Exception e) {
@@ -733,7 +733,7 @@ public class ComplatUserController extends BaseController {
 					complatUserService.save(complatUser);
 					returnMsg("success", "停用成功", request);
 				} else if (complatUser.getEnable() == 0) {
-					returnMsg("success", "已停用,请先启用再重复操作", request);
+					returnMsg("success", "已停用", request);
 				}
 			}
 		} catch (Exception e) {
