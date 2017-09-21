@@ -157,4 +157,12 @@ public class ComplatGroupServiceImpl implements ComplatGroupService{
 		
 		return jdbcTemplate.queryForList(sql);
 	}
+
+	@Override
+	public List<Map<String,Object>> findAllIidsAndName() {
+		// TODO Auto-generated method stub
+		
+		String sql = "select iid, name from complat_group where opersign<>3 ";
+		return jdbcTemplate.queryForList(sql);
+	}
 }

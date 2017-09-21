@@ -69,5 +69,5 @@ public interface JisLogService {
 	 */
 	public List<JisLog> findBySpec(String spec) throws Exception;
 
-
+	public void save(JisLog log);
 }

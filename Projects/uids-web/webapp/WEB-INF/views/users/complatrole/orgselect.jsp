@@ -10,6 +10,7 @@
 <title>组织选择</title>
 <link type="text/css" rel="stylesheet" href="${ctx}/res/ui/css/roleGlobal.css"/>
 <script type="text/javascript" src="${ctx}/res/plugin/jquery/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="${ctx }/res/skin/default/js/jquery-ui.js"></script>
 <script type="text/javascript" src="${ctx}/res/skin/login/js/jquery.draggable.js"></script>
 
 <link rel="stylesheet" href="${ctx}/res/skin/default/css/tabs.css"/>
@@ -19,7 +20,6 @@
 <script type="text/javascript" src="${ctx}/res/skin/login/js/jquery.tabs.js"></script>
 <link rel="stylesheet" href="${ctx}/res/ui/css/grouptree.css"/>
 <script type="text/javascript" src="${ctx}/res/skin/login/js/jquery.tree.js"></script>
-
 <script type="text/javascript" src="${ctx}/res/skin/default/js/jquery.hotkeys-0.7.9.min.js"></script>
 
 <script>
@@ -40,7 +40,6 @@
 	 */
 	function loadUserData(currentId) {
 		$('#usersselect .selectsource').empty();
-		console.log("currentid"+currentId);
 		$.ajax({
 			type : "POST",
 			url : "${ctx}/complat/user_load",
@@ -48,8 +47,6 @@
 			data : 'id=' + currentId + "&roleid=${roleid}",
 			success : function(jsonData) {
 				var pid = jsonData.pid;
-				console.log(jsonData);
-				console.log(pid);
 				if (pid != null) {
 					$('#usersselect .selectsource').append('<li class="reply" pid="'+pid+'">... 返回上一层</li>');
 				}
@@ -148,6 +145,9 @@
 			border : false
 		});
 		
+		
+		var button = $(".ui-button-text");
+		
 		if (userEnable) {
 			loadUserData(0); // 加载用户数据
 
@@ -164,7 +164,6 @@
 		if (groupEnable) {
 			// 检索机构
 			$('#group-search-btn').click(searchGroup);
-			console.log($('#group-search-btn'));
 			$('#group-search').bind('keydown', 'return', searchGroup);
 		}
 		
@@ -539,7 +538,7 @@
 			$('#usersselect .selectsource').hide();
 			$('#usersselect .searchresult').empty().show();
 			$.ajax({
-				url : '${ctx}/manager/user_search.do',
+				url : '${ctx}/complat/user_search',
 				data : {keyword:$('#user-search').val(),roleid:"${roleid}"},
 				dataType: 'json',
 				type : 'post',
@@ -618,7 +617,7 @@
 			$('#groupselect .selectsource').hide();
 			$('#groupselect .searchresult').empty().show();
 			$.ajax({
-				url : '${ctx}/manager/group_search.do',
+				url : '${ctx}/complat/group_search',
 				data : {keyword:$('#group-search').val(),roleid:"${roleid}"},
 				dataType: 'json',
 				type : 'post',
@@ -671,7 +670,7 @@
 			$('#roleselect .searchresult').empty().show();
 			$.ajax({
 				type : "POST",
-				url : '${ctx}/manager/role_search.do',
+				url : '${ctx}/complat/role_search',
 				data : {keyword:$('#role-search').val()},
 				dataType : 'json',
 				success : function(jsonData) {
@@ -779,10 +778,45 @@
 			alert('没有添加任何对象!');
 			return;
 		}
+		
+		//$("#dialogframe").callback(selectedUsers, selectedGroups, selectedRoles);
+		var groupsArray = new Array();
+		var usersArray = new Array();
 
-		getDialog().dialog('options').callback(selectedUsers, selectedGroups, selectedRoles);
+		if(typeof(selectedGroups)!="undefined"){ 
+			$.each(selectedGroups, function(id) {
+				groupsArray.push(id);
+			});
+		} 
+		if(typeof(selectedUsers)!="undefined"){ 
+			$.each(selectedUsers, function(id) {
+				usersArray.push(id);
+			});
+		} 
+		
+		var users = usersArray.join();
+		var groups = groupsArray.join();
+		$.ajax({
+			type: 'POST',
+			url : "${ctx}/complat/modify_submit",
+			data:{"roleId":${roleid},"users":users,"groups":groups},
+			dataType : "JSON",
+			async : false,
+			success : function(data) {
+				if(data.result){
+					alert("新增成功");
+				}else{
+					alert("新增失败");
+				}
+			}
+		});
 		closeDialog();
 	}
+	
+	function closeDialog(){
+		window.parent.document.location.reload();
+	}
+	
 </script>
 <style>
 #orgselect-source {
@@ -961,6 +995,51 @@
 	{
 	vertical-align: middle;
 }
+.ui_buttons {
+    white-space: nowrap;
+    padding: 4px 0 4px 8px;
+    height: 52px;
+    line-height: 52px;
+    text-align: right;
+    background-color: #ffffff;
+    border-top: solid 1px #e5e5e5;
+}
+.ui_buttons input::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+
+.ui_buttons input {
+    padding: 4px 12px 4px 14px;
+    padding: 6px 12px 6px 14px\0;
+    *padding: 5px 12px 5px 12px;
+    margin-left: 6px;
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+    line-height: 1;
+    height: 28px;
+    letter-spacing: 3px;
+    overflow: visible;
+    color: #4cadf1;
+    font-size: 14px;
+    border: solid 1px #4cadf1;
+    border-radius: 3px;
+    border-radius: 0\9;
+    background: #ffffff;
+}
+
+.ui_buttons input:hover {
+    color: #ffffff;
+	background-color: #81c5f5;
+    box-shadow: none;
+}
+.ui_buttons input:active {
+    color: #ffffff;
+	background-color: #81c5f5;
+    box-shadow: none;
+}
 </style>
 </head>
 <body>
@@ -971,7 +1050,7 @@
 		<i class="icon-remove-sign" style="font-size: 60px;"></i><br /> 点击移除已选中
 	</div>
 	<div id="dialog-content" style="padding: 0; overflow: hidden;">
-		<div id="orgselect-source" data-options="tabPosition:'left',headerWidth:100" class="easyui-tabs" style="width: 500px; height: 399px;">
+		<div id="orgselect-source" data-options="tabPosition:'left',headerWidth:100" class="easyui-tabs" style="width: 500px; height: 368px;">
 			
 			<c:if test="${fn:contains(orgType,'u')}">
 				<div id="usersselect" title="用户和机构">
@@ -1030,11 +1109,14 @@
 					<span class="member-icon"><i class="icon-vcard-2"></i><div id="rolesize" class="member-size"></div></span>
 					</c:if>
 			</div>
-			<div class="batchselect-wrap" style="height: 356px; overflow: auto; position: relative;">
+			<div class="batchselect-wrap" style="height: 325px; overflow: auto; position: relative;">
 				<ul class="selecttarget batchselect"></ul>
 			</div>
 		</div>
 	</div>
-	
+	<div class="ui_buttons">
+			<input type="button" class="btn btn-primary" value="确定" onclick="ok();" />
+			<input type="button" class="btn ui-dialog-titlebar-close" value="关闭" onclick="closeDialog();" />
+		</div>
 </body>
 </html>

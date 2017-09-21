@@ -12,7 +12,6 @@
 		<script type="text/javascript">
 		
 		function btnAuthorize(obj) {
-		console.log(obj);
 		$(".list-page").css({'position':'absolute'});
 		$(".list-page").css({'bottom':'-100px'});
 		$("#list-warper").addClass("window-mask");
@@ -41,6 +40,20 @@
 		      }
 		   });
 	};
+	
+	function modifyIsDefault(iid, checkbox) {
+		var isDefault = checkbox.checked ? 1 : 0; //切换当前角色缺省状态
+		$.ajax({
+			type : "POST",
+			url : "${ctx}/complat/isdefault_modify",
+			data : "iid=" + iid + "&isDefault=" + isDefault,
+			success : function(result) {
+				if (!result.success)
+					alert(result.message);
+			}
+		});
+	}
+	
 	/**搜索表单校验**/
 	function checkSubmitForm() {
 		var nameSearch = $("#nameSearch").val();
@@ -72,7 +85,7 @@
 			<!--列表的面包屑区域-->
 			<ol class="breadcrumb">
 				<li>
-					<a href="${ctx}/index" target="_top">首页</a>
+					<a href="${ctx}/backIndex" target="_top">首页</a>
 				</li>
 				<li class="split"></li>
 				<li>
@@ -158,7 +171,7 @@
 									${complatRole.spec}
 								</td>
 								<td style="text-align: center">
-									<input type="checkbox"/>
+									<input type="checkbox" <c:if test="${complatRole.isdeFault==1}">checked</c:if> onclick="modifyIsDefault(${complatRole.iid},this);"/>
 								</td>
 								<td class="position-content" style="text-align: center">
 									<div class="listOper">

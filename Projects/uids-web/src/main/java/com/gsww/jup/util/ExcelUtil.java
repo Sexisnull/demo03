@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -120,7 +121,8 @@ public class ExcelUtil {
 		if (cell.getCellType() == cell.CELL_TYPE_BOOLEAN) {
 			return String.valueOf(cell.getBooleanCellValue());
 		} else if (cell.getCellType() == cell.CELL_TYPE_NUMERIC) {
-			return String.valueOf(cell.getNumericCellValue());
+			DecimalFormat df = new DecimalFormat("0");
+			return String.valueOf(df.format(cell.getNumericCellValue()));
 		} else {
 			return String.valueOf(cell.getStringCellValue());
 		}

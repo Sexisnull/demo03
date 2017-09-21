@@ -149,6 +149,25 @@ public class JisFieldsController extends BaseController {
 					jisUserdetailService.addUserField(jisFields.getFieldname());
 					returnMsg("success", "保存成功", request);
 				} else { // 编辑
+					int type = jisFields.getType();
+					if (type == 1) {//字符串
+						jisFields.setDefvalue("");
+						jisFields.setFieldkeys("");
+						jisFields.setFieldvalues("");
+					} 
+					if (type == 2) {//枚举值
+						jisFields.setDefvalue("");
+						String keys = StringUtils.substringBeforeLast(jisFields.getFieldkeys(), ",");
+						String values = StringUtils.substringBeforeLast(jisFields.getFieldvalues(), ",");
+						jisFields.setFieldkeys(keys);
+						jisFields.setFieldvalues(values);
+					}
+					if (type == 3) {
+						jisFields.setFieldkeys("");
+						jisFields.setFieldvalues("");
+						String defvalue = StringUtils.substringBeforeLast(jisFields.getDefvalue(), ",");
+						jisFields.setDefvalue(defvalue);
+					}
 					jisFieldsService.save(jisFields);
 					returnMsg("success", "编辑成功", request);
 				}
@@ -230,15 +249,23 @@ public class JisFieldsController extends BaseController {
 	
 	@RequestMapping(value = "/checkFieldname", method = RequestMethod.GET)
 	public void checkFieldname(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		JisFields jisFieldsSame = null;
 		try {
-			boolean flag = true;
+			boolean flag = true;//true 不重名  false 重名
 			String fieldname = StringUtils.trim((String) request.getParameter("fieldname"));
+			String iidStr = StringUtils.trim((String) request.getParameter("iid"));
+			if (iidStr != null && iidStr != "") {
+				int iid = Integer.parseInt(iidStr);
+				jisFieldsSame = jisFieldsService.findByKey(iid);
+			}
 			if (fieldname != "null") {
 				List<JisFields> jisFieldsList = jisFieldsService.findAllJisFields();
 				for (JisFields jisFields : jisFieldsList) {
 					if (fieldname.equals(jisFields.getFieldname())) {
-						flag = false;
-						break;
+						if (!fieldname.equals(jisFieldsSame.getFieldname())) {
+							flag = false;
+							break;
+						}
 					}
 				}
 			} else {

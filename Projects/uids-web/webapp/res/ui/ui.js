@@ -18,8 +18,6 @@ $(function(){
  * @returns
  */
 function openDialog(url, width, height, options, id) {
-	console.log("openDialog");
-	console.log(url);
 	var tmp_id = "";
 	if (typeof (id) == 'undefined') {
 		tmp_id = 'dialog_id_' + new Date().getTime();

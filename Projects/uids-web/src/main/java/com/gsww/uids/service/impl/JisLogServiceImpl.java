@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gsww.jup.ServiceException;
-
 import com.gsww.uids.dao.JisLogDao;
 import com.gsww.uids.entity.JisLog;
 import com.gsww.uids.service.JisLogService;
@@ -160,6 +159,15 @@ public class JisLogServiceImpl implements JisLogService {
 	public List<JisLog> findBySpec(String spec) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void save(JisLog log) {
+		
+		if(log!=null){
+			jisLogDao.save(log);
+		}
+		
 	}
 
 }
