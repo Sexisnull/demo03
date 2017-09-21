@@ -1,4 +1,4 @@
-package com.gsww.uids.sysview.test;
+package com.gsww.uids.service.test;
 
 
 import static org.junit.Assert.*;

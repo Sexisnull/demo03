@@ -1,4 +1,4 @@
-package com.gsww.uids.complatuser.test;
+package com.gsww.uids.service.test;
 
 import static org.junit.Assert.assertTrue;
 
@@ -143,27 +143,5 @@ public class ComplatUserServiceTest {
 		}
 		assertTrue(true);
 	}
-	
-	/*@Test
-	public void getComplatUserPage(){
-		try {
-			//Specification<ComplatUser> spec = null;
-			//PageRequest pageRequest = null;
-			//初始化分页数据
-			HttpServletRequest hrequest = null;
-			PageUtils pageUtils=new PageUtils(1,10,"createtime","DESC");
-			PageRequest pageRequest=super.buildPageRequest(hrequest,pageUtils,ComplatUser.class,"findNowPage");
-			
-			//搜索属性初始化
-			Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
-			Specification<ComplatUser>  spec=super.toNewSpecification(searchParams, ComplatUser.class);
-			List<Map<String, Object>> complatUserMapList = complatUserService.findByGroupIds(groupIds);
-			System.out.println("根据机构ID获取政府用户信息List"+JSONArray.fromObject(complatUserMapList).toString());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		assertTrue(true);
-	}*/
-	
 	
 }
