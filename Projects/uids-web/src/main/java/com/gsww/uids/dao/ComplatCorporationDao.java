@@ -1,5 +1,7 @@
 package com.gsww.uids.dao;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -30,4 +32,11 @@ public interface ComplatCorporationDao extends  PagingAndSortingRepository<Compl
 	@Modifying
 	@Query("update ComplatCorporation t set t.operSign = 3 where t.iid = ?")
 	public void updateCorporation(Integer iid);
+	
+	/**
+     * @discription    根据登录名查找法人用户实体
+     * @param loginName
+     * @return
+	 */
+	List<ComplatCorporation> findByLoginName(String loginName);
 }

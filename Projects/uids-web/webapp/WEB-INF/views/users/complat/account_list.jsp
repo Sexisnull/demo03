@@ -242,7 +242,6 @@ function intPutComplatUser(){
     document.body.appendChild(mybg);
 	document.body.style.overflow = "hidden"; 
 	$("#alerttb").show(); 				
-
 }
 	
  
@@ -371,15 +370,15 @@ function outPutComplatUser() {
 			<form id="form2" name="form2" action="${ctx}/complat/complatList" method="get">
 				<table class="advanced-content" style="display:none;">
 					<tr>
-						  <th style="padding-left: 10px">姓名：</th>
+						  <th style="padding-left: 10px">请输入姓名：</th>
 					      <td width="20%">
-							   <input type="text"  style="width: 170px;" placeholder="请输姓名:" value="${sParams['LIKE_name']}" id="nameSearch" name="search_LIKE_name" />
+							   <input type="text"  style="width: 170px;" placeholder="请输入姓名:" value="${sParams['LIKE_name']}" id="nameSearch" name="search_LIKE_name" />
 						  </td>
-						  <th style="padding-left: 5px">登录名：</th>
+						  <th style="padding-left: 5px">请输入登录名：</th>
 						  <td width="20%">
 							   <input type="text"  style="width: 170px;" placeholder="请输入登录名:" value="${sParams['LIKE_loginname']}" id="loginnameSearch" name="search_LIKE_loginname" />
 						  </td>
-						  <th style="padding-left: 10px">登录名全称：</th>
+						  <th style="padding-left: 10px">请输入登录名全称：</th>
 						  <td width="20%">
 							   <input type="text"  style="width: 170px;" placeholder="请输入登录名全称:" value="${sParams['LIKE_loginallname']}" id="loginallnameSearch" name="search_LIKE_loginallname" />
 						  </td>
@@ -437,12 +436,11 @@ function outPutComplatUser() {
                 	<th width="10%" style="text-align: center;">姓名</th>
                     <th width="8%" style="text-align: center;">登录名</th>
                     <th width="10%" style="text-align: center;">登录全名</th>
-                    <th width="15%" style="text-align: center;">手机号码</th>
-                    <th width="10%" style="text-align: center;">邮箱</th>
-                    <th width="5%" style="text-align: center;">账号开启</th>                                                     
-                    <!--<th width="15%" class="alignL" style="text-align: center;">用户职务</th>-->
-                    <th width="22%" class="alignL" style="text-align: center;">注册时间</th>    
-                    <!--<th width="5%" style="text-align: center;">办公电话</th> -->
+                    <th width="13%" style="text-align: center;">所属机构</th>
+                    <th width="13%" class="alignL" style="text-align: center;">用户职务</th>
+                    <th width="20%" style="text-align: center;">办公电话</th>
+                    <th width="6%" style="text-align: center;">账号开启</th><!--                                                     
+                    <th width="18%" class="alignL" style="text-align: center;">注册时间</th>-->  
                     <th width="20%" style="text-align: center;">操作</th> 
                 </tr>
             </thead> 
@@ -464,10 +462,13 @@ function outPutComplatUser() {
 	                    	<div title="${complatUser.loginallname}" class="word_break">${complatUser.loginallname}</div>
 	                    </td>
 	                    <td style="text-align: center;">
-	                    	<div title="${complatUser.mobile}" class="word_break">${complatUser.mobile}</div>
+	                    	<div class="word_break">${groupMap[complatUser.groupid]}</div>
 	                    </td>
 	                    <td style="text-align: center;">
-	                    	<div title="${complatUser.email}" class="word_break">${complatUser.email}</div>
+	                    	<div class="word_break">${complatUser.headship}</div>
+	                    </td>
+	                    <td style="text-align: center;">
+	                    	<div title="${complatUser.phone}" class="word_break">${complatUser.phone}</div>
 	                    </td>
 	                    <td style="text-align: center;">
 	                    	<div class="alignL">
@@ -476,12 +477,10 @@ function outPutComplatUser() {
 	                           		<c:if test="${complatUser.enable == '1'}"><font color="#32CD32">启用</font></c:if>
 	                    		</div>
 	                        </div>
-	                    </td>
-	                    
-	                    
-	                     <td style="text-align: center;">
-	                    	<div title="${complatUser.createtime}" class="word_break">${complatUser.createtime}</div>
-	                    </td>	                    	                   
+
+	                    <!-- <td style="text-align: center;">
+	                        <div title="${complatUser.createtime}" class="word_break">${complatUser.createtime}</div>
+	                    </td> -->	                    	                   
 	                	<td class="position-content" style="text-align: center;" >
 	                        <gsww:opTag menuId="8a929c9e5e5fbde5015e5fdb125c0002" tabIndex="1" operatorType="2"></gsww:opTag>
 	                    </td>

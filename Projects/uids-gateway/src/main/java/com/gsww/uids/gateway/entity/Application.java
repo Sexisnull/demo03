@@ -6,60 +6,30 @@ public class Application implements Serializable {
 	private static final long serialVersionUID = -9198437426281533523L;
 
 	private Integer iid;
-
 	private String name;
-
 	private String mark;
-
-	private Integer groupId = Integer.valueOf(0);
-
+	private Integer groupid = Integer.valueOf(0);
 	private String spec;
-
 	private Integer transtype = Integer.valueOf(0);
-
-	private String encryptKey;
-
+	private String encryptkey;
 	private String icon = "/resources/jis/front/app/default.jpg";
-
-	private Integer loginType = Integer.valueOf(0);
-
-	private String appUrl;
-
-	private String ssoUrl;
-
-	private Integer userDefined = Integer.valueOf(0);
-
-	private String allLoginiId;
-
-	private String allPwd;
-
-	private Integer encryptType = Integer.valueOf(1);
-
-	private Integer isSyncGroup = Integer.valueOf(1);
-
-	private Integer orderId;
-
-	private Integer isShow = Integer.valueOf(1);
-
-	private Integer isLogoff = Integer.valueOf(0);
-
-	private Integer isUnifyRegister = Integer.valueOf(0);
-
-	private Integer netType = Integer.valueOf(0);
-
-	private String logoffUrl;
-	private Integer approleid;
-
-	public Integer getApproleid() {
-		return this.approleid;
-	}
-
-	public void setApproleid(Integer approleid) {
-		this.approleid = approleid;
-	}
+	private Integer logintype = Integer.valueOf(0);
+	private String appurl;
+	private String ssourl;
+	private Integer userdefined = Integer.valueOf(0);
+	private String allloginiid;
+	private String allpwd;
+	private Integer encrypttype = Integer.valueOf(1);
+	private Integer issyncgroup = Integer.valueOf(1);
+	private Integer orderid;
+	private Integer isshow = Integer.valueOf(1);
+	private Integer islogoff = Integer.valueOf(0);
+	private Integer isunifyregister = Integer.valueOf(0);
+	private Integer nettype = Integer.valueOf(0);
+	private String logoffurl;
 
 	public Integer getIid() {
-		return this.iid;
+		return iid;
 	}
 
 	public void setIid(Integer iid) {
@@ -67,7 +37,7 @@ public class Application implements Serializable {
 	}
 
 	public String getName() {
-		return this.name;
+		return name;
 	}
 
 	public void setName(String name) {
@@ -75,162 +45,163 @@ public class Application implements Serializable {
 	}
 
 	public String getMark() {
-		return this.mark;
+		return mark;
 	}
 
 	public void setMark(String mark) {
 		this.mark = mark;
 	}
 
-	public Integer getGroupId() {
-		return this.groupId;
+	public Integer getGroupid() {
+		return groupid;
 	}
 
-	public void setGroupId(Integer groupId) {
-		this.groupId = groupId;
+	public void setGroupid(Integer groupid) {
+		this.groupid = groupid;
 	}
 
 	public String getSpec() {
-		return this.spec;
+		return spec;
 	}
 
 	public void setSpec(String spec) {
 		this.spec = spec;
 	}
 
-	public String getEncryptKey() {
-		return this.encryptKey;
-	}
-
-	public void setEncryptKey(String encryptKey) {
-		this.encryptKey = encryptKey;
-	}
-
-	public String getIcon() {
-		return this.icon;
-	}
-
-	public void setIcon(String icon) {
-		this.icon = icon;
-	}
-
-	public Integer getLoginType() {
-		return this.loginType;
-	}
-
-	public void setLoginType(Integer loginType) {
-		this.loginType = loginType;
-	}
-
-	public String getAppUrl() {
-		return this.appUrl;
-	}
-
-	public void setAppUrl(String appUrl) {
-		this.appUrl = appUrl;
-	}
-
-	public String getSsoUrl() {
-		return this.ssoUrl;
-	}
-
-	public void setSsoUrl(String ssoUrl) {
-		this.ssoUrl = ssoUrl;
-	}
-
-	public Integer getUserDefined() {
-		return this.userDefined;
-	}
-
-	public void setUserDefined(Integer userDefined) {
-		this.userDefined = userDefined;
-	}
-
-	public String getAllLoginiId() {
-		return this.allLoginiId;
-	}
-
-	public void setAllLoginiId(String allLoginiId) {
-		this.allLoginiId = allLoginiId;
-	}
-
-	public String getAllPwd() {
-		return this.allPwd;
-	}
-
-	public void setAllPwd(String allPwd) {
-		this.allPwd = allPwd;
-	}
-
-	public Integer getEncryptType() {
-		return this.encryptType;
-	}
-
-	public void setEncryptType(Integer encryptType) {
-		this.encryptType = encryptType;
-	}
-
-	public Integer getIsSyncGroup() {
-		return this.isSyncGroup;
-	}
-
-	public void setIsSyncGroup(Integer isSyncGroup) {
-		this.isSyncGroup = isSyncGroup;
-	}
-
-	public Integer getOrderId() {
-		return this.orderId;
-	}
-
-	public void setOrderId(Integer orderId) {
-		this.orderId = orderId;
-	}
-
-	public Integer getIsShow() {
-		return this.isShow;
-	}
-
-	public void setIsShow(Integer isShow) {
-		this.isShow = isShow;
-	}
-
 	public Integer getTranstype() {
-		return this.transtype;
+		return transtype;
 	}
 
 	public void setTranstype(Integer transtype) {
 		this.transtype = transtype;
 	}
 
-	public Integer getIsLogoff() {
-		return this.isLogoff;
+	public String getEncryptkey() {
+		return encryptkey;
 	}
 
-	public void setIsLogoff(Integer isLogoff) {
-		this.isLogoff = isLogoff;
+	public void setEncryptkey(String encryptkey) {
+		this.encryptkey = encryptkey;
 	}
 
-	public String getLogoffUrl() {
-		return this.logoffUrl;
+	public String getIcon() {
+		return icon;
 	}
 
-	public void setLogoffUrl(String logoffUrl) {
-		this.logoffUrl = logoffUrl;
+	public void setIcon(String icon) {
+		this.icon = icon;
 	}
 
-	public Integer getIsUnifyRegister() {
-		return this.isUnifyRegister;
+	public Integer getLogintype() {
+		return logintype;
 	}
 
-	public void setIsUnifyRegister(Integer isUnifyRegister) {
-		this.isUnifyRegister = isUnifyRegister;
+	public void setLogintype(Integer logintype) {
+		this.logintype = logintype;
 	}
 
-	public Integer getNetType() {
-		return this.netType;
+	public String getAppurl() {
+		return appurl;
 	}
 
-	public void setNetType(Integer netType) {
-		this.netType = netType;
+	public void setAppurl(String appurl) {
+		this.appurl = appurl;
 	}
+
+	public String getSsourl() {
+		return ssourl;
+	}
+
+	public void setSsourl(String ssourl) {
+		this.ssourl = ssourl;
+	}
+
+	public Integer getUserdefined() {
+		return userdefined;
+	}
+
+	public void setUserdefined(Integer userdefined) {
+		this.userdefined = userdefined;
+	}
+
+	public String getAllloginiid() {
+		return allloginiid;
+	}
+
+	public void setAllloginiid(String allloginiid) {
+		this.allloginiid = allloginiid;
+	}
+
+	public String getAllpwd() {
+		return allpwd;
+	}
+
+	public void setAllpwd(String allpwd) {
+		this.allpwd = allpwd;
+	}
+
+	public Integer getEncrypttype() {
+		return encrypttype;
+	}
+
+	public void setEncrypttype(Integer encrypttype) {
+		this.encrypttype = encrypttype;
+	}
+
+	public Integer getIssyncgroup() {
+		return issyncgroup;
+	}
+
+	public void setIssyncgroup(Integer issyncgroup) {
+		this.issyncgroup = issyncgroup;
+	}
+
+	public Integer getOrderid() {
+		return orderid;
+	}
+
+	public void setOrderid(Integer orderid) {
+		this.orderid = orderid;
+	}
+
+	public Integer getIsshow() {
+		return isshow;
+	}
+
+	public void setIsshow(Integer isshow) {
+		this.isshow = isshow;
+	}
+
+	public Integer getIslogoff() {
+		return islogoff;
+	}
+
+	public void setIslogoff(Integer islogoff) {
+		this.islogoff = islogoff;
+	}
+
+	public Integer getIsunifyregister() {
+		return isunifyregister;
+	}
+
+	public void setIsunifyregister(Integer isunifyregister) {
+		this.isunifyregister = isunifyregister;
+	}
+
+	public Integer getNettype() {
+		return nettype;
+	}
+
+	public void setNettype(Integer nettype) {
+		this.nettype = nettype;
+	}
+
+	public String getLogoffurl() {
+		return logoffurl;
+	}
+
+	public void setLogoffurl(String logoffurl) {
+		this.logoffurl = logoffurl;
+	}
+
 }

@@ -13,6 +13,11 @@ import com.gsww.uids.entity.ComplatGroup;
 public interface ComplatGroupDao extends  PagingAndSortingRepository<ComplatGroup, String>,
 JpaSpecificationExecutor<ComplatGroup>{
 	
+	/**
+	 * 根据pid查询对象
+	 * @param pid
+	 * @return
+	 */
 	@Query(value = "select group from ComplatGroup group where group.pid=?1 order by group.orderid asc")
 	public List<ComplatGroup> findByPid(Integer pid);
 	/**

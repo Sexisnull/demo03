@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONArray;
 
+import net.sourceforge.pinyin4j.PinyinHelper;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -87,6 +89,7 @@ public class ComplatUserController extends BaseController{
 	
 	@Autowired
 	private JisFieldsService jisFieldsService;
+	
 	/**
 	 * 获取政府用户列表
 	 * @param pageNumber
@@ -119,9 +122,19 @@ public class ComplatUserController extends BaseController{
 			Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 			Specification<ComplatUser>  spec=super.toNewSpecification(searchParams, ComplatUser.class);
 			
+			// map放入
+			List<Map<String, Object>> groupList = new ArrayList<Map<String, Object>>();
+			Map<Integer, Object> groupMap = new HashMap<Integer, Object>();
+			groupList = complatGroupService.getComplatGroupList();
+			for (Map<String, Object> group : groupList) {
+				groupMap.put((Integer) group.get("iid"), group.get("name"));
+			}
+			
 			//分页
 			Page<ComplatUser> pageInfo = complatUserService.getComplatUserPage(spec,pageRequest);
-			model.addAttribute("pageInfo", pageInfo);			
+			model.addAttribute("pageInfo", pageInfo);	
+			model.addAttribute("groupMap", groupMap);
+			
 			// 将搜索条件编码成字符串，用于排序，分页的URL
 			model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
 			model.addAttribute("sParams", searchParams);						
@@ -147,6 +160,16 @@ public class ComplatUserController extends BaseController{
 	@RequestMapping(value = "/complatUserEdit", method = RequestMethod.GET)
 	public String complatUserEdit(String iid,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {		
 		try {
+			
+			// map放入
+			List<Map<String, Object>> groupList = new ArrayList<Map<String, Object>>();
+			Map<Integer, Object> groupMap = new HashMap<Integer, Object>();
+			groupList = complatGroupService.getComplatGroupList();
+			for (Map<String, Object> group : groupList) {
+				groupMap.put((Integer) group.get("iid"), group.get("name"));
+			}
+			
+			
 			ComplatUser complatUser = null;	
 			if (StringHelper.isNotBlack(iid)) {
 				complatUser = complatUserService.findByKey(Integer.parseInt(iid));
@@ -252,6 +275,30 @@ public class ComplatUserController extends BaseController{
 
 	
 	
+	
+	/**
+	 * 将机构名首字母大写返回
+	 * @author LinCX
+	 * @param str
+	 * @return convert
+	 */
+    public static String getPinYinHeadChar(String str) {  
+        String convert = "";  
+        for (int j = 0; j < str.length(); j++) {  
+            char word = str.charAt(j);  
+            String[] pinyinArray = PinyinHelper.toHanyuPinyinStringArray(word);  
+            if (pinyinArray != null) {  
+                convert += pinyinArray[0].charAt(0);  
+            } else {  
+                convert += word;  
+            }  
+        }  
+        return convert.toUpperCase();  
+    }
+    
+    
+	
+	
 
 	/**
 	 * 数据导入
@@ -263,36 +310,74 @@ public class ComplatUserController extends BaseController{
 	 * @throws Exception
 	 * @author <a href=" ">shenxh</a>
 	 */
-	@RequestMapping(value = "/complatImport", method = RequestMethod.POST)
-	public ModelAndView complatImport(@RequestParam("excelFile")MultipartFile multipartFile,
+	/*@RequestMapping(value = "/complatImport", method = RequestMethod.POST)
+	public ModelAndView complatImport(@RequestParam("files")MultipartFile multipartFile,
 			HttpServletRequest request,Model model,
-			HttpServletResponse response) throws Exception {				      
+			HttpServletResponse response) throws Exception {	
 		String fileName = multipartFile.getOriginalFilename();	
 		LinkedHashMap<String, String> fieldMap = new LinkedHashMap<String, String>();
 		fieldMap.put("0", "name");
 		fieldMap.put("1", "loginname");
 		fieldMap.put("2", "loginallname");
-		fieldMap.put("3", "mobile");
-		fieldMap.put("4", "email");
+		fieldMap.put("3", "groupid");
+		fieldMap.put("4", "headship");
+		fieldMap.put("5", "phone");
+		fieldMap.put("6", "enable");
 		List<ComplatUser> users= ExcelUtil.readXls(fileName,multipartFile.getInputStream(),ComplatUser.class,fieldMap);
+		//判断是哪行导入失败
+		int row = 1;
+		boolean flag=true;
+		String strRow = "";
 		try {
 			for(ComplatUser complatUser:users){
-				List<ComplatUser> list = complatUserService.findByUserAllName(complatUser.getLoginallname());				
-				if(list.size()==0){					
-					complatUser.setEnable(0);
-					Date date=new Date();
-					DateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-					String time=format.format(date);
-					Date createTime = sdf.parse(time);
-					complatUser.setCreatetime(createTime);
-					complatUserService.save(complatUser);
-				}
+				List<ComplatUser> list = complatUserService.findByLoginallname(complatUser.getLoginallname());			
+				if(list.size()==0){		
+					if(list.size()==0){					
+						complatUser.setEnable(0);
+						Date date=new Date();
+						DateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+						String time=format.format(date);
+						Date createTime = sdf.parse(time);
+						complatUser.setCreatetime(createTime);
+						complatUserService.save(complatUser);
+					}
+					if(StringHelper.isNotBlack(complatUser.getName())){  //判断excel表格导入的数据是否规范						
+						//新增时将机构名汉字转换成首字母大写保存到pinyin字段中
+						String daPinYin = getPinYinHeadChar(complatUser.getName());
+						complatUser.setPinyin(daPinYin);
+						//设置创建时间
+						Date date=new Date();
+						DateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+						String time=format.format(date);
+						Date createTime = sdf.parse(time);
+						complatUser.setCreatetime(createTime);
+						//设置pid		
+						complatGroup.setPid(complatGroupService.findByName(complatGroup.getParentName()).getIid());
+						complatUser.setGroupid(complatUserService.findByAllName(complatUser.getLoginallname()).getGroupid());
+						//设置状态值
+						complatUser.setOpersign(1);
+						complatUser.setSynState(2);
+						complatUserService.save(complatUser);
+					}else{
+						flag = false;
+						strRow = strRow + row + "、"; //记录第几行数据导入失败
+					}//else
+					row++;//导入行数加一
+				}//if(list
+			}//for
+			if(flag){
+				returnMsg("success","导入成功",request);
+			}else{
+				returnMsg("error", "导入失败,第" + strRow + "数据不符合规范！",request);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+		e.printStackTrace();
+		returnMsg("error", "导入失败",request);
 		}
-		return new ModelAndView("redirect:/complat/complatList");
+		return new ModelAndView("redirect:/uids/complatList");
 	}
+		*/
+		
 	
 	
 	
@@ -319,10 +404,11 @@ public class ComplatUserController extends BaseController{
         headList.add("用户姓名");
         headList.add("登录名");
         headList.add("登录全名");
-        headList.add("手机号码");
-        headList.add("邮箱");
+        headList.add("所属机构");
+        headList.add("用户职务");
+        headList.add("办公电话");
         headList.add("账号开启");
-        headList.add("注册时间");
+        
 		Workbook wb = new XSSFWorkbook();  // 导出 Excel为2007 工作簿对象  
         
 		List dataList = new ArrayList();
@@ -332,16 +418,15 @@ public class ComplatUserController extends BaseController{
 			treeMap.put("1", complatUser.getName());
 			treeMap.put("2", complatUser.getLoginname());
 			treeMap.put("3", complatUser.getLoginallname());
-			treeMap.put("4", complatUser.getMobile());
-			treeMap.put("5", complatUser.getEmail());	
+			treeMap.put("4", complatUser.getGroupid());
+			treeMap.put("5", complatUser.getHeadship());
+			treeMap.put("6", complatUser.getPhone());	
 			int enable = complatUser.getEnable();
 			if(enable==0){
-				treeMap.put("6","未启用");
+				treeMap.put("7","未启用");
 			}else{
-				treeMap.put("6","已启用");
-			}
-			
-			treeMap.put("7", complatUser.getCreatetime());			
+				treeMap.put("7","已启用");
+			}				
 			dataList.add(treeMap);
 		}
 		map.put(ExcelUtil.HEADERINFO, headList);  
@@ -458,6 +543,13 @@ public class ComplatUserController extends BaseController{
 		String userMenu = request.getParameter("userMenu");
 		Integer userId = null;
 		if("2".equals(userMenu)){
+			SysUserSession sysUserSession = (SysUserSession) request.getSession().getAttribute("sysUserSession");
+			String usersId = sysUserSession.getAccountId();
+			if(StringHelper.isNotBlack(usersId)){
+				userId = Integer.parseInt(usersId);
+			}
+
+		}else if("1".equals(userMenu)){
 			SysUserSession sysUserSession = (SysUserSession) request.getSession().getAttribute("sysUserSession");
 			String usersId = sysUserSession.getAccountId();
 			if(StringHelper.isNotBlack(usersId)){

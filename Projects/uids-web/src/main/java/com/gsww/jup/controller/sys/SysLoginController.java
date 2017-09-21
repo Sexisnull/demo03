@@ -191,11 +191,11 @@ public class SysLoginController extends BaseController{
 	@RequestMapping(value = "/login/getSysMain")
 	public String getSysIndexMain(ServletRequest request) {
 		try {
-
+			
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(),ex);
 		}
-		return "main/main";
+		return "redirect:/complat/complatList";
 	}
 
 	/**

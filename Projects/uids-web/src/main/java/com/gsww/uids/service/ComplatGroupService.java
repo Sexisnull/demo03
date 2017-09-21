@@ -11,10 +11,14 @@ import org.springframework.data.jpa.domain.Specification;
 
 public interface ComplatGroupService {
 	
-	public List<ComplatGroup> findByPid(Integer pid);
-	
 	public List<ComplatGroup> findAll();
 	
+	/**
+	 * 根据pid查找对象
+	 * @param pid
+	 * @throws Exception
+	 */
+	public List<ComplatGroup> findByPid(Integer pid) throws Exception;
 	
 	/**
 	 * 保存或修改对象
@@ -90,10 +94,10 @@ public interface ComplatGroupService {
 	public List<Map<String, Object>> findByNameOrPinYin(String keyword);
 	
 	/**
-	 * 查询所有组织机构iid和名称
-	 * @return
+	 * 根据名字查找对象保存到列表里
 	 */
-	public List<Map<String,Object>> findAllIidsAndName();
+	public List<ComplatGroup> findByAllName(String name);
 	
+	public List<Map<String,Object>> findAllIidsAndName();
 
 }

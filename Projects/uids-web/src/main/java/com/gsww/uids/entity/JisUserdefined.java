@@ -21,20 +21,12 @@ public class JisUserdefined implements java.io.Serializable {
 	private Integer appid;
 	private String apploginname;
 	private String apppwd;
+	private String loginallname;
 
 	// Constructors
 
 	/** default constructor */
 	public JisUserdefined() {
-	}
-
-	/** full constructor */
-	public JisUserdefined(String loginname, Integer appid, String apploginname,
-			String apppwd) {
-		this.loginname = loginname;
-		this.appid = appid;
-		this.apploginname = apploginname;
-		this.apppwd = apppwd;
 	}
 
 	// Property accessors
@@ -84,5 +76,15 @@ public class JisUserdefined implements java.io.Serializable {
 	public void setApppwd(String apppwd) {
 		this.apppwd = apppwd;
 	}
+	
+	@Column(name = "loginallname")
+	public String getLoginallname() {
+		return loginallname;
+	}
 
+	public void setLoginallname(String loginallname) {
+		this.loginallname = loginallname;
+	}
+	
+	
 }

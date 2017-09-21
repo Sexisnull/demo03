@@ -93,6 +93,10 @@
 		$("#input_three")[0].style.display = 'none';
 		$("#outsideUserType").attr("value", 1);
 	}
+	//关闭
+	$(".close").click(function() {
+        $("#alerttb").hide();
+    });
 </script>
 <style type="text/css">
 /*设置弹出层样式*/
@@ -149,7 +153,7 @@
 	<div class="position">
 		<ol class="breadcrumb">
 			<li>
-				<a href="${ctx}/index" target="_top">首页</a>
+				<a href="${ctx}/backIndex" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
 			<li>
@@ -357,26 +361,33 @@
 					<tr style="display:none;" id="tr_reject">
 						<th></th>
 						<td>
-						<textarea rows="5" cols="5" class="rejectReason" name="rejectReason2"></textarea>
+						<textarea placeholder="请填写拒绝原因" rows="5" cols="5" class="rejectReason" name="rejectReason2"></textarea>
 						</td>
 						<td></td>
 					</tr>
+					<tr id="input_three" class="input_three" style="display:none;" align = "center">
+						<th></th>
+						<td></td>
+						<td>
+							<p align = "right">
+								<input type="submit" class="btn btn-primary" value="保存"/> 
+								<input type="button" class="btn" value="取消" onclick="rejectCancel();" />
+							</p>
+						</td>
+					</tr>
+					<tr id="input_four" class="input_four" align = "center">
+						<th></th>
+						<td></td>
+						<td>
+						<p align = "center">
+							<input type="button" class="btn btn-primary" value="拒绝" onclick="regect();" /> 
+							<input type="submit" class="btn" value="通过"/>
+							<input type="button" class="btn" value="取消" onclick="javascript:window.location.href='${ctx}/complat/outsideuserList'" />
+						</p>
+						</td>
+					</tr>
 				</table>
 			</div>
-	        <!--表单按钮区-->
-			<div id="input_three" class="input_three" style="display:none;"> 
-				<p align = "right">
-					<input type="submit" class="btn btn-primary" value="保存"/> 
-					<input type="button" class="btn" value="取消" onclick="rejectCancel();" />
-				</p>
-			</div>
-			<div id="input_four" class="input_four"> 
-			<p align = "center">
-				<input type="button" class="btn btn-primary" value="拒绝" onclick="regect();" /> 
-				<input type="submit" class="btn" value="通过"/>
-				<input type="button" class="btn" value="取消" onclick="javascript:window.location.href='${ctx}/complat/outsideuserList'" />
-			</p>
-		</div>
 		</form>
       </div> 
     </div>
