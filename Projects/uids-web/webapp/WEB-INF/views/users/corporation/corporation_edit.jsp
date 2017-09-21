@@ -1,3 +1,6 @@
+
+
+
 <%@ page language="java" pageEncoding="utf-8"%>
 <!DOCTYPE html>
 <html>
@@ -26,6 +29,7 @@ var corNameInput=$("#name").val();
 	   },
 	   cardNumber:{
 	   	isIdCardNo:true,
+	   	required:true,
 	   	 maxlength: 18
 	   },
 	   orgNumber:{
@@ -42,10 +46,14 @@ var corNameInput=$("#name").val();
 	   	required: true
 	   },
 	   email:{
+	   	required: true,
 	   	email:true
 	   },
 	   phone:{
 	   	isPhone:true
+	   },
+	   nation:{
+	   	required: true
 	   }
 	  }
     });
@@ -59,16 +67,18 @@ var corNameInput=$("#name").val();
 	               "鄂伦春族","独龙族","赫哲族","高山族","珞巴族","塔塔尔族"];
 	var nation = $("#nation");
 	for(var i=0;i<nations.length;i++){
-		nation.append("<option value='nations[i]'>"+nations[i]+"</option>");
+		var corNation = document.getElementById("corNation").value;
+		if(corNation == nations[i]){
+			nation.append("<option value='"+nations[i]+"' selected='selected'>"+nations[i]+"</option>");	
+		}else{
+			nation.append("<option value='"+nations[i]+"'>"+nations[i]+"</option>");
+		}
+		
 	}
-});
-
-$(function(){
-	// Ajax重命名校验
-	$.uniqueValidate('uniqueLoginAccount', '${ctx}/sys/checkAccount', ['loginAccount','oldLoginAccount'], '对不起，这个账号重复了');
-	$("#roleNames").Popup($(".ulRoleList"), { width: "auto" });
-	//
-	$(".icon-date-r").click(function(){ $(this).prev("input").click(); });
+	
+	 
+	
+	
 });
 
 
@@ -136,6 +146,7 @@ color: rgb(119, 119, 119);
         <input type="hidden" id="authState" name="authState" value="${corporation.authState}"/>
     	<input type="hidden" id="isAuth" name="isAuth" value="${corporation.isAuth}"/>
     	<input type="hidden" id="time" name="time" value="${time}">
+    	<input type="hidden" name="corNation" id="corNation" value="${corNation}">
     </div>
     
     <!--表单的主内容区域-->
@@ -153,7 +164,7 @@ color: rgb(119, 119, 119);
 		<tr>
 			<th><b class="mustbe">*</b> 企业名称：</th>
 			 <td width="20%">
-				<input type="text" id="name" name="name" value="${corporation.name}" />
+				<input type="text" id="name" name="name" value="${corporation.name}"/>
 			</td>
         	<th><b class="mustbe">*</b> 企业法人姓名：</th>
                <td>
@@ -163,7 +174,7 @@ color: rgb(119, 119, 119);
 		<tr>
 			<th><b class="mustbe">*</b> 企业法人身份证号：</th>
 				<td>
-					<input type="text" id="cardNumber" name="cardNumber" value="${corporation.cardNumber}"">
+					<input type="text" id="cardNumber" name="cardNumber" value="${corporation.cardNumber}">
 	            </td>
 				<th> 企业法人民族：</th>
 				<td>
@@ -201,8 +212,7 @@ color: rgb(119, 119, 119);
 		<tr>
 			<th> 密码：</th>
         	<td>
-        		<input type="password" id="pwd" name="pwd" value="${corporation.pwd}" 
-        		onkeyup="javascript:EvalPwd(this.value);"/>
+        		<input type="password" id="pwd" name="pwd"  onkeyup="javascript:EvalPwd(this.value);"/>
             	
         	</td>
 			<th>邮箱：</th>
@@ -214,7 +224,7 @@ color: rgb(119, 119, 119);
 		<tr>
 			<th>密码强度：</th>
 			<td>
-				<table id="pwdpower" title="字母加数字加符号就会强" style="width: 100%" cellspacing="0"
+				<table id="pwdpower" title="字母加数字加符号就会强" style="width: 87%" cellspacing="0"
 				cellpadding="0" border="0">
 					<tbody>
 						<tr>

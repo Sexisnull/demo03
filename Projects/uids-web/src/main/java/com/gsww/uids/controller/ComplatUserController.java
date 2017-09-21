@@ -1,5 +1,6 @@
 package com.gsww.uids.controller;
 
+import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -14,6 +15,8 @@ import java.util.TreeMap;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import net.sf.json.JSONArray;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -357,7 +360,6 @@ public class ComplatUserController extends BaseController{
 	 */
 	@RequestMapping(value="/userSetUpEdit",method = RequestMethod.GET)
 	public ModelAndView userSetUpEdit(Model model,HttpServletRequest request,HttpServletResponse response) throws Exception{
-		
 		ModelAndView mav = new ModelAndView("users/sysview/user_setup");
 		try{
 			//获取系统当前登录用户
@@ -430,9 +432,11 @@ public class ComplatUserController extends BaseController{
 				if(jisUserdetail.getIid() == null){
 					jisUserdetailService.save(jisUserdetail);
 				}else{
-					jisUserdetailService.update(jisUserdetail.getIid(),cardId);
+					//扩展属性
+					Map<String,String> userMap = this.saveExendsAttr(userId, request);
+					//对身份证号和用户扩展属性update
+					jisUserdetailService.update(jisUserdetail.getIid(),cardId,userMap);
 				}
-				
 			}			
 			returnMsg("success","保存成功",request);
 		} catch (Exception e) {
@@ -452,14 +456,16 @@ public class ComplatUserController extends BaseController{
 		List<List<Map<String,Object>>> fieldsListMap = new ArrayList<List<Map<String,Object>>>();
 		//判断是政府用户还是用户设置菜单，获取用户id。1-政府用户；2-用户设置
 		String userMenu = request.getParameter("userMenu");
-		userMenu = "2";
 		Integer userId = null;
-		SysUserSession sysUserSession = (SysUserSession) request.getSession().getAttribute("sysUserSession");
-		String usersId = sysUserSession.getAccountId();
-		if(StringHelper.isNotBlack(usersId)){
-			userId = Integer.parseInt(usersId);
+		if("2".equals(userMenu)){
+			SysUserSession sysUserSession = (SysUserSession) request.getSession().getAttribute("sysUserSession");
+			String usersId = sysUserSession.getAccountId();
+			if(StringHelper.isNotBlack(usersId)){
+				userId = Integer.parseInt(usersId);
+			}
 		}
-		//1.查询类型 1-字符；2-枚举；3-固定值
+		
+		//1.查询类型 1-字符；2-枚举
 		List<Map<String, Object>> listMap = null;
 		List<JisFields> fieldsList = this.jisFieldsService.findAllJisFields();
 		List<Integer> typeList = this.jisFieldsService.findFieldsType();
@@ -477,14 +483,54 @@ public class ComplatUserController extends BaseController{
 				System.out.println(listMap.size());
 			}
 		}
-		//model.addAttribute("fieldsListMap",fieldsListMap);
+		
 		JSONArray array = JSONArray.fromObject(fieldsListMap);
 		PrintWriter out = response.getWriter();
 		String json = array.toString();
-		System.out.println(json);
 		out.write(json);
 		model.addAttribute("fieldsListMap",json);
 		
+		//设置默认值
+		List<JisFields> fieldsTypeList= this.jisFieldsService.findByType(2);
+		Map<String,Object> fieldsMap = jisFieldsService.findByUserIdAndType(fieldsTypeList,userId);
+		JSONArray mapArray = JSONArray.fromObject(fieldsMap);
+		PrintWriter outMap = response.getWriter();
+		String jsonMap = mapArray.toString();
+		outMap.write(jsonMap);
+		model.addAttribute("jsonMap",jsonMap);
+		
+	}
+	
+	
+	/**
+	 * 保存用户扩展属性
+	 */
+	private Map<String,String> saveExendsAttr(Integer userId,HttpServletRequest request){
+		Map<String,String> userMap = new HashMap<String, String>();
+		try {
+			Integer type = 1;
+			List<JisFields> fieldsList = jisFieldsService.findByType(type);
+			for(int i=0;i<fieldsList.size();i++){
+				 String fileleNameKey = fieldsList.get(i).getFieldname();
+				 String fieldNameValue = request.getParameter(fileleNameKey);
+				 userMap.put(fileleNameKey, fieldNameValue);
+			}
+			
+			type=2;
+			fieldsList = jisFieldsService.findByType(type);
+			for(int i=0;i<fieldsList.size();i++){
+				String fieldName = fieldsList.get(i).getFieldname();
+				//根据select的name获取key值
+				String fieldKey = request.getParameter(fieldName);
+				userMap.put(fieldName, fieldKey);
+				
+			}
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return userMap;
 	}
 	
 	
@@ -671,7 +717,6 @@ public class ComplatUserController extends BaseController{
 		
 	}
 
-	
 }
 
 

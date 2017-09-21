@@ -1,6 +1,7 @@
 package com.gsww.uids.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -108,13 +109,10 @@ public class JisFieldsServiceImpl implements JisFieldsService {
 			
 			querySql = "select distinct b.userid,type,"+ queryFieldsName +" from jis_fields a ,jis_userdetail b where b.userId = '"+userId+"'" +
 			" and type = '1' and a.fieldname in("+whereFieldsName+")";
-			System.out.println("querySql:"+querySql);
 		}else if(type == 2){
 			querySql = "select a.fieldkeys,a.fieldvalues,type,a.fieldname from jis_fields a where type = '2'";
-			System.out.println("querySql:"+querySql);
 		}
 		listMap = jdbcTemplate.queryForList(querySql);
-		//Map map = jdbcTemplate.queryForMap(querySql);
 		return listMap;
 	}
 
@@ -125,6 +123,29 @@ public class JisFieldsServiceImpl implements JisFieldsService {
 		
 		return jisFieldsDao.findFieldsType();
 	}
+
+	@Override
+	public List<JisFields> findByType(Integer type) throws Exception {
+		
+		return jisFieldsDao.findByType(type);
+	}
+
+	@Override
+	public Map<String, Object> findByUserIdAndType(List<JisFields> fieldsList,Integer userId) throws Exception {
+		Map<String, Object> fieldsMap = new HashMap<String, Object>();
+		String names = "";
+		String fieldName = "";
+		for(int i=0;i<fieldsList.size();i++){
+			fieldName = fieldsList.get(i).getFieldname();
+			names += fieldName+",";
+		}
+		names = names.substring(0, names.length()-1);
+		String querySql = "select distinct "+names+" from jis_fields a ,jis_userdetail b where  a.type='2' and b.userid = '1'";
+		fieldsMap = jdbcTemplate.queryForMap(querySql);
+		return fieldsMap;
+	}
+
+	
 	
 	
 

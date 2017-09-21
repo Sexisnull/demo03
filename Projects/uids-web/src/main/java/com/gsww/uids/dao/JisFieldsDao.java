@@ -26,4 +26,8 @@ public interface JisFieldsDao
 	@Query("select distinct t.type from JisFields t")
 	List<Integer> findFieldsType();
 	
+	
+	List<JisFields> findByType(Integer type);
+	
+	
 }

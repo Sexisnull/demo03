@@ -1,4 +1,5 @@
 
+
 <%@page language="java" pageEncoding="UTF-8"%>
 <!doctype html>
 <%@ include file="/include/meta.jsp"%>
@@ -58,6 +59,7 @@
 					  }
 				    }); 
 				    
+				    
 				    //获取用户扩展属性
 				    var htmlString=[];
 				    var count = 1;
@@ -75,7 +77,7 @@
 				    			       htmlString.push("<tr><th>"+key+"</th><td><input name='"+key+"' type='text' value='"+value+"'></td>");
 				    			    }
 				    			    if(count%2==0){
-				    			       htmlString.push("<th>"+key+"</th><td><input type='text' value='"+value+"'></td></tr>");
+				    			       htmlString.push("<th>"+key+"</th><td><input type='text' name='"+key+"' value='"+value+"'></td></tr>");
 				    			    }
 				    			    count++;
 				    			}
@@ -94,26 +96,42 @@
 				    			if(key == 'fieldvalues'){
 				    				values = value.split(",");
 				    			}
-				    			
 				    			if(key!='type' && key !='userid'){
 				    			    if(key == 'fieldname'){
 				    			    if(count%2==1){
-				    			    alert("1111");
-				    			    	htmlString.push("<tr><th>"+value+"</th><td><select id= '"+value+"'>");
 				    			    	
+				    			    	htmlString.push("<tr><th>"+value+"</th><td><select id='"+value+"' name= '"+value+"'>");
 				    			    	//循环key；
 				    			        for(var i=0;i<keys.length;i++){
-				    					  htmlString.push("<option value='"+keys[i]+"'>"+values[i]+"</option>");
+				    			 			htmlString.push("<option value='"+keys[i]+"'");
+				    			          //获取下拉列表默认值
+										    var select = eval('${jsonMap}');
+										    for(var selectKey in select[0]){
+										    	var selectValue = select[0][selectKey];
+										    	if(selectValue == keys[i]){
+				    			        			htmlString.push("selected = 'selected'");
+				    			        		}
+									    	}
+									    	htmlString.push(">"+values[i]+"</option>");
 				    				    }
 				    			       htmlString.push("</select></td>");
+				    			       
+				    				   
 				    			    }
 				    			    if(count%2==0){
-				    			    alert("0000000");
-				    			    	htmlString.push("<th>"+value+"</th><td><select id= '"+value+"'>");
-				    			    	
+				    			    	htmlString.push("<th>"+value+"</th><td><select id='"+value+"' name= '"+value+"'>");
 				    			    	//循环key；
 				    			        for(var i=0;i<keys.length;i++){
-				    					  htmlString.push("<option value='"+keys[i]+"'>"+values[i]+"</option>");
+				    			        	htmlString.push("<option value='"+keys[i]+"'");
+				    			          //获取下拉列表默认值
+										    var select = eval('${jsonMap}');
+										    for(var selectKey in select[0]){
+										    	var selectValue = select[0][selectKey];
+										    	if(selectValue == keys[i]){
+				    			        			htmlString.push("selected = 'selected'");
+				    			        		}
+									    	}
+									    	htmlString.push(">"+values[i]+"</option>");
 				    				    }
 				    			       htmlString.push("</select></td></tr>");
 				    			    }
@@ -158,7 +176,7 @@
                     <li class="home" onclick="toFront();">
                         <p>返回首页</p>
                     </li>
-                    <li class="speaker modify-msgs">
+                    <li class="speaker modify-msgs" onclick="javascript:window.location.href='${ctx}/complat/userSetUpEdit?userMenu=2'">
                     	<p>账户设置</p>
                     </li>
                     <li class="pwd modify-pwd"  onclick="javascript:window.location.href='${ctx}/jisLog/countUser'">
@@ -204,6 +222,7 @@
 		    <div style="display:none;">
 		    	<input type="hidden" id="iid" name="iid" value="${complatUser.iid}"/>
 		    	<input type="hidden" id="userDetailIid" name="userDetailIid" value="${userDetail.iid}">
+		    	
 		    </div>
 		    
 		    <!--表单的主内容区域-->
