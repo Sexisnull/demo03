@@ -1,5 +1,6 @@
 package com.gsww.uids.gateway.ws;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -65,24 +66,25 @@ public class WsPerAuth {
 			map.put("errormsg", "必填参数为空");
 			return new JSONUtil().writeMapSJSON(map);
 		}
-		String token = "";
 		JisAuthLog jisAuthLog = this.authLogService.findByTicket(ticket, 1);
 		if (jisAuthLog != null) {
-			Date outTicketTime = jisAuthLog.getOutTicketTime();
+			Date outTicketTime = jisAuthLog.getOuttickettime();
 
 			if (DateTime.dayDiff(new Date(), outTicketTime) < 0L) {
+				jisAuthLog.setSpec("票据已过期");
 				map.put("errormsg", "票据已过期");
 				// CacheUtil.removeKey(ticket, "perticket");
 				return new JSONUtil().writeMapSJSON(map);
 			}
 			Application appLication = this.appService.findByMark(appmark);
 			MD5 md5 = new MD5();
+			String token = "";
 			if (appLication != null) {
 				String decodeSign = md5.decrypt(sign, time);
-				if (decodeSign.equals(appmark + appLication.getEncryptKey() + time)) {
-					String loginName = jisAuthLog.getLoginName();
-					if (StringUtil.isNotEmpty(StringUtil.getString(jisAuthLog.getLoginName()))) {
-						token = StringUtil.getString(jisAuthLog.getLoginName());
+				if (decodeSign.equals(appmark + appLication.getEncryptkey() + time)) {
+					String loginName = jisAuthLog.getLoginname();
+					if (!(StringHelper.isNotBlack((StringUtil.getString(jisAuthLog.getLoginname()))))) {
+						token = StringUtil.getString(jisAuthLog.getLoginname());
 						if (jisAuthLog.getToken() == null) {
 							jisAuthLog.setToken(token);
 							// CacheUtil.setValue(token, jisAuthLog,
@@ -98,7 +100,7 @@ public class WsPerAuth {
 					}
 					map.put("token", token);
 					map.put("loginname", loginName);
-					map.put("username", jisAuthLog.getUserName());
+					map.put("username", jisAuthLog.getUsername());
 				} else {
 					map.put("errormsg", "sign中的appmark或appkey值与参数不同");
 				}
@@ -134,25 +136,25 @@ public class WsPerAuth {
 			return new JSONUtil().writeMapSJSON(map);
 		}
 
-		int userType = jisAuthLog.getUserType().intValue();
+		int userType = jisAuthLog.getUsertype().intValue();
 		if (userType == 1) {
-			OutsideUser outSideUser = this.outSideUserService.findByLoginName(jisAuthLog.getLoginName());
+			OutsideUser outSideUser = this.outSideUserService.findByLoginName(jisAuthLog.getLoginname());
 			map.put("uuid", outSideUser.getUuid());
-			map.put("loginname", outSideUser.getLoginName());
+			map.put("loginname", outSideUser.getLoginname());
 			map.put("mobile", StringUtil.getString(outSideUser.getMobile()));
 			map.put("email", StringUtil.getString(outSideUser.getEmail()));
 			map.put("name", StringUtil.getString(outSideUser.getName()));
 			map.put("sex", StringUtil.getString(outSideUser.getSex()));
-			map.put("cardid", StringUtil.getString(outSideUser.getPapersNumber()));
-			map.put("birthdate", StringUtil.getString(outSideUser.getBirthDate()));
+			map.put("cardid", StringUtil.getString(outSideUser.getPapersnumber()));
+			map.put("birthdate", StringUtil.getString(outSideUser.getBirthdate()));
 			map.put("phone", StringUtil.getString(outSideUser.getPhone()));
 			map.put("address", StringUtil.getString(outSideUser.getAddress()));
-			map.put("workunit", StringUtil.getString(outSideUser.getWorkUnit()));
+			map.put("workunit", StringUtil.getString(outSideUser.getWorkunit()));
 			map.put("msn", StringUtil.getString(outSideUser.getMsn()));
 			map.put("qq", StringUtil.getString(outSideUser.getQq()));
 			map.put("isauth", StringUtil.getString(outSideUser.getIsauth()));
 			map.put("usertype", "1");
-			map.put("authstate", StringUtil.getString(outSideUser.getAuthState()));
+			map.put("authstate", StringUtil.getString(outSideUser.getAuthstate()));
 		} else {
 			map.put("errormsg", "登录名不是个人用户");
 		}
@@ -167,59 +169,59 @@ public class WsPerAuth {
 		System.out.println(
 				"appmark=" + appmark + "token=" + token + "time=" + time + "sign=" + sign + "proxyapp=" + proxyapp);
 		Map<String, String> map = new HashMap<String, String>();
-		if ((!StringHelper.isNotBlack(appmark)) || (!StringHelper.isNotBlack(token)) || (!StringHelper.isNotBlack(sign))
-				|| (!StringHelper.isNotBlack(proxyapp)) || (!StringHelper.isNotBlack(time))) {
+		if ((StringHelper.isNotBlack(appmark)) || (StringHelper.isNotBlack(token)) || (StringHelper.isNotBlack(sign))
+				|| (StringHelper.isNotBlack(proxyapp)) || (StringHelper.isNotBlack(time))) {
+			Application appLication = this.appService.findByMark(proxyapp);
+			if (appLication != null) {
+				/*
+				 * if (CacheUtil.getValue(token, "pertoken") == null) {
+				 * map.put("errormsg", "令牌已失效"); return new
+				 * JSONUtil().writeMapSJSON(map); }
+				 */
+				JisAuthLog jisAuthLog = this.authLogService.findByToken(token, 1);
+				if (jisAuthLog != null) {
+					JisAuthLog jisAuthLogNew = new JisAuthLog();
+					jisAuthLogNew.setAppid(appLication.getIid());
+					jisAuthLogNew.setAppmark(proxyapp);
+					jisAuthLogNew.setAuthtype(Integer.valueOf(1));
+					jisAuthLogNew.setCreatetime(new Date());
+					jisAuthLogNew.setLoginname(jisAuthLog.getLoginname());
+					long times = new Date().getTime() + NumberUtil.getLong(300) * 1000L;
+					Date outTime = new Date(times);
+					jisAuthLogNew.setOuttickettime(outTime);
+
+					String ticket = MD5
+							.encodeMd5(proxyapp + appLication.getEncryptkey() + jisAuthLog.getLoginname() + new Date());
+					jisAuthLogNew.setTicket(ticket);
+					jisAuthLogNew.setUserId(jisAuthLog.getUserId());
+					jisAuthLogNew.setUsername(jisAuthLog.getUsername());
+					jisAuthLogNew.setUsertype(jisAuthLog.getUsertype());
+					jisAuthLogNew.setState(Integer.valueOf(0));
+					// boolean isSuccess = CacheUtil.setValue(ticket,
+					// jisAuthLogNew,
+					// "perticket");
+
+					if (ticket != null)
+						map.put("ticket", ticket);
+					else
+						map.put("errormsg", "票据生成失败");
+				} else {
+					map.put("errormsg", "没有该令牌");
+				}
+			} else {
+				map.put("errormsg", "接入应用不存在");
+			}
+
+			this.logger.debug("====generateTicket===返回结果===" + new JSONUtil().writeMapSJSON(map));
+			return new JSONUtil().writeMapSJSON(map);
+		} else {
 			map.put("errormsg", "必填参数为空");
 			return new JSONUtil().writeMapSJSON(map);
 		}
-
-		Application appLication = this.appService.findByMark(proxyapp);
-		if (appLication != null) {
-			/*if (CacheUtil.getValue(token, "pertoken") == null) {
-				map.put("errormsg", "令牌已失效");
-				return new JSONUtil().writeMapSJSON(map);
-			}*/
-			JisAuthLog jisAuthLog = this.authLogService.findByToken(token, 1);
-			if (jisAuthLog != null) {
-				JisAuthLog jisAuthLogNew = new JisAuthLog();
-				jisAuthLogNew.setAppId(appLication.getIid());
-				jisAuthLogNew.setAppmark(proxyapp);
-				jisAuthLogNew.setAuthType(Integer.valueOf(1));
-				jisAuthLogNew.setCreateTime(new Date());
-				jisAuthLogNew.setLoginName(jisAuthLog.getLoginName());
-				Settings settings = Settings.getSettings();
-				String authEffectiveTime = settings.getTicketEffectiveTime();
-				long times = new Date().getTime() + NumberUtil.getLong(authEffectiveTime) * 1000L;
-				Date outTime = new Date(times);
-				jisAuthLogNew.setOutTicketTime(outTime);
-
-				String ticket = MD5
-						.encodeMd5(proxyapp + appLication.getEncryptKey() + jisAuthLog.getLoginName() + new Date());
-				jisAuthLogNew.setTicket(ticket);
-				jisAuthLogNew.setUserId(jisAuthLog.getUserId());
-				jisAuthLogNew.setUserName(jisAuthLog.getUserName());
-				jisAuthLogNew.setUserType(jisAuthLog.getUserType());
-				jisAuthLogNew.setState(Integer.valueOf(0));
-				// boolean isSuccess = CacheUtil.setValue(ticket, jisAuthLogNew,
-				// "perticket");
-
-				if (ticket != null)
-					map.put("ticket", ticket);
-				else
-					map.put("errormsg", "票据生成失败");
-			} else {
-				map.put("errormsg", "没有该令牌");
-			}
-		} else {
-			map.put("errormsg", "接入应用不存在");
-		}
-
-		this.logger.debug("====generateTicket===返回结果===" + new JSONUtil().writeMapSJSON(map));
-		return new JSONUtil().writeMapSJSON(map);
 	}
 
 	@WebMethod
-	public String userValidate(String appmark, String time, String sign, String loginname, String password) {
+	public String userValidate(String appmark, String time, String sign, String loginname, String password) throws UnsupportedEncodingException {
 		System.out.println("appmark=" + appmark + "time=" + time + "sign=" + sign + "loginname=" + loginname
 				+ "password=" + password);
 		Map<String, String> map = new HashMap<String, String>();
@@ -235,31 +237,31 @@ public class WsPerAuth {
 		}
 		String ip = "";
 		MD5 md5 = new MD5();
-		password = md5.decrypt(password, time);
+		//password = new String(md5.decrypt(password, time).getBytes("gbk"),"utf-8");
 		JisAuthLog jisAuthLog = new JisAuthLog();
 		try {
 			if (UserUtil.isMobilelegal(loginname)) {
 				OutsideUser outsideUser = this.outSideUserService.findByMobile(loginname);
 				if (outsideUser != null) {
-					loginname = outsideUser.getLoginName();
+					loginname = outsideUser.getLoginname();
 				}
 			} else if (UserUtil.isIDnumberlegal(loginname)) {
 				OutsideUser outsideUser = this.outSideUserService.findByIdCard(loginname);
 				if (outsideUser != null) {
-					loginname = outsideUser.getLoginName();
+					loginname = outsideUser.getLoginname();
 				}
 			}
 
 			OutsideUser outsideUser = this.outSideUserService.checkUserLogin(loginname, password, ip);
 			if (outsideUser != null) {
 				jisAuthLog.setAppmark(appmark);
-				jisAuthLog.setLoginName(outsideUser.getLoginName());
-				jisAuthLog.setUserType(Integer.valueOf(1));
-				jisAuthLog.setAuthType(Integer.valueOf(2));
+				jisAuthLog.setLoginname(outsideUser.getLoginname());
+				jisAuthLog.setUsertype(Integer.valueOf(1));
+				jisAuthLog.setAuthtype(Integer.valueOf(2));
 				String token = md5.encrypt(loginname + appmark, loginname);
 				jisAuthLog.setToken(token);
 
-				long tokenEffectiveTime = NumberUtil.getLong(Settings.getSettings().getTokenEffectiveTime());
+				long tokenEffectiveTime = NumberUtil.getLong(300);
 				// CacheUtil.setValue(loginname, token, "pertokenkey");
 				// CacheUtil.setValue(token, jisAuthLog, "pertoken");
 				map.put("token", token);

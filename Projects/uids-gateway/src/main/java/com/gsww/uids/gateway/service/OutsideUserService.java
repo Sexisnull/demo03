@@ -43,19 +43,15 @@ public class OutsideUserService {
 
 		if (outsideUser == null) {
 			outsideUser = this.outsideUserDAO.findByLoginName(loginName);
-			if (outsideUser != null) {
-				System.out.println("corporation" + outsideUser);
-				// CacheUtil.setValue(loginName, outsideUser, "perusers");
-			}
 		}
 		if (outsideUser != null) {
 			if (outsideUser.getEnable().intValue() == 0) {
 				throw new LoginException("login.isnotallowed");
 			}
-			String password = Md5Util.md5decode(outsideUser.getPwd());
+			String password = outsideUser.getPwd();
 			if (password.equals(pwd)) {
-				outsideUser.setLoginIp(ip);
-				outsideUser.setLoginTime(new Date());
+				outsideUser.setLoginip(ip);
+				outsideUser.setLogintime(new Date());
 			} else {
 				outsideUser = null;
 			}

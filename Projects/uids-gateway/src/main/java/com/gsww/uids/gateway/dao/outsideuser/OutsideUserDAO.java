@@ -26,7 +26,7 @@ public class OutsideUserDAO extends JdbcTemplateDao {
 
 	public OutsideUser findByMobile(String cellPhoneNum) {
 
-		List<OutsideUser> list = (List<OutsideUser>) ConvertSqlToDtoList.ExeSQL2List(jdbcTemplate, findByLoginName,
+		List<OutsideUser> list = (List<OutsideUser>) ConvertSqlToDtoList.ExeSQL2List(jdbcTemplate, findByMobile,
 				new Object[] { cellPhoneNum }, "com.gsww.uids.gateway.entity.OutsideUser");
 		if (list.size() == 1) {
 			return list.get(0);
@@ -36,7 +36,7 @@ public class OutsideUserDAO extends JdbcTemplateDao {
 	}
 
 	public OutsideUser findByIdCard(String IdCard) {
-		List<OutsideUser> list = (List<OutsideUser>) ConvertSqlToDtoList.ExeSQL2List(jdbcTemplate, findByLoginName,
+		List<OutsideUser> list = (List<OutsideUser>) ConvertSqlToDtoList.ExeSQL2List(jdbcTemplate, findByIdCard,
 				new Object[] { IdCard }, "com.gsww.uids.gateway.entity.OutsideUser");
 		if (list.size() == 1) {
 			return list.get(0);

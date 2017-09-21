@@ -3,74 +3,77 @@ package com.gsww.uids.gateway.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.ObjectUtils;
 
 public class StringUtil {
-	
-	//左、右括号常量
-    private static final char LEFTBRACKET = '{';
-    
-    private static final char RIGHTBRACKET = '}';
-	
-	 /**
-     * 从合法的字符串数组中，找到指定的字符串
-     * @param cArr
-     * @return 
-     * @see
-     */
-    public static String getStringFromBracket(char[] cArr,int TargetNum){
- 
-        //成对括号计数器
-        int counter = 0;
- 
-        int i = 0;
-        
-        //找到第N个左括号
-        
-        for (; i < cArr.length && counter < TargetNum; i++){
-        	
-            if (LEFTBRACKET == cArr[i]){
-            	
-                counter++;
-                
-            }
-            
-        }
- 
-        //从目标左括号开始截取字符串
-        int leftNum = 0;
-        
-        StringBuilder sb = new StringBuilder();
-        
-        outer: for (; i < cArr.length; i++){
-        	
-            if (cArr[i] == RIGHTBRACKET){
-            	
-                //左右括号数匹配了
-                --leftNum;
-                
-                if (leftNum < 0){
-                	
-                    break outer;
-                    
-                }
-                
-            } else if (cArr[i] == LEFTBRACKET){
-            	
-                //多余的左括号也要加入到String中，这里不需要break操作
-                ++leftNum;
-                
-            }
-            
-            sb.append(cArr[i]);
-            
-        }
-        
-        return sb.toString();
-        
-    }
+
+	// 左、右括号常量
+	private static final char LEFTBRACKET = '{';
+
+	private static final char RIGHTBRACKET = '}';
+
+	/**
+	 * 从合法的字符串数组中，找到指定的字符串
+	 * 
+	 * @param cArr
+	 * @return
+	 * @see
+	 */
+	public static String getStringFromBracket(char[] cArr, int TargetNum) {
+
+		// 成对括号计数器
+		int counter = 0;
+
+		int i = 0;
+
+		// 找到第N个左括号
+
+		for (; i < cArr.length && counter < TargetNum; i++) {
+
+			if (LEFTBRACKET == cArr[i]) {
+
+				counter++;
+
+			}
+
+		}
+
+		// 从目标左括号开始截取字符串
+		int leftNum = 0;
+
+		StringBuilder sb = new StringBuilder();
+
+		outer: for (; i < cArr.length; i++) {
+
+			if (cArr[i] == RIGHTBRACKET) {
+
+				// 左右括号数匹配了
+				--leftNum;
+
+				if (leftNum < 0) {
+
+					break outer;
+
+				}
+
+			} else if (cArr[i] == LEFTBRACKET) {
+
+				// 多余的左括号也要加入到String中，这里不需要break操作
+				++leftNum;
+
+			}
+
+			sb.append(cArr[i]);
+
+		}
+
+		return sb.toString();
+
+	}
 
 	/**
 	 * 第一个字符小写
+	 * 
 	 * @param str
 	 * @return
 	 */
@@ -90,6 +93,7 @@ public class StringUtil {
 
 	/**
 	 * 首字符大写
+	 * 
 	 * @param str
 	 * @return
 	 */
@@ -99,8 +103,7 @@ public class StringUtil {
 
 		if (!Character.isUpperCase(ch)) {
 
-			str = String.valueOf(((char) (str.charAt(0) - 32)))
-					+ str.substring(1);
+			str = String.valueOf(((char) (str.charAt(0) - 32))) + str.substring(1);
 
 		}
 
@@ -143,8 +146,7 @@ public class StringUtil {
 	 *            要查找的目标字符串
 	 * @return 索引位置
 	 */
-	public String subString(int startIndex, int endIndex, String source,
-			String target) {
+	public String subString(int startIndex, int endIndex, String source, String target) {
 
 		int index = 0;
 
@@ -154,42 +156,36 @@ public class StringUtil {
 
 		}
 
-		return source.substring(index(startIndex, source, target),
-				index(endIndex, source, target));
+		return source.substring(index(startIndex, source, target), index(endIndex, source, target));
 
 	}
-	
+
 	/**
 	 * 将指定字符串按逗号分开，因当全部为逗号时无法分开而创建此方法
+	 * 
 	 * @param src
 	 * @return
 	 */
-	public List<String> splitComma(String src){
-		
-		List<String> result=new ArrayList<String>();
-		
-		src=src.replace(",", ";,;");
-		
-		String[] array=src.split(",");
-		
+	public List<String> splitComma(String src) {
+
+		List<String> result = new ArrayList<String>();
+
+		src = src.replace(",", ";,;");
+
+		String[] array = src.split(",");
+
 		for (String string : array) {
-			
+
 			result.add(string.replace(";", ""));
-			
+
 		}
-		
+
 		return result;
-		
+
 	}
 
-	public static String getString(Object value) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public static boolean isNotEmpty(Object string) {
-		// TODO Auto-generated method stub
-		return false;
+	public static String getString(Object paramObject) {
+		return ObjectUtils.toString(paramObject, "");
 	}
 
 }
