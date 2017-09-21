@@ -10,19 +10,26 @@ import com.gsww.uids.gateway.util.ConvertSqlToDtoList;
 
 public class OutsideUserDao extends JdbcTemplateDao {
 	// 通过AliAccessToken查找个人用户信息
-	private static final String findByAccessToken = "select * FROM complat_outsideuser where aliAccessToken = ?  AND opersign!=3 ";
+	private static final String findByAliUserId = "select * FROM complat_outsideuser where aliUserId = ?  AND opersign!=3 ";
+	private static final String saveAliUserId = "update complat_outsideuser set aliUserId=? where iid=? ";
 	private static final String findByLoginName = "select *FROM complat_outsideuser where loginname = ?  AND opersign<>3 ";
 	private static final String findByMobile = "select *FROM complat_outsideuser where cellPhoneNum = ?  AND opersign<>3 ";
 	private static final String findByIdCard = "select *FROM complat_outsideuser where IdCard = ?  AND opersign<>3 ";
 	
 	@SuppressWarnings("unchecked")
-	public OutsideUser findByAccessToken(String accessToken) {
-		List<OutsideUser> list = (List<OutsideUser>) ConvertSqlToDtoList.ExeSQL2List(jdbcTemplate, findByAccessToken,
-				new Object[] { accessToken }, "com.gsww.uids.gateway.entity.OutsideUser");
+	public OutsideUser findByUserId(String aliUserId) {
+		List<OutsideUser> list = (List<OutsideUser>) ConvertSqlToDtoList.ExeSQL2List(jdbcTemplate, findByAliUserId,
+				new Object[] { aliUserId }, "com.gsww.uids.gateway.entity.OutsideUser");
 		if (list.size() >= 1) {
 			return list.get(0);
 		}
 		return null;
+	}
+	
+	public int saveAliUserId(String aliUserId, String iid) {
+		int a = 0 ;
+		a = jdbcTemplate.update(saveAliUserId, new Object[] { aliUserId, iid });
+		return a;
 	}
 	
 	public OutsideUser findByLoginName(String loginName) {

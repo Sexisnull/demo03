@@ -16,7 +16,6 @@ import com.alipay.api.request.AlipaySystemOauthTokenRequest;
 import com.alipay.api.request.AlipayUserInfoShareRequest;
 import com.alipay.api.response.AlipaySystemOauthTokenResponse;
 import com.alipay.api.response.AlipayUserInfoShareResponse;
-import com.gsww.sag.util.StringHelper;
 import com.gsww.uids.gateway.dao.outsideuser.OutsideUserDao;
 import com.gsww.uids.gateway.entity.OutsideUser;
 import com.gsww.uids.gateway.util.SpringContextHolder;
@@ -61,7 +60,7 @@ public class AliOauthService {
 				if (oauthTokenResponse != null) {
 					String accessToken = oauthTokenResponse.getAccessToken();
 					String aliUserId = oauthTokenResponse.getUserId();
-					outsideUser = outsideUserDAO.findByAccessToken(accessToken);
+					outsideUser = outsideUserDAO.findByUserId(accessToken);
 					if(outsideUser != null){
 						// 登陆成功
 						flag = true;
