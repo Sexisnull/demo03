@@ -43,4 +43,5 @@
 		<bean id="applicationDao" class="com.gsww.uids.gateway.dao.application.ApplicationDao" scope="prototype" />
 		<bean id="sysViewDao" class="com.gsww.uids.gateway.dao.sysview.SysViewDao" scope="prototype" />
 		<bean id="sysViewDetailDao" class="com.gsww.uids.gateway.dao.sysview.SysViewDetailDao" scope="prototype" />
+		<bean id="outsideUserDao" class="com.gsww.uids.gateway.dao.outsideuser.OutsideUserDao" scope="prototype" />
 </beans>
