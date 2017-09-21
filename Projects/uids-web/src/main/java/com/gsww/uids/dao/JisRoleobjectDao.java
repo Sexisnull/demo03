@@ -16,4 +16,5 @@ public interface JisRoleobjectDao extends PagingAndSortingRepository<JisRoleobje
 	
 	public List<JisRoleobject> findByRoleidAndType(Integer roleId,Integer type);
 	
+	
 }

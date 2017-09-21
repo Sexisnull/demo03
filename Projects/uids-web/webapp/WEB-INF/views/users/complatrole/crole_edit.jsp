@@ -12,12 +12,13 @@ $().ready(function() {
 	    rules: {
 		   	name: {
 		    required: true,
-		    cnRangelength: [0,128],
+		    cnRangelength: [0,50],
 		    uniqueRoleName:true,
 		    stringCheck:roleNameInput
 		   },
 		   spec: {
-		    cnRangelength: [0,1024]
+			required: true,
+		    cnRangelength: [0,255]
 		   }
 		  }
 	    });
@@ -61,15 +62,15 @@ $().ready(function() {
     		<tr>
     			<th style="text-align: center;"><b class="mustbe">*</b>请输入角色名称:</th>
     			<td>
-    				<input type="text" id="name" class="input" name="name" value="${complatRole.name}"  style="width: 92.5%;"/>
+    				<input type="text" id="name" class="input" name="name" value="${complatRole.name}"  style="width: 50%;"/>
             		<input type="hidden" id="oldRoleName" class="input" name="oldRoleName" value="${complatRole.name}"  />
             		<input type="hidden" id="croleId" class="input" name="iid" value="${complatRole.iid}"  />
     			</td>
     		</tr>
     		<tr>
-    			<th style="text-align: center;"><b class="mustbe"></b>请输入角色描述:</th>
+    			<th style="text-align: center;"><b class="mustbe">*</b>请输入角色描述:</th>
     			<td>
-    			<textarea class="textarea" name="spec" style="width: 89.1%;">${complatRole.spec}</textarea>
+    			<textarea class="textarea" name="spec" style="width: 50%;">${complatRole.spec}</textarea>
     			</td>
     		</tr>
     	</table>        
