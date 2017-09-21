@@ -18,6 +18,7 @@ import com.gsww.uids.gateway.entity.OutsideUser;
 import com.gsww.uids.gateway.exception.LoginException;
 import com.gsww.uids.gateway.service.AppService;
 import com.gsww.uids.gateway.service.AuthLogService;
+import com.gsww.uids.gateway.service.CorporationService;
 import com.gsww.uids.gateway.service.OutsideUserService;
 import com.gsww.uids.gateway.sso.ldap.util.MD5;
 import com.gsww.uids.gateway.util.CacheUtil;
@@ -26,6 +27,7 @@ import com.gsww.uids.gateway.util.DateUtil;
 import com.gsww.uids.gateway.util.JSONUtil;
 import com.gsww.uids.gateway.util.MathUtil;
 import com.gsww.uids.gateway.util.NumberUtil;
+import com.gsww.uids.gateway.util.SpringContextHolder;
 import com.gsww.uids.gateway.util.StringHelper;
 import com.gsww.uids.gateway.util.StringUtil;
 import com.gsww.uids.gateway.util.UserUtil;
@@ -49,9 +51,19 @@ import com.gsww.uids.gateway.util.UserUtil;
 @SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use = SOAPBinding.Use.LITERAL, parameterStyle = SOAPBinding.ParameterStyle.WRAPPED)
 @WebService(name = "WsPerAuth", targetNamespace = "http://www.gszwfw.gov.cn/gsjis/services/WsPerAuth")
 public class WsPerAuth {
-	private AppService appService = new AppService();
-	private AuthLogService authLogService = new AuthLogService();
-	private OutsideUserService outSideUserService = new OutsideUserService();
+
+	private static AuthLogService authLogService;
+	static {
+		authLogService = SpringContextHolder.getBean("authLogService");
+	}
+	private static AppService appService;
+	static {
+		appService = SpringContextHolder.getBean("appService");
+	}
+	private static OutsideUserService outsideUserService;
+	static {
+		outsideUserService = SpringContextHolder.getBean("outsideUserService");
+	}
 
 	protected Logger logger = Logger.getLogger(getClass());
 
@@ -138,7 +150,7 @@ public class WsPerAuth {
 
 		int userType = jisAuthLog.getUsertype().intValue();
 		if (userType == 1) {
-			OutsideUser outSideUser = this.outSideUserService.findByLoginName(jisAuthLog.getLoginname());
+			OutsideUser outSideUser = this.outsideUserService.findByLoginName(jisAuthLog.getLoginname());
 			map.put("uuid", outSideUser.getUuid());
 			map.put("loginname", outSideUser.getLoginname());
 			map.put("mobile", StringUtil.getString(outSideUser.getMobile()));
@@ -221,7 +233,8 @@ public class WsPerAuth {
 	}
 
 	@WebMethod
-	public String userValidate(String appmark, String time, String sign, String loginname, String password) throws UnsupportedEncodingException {
+	public String userValidate(String appmark, String time, String sign, String loginname, String password)
+			throws UnsupportedEncodingException {
 		System.out.println("appmark=" + appmark + "time=" + time + "sign=" + sign + "loginname=" + loginname
 				+ "password=" + password);
 		Map<String, String> map = new HashMap<String, String>();
@@ -237,22 +250,23 @@ public class WsPerAuth {
 		}
 		String ip = "";
 		MD5 md5 = new MD5();
-		//password = new String(md5.decrypt(password, time).getBytes("gbk"),"utf-8");
+		// password = new String(md5.decrypt(password,
+		// time).getBytes("gbk"),"utf-8");
 		JisAuthLog jisAuthLog = new JisAuthLog();
 		try {
 			if (UserUtil.isMobilelegal(loginname)) {
-				OutsideUser outsideUser = this.outSideUserService.findByMobile(loginname);
+				OutsideUser outsideUser = this.outsideUserService.findByMobile(loginname);
 				if (outsideUser != null) {
 					loginname = outsideUser.getLoginname();
 				}
 			} else if (UserUtil.isIDnumberlegal(loginname)) {
-				OutsideUser outsideUser = this.outSideUserService.findByIdCard(loginname);
+				OutsideUser outsideUser = this.outsideUserService.findByIdCard(loginname);
 				if (outsideUser != null) {
 					loginname = outsideUser.getLoginname();
 				}
 			}
 
-			OutsideUser outsideUser = this.outSideUserService.checkUserLogin(loginname, password, ip);
+			OutsideUser outsideUser = this.outsideUserService.checkUserLogin(loginname, password, ip);
 			if (outsideUser != null) {
 				jisAuthLog.setAppmark(appmark);
 				jisAuthLog.setLoginname(outsideUser.getLoginname());

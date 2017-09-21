@@ -10,6 +10,7 @@ import javax.jws.soap.SOAPBinding;
 
 import org.apache.log4j.Logger;
 
+import com.gsww.uids.gateway.dao.application.ApplicationDao;
 import com.gsww.uids.gateway.entity.Application;
 import com.gsww.uids.gateway.entity.Corporation;
 import com.gsww.uids.gateway.entity.JisAuthLog;
@@ -23,6 +24,7 @@ import com.gsww.uids.gateway.util.DateUtil;
 import com.gsww.uids.gateway.util.JSONUtil;
 import com.gsww.uids.gateway.util.MathUtil;
 import com.gsww.uids.gateway.util.NumberUtil;
+import com.gsww.uids.gateway.util.SpringContextHolder;
 import com.gsww.uids.gateway.util.StringHelper;
 import com.gsww.uids.gateway.util.StringUtil;
 
@@ -45,9 +47,19 @@ import com.gsww.uids.gateway.util.StringUtil;
 @SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use = SOAPBinding.Use.LITERAL, parameterStyle = SOAPBinding.ParameterStyle.WRAPPED)
 @WebService(name = "WsCorAuth", targetNamespace = "http://www.gszwfw.gov.cn/gsjis/services/WsCorAuth")
 public class WsCorAuth {
-	private AuthLogService authLogService = new AuthLogService();
-	private AppService appService = new AppService();
-	private CorporationService corporationService = new CorporationService();
+	private static AuthLogService authLogService;
+	static {
+		authLogService = SpringContextHolder.getBean("authLogService");
+	}
+	private static AppService appService;
+	static {
+		appService = SpringContextHolder.getBean("appService");
+	}
+	private static CorporationService corporationService;
+	static {
+		corporationService = SpringContextHolder.getBean("corporationService");
+	}
+
 	protected Logger logger = Logger.getLogger(getClass());
 
 	@WebMethod
