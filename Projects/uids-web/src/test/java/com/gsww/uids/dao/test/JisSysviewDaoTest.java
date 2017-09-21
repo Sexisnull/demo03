@@ -1,4 +1,4 @@
-package com.gsww.uids.sysview.test;
+package com.gsww.uids.dao.test;
 
 import static org.junit.Assert.assertTrue;
 

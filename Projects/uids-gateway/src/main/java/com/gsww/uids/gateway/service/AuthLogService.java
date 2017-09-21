@@ -12,11 +12,19 @@ public class AuthLogService {
 	}
 
 	public JisAuthLog findByTicket(String ticket, int userType) {
-		if ((!StringHelper.isNotBlack(ticket)) || (userType == 0)) {
-			return null;
-		} else {
+		if ((StringHelper.isNotBlack(ticket)) || (userType != 0)) {
 			JisAuthLog jisAuthLog = authLogDao.getJisAuthLogByTicket(ticket, userType);
+			if (jisAuthLog == null) {
+				// System.out.println("jisAuthLog==null!!!");
+			} else {
+			}
+			// System.out.println("AuthLogService---findByTicket--outTicketTime"
+			// + jisAuthLog.getOuttickettime());
+			// System.out.println("AuthLogService---findByTicket--createTime" +
+			// jisAuthLog.getCreatetime());
 			return jisAuthLog;
+		} else {
+			return null;
 		}
 	}
 
@@ -25,7 +33,7 @@ public class AuthLogService {
 		if ((!StringHelper.isNotBlack(token)) || (userType == 0)) {
 			return null;
 		} else {
-			JisAuthLog jisAuthLog = authLogDao.getJisAuthLogByTicket(token, userType);
+			JisAuthLog jisAuthLog = authLogDao.getJisAuthLogByToken(token, userType);
 			return jisAuthLog;
 		}
 
