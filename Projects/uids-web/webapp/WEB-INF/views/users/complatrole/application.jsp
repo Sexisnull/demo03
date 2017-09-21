@@ -20,6 +20,14 @@
 			
 		
 		<script type="text/javascript">
+		function choseall(){
+			var c=$('#checkallUser').attr("checked");
+			if(c=="checked"){
+				$(".datagrid-view2 :checkbox").attr("checked","checked");
+			}else{
+				$(".datagrid-view2 :checkbox").removeAttr("checked");
+			}
+		}
 		function getCheckedIds(){
 			var spCodesTemp = "";
 		      $('input:checkbox[name=iids]:checked').each(function(i){
@@ -316,7 +324,7 @@ body {
 										<tr class="datagrid-header-row">
 											<td field="iid">
 												<div class="datagrid-header-check">
-													<input type="checkbox">
+													<input type="checkbox" id="checkallUser" onclick="choseall();">
 												</div>
 											</td>
 											<td field="name">

@@ -170,9 +170,9 @@
 		<form id="form1" name="pageForm" action="${ctx}/complat/outsideuserList" method="get">
 			<table class="advanced-content">
 				<tr>
-					<th style="padding-left: 300px">用户登录名：</th>
+					<th style="padding-left: 300px">请输入登录名：</th>
 						<td width="20%">
-							<input type="text"  style="width: 170px;" placeholder="用户登录名" value="${sParams['LIKE_loginName']}" id="loginNameSearch" name="search_LIKE_loginName" />
+							<input type="text"  style="width: 170px;" placeholder="请输入个人用户登录名" value="${sParams['LIKE_loginName']}" id="loginNameSearch" name="search_LIKE_loginName" />
 						</td>
 					<td class="btn-group"> <a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a></td>
 					<td class="btn-group"> <a id="advanced-btn" class="btnSearch" >高级搜索</a></td>
@@ -328,7 +328,7 @@
     <div id="alerttb" class="alert_tb" style="display:none;"> 
       <div class="input_one">
 		<span id="inputUser">用户认证</span>
-		<i class="close"><a  id="close"  href="${ctx}/complat/outsideuserList">X&nbsp</a></i>
+		<i class="close">X</i>
       </div>   
       <div class="input_two">
 	     <form align = "center" id="oprform" name="oprform" action="${ctx}/complat/outsideuserAuth" method="get">

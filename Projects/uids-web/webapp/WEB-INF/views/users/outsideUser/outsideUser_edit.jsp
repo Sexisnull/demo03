@@ -263,7 +263,7 @@ color: rgb(119, 119, 119);
 			<tr>
 				<th><b class="mustbe">*</b>身份证号：</th>
 				<td>
-					<input type="text" <c:if test="${outsideUser.papersNumber != null}">readonly="readonly"</c:if> class="papersNumber" name="papersNumber" value="${outsideUser.papersNumber}" />
+					<input type="text"  class="papersNumber" name="papersNumber" value="${outsideUser.papersNumber}" />
 				</td>
 				<th>学历：</th>
 				<td>

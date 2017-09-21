@@ -2,8 +2,6 @@ package com.gsww.uids.service;
 
 import java.util.List;
 
-import org.springframework.data.jpa.repository.Query;
-
 import com.gsww.uids.entity.JisRoleobject;
 
 public interface JisRoleobjectService {
@@ -23,6 +21,4 @@ public interface JisRoleobjectService {
 	 * @return
 	 */
 	boolean add(int parseInt, int parseInt2, int i);
-	//删除
-	public void deleteByRoleId(int id);
 }

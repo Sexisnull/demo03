@@ -315,7 +315,7 @@
     <div id="alerttb" class="alert_tb" style="display:none;"> 
       <div class="input_one">
 		<span id="inputUser">用户认证</span>
-		<i class="close"><a  id="close"  href="${ctx}/complat/corporationList">X&nbsp</a></i>
+		<i class="close">X</i>
       </div>   
       <div class="input_two">
 	     <form align = "center" id="oprform" name="oprform" action="${ctx}/complat/corporationAuth" method="get">

@@ -19,7 +19,7 @@ function loginOut() {
 	});
 }
 function toBack(){
-	window.location.href="backIndex";
+	window.location.href="/uids-web/backIndex";
 }
 function toFront(){
 	window.location.href="frontIndex";

@@ -47,13 +47,8 @@ public class JisFieldsServiceTest {
 	}
 	@Test
 	public void findFieldsType(){
-		List<Integer> list;
-		try {
-			list = jisFieldsService.findFieldsType();
-			System.out.println(list);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		List<Integer> list=jisFieldsService.findFieldsType();
+		System.out.println(list);
 		assertTrue(true);
 	}
 }

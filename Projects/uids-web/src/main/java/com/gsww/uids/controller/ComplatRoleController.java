@@ -3,8 +3,8 @@ package com.gsww.uids.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -28,22 +28,21 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
-import com.gsww.jup.entity.sys.SysUserSession;
 import com.gsww.jup.util.JSONUtil;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.jup.util.StringHelper;
 import com.gsww.uids.entity.ComplatGroup;
 import com.gsww.uids.entity.ComplatOutsideuser;
 import com.gsww.uids.entity.ComplatRole;
+import com.gsww.uids.entity.ComplatRolerelation;
+import com.gsww.uids.entity.ComplatUser;
 import com.gsww.uids.entity.JisApplication;
-import com.gsww.uids.entity.JisLog;
 import com.gsww.uids.entity.JisRoleobject;
 import com.gsww.uids.service.ComplatGroupService;
 import com.gsww.uids.service.ComplatOutsideuserService;
 import com.gsww.uids.service.ComplatRoleService;
 import com.gsww.uids.service.ComplatUserService;
 import com.gsww.uids.service.JisApplicationService;
-import com.gsww.uids.service.JisLogService;
 import com.gsww.uids.service.JisRoleobjectService;
 
 @Controller
@@ -64,8 +63,6 @@ public class ComplatRoleController extends BaseController {
 	private ComplatOutsideuserService complatOutsideuserService;
 	@Autowired
 	private ComplatUserService complatUserService;
-	@Autowired
-	private JisLogService jisLogService;
 
 	@RequestMapping(value = "/croleList", method = RequestMethod.GET)
 	public String roleList(
@@ -175,20 +172,19 @@ public class ComplatRoleController extends BaseController {
 	public ModelAndView roleDelete(String croleId, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		String resMsg = "";
-		SysUserSession session = (SysUserSession) request.getSession().getAttribute("sysUserSession");
 		try {
 			String[] para = croleId.split(",");
 			for (int i = 0; i < para.length; i++) {
-				ComplatRole role = complatRoleService.findByKey(Integer.parseInt(para[i].trim()));
-				complatRoleService.delete(Integer.parseInt(para[i].trim()));
-				jisRoleobjectService.deleteByRoleId(Integer.parseInt(para[i].trim()));
-				JisLog log = new JisLog();
-				log.setOperateType(3);
-				log.setModuleName(3);
-				log.setSpec(role.getName());
-				log.setUserId(session.getAccountId());
-				log.setOperateTime(new Date());
-				jisLogService.save(log);
+				List<ComplatRolerelation> acct = complatRoleService
+						.findAcctByroleId(Integer.parseInt(para[i].trim()));
+				ComplatRole role = complatRoleService.findByKey(Integer
+						.parseInt(para[i].trim()));
+				if (acct != null && acct.size() > 0) {
+					resMsg += "名称为“" + role.getName()
+							+ "”的角色下存在用户，不能删除！   </br>   ";
+				} else {
+					complatRoleService.delete(Integer.parseInt(para[i].trim()));
+				}
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
