@@ -5,7 +5,11 @@ import java.util.List;
 import com.gsww.uids.gateway.dao.JdbcTemplateDao;
 import com.gsww.uids.gateway.entity.JisAuthLog;
 import com.gsww.uids.gateway.util.ConvertSqlToDtoList;
-
+/**
+ * AuthLogDao
+ * @author zcc
+ *
+ */
 public class AuthLogDao extends JdbcTemplateDao {
 	// 通过ticket查询政府用户
 	private static final String FIND_BY_TICKET = "SELECT * FROM jis_authlog WHERE ticket =? and userType=? ";

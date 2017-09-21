@@ -6,7 +6,11 @@ import com.gsww.uids.gateway.dao.outsideuser.OutsideUserDAO;
 import com.gsww.uids.gateway.entity.OutsideUser;
 import com.gsww.uids.gateway.exception.LoginException;
 import com.gsww.uids.gateway.util.SpringContextHolder;
-
+/**
+ * OutsideUserService
+ * @author zcc
+ *
+ */
 public class OutsideUserService {
 	private static OutsideUserDAO outsideUserDAO;
 	static {

@@ -1,7 +1,11 @@
 package com.gsww.uids.gateway.entity;
 
 import java.io.Serializable;
-
+/**
+ * 实体类-Application-jis_application
+ * @author zcc
+ *
+ */
 public class Application implements Serializable {
 	private static final long serialVersionUID = -9198437426281533523L;
 

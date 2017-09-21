@@ -2,7 +2,11 @@ package com.gsww.uids.gateway.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-
+/**
+ * 实体类-JisAuthLog-jis_authlog
+ * @author zcc
+ *
+ */
 public class JisAuthLog implements Serializable {
 	private static final long serialVersionUID = 6960861914952175611L;
 	private Integer iid;

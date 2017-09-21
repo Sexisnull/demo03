@@ -1,7 +1,14 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 
 <mule xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
-	xmlns:servlet="http://www.mulesoft.org/schema/mule/servlet" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf" xmlns:jersey="http://www.mulesoft.org/schema/mule/jersey" xmlns:quartz="http://www.mulesoft.org/schema/mule/quartz" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:core="http://www.mulesoft.org/schema/mule/core" version="EE-3.4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd
+	xmlns:servlet="http://www.mulesoft.org/schema/mule/servlet"
+	xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf"
+	xmlns:jersey="http://www.mulesoft.org/schema/mule/jersey" xmlns:quartz="http://www.mulesoft.org/schema/mule/quartz"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" xmlns:core="http://www.mulesoft.org/schema/mule/core"
+	version="EE-3.4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
 http://www.mulesoft.org/schema/mule/jersey http://www.mulesoft.org/schema/mule/jersey/current/mule-jersey.xsd
@@ -11,26 +18,29 @@ http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/cor
 http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
 http://www.mulesoft.org/schema/mule/servlet http://www.mulesoft.org/schema/mule/servlet/current/mule-servlet.xsd">
 
-	<!-- REST接口发布-->
+	<!-- REST接口发布 -->
 	<flow name="authenticateService" doc:name="authenticateService">
-        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8080" doc:name="HTTP"/>
-        <jersey:resources doc:name="REST">
-            <component class="com.gsww.uids.gateway.rest.AuthenticateService"/>
-        </jersey:resources>
-    </flow> 
-    <flow name="httpInterfaceService" doc:name="httpInterfaceService">
-        <http:inbound-endpoint exchange-pattern="request-response" host="0.0.0.0" port="8082" doc:name="HTTP"/>
-        <jersey:resources doc:name="REST">
-            <component class="com.gsww.uids.gateway.service.HttpInterfaceService"/>
-        </jersey:resources>
-    </flow>
-    <flow name="aliOauthService" doc:name="aliOauthService">
-        <http:inbound-endpoint exchange-pattern="request-response" host="0.0.0.0" port="8088" doc:name="HTTP"/>
-        <jersey:resources doc:name="REST">
-            <component class="com.gsww.uids.gateway.rest.AliOauthService"/>
-        </jersey:resources>
-    </flow>
-<!-- WebService接口发布 -->
+		<http:inbound-endpoint exchange-pattern="request-response"
+			host="localhost" port="8080" doc:name="HTTP" />
+		<jersey:resources doc:name="REST">
+			<component class="com.gsww.uids.gateway.rest.AuthenticateService" />
+		</jersey:resources>
+	</flow>
+	<flow name="httpInterfaceService" doc:name="httpInterfaceService">
+		<http:inbound-endpoint exchange-pattern="request-response"
+			host="0.0.0.0" port="8082" doc:name="HTTP" />
+		<jersey:resources doc:name="REST">
+			<component class="com.gsww.uids.gateway.service.HttpInterfaceService" />
+		</jersey:resources>
+	</flow>
+	<flow name="aliOauthService" doc:name="aliOauthService">
+		<http:inbound-endpoint exchange-pattern="request-response"
+			host="0.0.0.0" port="8088" doc:name="HTTP" />
+		<jersey:resources doc:name="REST">
+			<component class="com.gsww.uids.gateway.rest.AliOauthService" />
+		</jersey:resources>
+	</flow>
+	<!-- WebService接口发布 -->
 	<!-- 个人获取票据认证接口 -->
 	<flow name="WsPerAuth" doc:name="WsPerAuth">
 		<inbound-endpoint exchange-pattern="request-response"
@@ -51,28 +61,38 @@ http://www.mulesoft.org/schema/mule/servlet http://www.mulesoft.org/schema/mule/
 			<singleton-object class="com.gsww.uids.gateway.ws.WsCorAuth" />
 		</component>
 	</flow>
-    <!-- 获取机构信息接口 -->
-    <flow name="WSGroup" doc:name="WSGroup">
-        <inbound-endpoint exchange-pattern="request-response" address="http://0.0.0.0:8081/services/WSGroup" doc:name="WebService"/>
-        <cxf:jaxws-service serviceClass="com.gsww.uids.gateway.ws.WSGroupImpl" doc:name="SOAP" />
-        <component doc:name="comp">
-            <singleton-object class="com.gsww.uids.gateway.ws.WSGroupImpl"/>
-        </component>
-    </flow>
-    
-    <!-- 实时同步列表JOB -->
-    <!-- <flow name="immediateSyncJob" doc:name="immediateSyncJob">
-        <quartz:inbound-endpoint jobName="ImmediateSyncJob" repeatInterval="0" responseTimeout="10000" doc:name="Quartz" repeatCount="0" startDelay="0">
-            <quartz:event-generator-job groupName="Job" jobGroupName="Job"/>
-        </quartz:inbound-endpoint>
-        <component class="com.gsww.uids.gateway.job.ImmediateSyncJob" doc:name="Java"/>
-    </flow> -->
-    
-    <!-- 记录同步历史JOB -->
-    <!-- <flow name="recordSyncHisJob" doc:name="recordSyncHisJob">
-        <quartz:inbound-endpoint jobName="RecordSyncHisJob" repeatInterval="0" responseTimeout="10000" doc:name="Quartz" repeatCount="0" startDelay="0">
-            <quartz:event-generator-job groupName="Job" jobGroupName="Job"/>
-        </quartz:inbound-endpoint>
-        <component class="com.gsww.uids.gateway.job.RecordSyncHisJob" doc:name="Java"/>
-    </flow> -->
+	<!-- 获取机构信息接口 -->
+	<flow name="WSGroup" doc:name="WSGroup">
+		<inbound-endpoint exchange-pattern="request-response"
+			address="http://0.0.0.0:8081/services/WSGroup" doc:name="WebService" />
+		<cxf:jaxws-service serviceClass="com.gsww.uids.gateway.ws.WSGroupImpl"
+			doc:name="SOAP" />
+		<component doc:name="comp">
+			<singleton-object class="com.gsww.uids.gateway.ws.WSGroupImpl" />
+		</component>
+	</flow>
+
+	<!-- 实时同步列表JOB -->
+	<flow name="immediateSyncJob" doc:name="immediateSyncJob">
+		<quartz:inbound-endpoint jobName="ImmediateSyncJob"
+			repeatInterval="0" responseTimeout="10000" doc:name="Quartz"
+			repeatCount="0" startDelay="0">
+			<quartz:event-generator-job groupName="Job"
+				jobGroupName="Job" />
+		</quartz:inbound-endpoint>
+		<component class="com.gsww.uids.gateway.job.ImmediateSyncJob"
+			doc:name="Java" />
+	</flow>
+
+	<!-- 记录同步历史JOB -->
+	<flow name="recordSyncHisJob" doc:name="recordSyncHisJob">
+		<quartz:inbound-endpoint jobName="RecordSyncHisJob"
+			repeatInterval="0" responseTimeout="10000" doc:name="Quartz"
+			repeatCount="0" startDelay="0">
+			<quartz:event-generator-job groupName="Job"
+				jobGroupName="Job" />
+		</quartz:inbound-endpoint>
+		<component class="com.gsww.uids.gateway.job.RecordSyncHisJob"
+			doc:name="Java" />
+	</flow>
 </mule>

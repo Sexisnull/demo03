@@ -4,109 +4,65 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 实体类-OutsideUser-complat_outsideuser
+ * 
+ * @author zcc
+ *
+ */
 public class OutsideUser implements Serializable {
 	private static final long serialVersionUID = 2506351625961775795L;
 
 	private Integer iid;
-
 	private String uuid;
-
 	private String loginname;
-
 	private String pwd;
-
 	private String name;
-
 	private Integer age;
-
 	private String sex;
-
 	private Integer enable = Integer.valueOf(1);
-
 	private String degree;
-
 	private String pinyin;
-
 	private Integer paperstype = Integer.valueOf(1);
-
 	private String papersnumber;
-
 	private String description;
-
 	private String mobile;
-
 	private String phone;
-
 	private String comptel;
-
 	private String fax;
-
 	private String email;
-
 	private String qq;
-
 	private String msn;
-
 	private String address;
-
 	private String post;
-
 	private String workunit;
-
 	private String headship;
-
 	private Date birthdate;
-
 	private Date logintime;
-
 	private String loginip;
-
 	private String regip;
-
 	private Date createtime;
-
 	private String regsite;
-
 	private String rejectreason;
-
 	private Integer isauth = Integer.valueOf(0);
-
 	private Integer authstate = Integer.valueOf(0);
-
 	private String headpic;
-
 	private String headrenamepic;
-
 	private String bodypic;
-
 	private String bodyrenamepic;
-
 	private Integer isupload = Integer.valueOf(0);
-
 	private Date modifytime;
-
 	private List<Role> rolelist;
-
 	private Integer opersign;
-
 	private Integer synstate = Integer.valueOf(0);
-
 	private String residenceid = "";
-
 	private String presidenceid = "";
-
 	private String gpresidenceid = "";
-
 	private String residencedetail = "";
-
 	private String livingareaid = "";
-
 	private String plivingareaid = "";
-
 	private String gplivingareaid = "";
-
 	private String livingareadetail = "";
-
 	private Integer iscellphoneverified = Integer.valueOf(0);
 
 	public Integer getIid() {
