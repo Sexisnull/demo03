@@ -85,11 +85,4 @@ public interface JisApplicationService {
 	 * @throws Exception
 	 */
 	public List<JisApplication> findAll();
-	
-	/**
-	 * 根据用户角色获取有权访问的子系统
-	 * @param roleIds
-	 * @return
-	 */
-	public List<Map<String, Object>> findAppByRoleIds(String roleIds);
 }
