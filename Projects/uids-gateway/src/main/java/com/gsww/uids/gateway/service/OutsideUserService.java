@@ -2,20 +2,13 @@ package com.gsww.uids.gateway.service;
 
 import java.util.Date;
 
-import javax.servlet.http.HttpSession;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.gsww.uids.gateway.dao.application.ApplicationDao;
-import com.gsww.uids.gateway.dao.outsideuser.OutsideUserDao;
+import com.gsww.uids.gateway.dao.outsideuser.OutsideUserDAO;
 import com.gsww.uids.gateway.entity.OutsideUser;
 import com.gsww.uids.gateway.exception.LoginException;
-import com.gsww.uids.gateway.util.CacheUtil;
-import com.gsww.uids.gateway.util.Md5Util;
 import com.gsww.uids.gateway.util.SpringContextHolder;
 
 public class OutsideUserService {
-	private static OutsideUserDao outsideUserDAO;
+	private static OutsideUserDAO outsideUserDAO;
 	static {
 		outsideUserDAO = SpringContextHolder.getBean("outsideUserDAO");
 	}
