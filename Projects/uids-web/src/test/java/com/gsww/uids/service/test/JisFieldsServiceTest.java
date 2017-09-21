@@ -46,7 +46,7 @@ public class JisFieldsServiceTest {
 		assertTrue(true);
 	}
 	@Test
-	public void findFieldsType(){
+	public void findFieldsType() throws Exception{
 		List<Integer> list=jisFieldsService.findFieldsType();
 		System.out.println(list);
 		assertTrue(true);
