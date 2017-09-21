@@ -26,7 +26,6 @@ public class ComplatCorporationServiceTest {
 			ComplatCorporation corporation=complatCorporationService.findByKey(iid);
 			System.out.println(corporation.getLoginName());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getMessage(),e);
 		}
 		assertTrue(true);
@@ -37,7 +36,6 @@ public class ComplatCorporationServiceTest {
 		try {
 			complatCorporationService.save(corporation);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getMessage(),e);
 		}
 		assertTrue(true);
@@ -48,7 +46,6 @@ public class ComplatCorporationServiceTest {
 		try {
 			complatCorporationService.updateCorporation(iid);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getMessage(),e);
 		}
 		assertTrue(true);

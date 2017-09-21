@@ -27,7 +27,6 @@ public class ComplatBanListServiceTest {
 			List<ComplatBanlist> list=complatBanListService.findComplatbanList();
 			System.out.println(list);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getMessage(),e);
 		}
 		assertTrue(true);
@@ -39,7 +38,6 @@ public class ComplatBanListServiceTest {
 			ComplatBanlist banList=complatBanListService.findByIid(iid);
 			System.out.println(banList.getLoginname());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getMessage(),e);
 		}
 		assertTrue(true);
@@ -50,7 +48,6 @@ public class ComplatBanListServiceTest {
 			ComplatBanlist banList=complatBanListService.findByIid(70);
 			System.out.println(banList.getLoginname());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getMessage(),e);
 		}
 		assertTrue(true);

@@ -27,7 +27,6 @@ public class JisLogServiceTest {
 			List<JisLog> list=jisLogService.findLogList();
 			System.out.println(list);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getMessage(),e);
 		}
 		assertTrue(true);

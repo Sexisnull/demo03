@@ -51,7 +51,6 @@ public class ComplatRoleServiceTest extends BaseController{
 		try {
 			complatRoleService.save(entity);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getMessage(),e);
 		}
 		assertTrue(true);
@@ -62,7 +61,6 @@ public class ComplatRoleServiceTest extends BaseController{
 		try {
 			complatRoleService.delete(id);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getMessage(),e);
 		}
 		assertTrue(true);
@@ -74,7 +72,6 @@ public class ComplatRoleServiceTest extends BaseController{
 			ComplatRole role=complatRoleService.findByKey(id);
 			System.out.println(role.getName());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getMessage(),e);
 		}
 		assertTrue(true);
@@ -86,7 +83,6 @@ public class ComplatRoleServiceTest extends BaseController{
 			List<ComplatRolerelation> list=complatRoleService.findAcctByroleId(id);
 			System.out.println(list);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getMessage(),e);
 		}
 		assertTrue(true);
@@ -104,7 +100,6 @@ public class ComplatRoleServiceTest extends BaseController{
 			String json=complatRoleService.getAuthorizeTree(id);
 			System.out.println(json);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getMessage(),e);
 		}
 		assertTrue(true);
@@ -125,7 +120,6 @@ public class ComplatRoleServiceTest extends BaseController{
 				System.out.println(role.getName());
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getMessage(),e);
 		}
 		assertTrue(true);
@@ -139,7 +133,6 @@ public class ComplatRoleServiceTest extends BaseController{
 				System.out.println(relation.getRoleId());
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getMessage(),e);
 		}
 		assertTrue(true);
@@ -158,7 +151,6 @@ public class ComplatRoleServiceTest extends BaseController{
 		try {
 			complatRoleService.deleteByRoleId(roleId);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getMessage(),e);
 		}
 		assertTrue(true);

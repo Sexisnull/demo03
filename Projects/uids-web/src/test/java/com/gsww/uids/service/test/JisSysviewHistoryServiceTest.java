@@ -25,7 +25,6 @@ public class JisSysviewHistoryServiceTest {
 			JisSysviewHistory history=jisSysviewHistoryService.findByIid(iid);
 			System.out.println(history.getObjectname());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getMessage(),e);
 		}
 		assertTrue(true);

@@ -26,7 +26,6 @@ public class JisParameterServiceTest {
 		try {
 			jisParameterService.save(entity);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getMessage(),e);
 		}
 		assertTrue(true);
@@ -38,7 +37,6 @@ public class JisParameterServiceTest {
 			JisParameter parameter=jisParameterService.findByKey(iid);
 			System.out.println(parameter.getSysName());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getMessage(),e);
 		}
 		assertTrue(true);
