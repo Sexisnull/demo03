@@ -90,7 +90,6 @@ function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
 			onDblClick : onDblClickFunction
 		}
 	};
-	console.log("-----"+treeName);
 	$("#" + treeName).tree(setting, rootNode);
 //	$("#" + treeName).tree().refreshNode('');
 }
@@ -243,7 +242,7 @@ $(function(){
 	<div class="position">
 		<ol class="breadcrumb">
 			<li>
-				<a href="${ctx}/index" target="_top">首页</a>
+				<a href="${ctx}/backIndex" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
 			<li>

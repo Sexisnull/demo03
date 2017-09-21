@@ -17,6 +17,8 @@
 		<link href="${ctx}/res/skin/${theme }/css/reset.css" rel="stylesheet" type="text/css" />
 		<link href="${ctx}/res/skin/${theme }/css/index.css" rel="stylesheet" type="text/css" />
 		<link rel="stylesheet" type="text/css" href="${ctx}/res/plugin/scroll/jquery.mCustomScrollbar.css" />
+		<link rel="stylesheet" href="${ctx}/res/skin/default/css/jquery-ui.css">
+		<script type="text/javascript" src="${ctx}/res/skin/default/js/jquery-ui.js"></script>
 		<link rel="stylesheet" type="text/css" href="${ctx}/res/skin/login/css/login.css" />
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -25,6 +27,21 @@
 	$(document).ready(function() {
 		$('#calltest').removeClass();
 	});
+		function openSetting(appid, appname){
+			$("#dialog_frame").attr("src","${ctx}/setUserDefined?appid="+appid+"&appname="+appname);
+			$("#dialogframe").dialog({
+				width : 500,
+				height : 260,
+				closed : false,
+				cache : false,
+				parentWindow : window,
+				modal:true,
+				title:'参数设置',
+				moveToTop:true,
+				bgiframe: true
+			});
+		}
+
 </script>
 		<style type="text/css">
 body {
@@ -53,11 +70,16 @@ body {
 	background-color: #fff;
 	text-align: center
 }
+
 </style>
 
 	</head>
 	<body>
-		<div style="min-height:95%">
+		<div id="dialogframe" style="display:none;width:100%;height:100%;" class="dialog-wrap">
+			<iframe name="dialog_frame" id="dialog_frame"  src="" style="width:100%;height:100%;" frameborder="0"> 
+			</iframe>
+		</div>
+		<div style="min-height: 95%" id="source">
 			<div id="header" class="ui-layout-north">
 				<div class="logo">
 					<%--  <img class="logo_localhost" src="${ctx}/res/skin/${theme }/images/login/${systemMap.icon }">
@@ -117,35 +139,28 @@ body {
 					</h3>
 					<table width="80%" border="0" align="center" cellpadding="2" cellspacing="1" style="margin: 50px; display: in" bgcolor="#CBC9CC">
 						<tr>
-							<td width="80%" class="sz_yy" style="font-weight: bold;border: 1px grey solid;">
+							<td width="80%" class="sz_yy" style="font-weight: bold; border: 1px grey solid;">
 								应用系统
 							</td>
-							<td width="20%" class="sz_cs" style="font-weight: bold;border: 1px grey solid;">
+							<td width="20%" class="sz_cs" style="font-weight: bold; border: 1px grey solid;">
 								参数设置
 							</td>
 						</tr>
-						<tr>
-							<td class='sz_yy' style="border: 1px grey solid;">
-								网站管理系统
-							</td>
-							<td class='sz_cs' style="border: 1px grey solid;">
-								<a style='color: #ccc;'>设置</a>
-							</td>
-						</tr>
-					</table>
-
-					<table align="center" width="80%" border="0">
-						<tr>
-							<td width="34%" margin-right="20px" height="46" border="0" align="right" valign="middle">
-								<a style='color: #ccc'>上一页</a>
-							</td>
-							<td width="30%" border="0" align="center" valign="middle">
-								第1页 /共1页
-							</td>
-							<td width="36%" border="0" margin-left="20px" align="left" valign="middle">
-								<a style='color: #ccc'>下一页</a>
-							</td>
-						</tr>
+						<c:forEach items="${application }" var="app">
+							<tr>
+								<td class='sz_yy' style="border: 1px grey solid;">
+									${app.name }
+								</td>
+								<td class='sz_cs' style="border: 1px grey solid;">
+									<c:if test="${app.userdefined!=0 || app.logintype==0 }">
+										<a style='color: #ccc;'>设置</a>
+									</c:if>
+									<c:if test="${app.userdefined==0 && app.logintype!=0 }">
+										<a href='#' onclick="openSetting('${app.iid}','${app.name }')">设置</a>
+									</c:if>
+								</td>
+							</tr>
+						</c:forEach>
 					</table>
 
 					<div style="display: inline"></div>
@@ -162,87 +177,6 @@ body {
 				<span class="instruction">建议使用1024*768，IE8浏览器以上为最佳浏览模式</span>
 			</div>
 		</div>
-
-		<!-- Jquery类库 -->
-		<script type="text/javascript" src="${ctx}/res/plugin/jquery/jquery-1.8.3.min.js"></script>
-		<script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgcore.lhgdialog.min.js"></script>
-		<!-- Handlebars模板组件 -->
-		<script type="text/javascript" src="${ctx}/res/plugin/handlebars/handlebars.js"></script>
-
-		<script type="text/javascript" src="${ctx}/res/plugin/jquery.layout/jquery.layout-latest.min.js"></script>
-		<!-- 滚动条组件 -->
-		<script type="text/javascript" src="${ctx}/res/plugin/scroll/jquery.mCustomScrollbar.concat.min.js"></script>
-		<%--	    <script type="text/javascript" src="${ctx}/res/plugin/nicescroll/jquery.nicescroll.min.js"></script>--%>
 		<script type="text/javascript" src="${ctx}/res/skin/login/js/login.js"></script>
-		<script type="text/javascript">
-	$(function() {
-
-		//$('#nav').height($(document).height()-$('#header').height());
-		$('#nav').mCustomScrollbar({
-			scrollButtons : {
-				enable : false
-			},
-			theme : "custom"
-		});
-
-		//生成NAV菜单
-		$.ajax({
-			url : "${ctx}/login/getSysMenuJson?rs=" + Math.random(),
-			dataType : "JSON",
-			async : false,
-			success : function(data) {
-				///alert(data);
-				//如果数据返回成功，则拼接HTML元素
-				var menuLength = data.length;
-				if (menuLength == 0) {
-					alert("您没有分配访问此系统的权限,请联系管理员!");
-					$.get("${ctx}/login/loginOut");
-					location.href = '${ctx}/login';
-				} else {
-					var nav_template = Handlebars.compile($("#nav_template")
-							.html());
-					$("#nav ul").html(nav_template(data));
-					if (menuLength == 1) {
-						$('.home').hide();
-						$('#nav ul li').eq(0).find("dt").slideUp(100);
-						$('#nav ul li').eq(0).addClass("active");
-						var url = $('#nav ul li').eq(0).find("dt").eq(0).find(
-								"a").attr("_href");
-						$('#nav ul li').eq(0).find("dt").eq(0).find("a").find(
-								"dl").eq(0).addClass("active");
-						;
-						$('#nav ul li').eq(0).find("dt").slideToggle(400);
-						if (url) {
-							$("#main").attr("src", url);
-						}
-					}
-				}
-			}
-		});
-
-	});
-</script>
-		<script type="text/javascript">
-	function fade() {
-
-		var docHeight = $(document).height(); //获取窗口高度  
-
-		$('body').append('<div id="overlay"></div>');
-
-		$('#overlay').height(docHeight).css({
-			'opacity' : .10, //透明度  
-			'position' : 'absolute',
-			'top' : 0,
-			'left' : 0,
-			'background-color' : '#E5E5E5',
-			'width' : '100%',
-			'z-index' : 5000
-		//保证这个悬浮层位于其它内容之上  
-		});
-		setTimeout(function() {
-			$('#overlay').fadeOut('slow')
-		}, 3000); //设置3秒后覆盖层自动淡出  
-	}
-</script>
 	</body>
 </html>

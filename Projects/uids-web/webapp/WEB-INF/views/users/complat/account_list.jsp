@@ -176,43 +176,78 @@ function addComplatUser(){
 
 $(function(){
 /***删除***/
- $("#deleteUser").click(function(url,parm){
-		if($(".boxOne:checked").length == 0&&$('#list-table input:checkbox:checked').length == 0){
-        	alert("请先选择要删除的数据");
-        }else if($("input[type=checkbox]:checked").length >= 1){      
-          	var ids = "";
-				$('#list-table tbody input[type=checkbox]').each(function(i, o) {
-					if($(o).attr('checked')) {
+
+$("#deleteUser").click(function(url,parm){
+		if ($(".check_btn:checked").length != 0 && $('#list-table tbody input:checkbox:checked').length != 0) {
+			$.dialog.confirm('您确认要删除吗？', function() {
+				var ids = "";
+				$('.list-table tbody input[type=checkbox]').each(function(i, o) {
+					if ($(o).attr('checked')) {
 						ids += $(o).val() + ",";
 					}
-				});		                     
-           window.location.href="${ctx}/complat/complatUserDelete?complatUserId="+ids;             						       
-        } 			
+				});
+				window.location.href="${ctx}/complat/complatUserDelete?complatUserId="+ids;  
+			});
+	
+		} else {
+			$.dialog.alert('请您至少选择一条数据', function() {
+				return null;
+			});
+		}
+			
 	});
 	
 	
 	
-	/*批量启用*/
-     $("#startUsersPower").click(function(url,parm){	
-          var enable= 1;
-         if($(".boxOne:checked").length == 0&&$('#list-table input:checkbox:checked').length == 0){
-        	alert("请先选择要启用的用户");
-        }else if($("input[type=checkbox]:checked").length >= 1){      
-          	var ids = "";
-				$('#list-table tbody input[type=checkbox]').each(function(i, o) {
+	/*批量启用*/ 
+       $("#startUsersPower").click(function(url,parm){	
+         var enable= 0;
+         if($(".check_btn:checked").length != 0&&$('#list-table input:checkbox:checked').length != 0){
+            $.dialog.confirm('您确认要启用吗？',function(){
+            var ids = "";
+				$('.list-table tbody input[type=checkbox]').each(function(i, o) {
 					if($(o).attr('checked')) {
 						ids += $(o).val() + ",";
 					}
-				});		                     
-           window.location.href="${ctx}/complat/startUserEnable?complatUserId="+ids+"&Enable="+enable;             						       
-        }
+				});
+				window.location.href="${ctx}/complat/startUserEnable?complatUserId="+ids+"&Enable="+enable;
+			});
+          }else{
+			$.dialog.alert('请您至少选择一条数据',function(){
+				return null;
+			});
+		} 
+      
      });
-
+      
+      
 
     /*批量停用*/
-    $("#stopUsersPower").click(function(url,parm){	
-         var enable= 0;
-         if($(".boxOne:checked").length == 0&&$('#list-table input:checkbox:checked').length == 0){
+   $("#stopUsersPower").click(function(url,parm){
+        var enable= 0;
+         if($(".check_btn:checked").length != 0&&$('#list-table input:checkbox:checked').length != 0){
+            $.dialog.confirm('您确认要停用吗？',function(){
+            var ids = "";
+				$('.list-table tbody input[type=checkbox]').each(function(i, o) {
+					if($(o).attr('checked')) {
+						ids += $(o).val() + ",";
+					}
+				});
+				window.location.href="${ctx}/complat/stopUserEnable?complatUserId="+ids+"&Enable="+enable;
+			});
+          }else{
+			$.dialog.alert('请您至少选择一条数据',function(){
+				return null;
+			});
+		} 
+				
+	});
+    
+    
+
+         
+         
+       /*  
         	alert("请先选择要停用的用户");
         }else if($("input[type=checkbox]:checked").length >= 1){      
           	var ids = "";
@@ -221,15 +256,67 @@ $(function(){
 						ids += $(o).val() + ",";
 					}
 				});		                     
-           window.location.href="${ctx}/complat/stopUserEnable?complatUserId="+ids+"&Enable="+enable;             						       
+                        						       
         }
-    });
+        */
+    
 
-
+	
 
 });
 
-
+      /**停用单条数据**/
+	function stopSingle(url,parm,obj){
+	var singleId=$(obj).parent().parent().parent().parent().find('td:first').find('input').attr('id');
+		var flag=false;
+			$.ajax({
+				 type: "POST",
+				 url: "${ctx}/complat/enableStop",
+				 data: "iid=" + singleId,
+				 async:false,
+				 success: function (data) {
+				 if (data == "0") {
+					 flag=true;					 
+				 } else {
+					 flag=false;
+				 }
+				}
+             });
+			if(flag==true){
+				$.dialog.alert("该操作已经停用");
+				return false;
+			}else{
+				$.dialog.confirm('您确认要停用吗？',function(){
+					window.location.href="${ctx}/"+url+"?"+parm+"="+singleId;
+				});
+		}
+	}
+	/**启用单条数据**/
+	function startSingle(url,parm,obj){
+	var singleId=$(obj).parent().parent().parent().parent().find('td:first').find('input').attr('id'); 
+	var flag=false;
+			$.ajax({
+				 type: "POST",
+				 url: "${ctx}/complat/enableStop",
+				 data: "iid=" + singleId,
+				 async:false,
+				 success: function (data) {
+				 if (data == "1") {
+					 flag=true;					 
+				 } else {
+					 flag=false;
+				 }
+				}
+             });
+			if(flag==true){
+				$.dialog.alert("该操作已经启用");
+				return false;
+			}else{
+				$.dialog.confirm('您确认要启用吗？',function(){
+					window.location.href="${ctx}/"+url+"?"+parm+"="+singleId;
+				});
+		}
+	}
 
 
 

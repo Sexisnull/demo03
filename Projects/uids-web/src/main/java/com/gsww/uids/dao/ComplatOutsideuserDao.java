@@ -36,4 +36,11 @@ public interface ComplatOutsideuserDao extends
 	@Modifying
 	@Query("update ComplatOutsideuser t set t.operSign = 3 where t.iid = ?")
 	public void updateOutsideuser(Integer iid);
+	
+	/**
+     * @discription    根据登录名查询个人用户实体
+     * @param loginName
+     * @return
+	 */
+	List<ComplatOutsideuser> findByLoginName(String loginName);
 }

@@ -3,6 +3,7 @@ package com.gsww.uids.service.impl;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -65,5 +66,15 @@ public class ComplatOutsideuserServiceImpl implements ComplatOutsideuserService 
 	@Override
 	public void delete(Integer iid) {
 		outsideUserDao.updateOutsideuser(iid);
+	}
+
+	@Override
+	public ComplatOutsideuser findByLoginNameIsUsed(String loginName) {
+		List<ComplatOutsideuser> oList = outsideUserDao.findByLoginName(loginName);
+		if (CollectionUtils.isNotEmpty(oList)) {
+			return oList.get(0);
+		} else {
+			return null;
+		}
 	}
 }

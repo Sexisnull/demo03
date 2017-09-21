@@ -130,7 +130,7 @@ public class ComplatOutsideuserController extends BaseController {
 			if (outsideUser != null) {
 				String iidStr = String.valueOf(outsideUser.getIid());
 				System.out.println(iidStr);
-				if (iidStr == "null" && iidStr.length() <= 0) {
+				if (iidStr == "null" || iidStr.length() <= 0) {
 					Date d = new Date(); 
 					outsideUser.setEnable(1); // 是否禁用
 					outsideUser.setAuthState(0); // 审核状态
@@ -310,6 +310,36 @@ public class ComplatOutsideuserController extends BaseController {
 				String json = object.toString();
 				out.write(json);
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+     * @discription    登录名唯一性校验
+     * @param loginName
+     * @param model
+     * @param request
+     * @param response  1：不重复     0：重复
+     * @throws Exception
+	 */
+	@RequestMapping(value="/checkOutisideUserLoginName", method = RequestMethod.GET)
+	public void checkLoginName(String loginName,Model model,HttpServletRequest request,HttpServletResponse response)throws Exception {
+		try {
+			ComplatOutsideuser complatOutsideuser = null;
+			String loginNameInput=StringUtils.trim((String)request.getParameter("loginName"));
+			String oldLoginName=StringUtils.trim((String)request.getParameter("oldLoginName"));
+			if(!loginNameInput.equals(oldLoginName)){
+				complatOutsideuser = outsideUserService.findByLoginNameIsUsed(loginName);
+				if(complatOutsideuser!=null){					
+					response.getWriter().write("0");								
+				}else{
+					response.getWriter().write("1");
+				}
+			}else{
+				response.getWriter().write("1");
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

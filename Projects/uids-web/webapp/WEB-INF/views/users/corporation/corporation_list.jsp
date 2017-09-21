@@ -150,7 +150,7 @@
 	<div class="position">
 		<ol class="breadcrumb">
 			<li>
-				<a href="${ctx}/index" target="_top">首页</a>
+				<a href="${ctx}/backIndex" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
 			<li>
@@ -355,7 +355,7 @@
 					<tr style="display:none;" id="tr_reject">
 						<th></th>
 						<td>
-						<textarea rows="5" cols="5" class="rejectReason" name="rejectReason2"></textarea>
+						<textarea placeholder="请填写拒绝原因" rows="5" cols="5" class="rejectReason" name="rejectReason2"></textarea>
 						</td>
 						<td></td>
 					</tr>
