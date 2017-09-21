@@ -57,7 +57,6 @@ public class JisLogServiceImpl implements JisLogService {
 			int startNo = (pageNumber - 1) * pageSize;
 			int endNo = startNo + pageSize;
 			Integer totalCount = this.queryForCount(logListSql);
-			System.out.println("-----totalCount-----:" + totalCount);
 			List logList = this.searchForList(logListSql, startNo, endNo);
 			Page<Map<String, String>> page = new PageImpl<Map<String, String>>(
 					logList, new PageRequest(pageNumber - 1, pageSize),
@@ -84,10 +83,8 @@ public class JisLogServiceImpl implements JisLogService {
 			querySql.append("left join complat_user us on log.userid = us.iid ");
 			querySql.append("left join complat_group gr on us.groupid = gr.iid ");
 			querySql.append("order by log.operatetime desc ");
-			System.out.println("querySql:" + querySql.toString());
 			return querySql.toString();
 		} catch (Exception exception) {
-
 			throw new ServiceException("拼装查询sql时出错！"
 					+ exception.fillInStackTrace());
 		}

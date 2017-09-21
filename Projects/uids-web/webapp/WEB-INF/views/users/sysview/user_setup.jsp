@@ -207,7 +207,7 @@
 		<div class="position">
 			<ol class="breadcrumb">
 				<li>
-					<a href="${ctx}/backIndex" target="_top">首页</a>
+					<a href="${ctx}/index" target="_top">首页</a>
 				</li>
 				<li class="split"></li>
 				<li>
@@ -317,7 +317,7 @@
 		    <div class="form-btn">
 		    	<input type="submit" tabindex="15" id="submit-btn" value="保存" class="btn bluegreen"/>
 		    	&nbsp;&nbsp;
-		        <input type="button" tabindex="16" value="返回" onclick="javascript:window.location.href='${ctx}/complat/corporationList?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}'" class="btn gray"/>
+		        <input type="button" tabindex="16" value="返回" onclick="javascript:window.history.back();" class="btn gray"/>
 		    </div>
 	    </form>
 		

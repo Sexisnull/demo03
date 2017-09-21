@@ -539,7 +539,7 @@ public class ComplatUserController extends BaseController{
 	 */
 	private void extendsAttr(Model model,HttpServletRequest request,HttpServletResponse response) throws Exception{
 		List<List<Map<String,Object>>> fieldsListMap = new ArrayList<List<Map<String,Object>>>();
-		//判断是政府用户还是用户设置菜单，获取用户id。1-政府用户；2-用户设置
+		//判断是政府用户还是用户设置菜单，获取用户id。2-用户设置
 		String userMenu = request.getParameter("userMenu");
 		Integer userId = null;
 		if("2".equals(userMenu)){
@@ -549,11 +549,10 @@ public class ComplatUserController extends BaseController{
 				userId = Integer.parseInt(usersId);
 			}
 
-		}else if("1".equals(userMenu)){
-			SysUserSession sysUserSession = (SysUserSession) request.getSession().getAttribute("sysUserSession");
-			String usersId = sysUserSession.getAccountId();
-			if(StringHelper.isNotBlack(usersId)){
-				userId = Integer.parseInt(usersId);
+		}else{
+			String iid = request.getParameter("iid");
+			if(StringHelper.isNotBlack(iid)){
+				userId = Integer.parseInt(iid);
 			}
 		}
 		
@@ -567,12 +566,10 @@ public class ComplatUserController extends BaseController{
 				listMap = this.jisFieldsService.findExtendAttr(fieldsList, userId,type);
 				fieldsListMap.add(listMap);
 				model.addAttribute("type",type);
-				System.out.println(listMap.size());
 			}else if(type == 2){
 				listMap = this.jisFieldsService.findExtendAttr(fieldsList, userId,type);
 				fieldsListMap.add(listMap);
 				model.addAttribute("type",type);
-				System.out.println(listMap.size());
 			}
 		}
 		
@@ -581,6 +578,7 @@ public class ComplatUserController extends BaseController{
 		String json = array.toString();
 		out.write(json);
 		model.addAttribute("fieldsListMap",json);
+		System.out.println("json---:"+json);
 		
 		//设置默认值
 		List<JisFields> fieldsTypeList= this.jisFieldsService.findByType(2);
@@ -590,6 +588,7 @@ public class ComplatUserController extends BaseController{
 		String jsonMap = mapArray.toString();
 		outMap.write(jsonMap);
 		model.addAttribute("jsonMap",jsonMap);
+		System.out.println("jsonMap---:"+jsonMap);
 		
 	}
 	
