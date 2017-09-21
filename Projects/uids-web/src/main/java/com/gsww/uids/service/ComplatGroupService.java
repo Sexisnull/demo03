@@ -99,5 +99,9 @@ public interface ComplatGroupService {
 	public List<ComplatGroup> findByAllName(String name);
 	
 	public List<Map<String,Object>> findAllIidsAndName();
+	
+	
+	public ComplatGroup findByIid(int iid);
+	
 
 }

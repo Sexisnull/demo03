@@ -33,6 +33,10 @@ JpaSpecificationExecutor<ComplatGroup>{
 	
 
 	
-	
-
+	/**
+	 * 根据机构id查询机构名称
+	 * @param Iid
+	 * @return
+	 */
+	public ComplatGroup findByIid(int iid);
 }
