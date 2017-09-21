@@ -16,10 +16,109 @@
 	<link type="text/css" rel="stylesheet" href="${ctx}/res/skin/login/css/tree.css" />
 	<script type="text/javascript" src="${ctx}/res/jslib/ztree/js/jquery.ztree.all-3.5.min.js"></script>
 	<script type="text/javascript" src="${ctx}/res/skin/login/js/tree.js"></script>
-
-
-<script type="text/javascript"> 
+    
+<style>
+.dialog{
+	display:none;
+	position:absolute;
+	left:250px;
+	top:100px;
+	font-size: 18px;
+	width: 600px;
+	height: 225px;
+	background: #f9f9f9;
+	padding: 10px;
+	border-radius: 5px;
+	border: 1px solid #999;
+	z-index:101;
 	
+}
+.dialogtop{
+	height: 30px;
+	position: relative;
+}
+.upload{
+	padding-top: 37px;
+	height: 105px;
+	background: white;
+	border: 1px solid #999;
+	padding-left: 60px;
+}
+.btnarea{
+	text-align: right;
+	height: 37px;
+	border: 1px solid #999;
+	border-top: 0px;
+	padding-top: 7px;
+	padding-right: 37px;
+	cursor: pointer;
+}
+.confirm-btn{
+	display: inline-block;
+	width: 60px;
+	height: 30px;
+	background-color: #42a2f5;
+	color: white;
+	text-align: center;
+	line-height: 30px;
+	border-radius: 2px;
+	cursor: pointer;
+}
+.councel-btn{
+	display: inline-block;
+	width: 60px;
+	height: 30px;
+	background-color: #dfdfdf;
+	text-align: center;
+	line-height: 30px;
+	border-radius: 2px;
+	cursor: pointer;
+}
+.file-btn{
+	display: inline-block;
+	width: 105px;
+	height: 30px;
+	line-height: 30px;
+	background: #5fa60f;
+	border-radius: 2px;
+	color: white;
+	text-align: center;
+	cursor: pointer;
+	padding-left: 4px;
+	padding-right: 4px;
+}
+.download{
+	color: blue;
+	text-decoration: underline;
+	padding-left: 15px;
+}
+.fileinput{
+	width: 1px;
+	height: 0px;
+	outline: none;
+}
+.closeicon{
+text-decoration: none;
+float:right;
+
+}
+a:hover{
+text-decoration: none;
+}
+
+/**遮罩层**/
+
+.mask{
+	display:none;
+   width: 100%; height: 100%; position: fixed; top: 0; 
+	left: 0; right: 0; bottom: 0; background: #000; opacity: 0.3; 
+	filter: alpha(opacity = 30); z-index: 100;
+	}
+
+</style>
+<script type="text/javascript"> 
+
+	//删除
 	function deleteData() {
 		var paraTypeId=$(".iid").val();
 		if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checked').length!=0){
@@ -141,6 +240,7 @@ function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
 			onDblClick : onDblClickFunction
 		}
 	};
+	console.log("-----"+treeName);
 	$("#" + treeName).tree(setting, rootNode);
 //	$("#" + treeName).tree().refreshNode('');
 }
@@ -155,18 +255,107 @@ function beforeClick(treeId, treeNode, clickFlag) {
 function resetform() {
 	$('form').find(':input').not(':button,:hidden,:submit,:reset').val('');
 }
+	
+// 显示文件名在input中
+//弹出层
+function importGroup(){
+    var mybg = document.createElement("div"); 
+	mybg.setAttribute("class","mybg"); 
+	$(".mybg").addClass("mybg");
+    document.body.appendChild(mybg);
+	document.body.style.overflow = "hidden"; 
+	$("#alerttb").show(); 				
+
+}
+    	//导入
+	function importFile(){
+	$('#mask').show();
+	$('#importdiv').show();
+	}
+	
+	//关闭弹窗
+	function closeWindow(){
+	$('#mask').hide();
+	$('#importdiv').hide();
+	};
+	//选择文件
+	 var fileBtn = $("#fileupload");
+    fileBtn.on("change", function() {
+        var index = $(this).val().lastIndexOf("\\"); 
+        var sFileName = $(this).val().substr((index + 1));
+
+        $("#filename").val(sFileName);
+    });
+//导入文件验证
+function fileUpload(){
+		var picPath=document.getElementById('excelFile').value;
+		if(picPath==null||picPath==""){
+			alert("请选择要导入的excel文件！");
+			return false ;
+						}
+		var type=picPath.substring(picPath.lastIndexOf(".")+1,picPath.length).toLowerCase();
+		if(type=="xls"||type=="xlsx"){
+			$("#form3").submit();							
+		}else{
+			alert("请上传正确的EXCEL表格文档");
+			document.getElementById("excelFile").value="";
+			return false;
+		}
+			     
+}	
+//机构导出
+function exportGroup() {
+		var paraTypeId=$(".iid").val();
+		if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checked').length!=0){
+				var ids = "";
+				$('.list-table tbody input[type=checkbox]').each(function(i, o) {
+					if($(o).attr('checked')) {
+						ids += $(o).val() + ",";
+					}
+				});
+				window.location.href="${ctx}/uids/complatgroupExport?sId="+ids.substring(0,ids.length-1);
+			}else{
+				$.dialog.confirm('请您至少选择一条数据',function(){
+					return null;
+				});
+			}
+	}
 
 </script>
 
 </head>
 <body>
+<div class="mask" id='mask'></div>
+<div class="list-warper" >
 
-<div class="list-warper">
+<!-- 导入数据时的弹出层 -->
+   <div  class="dialog" id="importdiv" style="display:none;">
+	<div class="dialogtop">
+	<span>机构导入</span>
+	<i class="closeicon"></i>
+	<a class="ui_close closeicon" href="javascript:void(0);" title="关闭(esc键)" style="display: inline-block;" onclick="closeWindow();">×</a>
+	</div>
+	<form id="form3" name="form3" action="${ctx}/uids/complatgroupImport" method="post" enctype="multipart/form-data">
+		<div class="upload">
+			<!-- form 提交 -->
+			<label for="fileupload">
+			<input type="file" id="excelFile" class="required" name="excelFile">
+			</label>
+			<a class="download" href="${ctx}/uploadFile/complat/机构列表.xlsx">下载参考样例</a>
+		</div>
+		<div class="btnarea">
+			<span class="confirm-btn" onclick="fileUpload()">确认</span>
+			<span class="councel-btn" onclick="closeWindow();">取消</span>
+		</div>
+	</form>
+</div>
+
+
 	<!--列表的面包屑区域-->
 	<div class="position">
 		<ol class="breadcrumb">
 			<li>
-				<a href="${ctx}/backIndex" target="_top">首页</a>
+				<a href="${ctx}/index" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
 			<li>
@@ -255,12 +444,20 @@ function resetform() {
 	<input type="hidden" id="orderSort" name="orderSort" value="${orderSort}"/>
 		
         <div class="list-topBar  advanced-search">
-        	 <div class="list-toolbar">
+           	<div class="list-toolbar">
             <!-- 操作按钮开始	 -->
-              <gsww:opTag menuId="8a92012d5e7de06a015e7de18b3a0001" tabIndex="1" operatorType="1"></gsww:opTag>
-             <!-- 操作按钮结束 -->
-           </div> 
-            
+              	 <!--<gsww:opTag menuId="8a92012d5e7de06a015e7de18b3a0001" tabIndex="1" operatorType="1"></gsww:opTag>-->
+              	 <ul class="list-Topbtn">
+						<li class="add"><a title="新增"
+							onclick="add('uids/complatgroupEdit');">新增</a></li>
+						<li class="del"><a title="删除"
+							onclick="deleteData('uids/complatgroupDelete','iid');">删除</a></li>
+						<li class="query" id="importFile" onclick="importFile()"><a title="导入">导入</a></li>
+						<li class="exportData"><a title="导出"
+							onclick="exportGroup()">导出</a></li>
+				 </ul>
+            <!-- 操作按钮结束 -->
+           	</div> 
         </div>
         
          <div class="form-alert;" >
