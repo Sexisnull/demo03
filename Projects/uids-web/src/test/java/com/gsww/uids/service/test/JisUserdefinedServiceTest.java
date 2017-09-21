@@ -33,7 +33,6 @@ public class JisUserdefinedServiceTest {
 			JisUserdefined define=jisUserdefinedService.findByKey(iid);
 			System.out.println(define);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getMessage(),e);
 		}
 		assertTrue(true);
@@ -44,7 +43,6 @@ public class JisUserdefinedServiceTest {
 		try {
 			jisUserdefinedService.save(define);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getMessage(),e);
 		}
 		assertTrue(true);

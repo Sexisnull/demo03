@@ -6,6 +6,17 @@
 <script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgcore.lhgdialog.min.js"></script>
 	<script type="text/javascript" src="${ctx}/res/plugin/ztree/js/jquery.ztree.all-3.5.js"></script>
 	<link rel="stylesheet" href="${ctx}/res/plugin/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css"></link>
+<style type="text/css">
+/* 	.menuContent{background: #fff;
+    width: 270px;
+    border: 1px solid #ccc;
+    height: 400px;
+    border-top: 0px;
+    overflow-y: auto;} */
+    .menuContent{border: 1px solid #ddd;overflow-x:auto;overflow-y:auto;float: left;}
+	.menuContent #areaTree{ width:450px;display: block;height:450px;float: left;overflow-x:auto;overflow-y:auto;}
+    .form-content{margin-left: 200px;}
+</style>
 <head>
 <meta charset="utf-8"/>
 <title>甘肃万维JUP课题</title>
@@ -422,6 +433,10 @@ function outPutComplatUser() {
     	</div>
     	<!-- 提示信息结束 -->
     	<!-- 列表开始 -->
+    	<div id="menuContent" class="menuContent">
+			<ul id="areaTree" class="ztree" style="margin-top:0; width:180px;"></ul>
+		</div>
+		<div class="form-content">
         <table cellpadding="0" cellspacing="0" border="0" width="100%" id="list-table" class="list-table">
         	<thead>
             	<tr>
@@ -489,6 +504,7 @@ function outPutComplatUser() {
                 
             </tbody>       
         </table>
+        </div>
         <!-- 列表结束 -->
     </div>
     <!-- 分页 -->
@@ -522,4 +538,98 @@ function outPutComplatUser() {
         </div>
 </div>
 </body>
+<script type="text/javascript">
+$(function(){
+var zNodes = [];
+		var setting = {
+			async : {
+				enable : true,
+				type:"post",
+				//url : "${ctx}/area/areaTree" //获取节点数据的URL地址
+				url:"${ctx}/login/getGroup",
+		        autoParam: ["id=groupId", "isDisabled"],
+		        otherParam: { "type": "1" }
+			},
+			data : {
+				simpleData : {
+					enable : true
+				}
+			},
+			callback : {
+				
+				onClick : function(event, treeId, treeNode){
+					var zTree = $.fn.zTree.getZTreeObj("areaTree");
+					var nodes = zTree.getSelectedNodes();
+					nodes.sort(function compare(a, b) {
+						return a.id - b.id;
+					});
+					
+					var _name=$.trim(nodes[0].name);
+					var _code=nodes[0].id;
+					alert(_name+"--"+_code);
+					var param="";
+					 $.ajax({
+					       type:"get",
+					       url:  "${ctx}/complat/complatList",
+					       data:{"search_EQ_groupid":_code},
+					       datatype:  "json",
+					       success: function (value) {
+						     /*  alert(value)	;				      
+	                           alert("请求成功"+_code);   */                                                                     
+	                           var   data=JSON.parse(value);                         
+	                           handleResponse(data) ;
+                           }, 
+                           
+                           error: function (returnValue) {
+                       /*   alert(_code);*/
+                           }
+					});
+					
+					if(_code!="1"&&_code.length>0 && _name.length>0)
+						param="?search_EQ_groupid="+_code;
+						
+					if(_code.length>0 && _name.length>0){
+						window.location.href="${ctx}/complat/complatList"+param;
+					}
+					$("#areacode").next('.error').hide();
+				}
+			}
+		};
+		
+		//初始化组织机构树
+		$.fn.zTree.init($("#areaTree"), setting, zNodes);
+		
+	});
+
+	function beforeClick(treeId, treeNode) {
+		var check = (treeNode && !treeNode.isParent);
+		if (!check) return false;
+		return check;
+	}
+	
+	function showMenu() {
+		var cityObj = $("#areaname");
+		var cityOffset = $("#areaname").offset();
+		$("#menuContent").css({left:cityOffset.left + "px", top:cityOffset.top + cityObj.outerHeight() + "px"}).slideDown("fast");
+
+		$("body").bind("mousedown", onBodyDown);
+	}
+	function hideMenu() {
+		$("#menuContent").fadeOut("fast");
+		$("body").unbind("mousedown", onBodyDown);
+	}
+	function onBodyDown(event) {
+		if (!(event.target.id == "menuBtn" || event.target.id == "menuContent" || $(event.target).parents("#menuContent").length>0)) {
+			hideMenu();
+		}
+	}
+	function checkSubmit(){
+		var powername=$("#qlName").val();
+		var name=$.trim(powername);
+		$("#qlName").val(name);
+		form1.submit();
+	}
+
+
+</script>
 </html>

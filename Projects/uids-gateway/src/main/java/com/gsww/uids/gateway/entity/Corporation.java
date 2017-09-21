@@ -3,7 +3,11 @@ package com.gsww.uids.gateway.entity;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
+/**
+ * 实体类-Corporation-complat_corporation
+ * @author zcc
+ *
+ */
 public class Corporation {
 	private Integer iid;
 	private String uuid;

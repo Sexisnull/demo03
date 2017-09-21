@@ -6,8 +6,10 @@
 
 <head>
 <title>甘肃万维JUP课题</title>
-<style type="text/css">
-</style>
+<link rel="stylesheet" href="${ctx}/res/plugin/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css"/>
+<%-- <script type="text/javascript" src="${ctx}/res/skin/default/plugin/z-tree/js/jquery.ztree.core-3.5.min.js"></script> --%>
+<script type="text/javascript" src="${ctx}/res/plugin/uploadify/js/jquery.uploadify-3.1.min.js"></script>
+
 <script type="text/javascript">
 function loadTab(){
 		//读取cardBar下面所有li标签
@@ -70,7 +72,7 @@ $(function(){
 		$('#email_passContent').require('找回密码内容必须填写');
 		$('#modifyPassTime').require('定时修改密码时间必须填写').match('num1','密码定时修改,只能为正数包括零,请重新输入!');
 		
-		//李德隆加于20160608
+		
 		$('#appId').require('appId内容必须填写');
 		$('#appName').require('appName内容必须填写');
 		$('#appAcc').require('appAcc内容必须填写');
@@ -174,12 +176,12 @@ function showRealNameAuthUrl(){
 	/* End hide from IE-mac */
 	.tab {width:90%;margin:0 auto;}
 	.nav, .nav li a, .hackBox {list-style:none;border:1px solid #ccc;}
-	.nav {position:relative;margin:1em 0 0;border-width:0 0 1px;}
+	.nav {position:relative;margin:1em 0 0;border-width:0 0 0px;}
 	.nav li {float:left;margin:0 .3em;}
 	.nav li a {position:relative;display:block;float:left;margin:0 0 -1px;padding:0 .8em;background:#eee;color:#666;font-size:1.1em;line-height:1.8em;text-decoration:none;}
 	/*- .nav li a:hover, -*/ .nav li.Selected a {border-bottom-color:#fff;background:#fff;color:#000;line-height:2em;}
 	/*对点击下栏显示边框的代码进行美化*/
-	.hackBox {display:none;padding:4px;margin:5px;border-width:0 1px 1px;}
+	.hackBox {display:none;padding:4px;margin:0 0 0 4px;}
 	.hackBox p {margin:0 1em 1em;color:#333;font-size:1.1em;text-align:left;}
 	.hackBox img {float:left;width:100px;margin:0 .8em .4em 0;}
 	/*]]>*/-->
@@ -188,6 +190,7 @@ function showRealNameAuthUrl(){
 </head>
 <body>
 <div class="tab">
+<br/><div style="text-align: left;font-size:22px;">系统参数</div><br/><hr/><br/>
 	<form action="${ctx}/parameter/parameterSave" method="post" id="oprform" name="oprform">
 		<input type="hidden" id="iid" name="iid" value="${jisParameter.iid}"/> 
 		<ul class="nav clearfix" id="cardBar">
@@ -195,8 +198,8 @@ function showRealNameAuthUrl(){
 			<li id="card2"><a href="#" title="" onclick="javascript:switchTab('cardBar','card2');">前台参数</a></li>
 			<li id="card3"><a href="#" title="" onclick="javascript:switchTab('cardBar','card3');">邮件参数</a></li>
 		    <li id="card4"><a href="#" title="" onclick="javascript:switchTab('cardBar','card4');">系统线程</a></li>
-			<li id="card5"><a href="#" title="" onclick="javascript:switchTab('cardBar','card5');">发送短信接口参数</a></li>
-			<li id="card6"><a href="#" title="" onclick="javascript:switchTab('cardBar','card6');">注册、密码找回 、动态密码、短信相关参数</a></li>
+			<li id="card5"><a href="#" title="" onclick="javascript:switchTab('cardBar','card5');">短信接口参数</a></li>
+			<li id="card6"><a href="#" title="" onclick="javascript:switchTab('cardBar','card6');">注册、密码、短信相关参数</a></li>
 			<li id="card7"><a href="#" title="" onclick="javascript:switchTab('cardBar','card7');">实名认证参数</a></li>
 			<li id="card8"><a href="#" title="" onclick="javascript:switchTab('cardBar','card8');">政府用户实名认证参数</a></li>
 		</ul>
@@ -233,8 +236,11 @@ function showRealNameAuthUrl(){
 								<input type="radio" name="isLoginfail" checked="checked" value="1" onclick="setlogintime()"/>是&nbsp;&nbsp;&nbsp;
 								<input type="radio" name="isLoginfail" value="0" onclick="setlogintime()"/>否
 							</c:if>
-							<%-- <input type="radio" name="isLoginfail" value="1" data-value="${jisParameter.isLoginfail}" onclick="setlogintime()">是&nbsp;&nbsp;&nbsp;
-							<input type="radio" name="isLoginfail" value="0" data-value="${jisParameter.isLoginfail}" onclick="setlogintime()">否 --%>
+							
+							<c:if test="${jisParameter.isLoginfail==null}">
+								<input type="radio" name="isLoginfail" value="1" onclick="setlogintime()"/>是&nbsp;&nbsp;&nbsp;
+								<input type="radio" name="isLoginfail" value="0" onclick="setlogintime()"/>否
+							</c:if>
 						</td>
 					</tr>
 					<tr id="logintimes_tr1">
@@ -245,9 +251,6 @@ function showRealNameAuthUrl(){
 					</tr>
 					<tr id="logintimes_tr2">
 						<td align="right" class="label" width="100">错误限制时长</td>
-						<!-- <td class="required">
-							<h:tip title="错误登录次数达到限制，该用户将在配置时间内不可再登录，0不作限制，单位：分钟"></h:tip>
-						</td> -->
 						<td colspan="2">
 							<input type="text" id="banTimes" placeholder="单位：分钟" name="banTimes" maxlength="33" class="input-text" value="${jisParameter.banTimes}" />
 						</td>
@@ -256,17 +259,49 @@ function showRealNameAuthUrl(){
 						<td align="right" class="label">后台密码强度等级</td>
 						<!-- <td class="required"><h:tip title="注册、登录、修改时，密码要求达到的强度"></h:tip></td> -->
 						<td>
-							<input type="radio" name="pwdLevel" value="0" data-value="${jisParameter.pwdLevel}" onclick="">弱&nbsp;&nbsp;&nbsp;
+							<c:if test="${jisParameter.pwdLevel=='0'}">
+							<input type="radio" name="pwdLevel" value="0" checked="checked" data-value="${jisParameter.pwdLevel}" onclick="">弱&nbsp;&nbsp;&nbsp;
 							<input type="radio" name="pwdLevel" value="1" data-value="${jisParameter.pwdLevel}" onclick="">中&nbsp;&nbsp;&nbsp;
-							<input type="radio" name="pwdLevel" value="2" data-value="${jisParameter.pwdLevel}" onclick="">强	
+							<input type="radio" name="pwdLevel" value="2" data-value="${jisParameter.pwdLevel}" onclick="">强
+							</c:if>
+							
+							<c:if test="${jisParameter.pwdLevel=='1'}">
+								<input type="radio" name="pwdLevel" value="0" data-value="${jisParameter.pwdLevel}" onclick="">弱&nbsp;&nbsp;&nbsp;
+								<input type="radio" name="pwdLevel" value="1" checked="checked" data-value="${jisParameter.pwdLevel}" onclick="">中&nbsp;&nbsp;&nbsp;
+								<input type="radio" name="pwdLevel" value="2" data-value="${jisParameter.pwdLevel}" onclick="">强
+							</c:if>
+							
+							<c:if test="${jisParameter.pwdLevel=='2'}">
+								<input type="radio" name="pwdLevel" value="0" data-value="${jisParameter.pwdLevel}" onclick="">弱&nbsp;&nbsp;&nbsp;
+								<input type="radio" name="pwdLevel" value="1" data-value="${jisParameter.pwdLevel}" onclick="">中&nbsp;&nbsp;&nbsp;
+								<input type="radio" name="pwdLevel" value="2" checked="checked" data-value="${jisParameter.pwdLevel}" onclick="">强
+							</c:if>
+							
+							<c:if test="${jisParameter.pwdLevel==null}">
+								<input type="radio" name="pwdLevel" value="0" data-value="${jisParameter.pwdLevel}" onclick="">弱&nbsp;&nbsp;&nbsp;
+								<input type="radio" name="pwdLevel" value="1" data-value="${jisParameter.pwdLevel}" onclick="">中&nbsp;&nbsp;&nbsp;
+								<input type="radio" name="pwdLevel" value="2" data-value="${jisParameter.pwdLevel}" onclick="">强
+							</c:if>
 						</td>
 					</tr>
 					<tr>
 						<td align="right" class="label">系统网络类型</td>
 						<!-- <td class="required"><h:tip title="选择不同的网络类型，将会同步不同网络的应用数据"></h:tip></td> -->
 						<td>
-							<input type="radio" name="netType" value="1" data-value="${jisParameter.netType}" >外网&nbsp;&nbsp;&nbsp;
+							<c:if test="${jisParameter.netType=='1'}">
+								<input type="radio" name="netType" value="1" checked="checked" data-value="${jisParameter.netType}" >外网&nbsp;&nbsp;&nbsp;
+								<input type="radio" name="netType" value="2" data-value="${jisParameter.netType}" >专网
+							</c:if>
+					
+							<c:if test="${jisParameter.netType=='2'}">
+								<input type="radio" name="netType" value="1" data-value="${jisParameter.netType}" >外网&nbsp;&nbsp;&nbsp;
+							<input type="radio" name="netType" value="2" checked="checked" data-value="${jisParameter.netType}" >专网
+							</c:if>
+							
+							<c:if test="${jisParameter.netType==null}">
+								<input type="radio" name="netType" value="1" data-value="${jisParameter.netType}" >外网&nbsp;&nbsp;&nbsp;
 							<input type="radio" name="netType" value="2" data-value="${jisParameter.netType}" >专网
+							</c:if>
 						</td>
 					</tr>
 					<tr >
@@ -307,9 +342,6 @@ function showRealNameAuthUrl(){
 					</tr>
 					<tr id="logintimes_tr2">
 						<td align="right" class="label">前台个人用户登录超时时间</td>
-						<!-- <td class="required">
-							<h:tip title="在此时间内，如果用户未做任何操作，则当超过此时间后用户再进行操作，会跳转到登录页面，0不作限制，单位：分钟"></h:tip>
-						</td> -->
 						<td colspan="2">
 							<input type="text" id="perSessionTime" name="perSessionTime" 
 							  maxlength="10" class="input-text" value="${jisParameter.corSessionTime}" 
@@ -410,22 +442,33 @@ function showRealNameAuthUrl(){
 				<table class="form-table">
 					<tr>
 						<td align="right" class="label">同步线程开启</td>
-						<!-- <td class="required">&nbsp;</td> -->
 						<td colspan="2">
-							<input type="radio" name="enableSynTask" value="1" data-value="${jisParameter.enableSynTask}" >是&nbsp;&nbsp;&nbsp;
-							<input type="radio" name="enableSynTask" value="0" data-value="${jisParameter.enableSynTask}" >否
+							<c:if test="${jisParameter.enableSynTask=='1'}">
+								<input type="radio" name="enableSynTask" value="1" checked="checked" data-value="${jisParameter.enableSynTask}" >是&nbsp;&nbsp;&nbsp;
+								<input type="radio" name="enableSynTask" value="0" data-value="${jisParameter.enableSynTask}" >否
+							</c:if>
+					
+							<c:if test="${jisParameter.enableSynTask=='0'}">
+								<input type="radio" name="enableSynTask" value="1" data-value="${jisParameter.enableSynTask}" >是&nbsp;&nbsp;&nbsp;
+								<input type="radio" name="enableSynTask" value="0" checked="checked" data-value="${jisParameter.enableSynTask}" >否
+							</c:if>
+							
+							<c:if test="${jisParameter.enableSynTask==null}">
+								<input type="radio" name="enableSynTask" value="1" data-value="${jisParameter.enableSynTask}" >是&nbsp;&nbsp;&nbsp;
+								<input type="radio" name="enableSynTask" value="0" data-value="${jisParameter.enableSynTask}" >否
+							</c:if>
 						</td>
 					</tr>
 					<tr>
 						<td align="right" class="label" width="100">同步线程时间</td>
 						<!-- <td class="required"><h:tip title="线程修改同步时间需要重启"></h:tip></td> -->
 						<td colspan="2">
-							<select id="syncTime" name="syncTime" data-value="${jisParameter.syncTime}" style="width: 160px;">
-								<option value="30">30秒</option>
-								<option value="60">1分钟</option>
-								<option value="120">2分钟</option> 
-								<option value="180">3分钟</option>
-								<option value="300">5分钟</option>
+							<select id="syncTime" name="syncTime" data-value="${jisParameter.syncTime}" style="width: 160px;">   
+								<option value="30"<c:if test="${jisParameter.syncTime==30}">selected</c:if>>30秒</option>   
+								<option value="60"<c:if test="${jisParameter.syncTime==60}">selected</c:if>>1分钟</option>
+								<option value="120"<c:if test="${jisParameter.syncTime==120}">selected</c:if>>2分钟</option>
+								<option value="180"<c:if test="${jisParameter.syncTime==180}">selected</c:if>>3分钟</option>
+								<option value="300"<c:if test="${jisParameter.syncTime==300}">selected</c:if>>5分钟</option>
 							</select>
 						</td>
 					</tr>
@@ -433,12 +476,12 @@ function showRealNameAuthUrl(){
 						<td align="right" class="label" width="100">日志保留天数</td>
 						<!-- <td class="required">&nbsp;</td> -->
 						<td colspan="2">
-							<select id="clearLogTime" name="clearLogTime" data-value="${jisParameter.clearLogTime}" style="width: 160px;">
-								<option value="604800">7天</option> 
-								<option value="1296000">15天</option>
-								<option value="2592000">1个月</option>
-								<option value="15552000">半年</option>
-								<option value="31104000">1年</option>
+							<select id="clearLogTime" name="clearLogTime" data-value="${jisParameter.clearLogTime}" style="width: 160px;">   
+								<option value="604800"<c:if test="${jisParameter.clearLogTime==604800}">selected</c:if>>7天</option>   
+								<option value="1296000"<c:if test="${jisParameter.clearLogTime==1296000}">selected</c:if>>15天</option>
+								<option value="2592000"<c:if test="${jisParameter.clearLogTime==2592000}">selected</c:if>>1个月</option>
+								<option value="15552000"<c:if test="${jisParameter.clearLogTime==15552000}">selected</c:if>>半年</option>
+								<option value="31104000"<c:if test="${jisParameter.clearLogTime==31104000}">selected</c:if>>1年</option>
 							</select>
 						</td>
 					</tr>
@@ -613,12 +656,13 @@ function showRealNameAuthUrl(){
 						<td align="right" class="label" width="100">动态登录密码有效期</td>
 						<!-- <td class="required">&nbsp;</td>  <h:tip title="单位是分钟"></h:tip></td> -->
 						<td colspan="2">
-							<select id="validityPeriod" name="validityPeriod" data-value="${jisParameter.validityPeriod}">
-								<option value="5">5分钟</option>
-								<option value="10">10分钟</option>
-								<option value="15">15分钟</option> 
-								<option value="20">20分钟</option>									
+							<select id="validityPeriod" name="validityPeriod" data-value="${jisParameter.validityPeriod}">   
+								<option value="5"<c:if test="${jisParameter.validityPeriod==5}">selected</c:if>>5分钟</option>   
+								<option value="10"<c:if test="${jisParameter.validityPeriod==10}">selected</c:if>>10分钟</option>
+								<option value="15"<c:if test="${jisParameter.validityPeriod==15}">selected</c:if>>15分钟</option>
+								<option value="20"<c:if test="${jisParameter.validityPeriod==20}">selected</c:if>>20分钟</option>
 							</select>
+						
 						</td>
 					</tr>
 					<tr>
@@ -637,12 +681,21 @@ function showRealNameAuthUrl(){
 				<table class="form-table">
 					<tr>
 						<td align="right" class="label">实名认证开启</td>
-						<!-- <td class="required">
-							<h:tip title="开启后，前台个人法人注册会自动调用第三方接口验证"></h:tip>
-						</td> -->
 						<td colspan="2">
-							<input type="radio" name="enableCorRealNameAuth" value="1" data-value="${jisParameter.enableCorRealNameAuth}" >是&nbsp;&nbsp;&nbsp;
-							<input type="radio" name="enableCorRealNameAuth" value="0" data-value="${jisParameter.enableCorRealNameAuth}" >否
+							<c:if test="${jisParameter.enableCorRealNameAuth=='0'}">
+								<input type="radio" name="enableCorRealNameAuth" value="1" data-value="${jisParameter.enableCorRealNameAuth}" >是&nbsp;&nbsp;&nbsp;
+								<input type="radio" name="enableCorRealNameAuth" value="0" checked="checked" data-value="${jisParameter.enableCorRealNameAuth}" >否
+							</c:if>
+							
+							<c:if test="${jisParameter.enableCorRealNameAuth=='1'}">
+								<input type="radio" name="enableCorRealNameAuth" value="1" checked="checked" data-value="${jisParameter.enableCorRealNameAuth}" >是&nbsp;&nbsp;&nbsp;
+								<input type="radio" name="enableCorRealNameAuth" value="0" data-value="${jisParameter.enableCorRealNameAuth}" >否
+							</c:if>
+							
+							<c:if test="${jisParameter.enableCorRealNameAuth==null}">
+								<input type="radio" name="enableCorRealNameAuth" value="1" data-value="${jisParameter.enableCorRealNameAuth}" >是&nbsp;&nbsp;&nbsp;
+								<input type="radio" name="enableCorRealNameAuth" value="0" data-value="${jisParameter.enableCorRealNameAuth}" >否
+							</c:if>
 						</td>
 					</tr>
 					<tr>
@@ -714,8 +767,20 @@ function showRealNameAuthUrl(){
 							<h:tip title="开启后，政府用户注册会自动调用第三方接口验证"></h:tip>
 						</td> -->
 						<td colspan="2">
-							<input type="radio" name="enableGovRealNameAuth" value="1" data-value="${jisParameter.enableGovRealNameAuth}" >是&nbsp;&nbsp;&nbsp;
-							<input type="radio" name="enableGovRealNameAuth" value="0" data-value="${jisParameter.enableGovRealNameAuth}" >否
+							<c:if test="${jisParameter.enableGovRealNameAuth=='0'}">
+								<input type="radio" name="enableGovRealNameAuth" value="1" data-value="${jisParameter.enableGovRealNameAuth}">是&nbsp;&nbsp;&nbsp;
+								<input type="radio" name="enableGovRealNameAuth" value="0" checked="checked" data-value="${jisParameter.enableGovRealNameAuth}" >否
+							</c:if>
+							
+							<c:if test="${jisParameter.enableGovRealNameAuth=='1'}">
+								<input type="radio" name="enableGovRealNameAuth" value="1" checked="checked" data-value="${jisParameter.enableGovRealNameAuth}">是&nbsp;&nbsp;&nbsp;
+								<input type="radio" name="enableGovRealNameAuth" value="0" data-value="${jisParameter.enableGovRealNameAuth}">否
+							</c:if>
+							
+							<c:if test="${jisParameter.enableGovRealNameAuth==null}">
+								<input type="radio" name="enableGovRealNameAuth" value="1" data-value="${jisParameter.enableGovRealNameAuth}">是&nbsp;&nbsp;&nbsp;
+								<input type="radio" name="enableGovRealNameAuth" value="0" data-value="${jisParameter.enableGovRealNameAuth}">否
+							</c:if>
 						</td>
 					</tr>
 					<tr>
@@ -776,15 +841,24 @@ function showRealNameAuthUrl(){
 					</tr>
 				</table>
 			</div>
-		
 		</div>
-		<table border="0" align="center" cellpadding="10" cellspacing="0" class="table">
+		<table border="0" align="center" cellpadding="10" cellspacing="0" class="form-btn">
+			<tr>
+				<td height="40" align="center">
+					<input type="submit" tabindex="15" id="submit-btn" value="保存" class="btn bluegreen"/>
+				</td>
+			</tr>
+		</table>
+		<!-- <div class="form-btn">
+	    	<input type="submit" tabindex="15" id="submit-btn" value="保存" class="btn bluegreen"/>
+    	</div> -->
+		<!-- <table border="0" align="center" cellpadding="10" cellspacing="0" class="table">
 			<tr>
 				<td height="40" align="center">
 					<input type="submit" class="btn btn-primary" value="保存"/>
 				</td>
 			</tr>
-		</table>
+		</table> -->
 	</form>
 </div>
 </body>

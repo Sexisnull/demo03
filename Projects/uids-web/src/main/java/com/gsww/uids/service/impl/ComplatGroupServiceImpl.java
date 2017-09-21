@@ -176,4 +176,12 @@ public class ComplatGroupServiceImpl implements ComplatGroupService{
 		return jdbcTemplate.queryForList(sql);
 	}
 
+	@Override
+	public ComplatGroup findByIid(int iid) {	
+		ComplatGroup complatGroup = null;
+		complatGroup=complatGroupDao.findByIid(iid);
+		System.out.println(complatGroup);
+		return complatGroup;
+	}
+
 }

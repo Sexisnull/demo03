@@ -15,6 +15,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jasig.cas.client.authentication.AttributePrincipal;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -333,7 +334,7 @@ public class SysLoginController extends BaseController{
 
 			List<ComplatGroup> list = new ArrayList<ComplatGroup>();
 			
-			if(!"0".equals(groupId)){
+			if(!"0".equals(groupId)&&StringUtils.isNotBlank(groupId)){
 				list = complatGroupService.findByPid(Integer.parseInt(groupId));
 			}else{
 				list.add(complatGroupService.findByIid(128));

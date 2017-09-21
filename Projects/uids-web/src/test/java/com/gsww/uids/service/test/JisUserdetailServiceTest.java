@@ -19,14 +19,13 @@ public class JisUserdetailServiceTest {
 	@Autowired
 	private JisUserdetailService jisUserdetailService;
 	private static Logger logger = LoggerFactory.getLogger(JisUserdetailServiceTest.class);
-	/*@Test
+	@Test
 	public void findByUserid(){
 		int userId=1;
 		try {
 			JisUserdetail detail=jisUserdetailService.findByUserid(userId);
 			System.out.println(detail.getCardid());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getMessage(),e);
 		}
 		assertTrue(true);
@@ -37,11 +36,10 @@ public class JisUserdetailServiceTest {
 		try {
 			jisUserdetailService.save(detail);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getMessage(),e);
 		}
 		assertTrue(true);
-	}*/
+	}
 	/*@Test
 	public void update(){
 		int iid=20519;
@@ -49,7 +47,6 @@ public class JisUserdetailServiceTest {
 		try {
 			jisUserdetailService.update(iid, cardId);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getMessage(),e);
 		}
 		assertTrue(true);

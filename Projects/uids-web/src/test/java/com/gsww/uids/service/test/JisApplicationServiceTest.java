@@ -28,7 +28,6 @@ public class JisApplicationServiceTest {
 		try {
 			jisApplicationService.save(entity);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getMessage(),e);
 		}
 		assertTrue(true);
@@ -39,7 +38,6 @@ public class JisApplicationServiceTest {
 			JisApplication entity=jisApplicationService.findByKey(27);
 			jisApplicationService.delete(entity);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getMessage(),e);
 		}
 		assertTrue(true);
@@ -52,7 +50,6 @@ public class JisApplicationServiceTest {
 			JisApplication entity=jisApplicationService.findByKey(iid);
 			System.out.println(entity.getName());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getMessage(),e);
 		}
 		assertTrue(true);
@@ -64,7 +61,6 @@ public class JisApplicationServiceTest {
 			JisApplication entity=jisApplicationService.findByMark(mark);
 			System.out.println(entity.getName());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getMessage(),e);
 		}
 		assertTrue(true);
@@ -75,7 +71,6 @@ public class JisApplicationServiceTest {
 			List<Map<String, Object>> list=jisApplicationService.getJisApplicationList();
 			System.out.println(list);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getMessage(),e);
 		}
 		assertTrue(true);

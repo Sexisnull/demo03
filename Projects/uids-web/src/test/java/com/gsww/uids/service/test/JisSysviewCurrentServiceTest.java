@@ -28,7 +28,6 @@ public class JisSysviewCurrentServiceTest {
 			List<JisSysviewCurrent> list=jisSysviewCurrentService.findJisCurList();
 			System.out.println(list);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getMessage(),e);
 		}
 		assertTrue(true);
@@ -40,7 +39,6 @@ public class JisSysviewCurrentServiceTest {
 			JisSysviewCurrent jis=jisSysviewCurrentService.findByIid(id);
 			System.out.println(jis);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -50,7 +48,6 @@ public class JisSysviewCurrentServiceTest {
 			JisSysviewCurrent entity=jisSysviewCurrentService.findByIid(4060);
 			jisSysviewCurrentService.delete(entity);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

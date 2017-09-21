@@ -53,9 +53,10 @@
 		$("#alerttb").show(); 				
 	}
 	//关闭
-	$(".close").click(function() {
-        $("#alerttb").hide();
-    });
+    /* function closeWindow() {
+    	alert("11");
+    	$("#alerttb").hide();
+    } */
     //全选/反选
     function chooseall(){
 		var check = $('#checkall:checked').val();
@@ -111,7 +112,6 @@
   background-color:#fbedce;
   height:30px;
   font-size:13px;
-}
 }
 </style>
 </head>
@@ -243,7 +243,7 @@
       </div>
       <div class="input_one">
 		<span id="inputUser">用户扩展属性 - 设置 - 修改必填信息</span>
-		<i class="close">X</i>
+		<i class="close"><a  id="close"  href="${ctx}/jis/fieldsList">X&nbsp</a></i>
       </div>   
       <div class="input_two">
 	     <form id="oprform" name="oprform" action="${ctx}/jis/fieldsOperate" method="get">

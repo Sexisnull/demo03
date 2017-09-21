@@ -24,7 +24,6 @@ public class JisDatacallServiceTest {
 		try {
 			jisDatacallService.save(call);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getMessage(),e);
 		}
 		assertTrue(true);
@@ -35,7 +34,6 @@ public class JisDatacallServiceTest {
 			JisDatacall call=jisDatacallService.findByKey(10);
 			jisDatacallService.delete(call);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getMessage(),e);
 		}
 		assertTrue(true);
@@ -47,7 +45,6 @@ public class JisDatacallServiceTest {
 			JisDatacall call=jisDatacallService.findByKey(iid);
 			System.out.println(call.getContent());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getMessage(),e);
 		}
 		assertTrue(true);

@@ -4,7 +4,11 @@ import com.gsww.uids.gateway.dao.authlog.AuthLogDao;
 import com.gsww.uids.gateway.entity.JisAuthLog;
 import com.gsww.uids.gateway.util.SpringContextHolder;
 import com.gsww.uids.gateway.util.StringHelper;
-
+/**
+ * AuthLogService
+ * @author zcc
+ *
+ */
 public class AuthLogService {
 	private static AuthLogDao authLogDao;
 	static {
