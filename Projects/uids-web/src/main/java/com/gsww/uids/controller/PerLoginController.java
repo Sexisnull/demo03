@@ -600,7 +600,7 @@ public class PerLoginController{
     if ("per".equals(typeEntity)) {
       ComplatOutsideuser outsideUser = (ComplatOutsideuser)session.getAttribute("outsideUser");
       String loginName = outsideUser.getLoginName();
-      isSuccess = this.OutsideUserService.updatePwd(loginName, Md5Util.md5encode(pwd));
+      isSuccess = this.OutsideUserService.updatePwd(Integer.parseInt(loginName), Md5Util.md5encode(pwd));
     } else {
       ComplatCorporation corporation = (ComplatCorporation)session.getAttribute("corporation");
       String loginName = corporation.getLoginName();

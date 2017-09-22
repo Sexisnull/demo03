@@ -1,5 +1,6 @@
 package com.gsww.uids.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -34,7 +35,7 @@ public interface ComplatOutsideuserDao extends
 	 * 更新删除状态
 	 */
 	@Modifying
-	@Query("update ComplatOutsideuser t set t.operSign = 3 where t.iid = ?")
+	@Query("update ComplatOutsideuser t set t.operSign = 3 where t.iid = ?1")
 	public void updateOutsideuser(Integer iid);
 	
 	/**
@@ -42,5 +43,21 @@ public interface ComplatOutsideuserDao extends
      * @param loginName
      * @return
 	 */
-	List<ComplatOutsideuser> findByLoginName(String loginName);
+	ComplatOutsideuser findByLoginName(String loginName);
+
+	ComplatOutsideuser findByMobile(String cellPhoneNum);
+
+	ComplatOutsideuser findByPapersNumber(String idCard);
+
+	@Modifying
+	@Query("update ComplatOutsideuser t set t.logintime = ?2 and t.loginip=?3 where t.iid = ?1")
+	boolean updateLoginIpAndLoginTime(int iid, Date time, String ip);
+
+	@Modifying
+	@Query("update ComplatOutsideuser t set t.opersign = ?2 where t.iid = ?1")
+	boolean updateOpersign(String ids, int opersign);
+	
+	@Modifying
+	@Query("update ComplatOutsideuser t set t.pwd = ?2 where t.iid = ?1")
+	boolean updatePwd(int iid, String pwd);
 }

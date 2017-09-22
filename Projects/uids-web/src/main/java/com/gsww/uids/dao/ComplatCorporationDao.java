@@ -38,5 +38,5 @@ public interface ComplatCorporationDao extends  PagingAndSortingRepository<Compl
      * @param loginName
      * @return
 	 */
-	List<ComplatCorporation> findByLoginName(String loginName);
+	ComplatCorporation findByLoginName(String loginName);
 }

@@ -7,6 +7,8 @@ import java.util.Map;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gsww.jup.util.StringHelper;
+import com.gsww.uids.controller.ComplatRoleController;
 import com.gsww.uids.dao.JisApplicationDao;
 import com.gsww.uids.entity.JisApplication;
 import com.gsww.uids.service.JisApplicationService;
@@ -27,6 +30,8 @@ import com.gsww.uids.service.JisApplicationService;
 @Transactional
 @Service("JisApplicationService")
 public class JisApplicationServiceImpl implements JisApplicationService {
+	
+	private static Logger logger = LoggerFactory.getLogger(JisApplicationServiceImpl.class);
 
 	@Autowired
 	private JisApplicationDao jisApplicationDao;
@@ -83,7 +88,6 @@ public class JisApplicationServiceImpl implements JisApplicationService {
 	
 	@Override
 	public List<JisApplication> findAll() {
-		// TODO Auto-generated method stub
 		return jisApplicationDao.findAll();
 	}
 	
@@ -113,5 +117,30 @@ public class JisApplicationServiceImpl implements JisApplicationService {
 		String selApp = "select iid,name,icon,userdefined,logintype from jis_application where isshow=1 and iid in ("+ids+")";
 		
 		return jdbcTemplate.queryForList(selApp);
+	}
+
+	@Override
+	public String findURLBylogoff(int islogoff) {
+	    List<JisApplication> list = null;
+	    String url = "";
+	    StringBuffer buffer = new StringBuffer(128);
+	    try
+	    {
+	      list = this.jisApplicationDao.findAll();
+	      if ((list != null) && (list.size() > 0)) {
+	        for (JisApplication app : list) {
+	          buffer.append("，" + app.getLogOffUrl());
+	        }
+	        if ((buffer != null) && (buffer.length() > 0))
+	          url = buffer.substring(1).toString();
+	      }
+	    }
+	    catch (Exception e)
+	    {
+	      e.printStackTrace();
+	      logger.error("[findURLBylogoff] error:" + e);
+	      return url;
+	    }
+	    return url;
 	}
 }
