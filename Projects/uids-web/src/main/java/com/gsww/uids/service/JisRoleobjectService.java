@@ -21,4 +21,5 @@ public interface JisRoleobjectService {
 	 * @return
 	 */
 	boolean add(int parseInt, int parseInt2, int i);
+	public void deleteByRoleId(int id);
 }
