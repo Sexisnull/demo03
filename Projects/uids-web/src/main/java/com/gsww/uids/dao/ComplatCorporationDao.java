@@ -39,4 +39,8 @@ public interface ComplatCorporationDao extends  PagingAndSortingRepository<Compl
      * @return
 	 */
 	ComplatCorporation findByLoginName(String loginName);
+	
+	@Modifying
+	@Query("update ComplatCorporation t set t.pwd = ?2 where t.loginName = ?1")
+	public boolean updatePwd(String loginName, String pwd);
 }

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.hanweb.common.util.StringUtil;
 import com.gsww.uids.dao.ComplatCorporationDao;
 import com.gsww.uids.entity.ComplatCorporation;
 import com.gsww.uids.service.ComplatCorporationService;
@@ -46,15 +47,21 @@ public class ComplatCorporationServiceImpl implements ComplatCorporationService{
 
 	@Override
 	public ComplatCorporation findByLoginName(String loginName) {
-		// TODO Auto-generated method stub
-		return null;
+	    return this.complatCorporationDao.findByLoginName(loginName);
 	}
 
 	@Override
-	public boolean updatePwd(String loginName, String md5encode) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean updatePwd(String loginName, String pwd) {
+	    if (StringUtil.isEmpty(loginName)) {
+	        return false;
+	      }
+	      return this.complatCorporationDao.updatePwd(loginName, pwd);
 	}
+	
+	  public ComplatCorporation findByLoginName1(String loginName)
+	  {
+	    return this.complatCorporationDao.findByLoginName(loginName);
+	  }
 
 	@Override
 	public ComplatCorporation findByLoginNameIsUsed(String loginName) {
