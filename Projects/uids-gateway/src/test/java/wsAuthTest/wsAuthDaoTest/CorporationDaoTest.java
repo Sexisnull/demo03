@@ -24,9 +24,9 @@ import net.sf.json.JSONArray;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("/applicationContext.xml")
 public class CorporationDaoTest {
-	private static CorporationDao corporationDAO;
+	private static CorporationDao corporationDao;
 	static {
-		corporationDAO = SpringContextHolder.getBean("corporationDAO");
+		corporationDao = SpringContextHolder.getBean("corporationDao");
 	}
 
 	@Test
@@ -34,9 +34,9 @@ public class CorporationDaoTest {
 		Corporation corporation = new Corporation();
 		try {
 			String loginName = "hanweb";
-			corporation = corporationDAO.findByLoginName(loginName);
+			corporation = corporationDao.findByLoginName(loginName);
 			System.out.println(
-					"CorporationDaoTest-通过loginName获取Corporation" + JSONArray.fromObject(corporation).toString());
+					"corporationDaoTest-通过loginName获取Corporation" + JSONArray.fromObject(corporation).toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -48,9 +48,9 @@ public class CorporationDaoTest {
 		Corporation corporation = new Corporation();
 		try {
 			String regNumber = "54545451";
-			corporation = corporationDAO.findByRegNumber(regNumber);
+			corporation = corporationDao.findByRegNumber(regNumber);
 			System.out.println(
-					"CorporationDaoTest-通过regNumber获取Corporation" + JSONArray.fromObject(corporation).toString());
+					"corporationDaoTest-通过regNumber获取Corporation" + JSONArray.fromObject(corporation).toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -62,7 +62,7 @@ public class CorporationDaoTest {
 		List<Corporation> corporation = new ArrayList<Corporation>();
 		try {
 			String orgnumber = "23434233";
-			corporation = corporationDAO.findByOrgNumber(orgnumber);
+			corporation = corporationDao.findByOrgNumber(orgnumber);
 			System.out.println(
 					"AuthLogDaoTest-通过orgnumber获取List<Corporation>" + JSONArray.fromObject(corporation).toString());
 		} catch (Exception e) {

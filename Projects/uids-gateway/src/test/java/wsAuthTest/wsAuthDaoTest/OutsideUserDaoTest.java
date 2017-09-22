@@ -21,9 +21,9 @@ import net.sf.json.JSONArray;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("/applicationContext.xml")
 public class OutsideUserDaoTest {
-	private static OutsideUserDao outsideUserDAO;
+	private static OutsideUserDao outsideUserDao;
 	static {
-		outsideUserDAO = SpringContextHolder.getBean("outsideUserDAO");
+		outsideUserDao = SpringContextHolder.getBean("outsideUserDao");
 	}
 
 	@Test
@@ -31,7 +31,7 @@ public class OutsideUserDaoTest {
 		OutsideUser outsideUser = new OutsideUser();
 		try {
 			String loginName = "hanweb";
-			outsideUser = outsideUserDAO.findByLoginName(loginName);
+			outsideUser = outsideUserDao.findByLoginName(loginName);
 			System.out.println(
 					"OutsideUserDaoTest-通过loginName获取OutsideUser" + JSONArray.fromObject(outsideUser).toString());
 		} catch (Exception e) {
@@ -45,7 +45,7 @@ public class OutsideUserDaoTest {
 		OutsideUser outsideUser = new OutsideUser();
 		try {
 			String cellPhoneNum = "18900000000";
-			outsideUser = outsideUserDAO.findByMobile(cellPhoneNum);
+			outsideUser = outsideUserDao.findByMobile(cellPhoneNum);
 			System.out.println(
 					"OutsideUserDaoTest-通过cellPhoneNum获取outsideUser" + JSONArray.fromObject(outsideUser).toString());
 		} catch (Exception e) {
@@ -59,7 +59,7 @@ public class OutsideUserDaoTest {
 		OutsideUser outsideUser = new OutsideUser();
 		try {
 			String IdCard = "320323198903061034";
-			outsideUser = outsideUserDAO.findByIdCard(IdCard);
+			outsideUser = outsideUserDao.findByIdCard(IdCard);
 			System.out.println("AuthLogDaoTest-通过IdCard获取OutsideUser" + JSONArray.fromObject(outsideUser).toString());
 		} catch (Exception e) {
 			e.printStackTrace();
