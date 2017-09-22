@@ -79,7 +79,7 @@
     <filter-class>com.gsww.jup.util.AccessFilter</filter-class>
     <init-param>
       <param-name>excludedPages</param-name>
-      <param-value>/login_new.jsp,/login.jsp,/res,/login/getGroup,/kaptcha,/time_out.jsp,/sysLogin,/withOutlogin,/userInterface</param-value>
+      <param-value>/login_new.jsp,/login.jsp,/res,/login/getGroup,/kaptcha,/time_out.jsp,/sysLogin,/withOutlogin,/userInterface,/front/perlogin</param-value>
     </init-param>
   </filter>
   <filter-mapping>
