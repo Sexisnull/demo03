@@ -28,7 +28,7 @@ public class JisUserdetail implements java.io.Serializable {
 	private Integer userid;
 	private String comptel;
 	private String cardid;
-	private Map<String, String> userFieldsMap = new HashMap<>();
+	private Map<String, String> userFieldsMap = new HashMap<String, String>();
 
 	// Constructors
 
