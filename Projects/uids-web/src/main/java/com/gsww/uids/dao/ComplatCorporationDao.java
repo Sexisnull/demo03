@@ -30,4 +30,6 @@ public interface ComplatCorporationDao extends  PagingAndSortingRepository<Compl
 	@Modifying
 	@Query("update ComplatCorporation t set t.operSign = 3 where t.iid = ?")
 	public void updateCorporation(Integer iid);
+
+	public ComplatCorporation findByLoginName(String loginName);
 }

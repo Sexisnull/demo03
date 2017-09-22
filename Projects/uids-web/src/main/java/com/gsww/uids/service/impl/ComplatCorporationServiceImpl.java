@@ -44,6 +44,18 @@ public class ComplatCorporationServiceImpl implements ComplatCorporationService{
 		complatCorporationDao.updateCorporation(iid);
 	}
 
+	@Override
+	public ComplatCorporation findByLoginName(String loginName) {
+		 ComplatCorporation corporation = this.complatCorporationDao.findByLoginName(loginName);
+	    return corporation;
+	}
+
+	@Override
+	public boolean updatePwd(String loginName, String md5encode) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 	
 	
 	
