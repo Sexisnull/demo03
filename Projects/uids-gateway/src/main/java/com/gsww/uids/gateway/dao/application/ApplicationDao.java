@@ -9,8 +9,10 @@ import com.gsww.uids.gateway.dao.JdbcTemplateDao;
 import com.gsww.uids.gateway.entity.Application;
 import com.gsww.uids.gateway.entity.ApplicationMule;
 import com.gsww.uids.gateway.util.ConvertSqlToDtoList;
+
 /**
  * ApplicationDao
+ * 
  * @author zcc
  *
  */
@@ -19,9 +21,9 @@ public class ApplicationDao extends JdbcTemplateDao {
 
 	// 注册应用SQL
 	private static final String APP_REGISTER_SQL = "INSERT INTO jis_application(name,encryptkey,appurl,mark,encrypttype) VALUES(?,?,?,?,?)";
-	// 查询应用
+	// 主键查询应用sql
 	private static final String SELECT_APP_SQL = "select * from jis_application t WHERE t.iid = ?";
-	// 查询实时同步列表sql
+	// 根据mark查询应用sql
 	private static final String FIND_APP_SQL_BY_MARK = "SELECT * FROM JIS_APPLICATION WHERE MARK =?";
 
 	/**
@@ -37,12 +39,20 @@ public class ApplicationDao extends JdbcTemplateDao {
 		jdbcTemplate.update(APP_REGISTER_SQL,
 				new Object[] { app.getAppname(), app.getEnckey(), app.getSysurl(), app.getLdapurl(), type });
 	}
-
+	/**
+	 * 应用查询
+	 * 
+	 * @param Application
+	 */
 	public Map<String, Object> selectAppById(int iid) {
 		Map<String, Object> map = jdbcTemplate.queryForMap(SELECT_APP_SQL, new Object[] { iid });
 		return map;
 	}
-
+	/**
+	 * 应用查询
+	 * 
+	 * @param Application
+	 */
 	@SuppressWarnings("unchecked")
 	public Application getApplicatioonByMark(String mark) {
 		List<Application> list = (List<Application>) ConvertSqlToDtoList.ExeSQL2List(jdbcTemplate, FIND_APP_SQL_BY_MARK,

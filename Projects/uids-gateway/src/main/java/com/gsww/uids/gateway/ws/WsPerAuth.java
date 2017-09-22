@@ -69,46 +69,49 @@ public class WsPerAuth {
 
 	@WebMethod
 	public String ticketValidate(String appmark, String ticket, String time, String sign) {
-		System.out.println("appmark=" + appmark + "ticket=" + ticket + "time=" + time + "sign=" + sign);
+		// System.out.println("appmark=" + appmark + "ticket=" + ticket +
+		// "time=" + time + "sign=" + sign);
 		this.logger.debug("=ticketValidate=start==" + DateUtil.getCurrDateTime());
 
 		Map<String, String> map = new HashMap<String, String>();
+		// 参数为必填项，不允许为空
 		if ((!StringHelper.isNotBlack(appmark)) || (!StringHelper.isNotBlack(ticket))
 				|| (!StringHelper.isNotBlack(time)) || (!StringHelper.isNotBlack(sign))) {
 			map.put("errormsg", "必填参数为空");
 			return new JSONUtil().writeMapSJSON(map);
 		}
+		// 通过ticket查询JisAuthLog
 		JisAuthLog jisAuthLog = this.authLogService.findByTicket(ticket, 1);
 		if (jisAuthLog != null) {
+			// 设置ticket过期时间
 			Date outTicketTime = jisAuthLog.getOuttickettime();
-
 			if (DateTime.dayDiff(new Date(), outTicketTime) < 0L) {
 				jisAuthLog.setSpec("票据已过期");
 				map.put("errormsg", "票据已过期");
 				// CacheUtil.removeKey(ticket, "perticket");
 				return new JSONUtil().writeMapSJSON(map);
 			}
+			// 通过appmark查询Application
 			Application appLication = this.appService.findByMark(appmark);
+			// MD5加密规则
 			MD5 md5 = new MD5();
 			String token = "";
 			if (appLication != null) {
 				String decodeSign = md5.decrypt(sign, time);
+				// 秘钥匹配判断
 				if (decodeSign.equals(appmark + appLication.getEncryptkey() + time)) {
 					String loginName = jisAuthLog.getLoginname();
 					if (!(StringHelper.isNotBlack((StringUtil.getString(jisAuthLog.getLoginname()))))) {
 						token = StringUtil.getString(jisAuthLog.getLoginname());
 						if (jisAuthLog.getToken() == null) {
 							jisAuthLog.setToken(token);
-							// CacheUtil.setValue(token, jisAuthLog,
-							// "pertoken");
 						}
 					} else {
+						// 设置token
 						token = md5.encrypt(
 								DateUtil.getCurrDate("MMddHHmmssSSS") + MathUtil.randomNumeric(Integer.valueOf(6)),
 								MathUtil.randomNumeric(Integer.valueOf(6)));
 						jisAuthLog.setToken(token);
-						// CacheUtil.setValue(loginName, token, "pertokenkey");
-						// CacheUtil.setValue(token, jisAuthLog, "pertoken");
 					}
 					map.put("token", token);
 					map.put("loginname", loginName);
