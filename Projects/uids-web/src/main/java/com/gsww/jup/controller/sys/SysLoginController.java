@@ -146,7 +146,6 @@ public class SysLoginController extends BaseController{
 					}
 				}
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				logger.error(e.getMessage(),e);
 				resMap.put("ret", "4");
 				resMap.put("msg", "系统错误！");
@@ -295,7 +294,6 @@ public class SysLoginController extends BaseController{
 			}
 			response.getWriter().write(returnStr);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			returnStr = "没有找到用户或存在同名账号的用户，请联系管理员！";
 			e.printStackTrace();
 		}

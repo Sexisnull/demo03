@@ -299,7 +299,6 @@ public class ComplatRoleController extends BaseController {
 			try {
 				response.getWriter().write(JSONUtil.writeMapJSON(result));
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				logger.error(e1.getMessage(),e1);
 			}
 		}
@@ -332,7 +331,6 @@ public class ComplatRoleController extends BaseController {
 			try {
 				response.getWriter().write(JSONUtil.writeMapJSON(result));
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				logger.error(e1.getMessage(),e1);
 			}
 		}
@@ -384,7 +382,6 @@ public class ComplatRoleController extends BaseController {
 			response.getWriter().write(JSONUtil.writeMapJSON(res));
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getMessage(),e);
 		}
 
@@ -796,7 +793,6 @@ public class ComplatRoleController extends BaseController {
 				response.getWriter().write(JSONUtil.writeMapJSON(result));
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
 			logger.error(e.getMessage(),e);
 		}
 

@@ -22,13 +22,11 @@ public class JisRoleobjectServiceImpl implements JisRoleobjectService{
 	
 	@Override
 	public List<JisRoleobject> findByRoleIdAndType(Integer roleId, Integer type) {
-		// TODO Auto-generated method stub
 		return jisRoleobjectDao.findByRoleidAndType(roleId, type);
 	}
 
 	@Override
 	public boolean modifyRoleApps(Integer iid, String apps) {
-		// TODO Auto-generated method stub
 		try {
 			List<JisRoleobject> list = findByRoleIdAndType(iid,3);
 			for(JisRoleobject object : list){

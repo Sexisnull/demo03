@@ -52,7 +52,6 @@ public class JisFieldsServiceTest {
 			list = jisFieldsService.findFieldsType();
 			System.out.println(list);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		assertTrue(true);
