@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.gsww.uids.gateway.dao.corporation.CorporationDAO;
+import com.gsww.uids.gateway.dao.corporation.CorporationDao;
 import com.gsww.uids.gateway.entity.Corporation;
 import com.gsww.uids.gateway.util.SpringContextHolder;
 
@@ -24,7 +24,7 @@ import net.sf.json.JSONArray;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("/applicationContext.xml")
 public class CorporationDaoTest {
-	private static CorporationDAO corporationDAO;
+	private static CorporationDao corporationDAO;
 	static {
 		corporationDAO = SpringContextHolder.getBean("corporationDAO");
 	}

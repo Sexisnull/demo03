@@ -66,4 +66,6 @@
 		scope="prototype" />
 	<bean id="outsideUserService" class="com.gsww.uids.gateway.service.OutsideUserService"
 		scope="prototype" />
+	<bean id="weChatAuthService" class="com.gsww.uids.gateway.rest.WeChatAuthService"
+		scope="prototype" />
 </beans>

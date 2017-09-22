@@ -7,7 +7,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.gsww.uids.gateway.dao.outsideuser.OutsideUserDAO;
+import com.gsww.uids.gateway.dao.outsideuser.OutsideUserDao;
 import com.gsww.uids.gateway.entity.OutsideUser;
 import com.gsww.uids.gateway.util.SpringContextHolder;
 
@@ -21,7 +21,7 @@ import net.sf.json.JSONArray;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("/applicationContext.xml")
 public class OutsideUserDaoTest {
-	private static OutsideUserDAO outsideUserDAO;
+	private static OutsideUserDao outsideUserDAO;
 	static {
 		outsideUserDAO = SpringContextHolder.getBean("outsideUserDAO");
 	}
