@@ -48,6 +48,9 @@ public class ComplatGroup implements java.io.Serializable{
     private Timestamp modifytime; //修改时间(yyyy-MM-dd HH:mm:ss)
     private Integer synState;     //0-未备份1-备份失败2-备份成功
     private String parentName;    //上级机构名称
+    private String strNodeType;   //字符串节点类型
+    private String strAreaType;   //字符串区域类型
+    private String strIsCombine;  //字符串是否为合并机构
 
 
    // Constructors
@@ -279,5 +282,32 @@ public class ComplatGroup implements java.io.Serializable{
 
 	public void setParentName(String parentName) {
 		this.parentName = parentName;
+	}
+	
+	@Transient
+	public String getStrNodeType() {
+		return strNodeType;
+	}
+
+	public void setStrNodeType(String strNodeType) {
+		this.strNodeType = strNodeType;
+	}
+	
+	@Transient
+	public String getStrAreaType() {
+		return strAreaType;
+	}
+
+	public void setStrAreaType(String strAreaType) {
+		this.strAreaType = strAreaType;
+	}
+	
+	@Transient
+	public String getStrIsCombine() {
+		return strIsCombine;
+	}
+
+	public void setStrIsCombine(String strIsCombine) {
+		this.strIsCombine = strIsCombine;
 	}
 }

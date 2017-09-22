@@ -1,3 +1,4 @@
+
 <%@ page language="java" pageEncoding="utf-8"%>
 <!DOCTYPE html>
 <html>
@@ -8,89 +9,91 @@
 <title>甘肃万维JUP课题</title>
 <script type="text/javascript">
 $().ready(function() {
-//表单校验
-var outisideUserNameInput=$("#name").val();
-$("#editForm").validate({
-	rules: {
-		loginName : {//重命名校验*
-			required: true,
-			cnRangelength: [0,127]
-		},
-	   	pwd : {
-			required: true,
-			cnRangelength: [0,127]
-		},
-		name : {
-			required: true,
-			cnRangelength: [0,32],
-	    	stringCheck: outisideUserNameInput
-		},
-		email : {//email校验
-			required: true,
-			email:true,
-	   		maxlength: 64
-		},
-		mobile : {//固定电话
-			required: true,
-			isPhone:true,
-	   		maxlength: 16
-		},
-		residenceDetail : {
-			required: true,
-			cnRangelength: [0,127]
-		},
-		livingAreaDetail : {
-			required: true,
-			cnRangelength: [0,127]
-		},
-		sex : {
-			required: true
-		},
-		papersNumber : {
-			required: true,
-			isIdCardNo:true,
-	   	 	maxlength: 18
-		},
-		age:{
-	   		cnRangelength: [0,64]
-	   	},
-		degree:{//学历
-	   		cnRangelength: [0,64]
-	   	},
-		workUnit:{
-	   		cnRangelength: [0,64]
-	   	},
-		headShip:{
-	   		cnRangelength: [0,64]
-	   	},
-		fax:{
-	   		cnRangelength: [0,64]
-	   	},
-		phone:{
-	   		isMobile:true,
-	   		maxlength: 16
-	   	},
-		compTel:{
-	   		isPhone:true,
-	   		maxlength: 16
-	   	},
-		qq:{
-	   		maxlength: 11
-	   	},
-		msn:{
-	   		cnRangelength: [0,64]
-	   	},
-		post:{
-	   		maxlength: 6
-	   	},
-		address:{
-	   		cnRangelength: [0,127]
-	   	},
-	   	submitHandler:function(form){
-			form.submit();
+	//表单校验
+	var outisideUserNameInput=$("#name").val();
+	$("#editForm").validate({
+		rules: {
+			loginName : {//重命名校验*
+				required: true,
+				cnRangelength: [0,127],
+				uniqueLoginName: true 
+			},
+		   	pwd : {
+				required: true,
+				cnRangelength: [6,18]
+			},
+			name : {
+				required: true,
+				cnRangelength: [0,32],
+		    	stringCheck: outisideUserNameInput
+			},
+			email : {//email校验
+				required: true,
+				email:true,
+		   		maxlength: 64
+			},
+			mobile : {//固定电话
+				required: true,
+				isPhone:true,
+		   		maxlength: 16
+			},
+			residenceDetail : {
+				required: true,
+				cnRangelength: [0,127]
+			},
+			livingAreaDetail : {
+				required: true,
+				cnRangelength: [0,127]
+			},
+			sex : {
+				required: true
+			},
+			papersNumber : {
+				required: true,
+				isIdCardNo:true
+			},
+			age:{
+		   		cnRangelength: [0,64]
+		   	},
+			degree:{//学历
+		   		//cnRangelength: [0,64]
+		   	},
+			workUnit:{
+		   		cnRangelength: [0,64]
+		   	},
+			headShip:{
+		   		cnRangelength: [0,64]
+		   	},
+			fax:{
+		   		cnRangelength: [0,64]
+		   	},
+			phone:{
+		   		isMobile:true,
+		   		maxlength: 16
+		   	},
+			compTel:{
+		   		isPhone:true,
+		   		maxlength: 16
+		   	},
+			qq:{
+		   		maxlength: 11
+		   	},
+			msn:{
+		   		cnRangelength: [0,64]
+		   	},
+			post:{
+		   		maxlength: 6
+		   	},
+			address:{
+		   		cnRangelength: [0,127]
+		   	},
+		   	submitHandler:function(form){
+					 form.submit();
+			}
 		}
-	}
-});
+	});
+	// Ajax重命名校验
+	$.uniqueValidate('uniqueLoginName', '${ctx}/complat/checkOutisideUserLoginName', ['loginName','oldLoginName'], '对不起，这个账号重复了');
 });
 </script>
 
@@ -137,7 +140,7 @@ color: rgb(119, 119, 119);
 	<div class="position">
 		<ol class="breadcrumb">
 			<li>
-				<a href="${ctx}/index" target="_top">首页</a>
+				<a href="${ctx}/backIndex" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
 			<li>
@@ -157,7 +160,7 @@ color: rgb(119, 119, 119);
     	<input type="hidden" id="enable" name="enable" value="${outsideUser.enable}"/>
     	<input type="hidden" id="authState" name="authState" value="${outsideUser.authState}"/>
     	<input type="hidden" id="isAuth" name="isAuth" value="${outsideUser.isAuth}"/>
-    	<input type="text" id="time" name="time" value="${time}"/>
+    	<input type="hidden" id="time" name="time" value="${time}"/>
     </div>
     
     <!--表单的主内容区域-->
@@ -167,11 +170,12 @@ color: rgb(119, 119, 119);
 				<td class="td_1" rowspan="5" style="max-width:0px;width:100px;ont-weight:bold;" align="center">基本属性</td>
 				<th><b class="mustbe">*</b>登录名：</th>
 				<td>
-					<input type="text"  class="loginName" name="loginName" value="${outsideUser.loginName}" />
+					<input type="text" id="loginName" name="loginName" value="${outsideUser.loginName}" />
+					<input type="hidden" id="oldLoginName" name="oldLoginName" value="${outsideUser.loginName}" />
 	            </td>
 	        	<th><b class="mustbe">*</b>密码：</th>
 				<td>
-					<input type="password"  class="pwd" name="pwd" value="${outsideUser.pwd}" onkeyup="javascript:EvalPwd(this.value);"/>
+					<input type="password" id="pwd" class="pwd" name="pwd" value="${outsideUser.pwd}" onkeyup="javascript:EvalPwd(this.value);"/>
 				</td>
 			</tr>
 			<tr>
@@ -181,13 +185,13 @@ color: rgb(119, 119, 119);
 				</td>
 				<th>密码强度：</th>
 				<td>
-					<table id="pwdpower" title="字母加数字加符号就会强" style="width: 100%" cellspacing="0"
+					<table id="pwdpower" style="width: 84%" cellspacing="0"
 					cellpadding="0" border="0">
 						<tbody>
 							<tr>
-								<td id="pweak" style="">弱</td>
-								<td id="pmedium" style="">中</td>
-								<td id="pstrong" style="">强</td>
+								<td id="pweak" style="text-align: center;width: 100px;border: 1px solid gray;">弱</td>
+								<td id="pmedium" style="text-align: center;width: 100px;border: 1px solid gray;">中</td>
+								<td id="pstrong" style="text-align: center;width: 100px;border: 1px solid gray;">强</td>
 							</tr>
 						</tbody>
 					</table>
@@ -259,7 +263,7 @@ color: rgb(119, 119, 119);
 			<tr>
 				<th><b class="mustbe">*</b>身份证号：</th>
 				<td>
-					<input type="text"  class="papersNumber" name="papersNumber" value="${outsideUser.papersNumber}" />
+					<input type="text" <c:if test="${outsideUser.papersNumber != null}">readonly="readonly"</c:if> class="papersNumber" name="papersNumber" value="${outsideUser.papersNumber}" />
 				</td>
 				<th>学历：</th>
 				<td>

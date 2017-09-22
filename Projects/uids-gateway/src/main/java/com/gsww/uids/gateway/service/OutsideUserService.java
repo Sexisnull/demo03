@@ -2,18 +2,15 @@ package com.gsww.uids.gateway.service;
 
 import java.util.Date;
 
-import javax.servlet.http.HttpSession;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.gsww.uids.gateway.dao.application.ApplicationDao;
 import com.gsww.uids.gateway.dao.outsideuser.OutsideUserDAO;
 import com.gsww.uids.gateway.entity.OutsideUser;
 import com.gsww.uids.gateway.exception.LoginException;
-import com.gsww.uids.gateway.util.CacheUtil;
-import com.gsww.uids.gateway.util.Md5Util;
 import com.gsww.uids.gateway.util.SpringContextHolder;
-
+/**
+ * OutsideUserService
+ * @author zcc
+ *
+ */
 public class OutsideUserService {
 	private static OutsideUserDAO outsideUserDAO;
 	static {
@@ -43,19 +40,15 @@ public class OutsideUserService {
 
 		if (outsideUser == null) {
 			outsideUser = this.outsideUserDAO.findByLoginName(loginName);
-			if (outsideUser != null) {
-				System.out.println("corporation" + outsideUser);
-				// CacheUtil.setValue(loginName, outsideUser, "perusers");
-			}
 		}
 		if (outsideUser != null) {
 			if (outsideUser.getEnable().intValue() == 0) {
 				throw new LoginException("login.isnotallowed");
 			}
-			String password = Md5Util.md5decode(outsideUser.getPwd());
+			String password = outsideUser.getPwd();
 			if (password.equals(pwd)) {
-				outsideUser.setLoginIp(ip);
-				outsideUser.setLoginTime(new Date());
+				outsideUser.setLoginip(ip);
+				outsideUser.setLogintime(new Date());
 			} else {
 				outsideUser = null;
 			}

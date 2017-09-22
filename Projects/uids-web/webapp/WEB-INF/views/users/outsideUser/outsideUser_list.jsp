@@ -93,6 +93,10 @@
 		$("#input_three")[0].style.display = 'none';
 		$("#outsideUserType").attr("value", 1);
 	}
+	//关闭
+	$(".close").click(function() {
+        $("#alerttb").hide();
+    });
 </script>
 <style type="text/css">
 /*设置弹出层样式*/
@@ -149,7 +153,7 @@
 	<div class="position">
 		<ol class="breadcrumb">
 			<li>
-				<a href="${ctx}/index" target="_top">首页</a>
+				<a href="${ctx}/backIndex" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
 			<li>
@@ -166,9 +170,9 @@
 		<form id="form1" name="pageForm" action="${ctx}/complat/outsideuserList" method="get">
 			<table class="advanced-content">
 				<tr>
-					<th style="padding-left: 300px">请输入登录名：</th>
+					<th style="padding-left: 300px">用户登录名：</th>
 						<td width="20%">
-							<input type="text"  style="width: 170px;" placeholder="请输入个人用户登录名" value="${sParams['LIKE_loginName']}" id="loginNameSearch" name="search_LIKE_loginName" />
+							<input type="text"  style="width: 170px;" placeholder="用户登录名" value="${sParams['LIKE_loginName']}" id="loginNameSearch" name="search_LIKE_loginName" />
 						</td>
 					<td class="btn-group"> <a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a></td>
 					<td class="btn-group"> <a id="advanced-btn" class="btnSearch" >高级搜索</a></td>
@@ -324,7 +328,7 @@
     <div id="alerttb" class="alert_tb" style="display:none;"> 
       <div class="input_one">
 		<span id="inputUser">用户认证</span>
-		<i class="close">X</i>
+		<i class="close"><a  id="close"  href="${ctx}/complat/outsideuserList">X&nbsp</a></i>
       </div>   
       <div class="input_two">
 	     <form align = "center" id="oprform" name="oprform" action="${ctx}/complat/outsideuserAuth" method="get">
@@ -357,26 +361,33 @@
 					<tr style="display:none;" id="tr_reject">
 						<th></th>
 						<td>
-						<textarea rows="5" cols="5" class="rejectReason" name="rejectReason2"></textarea>
+						<textarea placeholder="请填写拒绝原因" rows="5" cols="5" class="rejectReason" name="rejectReason2"></textarea>
 						</td>
 						<td></td>
 					</tr>
+					<tr id="input_three" class="input_three" style="display:none;" align = "center">
+						<th></th>
+						<td></td>
+						<td>
+							<p align = "right">
+								<input type="submit" class="btn btn-primary" value="保存"/> 
+								<input type="button" class="btn" value="取消" onclick="rejectCancel();" />
+							</p>
+						</td>
+					</tr>
+					<tr id="input_four" class="input_four" align = "center">
+						<th></th>
+						<td></td>
+						<td>
+						<p align = "center">
+							<input type="button" class="btn btn-primary" value="拒绝" onclick="regect();" /> 
+							<input type="submit" class="btn" value="通过"/>
+							<input type="button" class="btn" value="取消" onclick="javascript:window.location.href='${ctx}/complat/outsideuserList'" />
+						</p>
+						</td>
+					</tr>
 				</table>
 			</div>
-	        <!--表单按钮区-->
-			<div id="input_three" class="input_three" style="display:none;"> 
-				<p align = "right">
-					<input type="submit" class="btn btn-primary" value="保存"/> 
-					<input type="button" class="btn" value="取消" onclick="rejectCancel();" />
-				</p>
-			</div>
-			<div id="input_four" class="input_four"> 
-			<p align = "center">
-				<input type="button" class="btn btn-primary" value="拒绝" onclick="regect();" /> 
-				<input type="submit" class="btn" value="通过"/>
-				<input type="button" class="btn" value="取消" onclick="javascript:window.location.href='${ctx}/complat/outsideuserList'" />
-			</p>
-		</div>
 		</form>
       </div> 
     </div>

@@ -121,7 +121,7 @@
 		<!--列表的面包屑区域-->
 		<div class="position">
 			<ol class="breadcrumb">
-				<li><a href="${ctx}/index" target="_top">首页</a></li>
+				<li><a href="${ctx}/backIndex" target="_top">首页</a></li>
 				<li class="split"></li>
 				<li><a>个性化设置</a></li>
 				<li class="split"></li>
@@ -243,7 +243,7 @@
       </div>
       <div class="input_one">
 		<span id="inputUser">用户扩展属性 - 设置 - 修改必填信息</span>
-		<i class="close">X</i>
+		<i class="close"><a  id="close"  href="${ctx}/jis/fieldsList">X&nbsp</a></i>
       </div>   
       <div class="input_two">
 	     <form id="oprform" name="oprform" action="${ctx}/jis/fieldsOperate" method="get">

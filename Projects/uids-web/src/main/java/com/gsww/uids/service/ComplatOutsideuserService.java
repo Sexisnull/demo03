@@ -48,6 +48,10 @@ public interface ComplatOutsideuserService {
 	 */
 	void delete(ComplatOutsideuser outsideUser);
 
+	/**
+     * @discription  查询全部个人用户实体  
+     * @return
+	 */
 	public List<ComplatOutsideuser> findAll();
 	
 	/**
@@ -71,4 +75,16 @@ public interface ComplatOutsideuserService {
 
 	public boolean updatePwd(String loginName, String md5encode);
 
+	/**
+     * @discription   逻辑删除 
+     * @param iid
+	 */
+	void delete(Integer iid);
+	
+	/**
+     * @discription   验证loginName实体是否存在 
+     * @param loginName
+     * @return
+	 */
+	public ComplatOutsideuser findByLoginNameIsUsed(String loginName);
 }

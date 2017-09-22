@@ -46,8 +46,8 @@ public class ComplatCorporationServiceImpl implements ComplatCorporationService{
 
 	@Override
 	public ComplatCorporation findByLoginName(String loginName) {
-		 ComplatCorporation corporation = this.complatCorporationDao.findByLoginName(loginName);
-	    return corporation;
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
@@ -56,9 +56,10 @@ public class ComplatCorporationServiceImpl implements ComplatCorporationService{
 		return false;
 	}
 
-	
-	
-	
-
+	@Override
+	public ComplatCorporation findByLoginNameIsUsed(String loginName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }

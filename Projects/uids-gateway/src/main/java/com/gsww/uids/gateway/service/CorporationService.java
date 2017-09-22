@@ -12,7 +12,11 @@ import com.gsww.uids.gateway.exception.LoginException;
 import com.gsww.uids.gateway.util.CacheUtil;
 import com.gsww.uids.gateway.util.Md5Util;
 import com.gsww.uids.gateway.util.SpringContextHolder;
-
+/**
+ * CorporationService
+ * @author zcc
+ *
+ */
 public class CorporationService {
 	private static CorporationDAO corporationDAO;
 	static {

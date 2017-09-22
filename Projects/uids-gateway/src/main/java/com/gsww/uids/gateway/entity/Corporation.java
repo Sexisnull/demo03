@@ -3,124 +3,62 @@ package com.gsww.uids.gateway.entity;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
+/**
+ * 实体类-Corporation-complat_corporation
+ * @author zcc
+ *
+ */
 public class Corporation {
 	private Integer iid;
-
 	private String uuid;
-
 	private Integer type;
-
 	private Integer enable = Integer.valueOf(1);
-
-	private String loginName;
-
+	private String loginname;
 	private String pwd;
 	private String mobile;
-
 	private String phone;
-
 	private String name;
-
-	private String regNumber;
-
-	private String realName;
-
+	private String regnumber;
+	private String realname;
 	private String sex;
-
 	private String post;
-
 	private String address;
-
 	private String scope;
-
-	private String regorgName;
-
-	private String serialNumber;
-
+	private String regorgname;
+	private String serialnumber;
 	private String headship;
-
 	private String fax;
-
 	private String email;
-
-	private String cardNumber;
-
-	private String orgNumber;
-
-	private Date createTime;
-
+	private String cardnumber;
+	private String orgnumber;
+	private Date createtime;
 	private String nation;
-
-	private String pinYin;
-
+	private String pinyin;
 	private Integer isauth = Integer.valueOf(0);
-
-	private Integer authState = Integer.valueOf(0);
-
-	private String cardPic;
-
-	private String cardRenamePic;
-
-	private String orgPic;
-
-	private String orgRenamePic;
-
-	private String licencePic;
-
-	private String licenceRenamePic;
-
+	private Integer authstate = Integer.valueOf(0);
+	private String cardpic;
+	private String cardRenamepic;
+	private String orgpic;
+	private String orgrenamepic;
+	private String licencepic;
+	private String licencerenamepic;
 	private Integer isupload = Integer.valueOf(0);
-
-	private String rejectReason;
-
-	private Date modifytime;
-	private Map<String, String> userFieldsMap = new HashMap();
-
-	private Integer opersign;
-
+	private String rejectreason;
 	private Integer synState = Integer.valueOf(0);
-
-	private Integer declarationIid;
-
 	private String residenceId = "";
-
-	private String presidenceId = "";
-
-	private String gpresidenceId = "";
-
 	private String residenceDetail = "";
-
 	private String livingAreaId = "";
-
-	private String plivingAreaId = "";
-
-	private String gplivingAreaId = "";
-
 	private String livingAreaDetail = "";
-
+	private String presidenceId = "";
+	private String gpresidenceId = "";
+	private String plivingAreaId = "";
+	private String gplivingAreaId = "";
+	private Integer declarationIid;
 	private Date loginTime;
-
 	private String loginip = "";
 
-	public Date getLoginTime() {
-		return this.loginTime;
-	}
-
-	public void setLoginTime(Date loginTime) {
-		this.loginTime = loginTime;
-	}
-
-	public String getLoginip() {
-		return this.loginip;
-	}
-
-	public void setLoginip(String loginip) {
-		this.loginip = loginip;
-	}
-
 	public Integer getIid() {
-		return this.iid;
+		return iid;
 	}
 
 	public void setIid(Integer iid) {
@@ -128,31 +66,39 @@ public class Corporation {
 	}
 
 	public String getUuid() {
-		return this.uuid;
+		return uuid;
 	}
 
 	public void setUuid(String uuid) {
 		this.uuid = uuid;
 	}
 
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
+
 	public Integer getEnable() {
-		return this.enable;
+		return enable;
 	}
 
 	public void setEnable(Integer enable) {
 		this.enable = enable;
 	}
 
-	public String getLoginName() {
-		return this.loginName;
+	public String getLoginname() {
+		return loginname;
 	}
 
-	public void setLoginName(String loginName) {
-		this.loginName = loginName;
+	public void setLoginname(String loginname) {
+		this.loginname = loginname;
 	}
 
 	public String getPwd() {
-		return this.pwd;
+		return pwd;
 	}
 
 	public void setPwd(String pwd) {
@@ -160,7 +106,7 @@ public class Corporation {
 	}
 
 	public String getMobile() {
-		return this.mobile;
+		return mobile;
 	}
 
 	public void setMobile(String mobile) {
@@ -168,47 +114,39 @@ public class Corporation {
 	}
 
 	public String getPhone() {
-		return this.phone;
+		return phone;
 	}
 
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
 
-	public Integer getType() {
-		return this.type;
-	}
-
-	public void setType(Integer type) {
-		this.type = type;
-	}
-
 	public String getName() {
-		return this.name;
+		return name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	public String getRegNumber() {
-		return this.regNumber;
+	public String getRegnumber() {
+		return regnumber;
 	}
 
-	public void setRegNumber(String regNumber) {
-		this.regNumber = regNumber;
+	public void setRegnumber(String regnumber) {
+		this.regnumber = regnumber;
 	}
 
-	public String getRealName() {
-		return this.realName;
+	public String getRealname() {
+		return realname;
 	}
 
-	public void setRealName(String realName) {
-		this.realName = realName;
+	public void setRealname(String realname) {
+		this.realname = realname;
 	}
 
 	public String getSex() {
-		return this.sex;
+		return sex;
 	}
 
 	public void setSex(String sex) {
@@ -216,7 +154,7 @@ public class Corporation {
 	}
 
 	public String getPost() {
-		return this.post;
+		return post;
 	}
 
 	public void setPost(String post) {
@@ -224,7 +162,7 @@ public class Corporation {
 	}
 
 	public String getAddress() {
-		return this.address;
+		return address;
 	}
 
 	public void setAddress(String address) {
@@ -232,31 +170,31 @@ public class Corporation {
 	}
 
 	public String getScope() {
-		return this.scope;
+		return scope;
 	}
 
 	public void setScope(String scope) {
 		this.scope = scope;
 	}
 
-	public String getRegorgName() {
-		return this.regorgName;
+	public String getRegorgname() {
+		return regorgname;
 	}
 
-	public void setRegorgName(String regorgName) {
-		this.regorgName = regorgName;
+	public void setRegorgname(String regorgname) {
+		this.regorgname = regorgname;
 	}
 
-	public String getSerialNumber() {
-		return this.serialNumber;
+	public String getSerialnumber() {
+		return serialnumber;
 	}
 
-	public void setSerialNumber(String serialNumber) {
-		this.serialNumber = serialNumber;
+	public void setSerialnumber(String serialnumber) {
+		this.serialnumber = serialnumber;
 	}
 
 	public String getHeadship() {
-		return this.headship;
+		return headship;
 	}
 
 	public void setHeadship(String headship) {
@@ -264,7 +202,7 @@ public class Corporation {
 	}
 
 	public String getFax() {
-		return this.fax;
+		return fax;
 	}
 
 	public void setFax(String fax) {
@@ -272,171 +210,143 @@ public class Corporation {
 	}
 
 	public String getEmail() {
-		return this.email;
+		return email;
 	}
 
 	public void setEmail(String email) {
 		this.email = email;
 	}
 
-	public String getCardNumber() {
-		return this.cardNumber;
+	public String getCardnumber() {
+		return cardnumber;
 	}
 
-	public void setCardNumber(String cardNumber) {
-		this.cardNumber = cardNumber;
+	public void setCardnumber(String cardnumber) {
+		this.cardnumber = cardnumber;
 	}
 
-	public String getOrgNumber() {
-		return this.orgNumber;
+	public String getOrgnumber() {
+		return orgnumber;
 	}
 
-	public void setOrgNumber(String orgNumber) {
-		this.orgNumber = orgNumber;
+	public void setOrgnumber(String orgnumber) {
+		this.orgnumber = orgnumber;
 	}
 
-	public Date getCreateTime() {
-		return this.createTime;
+	public Date getCreatetime() {
+		return createtime;
 	}
 
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-
-	public String getPinYin() {
-		return this.pinYin;
-	}
-
-	public void setPinYin(String pinYin) {
-		this.pinYin = pinYin;
-	}
-
-	public Integer getIsauth() {
-		return this.isauth;
-	}
-
-	public void setIsauth(Integer isauth) {
-		this.isauth = isauth;
-	}
-
-	public Map<String, String> getUserFieldsMap() {
-		return this.userFieldsMap;
-	}
-
-	public void setUserFieldsMap(Map<String, String> userFieldsMap) {
-		this.userFieldsMap = userFieldsMap;
-	}
-
-	public Integer getAuthState() {
-		return this.authState;
-	}
-
-	public void setAuthState(Integer authState) {
-		this.authState = authState;
-	}
-
-	public String getCardPic() {
-		return this.cardPic;
-	}
-
-	public void setCardPic(String cardPic) {
-		this.cardPic = cardPic;
-	}
-
-	public String getOrgPic() {
-		return this.orgPic;
-	}
-
-	public void setOrgPic(String orgPic) {
-		this.orgPic = orgPic;
-	}
-
-	public String getLicencePic() {
-		return this.licencePic;
-	}
-
-	public void setLicencePic(String licencePic) {
-		this.licencePic = licencePic;
+	public void setCreatetime(Date createtime) {
+		this.createtime = createtime;
 	}
 
 	public String getNation() {
-		return this.nation;
+		return nation;
 	}
 
 	public void setNation(String nation) {
 		this.nation = nation;
 	}
 
+	public String getPinyin() {
+		return pinyin;
+	}
+
+	public void setPinyin(String pinyin) {
+		this.pinyin = pinyin;
+	}
+
+	public Integer getIsauth() {
+		return isauth;
+	}
+
+	public void setIsauth(Integer isauth) {
+		this.isauth = isauth;
+	}
+
+	public Integer getAuthstate() {
+		return authstate;
+	}
+
+	public void setAuthstate(Integer authstate) {
+		this.authstate = authstate;
+	}
+
+	public String getCardpic() {
+		return cardpic;
+	}
+
+	public void setCardpic(String cardpic) {
+		this.cardpic = cardpic;
+	}
+
+	public String getCardRenamepic() {
+		return cardRenamepic;
+	}
+
+	public void setCardRenamepic(String cardRenamepic) {
+		this.cardRenamepic = cardRenamepic;
+	}
+
+	public String getOrgpic() {
+		return orgpic;
+	}
+
+	public void setOrgpic(String orgpic) {
+		this.orgpic = orgpic;
+	}
+
+	public String getOrgrenamepic() {
+		return orgrenamepic;
+	}
+
+	public void setOrgrenamepic(String orgrenamepic) {
+		this.orgrenamepic = orgrenamepic;
+	}
+
+	public String getLicencepic() {
+		return licencepic;
+	}
+
+	public void setLicencepic(String licencepic) {
+		this.licencepic = licencepic;
+	}
+
+	public String getLicencerenamepic() {
+		return licencerenamepic;
+	}
+
+	public void setLicencerenamepic(String licencerenamepic) {
+		this.licencerenamepic = licencerenamepic;
+	}
+
 	public Integer getIsupload() {
-		return this.isupload;
+		return isupload;
 	}
 
 	public void setIsupload(Integer isupload) {
 		this.isupload = isupload;
 	}
 
-	public String getCardRenamePic() {
-		return this.cardRenamePic;
+	public String getRejectreason() {
+		return rejectreason;
 	}
 
-	public void setCardRenamePic(String cardRenamePic) {
-		this.cardRenamePic = cardRenamePic;
-	}
-
-	public String getOrgRenamePic() {
-		return this.orgRenamePic;
-	}
-
-	public void setOrgRenamePic(String orgRenamePic) {
-		this.orgRenamePic = orgRenamePic;
-	}
-
-	public String getLicenceRenamePic() {
-		return this.licenceRenamePic;
-	}
-
-	public void setLicenceRenamePic(String licenceRenamePic) {
-		this.licenceRenamePic = licenceRenamePic;
-	}
-
-	public String getRejectReason() {
-		return this.rejectReason;
-	}
-
-	public void setRejectReason(String rejectReason) {
-		this.rejectReason = rejectReason;
-	}
-
-	public Date getModifytime() {
-		return this.modifytime;
-	}
-
-	public void setModifytime(Date modifytime) {
-		this.modifytime = modifytime;
-	}
-
-	public Integer getOpersign() {
-		return this.opersign;
-	}
-
-	public void setOpersign(Integer opersign) {
-		this.opersign = opersign;
+	public void setRejectreason(String rejectreason) {
+		this.rejectreason = rejectreason;
 	}
 
 	public Integer getSynState() {
-		return this.synState;
+		return synState;
 	}
 
 	public void setSynState(Integer synState) {
 		this.synState = synState;
 	}
 
-	public static long getSerialversionuid() {
-		return -4109747289770321719L;
-	}
-
 	public String getResidenceId() {
-		return this.residenceId;
+		return residenceId;
 	}
 
 	public void setResidenceId(String residenceId) {
@@ -444,7 +354,7 @@ public class Corporation {
 	}
 
 	public String getResidenceDetail() {
-		return this.residenceDetail;
+		return residenceDetail;
 	}
 
 	public void setResidenceDetail(String residenceDetail) {
@@ -452,7 +362,7 @@ public class Corporation {
 	}
 
 	public String getLivingAreaId() {
-		return this.livingAreaId;
+		return livingAreaId;
 	}
 
 	public void setLivingAreaId(String livingAreaId) {
@@ -460,7 +370,7 @@ public class Corporation {
 	}
 
 	public String getLivingAreaDetail() {
-		return this.livingAreaDetail;
+		return livingAreaDetail;
 	}
 
 	public void setLivingAreaDetail(String livingAreaDetail) {
@@ -468,7 +378,7 @@ public class Corporation {
 	}
 
 	public String getPresidenceId() {
-		return this.presidenceId;
+		return presidenceId;
 	}
 
 	public void setPresidenceId(String presidenceId) {
@@ -476,7 +386,7 @@ public class Corporation {
 	}
 
 	public String getGpresidenceId() {
-		return this.gpresidenceId;
+		return gpresidenceId;
 	}
 
 	public void setGpresidenceId(String gpresidenceId) {
@@ -484,7 +394,7 @@ public class Corporation {
 	}
 
 	public String getPlivingAreaId() {
-		return this.plivingAreaId;
+		return plivingAreaId;
 	}
 
 	public void setPlivingAreaId(String plivingAreaId) {
@@ -492,7 +402,7 @@ public class Corporation {
 	}
 
 	public String getGplivingAreaId() {
-		return this.gplivingAreaId;
+		return gplivingAreaId;
 	}
 
 	public void setGplivingAreaId(String gplivingAreaId) {
@@ -500,10 +410,27 @@ public class Corporation {
 	}
 
 	public Integer getDeclarationIid() {
-		return this.declarationIid;
+		return declarationIid;
 	}
 
 	public void setDeclarationIid(Integer declarationIid) {
 		this.declarationIid = declarationIid;
 	}
+
+	public Date getLoginTime() {
+		return loginTime;
+	}
+
+	public void setLoginTime(Date loginTime) {
+		this.loginTime = loginTime;
+	}
+
+	public String getLoginip() {
+		return loginip;
+	}
+
+	public void setLoginip(String loginip) {
+		this.loginip = loginip;
+	}
+
 }

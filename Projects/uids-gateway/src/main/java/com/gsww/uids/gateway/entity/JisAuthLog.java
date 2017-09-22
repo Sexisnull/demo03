@@ -2,22 +2,26 @@ package com.gsww.uids.gateway.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-
+/**
+ * 实体类-JisAuthLog-jis_authlog
+ * @author zcc
+ *
+ */
 public class JisAuthLog implements Serializable {
 	private static final long serialVersionUID = 6960861914952175611L;
 	private Integer iid;
 
-	private Integer userType;
+	private Integer usertype;
 
-	private Integer authType;
+	private Integer authtype;
 
 	private Integer userId;
 
-	private String loginName;
+	private String loginname;
 
-	private String userName;
+	private String username;
 
-	private Integer appId;
+	private Integer appid;
 
 	private String appmark;
 
@@ -27,72 +31,96 @@ public class JisAuthLog implements Serializable {
 
 	private Integer state;
 
-	private Date createTime;
+	private Date createtime;
 
-	private Date outTicketTime;
+	private Date outtickettime;
 
-	private Date outTokenTime;
+	private Date outtokentime;
 
 	private String spec;
 
+	public JisAuthLog() {
+	}
+
+	public JisAuthLog(Integer iid, Integer usertype, Integer authtype, Integer userId, String loginname,
+			String username, Integer appid, String appmark, String ticket, String token, Integer state, Date createtime,
+			Date outtickettime, Date outtokentime, String spec) {
+		super();
+		this.iid = iid;
+		this.usertype = usertype;
+		this.authtype = authtype;
+		this.userId = userId;
+		this.loginname = loginname;
+		this.username = username;
+		this.appid = appid;
+		this.appmark = appmark;
+		this.ticket = ticket;
+		this.token = token;
+		this.state = state;
+		this.createtime = createtime;
+		this.outtickettime = outtickettime;
+		this.outtokentime = outtokentime;
+		this.spec = spec;
+	}
+
 	public Integer getIid() {
-		return this.iid;
+		return iid;
 	}
 
 	public void setIid(Integer iid) {
 		this.iid = iid;
 	}
 
-	public Integer getUserType() {
-		return this.userType;
+	public Integer getUsertype() {
+		return usertype;
 	}
 
-	public void setUserType(Integer userType) {
-		this.userType = userType;
+	public void setUsertype(Integer usertype) {
+		this.usertype = usertype;
 	}
 
-	public Integer getAuthType() {
-		return this.authType;
+	public Integer getAuthtype() {
+		return authtype;
 	}
 
-	public void setAuthType(Integer authType) {
-		this.authType = authType;
+	public void setAuthtype(Integer authtype) {
+		this.authtype = authtype;
 	}
 
 	public Integer getUserId() {
-		return this.userId;
+		return userId;
 	}
 
 	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
 
-	public String getLoginName() {
-		return this.loginName;
+	public String getLoginname() {
+		return loginname;
 	}
 
-	public void setLoginName(String loginName) {
-		this.loginName = loginName;
+	public void setLoginname(String loginname) {
+		this.loginname = loginname;
 	}
 
-	public String getUserName() {
-		return this.userName;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
-	public Integer getAppId() {
-		return this.appId;
+	public Integer getAppid() {
+		return appid;
 	}
 
-	public void setAppId(Integer appId) {
-		this.appId = appId;
+	public void setAppid(Integer appid) {
+		this.appid = appid;
 	}
 
 	public String getAppmark() {
-		return this.appmark;
+		return appmark;
 	}
 
 	public void setAppmark(String appmark) {
@@ -100,58 +128,59 @@ public class JisAuthLog implements Serializable {
 	}
 
 	public String getTicket() {
-		return this.ticket;
+		return ticket;
 	}
 
 	public void setTicket(String ticket) {
 		this.ticket = ticket;
 	}
 
-	public Integer getState() {
-		return this.state;
-	}
-
-	public void setState(Integer state) {
-		this.state = state;
-	}
-
-	public Date getCreateTime() {
-		return this.createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-
-	public Date getOutTicketTime() {
-		return this.outTicketTime;
-	}
-
-	public void setOutTicketTime(Date outTicketTime) {
-		this.outTicketTime = outTicketTime;
-	}
-
-	public String getSpec() {
-		return this.spec;
-	}
-
-	public void setSpec(String spec) {
-		this.spec = spec;
-	}
-
 	public String getToken() {
-		return this.token;
+		return token;
 	}
 
 	public void setToken(String token) {
 		this.token = token;
 	}
 
-	public Date getOutTokenTime() {
-		return this.outTokenTime;
+	public Integer getState() {
+		return state;
 	}
 
-	public void setOutTokenTime(Date outTokenTime) {
-		this.outTokenTime = outTokenTime;
+	public void setState(Integer state) {
+		this.state = state;
 	}
+
+	public Date getCreatetime() {
+		return createtime;
+	}
+
+	public void setCreatetime(Date createtime) {
+		this.createtime = createtime;
+	}
+
+	public Date getOuttickettime() {
+		return outtickettime;
+	}
+
+	public void setOuttickettime(Date outtickettime) {
+		this.outtickettime = outtickettime;
+	}
+
+	public Date getOuttokentime() {
+		return outtokentime;
+	}
+
+	public void setOuttokentime(Date outtokentime) {
+		this.outtokentime = outtokentime;
+	}
+
+	public String getSpec() {
+		return spec;
+	}
+
+	public void setSpec(String spec) {
+		this.spec = spec;
+	}
+
 }

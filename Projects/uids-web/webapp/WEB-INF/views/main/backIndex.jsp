@@ -58,10 +58,10 @@
                     <li class="home" onclick="toFront();">
                         <p>返回首页</p>
                     </li>
-                    <li class="speaker modify-msgs" onclick="javascript:window.location.href='${ctx}/complat/userSetUpEdit'">
+                    <li class="speaker modify-msgs" onclick="javascript:window.location.href='${ctx}/complat/userSetUpEdit?userMenu=2'">
                     	<p>账户设置</p>
                     </li>
-                    <li class="pwd modify-pwd"  onclick="javascript:window.location.href='${ctx}/jisLog/countUser'">
+                    <li class="pwd modify-pwd"  onclick="toCountUser();">
                         <p>在线用户</p>
                     </li>
                     
@@ -185,10 +185,7 @@
 						}
 					}
 				});
-//	            var json = '[{"id":"33100","icon":"system-manager-icon.png","name":"首页","url":"http://www.baidu.com"},{"id":"33100","icon":"system-manager-icon.png","name":"首页","menuitem":[{"id":"19200","icon":"","name":"快捷导航","url":"login/getSysMain"},{"id":"42050","icon":"","name":"操作指南","url":"help/list"}]},{"id":"19151","icon":"file-manager-icon.png","name":"窗口办件","menuitem":[{"id":"19155","icon":"","name":"办件受理","url":"workflow/collaborateTemplateAais!list.do"},{"id":"19156","icon":"","name":"办件领取","url":"workflow/workflowTaskAais!getWaitCheckList.do"},{"id":"22100","icon":"","name":"我的办件","url":"workflow/acceptCase!list.do"},{"id":"27050","icon":"","name":"我的收费","url":"workflow/matterCharge!myList.do"},{"id":"35050","icon":"","name":"网上申请","url":"workflow/webApply!list.do"},{"id":"38050","icon":"","name":"测试菜单","url":"test/list"}]},{"id":"19152","icon":"apply-manager-icon.png","name":"警示件管理","menuitem":[{"id":"19159","icon":"","name":"超期件","url":"workflow/workflowTaskAais!getChaoQiList.do"},{"id":"19160","icon":"","name":"举牌件","url":"workflow/workflowTaskAais!getJuPaiList.do"}]},{"id":"19153","icon":"mail-manager-icon.png","name":"办件统计","menuitem":[{"id":"35200","icon":"","name":"报表统计图","url":"handlestat/topage"},{"id":"19162","icon":"","name":"评价统计","url":"evaluate/assessCount"},{"id":"26102","icon":"","name":"单位统计","url":"dept/date?type=1"},{"id":"32050","icon":"","name":"服务评价统计","url":"evaluate/date?type=1"},{"id":"35150","icon":"","name":"评价统计图","url":"evaluate/topage"}]},{"id":"19154","icon":"shenpi-manager-icon.png","name":"日常管理","menuitem":[{"id":"19163","icon":"","name":"通知公告","url":"noticeAais/noticeList"},{"id":"19164","icon":"","name":"中心制度","url":"rules/rulesList"},{"id":"23101","icon":"","name":"信息发送","url":"mymess/messList"},{"id":"23050","icon":"","name":"信息接收","url":"mymess/mymessList"},{"id":"33150","icon":"","name":"我的考勤","url":"myAttendance/myAttendanceList"},{"id":"34050","icon":"","name":"考勤明细","url":"myAttendance/myAttendanceDetailList"}]}]';
-//	            var nav_template = Handlebars.compile($("#nav_template").html());
-//	            $("#nav ul").html(nav_template($.parseJSON(json)));
-	            //$("#nav").niceScroll();
+
 	            
 	            //导航菜单点击展开
 	            $("#nav ul li").on("click", function () {
@@ -239,111 +236,12 @@
 				$("#main").attr("src", "${ctx}/login/getSysMain");
 				$("#main").reload();
 			}
-			function goHome1() {
-				$.dialog({
-					title : '受理',
-					width : 1000,
-					height : 450,
-					max : false,
-					min : false,
-					lock : true,
-					padding : '40px 20px',
-					content : 'url:${ctx}/gsww_handle/stagingDialog?id=',
-					fixed : true,
-					drag : false,
-					resize : false,
-					close: function() {
-						
-					}
-				});
-			}
-			$(function(e) {
-				//判断是否存在监察结果
-					$.ajax({
-					url : "${ctx}/newsReminder/newsReminderDetermine",
-					dataType : "JSON",
-					success : function(data) {
-						if(data.determine=='1'){
-							$('.msgs-center').css({display:"block"});
-							$('.modify-msgs').on('click', function(event) {
-								$('.msgs-center').toggle();
-							});
-						}else{
-							$('.modify-msgs').on('click', function(event) {
-								$('.msgs-center').toggle();
-								});
-							}
-						}
-					});	
-				//修改密码
-				$('.modify-pwd').on('click', function(event) {
-					$('.per-center').toggle();
-				});
-				
-				/*var login_password="${initPassword}";
-				if(login_password!=null&&login_password=="111111"){
-					$.dialog({
-						title : '密码为初始密码，请修改',
-						min : false,
-						max : false,
-						width : 460,
-						height : 160,
-						lock : true,
-						content : 'url:${ctx}/login/getPwd'
-					});
-				}*/
-				
-				
-				//个人中心
-				$('.user-center').on('click', function(event) {
-					$.dialog({
-						title : '个人中心',
-						min : false,
-						max : false,
-						width : 800,
-						height : 300,
-						lock : true,
-						content : 'url:${ctx}/login/gotoUserDetail'
-					});
-				});
-
-				//排号呼叫操作
-				
-				$(".header_nav .call").on("click", function() {
-					//fade();
-					if ($(this).hasClass("selected")) {
-						$(this).removeClass("selected");
-						//$(".call").css("padding-bottom","-4px");
-						$(".call").css("background-color","#2d74af");
-						$(this).addClass("background-color","#267ac4");
-						$(".callMenu").slideUp("fast");
-					} else  {
-						$(".call").css("background-color","#267AC4");
-						$(this).addClass("selected");
-						$(".callMenu").slideDown("fast");
-						//排号呼叫操作定位
-						var offset = $(this).offset();
-						$(".callMenu").css({"left": offset.left,"top": offset.top + 66, "width": $(this).width()});
-						$.ajax({
-				    		cache: true,
-		    				type : "POST",
-		    				url : '${ctx}/adCase/countWaiters',
-		    				dataType : "json",
-		    				async: false,
-		    				success : function(msg) {
-		    					$("#countWaiter").html(msg.result);
-		    				}
-				    	});
-					}
-				});
-			});
 			
 			function loginOut() {
 				$.dialog.confirm('您确认要退出系统吗?',function(){
 					$.get("${ctx}/login/loginOut");
-					//?service=http://127.0.0.1:8080/aais
-					//window.location.href='${ctx}/login';
-					window.location.href='http://127.0.0.1:8080/uids-web';
+					window.location.href='${ctx}';
+					
 				});
 			}
 			

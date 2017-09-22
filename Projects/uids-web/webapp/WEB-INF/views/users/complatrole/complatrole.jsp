@@ -12,7 +12,6 @@
 		<script type="text/javascript">
 		
 		function btnAuthorize(obj) {
-		console.log(obj);
 		$(".list-page").css({'position':'absolute'});
 		$(".list-page").css({'bottom':'-100px'});
 		$("#list-warper").addClass("window-mask");
@@ -44,8 +43,6 @@
 	
 	function modifyIsDefault(iid, checkbox) {
 		var isDefault = checkbox.checked ? 1 : 0; //切换当前角色缺省状态
-		console.log(checkbox.checked);
-		console.log(isDefault);
 		$.ajax({
 			type : "POST",
 			url : "${ctx}/complat/isdefault_modify",
@@ -88,7 +85,7 @@
 			<!--列表的面包屑区域-->
 			<ol class="breadcrumb">
 				<li>
-					<a href="${ctx}/index" target="_top">首页</a>
+					<a href="${ctx}/backIndex" target="_top">首页</a>
 				</li>
 				<li class="split"></li>
 				<li>

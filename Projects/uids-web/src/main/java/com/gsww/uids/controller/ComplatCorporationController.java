@@ -1,5 +1,6 @@
 package com.gsww.uids.controller;
 
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -8,6 +9,10 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
+import net.sf.json.JSONArray;
+
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +32,6 @@ import com.gsww.jup.util.PageUtils;
 import com.gsww.jup.util.StringHelper;
 import com.gsww.jup.util.TimeHelper;
 import com.gsww.uids.entity.ComplatCorporation;
-import com.gsww.uids.entity.ComplatOutsideuser;
 import com.gsww.uids.service.ComplatCorporationService;
 /**
  * <p>Copyright: Copyright (c) 2014</p>
@@ -106,7 +110,8 @@ public class ComplatCorporationController extends BaseController{
 			if(StringHelper.isNotBlack(corporationId)){
 				Integer iid = Integer.parseInt(corporationId);
 				corporation = complatCorporationService.findByKey(iid);
-				
+				String corNation = corporation.getNation();
+				model.addAttribute("corNation", corNation);
 				//对注册时间进行转换
 				Date createTime = corporation.getCreateTime();
 				if(createTime != null){
@@ -260,4 +265,101 @@ public class ComplatCorporationController extends BaseController{
 		}
 	}
 	
+	/**
+     * @discription   用户认证 
+     * @param outsideuserIid
+     * @param model
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+	 */
+	@SuppressWarnings("finally")
+	@RequestMapping(value = "/corporationAuth", method = RequestMethod.GET)
+	public ModelAndView corporationAuth(Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+		ComplatCorporation complatCorporation = null;
+		try{			
+			String iid = StringUtils.trim((String) request.getParameter("iid"));
+			String corporationType = StringUtils.trim((String) request.getParameter("outsideUserType"));
+			String rejectReason2 = StringUtils.trim((String) request.getParameter("rejectReason2"));
+			int type = Integer.parseInt(corporationType);//1:通过  2：拒绝
+			complatCorporation = complatCorporationService.findByKey(Integer.parseInt(iid));
+			if(type == 1) {
+				int isAuth = complatCorporation.getisAuth();
+				if (isAuth == 0) {
+					complatCorporation.setisAuth(1);
+					complatCorporation.setauthState(1);
+					complatCorporationService.save(complatCorporation);
+					returnMsg("success", "用户认证成功！", request);
+				} else {
+					returnMsg("success", "用户已认证！", request);
+				}
+			} else if (type == 0) {
+				complatCorporation.setisAuth(0);
+				complatCorporation.setauthState(2);
+				if (rejectReason2 != null) {
+					complatCorporation.setrejectReason(rejectReason2);
+				}
+				complatCorporationService.save(complatCorporation);
+				returnMsg("success", "用户认证已拒绝！", request);
+			} 
+		}catch(Exception e){
+			e.printStackTrace();
+			returnMsg("error", "认证失败！", (HttpServletRequest) request);
+		}finally{
+			return  new ModelAndView("redirect:/complat/corporationList");
+		}
+	}
+	
+	/**
+     * @discription    获取认证用户信息
+     * @param request
+     * @param response
+	 */
+	@RequestMapping(value = { "/getCorporationInfo" }, method = {RequestMethod.POST })
+	public void getCorporationInfo(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			String pidStr = request.getParameter("iid");
+			Integer pid = Integer.valueOf(Integer.parseInt(pidStr));
+			ComplatCorporation complatCorporation = complatCorporationService.findByKey(pid);
+			if (complatCorporation != null) {
+				net.sf.json.JSONObject object = net.sf.json.JSONObject.fromObject(complatCorporation);
+				PrintWriter out = response.getWriter();
+				String json = object.toString();
+				out.write(json);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+     * @discription    登录名唯一性校验
+     * @param loginName
+     * @param model
+     * @param request
+     * @param response  
+     * @throws Exception
+	 */
+	@RequestMapping(value="/checkCorporationLoginName", method = RequestMethod.GET)
+	public void checkLoginName(String loginName,Model model,HttpServletRequest request,HttpServletResponse response)throws Exception {
+		try {
+			ComplatCorporation complatCorporation = null;
+			String loginNameInput=StringUtils.trim((String)request.getParameter("loginName"));
+			String oldLoginName=StringUtils.trim((String)request.getParameter("oldLoginName"));
+			if(!loginNameInput.equals(oldLoginName)){
+				complatCorporation = complatCorporationService.findByLoginNameIsUsed(loginName);
+				if(complatCorporation!=null){					
+					response.getWriter().write("0");								
+				}else{
+					response.getWriter().write("1");
+				}
+			}else{
+				response.getWriter().write("1");
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

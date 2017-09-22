@@ -25,7 +25,7 @@ public class JisApplication implements java.io.Serializable {
 	private String encryptKey;             //密钥
 	private String icon;                   //应用图标地址
 	private Integer synUser;               //同步用户，1：同步后台、前台用户，2：只同步后台，3：不同步
-	private Integer loginType;             //登录方式，1：统一用户且单点登录，2：仅单点登录
+	private Integer loginType;             //登录方式，0：统一用户且单点登录，1：仅单点登录
 	private Integer userDefined;           //是否支持自定义登录帐号/密码，1：自定义帐号，2：固定帐号
 	private String allLoginIid;            //统一帐号用户名
 	private String allPwd;                 //统一帐号密码(加密)

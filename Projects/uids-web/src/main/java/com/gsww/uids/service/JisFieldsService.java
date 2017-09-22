@@ -65,7 +65,19 @@ public interface JisFieldsService {
 	 * 获取扩展属性类型
 	 * @return
 	 */
-	List<Integer> findFieldsType();
+	List<Integer> findFieldsType() throws Exception;
+	
+	/**
+	 * 获取字符和枚举类型的属性
+	 */
+	
+	List<JisFields> findByType(Integer type) throws Exception;
+	
+	/**
+	 * 根据用户ID获取下拉列表的值
+	 */
+	Map<String,Object> findByUserIdAndType(List<JisFields> fieldsList,Integer userId) throws Exception;
+	
 	
 	
 }

@@ -40,7 +40,6 @@
 	 */
 	function loadUserData(currentId) {
 		$('#usersselect .selectsource').empty();
-		console.log("currentid"+currentId);
 		$.ajax({
 			type : "POST",
 			url : "${ctx}/complat/user_load",
@@ -48,8 +47,6 @@
 			data : 'id=' + currentId + "&roleid=${roleid}",
 			success : function(jsonData) {
 				var pid = jsonData.pid;
-				console.log(jsonData);
-				console.log(pid);
 				if (pid != null) {
 					$('#usersselect .selectsource').append('<li class="reply" pid="'+pid+'">... 返回上一层</li>');
 				}
@@ -167,7 +164,6 @@
 		if (groupEnable) {
 			// 检索机构
 			$('#group-search-btn').click(searchGroup);
-			console.log($('#group-search-btn'));
 			$('#group-search').bind('keydown', 'return', searchGroup);
 		}
 		
@@ -800,8 +796,6 @@
 		
 		var users = usersArray.join();
 		var groups = groupsArray.join();
-		console.log(users);
-		console.log(groups);
 		$.ajax({
 			type: 'POST',
 			url : "${ctx}/complat/modify_submit",
