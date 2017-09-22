@@ -14,7 +14,7 @@ import javax.persistence.Table;
 @Table(name = "jis_outsideuserdetail")
 public class JisOutsideuserdetail implements java.io.Serializable {
 
-	// Fields
+	// Fields 
 
 	/**
 	 * 
