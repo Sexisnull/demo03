@@ -71,10 +71,4 @@ public class JisRoleobjectServiceImpl implements JisRoleobjectService{
 		return jdbcTemplate.queryForObject(sql,Integer.class);
 	}
 
-	@Override
-	public void deleteByRoleId(int id) {
-		String sql="delete from jis_roleobject where roleid = "+id;
-		jdbcTemplate.execute(sql);
-	}
-
 }

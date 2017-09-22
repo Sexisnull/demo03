@@ -56,8 +56,6 @@ import com.gsww.uids.service.ComplatUserService;
 import com.gsww.uids.service.JisFieldsService;
 import com.gsww.uids.service.JisUserdetailService;
 
-import net.sf.json.JSONArray;
-
 /**
  * <p>
  * Copyright: Copyright (c) 2014
@@ -168,7 +166,7 @@ public class ComplatUserController extends BaseController {
 	}
 
 	/**
-	 * 转到新增政府用户页面
+	 * 转到政府用户新增或编辑页面
 	 * 
 	 * @param model
 	 * @param request
@@ -181,30 +179,27 @@ public class ComplatUserController extends BaseController {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		try {
-
-			// map放入
-			List<Map<String, Object>> groupList = new ArrayList<Map<String, Object>>();
-			Map<Integer, Object> groupMap = new HashMap<Integer, Object>();
-			groupList = complatGroupService.getComplatGroupList();
-			for (Map<String, Object> group : groupList) {
-				groupMap.put((Integer) group.get("iid"), group.get("name"));
-			}
-
 			ComplatUser complatUser = null;
 			if (StringHelper.isNotBlack(iid)) {
-				complatUser = complatUserService.findByKey(Integer
-						.parseInt(iid));
-
+				complatUser = complatUserService.findByKey(Integer.parseInt(iid));
 				Date createTime = complatUser.getCreatetime();
 				if (createTime != null) {
 					String time = sdf.format(createTime);
 					model.addAttribute("time", time);
+					// map放入
+					List<Map<String, Object>> groupList = new ArrayList<Map<String, Object>>();
+					Map<Integer, Object> groupMap = new HashMap<Integer, Object>();
+					groupList = complatGroupService.getComplatGroupList();
+					for (Map<String, Object> group : groupList) {
+						groupMap.put((Integer) group.get("iid"), group.get("name"));
+					}
+					model.addAttribute("groupMap", groupMap);
 				}
 			} else {
 				complatUser = new ComplatUser();
 			}
-			this.extendsAttr(model, request, response);
 			model.addAttribute("complatUser", complatUser);
+			//this.extendsAttr(model, request, response);			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -236,6 +231,7 @@ public class ComplatUserController extends BaseController {
 					// complatUser.setAuthState(0); // 审核状态
 					// complatUser.setIsAuth(0); // 是否审核
 					complatUser.setCreatetime(d);// 创建时间
+					System.out.println("新增groupid========="+complatUser.getGroupid());
 					complatUserService.save(complatUser);
 					returnMsg("success", "保存成功", request);
 				} else {
@@ -244,7 +240,9 @@ public class ComplatUserController extends BaseController {
 					String time = request.getParameter("time");
 					Date createTime = sdf.parse(time);
 					complatUser.setCreatetime(createTime);
+					System.out.println("编辑groupid============"+complatUser.getGroupid());
 					complatUserService.save(complatUser);
+					
 					returnMsg("success", "编辑成功", request);
 				}
 			}
@@ -269,11 +267,11 @@ public class ComplatUserController extends BaseController {
 	 */
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/complatUserDelete", method = RequestMethod.GET)
-	public ModelAndView complatUserDelete(String complatUserId,
+	public ModelAndView complatUserDelete(String iid,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		try {
-			String[] para = complatUserId.split(",");
+			String[] para = iid.split(",");
 			ComplatUser complatUser = null;
 			for (int i = 0; i < para.length; i++) {
 				Integer corId = Integer.parseInt(para[i].trim());
@@ -417,8 +415,8 @@ public class ComplatUserController extends BaseController {
 	@RequestMapping(value = "/complatExport", method = RequestMethod.GET)
 	public void complatExport(Model model, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		String complatUserId = request.getParameter("complatUserId");
-		String[] complatUserIds = complatUserId.split(",");
+		String userIid = request.getParameter("iid");
+		String[] complatUserIds = userIid.split(",");
 		String fileName = "政府用户信息统计列表";
 		Map<String, Object> map = new HashMap<String, Object>();
 		List headList = new ArrayList();// 表头数据
@@ -699,7 +697,7 @@ public class ComplatUserController extends BaseController {
 	 */
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/startUserEnable", method = RequestMethod.GET)
-	public ModelAndView startUserEnable(String complatUserId,
+	public ModelAndView startUserEnable(String iid,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		String enable = request.getParameter("Enable");
@@ -709,7 +707,7 @@ public class ComplatUserController extends BaseController {
 				enable = "1";
 				Enable = Integer.parseInt(enable);
 			}
-			String[] para = complatUserId.split(",");
+			String[] para = iid.split(",");
 			ComplatUser complatUser = null;
 			for (int i = 0; i < para.length; i++) {
 				Integer corId = Integer.parseInt(para[i].trim());
@@ -741,7 +739,7 @@ public class ComplatUserController extends BaseController {
 	 */
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/stopUserEnable", method = RequestMethod.GET)
-	public ModelAndView stopUserEnable(String complatUserId,
+	public ModelAndView stopUserEnable(String iid,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		String enable = request.getParameter("Enable");
@@ -751,7 +749,7 @@ public class ComplatUserController extends BaseController {
 				enable = "0";
 				Enable = Integer.parseInt(enable);
 			}
-			String[] para = complatUserId.split(",");
+			String[] para = iid.split(",");
 			ComplatUser complatUser = null;
 			for (int i = 0; i < para.length; i++) {
 				Integer corId = Integer.parseInt(para[i].trim());

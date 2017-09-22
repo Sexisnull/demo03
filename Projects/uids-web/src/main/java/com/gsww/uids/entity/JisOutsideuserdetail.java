@@ -5,8 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import static javax.persistence.GenerationType.IDENTITY;
 
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -18,7 +16,7 @@ import javax.persistence.Table;
 @Table(name = "jis_outsideuserdetail")
 public class JisOutsideuserdetail implements java.io.Serializable {
 
-	// Fields
+	// Fields 
 
 	/**
 	 * 
@@ -29,8 +27,6 @@ public class JisOutsideuserdetail implements java.io.Serializable {
 	private String comptel;
 	private String cardid;
 	
-	private Map<String, String> userFieldsMap = new HashMap<String, String>();
-
 	// Constructors
 
 	/** default constructor */
@@ -82,13 +78,5 @@ public class JisOutsideuserdetail implements java.io.Serializable {
 	public void setCardid(String cardid) {
 		this.cardid = cardid;
 	}
-	
-    public Map<String, String> getUserFieldsMap() {
-	    return this.userFieldsMap;
-	  }
-
-    public void setUserFieldsMap(Map<String, String> userFieldsMap) {
-	    this.userFieldsMap = userFieldsMap;
-	  }
 
 }
