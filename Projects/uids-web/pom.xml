@@ -868,6 +868,20 @@
 		    <artifactId>jackson-jaxrs</artifactId>
 		    <version>1.9.11</version>
 		</dependency>
+		<dependency>
+			<groupId>com.gsww</groupId>
+			<artifactId>hanweb-security</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/webapp/WEB-INF/lib/hanweb-security.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>com.gsww</groupId>
+			<artifactId>hanwebcore</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/webapp/WEB-INF/lib/hanwebcore.jar</systemPath>
+		</dependency>
 	</dependencies>
 
 	<build>
