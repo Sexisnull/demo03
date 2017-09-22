@@ -356,6 +356,16 @@ public class ComplatUserController extends BaseController {
 		String strRow = "";
 		try {
 			for (ComplatUser complatUser : users) {
+				//从解析出来的集合中获取机构id
+				int groupId = complatUser.getGroupid();
+				//依据机构id在机构表中查询当前机构id的机构对象
+				ComplatGroup complatGroup = complatGroupService.findByIid(groupId);
+				String name=complatGroup.getName();//获取到机构名称
+				if("".equals(name)){
+					
+				}else{
+					returnMsg("error", "导入失败", request);
+				}
 				List<ComplatUser> list = complatUserService.findByUserAllName(complatUser.getLoginallname());
 				if (list.size() == 0) {
 					if (StringHelper.isNotBlack(complatUser.getName())) { // 判断excel表格导入的数据是否规范
@@ -369,14 +379,14 @@ public class ComplatUserController extends BaseController {
 						Date createTime = sdf.parse(time);
 						complatUser.setCreatetime(createTime);
 						//设置性别
-
+                        
 						
 						
 						
 						
 						// 设置groupId
-						int groupId = complatUser.getGroupid(); 
-						ComplatGroup complatGroup = complatGroupService.findByIid(groupId);
+						
+						
 						
 						// 设置状态值
 	                    complatUser.setEnable(0);
