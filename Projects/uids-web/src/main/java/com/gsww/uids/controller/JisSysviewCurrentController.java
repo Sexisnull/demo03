@@ -276,4 +276,29 @@ public class JisSysviewCurrentController extends BaseController{
 		return returnMap;
 	}
 	
+	/**
+	 * 是否同步成功校验
+	 * @param iid
+	 * @param optresult 要筛选的同步成功的状态
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/checkSyncListState",method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String,Object> checkSyncState(@RequestParam("iid")String iid,@RequestParam("optresult")int optresult,Model model) throws Exception{
+		String[] para=iid.split(",");
+		Map<String,Object> returnMap = new HashMap<String, Object>();
+		for(int i=0;i<para.length;i++){
+			JisSysviewCurrent jisSysviewCurrent = jisSysviewCurrentService.findByIid(Integer.valueOf(para[i]));
+			if(null!=jisSysviewCurrent){
+				if(optresult == jisSysviewCurrent.getOptresult()){
+					returnMap.put("success", "true") ;
+				}else{
+					returnMap.put("success", "false") ;
+				}
+			}
+		}
+		return returnMap;
+	}
 }

@@ -66,7 +66,7 @@ function checkSubmitForm() {
 }
 
 /**同步*/
-function sync(url,param,obj){
+function sync1(url,param,obj){
     var singleId = $(obj).parents("td").parent().find('td:first').find('input').attr('id');
     $.dialog.confirm('您确认要同步吗？',function(){
 		 window.location.href="${ctx}/"+url+"?"+param+"="+singleId;
@@ -74,7 +74,7 @@ function sync(url,param,obj){
 }
 	
  /**同步+校验**/
-function sync1(url,param,obj){
+function sync(url,param,obj){
     var singleId = $(obj).parents("td").parent().find('td:first').find('input').attr('id');
     $.get("${ctx}/sysviewCurr/checkSyncState", {"iid":singleId,"optresult":2}, function (data) {
         if (data != null) {
@@ -114,10 +114,26 @@ function batchSync(url,param){
 			var ids = "";
 			$('.list-table tbody input[type=checkbox]').each(function(i, o) {
 				if($(o).attr('checked')) {
-					ids += $(o).val() + ",";
+				     ids += $(o).val() + ",";
 				}
 			});
-			window.location.href="${ctx}/"+url+"?"+param+"="+ids.substring(0,ids.length-1);
+			if(ids != ""){
+			   $.get("${ctx}/sysviewCurr/checkSyncListState", {"iid":ids,"optresult":2}, function (data) {
+                           if (data != null) {
+                              if(data.success == 'true'){
+                                  $.dialog.alert('存在已同步成功，不能再次同步，请取消同步成功的数据！',function(){
+                                    ids = "";
+                                    return null;
+                                  });
+                                  return false
+                              }
+                              if(data.success == 'false'){
+                                 window.location.href="${ctx}/"+url+"?"+param+"="+ids.substring(0,ids.length-1);
+                              }
+                          }
+              });
+			   
+			}
 		});
 		
 	}else{
