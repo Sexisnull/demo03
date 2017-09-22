@@ -58,4 +58,12 @@
 		scope="prototype" />
 	<bean id="authLogDao" class="com.gsww.uids.gateway.dao.authlog.AuthLogDao"
 		scope="prototype" />
+	<bean id="appService" class="com.gsww.uids.gateway.service.AppService"
+		scope="prototype" />
+	<bean id="authLogService" class="com.gsww.uids.gateway.service.AuthLogService"
+		scope="prototype" />
+	<bean id="corporationService" class="com.gsww.uids.gateway.service.CorporationService"
+		scope="prototype" />
+	<bean id="outsideUserService" class="com.gsww.uids.gateway.service.OutsideUserService"
+		scope="prototype" />
 </beans>

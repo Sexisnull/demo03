@@ -124,7 +124,7 @@ public class FrontAppController extends BaseController {
 				model.addAttribute("userDefinedId", userDefined.getIid());
 				model.addAttribute("loginAllName", user.getLoginallname());
 				model.addAttribute("appid", appid);
-				model.addAttribute("apploginname", userDefined.getLoginname());
+				model.addAttribute("apploginname", userDefined.getApploginname());
 				model.addAttribute("loginName", user.getLoginname());
 			}
 		} catch (Exception e) {

@@ -181,7 +181,7 @@ var complatUserNameInput=$("#name").val();
 		}, 
 	    pwd : {
 			required: true,
-			cnRangelength: [0,127]
+			cnRangelength: [6,18]
 		},
 	   
 	   pwdquestion : {
@@ -331,9 +331,8 @@ $(function(){
 	        	    <input type="hidden" id="croleId" class="input" name="iid" value="${complatUser.iid}"  />	  
 	              </td>
 	        	  <th><b class="mustbe">*</b>性别：</th>
-				  <td>
-					<input type="radio" name="sex" value = 1 <c:if test="${complatUser.sex == 1}">checked="checked" </c:if>>男&nbsp&nbsp&nbsp
-    				<input type="radio" name="sex" value = 0 <c:if test="${complatUser.sex == 0}">checked="checked" </c:if>>女		
+				  <td>	
+				 	<gsww:checkboxTag name="type" defaultValue="1" type="ZFYHXB" inputType="radio" value="${complatUser.sex}"></gsww:checkboxTag>
 				  </td>
 		 		</tr> 
 		 		<tr>  
@@ -442,15 +441,16 @@ $(function(){
 			    <tr>				
 		           <th class="td_5"> 密码强度：</th>
 			       <td class="td_3">			                 
-				      <table id="pwdpower" title="字母加数字加符号就会强" style="width:166px;" cellspacing="0" cellpadding="0" border="0">
-					      <tbody>
-							  <tr>
-							     <td id="pweak" style="">弱</td>
-						         <td id="pmedium" style="">中</td>
-								 <td id="pstrong" style="">强</td>
-							  </tr>
-					      </tbody>
-				      </table>
+				      <table id="pwdpower" style="width: 85%" cellspacing="0"
+							cellpadding="0" border="0">
+						<tbody>
+							<tr>
+								<td id="pweak" style="text-align: center;width: 100px;border: 1px solid  grey">弱</td>
+								<td id="pmedium" style="text-align: center;width: 100px;border: 1px solid  grey">中</td>
+								<td id="pstrong" style="text-align: center;width: 100px;border: 1px solid  grey">强</td>
+							</tr>
+						</tbody>
+				</table>
 			       </td>
 			       <th class="td_6"><b class="mustbe">*</b> 请设置密码找回问题答案：</th>
 				   <td class="td_4">
