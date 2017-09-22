@@ -49,7 +49,7 @@ public class CellphoneShortMessageUtil
       String error = "发短信读取配置文件参数连接连接抛异常。there is a exception of reading connection parameters when sending Cellphoneshortmessage ";
 
       System.out.println(error);
-      Map<String,String> map = new HashMap<>();
+      Map<String,String> map = new HashMap<String,String>();
       map.put("success", "false");
       map.put("code", "0");
       map.put("msg", error);
@@ -85,7 +85,7 @@ public class CellphoneShortMessageUtil
       String error = "发短信连接抛异常或读取短信接口的返回值异常。there is a exception of creating connection when sending Cellphoneshortmessage ";
 
       System.out.println(error);
-      Map<String,String> map = new HashMap<>();
+      Map<String,String> map = new HashMap<String,String>();
       map.put("success", "false");
       map.put("code", "0");
       map.put("msg", error);

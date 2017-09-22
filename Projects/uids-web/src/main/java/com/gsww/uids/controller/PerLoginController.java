@@ -280,7 +280,7 @@ public class PerLoginController{
   @ResponseBody
   public String sendDynamicPwd(String telNum, HttpSession session)
   {
-    Map<String,String> map = new HashMap<>();
+    Map<String,String> map = new HashMap<String,String>();
     if ((telNum == null) || ("".equals(telNum.trim())))
     {
       map.put("success", "false");
@@ -447,7 +447,7 @@ public class PerLoginController{
   @ResponseBody
   public String sendCellphoneShortMessageUserPwdRecover(HttpSession session)
   {
-    Map<String,String> map1 = new HashMap<>();
+    Map<String,String> map1 = new HashMap<String,String>();
     Object mobileSend = session.getAttribute("mobilesend");
     if (mobileSend == null) {
       map1.put("msg", "参数为空");
@@ -481,7 +481,7 @@ public class PerLoginController{
     }
 
     if ((outsideUser == null) && (corporation == null)) {
-      Map<String,String> mapInfo = new HashMap<>();
+      Map<String,String> mapInfo = new HashMap<String,String>();
       mapInfo.put("success", "false");
       mapInfo.put("code", "0");
       mapInfo.put("msg", "无此用户");
@@ -600,7 +600,7 @@ public class PerLoginController{
     if ("per".equals(typeEntity)) {
       ComplatOutsideuser outsideUser = (ComplatOutsideuser)session.getAttribute("outsideUser");
       String loginName = outsideUser.getLoginName();
-      isSuccess = this.OutsideUserService.updatePwd(loginName, Md5Util.md5encode(pwd));
+      isSuccess = this.OutsideUserService.updatePwd(Integer.parseInt(loginName), Md5Util.md5encode(pwd));
     } else {
       ComplatCorporation corporation = (ComplatCorporation)session.getAttribute("corporation");
       String loginName = corporation.getLoginName();

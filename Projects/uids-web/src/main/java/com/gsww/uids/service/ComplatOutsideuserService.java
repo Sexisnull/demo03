@@ -61,19 +61,19 @@ public interface ComplatOutsideuserService {
 	 */
 	public List<Map<String, Object>> findByNameOrPinYin(String keyword);
 
-	public ComplatOutsideuser findByMobile(String userName);
+	public ComplatOutsideuser findByMobile(String cellPhoneNum);
 
-	public ComplatOutsideuser findByIdCard(String userName);
+	public ComplatOutsideuser findByIdCard(String IdCard);
 
 	public ComplatOutsideuser findByLoginName(String userName);
 
 	public ComplatOutsideuser checkUserLogin(String userName, String password, String ip);
 
-	public ComplatOutsideuser checkUserLogin(HttpSession session, String userName, String password, String ip);
+	public ComplatOutsideuser checkUserLogin(HttpSession session, String loginName, String password, String ip);
 
-	public void updateLoginIpAndLoginTime(ComplatOutsideuser user);
+	public boolean updateLoginIpAndLoginTime(ComplatOutsideuser user);
 
-	public boolean updatePwd(String loginName, String md5encode);
+	public boolean updatePwd(int iid, String pwd);
 
 	/**
      * @discription   逻辑删除 

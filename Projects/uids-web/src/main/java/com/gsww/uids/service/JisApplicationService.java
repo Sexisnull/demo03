@@ -93,5 +93,5 @@ public interface JisApplicationService {
 	 */
 	public List<Map<String, Object>> findAppByRoleIds(String roleIds);
 
-	public String findURLBylogoff(int i);
+	public String findURLBylogoff(int islogoff);
 }
