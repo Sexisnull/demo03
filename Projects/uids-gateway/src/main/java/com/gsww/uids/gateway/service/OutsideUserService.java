@@ -2,7 +2,7 @@ package com.gsww.uids.gateway.service;
 
 import java.util.Date;
 
-import com.gsww.uids.gateway.dao.outsideuser.OutsideUserDAO;
+import com.gsww.uids.gateway.dao.outsideuser.OutsideUserDao;
 import com.gsww.uids.gateway.entity.OutsideUser;
 import com.gsww.uids.gateway.exception.LoginException;
 import com.gsww.uids.gateway.util.SpringContextHolder;
@@ -12,26 +12,26 @@ import com.gsww.uids.gateway.util.SpringContextHolder;
  *
  */
 public class OutsideUserService {
-	private static OutsideUserDAO outsideUserDAO;
+	private static OutsideUserDao outsideUserDao;
 	static {
-		outsideUserDAO = SpringContextHolder.getBean("outsideUserDAO");
+		outsideUserDao = SpringContextHolder.getBean("outsideUserDao");
 	}
 
 	public OutsideUser findByLoginName(String loginName) {
 		OutsideUser outsideUser = null;
-		outsideUser = this.outsideUserDAO.findByLoginName(loginName);
+		outsideUser = this.outsideUserDao.findByLoginName(loginName);
 		return outsideUser;
 	}
 
 	public OutsideUser findByMobile(String cellPhoneNum) {
 		OutsideUser outsideUser = null;
-		outsideUser = this.outsideUserDAO.findByMobile(cellPhoneNum);
+		outsideUser = this.outsideUserDao.findByMobile(cellPhoneNum);
 		return outsideUser;
 	}
 
 	public OutsideUser findByIdCard(String IdCard) {
 		OutsideUser outsideUser = null;
-		outsideUser = this.outsideUserDAO.findByIdCard(IdCard);
+		outsideUser = this.outsideUserDao.findByIdCard(IdCard);
 		return outsideUser;
 	}
 
@@ -39,7 +39,7 @@ public class OutsideUserService {
 		OutsideUser outsideUser = null;
 
 		if (outsideUser == null) {
-			outsideUser = this.outsideUserDAO.findByLoginName(loginName);
+			outsideUser = this.outsideUserDao.findByLoginName(loginName);
 		}
 		if (outsideUser != null) {
 			if (outsideUser.getEnable().intValue() == 0) {

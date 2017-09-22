@@ -55,7 +55,7 @@ public class ComplatGroupServiceTest {
 	public void save(){
 		try {
 			ComplatGroup complatGroup = new ComplatGroup();
-			//complatGroup.setIid(130);
+			//complatGroup.setIid(8104);
 			complatGroup.setName("单元测试");
 			complatGroup.setNodetype(2);
 			complatGroup.setCodeid("001001001");
@@ -83,7 +83,7 @@ public class ComplatGroupServiceTest {
 	public void delete(){
 		try {
 			ComplatGroup complatGroup = new ComplatGroup();
-			complatGroup.setIid(8096);
+			complatGroup.setIid(8104);
 			String msg = complatGroupService.delete(complatGroup);
 			System.out.println("机构删除成功"+msg);
 		} catch (Exception e) {

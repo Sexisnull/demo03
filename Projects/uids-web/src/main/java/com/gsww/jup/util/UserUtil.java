@@ -113,7 +113,7 @@ public class UserUtil
   @SuppressWarnings("unused")
   private static Hashtable<String, String> getAreaCode()
   {
-    Hashtable<String,String> hashtable = new Hashtable<>();
+    Hashtable<String,String> hashtable = new Hashtable<String,String>();
     hashtable.put("11", "北京");
     hashtable.put("12", "天津");
     hashtable.put("13", "河北");

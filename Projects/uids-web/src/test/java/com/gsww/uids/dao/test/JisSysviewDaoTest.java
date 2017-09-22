@@ -35,7 +35,7 @@ public class JisSysviewDaoTest {
 		assertTrue(true);
 	}
 	
-	@Test
+	/*@Test
 	public void findAll(){
 		List<JisSysview> jisSysviews = null;
 		try {
@@ -45,5 +45,5 @@ public class JisSysviewDaoTest {
 			e.printStackTrace();
 		}
 		assertTrue(true);
-	}
+	}*/
 }

@@ -29,7 +29,7 @@ public class JisOutsideuserdetail implements java.io.Serializable {
 	private String comptel;
 	private String cardid;
 	
-	private Map<String, String> userFieldsMap = new HashMap<>();
+	private Map<String, String> userFieldsMap = new HashMap<String, String>();
 
 	// Constructors
 

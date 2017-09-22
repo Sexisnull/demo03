@@ -52,9 +52,9 @@
 		scope="prototype" />
 	<bean id="sysViewDetailDao" class="com.gsww.uids.gateway.dao.sysview.SysViewDetailDao"
 		scope="prototype" />
-	<bean id="corporationDAO" class="com.gsww.uids.gateway.dao.corporation.CorporationDAO"
+	<bean id="corporationDao" class="com.gsww.uids.gateway.dao.corporation.CorporationDao"
 		scope="prototype" />
-	<bean id="outsideUserDAO" class="com.gsww.uids.gateway.dao.outsideuser.OutsideUserDAO"
+	<bean id="outsideUserDao" class="com.gsww.uids.gateway.dao.outsideuser.OutsideUserDao"
 		scope="prototype" />
 	<bean id="authLogDao" class="com.gsww.uids.gateway.dao.authlog.AuthLogDao"
 		scope="prototype" />

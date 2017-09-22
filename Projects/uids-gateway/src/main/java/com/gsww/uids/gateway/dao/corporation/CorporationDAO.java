@@ -12,7 +12,7 @@ import com.gsww.uids.gateway.util.ConvertSqlToDtoList;
  * @author zcc
  *
  */
-public class CorporationDAO extends JdbcTemplateDao {
+public class CorporationDao extends JdbcTemplateDao {
 	protected Logger logger = Logger.getLogger(getClass());
 	// findByLoginName
 	private static final String findByLoginName = "select *FROM complat_corporation where loginName = ?  AND opersign<>3";
