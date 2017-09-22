@@ -25,12 +25,10 @@ import com.gsww.jup.util.UserUtil;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -381,12 +379,7 @@ public class PerLoginController{
     JsonResult jsonResult = JsonResult.getInstance();
     int type = ((Integer)session.getAttribute("type")).intValue();
     if (type == 1) {
-      ComplatCorporation corporation = null;
-
-      corporation = (ComplatCorporation)CacheUtil.getValue(loginName, "corusers");
-      if (corporation == null) {
-        corporation = this.corporationService.findByLoginName(loginName);
-      }
+      ComplatCorporation corporation = this.corporationService.findByLoginName(loginName);
       if (corporation == null) {
         jsonResult.setMessage("用户名不存在！");
         jsonResult.set(ResultState.OPR_FAIL);
@@ -395,12 +388,7 @@ public class PerLoginController{
       session.setAttribute("username", corporation.getLoginName());
     }
     else {
-      ComplatOutsideuser outuser = null;
-
-      outuser = (ComplatOutsideuser)CacheUtil.getValue(loginName, "perusers");
-      if (outuser == null) {
-        outuser = this.OutsideUserService.findByLoginName(loginName);
-      }
+      ComplatOutsideuser outuser = this.OutsideUserService.findByLoginName(loginName);
       if (outuser == null) {
         jsonResult.setMessage("用户名不存在！");
         jsonResult.set(ResultState.OPR_FAIL);
