@@ -1,4 +1,4 @@
-package com.gsww.uids.gateway.wsClient;
+/*package com.gsww.uids.gateway.wsClient;
 
 import java.util.Map;
 
@@ -10,11 +10,11 @@ import org.apache.axis.client.Service;
 import org.apache.axis.encoding.XMLType;
 import org.apache.log4j.Logger;
 
-/**
+*//**
  * webService客户端接口
  * @author gaopf
  *
- */
+ *//*
 public class WsClientInterface {
 	protected Logger logger = Logger.getLogger(getClass());
 	private String syncToApplication(String responseJson,String appUrl){
@@ -38,3 +38,4 @@ public class WsClientInterface {
 		return "";	
 	}
 }
+*/

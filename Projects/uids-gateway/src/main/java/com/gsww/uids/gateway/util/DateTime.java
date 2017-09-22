@@ -38,9 +38,9 @@ public class DateTime {
 		System.out.println(DateTime.addSecond(1));
 	}
 
-
-	public static long dayDiff(Date date, Date outTime) {
-		// TODO Auto-generated method stub
-		return 0;
+	public static long dayDiff(Date paramDate1, Date paramDate2) {
+		return (paramDate2.getTime() - paramDate1.getTime()) / 86400000L;
+		// 日期对比放过
+		// return 0;
 	}
 }

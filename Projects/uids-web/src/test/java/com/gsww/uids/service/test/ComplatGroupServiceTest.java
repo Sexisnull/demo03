@@ -1,4 +1,4 @@
-package com.gsww.uids.complatgroup.test;
+package com.gsww.uids.service.test;
 
 import static org.junit.Assert.*;
 
@@ -33,7 +33,7 @@ public class ComplatGroupServiceTest {
 		try {
 			int pid = 128;
 			List<ComplatGroup> complatGroups = complatGroupService.findByPid(pid);
-			System.out.println("根据iid获取单个机构信息"+JSONArray.fromObject(complatGroups).toString());
+			System.out.println("根据pid获取单个机构信息"+JSONArray.fromObject(complatGroups).toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

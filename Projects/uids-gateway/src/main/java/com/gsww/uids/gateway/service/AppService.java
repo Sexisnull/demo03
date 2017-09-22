@@ -4,7 +4,11 @@ import com.gsww.uids.gateway.dao.application.ApplicationDao;
 import com.gsww.uids.gateway.entity.Application;
 import com.gsww.uids.gateway.util.SpringContextHolder;
 import com.gsww.uids.gateway.util.StringHelper;
-
+/**
+ * AppService
+ * @author zcc
+ *
+ */
 public class AppService {
 	private static ApplicationDao applicationDAO;
 	static {

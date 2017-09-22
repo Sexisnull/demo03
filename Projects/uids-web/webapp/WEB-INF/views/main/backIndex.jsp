@@ -58,7 +58,7 @@
                     <li class="home" onclick="toFront();">
                         <p>返回首页</p>
                     </li>
-                    <li class="speaker modify-msgs" onclick="javascript:window.location.href='${ctx}/complat/userSetUpEdit'">
+                    <li class="speaker modify-msgs" onclick="javascript:window.location.href='${ctx}/complat/userSetUpEdit?userMenu=2'">
                     	<p>账户设置</p>
                     </li>
                     <li class="pwd modify-pwd"  onclick="javascript:window.location.href='${ctx}/jisLog/countUser'">

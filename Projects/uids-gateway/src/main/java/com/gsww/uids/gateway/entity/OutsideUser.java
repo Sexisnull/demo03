@@ -4,120 +4,69 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 实体类-OutsideUser-complat_outsideuser
+ * 
+ * @author zcc
+ *
+ */
 public class OutsideUser implements Serializable {
 	private static final long serialVersionUID = 2506351625961775795L;
 
 	private Integer iid;
-
 	private String uuid;
-
-	private String loginName;
-
+	private String loginname;
 	private String pwd;
-
 	private String name;
-
 	private Integer age;
-
 	private String sex;
-
 	private Integer enable = Integer.valueOf(1);
-
 	private String degree;
-
-	private String pinYin;
-
-	private Integer papersType = Integer.valueOf(1);
-
-	private String papersNumber;
-
+	private String pinyin;
+	private Integer paperstype = Integer.valueOf(1);
+	private String papersnumber;
 	private String description;
-
 	private String mobile;
-
 	private String phone;
-
 	private String comptel;
-
 	private String fax;
-
 	private String email;
-
 	private String qq;
-
 	private String msn;
-
 	private String address;
-
 	private String post;
-
-	private String workUnit;
-
+	private String workunit;
 	private String headship;
-
-	private Date birthDate;
-
-	private Date loginTime;
-
-	private String loginIp;
-
+	private Date birthdate;
+	private Date logintime;
+	private String loginip;
 	private String regip;
-
-	private Date createTime;
-
+	private Date createtime;
 	private String regsite;
-
-	private String rejectReason;
-
+	private String rejectreason;
 	private Integer isauth = Integer.valueOf(0);
-
-	private Integer authState = Integer.valueOf(0);
-
+	private Integer authstate = Integer.valueOf(0);
 	private String headpic;
-
-	private String headRenamePic;
-
+	private String headrenamepic;
 	private String bodypic;
-
-	private String bodyRenamePic;
-
+	private String bodyrenamepic;
 	private Integer isupload = Integer.valueOf(0);
-
 	private Date modifytime;
-	private List<Role> roleList;
-
+	private List<Role> rolelist;
 	private Integer opersign;
-
-	private Integer synState = Integer.valueOf(0);
-
-	private String residenceId = "";
-
-	private String presidenceId = "";
-
-	private String gpresidenceId = "";
-
-	private String residenceDetail = "";
-
-	private String livingAreaId = "";
-
-	private String plivingAreaId = "";
-
-	private String gplivingAreaId = "";
-
-	private String livingAreaDetail = "";
-
-	private Integer isCellphoneVerified = Integer.valueOf(0);
+	private Integer synstate = Integer.valueOf(0);
+	private String residenceid = "";
+	private String presidenceid = "";
+	private String gpresidenceid = "";
+	private String residencedetail = "";
+	private String livingareaid = "";
+	private String plivingareaid = "";
+	private String gplivingareaid = "";
+	private String livingareadetail = "";
+	private Integer iscellphoneverified = Integer.valueOf(0);
 
 	public Integer getIid() {
-		return this.iid;
-	}
-
-	public Integer getIsCellphoneVerified() {
-		return this.isCellphoneVerified;
-	}
-
-	public void setIsCellphoneVerified(Integer isCellphoneVerified) {
-		this.isCellphoneVerified = isCellphoneVerified;
+		return iid;
 	}
 
 	public void setIid(Integer iid) {
@@ -125,23 +74,23 @@ public class OutsideUser implements Serializable {
 	}
 
 	public String getUuid() {
-		return this.uuid;
+		return uuid;
 	}
 
 	public void setUuid(String uuid) {
 		this.uuid = uuid;
 	}
 
-	public String getLoginName() {
-		return this.loginName;
+	public String getLoginname() {
+		return loginname;
 	}
 
-	public void setLoginName(String loginName) {
-		this.loginName = loginName;
+	public void setLoginname(String loginname) {
+		this.loginname = loginname;
 	}
 
 	public String getPwd() {
-		return this.pwd;
+		return pwd;
 	}
 
 	public void setPwd(String pwd) {
@@ -149,7 +98,7 @@ public class OutsideUser implements Serializable {
 	}
 
 	public String getName() {
-		return this.name;
+		return name;
 	}
 
 	public void setName(String name) {
@@ -157,7 +106,7 @@ public class OutsideUser implements Serializable {
 	}
 
 	public Integer getAge() {
-		return this.age;
+		return age;
 	}
 
 	public void setAge(Integer age) {
@@ -165,7 +114,7 @@ public class OutsideUser implements Serializable {
 	}
 
 	public String getSex() {
-		return this.sex;
+		return sex;
 	}
 
 	public void setSex(String sex) {
@@ -173,7 +122,7 @@ public class OutsideUser implements Serializable {
 	}
 
 	public Integer getEnable() {
-		return this.enable;
+		return enable;
 	}
 
 	public void setEnable(Integer enable) {
@@ -181,39 +130,39 @@ public class OutsideUser implements Serializable {
 	}
 
 	public String getDegree() {
-		return this.degree;
+		return degree;
 	}
 
 	public void setDegree(String degree) {
 		this.degree = degree;
 	}
 
-	public String getPinYin() {
-		return this.pinYin;
+	public String getPinyin() {
+		return pinyin;
 	}
 
-	public void setPinYin(String pinYin) {
-		this.pinYin = pinYin;
+	public void setPinyin(String pinyin) {
+		this.pinyin = pinyin;
 	}
 
-	public Integer getPapersType() {
-		return this.papersType;
+	public Integer getPaperstype() {
+		return paperstype;
 	}
 
-	public void setPapersType(Integer papersType) {
-		this.papersType = papersType;
+	public void setPaperstype(Integer paperstype) {
+		this.paperstype = paperstype;
 	}
 
-	public String getPapersNumber() {
-		return this.papersNumber;
+	public String getPapersnumber() {
+		return papersnumber;
 	}
 
-	public void setPapersNumber(String papersNumber) {
-		this.papersNumber = papersNumber;
+	public void setPapersnumber(String papersnumber) {
+		this.papersnumber = papersnumber;
 	}
 
 	public String getDescription() {
-		return this.description;
+		return description;
 	}
 
 	public void setDescription(String description) {
@@ -221,7 +170,7 @@ public class OutsideUser implements Serializable {
 	}
 
 	public String getMobile() {
-		return this.mobile;
+		return mobile;
 	}
 
 	public void setMobile(String mobile) {
@@ -229,15 +178,23 @@ public class OutsideUser implements Serializable {
 	}
 
 	public String getPhone() {
-		return this.phone;
+		return phone;
 	}
 
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
 
+	public String getComptel() {
+		return comptel;
+	}
+
+	public void setComptel(String comptel) {
+		this.comptel = comptel;
+	}
+
 	public String getFax() {
-		return this.fax;
+		return fax;
 	}
 
 	public void setFax(String fax) {
@@ -245,7 +202,7 @@ public class OutsideUser implements Serializable {
 	}
 
 	public String getEmail() {
-		return this.email;
+		return email;
 	}
 
 	public void setEmail(String email) {
@@ -253,7 +210,7 @@ public class OutsideUser implements Serializable {
 	}
 
 	public String getQq() {
-		return this.qq;
+		return qq;
 	}
 
 	public void setQq(String qq) {
@@ -261,7 +218,7 @@ public class OutsideUser implements Serializable {
 	}
 
 	public String getMsn() {
-		return this.msn;
+		return msn;
 	}
 
 	public void setMsn(String msn) {
@@ -269,7 +226,7 @@ public class OutsideUser implements Serializable {
 	}
 
 	public String getAddress() {
-		return this.address;
+		return address;
 	}
 
 	public void setAddress(String address) {
@@ -277,246 +234,243 @@ public class OutsideUser implements Serializable {
 	}
 
 	public String getPost() {
-		return this.post;
+		return post;
 	}
 
 	public void setPost(String post) {
 		this.post = post;
 	}
 
-	public String getWorkUnit() {
-		return this.workUnit;
+	public String getWorkunit() {
+		return workunit;
 	}
 
-	public void setWorkUnit(String workUnit) {
-		this.workUnit = workUnit;
+	public void setWorkunit(String workunit) {
+		this.workunit = workunit;
 	}
 
 	public String getHeadship() {
-		return this.headship;
+		return headship;
 	}
 
 	public void setHeadship(String headship) {
 		this.headship = headship;
 	}
 
-	public Date getBirthDate() {
-		return this.birthDate;
+	public Date getBirthdate() {
+		return birthdate;
 	}
 
-	public void setBirthDate(Date birthDate) {
-		this.birthDate = birthDate;
+	public void setBirthdate(Date birthdate) {
+		this.birthdate = birthdate;
 	}
 
-	public Date getLoginTime() {
-		return this.loginTime;
+	public Date getLogintime() {
+		return logintime;
 	}
 
-	public void setLoginTime(Date loginTime) {
-		this.loginTime = loginTime;
+	public void setLogintime(Date logintime) {
+		this.logintime = logintime;
 	}
 
-	public String getLoginIp() {
-		return this.loginIp;
+	public String getLoginip() {
+		return loginip;
 	}
 
-	public void setLoginIp(String loginIp) {
-		this.loginIp = loginIp;
+	public void setLoginip(String loginip) {
+		this.loginip = loginip;
 	}
 
 	public String getRegip() {
-		return this.regip;
+		return regip;
 	}
 
 	public void setRegip(String regip) {
 		this.regip = regip;
 	}
 
-	public Date getCreateTime() {
-		return this.createTime;
+	public Date getCreatetime() {
+		return createtime;
 	}
 
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
+	public void setCreatetime(Date createtime) {
+		this.createtime = createtime;
 	}
 
 	public String getRegsite() {
-		return this.regsite;
+		return regsite;
 	}
 
 	public void setRegsite(String regsite) {
 		this.regsite = regsite;
 	}
 
-	public List<Role> getRoleList() {
-		return this.roleList;
+	public String getRejectreason() {
+		return rejectreason;
 	}
 
-	public void setRoleList(List<Role> roleList) {
-		this.roleList = roleList;
+	public void setRejectreason(String rejectreason) {
+		this.rejectreason = rejectreason;
 	}
 
 	public Integer getIsauth() {
-		return this.isauth;
+		return isauth;
 	}
 
 	public void setIsauth(Integer isauth) {
 		this.isauth = isauth;
 	}
 
+	public Integer getAuthstate() {
+		return authstate;
+	}
+
+	public void setAuthstate(Integer authstate) {
+		this.authstate = authstate;
+	}
+
 	public String getHeadpic() {
-		return this.headpic;
+		return headpic;
 	}
 
 	public void setHeadpic(String headpic) {
 		this.headpic = headpic;
 	}
 
+	public String getHeadrenamepic() {
+		return headrenamepic;
+	}
+
+	public void setHeadrenamepic(String headrenamepic) {
+		this.headrenamepic = headrenamepic;
+	}
+
 	public String getBodypic() {
-		return this.bodypic;
+		return bodypic;
 	}
 
 	public void setBodypic(String bodypic) {
 		this.bodypic = bodypic;
 	}
 
-	public Integer getAuthState() {
-		return this.authState;
+	public String getBodyrenamepic() {
+		return bodyrenamepic;
 	}
 
-	public void setAuthState(Integer authState) {
-		this.authState = authState;
+	public void setBodyrenamepic(String bodyrenamepic) {
+		this.bodyrenamepic = bodyrenamepic;
 	}
 
 	public Integer getIsupload() {
-		return this.isupload;
+		return isupload;
 	}
 
 	public void setIsupload(Integer isupload) {
 		this.isupload = isupload;
 	}
 
-	public String getComptel() {
-		return this.comptel;
-	}
-
-	public void setComptel(String comptel) {
-		this.comptel = comptel;
-	}
-
-	public String getHeadRenamePic() {
-		return this.headRenamePic;
-	}
-
-	public void setHeadRenamePic(String headRenamePic) {
-		this.headRenamePic = headRenamePic;
-	}
-
-	public String getBodyRenamePic() {
-		return this.bodyRenamePic;
-	}
-
-	public void setBodyRenamePic(String bodyRenamePic) {
-		this.bodyRenamePic = bodyRenamePic;
-	}
-
-	public String getRejectReason() {
-		return this.rejectReason;
-	}
-
-	public void setRejectReason(String rejectReason) {
-		this.rejectReason = rejectReason;
-	}
-
 	public Date getModifytime() {
-		return this.modifytime;
+		return modifytime;
 	}
 
 	public void setModifytime(Date modifytime) {
 		this.modifytime = modifytime;
 	}
 
+	public List<Role> getRolelist() {
+		return rolelist;
+	}
+
+	public void setRolelist(List<Role> rolelist) {
+		this.rolelist = rolelist;
+	}
+
 	public Integer getOpersign() {
-		return this.opersign;
+		return opersign;
 	}
 
 	public void setOpersign(Integer opersign) {
 		this.opersign = opersign;
 	}
 
-	public Integer getSynState() {
-		return this.synState;
+	public Integer getSynstate() {
+		return synstate;
 	}
 
-	public void setSynState(Integer synState) {
-		this.synState = synState;
+	public void setSynstate(Integer synstate) {
+		this.synstate = synstate;
 	}
 
-	public static long getSerialversionuid() {
-		return 2506351625961775795L;
+	public String getResidenceid() {
+		return residenceid;
 	}
 
-	public String getResidenceId() {
-		return this.residenceId;
+	public void setResidenceid(String residenceid) {
+		this.residenceid = residenceid;
 	}
 
-	public void setResidenceId(String residenceId) {
-		this.residenceId = residenceId;
+	public String getPresidenceid() {
+		return presidenceid;
 	}
 
-	public String getResidenceDetail() {
-		return this.residenceDetail;
+	public void setPresidenceid(String presidenceid) {
+		this.presidenceid = presidenceid;
 	}
 
-	public void setResidenceDetail(String residenceDetail) {
-		this.residenceDetail = residenceDetail;
+	public String getGpresidenceid() {
+		return gpresidenceid;
 	}
 
-	public String getLivingAreaId() {
-		return this.livingAreaId;
+	public void setGpresidenceid(String gpresidenceid) {
+		this.gpresidenceid = gpresidenceid;
 	}
 
-	public void setLivingAreaId(String livingAreaId) {
-		this.livingAreaId = livingAreaId;
+	public String getResidencedetail() {
+		return residencedetail;
 	}
 
-	public String getLivingAreaDetail() {
-		return this.livingAreaDetail;
+	public void setResidencedetail(String residencedetail) {
+		this.residencedetail = residencedetail;
 	}
 
-	public void setLivingAreaDetail(String livingAreaDetail) {
-		this.livingAreaDetail = livingAreaDetail;
+	public String getLivingareaid() {
+		return livingareaid;
 	}
 
-	public String getPresidenceId() {
-		return this.presidenceId;
+	public void setLivingareaid(String livingareaid) {
+		this.livingareaid = livingareaid;
 	}
 
-	public void setPresidenceId(String presidenceId) {
-		this.presidenceId = presidenceId;
+	public String getPlivingareaid() {
+		return plivingareaid;
 	}
 
-	public String getGpresidenceId() {
-		return this.gpresidenceId;
+	public void setPlivingareaid(String plivingareaid) {
+		this.plivingareaid = plivingareaid;
 	}
 
-	public void setGpresidenceId(String gpresidenceId) {
-		this.gpresidenceId = gpresidenceId;
+	public String getGplivingareaid() {
+		return gplivingareaid;
 	}
 
-	public String getPlivingAreaId() {
-		return this.plivingAreaId;
+	public void setGplivingareaid(String gplivingareaid) {
+		this.gplivingareaid = gplivingareaid;
 	}
 
-	public void setPlivingAreaId(String plivingAreaId) {
-		this.plivingAreaId = plivingAreaId;
+	public String getLivingareadetail() {
+		return livingareadetail;
 	}
 
-	public String getGplivingAreaId() {
-		return this.gplivingAreaId;
+	public void setLivingareadetail(String livingareadetail) {
+		this.livingareadetail = livingareadetail;
 	}
 
-	public void setGplivingAreaId(String gplivingAreaId) {
-		this.gplivingAreaId = gplivingAreaId;
+	public Integer getIscellphoneverified() {
+		return iscellphoneverified;
 	}
+
+	public void setIscellphoneverified(Integer iscellphoneverified) {
+		this.iscellphoneverified = iscellphoneverified;
+	}
+
 }

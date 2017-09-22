@@ -23,7 +23,7 @@ import com.gsww.uids.gateway.util.SpringContextHolder;
 @Path("/uids-web")
 public class AliOauthService {
 
-	private OutsideUserDao outsideUserDAO = SpringContextHolder.getBean("outsideUserDao");;
+	private OutsideUserDao outsideUserDao = SpringContextHolder.getBean("outsideUserDao");;
 
 	protected Logger logger = Logger.getLogger(AliOauthService.class);
 
@@ -46,7 +46,7 @@ public class AliOauthService {
 		OutsideUser outsideUser = new OutsideUser();
 		logger.info("<AliOauth接口>接收到请求内容:" + appId);
 		// 标志
-		boolean flag = false; 
+		boolean flag = false;
 		if (!appId.isEmpty()) {
 			AlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipaydev.com/gateway.do", appId,
 					APP_PRIVATE_KEY, "json", CHARSET, ALIPAY_PUBLIC_KEY, "RSA2");
@@ -60,7 +60,7 @@ public class AliOauthService {
 				if (oauthTokenResponse != null) {
 					String accessToken = oauthTokenResponse.getAccessToken();
 					String aliUserId = oauthTokenResponse.getUserId();
-					outsideUser = outsideUserDAO.findByUserId(accessToken);
+					outsideUser = outsideUserDao.findByUserId(accessToken);
 					if(outsideUser != null){
 						// 登陆成功
 						flag = true;
@@ -79,7 +79,7 @@ public class AliOauthService {
 		}
 		return flag;
 	}
-	
+
 	/**
 	 * 绑定接口
 	 * 
@@ -94,10 +94,10 @@ public class AliOauthService {
 		OutsideUser outsideUser = new OutsideUser();
 		logger.info("<AliOauth接口>接收到请求内容:" + aliUserId);
 		// 标志
-		boolean flag = false; 
-		if (!aliUserId.isEmpty()&&!userId.isEmpty()) {
+		boolean flag = false;
+		if (!aliUserId.isEmpty() && !userId.isEmpty()) {
 			// 绑定个人用户与aliUserId
-			
+
 		}
 		return flag;
 	}

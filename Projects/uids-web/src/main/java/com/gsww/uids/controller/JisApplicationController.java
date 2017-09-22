@@ -21,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.web.Servlets;
 
@@ -29,6 +30,7 @@ import com.gsww.jup.util.PageUtils;
 import com.gsww.uids.entity.JisApplication;
 import com.gsww.uids.service.ComplatGroupService;
 import com.gsww.uids.service.JisApplicationService;
+import com.gsww.uids.util.HttpClientUtil;
 /**
  * 应用管理控制器
  * @author Seven
@@ -43,7 +45,6 @@ public class JisApplicationController extends BaseController{
 	private JisApplicationService jisApplicationService ;
 	@Autowired
 	private ComplatGroupService complatGroupService ;
-	
 	/**
 	 * 获取应用列表
 	 * @param pageNumber
@@ -258,4 +259,13 @@ public class JisApplicationController extends BaseController{
 			e.printStackTrace();
 		}
 	}
+	
+	
+	@RequestMapping({"checknet"})
+    @ResponseBody
+    public int checkNet(String url) {
+	    int overtime = 10000;
+	    int code = HttpClientUtil.getStatusCode(url, overtime);
+    return code;
+  }
 }

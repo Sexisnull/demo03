@@ -6,6 +6,17 @@
 <script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgcore.lhgdialog.min.js"></script>
 	<script type="text/javascript" src="${ctx}/res/plugin/ztree/js/jquery.ztree.all-3.5.js"></script>
 	<link rel="stylesheet" href="${ctx}/res/plugin/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css"></link>
+<style type="text/css">
+/* 	.menuContent{background: #fff;
+    width: 270px;
+    border: 1px solid #ccc;
+    height: 400px;
+    border-top: 0px;
+    overflow-y: auto;} */
+    .menuContent{border: 1px solid #ddd;overflow-x:auto;overflow-y:auto;float: left;}
+	.menuContent #areaTree{ width:450px;display: block;height:450px;float: left;overflow-x:auto;overflow-y:auto;}
+    .form-content{margin-left: 200px;}
+</style>
 <head>
 <meta charset="utf-8"/>
 <title>甘肃万维JUP课题</title>
@@ -176,78 +187,43 @@ function addComplatUser(){
 
 $(function(){
 /***删除***/
-
-$("#deleteUser").click(function(url,parm){
-		if ($(".check_btn:checked").length != 0 && $('#list-table tbody input:checkbox:checked').length != 0) {
-			$.dialog.confirm('您确认要删除吗？', function() {
-				var ids = "";
-				$('.list-table tbody input[type=checkbox]').each(function(i, o) {
-					if ($(o).attr('checked')) {
+ $("#deleteUser").click(function(url,parm){
+		if($(".boxOne:checked").length == 0&&$('#list-table input:checkbox:checked').length == 0){
+        	alert("请先选择要删除的数据");
+        }else if($("input[type=checkbox]:checked").length >= 1){      
+          	var ids = "";
+				$('#list-table tbody input[type=checkbox]').each(function(i, o) {
+					if($(o).attr('checked')) {
 						ids += $(o).val() + ",";
 					}
-				});
-				window.location.href="${ctx}/complat/complatUserDelete?complatUserId="+ids;  
-			});
-	
-		} else {
-			$.dialog.alert('请您至少选择一条数据', function() {
-				return null;
-			});
-		}
-			
+				});		                     
+           window.location.href="${ctx}/complat/complatUserDelete?complatUserId="+ids;             						       
+        } 			
 	});
 	
 	
 	
-	/*批量启用*/ 
-       $("#startUsersPower").click(function(url,parm){	
-         var enable= 0;
-         if($(".check_btn:checked").length != 0&&$('#list-table input:checkbox:checked').length != 0){
-            $.dialog.confirm('您确认要启用吗？',function(){
-            var ids = "";
-				$('.list-table tbody input[type=checkbox]').each(function(i, o) {
+	/*批量启用*/
+     $("#startUsersPower").click(function(url,parm){	
+          var enable= 1;
+         if($(".boxOne:checked").length == 0&&$('#list-table input:checkbox:checked').length == 0){
+        	alert("请先选择要启用的用户");
+        }else if($("input[type=checkbox]:checked").length >= 1){      
+          	var ids = "";
+				$('#list-table tbody input[type=checkbox]').each(function(i, o) {
 					if($(o).attr('checked')) {
 						ids += $(o).val() + ",";
 					}
-				});
-				window.location.href="${ctx}/complat/startUserEnable?complatUserId="+ids+"&Enable="+enable;
-			});
-          }else{
-			$.dialog.alert('请您至少选择一条数据',function(){
-				return null;
-			});
-		} 
-      
+				});		                     
+           window.location.href="${ctx}/complat/startUserEnable?complatUserId="+ids+"&Enable="+enable;             						       
+        }
      });
-      
-      
+
 
     /*批量停用*/
-   $("#stopUsersPower").click(function(url,parm){
-        var enable= 0;
-         if($(".check_btn:checked").length != 0&&$('#list-table input:checkbox:checked').length != 0){
-            $.dialog.confirm('您确认要停用吗？',function(){
-            var ids = "";
-				$('.list-table tbody input[type=checkbox]').each(function(i, o) {
-					if($(o).attr('checked')) {
-						ids += $(o).val() + ",";
-					}
-				});
-				window.location.href="${ctx}/complat/stopUserEnable?complatUserId="+ids+"&Enable="+enable;
-			});
-          }else{
-			$.dialog.alert('请您至少选择一条数据',function(){
-				return null;
-			});
-		} 
-				
-	});
-    
-    
-
-         
-         
-       /*  
+    $("#stopUsersPower").click(function(url,parm){	
+         var enable= 0;
+         if($(".boxOne:checked").length == 0&&$('#list-table input:checkbox:checked').length == 0){
         	alert("请先选择要停用的用户");
         }else if($("input[type=checkbox]:checked").length >= 1){      
           	var ids = "";
@@ -256,67 +232,15 @@ $("#deleteUser").click(function(url,parm){
 						ids += $(o).val() + ",";
 					}
 				});		                     
-                        						       
+           window.location.href="${ctx}/complat/stopUserEnable?complatUserId="+ids+"&Enable="+enable;             						       
         }
-        */
-    
+    });
 
-	
+
 
 });
 
-      /**停用单条数据**/
-	function stopSingle(url,parm,obj){
-	var singleId=$(obj).parent().parent().parent().parent().find('td:first').find('input').attr('id');
-		var flag=false;
-			$.ajax({
-				 type: "POST",
-				 url: "${ctx}/complat/enableStop",
-				 data: "iid=" + singleId,
-				 async:false,
-				 success: function (data) {
-				 if (data == "0") {
-					 flag=true;					 
-				 } else {
-					 flag=false;
-				 }
-				}
-             });
-			if(flag==true){
-				$.dialog.alert("该操作已经停用");
-				return false;
-			}else{
-				$.dialog.confirm('您确认要停用吗？',function(){
-					window.location.href="${ctx}/"+url+"?"+parm+"="+singleId;
-				});
-		}
-	}
-	/**启用单条数据**/
-	function startSingle(url,parm,obj){
-	var singleId=$(obj).parent().parent().parent().parent().find('td:first').find('input').attr('id'); 
-	var flag=false;
-			$.ajax({
-				 type: "POST",
-				 url: "${ctx}/complat/enableStop",
-				 data: "iid=" + singleId,
-				 async:false,
-				 success: function (data) {
-				 if (data == "1") {
-					 flag=true;					 
-				 } else {
-					 flag=false;
-				 }
-				}
-             });
-			if(flag==true){
-				$.dialog.alert("该操作已经启用");
-				return false;
-			}else{
-				$.dialog.confirm('您确认要启用吗？',function(){
-					window.location.href="${ctx}/"+url+"?"+parm+"="+singleId;
-				});
-		}
-	}
+
 
 
 
@@ -329,7 +253,6 @@ function intPutComplatUser(){
     document.body.appendChild(mybg);
 	document.body.style.overflow = "hidden"; 
 	$("#alerttb").show(); 				
-
 }
 	
  
@@ -458,15 +381,15 @@ function outPutComplatUser() {
 			<form id="form2" name="form2" action="${ctx}/complat/complatList" method="get">
 				<table class="advanced-content" style="display:none;">
 					<tr>
-						  <th style="padding-left: 10px">姓名：</th>
+						  <th style="padding-left: 10px">请输入姓名：</th>
 					      <td width="20%">
-							   <input type="text"  style="width: 170px;" placeholder="请输姓名:" value="${sParams['LIKE_name']}" id="nameSearch" name="search_LIKE_name" />
+							   <input type="text"  style="width: 170px;" placeholder="请输入姓名:" value="${sParams['LIKE_name']}" id="nameSearch" name="search_LIKE_name" />
 						  </td>
-						  <th style="padding-left: 5px">登录名：</th>
+						  <th style="padding-left: 5px">请输入登录名：</th>
 						  <td width="20%">
 							   <input type="text"  style="width: 170px;" placeholder="请输入登录名:" value="${sParams['LIKE_loginname']}" id="loginnameSearch" name="search_LIKE_loginname" />
 						  </td>
-						  <th style="padding-left: 10px">登录名全称：</th>
+						  <th style="padding-left: 10px">请输入登录名全称：</th>
 						  <td width="20%">
 							   <input type="text"  style="width: 170px;" placeholder="请输入登录名全称:" value="${sParams['LIKE_loginallname']}" id="loginallnameSearch" name="search_LIKE_loginallname" />
 						  </td>
@@ -510,6 +433,10 @@ function outPutComplatUser() {
     	</div>
     	<!-- 提示信息结束 -->
     	<!-- 列表开始 -->
+    	<div id="menuContent" class="menuContent">
+			<ul id="areaTree" class="ztree" style="margin-top:0; width:180px;"></ul>
+		</div>
+		<div class="form-content">
         <table cellpadding="0" cellspacing="0" border="0" width="100%" id="list-table" class="list-table">
         	<thead>
             	<tr>
@@ -524,12 +451,11 @@ function outPutComplatUser() {
                 	<th width="10%" style="text-align: center;">姓名</th>
                     <th width="8%" style="text-align: center;">登录名</th>
                     <th width="10%" style="text-align: center;">登录全名</th>
-                    <th width="15%" style="text-align: center;">手机号码</th>
-                    <th width="10%" style="text-align: center;">邮箱</th>
-                    <th width="5%" style="text-align: center;">账号开启</th>                                                     
-                    <!--<th width="15%" class="alignL" style="text-align: center;">用户职务</th>-->
-                    <th width="22%" class="alignL" style="text-align: center;">注册时间</th>    
-                    <!--<th width="5%" style="text-align: center;">办公电话</th> -->
+                    <th width="13%" style="text-align: center;">所属机构</th>
+                    <th width="13%" class="alignL" style="text-align: center;">用户职务</th>
+                    <th width="20%" style="text-align: center;">办公电话</th>
+                    <th width="6%" style="text-align: center;">账号开启</th><!--                                                     
+                    <th width="18%" class="alignL" style="text-align: center;">注册时间</th>-->  
                     <th width="20%" style="text-align: center;">操作</th> 
                 </tr>
             </thead> 
@@ -551,10 +477,13 @@ function outPutComplatUser() {
 	                    	<div title="${complatUser.loginallname}" class="word_break">${complatUser.loginallname}</div>
 	                    </td>
 	                    <td style="text-align: center;">
-	                    	<div title="${complatUser.mobile}" class="word_break">${complatUser.mobile}</div>
+	                    	<div class="word_break">${groupMap[complatUser.groupid]}</div>
 	                    </td>
 	                    <td style="text-align: center;">
-	                    	<div title="${complatUser.email}" class="word_break">${complatUser.email}</div>
+	                    	<div class="word_break">${complatUser.headship}</div>
+	                    </td>
+	                    <td style="text-align: center;">
+	                    	<div title="${complatUser.phone}" class="word_break">${complatUser.phone}</div>
 	                    </td>
 	                    <td style="text-align: center;">
 	                    	<div class="alignL">
@@ -563,12 +492,10 @@ function outPutComplatUser() {
 	                           		<c:if test="${complatUser.enable == '1'}"><font color="#32CD32">启用</font></c:if>
 	                    		</div>
 	                        </div>
-	                    </td>
-	                    
-	                    
-	                     <td style="text-align: center;">
-	                    	<div title="${complatUser.createtime}" class="word_break">${complatUser.createtime}</div>
-	                    </td>	                    	                   
+
+	                    <!-- <td style="text-align: center;">
+	                        <div title="${complatUser.createtime}" class="word_break">${complatUser.createtime}</div>
+	                    </td> -->	                    	                   
 	                	<td class="position-content" style="text-align: center;" >
 	                        <gsww:opTag menuId="8a929c9e5e5fbde5015e5fdb125c0002" tabIndex="1" operatorType="2"></gsww:opTag>
 	                    </td>
@@ -577,6 +504,7 @@ function outPutComplatUser() {
                 
             </tbody>       
         </table>
+        </div>
         <!-- 列表结束 -->
     </div>
     <!-- 分页 -->
@@ -610,4 +538,98 @@ function outPutComplatUser() {
         </div>
 </div>
 </body>
+<script type="text/javascript">
+$(function(){
+var zNodes = [];
+		var setting = {
+			async : {
+				enable : true,
+				type:"post",
+				//url : "${ctx}/area/areaTree" //获取节点数据的URL地址
+				url:"${ctx}/login/getGroup",
+		        autoParam: ["id=groupId", "isDisabled"],
+		        otherParam: { "type": "1" }
+			},
+			data : {
+				simpleData : {
+					enable : true
+				}
+			},
+			callback : {
+				
+				onClick : function(event, treeId, treeNode){
+					var zTree = $.fn.zTree.getZTreeObj("areaTree");
+					var nodes = zTree.getSelectedNodes();
+					nodes.sort(function compare(a, b) {
+						return a.id - b.id;
+					});
+					
+					var _name=$.trim(nodes[0].name);
+					var _code=nodes[0].id;
+					alert(_name+"--"+_code);
+					var param="";
+					 $.ajax({
+					       type:"get",
+					       url:  "${ctx}/complat/complatList",
+					       data:{"search_EQ_groupid":_code},
+					       datatype:  "json",
+					       success: function (value) {
+						     /*  alert(value)	;				      
+	                           alert("请求成功"+_code);   */                                                                     
+	                           var   data=JSON.parse(value);                         
+	                           handleResponse(data) ;
+                           }, 
+                           
+                           error: function (returnValue) {
+                       /*   alert(_code);*/
+                           }
+					});
+					
+					if(_code!="1"&&_code.length>0 && _name.length>0)
+						param="?search_EQ_groupid="+_code;
+						
+					if(_code.length>0 && _name.length>0){
+						window.location.href="${ctx}/complat/complatList"+param;
+					}
+					$("#areacode").next('.error').hide();
+				}
+			}
+		};
+		
+		//初始化组织机构树
+		$.fn.zTree.init($("#areaTree"), setting, zNodes);
+		
+	});
+
+	function beforeClick(treeId, treeNode) {
+		var check = (treeNode && !treeNode.isParent);
+		if (!check) return false;
+		return check;
+	}
+	
+	function showMenu() {
+		var cityObj = $("#areaname");
+		var cityOffset = $("#areaname").offset();
+		$("#menuContent").css({left:cityOffset.left + "px", top:cityOffset.top + cityObj.outerHeight() + "px"}).slideDown("fast");
+
+		$("body").bind("mousedown", onBodyDown);
+	}
+	function hideMenu() {
+		$("#menuContent").fadeOut("fast");
+		$("body").unbind("mousedown", onBodyDown);
+	}
+	function onBodyDown(event) {
+		if (!(event.target.id == "menuBtn" || event.target.id == "menuContent" || $(event.target).parents("#menuContent").length>0)) {
+			hideMenu();
+		}
+	}
+	function checkSubmit(){
+		var powername=$("#qlName").val();
+		var name=$.trim(powername);
+		$("#qlName").val(name);
+		form1.submit();
+	}
+
+
+</script>
 </html>
