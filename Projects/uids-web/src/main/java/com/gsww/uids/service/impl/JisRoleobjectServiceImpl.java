@@ -45,30 +45,38 @@ public class JisRoleobjectServiceImpl implements JisRoleobjectService{
 				}
 			}
 			return true;
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
-		
+
 	}
-	
+
 	@Override
 	public boolean add(int roleid, int objectid, int type) {
 		JisRoleobject roleObject = new JisRoleobject();
-	    roleObject.setObjectid(Integer.valueOf(objectid));
-	    roleObject.setRoleid(Integer.valueOf(roleid));
-	    roleObject.setType(Integer.valueOf(type));
-	    
-	    return jisRoleobjectDao.save(roleObject)!=null;
+		roleObject.setObjectid(Integer.valueOf(objectid));
+		roleObject.setRoleid(Integer.valueOf(roleid));
+		roleObject.setType(Integer.valueOf(type));
+
+		return jisRoleobjectDao.save(roleObject) != null;
 	}
-	
+
 	@Override
 	public int findObjectSize(int roleid, int objectid, int type) {
-		String sql = "SELECT COUNT(iid) FROM jis_roleobject " +
-				"WHERE roleid = "+roleid+" AND objectid = "+objectid+" AND type = "+type;
-		
-		return jdbcTemplate.queryForObject(sql,Integer.class);
+		String sql = "SELECT COUNT(iid) FROM jis_roleobject "
+				+ "WHERE roleid = " + roleid + " AND objectid = " + objectid
+				+ " AND type = " + type;
+
+		return jdbcTemplate.queryForObject(sql, Integer.class);
+	}
+
+	@Override
+	public void deleteByRoleId(int id) {
+
+		String sql = "delete from jis_roleobject where roleid = " + id;
+		jdbcTemplate.execute(sql);
 	}
 
 }
