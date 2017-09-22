@@ -34,7 +34,9 @@ public class JisFieldsServiceTest {
 	@Test
 	public void delete(){
 		JisFields jis=jisFieldsService.findByKey(34);
-		jisFieldsService.delete(jis);
+		if(jis!=null){
+			jisFieldsService.delete(jis);
+		}
 		assertTrue(true);
 	}
 	@Test
