@@ -680,7 +680,6 @@ public class ComplatUserController extends BaseController {
 				userMap.put(fieldName, fieldKey);
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return userMap;

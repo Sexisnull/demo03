@@ -29,7 +29,6 @@ public class JisDatacall implements java.io.Serializable{
 	
 	public JisDatacall() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public JisDatacall(int iid, String resName, String resUrl, int callingType,

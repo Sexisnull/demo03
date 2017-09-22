@@ -74,7 +74,6 @@ public class SysParaTypeServiceImpl implements SysParaTypeService {
 
 	@Override
 	public SysParaType checkParaTypeName(String paraTypeName) throws Exception {
-		// TODO Auto-generated method stub
 		return sysParaTypeDao.findByParaTypeName(paraTypeName);
 	}
 

@@ -38,7 +38,6 @@ public class JisLogServiceTest {
 			List<JisLog> list=jisLogService.findBySpec(spec);
 			System.out.println(list.get(0).getIid());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error(e.getMessage(),e);
 		}
 		assertTrue(true);

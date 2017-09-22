@@ -36,7 +36,6 @@ public class ComplatGroupServiceImpl implements ComplatGroupService{
 	
 	@Override
 	public List<ComplatGroup> findByPid(Integer pid) throws Exception {
-		// TODO Auto-generated method stub
 		List<ComplatGroup> list=new ArrayList<ComplatGroup>();
 		list=complatGroupDao.findByPid(pid);
 		return list;	
@@ -44,7 +43,6 @@ public class ComplatGroupServiceImpl implements ComplatGroupService{
 	
 	@Override
 	public List<ComplatGroup> findAll() {
-		// TODO Auto-generated method stub
 		String sql = "select * from complat_group";
 		return jdbcTemplate.queryForList(sql, ComplatGroup.class);
 		
@@ -154,7 +152,6 @@ public class ComplatGroupServiceImpl implements ComplatGroupService{
 
 	@Override
 	public List<Map<String, Object>> findByNameOrPinYin(String keyword) {
-		// TODO Auto-generated method stub
 		String sql = "SELECT iid, name, codeid FROM complat_group WHERE name" +
 				" LIKE '%"+keyword+"%' OR pinyin LIKE '%"+keyword+"%' AND opersign <> '3' ";
 		
@@ -170,8 +167,6 @@ public class ComplatGroupServiceImpl implements ComplatGroupService{
 	
 	@Override
 	public List<Map<String,Object>> findAllIidsAndName() {
-		// TODO Auto-generated method stub
-		
 		String sql = "select iid, name from complat_group where opersign<>3 ";
 		return jdbcTemplate.queryForList(sql);
 	}

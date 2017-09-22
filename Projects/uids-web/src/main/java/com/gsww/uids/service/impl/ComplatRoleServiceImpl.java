@@ -54,38 +54,32 @@ public class ComplatRoleServiceImpl implements ComplatRoleService {
 	@Override
 	public Page<ComplatRole> getRolePage(Specification<ComplatRole> spec,
 			PageRequest pageRequest) {
-		// TODO Auto-generated method stub
 		return roleDao.findAll(spec, pageRequest);
 	}
 
 	@Override
 	public void save(ComplatRole entity) throws Exception {
-		// TODO Auto-generated method stub
 		roleDao.save(entity);
 	}
 
 	@Override
 	public void delete(int id) throws Exception {
-		// TODO Auto-generated method stub
 
 		roleDao.delete(id);
 	}
 
 	@Override
 	public ComplatRole findByKey(int id) throws Exception {
-		// TODO Auto-generated method stub
 		return roleDao.findByIid(id);
 	}
 
 	@Override
 	public List<ComplatRolerelation> findAcctByroleId(Integer roleId) {
-		// TODO Auto-generated method stub
 		return comrelationDao.findByRoleId(roleId);
 	}
 
 	@Override
 	public List<ComplatRole> findByName(String name) {
-		// TODO Auto-generated method stub
 		return roleDao.findByName(name);
 	}
 
@@ -232,7 +226,6 @@ public class ComplatRoleServiceImpl implements ComplatRoleService {
 
 	@Override
 	public List<ComplatRole> findRoleList() throws Exception {
-		// TODO Auto-generated method stub
 		List<ComplatRole> list = new ArrayList<ComplatRole>();
 		list = roleDao.findAll();
 		return list;
@@ -266,7 +259,6 @@ public class ComplatRoleServiceImpl implements ComplatRoleService {
 	@Override
 	public List<Map<String, Object>> findRoleMember(String roleId,
 			String memberType, String memberName) {
-		// TODO Auto-generated method stub
 		StringBuilder sql = new StringBuilder(
 				"select rb.objectid objectid,rb.type type");
 		if (StringHelper.isNotBlack(memberName)) {
@@ -327,7 +319,6 @@ public class ComplatRoleServiceImpl implements ComplatRoleService {
 	
 	@Override
 	public void deleteByRoleId(String roleId) {
-		// TODO Auto-generated method stub
 		String sql= "delete from jis_roleobject where type!='3' and roleid="+roleId;
 		jdbcTemplate.execute(sql);
 	}

@@ -89,7 +89,6 @@ public class JisParameter implements java.io.Serializable{
 	
 	public JisParameter() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public JisParameter(Integer iid, String sysName, String sysUrl,

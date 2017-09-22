@@ -44,7 +44,6 @@ public class JisApplication implements java.io.Serializable {
 	
 	public JisApplication() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public JisApplication(Integer iid, String name, String mark, String spec,

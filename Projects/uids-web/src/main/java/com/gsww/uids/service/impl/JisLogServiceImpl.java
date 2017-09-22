@@ -135,7 +135,6 @@ public class JisLogServiceImpl implements JisLogService {
 
 	@Override
 	public void logInsert(JisLog jisLog) {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -154,7 +153,6 @@ public class JisLogServiceImpl implements JisLogService {
 
 	@Override
 	public List<JisLog> findBySpec(String spec) throws Exception {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
