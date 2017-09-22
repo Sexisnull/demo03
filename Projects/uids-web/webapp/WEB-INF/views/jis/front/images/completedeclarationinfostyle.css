@@ -1,0 +1,386 @@
+/*项目部 2014.07.11 */
+/*说明：项目中，请将下面用不到的样式删除，不要保留在此文档中*/
+/*更新说明：按修改的设计规范，添加了英文站的css样式，及微软雅黑字体使用样式；加了内边距的样式*/
+/*更新说明：微软雅黑的样式多为加了后缀:'_w',处修改字体外，需把字体大小提高1px;英文站样式多沿用原样式，其他样式加了后缀:'_e',修改字体，增加了几个英文站使用的样式*/
+/*网页全局样式开始*/
+
+body {
+	/*body基本样式开始*/
+    font-family: "宋体", "微软雅黑", Arial, verdana,;/*项目中根据自己项目的需要调整自己的字体，英文站要求使用Arial字体*/
+	color:#3d3d3d;
+	margin:0px;
+	padding:0px;
+	text-decoration:none;
+	text-align: left;
+	background-color: #FFF;
+	/*body基本样式结束*/
+
+/*body扩展样式开始*/
+    background-repeat: repeat;	/*背景重复*/
+	background-position: center;	/*背景居中*//*body扩展样式结束*/
+}
+/* 图片无边框*/
+img {
+	border:0;
+}
+/*定义整个页面的宽度*/
+page {
+	width:auto;!important;
+	max-width:1000px !important;
+	margin:0 auto;
+ height:auto !important width:1000px;
+}
+/*表格设置合并边框   注意：如果网页中用到了table的cellspace属性，会将页面的间距全部置为0，请慎用下面的样式*/
+
+/*指定当表格的单元格无内容时，显示该单元格的边框，不支持IE6 IE7 IE8(Q)*/
+td {
+	empty-cells:show;
+}
+/*页面容器初始化开始,*/
+/*注:v1.3及之前为font-size:9pt;line-height:180% */
+tr, td {
+	font-size:12px;
+	color:#3d3d3d;
+	line-height:22px;
+}
+form {
+	padding:0px;
+	margin:0px;
+}
+/*页面容器初始化结束*/
+
+/*清除页面底部高度，iframe所致*/
+#vishidden {
+	display:none
+}
+/*版通基本样式开始*/
+/*整个网页超链接样式开始*/
+a {
+	text-decoration: none;
+	color:#3D3D3D;
+}
+a:visited {
+	color:#3D3D3D;
+	text-decoration:none;
+}
+a:hover {
+	text-decoration: none;
+	color:#ff0000;
+}
+/*文章标题样式*/
+/*注:v1.3及之前为为font-size:16pt */
+.title {
+	font-size:22px;
+	color:#3D3D3D;
+	font-weight:bold;
+	line-height:150%;
+}
+/*微软雅黑字体使用*/
+.title_w {
+	font-size:23px;
+	FONT-FAMILY:微软雅黑;
+	color:#3D3D3D;
+	font-weight:bold;
+	line-height:150%;
+}
+/*首页、频道页栏目默认标题列表样式 小字体*/
+/*注:v1.3及之前为为font-size:9pt */
+.bt_link {
+	font-size:12px;
+	text-decoration:none;
+	color:#3d3d3d;
+}
+/*微软雅黑字体使用*/
+.bt_link_w {
+	font-size:13px;
+	FONT-FAMILY: "微软雅黑";
+	text-decoration:none;
+	color:#3d3d3d;
+}
+/*首页、频道页栏目默认标题列表样式 大字体（增）*/
+.bt_linkb {
+	font-size:14px;
+	text-decoration:none;
+	color:#3d3d3d;
+}
+/*微软雅黑字体使用*/
+.bt_linkb_w {
+	font-size:15px;
+	FONT-FAMILY: "微软雅黑";
+	text-decoration:none;
+	color:#3d3d3d;
+}
+/*底层栏目页标题列表及文章正文样式 大字体*/
+/*注:v1.3及之前为为font-size:10.5pt;line-height:180% */
+.bt_content {
+	font-size:14px;
+	text-decoration:none;
+	color:#3D3D3D;
+	line-height:26px;
+}
+/*微软雅黑字体使用*/
+.bt_content_w {
+	font-size:15px;
+	FONT-FAMILY:"微软雅黑";
+	text-decoration:none;
+	color:#3D3D3D;
+	line-height:26px;
+}
+/*时间显示样式*/
+/*注:v1.3及之前为为font-size:9pt */
+.bt_time {
+	font-size:12px;
+	color:#999999;
+	FONT-FAMILY:Verdana
+}
+.bt_date {
+	font-size:12px;
+	color:#999999;
+	FONT-FAMILY:Verdana
+}
+/*"更多"显示样式*/
+/*注:v1.3及之前为为font-size:9pt */
+/*英文站可直接使用该样式*/
+.bt_more {
+	font-size:12px;
+	color:#3D3D3D
+}
+a.bt_more {
+	text-decoration:none;
+	color:#3d3d3d;
+}
+a.bt_more:visited {
+	text-decoration:none;
+	color:#3d3d3d;
+}
+a.bt_more:hover {
+	text-decoration:none;
+	color:#ff0000;
+}
+/*微软雅黑字体使用*/
+.bt_more_w {
+	font-size:13px;
+	color:#3D3D3D
+}
+a.bt_more_w {
+	text-decoration:none;
+	color:#3d3d3d;
+}
+a.bt_more_w:visited {
+	text-decoration:none;
+	color:#3d3d3d;
+}
+a.bt_more_w:hover {
+	text-decoration:none;
+	color:#ff0000;
+}
+/*下划线样式_虚线*/
+.bt_unline {
+	border-bottom:#999999 dashed 1px;
+}
+/*通用导航样式*/
+/*注:v1.3及之前为font-size:10.5pt */
+/*英文站可直接使用该样式*/
+a.white {
+	text-decoration:none;
+	color:#ffffff;
+	font-size:14px;
+	font-weight:bold
+}
+a.white:visited {
+	color:#ffffff;
+	font-size:14px;
+	font-weight:bold
+}
+a.white:hover {
+	color:#ff0000;
+	font-size:14px;
+	font-weight:bold
+}
+/*微软雅黑字体使用*/
+a.white_w {
+	text-decoration:none;
+	color:#ffffff;
+	font-size:15px;
+	font-weight:bold
+}
+a.white_w:visited {
+	color:#ffffff;
+	font-size:15px;
+	font-weight:bold;
+}
+a.white_w:hover {
+	color:#ff0000;
+	font-size:15px;
+	font-weight:bold
+}
+/*通用滚动条*/
+.scrollbar {
+	/*滚动条的基本颜色*/
+		scrollbar-base-color:#c8e8fb;
+	/*立体滚动条强阴影的颜色*/
+		scrollbar-dark-shadow-color:#F5F1D8;
+	/*立体滚动条凸出部分的颜色*/
+		scrollbar-face-color:#E8E1B5;
+	/*滚动条空白部分的颜色*/
+		scrollbar-highlight-color:#c8e8fb;
+	/*立体滚动条阴影的颜色*/
+		scrollbar-shadow-color:#E8E1B5;
+	/*立体滚动条亮边的颜色*/
+		scrollbar-3d-light-color:#E8E1B5;
+	/*上下按钮上三角箭头的颜色*/
+		scrollbar-arrow-color:#4D6185;
+}
+
+/*行距*/
+/*注:设计规范要求12px字体行距22px;14px字体行距26px; */
+.line-height22 {
+	line-height:22px;
+}
+.line-height26 {
+	line-height:26px;
+}
+/*英文站主导航级栏目标题*/
+.bt_column_title {
+	font-size:16px;
+	FONT-FAMILY:Arial;
+	font-weight:bold;
+	line-height:150%;
+}
+/*英文站底层栏目页栏目列表*/
+.bt_column_e {
+	font-size:14px;
+	FONT-FAMILY:Arial;
+	text-decoration:none;
+	font-weight:bold;
+	color:#3D3D3D;
+	line-height:26px;
+}
+/*版通基本样式结束*/
+/*网页全局样式结束*/
+
+/* 自定义样式开始 */
+/*	一些滤镜的样式 慎用，耗内存 */		
+/* Glow 扩充的阴影字 支持IE4.0-IE9，不支持其他内核浏览器*/
+/*注:v1.3及之前font-size:10.5pt */
+.glow {
+	FONT-SIZE: 14px;
+	filter: Glow(Color=#3D3D3D, Strength=2)
+}
+/*微软雅黑字体使用*/
+.glow_w {
+	FONT-SIZE: 15px;
+	filter: Glow(Color=#3D3D3D, Strength=2)
+}
+/* Gradient 渐变 gradientType=0垂直渐变 1水平渐变默认 00完全透明  ff完全不透明， 支持IE5.5-IE9,不支持其他内核浏览器 */
+/*注:v1.3及之前为为font-size:10.5pt */
+.grad {
+	FONT-SIZE: 14px;
+ FILTER:progid:DXImageTransform.Microsoft.Gradient(gradientType=0, startColorStr=#FF0000FF, endColorStr=#3d3d3d00)
+}
+/*微软雅黑字体使用*/
+.grad_w {
+	FONT-SIZE: 15px;
+ FILTER:progid:DXImageTransform.Microsoft.Gradient(gradientType=0, startColorStr=#FF0000FF, endColorStr=#3d3d3d00)
+}
+/* AlphaImageLoader 图片平铺  scale:拉伸图片满表格 crop:显示图片自身大小并显示背景色 image:只显示图片， 支持IE5.5-IE9,不支持其他内核浏览器*/
+.alphaimage {
+ filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/图片文件', sizingMethod='scale')
+}
+/* Blur 模糊阴影字,支持IE5.5-IE9,不支持其他内核浏览器*/
+.blur1 {
+ filter:progid:DXImageTransform.Microsoft.Blur(makeShadow=true, pixelRadius=1, shadowOpacity=0.25)
+}
+/* Blur 模糊阴影字，支持IE5.5—IE9，不支持其他内核浏览器 */
+.blur2 {
+	filter:blur(add=ture, direction=135, strength=6)
+}
+/* DropShadow 有斜度的阴影字，支持IE4.0-IE9，不支持其他内核浏览器 */
+.dropshadow1 {
+	color: #ff0000;
+	filter: DropShadow(Color=#ffffff, OffX=1, OffY=1, Positive=1)
+}
+/*	制作对象的阴影效果 ，支持IE4.0-IE9，不支持其他内核浏览器 */
+.dropshadow2 {
+ filter:progid:DXImageTransform.Microsoft.DropShadow(color=#FF404040, offX=3, offY=3, positives=true)
+}
+/*	文字发光，支持IE4.0-IE9，不支持其他内核浏览器 */
+.dropshadow3 {
+	filter:Dropshadow(offx=1, offy=0, color=white)Dropshadow(offx=0, offy=1, color=white)Dropshadow(offx=0, offy=-1, color=white)Dropshadow(offx=-1, offy=0, color=white)
+}
+/* 背景透明，支持ie6-IE9、chrome、火狐等等 */
+.alphabg {
+	FILTER: alpha(opacity=50);
+	opacity: 0.5;
+	-moz-opacity: 0.5
+}
+
+
+
+/* 自定义样式结束 */
+
+/* 便民服务框架样式开始*/
+
+body {background:url(lschysy_12.jpg) top repeat-x;}
+
+.top {margin:0px auto; width:100%; height:31px; background:url(top.png); background:#e6e6e6;}
+.banner{margin:0px auto; width:100%; height:118px; background:url(banner.png);}
+.nav{margin:0px auto; width:100%; height:50px; background:url(nav1.png); }
+.navsty{ float:left; width:95px; height:50px; line-height:50px; text-align:center;  border-right:1px solid #be6f5c; display:inline-block}
+.navsty a{  height:40px; line-height:50px; text-align:center; font-family:'微软雅黑'; font-size:16px; color:#ffffff; padding-bottom:3px; }
+.navsty a:hover{ border-bottom:2px solid #FFF; }
+.check{border-bottom:2px solid #FFF; }
+
+
+.mainWth{ background:url(back.png) bottom repeat-x #4B9DF4; min-height:600px; padding-bottom:40px}
+.maincon{margin:0px auto; width:940px; background:#fbfcfe; padding:20px 30px 30px 30px; box-shadow:2px 2px 6px #666;}
+.main_title{height:50px;width:100%;overflow:hidden;}
+.userinfo{margin-top:25px;}
+.userinfo tr, .userinfo td{font-size:16px;line-height:35px;}
+.userinfo input, .userinfo select{ border:1px solid #c9c9c9;height:26px;}
+.infoSub{width:316px; height:46px; margin:40px auto 10px; text-align:center;}
+.infoSub input{float:left;display:block;width:148px;height:46px;line-height:46px;background:url(btn_bg.jpg);color:#fff;font-size:20px;cursor:pointer;}
+
+#foot { margin:0px auto; width:100%; height:87px; background-color:#545454;}
+#foot .copyrigt { margin:0px auto;width:1000px; height:87px; line-height:40px; background:url(copyright.png);}
+
+
+
+
+/********/
+.fl{ float:left}.fr{ float:right}
+
+.pagecon{ height:31px; line-height:31px; width:1000px; margin:0 auto; font-size:12px}
+.top a{ height:18px; line-height:18px; padding:6px 0; display:inline-block;}
+.top a img { float:left; margin-right:5px}
+.topleft{ float:left; display:inline-block}
+.topright{ float:right; display:inline-block}
+.topright a{ margin-left:13px}
+.topright span{ margin:0 -5px 0 6px; color:#999}
+.shizhouclass{ color:#9C2B0B; font-size:18px; font-weight:700; margin:25px 0 8px}
+
+.searchul{height:40px; list-style:none; height:40px;border: 1px solid #dedede; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius:5px; float:right; padding:0px; margin:0;}
+.searchinput{ float:left; width:300px; height:37px; line-height:37px; padding-left:5px; border:none; font-size:14px; font-family:'微软雅黑'; font-weight:0; margin-left:2px}
+
+.topcon{ position:relative}
+#shixian,#shengji{ cursor:pointer}
+#shixianlist,#shengjilist{background-color: #fff;box-shadow: 1px 2px 8px #828282;padding:20px;position: absolute;top:90px;z-index: 999; display:none}
+#shixianlist{width:960px; left:0}
+#shengjilist{ width:500px; right:220px}
+.navsty.fr{ border-right:none; margin-left:25px}
+.navsty.fr img{ margin-bottom:-5px}
+
+.bigtittle{ overflow:hidden}
+.btitle{ margin:16px 0 16px 80px; color:#fff; font-size:16px; font-weight:400; text-align:left; line-height:normal; width:250px; float:left; display:inline-block}
+.btitle span{ font-size:26px;color:#931C01; text-shadow:#eee 1px 0 0,#eee 0 1px 0,#eee -1px 0 0,#eee 0 -1px 0; }
+.abutton{ float:right; display:inline-block; width:400px; margin-top:8px; text-align:right; padding-right:80px}
+.abutton img{ margin-left:25px}
+.footet-text1,.footet-text2{color:#c0c4c7; font-size:14px; font-family:'微软雅黑'; line-height:30px; margin-right:20px;}
+.footet-text2{ text-align:center}
+
+*{font-family:'微软雅黑';}
+
+
+
+
+

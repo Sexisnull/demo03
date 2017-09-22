@@ -44,6 +44,10 @@ public interface ComplatCorporationService {
 	 * 修改
 	 */
 	void updateCorporation(Integer iid) throws Exception;
+
+	public ComplatCorporation findByLoginName(String loginName);
+
+	boolean updatePwd(String loginName, String md5encode);
 	
 	/**
      * @discription   验证loginName实体是否存在 

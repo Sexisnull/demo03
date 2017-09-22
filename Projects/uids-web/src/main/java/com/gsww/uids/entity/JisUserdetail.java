@@ -4,6 +4,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import static javax.persistence.GenerationType.IDENTITY;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -24,6 +28,7 @@ public class JisUserdetail implements java.io.Serializable {
 	private Integer userid;
 	private String comptel;
 	private String cardid;
+	private Map<String, String> userFieldsMap = new HashMap<>();
 
 	// Constructors
 
@@ -75,6 +80,14 @@ public class JisUserdetail implements java.io.Serializable {
 
 	public void setCardid(String cardid) {
 		this.cardid = cardid;
+	}
+
+	public Map<String, String> getUserFieldsMap() {
+		return userFieldsMap;
+	}
+
+	public void setUserFieldsMap(Map<String, String> userFieldsMap) {
+		this.userFieldsMap = userFieldsMap;
 	}
 
 }

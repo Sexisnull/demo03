@@ -15,8 +15,11 @@ import javax.persistence.Table;
 @Table(name = "jis_authlog")
 public class JisAuthlog implements java.io.Serializable {
 
-	// Fields
-
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1766305972375290079L;
+	
 	private Integer iid;
 	private Integer usertype;
 	private Integer authtype;
@@ -29,33 +32,12 @@ public class JisAuthlog implements java.io.Serializable {
 	private String token;
 	private Integer state;
 	private Timestamp createtime;
-	private Timestamp outtime;
+	private Timestamp outTicketTime;
+	private Timestamp outTokenTime;
 	private String spec;
-
-	// Constructors
 
 	/** default constructor */
 	public JisAuthlog() {
-	}
-
-	/** full constructor */
-	public JisAuthlog(Integer usertype, Integer authtype, Integer userid,
-			String loginname, String username, Integer appid, String appmark,
-			String ticket, String token, Integer state, Timestamp createtime,
-			Timestamp outtime, String spec) {
-		this.usertype = usertype;
-		this.authtype = authtype;
-		this.userid = userid;
-		this.loginname = loginname;
-		this.username = username;
-		this.appid = appid;
-		this.appmark = appmark;
-		this.ticket = ticket;
-		this.token = token;
-		this.state = state;
-		this.createtime = createtime;
-		this.outtime = outtime;
-		this.spec = spec;
 	}
 
 	// Property accessors
@@ -169,15 +151,6 @@ public class JisAuthlog implements java.io.Serializable {
 		this.createtime = createtime;
 	}
 
-	@Column(name = "outtime", length = 0)
-	public Timestamp getOuttime() {
-		return this.outtime;
-	}
-
-	public void setOuttime(Timestamp outtime) {
-		this.outtime = outtime;
-	}
-
 	@Column(name = "spec")
 	public String getSpec() {
 		return this.spec;
@@ -187,4 +160,42 @@ public class JisAuthlog implements java.io.Serializable {
 		this.spec = spec;
 	}
 
+	public JisAuthlog(Integer iid, Integer usertype, Integer authtype, Integer userid, String loginname, String username, Integer appid, String appmark, String ticket, String token, Integer state, Timestamp createtime, Timestamp outTicketTime, Timestamp outTokenTime, String spec) {
+		super();
+		this.iid = iid;
+		this.usertype = usertype;
+		this.authtype = authtype;
+		this.userid = userid;
+		this.loginname = loginname;
+		this.username = username;
+		this.appid = appid;
+		this.appmark = appmark;
+		this.ticket = ticket;
+		this.token = token;
+		this.state = state;
+		this.createtime = createtime;
+		this.outTicketTime = outTicketTime;
+		this.outTokenTime = outTokenTime;
+		this.spec = spec;
+	}
+
+	@Column(name="outtickettime")
+	public Timestamp getOutTicketTime() {
+		return outTicketTime;
+	}
+
+	public void setOutTicketTime(Timestamp outTicketTime) {
+		this.outTicketTime = outTicketTime;
+	}
+
+	@Column(name="outtokentime")
+	public Timestamp getOutTokenTime() {
+		return outTokenTime;
+	}
+
+	public void setOutTokenTime(Timestamp outTokenTime) {
+		this.outTokenTime = outTokenTime;
+	}
+
+	
 }
