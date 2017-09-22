@@ -2,7 +2,6 @@ package com.gsww.uids.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -71,7 +70,6 @@ public class ComplatOutsideuser implements Serializable {
 	private String gplivingAreaId; // 常住地省
 	private String livingAreaDetail;// 常住详细地
 	private Date modifyTime;// 修改时间
-	private List<ComplatRole> roleList;
 	private Integer synState;
 	private Integer operSign;
 	private Integer isCellphoneVerified;
@@ -593,14 +591,6 @@ public class ComplatOutsideuser implements Serializable {
 	}
 
 	public ComplatOutsideuser() {
-	}
-
-	public List<ComplatRole> getRoleList() {
-		return this.roleList;
-	}
-	
-    public void setRoleList(List<ComplatRole> roleList) {
-	    this.roleList = roleList;
 	}
 
 }

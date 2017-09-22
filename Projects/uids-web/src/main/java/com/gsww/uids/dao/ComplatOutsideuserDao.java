@@ -50,11 +50,11 @@ public interface ComplatOutsideuserDao extends
 	ComplatOutsideuser findByPapersNumber(String idCard);
 
 	@Modifying
-	@Query("update ComplatOutsideuser t set t.logintime = ?2 and t.loginip=?3 where t.iid = ?1")
+	@Query("update ComplatOutsideuser t set t.loginTime = ?2 , t.loginIp=?3 where t.iid = ?1")
 	boolean updateLoginIpAndLoginTime(int iid, Date time, String ip);
 
 	@Modifying
-	@Query("update ComplatOutsideuser t set t.opersign = ?2 where t.iid = ?1")
+	@Query("update ComplatOutsideuser t set t.operSign = ?2 where t.iid = ?1")
 	boolean updateOpersign(String ids, int opersign);
 	
 	@Modifying

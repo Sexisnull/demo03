@@ -40,7 +40,6 @@ public class JisAuthlog implements java.io.Serializable {
 	public JisAuthlog() {
 	}
 
-	// Property accessors
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "iid", unique = true, nullable = false)
