@@ -51,6 +51,7 @@
 		<json-lib.version>2.4</json-lib.version>
 		<mysql.version>5.1.39</mysql.version>
 		<aspectj.version>1.7.3</aspectj.version>
+		<webVersion>2.5</webVersion>
 	</properties>
 	<!-- 依赖项定义 -->
 	<dependencies>
@@ -862,14 +863,14 @@
 			</resource>
 		</resources>
 		<plugins>
-			<plugin>
+			<!-- <plugin>
 				<artifactId>maven-war-plugin</artifactId>
 				<configuration>
 					<webappDirectory>${basedir}/webapp</webappDirectory>
 					<warSourceDirectory>${basedir}/webapp</warSourceDirectory>
 					<contextRoot>/jup</contextRoot>
 				</configuration>
-			</plugin>
+			</plugin> -->
 			<!-- 增加functional test的Source目录 -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>

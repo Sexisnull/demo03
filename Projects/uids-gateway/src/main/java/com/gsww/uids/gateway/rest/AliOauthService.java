@@ -9,22 +9,21 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
 
-/*import com.alipay.api.AlipayApiException;
+import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.AlipaySystemOauthTokenRequest;
 import com.alipay.api.request.AlipayUserInfoShareRequest;
 import com.alipay.api.response.AlipaySystemOauthTokenResponse;
-import com.alipay.api.response.AlipayUserInfoShareResponse;*/
-import com.gsww.sag.util.StringHelper;
-import com.gsww.uids.gateway.dao.outsideuser.OutsideUserDAO;
+import com.alipay.api.response.AlipayUserInfoShareResponse;
+import com.gsww.uids.gateway.dao.outsideuser.OutsideUserDao;
 import com.gsww.uids.gateway.entity.OutsideUser;
 import com.gsww.uids.gateway.util.SpringContextHolder;
 
 @Path("/uids-web")
 public class AliOauthService {
 
-	private OutsideUserDAO outsideUserDAO = SpringContextHolder.getBean("outsideUserDao");;
+	private OutsideUserDao outsideUserDao = SpringContextHolder.getBean("outsideUserDao");;
 
 	protected Logger logger = Logger.getLogger(AliOauthService.class);
 
@@ -61,8 +60,8 @@ public class AliOauthService {
 				if (oauthTokenResponse != null) {
 					String accessToken = oauthTokenResponse.getAccessToken();
 					String aliUserId = oauthTokenResponse.getUserId();
-					outsideUser = outsideUserDAO.findByAccessToken(accessToken);
-					if (outsideUser != null) {
+					outsideUser = outsideUserDao.findByUserId(accessToken);
+					if(outsideUser != null){
 						// 登陆成功
 						flag = true;
 						// TODO(返回个人、基本信息)
@@ -92,15 +91,16 @@ public class AliOauthService {
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces(MediaType.APPLICATION_JSON)
 	public boolean mergeUserId(@QueryParam("aliUserId") String aliUserId, @QueryParam("userId") String userId) {
-		OutsideUser outsideUser = new OutsideUser();
-		logger.info("<AliOauth接口>接收到请求内容:" + aliUserId);
+		logger.info("<merge接口>接收到请求内容:" + aliUserId);
 		// 标志
 		boolean flag = false;
 		if (!aliUserId.isEmpty() && !userId.isEmpty()) {
 			// 绑定个人用户与aliUserId
-
+			int a = outsideUserDao.saveAliUserId(aliUserId, userId);
+			return a>0?true:false;
+		} else {
+			return flag;
 		}
-		return flag;
 	}
 
 }

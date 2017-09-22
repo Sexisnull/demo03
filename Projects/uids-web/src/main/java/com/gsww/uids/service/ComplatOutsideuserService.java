@@ -3,6 +3,8 @@ package com.gsww.uids.service;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -58,7 +60,21 @@ public interface ComplatOutsideuserService {
 	 * @return
 	 */
 	public List<Map<String, Object>> findByNameOrPinYin(String keyword);
-	
+
+	public ComplatOutsideuser findByMobile(String userName);
+
+	public ComplatOutsideuser findByIdCard(String userName);
+
+	public ComplatOutsideuser findByLoginName(String userName);
+
+	public ComplatOutsideuser checkUserLogin(String userName, String password, String ip);
+
+	public ComplatOutsideuser checkUserLogin(HttpSession session, String userName, String password, String ip);
+
+	public void updateLoginIpAndLoginTime(ComplatOutsideuser user);
+
+	public boolean updatePwd(String loginName, String md5encode);
+
 	/**
      * @discription   逻辑删除 
      * @param iid

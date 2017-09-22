@@ -44,7 +44,8 @@ var corNameInput=$("#name").val();
 	   	required: true
 	   },
 	   pwd:{
-	   	required: true
+	   	required: true,
+	   	cnRangelength: [6,18]
 	   },
 	   email:{
 	   	required: true,
@@ -172,7 +173,7 @@ color: rgb(119, 119, 119);
 		<tr>
 			<th><b class="mustbe">*</b> 企业法人身份证号：</th>
 				<td>
-					<input type="text" id="cardNumber" name="cardNumber" value="${corporation.cardNumber}">
+					<input type="text" <c:if test="${corporation.cardNumber != null}">readonly="readonly"</c:if> id="cardNumber" name="cardNumber" value="${corporation.cardNumber}">
 	            </td>
 				<th> 企业法人民族：</th>
 				<td>
@@ -184,7 +185,7 @@ color: rgb(119, 119, 119);
 		<tr>
 			<th class="td_3"><b class="mustbe">*</b>工商注册号/社会信用代码：</th>
 	        	 <td class="td_4">
-					<input type="text" id="regNumber" name="regNumber" value="${corporation.regNumber}" />
+					<input type="text" <c:if test="${corporation.regNumber != null}">readonly="readonly"</c:if> id="regNumber" name="regNumber" value="${corporation.regNumber}" />
 				</td>
 	            <c:if test="${corporation.iid==null}">
 					<th class="td_5"> 组织机构代码：</th>
@@ -200,7 +201,7 @@ color: rgb(119, 119, 119);
 			<th><b class="mustbe">*</b>用户名：</th>
 			<td>
 				<input type="text"  id="loginName" name="loginName" value="${corporation.loginName}" />
-            	<input type="text"  id="oldLoginName" name="oldLoginName" value="${corporation.loginName}" />
+            	<input type="hidden"  id="oldLoginName" name="oldLoginName" value="${corporation.loginName}" />
             </td>
         	<th><b class="mustbe">*</b> 手机号码：</th>
         	<td>
@@ -210,7 +211,7 @@ color: rgb(119, 119, 119);
 		<tr>
 			<th> 密码：</th>
         	<td>
-        		<input type="password" id="pwd" name="pwd"  onkeyup="javascript:EvalPwd(this.value);"/>
+        		<input type="password" id="pwd" name="pwd"  value="${corporation.pwd}" onkeyup="javascript:EvalPwd(this.value);"/>
             	
         	</td>
 			<th>邮箱：</th>
@@ -222,13 +223,13 @@ color: rgb(119, 119, 119);
 		<tr>
 			<th>密码强度：</th>
 			<td>
-				<table id="pwdpower" title="字母加数字加符号就会强" style="width: 87%" cellspacing="0"
+				<table id="pwdpower" style="width: 84%" cellspacing="0"
 				cellpadding="0" border="0">
 					<tbody>
 						<tr>
-							<td id="pweak" style="">弱</td>
-							<td id="pmedium" style="">中</td>
-							<td id="pstrong" style="">强</td>
+							<td id="pweak" style="text-align: center;width: 100px;border: 1px solid  grey">弱</td>
+							<td id="pmedium" style="text-align: center;width: 100px;border: 1px solid  grey">中</td>
+							<td id="pstrong" style="text-align: center;width: 100px;border: 1px solid  grey">强</td>
 						</tr>
 					</tbody>
 				</table>

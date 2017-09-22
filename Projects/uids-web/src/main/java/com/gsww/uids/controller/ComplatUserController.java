@@ -56,6 +56,8 @@ import com.gsww.uids.service.ComplatUserService;
 import com.gsww.uids.service.JisFieldsService;
 import com.gsww.uids.service.JisUserdetailService;
 
+import net.sf.json.JSONArray;
+
 /**
  * <p>
  * Copyright: Copyright (c) 2014
@@ -559,47 +561,44 @@ public class ComplatUserController extends BaseController {
 
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/userSetUpSave", method = RequestMethod.POST)
-	public ModelAndView userSetUpSave(ComplatUser complatUser,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+	public ModelAndView userSetUpSave(ComplatUser complatUser,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		try {
 			Integer userId = null;
-			if (complatUser != null) {
+			if(complatUser != null){
 				userId = complatUser.getIid();
 				String name = complatUser.getName();
 				String pwd = complatUser.getPwd();
 				String headShip = complatUser.getHeadship();
-				String phone = complatUser.getPhone();// 固定电话
-				String mobile = complatUser.getMobile();// 移动电话
+				String phone = complatUser.getPhone();//固定电话
+				String mobile = complatUser.getMobile();//移动电话
 				String fax = complatUser.getFax();
 				String email = complatUser.getEmail();
 				String qq = complatUser.getQq();
 				String time = TimeHelper.getCurrentTime();
-				SimpleDateFormat sdf = new SimpleDateFormat(
-						"yyyy-MM-dd HH:mm:ss");
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				Date modifyTime = sdf.parse(time);
-				complatUserService.updateUser(userId, name, headShip, phone,
-						mobile, fax, email, qq, modifyTime, pwd);
-
-				// 身份证号处理 JisUserdetail
+				complatUserService.updateUser(userId,name,headShip,phone,mobile,fax,email,qq,modifyTime,pwd);
+				
+				//身份证号处理 JisUserdetail
 				String cardId = request.getParameter("cardid");
-				JisUserdetail jisUserdetail = jisUserdetailService
-						.findByUserid(userId);
-				if (jisUserdetail.getIid() == null) {
+				JisUserdetail jisUserdetail = jisUserdetailService.findByUserid(userId);
+				if(jisUserdetail.getIid() == null){
 					jisUserdetailService.save(jisUserdetail);
-				} else {
-					//jisUserdetailService.update(jisUserdetail.getIid(), cardId);
+				}else{
+					//扩展属性
+					Map<String,String> userMap = this.saveExendsAttr(userId, request);
+					//对身份证号和用户扩展属性update
+					jisUserdetailService.update(jisUserdetail.getIid(),cardId,userMap);
 				}
-
-			}
-			returnMsg("success", "保存成功", request);
+			}			
+			returnMsg("success","保存成功",request);
 		} catch (Exception e) {
 			e.printStackTrace();
-			returnMsg("error", "保存失败", request);
-		} finally {
-			return new ModelAndView("redirect:/complat/complatList");
+			returnMsg("error","保存失败",request);
+		} finally{
+			return  new ModelAndView("redirect:/complat/complatList");
 		}
-
+		
 	}
 
 	/**
@@ -607,56 +606,86 @@ public class ComplatUserController extends BaseController {
 	 * 
 	 * @author yaoxi
 	 */
-	private void extendsAttr(Model model, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
-		List<List<Map<String, Object>>> fieldsListMap = new ArrayList<List<Map<String, Object>>>();
-		// 判断是政府用户还是用户设置菜单，获取用户id。1-政府用户；2-用户设置
+	private void extendsAttr(Model model,HttpServletRequest request,HttpServletResponse response) throws Exception{
+		List<List<Map<String,Object>>> fieldsListMap = new ArrayList<List<Map<String,Object>>>();
+		//判断是政府用户还是用户设置菜单，获取用户id。1-政府用户；2-用户设置
 		String userMenu = request.getParameter("userMenu");
-		userMenu = "1";
 		Integer userId = null;
-		if ("2".equals(userMenu)) {
-			SysUserSession sysUserSession = (SysUserSession) request
-					.getSession().getAttribute("sysUserSession");
+		if("2".equals(userMenu)){
+			SysUserSession sysUserSession = (SysUserSession) request.getSession().getAttribute("sysUserSession");
 			String usersId = sysUserSession.getAccountId();
-			if (StringHelper.isNotBlack(usersId)) {
+			if(StringHelper.isNotBlack(usersId)){
 				userId = Integer.parseInt(usersId);
 			}
-		} else if ("1".equals(userMenu)) {
-			SysUserSession sysUserSession = (SysUserSession) request
-					.getSession().getAttribute("sysUserSession");
-			String usersId = sysUserSession.getAccountId();
-			if (StringHelper.isNotBlack(usersId)) {
-				userId = Integer.parseInt(usersId);
+		}else{
+			String iid = request.getParameter("iid");
+			if(StringHelper.isNotBlack(iid)){
+				userId = Integer.parseInt(iid);
 			}
 		}
-		// 1.查询类型 1-字符；2-枚举；3-固定值
+		
+		//1.查询类型 1-字符；2-枚举
 		List<Map<String, Object>> listMap = null;
 		List<JisFields> fieldsList = this.jisFieldsService.findAllJisFields();
 		List<Integer> typeList = this.jisFieldsService.findFieldsType();
-		for (int i = 0; i < typeList.size(); i++) {
+		for(int i=0;i<typeList.size();i++){
 			Integer type = typeList.get(i);
-			if (type == 1) {
-				listMap = this.jisFieldsService.findExtendAttr(fieldsList,
-						userId, type);
+			if(type == 1){
+				listMap = this.jisFieldsService.findExtendAttr(fieldsList, userId,type);
 				fieldsListMap.add(listMap);
-				model.addAttribute("type", type);
-				System.out.println(listMap.size());
-			} else if (type == 2) {
-				listMap = this.jisFieldsService.findExtendAttr(fieldsList,
-						userId, type);
+				model.addAttribute("type",type);
+			}else if(type == 2){
+				listMap = this.jisFieldsService.findExtendAttr(fieldsList, userId,type);
 				fieldsListMap.add(listMap);
-				model.addAttribute("type", type);
-				System.out.println(listMap.size());
+				model.addAttribute("type",type);
 			}
 		}
-		// model.addAttribute("fieldsListMap",fieldsListMap);
+		
 		JSONArray array = JSONArray.fromObject(fieldsListMap);
 		PrintWriter out = response.getWriter();
 		String json = array.toString();
-		System.out.println(json);
 		out.write(json);
-		model.addAttribute("fieldsListMap", json);
-
+		model.addAttribute("fieldsListMap",json);
+		
+		//设置默认值
+		List<JisFields> fieldsTypeList= this.jisFieldsService.findByType(2);
+		Map<String,Object> fieldsMap = jisFieldsService.findByUserIdAndType(fieldsTypeList,userId);
+		JSONArray mapArray = JSONArray.fromObject(fieldsMap);
+		PrintWriter outMap = response.getWriter();
+		String jsonMap = mapArray.toString();
+		outMap.write(jsonMap);
+		model.addAttribute("jsonMap",jsonMap);
+		
+	}
+	
+	
+	/**
+	 * 保存用户扩展属性
+	 */
+	private Map<String,String> saveExendsAttr(Integer userId,HttpServletRequest request){
+		Map<String,String> userMap = new HashMap<String, String>();
+		try {
+			Integer type = 1;
+			List<JisFields> fieldsList = jisFieldsService.findByType(type);
+			for(int i=0;i<fieldsList.size();i++){
+				 String fileleNameKey = fieldsList.get(i).getFieldname();
+				 String fieldNameValue = request.getParameter(fileleNameKey);
+				 userMap.put(fileleNameKey, fieldNameValue);
+			}
+			
+			type=2;
+			fieldsList = jisFieldsService.findByType(type);
+			for(int i=0;i<fieldsList.size();i++){
+				String fieldName = fieldsList.get(i).getFieldname();
+				//根据select的name获取key值
+				String fieldKey = request.getParameter(fieldName);
+				userMap.put(fieldName, fieldKey);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return userMap;
 	}
 
 	/**

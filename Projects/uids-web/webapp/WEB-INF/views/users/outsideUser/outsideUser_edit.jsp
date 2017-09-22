@@ -1,3 +1,4 @@
+
 <%@ page language="java" pageEncoding="utf-8"%>
 <!DOCTYPE html>
 <html>
@@ -184,13 +185,13 @@ color: rgb(119, 119, 119);
 				</td>
 				<th>密码强度：</th>
 				<td>
-					<table id="pwdpower" title="字母加数字加符号就会强" style="width: 100%" cellspacing="0"
+					<table id="pwdpower" style="width: 84%" cellspacing="0"
 					cellpadding="0" border="0">
 						<tbody>
 							<tr>
-								<td id="pweak" style="">弱</td>
-								<td id="pmedium" style="">中</td>
-								<td id="pstrong" style="">强</td>
+								<td id="pweak" style="text-align: center;width: 100px;border: 1px solid gray;">弱</td>
+								<td id="pmedium" style="text-align: center;width: 100px;border: 1px solid gray;">中</td>
+								<td id="pstrong" style="text-align: center;width: 100px;border: 1px solid gray;">强</td>
 							</tr>
 						</tbody>
 					</table>
@@ -262,7 +263,7 @@ color: rgb(119, 119, 119);
 			<tr>
 				<th><b class="mustbe">*</b>身份证号：</th>
 				<td>
-					<input type="text"  class="papersNumber" name="papersNumber" value="${outsideUser.papersNumber}" />
+					<input type="text" <c:if test="${outsideUser.papersNumber != null}">readonly="readonly"</c:if> class="papersNumber" name="papersNumber" value="${outsideUser.papersNumber}" />
 				</td>
 				<th>学历：</th>
 				<td>

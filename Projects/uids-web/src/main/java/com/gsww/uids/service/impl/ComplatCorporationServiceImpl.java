@@ -1,9 +1,6 @@
 package com.gsww.uids.service.impl;
 
 
-import java.util.List;
-
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,7 +15,7 @@ import com.gsww.uids.service.ComplatCorporationService;
 
 
 @Transactional
-@Service("complatCorporationService")
+@Service("ComplatCorporationService")
 public class ComplatCorporationServiceImpl implements ComplatCorporationService{
 	
 	@Autowired
@@ -48,18 +45,21 @@ public class ComplatCorporationServiceImpl implements ComplatCorporationService{
 	}
 
 	@Override
-	public ComplatCorporation findByLoginNameIsUsed(String loginName) {
-		List<ComplatCorporation> cList = complatCorporationDao.findByLoginName(loginName);
-		if (CollectionUtils.isNotEmpty(cList)) {
-			return cList.get(0);
-		} else {
-			return null;
-		}
+	public ComplatCorporation findByLoginName(String loginName) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	
-	
-	
+	@Override
+	public boolean updatePwd(String loginName, String md5encode) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
+	@Override
+	public ComplatCorporation findByLoginNameIsUsed(String loginName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }

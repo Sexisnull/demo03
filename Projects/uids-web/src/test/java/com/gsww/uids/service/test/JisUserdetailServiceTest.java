@@ -40,7 +40,7 @@ public class JisUserdetailServiceTest {
 		}
 		assertTrue(true);
 	}
-	@Test
+	/*@Test
 	public void update(){
 		int iid=20519;
 		String cardId="123456";
@@ -50,5 +50,5 @@ public class JisUserdetailServiceTest {
 			logger.error(e.getMessage(),e);
 		}
 		assertTrue(true);
-	}
+	}*/
 }

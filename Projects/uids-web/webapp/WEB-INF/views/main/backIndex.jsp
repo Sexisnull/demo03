@@ -61,7 +61,7 @@
                     <li class="speaker modify-msgs" onclick="javascript:window.location.href='${ctx}/complat/userSetUpEdit?userMenu=2'">
                     	<p>账户设置</p>
                     </li>
-                    <li class="pwd modify-pwd"  onclick="javascript:window.location.href='${ctx}/jisLog/countUser'">
+                    <li class="pwd modify-pwd"  onclick="toCountUser();">
                         <p>在线用户</p>
                     </li>
                     

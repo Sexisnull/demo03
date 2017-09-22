@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<cross-domain-policy>
+  <allow-access-from domain="*" />	<!-- allow all -->
+  <allow-access-from domain="localhost" />
+  <allow-access-from domain="127.0.0.1" />
+  <allow-access-from domain="*.hanweb.com" />
+</cross-domain-policy>

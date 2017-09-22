@@ -20,17 +20,17 @@ function EvalPwd(sP)
     if(ClientSideStrongPassword(sP,gSimilarityMap,gDictionary))
     {
     	level = "strong";
-        aPQ=["#0c6","#0c6","#0c6","#0c6","#0c6","#000"];
+        aPQ=["#F1F1F1","#F1F1F1","#0c6","#000","#000","#000"];
     }
     else if(ClientSideMediumPassword(sP,gSimilarityMap,gDictionary))
     {
     	level = "medium";
-        aPQ=["#ff9","#ff9","#F1F1F1","#ff9","#000","#adadad"];
+        aPQ=["#F1F1F1","#ff9","#F1F1F1","#000","#000","#000"];
     }
     else if(ClientSideWeakPassword(sP,gSimilarityMap,gDictionary))
     {
     	level = "weak";
-        aPQ=["#f00","#F1F1F1","#F1F1F1","#000","#adadad","#adadad"];
+        aPQ=["#f00","#F1F1F1","#F1F1F1","#000","#000","#000"];
     }
     else
     {
