@@ -82,6 +82,11 @@ public class ExcelUtil {
 							}else{
 								content = "";
 							}
+							if("男".equals(content)){
+								content=1;
+							}else if("女".equals(content)){
+								content=0;
+							}
 							//String content = formatCell(hssfRow.getCell(i));
 							String fieldName = fieldMap.get(String.valueOf(i));
 							setFieldValueByName(fieldName, content, entity);

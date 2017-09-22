@@ -39,8 +39,8 @@ public class ComplatOutsideuserDaoTest {
 	@Test
 	public void findByLoginName(){
 		String logName="zcl1234";
-		ComplatOutsideuser list=complatOutsideuserDao.findByLoginName(logName);
-		System.out.println(list.getEmail());
+		ComplatOutsideuser user=complatOutsideuserDao.findByLoginName(logName);
+		System.out.println(user);
 		assertTrue(true);
 		
 	}

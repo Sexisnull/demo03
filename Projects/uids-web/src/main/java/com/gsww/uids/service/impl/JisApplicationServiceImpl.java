@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gsww.jup.util.StringHelper;
-import com.gsww.uids.controller.ComplatRoleController;
+//import com.gsww.uids.controller.ComplatRoleController;
 import com.gsww.uids.dao.JisApplicationDao;
 import com.gsww.uids.entity.JisApplication;
 import com.gsww.uids.service.JisApplicationService;

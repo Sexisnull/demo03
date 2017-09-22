@@ -18,7 +18,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.gsww.uids.controller.ComplatRoleController;
+//import com.gsww.uids.controller.ComplatRoleController;
 import com.gsww.uids.dao.ComplatOutsideuserDao;
 import com.gsww.uids.entity.ComplatOutsideuser;
 import com.gsww.uids.service.ComplatOutsideuserService;

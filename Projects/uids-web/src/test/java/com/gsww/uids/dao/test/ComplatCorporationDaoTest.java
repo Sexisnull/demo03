@@ -32,8 +32,8 @@ public class ComplatCorporationDaoTest {
 	@Test
 	public void findByLoginName(){
 		String loginName="test";
-		ComplatCorporation list=complatCorporationDao.findByLoginName(loginName);
-		System.out.println(list.getPwd());
+		ComplatCorporation corporation=complatCorporationDao.findByLoginName(loginName);
+		System.out.println(corporation);
 	}
 
 }
