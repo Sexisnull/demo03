@@ -317,6 +317,7 @@ public class ComplatZoneController extends BaseController {
 	 */
 	@RequestMapping(value = "/saveZone", method = RequestMethod.POST)
 	public void treeSave(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ComplatZone complatZone = null;
 		try {
 			String seq = request.getParameter("seq");
 			String name = request.getParameter("name");
@@ -331,7 +332,7 @@ public class ComplatZoneController extends BaseController {
 				Map<String, Object> resMap = new HashMap<String, Object>();
 				SysUserSession sysUserSession = (SysUserSession) ((HttpServletRequest) request).getSession()
 						.getAttribute("sysUserSession");
-				ComplatZone complatZone = new ComplatZone();
+				complatZone = new ComplatZone();
 				complatZone.setName(name);
 				complatZone.setPid(Integer.parseInt(parId));
 				complatZone.setCodeId(dcode);
@@ -342,7 +343,11 @@ public class ComplatZoneController extends BaseController {
 				resMap.put("ret", 1);
 				resMap.put("id", complatZoneSave.getIid());
 				response.getWriter().write(org.json.simple.JSONObject.toJSONString(resMap));
-			} else {
+			} if (type > 3) {
+				Map<String, Object> resMap = new HashMap<String, Object>();
+				resMap.put("ret", 4);
+				response.getWriter().write(org.json.simple.JSONObject.toJSONString(resMap));
+			}else if(complatZone == null){
 				Map<String, Object> resMap = new HashMap<String, Object>();
 				resMap.put("ret", 0);
 				response.getWriter().write(org.json.simple.JSONObject.toJSONString(resMap));

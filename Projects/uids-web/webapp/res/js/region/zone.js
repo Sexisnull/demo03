@@ -281,6 +281,9 @@ function addHoverDom(treeId, treeNode) {    				//用于当鼠标移动到节点
 					} else if (data.ret == 2) {
 						alert("区域名称或编码重复！");
 						return false;
+					} else if(data.ret == 4) {
+						alert("不能再添加子区域了！");
+						return false;
 					} else {
 						alert("区域添加失败！");
 						return false;
