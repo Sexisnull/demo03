@@ -4,8 +4,10 @@ import com.gsww.uids.gateway.dao.application.ApplicationDao;
 import com.gsww.uids.gateway.entity.Application;
 import com.gsww.uids.gateway.util.SpringContextHolder;
 import com.gsww.uids.gateway.util.StringHelper;
+
 /**
  * AppService
+ * 
  * @author zcc
  *
  */
@@ -15,6 +17,7 @@ public class AppService {
 		applicationDAO = SpringContextHolder.getBean("applicationDao");
 	}
 
+	// 通过应用的mark查询子系统应用信息
 	public Application findByMark(String mark) {
 		if (!(StringHelper.isNotBlack(mark))) {
 			return null;

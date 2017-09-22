@@ -1,0 +1,20 @@
+body{ font-family:"微软雅黑"; background:url(resetbg.jpg) repeat-x ;padding:0px;margin:0px;}
+.head{ height:124px; width:1000px; margin:0 auto;}
+.head .head_bg{ margin-left:21px; margin-top:20px; background:url(reset_05.jpg) ;width:429px; height:89px;  float:left}
+.title{ font-size:22px;color:#666; float:left; margin:67px 0px 0px 63px;}
+.mainbody{ width:998px; height:474px; border:1px solid #e6e6e6; margin:0 auto; margin-top:25px; background:#fff;}
+.resettop{width:1000px; height:47px; margin-top:23px;}
+.resettop img{ margin-left:21px; margin-right:6px; float:left}
+.resettitle{ float:left;width:881px;padding:14px 0  15px 16px; font-size:17px; height:16px; border-bottom:2px solid #d43700}
+.yzfs{ text-align:center; margin-top:35px; margin-bottom:44px;}
+.user{ margin-left:309px; font-size:15px;}
+.resetpsw{ font-size:15px; margin:22px 0 10px 271px; height:38px; line-height:38px;}
+.psw{ height:38px; line-height:38px; border:none; border:1px solid #cccccc; background:url(pswbg.jpg) repeat-x; padding:0px 0 0 10px; width:283px; margin-left:23px;}
+.yespsw{ font-size:15px;margin:0 0 60px 256px; height:38px; line-height:38px;}
+.sure{  width:100px;margin:0 auto; text-align:center; margin-left:485px; float:left;}
+.copyright{ width:1000px; margin:0 auto; height:37px; line-height:37px;color:#c7c7c7;font-size:15px;}
+.copyright a{color:#c7c7c7  ; text-decoration: none;}
+.copyright a:hover{color:#f00;  }
+.foot{width:100%; background:#6f6f6f; height:37px; margin-top:25px;}
+.left{ float:left}
+.right{ float:right; margin-right:3px;}

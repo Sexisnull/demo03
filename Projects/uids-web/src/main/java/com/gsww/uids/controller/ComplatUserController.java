@@ -56,6 +56,8 @@ import com.gsww.uids.service.ComplatUserService;
 import com.gsww.uids.service.JisFieldsService;
 import com.gsww.uids.service.JisUserdetailService;
 
+import net.sf.json.JSONArray;
+
 /**
  * <p>
  * Copyright: Copyright (c) 2014

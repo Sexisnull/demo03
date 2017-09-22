@@ -91,15 +91,16 @@ public class AliOauthService {
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces(MediaType.APPLICATION_JSON)
 	public boolean mergeUserId(@QueryParam("aliUserId") String aliUserId, @QueryParam("userId") String userId) {
-		OutsideUser outsideUser = new OutsideUser();
-		logger.info("<AliOauth接口>接收到请求内容:" + aliUserId);
+		logger.info("<merge接口>接收到请求内容:" + aliUserId);
 		// 标志
 		boolean flag = false;
 		if (!aliUserId.isEmpty() && !userId.isEmpty()) {
 			// 绑定个人用户与aliUserId
-
+			int a = outsideUserDao.saveAliUserId(aliUserId, userId);
+			return a>0?true:false;
+		} else {
+			return flag;
 		}
-		return flag;
 	}
 
 }

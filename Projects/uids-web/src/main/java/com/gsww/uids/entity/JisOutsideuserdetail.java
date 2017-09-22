@@ -4,6 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import static javax.persistence.GenerationType.IDENTITY;
+
+
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -24,7 +26,7 @@ public class JisOutsideuserdetail implements java.io.Serializable {
 	private Integer userid;
 	private String comptel;
 	private String cardid;
-
+	
 	// Constructors
 
 	/** default constructor */
