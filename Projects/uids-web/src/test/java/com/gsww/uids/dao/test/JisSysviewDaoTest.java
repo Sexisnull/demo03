@@ -35,15 +35,15 @@ public class JisSysviewDaoTest {
 		assertTrue(true);
 	}
 	
-	/*@Test
+	@Test
 	public void findAll(){
 		List<JisSysview> jisSysviews = null;
 		try {
 		    jisSysviews = jisSysviewDao.findAll();
-		    System.out.println("获取所有实时同步信息"+JSONArray.fromObject(jisSysviews).toString());
+		    System.out.println(jisSysviews.size());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		assertTrue(true);
-	}*/
+	}
 }

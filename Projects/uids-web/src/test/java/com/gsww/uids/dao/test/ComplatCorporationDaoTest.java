@@ -1,6 +1,5 @@
 package com.gsww.uids.dao.test;
 
-import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,18 +21,15 @@ public class ComplatCorporationDaoTest {
 		int iid=7;
 		ComplatCorporation corporation=complatCorporationDao.findByIid(iid);
 		System.out.println(corporation.getcardreNamePic());
-	}
-	@Test
-	public void updateCorporation(){
-		int iid =10;
-		complatCorporationDao.updateCorporation(iid);
 		assertTrue(true);
 	}
+	
 	@Test
 	public void findByLoginName(){
 		String loginName="test";
 		ComplatCorporation corporation=complatCorporationDao.findByLoginName(loginName);
 		System.out.println(corporation);
+		assertTrue(true);
 	}
 
 }

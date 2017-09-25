@@ -42,7 +42,8 @@ public class ComplatOutsideuserServiceTest extends BaseController{
 	}
 	@Test
 	public void save(){
-		ComplatOutsideuser user=new ComplatOutsideuser(null, null, "哈哈哈1", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+		ComplatOutsideuser user=new ComplatOutsideuser();
+		user.setLoginName("uids");
 		complatOutSideUserService.save(user);
 		assertTrue(true);
 	}
