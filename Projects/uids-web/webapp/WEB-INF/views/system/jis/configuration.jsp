@@ -60,7 +60,7 @@ function loadTab(){
 * 表单验证
 */
 $(function(){
-	$('#oprform').validity(function() {
+	$('#oprform').validate(function() {
 		$('#sysname').require('系统名称必须填写');
 		$('#sysurl').require('系统地址必须填写');
 		$('#email_smtp').require('邮件服务器必须填写');
@@ -259,49 +259,17 @@ function showRealNameAuthUrl(){
 						<td align="right" class="label">后台密码强度等级</td>
 						<!-- <td class="required"><h:tip title="注册、登录、修改时，密码要求达到的强度"></h:tip></td> -->
 						<td>
-							<c:if test="${jisParameter.pwdLevel=='0'}">
-							<input type="radio" name="pwdLevel" value="0" checked="checked" data-value="${jisParameter.pwdLevel}" onclick="">弱&nbsp;&nbsp;&nbsp;
-							<input type="radio" name="pwdLevel" value="1" data-value="${jisParameter.pwdLevel}" onclick="">中&nbsp;&nbsp;&nbsp;
-							<input type="radio" name="pwdLevel" value="2" data-value="${jisParameter.pwdLevel}" onclick="">强
-							</c:if>
-							
-							<c:if test="${jisParameter.pwdLevel=='1'}">
-								<input type="radio" name="pwdLevel" value="0" data-value="${jisParameter.pwdLevel}" onclick="">弱&nbsp;&nbsp;&nbsp;
-								<input type="radio" name="pwdLevel" value="1" checked="checked" data-value="${jisParameter.pwdLevel}" onclick="">中&nbsp;&nbsp;&nbsp;
-								<input type="radio" name="pwdLevel" value="2" data-value="${jisParameter.pwdLevel}" onclick="">强
-							</c:if>
-							
-							<c:if test="${jisParameter.pwdLevel=='2'}">
-								<input type="radio" name="pwdLevel" value="0" data-value="${jisParameter.pwdLevel}" onclick="">弱&nbsp;&nbsp;&nbsp;
-								<input type="radio" name="pwdLevel" value="1" data-value="${jisParameter.pwdLevel}" onclick="">中&nbsp;&nbsp;&nbsp;
-								<input type="radio" name="pwdLevel" value="2" checked="checked" data-value="${jisParameter.pwdLevel}" onclick="">强
-							</c:if>
-							
-							<c:if test="${jisParameter.pwdLevel==null}">
-								<input type="radio" name="pwdLevel" value="0" data-value="${jisParameter.pwdLevel}" onclick="">弱&nbsp;&nbsp;&nbsp;
-								<input type="radio" name="pwdLevel" value="1" data-value="${jisParameter.pwdLevel}" onclick="">中&nbsp;&nbsp;&nbsp;
-								<input type="radio" name="pwdLevel" value="2" data-value="${jisParameter.pwdLevel}" onclick="">强
-							</c:if>
+							<input type="radio" name="pwdLevel" value="0" <c:if test="${jisParameter.pwdLevel=='0' || jisParameter.pwdLevel=='' || jisParameter.pwdLevel==null}">checked="checked"</c:if> data-value="${jisParameter.pwdLevel}" onclick="">弱&nbsp;&nbsp;&nbsp;
+							<input type="radio" name="pwdLevel" value="1" <c:if test="${jisParameter.pwdLevel=='1'}">checked="checked"</c:if> data-value="${jisParameter.pwdLevel}" onclick="">中&nbsp;&nbsp;&nbsp;
+							<input type="radio" name="pwdLevel" value="2" <c:if test="${jisParameter.pwdLevel=='2'}">checked="checked"</c:if> data-value="${jisParameter.pwdLevel}" onclick="">强
 						</td>
 					</tr>
 					<tr>
 						<td align="right" class="label">系统网络类型</td>
 						<!-- <td class="required"><h:tip title="选择不同的网络类型，将会同步不同网络的应用数据"></h:tip></td> -->
 						<td>
-							<c:if test="${jisParameter.netType=='1'}">
-								<input type="radio" name="netType" value="1" checked="checked" data-value="${jisParameter.netType}" >外网&nbsp;&nbsp;&nbsp;
-								<input type="radio" name="netType" value="2" data-value="${jisParameter.netType}" >专网
-							</c:if>
-					
-							<c:if test="${jisParameter.netType=='2'}">
-								<input type="radio" name="netType" value="1" data-value="${jisParameter.netType}" >外网&nbsp;&nbsp;&nbsp;
-							<input type="radio" name="netType" value="2" checked="checked" data-value="${jisParameter.netType}" >专网
-							</c:if>
-							
-							<c:if test="${jisParameter.netType==null}">
-								<input type="radio" name="netType" value="1" data-value="${jisParameter.netType}" >外网&nbsp;&nbsp;&nbsp;
-							<input type="radio" name="netType" value="2" data-value="${jisParameter.netType}" >专网
-							</c:if>
+							<input type="radio" name="netType" value="1" <c:if test="${jisParameter.netType==1 }">checked="checked" </c:if> data-value="${jisParameter.netType}" >外网&nbsp;&nbsp;&nbsp;
+							<input type="radio" name="netType" value="2" <c:if test="${jisParameter.netType==2 || jisParameter.netType==null}">checked="checked" </c:if> data-value="${jisParameter.netType}" >专网
 						</td>
 					</tr>
 					<tr >
@@ -443,20 +411,8 @@ function showRealNameAuthUrl(){
 					<tr>
 						<td align="right" class="label">同步线程开启</td>
 						<td colspan="2">
-							<c:if test="${jisParameter.enableSynTask=='1'}">
-								<input type="radio" name="enableSynTask" value="1" checked="checked" data-value="${jisParameter.enableSynTask}" >是&nbsp;&nbsp;&nbsp;
-								<input type="radio" name="enableSynTask" value="0" data-value="${jisParameter.enableSynTask}" >否
-							</c:if>
-					
-							<c:if test="${jisParameter.enableSynTask=='0'}">
-								<input type="radio" name="enableSynTask" value="1" data-value="${jisParameter.enableSynTask}" >是&nbsp;&nbsp;&nbsp;
-								<input type="radio" name="enableSynTask" value="0" checked="checked" data-value="${jisParameter.enableSynTask}" >否
-							</c:if>
-							
-							<c:if test="${jisParameter.enableSynTask==null}">
-								<input type="radio" name="enableSynTask" value="1" data-value="${jisParameter.enableSynTask}" >是&nbsp;&nbsp;&nbsp;
-								<input type="radio" name="enableSynTask" value="0" data-value="${jisParameter.enableSynTask}" >否
-							</c:if>
+							<input type="radio" name="enableSynTask" value="1"  <c:if test="${jisParameter.enableSynTask=='1'}">checked="checked"</c:if> data-value="${jisParameter.enableSynTask}">是&nbsp;&nbsp;&nbsp;
+							<input type="radio" name="enableSynTask" value="0" <c:if test="${jisParameter.enableSynTask=='0' || jisParameter.enableSynTask=='' || jisParameter.enableSynTask==null}">checked="checked"</c:if> data-value="${jisParameter.enableSynTask}" >否
 						</td>
 					</tr>
 					<tr>
@@ -682,20 +638,8 @@ function showRealNameAuthUrl(){
 					<tr>
 						<td align="right" class="label">实名认证开启</td>
 						<td colspan="2">
-							<c:if test="${jisParameter.enableCorRealNameAuth=='0'}">
-								<input type="radio" name="enableCorRealNameAuth" value="1" data-value="${jisParameter.enableCorRealNameAuth}" >是&nbsp;&nbsp;&nbsp;
-								<input type="radio" name="enableCorRealNameAuth" value="0" checked="checked" data-value="${jisParameter.enableCorRealNameAuth}" >否
-							</c:if>
-							
-							<c:if test="${jisParameter.enableCorRealNameAuth=='1'}">
-								<input type="radio" name="enableCorRealNameAuth" value="1" checked="checked" data-value="${jisParameter.enableCorRealNameAuth}" >是&nbsp;&nbsp;&nbsp;
-								<input type="radio" name="enableCorRealNameAuth" value="0" data-value="${jisParameter.enableCorRealNameAuth}" >否
-							</c:if>
-							
-							<c:if test="${jisParameter.enableCorRealNameAuth==null}">
-								<input type="radio" name="enableCorRealNameAuth" value="1" data-value="${jisParameter.enableCorRealNameAuth}" >是&nbsp;&nbsp;&nbsp;
-								<input type="radio" name="enableCorRealNameAuth" value="0" data-value="${jisParameter.enableCorRealNameAuth}" >否
-							</c:if>
+							<input type="radio" name="enableCorRealNameAuth" value="1"  <c:if test="${jisParameter.enableCorRealNameAuth=='1'}">checked="checked"</c:if> data-value="${jisParameter.enableCorRealNameAuth}">是&nbsp;&nbsp;&nbsp;
+							<input type="radio" name="enableCorRealNameAuth" value="0" <c:if test="${jisParameter.enableCorRealNameAuth=='0' || jisParameter.enableCorRealNameAuth=='' || jisParameter.enableCorRealNameAuth==null}">checked="checked"</c:if> data-value="${jisParameter.enableCorRealNameAuth}" >否
 						</td>
 					</tr>
 					<tr>
@@ -767,20 +711,9 @@ function showRealNameAuthUrl(){
 							<h:tip title="开启后，政府用户注册会自动调用第三方接口验证"></h:tip>
 						</td> -->
 						<td colspan="2">
-							<c:if test="${jisParameter.enableGovRealNameAuth=='0'}">
-								<input type="radio" name="enableGovRealNameAuth" value="1" data-value="${jisParameter.enableGovRealNameAuth}">是&nbsp;&nbsp;&nbsp;
-								<input type="radio" name="enableGovRealNameAuth" value="0" checked="checked" data-value="${jisParameter.enableGovRealNameAuth}" >否
-							</c:if>
+							<input type="radio" name="enableGovRealNameAuth" value="1"  <c:if test="${jisParameter.enableGovRealNameAuth=='1'}">checked="checked"</c:if> data-value="${jisParameter.enableGovRealNameAuth}">是&nbsp;&nbsp;&nbsp;
+							<input type="radio" name="enableGovRealNameAuth" value="0" <c:if test="${jisParameter.enableGovRealNameAuth=='0' || jisParameter.enableGovRealNameAuth=='' || jisParameter.enableGovRealNameAuth==null}">checked="checked"</c:if> data-value="${jisParameter.enableGovRealNameAuth}" >否
 							
-							<c:if test="${jisParameter.enableGovRealNameAuth=='1'}">
-								<input type="radio" name="enableGovRealNameAuth" value="1" checked="checked" data-value="${jisParameter.enableGovRealNameAuth}">是&nbsp;&nbsp;&nbsp;
-								<input type="radio" name="enableGovRealNameAuth" value="0" data-value="${jisParameter.enableGovRealNameAuth}">否
-							</c:if>
-							
-							<c:if test="${jisParameter.enableGovRealNameAuth==null}">
-								<input type="radio" name="enableGovRealNameAuth" value="1" data-value="${jisParameter.enableGovRealNameAuth}">是&nbsp;&nbsp;&nbsp;
-								<input type="radio" name="enableGovRealNameAuth" value="0" data-value="${jisParameter.enableGovRealNameAuth}">否
-							</c:if>
 						</td>
 					</tr>
 					<tr>
@@ -842,7 +775,7 @@ function showRealNameAuthUrl(){
 				</table>
 			</div>
 		</div>
-		<table border="0" align="center" cellpadding="10" cellspacing="0" class="form-btn">
+		<table border="0" align="center" style="position: relative;" cellpadding="10" cellspacing="0" class="form-btn">
 			<tr>
 				<td height="40" align="center">
 					<input type="submit" tabindex="15" id="submit-btn" value="保存" class="btn bluegreen"/>

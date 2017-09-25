@@ -100,10 +100,10 @@ public class SysLoginController extends BaseController{
 						try {
 							// 登录日志
 							JisLog log = new JisLog();
-							log.setUserId(sysUserSession.getAccountId());
+							log.setUserId(sysUserSession.getUserName());
 							log.setIp(sysUserSession.getUserIp());
 							log.setOperateTime(new Date());
-							log.setSpec("系统登录成功");
+							log.setSpec(userName+"系统登录成功");
 							log.setModuleName(8);
 							log.setOperateType(9);
 							jisLogService.save(log);
@@ -120,7 +120,7 @@ public class SysLoginController extends BaseController{
 							log.setUserId(sysUserSession.getAccountId());
 							log.setIp(sysUserSession.getUserIp());
 							log.setOperateTime(new Date());
-							log.setSpec("系统登录失败[停用]");
+							log.setSpec(userName+"系统登录失败[停用]");
 							log.setModuleName(8);
 							log.setOperateType(9);
 							jisLogService.save(log);
@@ -137,7 +137,7 @@ public class SysLoginController extends BaseController{
 						log.setUserId(userName);
 						log.setIp(loginIp);
 						log.setOperateTime(new Date());
-						log.setSpec("系统登录失败[用户名密码错误]");
+						log.setSpec(userName+"系统登录失败[用户名密码错误]");
 						log.setModuleName(8);
 						log.setOperateType(9);
 						jisLogService.save(log);
