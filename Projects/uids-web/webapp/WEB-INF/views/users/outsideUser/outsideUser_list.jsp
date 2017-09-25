@@ -11,11 +11,21 @@
 
 <script type="text/javascript"> 
 	function checkSubmitForm(){
-		var loginNameSearch = $("#loginNameSearch").val();
-		if(loginNameSearch ==  '' || isNumbOrLett(loginNameSearch)){
-			form1.submit();
-		}else{
-			$.validator.errorShow($("#loginNameSearch"),'只能包括数字和字母');
+		var nameSearch = $("#nameSearch").val();
+		var loginNameSearch = $("#loginNameSearch").val(); 
+		var papersNumberSearch = $("#papersNumberSearch").val();
+		if(nameSearch ==  '' || isNumbOrLett1(nameSearch)){
+			if(loginNameSearch ==  '' || isNumbOrLett2(loginNameSearch)) {
+				if(papersNumberSearch ==  '' || isNumbOrLett3(papersNumberSearch)) {
+					form1.submit();
+				} else{
+					$.validator.errorShow($("#papersNumberSearch"),'只能包括数字和字母');
+				}
+			} else{
+				$.validator.errorShow($("#loginNameSearch"),'只能包括字母、数字、下划线');
+			}
+		} else{
+			$.validator.errorShow($("#nameSearch"),'只能包括字母、数字、下划线、中文');
 		}
 	}
 	
@@ -26,8 +36,27 @@
 	返回：
 	如果通过验证返回true,否则返回false
 	*/
-	function isNumbOrLett( s ){//判断是否是字母、数字组成
-		//var regu = "^[0-9a-zA-Z\u4e00-\u9fa5]+$";
+	function isNumbOrLett1( s ){
+		var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;
+		var re = new RegExp(regu);
+		if (re.test(s)) {
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	function isNumbOrLett2( s ){
+		var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_]+$/;
+		var re = new RegExp(regu);
+		if (re.test(s)) {
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	function isNumbOrLett3( s ){
 		var regu = /^([a-zA-Z0-9]+)$/;
 		var re = new RegExp(regu);
 		if (re.test(s)) {
@@ -37,7 +66,7 @@
 		}
 	}
 	
-	$(function(){
+	/* $(function(){
 		//高级搜索按钮点击事件
 		$('#advanced-btn').on('click',function(){
 			$('.advanced-content').toggle('fast');
@@ -53,7 +82,7 @@
 		        return false;
 		    }
 		});
-	});
+	}); */
 	
 	//弹出层
 	function openwindow(iid){
@@ -170,12 +199,19 @@
 		<form id="form1" name="pageForm" action="${ctx}/complat/outsideuserList" method="get">
 			<table class="advanced-content">
 				<tr>
-					<th style="padding-left: 300px">用户登录名：</th>
-						<td width="20%">
-							<input type="text"  style="width: 170px;" placeholder="用户登录名" value="${sParams['LIKE_loginName']}" id="loginNameSearch" name="search_LIKE_loginName" />
+					<th style="padding-left: 30px">姓名：</th>
+						<td width="33%">
+							<input type="text"  style="width: 170px;" placeholder="" value="${sParams['LIKE_name']}" id="nameSearch" name="search_LIKE_name" />
 						</td>
-					<td class="btn-group"> <a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a></td>
-					<td class="btn-group"> <a id="advanced-btn" class="btnSearch" >高级搜索</a></td>
+					<th style="padding-left: 20px">登录名：</th>
+						<td width="33%">
+							<input type="text"  style="width: 170px;" placeholder="" value="${sParams['LIKE_loginName']}" id="loginNameSearch" name="search_LIKE_loginName" />
+						</td>
+					<th style="padding-left: 20px">身份证号码：</th>
+						<td width="33%">
+							<input type="text"  style="width: 170px;" placeholder="" value="${sParams['LIKE_papersNumber']}" id="papersNumberSearch" name="search_LIKE_papersNumber" />
+						</td>
+					<td style="padding-right: 30px" class="btn-group"> <a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a></td>
 				</tr>
 			</table>
 		</form>
@@ -183,18 +219,7 @@
 		<form id="form2" name="form2" action="${ctx}/complat/outsideuserList" method="get">
 			<table class="advanced-content" style="display:none;">
 				<tr>
-					<th style="padding-left: 10px">姓名</th>
-						<td width="20%">
-							<input type="text"  style="width: 170px;" placeholder="" value="${sParams['LIKE_name']}" id="nameSearch" name="search_LIKE_name" />
-						</td>
-					<th style="padding-left: 5px">登录名</th>
-						<td width="20%">
-							<input type="text"  style="width: 170px;" placeholder="" value="${sParams['LIKE_loginName']}" id="loginNameSearch" name="search_LIKE_loginName" />
-						</td>
-					<th style="padding-left: 10px">身份证号码</th>
-						<td width="20%">
-							<input type="text"  style="width: 170px;" placeholder="" value="${sParams['LIKE_papersNumber']}" id="degreeSearch" name="search_LIKE_papersNumber" />
-						</td>
+					
 					<td class="btn-group"> <a id="advanced-search-btn" class="btnSearch" >搜索</a></td>
 				</tr>
 			</table>
@@ -215,23 +240,6 @@
            	 <!-- 操作按钮结束 -->
            </div> 
         </div>
-        
-        <%-- <form id="form2" name="form2" action="${ctx}/complat/outsideuserList">
-        
-        <ul class="advanced-content" style="display:none;">
-        	<li>
-        		<input type="hidden"  name="orderField" value="${orderField}"/> 
-				<input type="hidden"  name="orderSort" value="${orderSort}"/>
-            	<label>用户账号:</label>
-                <input type="text" class="" name="search_LIKE_loginName" value="${sParams['LIKE_loginName']}"/>
-            </li>
-            <li>
-            	<label>用户姓名:</label>
-                <input type="text" class="" name="search_LIKE_name" value="${sParams['LIKE_name']}"/>
-            </li>          
-            <li class="advanced-search-btn">搜索</li>
-        </ul>
-        </form> --%>
         <!-- 提示信息开始 -->
         <div class="form-alert;" >
          	<tags:message msgMap="${msgMap}"></tags:message>

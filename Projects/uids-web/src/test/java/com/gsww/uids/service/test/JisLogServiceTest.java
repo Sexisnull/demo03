@@ -31,7 +31,7 @@ public class JisLogServiceTest {
 		}
 		assertTrue(true);
 	}
-	/*@Test
+	@Test
 	public void findBySpec(){
 		String spec="qxjxxy登录系统";
 		try {
@@ -41,10 +41,11 @@ public class JisLogServiceTest {
 			logger.error(e.getMessage(),e);
 		}
 		assertTrue(true);
-	}*/
+	}
 	@Test
 	public void save(){
-		JisLog log=new JisLog(null, null, null, null, null, null, null, null);
+		JisLog log=new JisLog();
+		log.setSpec("描述");;
 		jisLogService.save(log);
 		assertTrue(true);
 	}

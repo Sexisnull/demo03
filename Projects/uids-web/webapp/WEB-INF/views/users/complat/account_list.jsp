@@ -41,7 +41,6 @@
 		<meta charset="utf-8" />
 		<title>甘肃万维JUP课题</title>
 		<style>
-/*设置按钮样式*/
 /*设置弹出层样式*/
 /*Popup*/
 .Popup {
@@ -50,7 +49,7 @@
 	position: absolute;
 	left: 400px;
 	top: 130px;;
-	background-color: #fff;
+	background-color: #1C70B8;
 	border: 1px solid #ccc;
 	z-index: 999;
 	border-radius: 5px;
@@ -58,7 +57,7 @@
 
 .Popup_top {
 	height: 40px;
-	background: #249BF3;
+	background: #1C70B8;
 	border-radius: 5px 5px 0 0;
 }
 
@@ -68,6 +67,15 @@
 	line-height: 40px;
 	font-size: 15px;
 	color: #ffffff;
+}
+
+.Popup_top h1 .close{
+    margin-left:255px;
+   color: #ffffff;
+}
+
+.Popup_top h1 .close:hover{
+    cursor:pointer;
 }
 
 .Close {
@@ -99,7 +107,7 @@
 .Popup_bottom {
 	width: 100%;
 	height: 40px;
-	background: #249BF3;
+	background: #1C70B8;
 	border-radius: 0 0 5px 5px;
 	line-height: 40px;
 	overflow: hidden;
@@ -341,6 +349,13 @@ function intPutComplatUser(){
 }
 	
  
+ 
+//关闭的单击事件
+$(".close").click(function(){	
+	  $(".Popup").css("display","none");
+	  $(".mybg").css("display","none");
+	window.location.reload();//刷新页面，清除缓存
+});
 
 
 //下载模板
@@ -359,7 +374,7 @@ $(function(){
         'uploader' : '${ctx}/complat/complatImport',//文件上传后台处理类
         // Your options here
         'langFile':'${ctx}/res/plugin/uploadify/js/uploadifyLang_zh.js',
-        'height':29,
+        'height':28,
         'width':100,
         'fileSizeLimit':'1GB',//文件大小限制最大为1G
         'buttonText':'选择文件',
@@ -397,8 +412,10 @@ $(function(){
 					<h1>
 						<font color="red"> * </font> 用户导入：
 					</h1>
-					<a href="${ctx}/complat/complatList" class="Close"><img
+					<%--<a href="${ctx}/complat/complatList" class="Close"><img
 							alt="关闭" /> </a>
+				--%>
+				    <h1><a href="${ctx}/complat/complatList" class="close">关闭</a></h1>  
 				</div>
 
 				<div class="Popup_cen">
@@ -435,30 +452,43 @@ $(function(){
 			</div>
 
 			<div class="search-content">
-				<form id="form1" name="pageForm" action="${ctx}/complat/complatList"
+				<form id="form2" name="form2" action="${ctx}/complat/complatList"
 					method="get">
 					<table class="advanced-content">
 						<tr>
-							<th style="padding-left: 300px">
+							<th style="padding-left: 10px">
+								请输入姓名：
+							</th>
+							<td width="20%">
+								<input type="text" style="width: 170px;" placeholder="请输入姓名:"
+									value="${sParams['LIKE_name']}" id="nameSearch"
+									name="search_LIKE_name" />
+							</td>
+							<th style="padding-left: 5px">
 								请输入登录名：
 							</th>
 							<td width="20%">
-								<input type="text" style="width: 170px;" placeholder="请输入登录名"
+								<input type="text" style="width: 170px;" placeholder="请输入登录名:"
 									value="${sParams['LIKE_loginname']}" id="loginnameSearch"
 									name="search_LIKE_loginname" />
 							</td>
-							<td class="btn-group">
-								<a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a>
+							<th style="padding-left: 10px">
+								请输入登录名全称：
+							</th>
+							<td width="20%">
+								<input type="text" style="width: 170px;" placeholder="请输入登录名全称:"
+									value="${sParams['LIKE_loginallname']}" id="loginallnameSearch"
+									name="search_LIKE_loginallname" />
 							</td>
 							<td class="btn-group">
-								<a id="advanced-btn" class="btnSearch">高级搜索</a>
+								<a id="advanced-search-btn" class="btnSearch">搜索</a>
 							</td>
 						</tr>
 					</table>
 				</form>
 
 				<!-- 高级探索表单 -->
-				<form id="form2" name="form2" action="${ctx}/complat/complatList"
+				<%--<form id="form2" name="form2" action="${ctx}/complat/complatList"
 					method="get">
 					<table class="advanced-content" style="display: none;">
 						<tr>
@@ -493,7 +523,7 @@ $(function(){
 						</tr>
 					</table>
 				</form>
-			</div>
+			--%></div>
 
 
 

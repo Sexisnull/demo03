@@ -25,21 +25,24 @@ public class ComplatZoneServiceTest {
 	}
 	@Test
 	public void fingByKey(){
-		int iid=51;
+		int iid=1;
 		ComplatZone zone=complatZoneService.fingByKey(iid);
 		System.out.println(zone.getName());
 		assertTrue(true);
 	}
 	@Test
 	public void save(){
-		ComplatZone zone=new ComplatZone(null, "兰州市", null, null, null, null, null);
+		ComplatZone zone=new ComplatZone();
+		zone.setName("武威市1");
 		complatZoneService.save(zone);
 		assertTrue(true);
 	}
 	@Test
 	public void delete(){
 		ComplatZone zone=complatZoneService.fingByKey(62);
+		if(zone!=null){
 		complatZoneService.delete(zone);
+		}
 		assertTrue(true);
 	}
 	@Test

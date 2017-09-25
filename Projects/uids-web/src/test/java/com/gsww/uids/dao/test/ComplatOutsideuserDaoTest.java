@@ -31,12 +31,6 @@ public class ComplatOutsideuserDaoTest {
 		assertTrue(true);
 	}
 	@Test
-	public void updateOutsideuser(){
-		int iid=13;
-		complatOutsideuserDao.updateOutsideuser(iid);
-		assertTrue(true);
-	}
-	@Test
 	public void findByLoginName(){
 		String logName="zcl1234";
 		ComplatOutsideuser user=complatOutsideuserDao.findByLoginName(logName);
