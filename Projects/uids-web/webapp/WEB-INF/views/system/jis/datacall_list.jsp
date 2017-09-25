@@ -127,8 +127,8 @@
                     <th width="10%" style="text-align: center;">
                   ID        
                     </th>
-                    <th width="15%" style="text-align: center;">名称</th>
-                    <th width="15%" style="text-align: center;">标识</th>
+                    <th width="15%" style="text-align: center;">数据名称</th>
+                    <th width="15%" style="text-align: center;">数据标识</th>
                     <th width="15%" style="text-align: center;">地址</th>
                     <th width="15%" class="alignL" style="text-align: center;">调用方式</th>
                     <th width="10%" class="alignL" style="text-align: center;">验证</th>

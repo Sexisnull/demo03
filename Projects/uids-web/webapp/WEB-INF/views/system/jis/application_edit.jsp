@@ -404,33 +404,54 @@ function setLoginType(){
 	setSsoLogin();
 }
 
-
-
-$().ready(function() {
+$().ready(function() { 
 //表单校验
-var userNameInput=$("#userName").val();
+/* var userNameInput=$("#userName").val(); */
  $("#editForm").validate({
     rules: {
     	name: {
 	    required: true,
-	    /* cnRangelength: [0,32],
-	    stringCheck:userNameInput */
+	    userName:true,
+	    maxlength: 32
 	   },
-	   remark: {
+	   mark: {
 	    required: true,
-	    uniqueRemark:true
+	    charNo:true,
+	    maxlength: 32,
+	    uniqueMark:true
 	   },
-	   callingType: {
+	   encryptKey: {
 	    required: true,
-	   /*  chrnum:true,
-	    uniqueLoginAccount:true,
-	    maxlength: 32 */
+	    chrnum:true,
+	    maxlength: 19,
 	   },
-	   resUrl:{
+	   appUrl:{
+	   required: true,
+	   url:true,
+	   maxlength: 255
+	   },
+	   ssoUrl:{
+	   required: true,
+	   url:true,
+	   maxlength: 255
+	   },
+	   netType:{
 	   required: true
 	   },
-	   isVerification:{
-	   required: true
+	   allLoginIid:{
+	   required: true,
+	   maxlength: 50,
+	   userName:true
+	   },
+	   allPwd:{
+	   required: true,
+	   maxlength: 50,
+	   chrnum:true
+	   },
+	   logOffUrl:{
+	   required: true, 
+	   maxlength: 255,
+	   url:true
 	   },
 	  },submitHandler:function(form){
             var callingType=$("#callingType").val(); 
@@ -444,10 +465,8 @@ var userNameInput=$("#userName").val();
             }else{
 				 form.submit();
 			}
-        } 
+        }  
     });
-    
-
 });
 
 $(function(){
@@ -485,16 +504,13 @@ $(function(){
 					$("#roleNames").val(val);
 				});
 	//选择角色
-	$(".user-role").on("click",function(event){
+	/* $(".user-role").on("click",function(event){
 			$('.error-info-checkedbox').remove();
 			$(this).removeClass('erro');
-	});
-	
+	}); */
 	// Ajax标识校验
-	$.uniqueValidate('uniqueRemark', '${ctx}/datacall/checkRemark', ['remark','oldRemark'], '对不起，此标识已存在');
-	/* $("#roleNames").Popup($(".ulRoleList"), { width: "auto" }); */
-	$(".icon-date-r").click(function(){ $(this).prev("input").click(); }); 
-});
+	$.uniqueValidate('uniqueMark', '${ctx}/application/checkMark', ['mark','oldMark'], '对不起，此标识已存在');
+}); 
 
 </script>
 
@@ -547,11 +563,11 @@ $(function(){
 				</td>
 			</tr>
 			<tr>
-				<th style="text-align:left;"><b class="mustbe">*</b> 所属机构：</th>
+				<th style="text-align:left;"><b class="mustbe">&nbsp;&nbsp;</b> 所属机构：</th>
 				<td>
 					<input id="groupname" value="${groupName}" name="groupname" type="text" style="cursor: pointer;"/> 
 				</td>
-				<th style="text-align:center;"><b class="mustbe">*</b> 同步用户：</th>
+				<th style="text-align:center;"><b class="mustbe">&nbsp;&nbsp;</b> 同步用户：</th>
                 <td>
                 	<select name="synctype" id="synctype" data-value="${jisApplication.loginType}${jisApplication.isSyncGroup}" 
 						onchange="setLoginType();">  
@@ -563,7 +579,7 @@ $(function(){
                 </td>
             </tr>
             <tr>
-				<th style="text-align:center;"><b class="mustbe">*</b>数据传送方式：</th>
+				<th style="text-align:center;"><b class="mustbe">&nbsp;&nbsp;</b>数据传送方式：</th>
 				<td>
 					<c:if test="${jisApplication.transType=='1'}">
 						<input type="radio" name="transType" value="0" onclick="selecttranstype(this.value);"/>HTTP&nbsp;&nbsp;
@@ -581,7 +597,7 @@ $(function(){
 					</c:if>
 				</td>
 				
-				<th style="text-align:center;"><b class="mustbe">*</b>加密设置：</th>
+				<th style="text-align:center;"><b class="mustbe">&nbsp;&nbsp;</b>加密设置：</th>
 				<td>
 				
 					<c:if test="${jisApplication.encryptType=='2'}">
@@ -618,7 +634,7 @@ $(function(){
 						onclick="generateKey()" value="重新生成"/>
 				</td>
 				
-				<th style="text-align: center;"><b class="mustbe">*</b> 应用图标：</th>
+				<th style="text-align: center;"><b class="mustbe">&nbsp;&nbsp;</b> 应用图标：</th>
 					<td>
 					
 						<!-- <div id="uploader-demo"> -->
@@ -670,7 +686,7 @@ $(function(){
 				</td>
 				
 				<tr id="tr_ssoLogin">
-					<th style="text-align:left;"><b class="mustbe">*</b>账号设置：</th>
+					<th style="text-align:left;"><b class="mustbe">&nbsp;&nbsp;</b>账号设置：</th>
 					<td><input type="radio" name="userDefined" value="0"
 						data-value="${jisApplication.userDefined }" onclick="setSsoLogin(this.value);">用户预设账号&nbsp;
 						<input type="radio" name="userDefined" value="2"
@@ -693,7 +709,7 @@ $(function(){
 				</tr>
 				
 				
-				<th style="text-align:center;"><b class="mustbe">*</b>前台是否显示：</th>
+				<th style="text-align:center;"><b class="mustbe">&nbsp;&nbsp;</b>前台是否显示：</th>
 				<td>
 					<c:if test="${jisApplication.isShow=='0'}">
 						<input type="radio" name="isShow" value="1"/>是&nbsp;&nbsp;
@@ -712,7 +728,7 @@ $(function(){
 				</td>
 			</tr>
 			<tr>
-				<th style="text-align:left;"><b class="mustbe">*</b>是否统一注销：</th>
+				<th style="text-align:left;"><b class="mustbe">&nbsp;&nbsp;</b>是否统一注销：</th>
 				<td>
 					<c:if test="${jisApplication.isLogOff=='0'}">
 						<input type="radio" name="isLogOff" value="1" onclick="selectlogoff(this.value);"/>是&nbsp;&nbsp;
@@ -730,7 +746,7 @@ $(function(){
 					</c:if>
 				</td>
 				
-				<th id="tr_isUniRgh" style="text-align:center;"><b class="mustbe">*</b>是否统一注册：</th>
+				<th id="tr_isUniRgh" style="text-align:center;"><b class="mustbe">&nbsp;&nbsp;</b>是否统一注册：</th>
 				<td id="tr_isUniRgd">
 					<c:if test="${jisApplication.isUnifyRegister=='0'}">
 						<input type="radio" name="isUnifyRegister" value="1"/>是&nbsp;&nbsp;
@@ -755,7 +771,7 @@ $(function(){
 					</td>
 				</tr>
 			<tr>
-				<th style="text-align: left;"><b class="mustbe">*</b>应用描述：</th>
+				<th style="text-align: left;"><b class="mustbe">&nbsp;&nbsp;</b>应用描述：</th>
 				<td colspan="6">
 					<textarea class="textarea" name="spec" style="width:884px;height:80px">${jisApplication.spec}</textarea>
 				</td>
