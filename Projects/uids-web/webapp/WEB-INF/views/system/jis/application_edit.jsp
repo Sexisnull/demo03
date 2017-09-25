@@ -3,17 +3,23 @@
 <html>
 
 <%@ include file="/include/meta.jsp"%> 
-
+<script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgcore.lhgdialog.min.js"></script>
+<script type="text/javascript" src="${ctx}/res/plugin/ztree/js/jquery.ztree.all-3.5.js"></script>
+<link rel="stylesheet" href="${ctx}/res/plugin/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css"></link>
 <head>
 <title>甘肃万维JUP课题</title>
-<link rel="stylesheet" href="${ctx}/res/plugin/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css"/>
 <link rel="stylesheet" type="text/css" href="${ctx}/res/plugin/webuploader/webuploader.css">
 <script type="text/javascript" src="${ctx}/res/plugin/webuploader/webuploader.js"></script>
-
+<link type="text/css" rel="stylesheet" href="${ctx}/res/skin/login/css/menu.css" />
+<script type="text/javascript" src="${ctx}/res/skin/login/js/menu.js"></script>
+<link type="text/css" rel="stylesheet" href="${ctx}/res/jslib/ztree/css/zTreeStyle/zTreeStyle.css" />
+<link type="text/css" rel="stylesheet" href="${ctx}/res/skin/login/css/tree.css" />
+<script type="text/javascript" src="${ctx}/res/jslib/ztree/js/jquery.ztree.all-3.5.min.js"></script>
+<script type="text/javascript" src="${ctx}/res/skin/login/js/tree.js"></script>
 <script type="text/javascript" src="${ctx}/res/plugin/ztree/js/jquery.ztree.all-3.5.min.js"></script>
 <script type="text/javascript" src="${ctx}/res/plugin/uploadify/js/jquery.uploadify-3.1.min.js"></script>
 <style type="text/css">
-.ztree {margin-top: 10px;border: 1px solid #cfd9db; display:none;background: #f0f6e4;height:360px;overflow-y:scroll;overflow-x:auto;}
+/* .ztree {margin-top: 10px;border: 1px solid #cfd9db; display:none;background: #f0f6e4;height:360px;overflow-y:scroll;overflow-x:auto;} */
 .mybg{
 	background-color:#000;
 	width:100%;
@@ -25,6 +31,24 @@
 	opacity:0.3; 
 	filter:Alpha(opacity=30); 
 }
+
+.pic {
+    width: 115px;
+    height: 75px;
+    text-align: center;
+    line-height: 180px;
+    cursor: pointer;
+}
+
+.title {
+    width: 120px;
+    height: 120px;
+    text-align: center;
+    line-height: 120px;
+    font-size: 12pt;
+    cursor: pointer;
+}
+
 .alert_tb {	
 	left:180px;
 	top:120px;
@@ -42,38 +66,114 @@
 	<link type="text/css" rel="stylesheet" href="${ctx}/res/skin/login/css/tree.css" />
 	<script type="text/javascript" src="${ctx}/res/jslib/ztree/js/jquery.ztree.all-3.5.min.js"></script>
 	<script type="text/javascript" src="${ctx}/res/skin/login/js/tree.js"></script>
+	<link type="text/css" rel="stylesheet" href="${ctx}/res/skin/login/css/menu.css" />
+	<script type="text/javascript" src="${ctx}/res/skin/login/js/menu.js"></script>
+	<link type="text/css" rel="stylesheet" href="${ctx}/res/jslib/ztree/css/zTreeStyle/zTreeStyle.css" />
+	<link type="text/css" rel="stylesheet" href="${ctx}/res/skin/login/css/tree.css" />
+	<script type="text/javascript" src="${ctx}/res/jslib/ztree/js/jquery.ztree.all-3.5.min.js"></script>
+	<script type="text/javascript" src="${ctx}/res/skin/login/js/tree.js"></script>
 <script type="text/javascript">
 $(function(){
-	$("#tr_logoffUrl").hide();
-	SyntaxHighlighter.all();
-	//支持选择多个文件同时上传
-    $('#file').uploadify({
-        'swf': '${ctx}res/skin/default/plugin/uploadify/image/uploadify.swf',
-        multi: true,//是否能选择多个文件
-        //auto:false,//文件选择完成后，是否自动上传
-        'uploader' : 'fileUpload',//文件上传后台处理类
-        // Your options here
-        'langFile':'${ctx}res/plugin/uploadify/js/uploadifyLang_zh.js',
-        'height':29,
-        'width':100,
-        'fileSizeLimit':'1GB',//文件大小限制最大为1G
-        'buttonText':'选择文件',
-        'fileTypeExts': '*.jpg;*.png;*.gif',//允许上传的文件类型           
-        'removeCompleted':false,
-        onUploadSuccess : function(file,data,response) {//上传完成时触发（每个文件触发一次）
-alert( 'id: ' + file.id
-+ ' - 索引: ' + file.index
-+ ' - 文件名: ' + file.name
-+ ' - 文件大小: ' + file.size
-+ ' - 类型: ' + file.type
-+ ' - 创建日期: ' + file.creationdate
-+ ' - 修改日期: ' + file.modificationdate
-+ ' - 文件状态: ' + file.filestatus
-+ ' - 服务器端消息: ' + data
-+ ' - 是否上传成功: ' + response);
+	var groupMenu = [{"name":"单位选择","id":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
+
+	$('#groupname').menu({
+		tree : 'groupmenu',
+		height : 200,
+		init : function() {
+			setting('groupmenu', onClickGroup, onDbClickGroup, groupMenu);
+		}
+	});
+});
+function hideGroupMenu(){
+	$('#groupname_menu').css('display','none');
 }
+function onClickGroup(event, treeId, treeNode) {
+	$('#groupid').val(treeNode.id);
+	$('#groupname').val(treeNode.name);
+	hideGroupMenu();
+}
+function onDbClickGroup(event, treeId, treeNode) {
+	if(treeNode == null){
+		return;
+	}
+	if (treeNode.isDisabled )//根节点及失效节点双击无效
+		return;
+	$('#groupid').val(treeNode.id);
+	$('#groupname').val(treeNode.name);
+	$('#groupname_menu').fadeOut(50);
+}
+
+/**
+ *	初始化树
+ */
+function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
+	var setting = {
+		async : {
+			enable : true,
+			url : '../login/getGroup',
+			autoParam : [ "id=groupId", "isDisabled" ]
+		},
+		callback : {
+			beforeClick : beforeClick,
+			onClick : onClickFunction,
+			onDblClick : onDblClickFunction
+		}
+	};
+	console.log("-----"+treeName);
+	$("#" + treeName).tree(setting, rootNode);
+//	$("#" + treeName).tree().refreshNode('');
+}
+/**
+ *	机构选择节点点击前回调
+ */
+function beforeClick(treeId, treeNode, clickFlag) {
+	if (treeNode.isDisabled)
+		return false;
+	return (treeNode.id != 0);
+}
+function resetform() {
+	$('form').find(':input').not(':button,:hidden,:submit,:reset').val('');
+}
+
+$(function(){
+	$("#tr_logoffUrl").hide();
+	/* $("#tr_ssoLogin").hide(); */
+	setLoginType();
+	setSsoLogin(); 
+	 // 初始化Web Uploader
+    var uploader = WebUploader.create({
+    	// 自动上传。
+        auto: true,
+        // swf文件路径
+        swf: '${ctx}/res/plugin/webuploader/Uploader.swf',
+        // 文件接收服务端。
+        server: '${ctx}/fileUpload',
+        // 选择文件的按钮。可选。
+        // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+        pick: '#filePicker',
+        // 只允许选择图片文件。
+        accept: {
+            title: 'Images',
+            extensions: 'gif,jpg,jpeg,bmp,png',
+            mimeTypes: 'image/*'
+        }
     });
-}); 
+	 
+    uploader.on( 'uploadSuccess', function( file, a ) {
+    	$("#picName").val(file.name);
+    	$("#icon2").attr("src","${ctx}/uploads/"+file.name);
+        $( '#'+file.id ).find('p.state').text('已上传');
+        $("#showpic").show();
+    });
+    
+    uploader.on( 'uploadError', function( file ) {
+        $( '#'+file.id ).find('p.state').text('上传出错');
+    });
+
+    uploader.on( 'uploadComplete', function( file ) {
+        $( '#'+file.id ).find('.progress').fadeOut();
+    });
+});
 
 //统一注销
 function selectlogoff(value){
@@ -88,6 +188,15 @@ function selectlogoff(value){
 		$("#tr_logoffUrl").css("display",'none');
 	}
 } 
+
+function setSsoLogin(value){
+	/* var ssoLogin = $('[name=userDefined]:checked').val(); */
+	if(value == '1'){
+		$('[id^=tr_ssoLogin_]').show();
+	}else{
+		$('[id^=tr_ssoLogin_]').hide();
+	}
+}
 
 function checknet(){
 	var url = $('#appUrl').val();
@@ -119,8 +228,46 @@ function checknet(){
  	});	
 }
 
+//默认图片弹出
+function selectpic(){
+	var mybg = document.createElement("div"); 
+	mybg.setAttribute("class","mybg"); 
+	$(".mybg").addClass("mybg");
+    document.body.appendChild(mybg);
+	document.body.style.overflow = "hidden"; 
+	$("#alertpic").show();
+}
 
-//弹出层
+function changSel(num){
+	var picName;
+	if(num==1){
+		picName="/jcms.jpg";
+	}else if(num==2){
+		picName="/jact.jpg";
+	}else if(num==3){
+		picName="/oa.jpg";
+	}else if(num==4){
+		picName="/email.jpg";
+	}else if(num==5){
+		picName="/xxgk.jpg";
+	}
+	var obj=document.getElementsByName("selectpicname");
+	obj[num-1].checked = true;
+	$("#picName").val(picName);
+	$("#icon2").attr("src","${ctx}/uploads/"+picName);
+	$("#showpic").show();
+}
+
+function selectpicSubmit(){
+	 
+	 var mybg = document.createElement("div"); 
+		$(".mybg").removeClass("mybg");
+	    document.body.appendChild(mybg);
+		document.body.style.overflow = "show"; 
+		document.getElementById("alertpic").style.display="none"; 
+}
+
+//便捷录入弹出层
 function fastwrite(){
     var mybg = document.createElement("div"); 
 	mybg.setAttribute("class","mybg"); 
@@ -175,6 +322,7 @@ function group(num){
 		document.getElementById("alerttb").style.display="none"; 
  }
 
+//生成密钥
 function generateKey(){
 	$('#encryptKey').val(randomChar(12));
 }
@@ -190,80 +338,75 @@ function randomChar(num)
 		}
 		return jsTmp;
 }
-function selpic(){
-	var page="pic_show.do";
-	var pic = document.getElementById("fast").val;
-	var picsrc; 
-	openDialog('app/pic_show.do', 600, 350, {
-		title : '图标'
-	});
-}
-function cleariocn(){
-	$("#icon").attr("src","${contextPath}${app.icon}");
-}
-$(function(){
-	var groupMenu = [{"name":"单位选择","id":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
 
-	$('#groupname').menu({
-		tree : 'groupmenu',
-		height : 200,
-		init : function() {
-			setting('groupmenu', onClickGroup, onDbClickGroup, groupMenu);
-		}
-	});
-});
-function hideGroupMenu(){
-	$('#groupname_menu').css('display','none');
-}
-function onClickGroup(event, treeId, treeNode) {
-	$('#groupid').val(treeNode.id);
-	$('#groupname').val(treeNode.name);
-	hideGroupMenu();
-}
-function onDbClickGroup(event, treeId, treeNode) {
-	if(treeNode == null){
-		return;
+function selecttranstype(value){
+	/* var transtype=$('input[name="transtype"]:checked').val(); */
+	if(value == '0'){
+		$("#ssoUrlh").css("display",'none');
+		$("#ssoUrld").css("display",'none');
+		$("#tr_isUniRgh").css("display",'none');
+		$("#tr_isUniRgd").css("display",'none');
 	}
-	if (treeNode.isDisabled )//根节点及失效节点双击无效
-		return;
-	$('#groupid').val(treeNode.id);
-	$('#groupname').val(treeNode.name);
-	$('#groupname_menu').fadeOut(50);
+	if(value == '1'){
+		$("#ssoUrlh").css("display",'');
+		$("#ssoUrld").css("display",'');
+		$("#tr_isUniRgh").css("display",'');
+		$("#tr_isUniRgd").css("display",'');
+	}
 }
-/**
- *	初始化树
- */
-function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
-	var setting = {
-		async : {
-			enable : true,
-			url : '../login/getGroup',
-			autoParam : [ "id=groupId", "isDisabled" ]
-		},
-		callback : {
-			beforeClick : beforeClick,
-			onClick : onClickFunction,
-			onDblClick : onDblClickFunction
-		}
-	};
-	console.log("-----"+treeName);
-	$("#" + treeName).tree(setting, rootNode);
-//	$("#" + treeName).tree().refreshNode('');
+
+function setLoginType(){
+	var loginType = $('#synctype').val();
+	if(loginType == '01'){  //同步前后台
+		$('#tr_encryptType').show();
+		$('#tr_isSyncGroup').show();
+		$('#ssoUrlh').show();
+		$('#ssoUrld').show();
+		$('#tr_ssoLogin').hide();  
+		$('#tr_encryptKey').show();
+		$('#id_setsso').hide();
+		$('#id_checknet').show();
+		$('#id_fastwrite').show();
+		$('#loginType').val(0);
+		$('#loginType').val(0);
+		$('#isSyncGroup').val(1);
+	}else if(loginType == '00'){  //只同步后台
+		$('#tr_encryptType').show();  
+		$('#tr_isSyncGroup').show();
+		$('#ssoUrlh').show();
+		$('#ssoUrld').show();
+		$('#tr_ssoLogin').hide();
+		$('#tr_encryptKey').show();
+		$('#id_setsso').hide();
+		$('#id_fastwrite').show();
+		$('#id_checknet').show();
+		$('#loginType').val(0);
+		$('#isSyncGroup').val(0);
+	}else if(loginType == '11'){  //不同步
+		$('#tr_encryptType').show();
+		$('#tr_isSyncGroup').hide();
+		$('#ssoUrlh').hide();
+		$('#ssoUrld').hide();
+		$('#tr_ssoLogin').show();  
+		$('#tr_encryptKey').show();
+		$('#id_setsso').show();
+		$('#id_fastwrite').hide();
+		$('#id_checknet').hide();  
+		$('#loginType').val(1);
+		$('#isSyncGroup').val(1);
+	}else{   //
+		$('#tr_ssoLogin').hide();
+		$('#id_fastwrite').show();
+		$('#ssoUrlh').show();
+		$('#ssoUrld').show();
+	}
+	
+	setSsoLogin();
 }
-/**
- *	机构选择节点点击前回调
- */
-function beforeClick(treeId, treeNode, clickFlag) {
-	if (treeNode.isDisabled)
-		return false;
-	return (treeNode.id != 0);
-}
-function resetform() {
-	$('form').find(':input').not(':button,:hidden,:submit,:reset').val('');
-}
+
+
 
 $().ready(function() {
-
 //表单校验
 var userNameInput=$("#userName").val();
  $("#editForm").validate({
@@ -362,7 +505,7 @@ $(function(){
 	<div class="position">
 		<ol class="breadcrumb">
 			<li>
-				<a href="${ctx}/backIndex" target="_top">首页</a>
+				<a href="${ctx}/index" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
 			<li>
@@ -385,6 +528,8 @@ $(function(){
     	<input type="hidden" name="setId" value="1"  />
     	<input type="hidden" id="orderField" name="orderField" value="${orderField}"/> 
 		<input type="hidden" id="orderSort" name="orderSort" value="${orderSort}"/>
+		<input type="hidden" id="groupid" name="groupid" value=""/>
+		<input type="hidden" id="picName" name="picName" value=""/>
     </div>
     
     <!--表单的主内容区域-->
@@ -404,34 +549,35 @@ $(function(){
 			<tr>
 				<th style="text-align:left;"><b class="mustbe">*</b> 所属机构：</th>
 				<td>
-					<input id="groupname" value="${groupName}" name="groupname" type="text" style="cursor: pointer;"/>
+					<input id="groupname" value="${groupName}" name="groupname" type="text" style="cursor: pointer;"/> 
 				</td>
 				<th style="text-align:center;"><b class="mustbe">*</b> 同步用户：</th>
                 <td>
-                	<select name="synUser"  >   
+                	<select name="synctype" id="synctype" data-value="${jisApplication.loginType}${jisApplication.isSyncGroup}" 
+						onchange="setLoginType();">  
 						<option value="">--请选择--</option>   
-						<option value="1"<c:if test="${jisApplication.synUser==1}">selected</c:if>>同步后台、前台用户</option>   
-						<option value="2"<c:if test="${jisApplication.synUser==2}">selected</c:if>>只同步后台</option>
-						<option value="3"<c:if test="${jisApplication.synUser==3}">selected</c:if>>不同步</option>
+						<option value="01"<c:if test="${jisApplication.loginType==0 && jisApplication.isSyncGroup==1}">selected</c:if>>同步后台、前台用户</option>   
+						<option value="00"<c:if test="${jisApplication.loginType==0 && jisApplication.isSyncGroup==0}">selected</c:if>>只同步后台</option>
+						<option value="11"<c:if test="${jisApplication.loginType==1 && jisApplication.isSyncGroup==1}">selected</c:if>>不同步</option>
 					</select>
                 </td>
             </tr>
             <tr>
 				<th style="text-align:center;"><b class="mustbe">*</b>数据传送方式：</th>
 				<td>
-					<c:if test="${jisApplication.transType=='2'}">
-						<input type="radio" name="transType" value="1"/>HTTP&nbsp;&nbsp;
-						<input type="radio" name="transType" checked="checked" value="2"/>WebService
+					<c:if test="${jisApplication.transType=='1'}">
+						<input type="radio" name="transType" value="0" onclick="selecttranstype(this.value);"/>HTTP&nbsp;&nbsp;
+						<input type="radio" name="transType" checked="checked" value="1" onclick="selecttranstype(this.value);"/>WebService
 					</c:if>
 					
-					<c:if test="${jisApplication.transType=='1'}">
-						<input type="radio" name="transType" checked="checked" value="1"/>HTTP&nbsp;&nbsp;
-						<input type="radio" name="transType" value="2"/>WebService
+					<c:if test="${jisApplication.transType=='0'}">
+						<input type="radio" name="transType" checked="checked" value="0" onclick="selecttranstype(this.value);"/>HTTP&nbsp;&nbsp;
+						<input type="radio" name="transType" value="1" onclick="selecttranstype(this.value);"/>WebService
 					</c:if>
 					
 					<c:if test="${jisApplication.transType==null}">
-						<input type="radio" name="transType" value="1"/>HTTP&nbsp;&nbsp;
-						<input type="radio" name="transType" value="2"/>WebService
+						<input type="radio" name="transType" value="0" onclick="selecttranstype(this.value);"/>HTTP&nbsp;&nbsp;
+						<input type="radio" name="transType" value="1" onclick="selecttranstype(this.value);"/>WebService
 					</c:if>
 				</td>
 				
@@ -474,14 +620,19 @@ $(function(){
 				
 				<th style="text-align: center;"><b class="mustbe">*</b> 应用图标：</th>
 					<td>
-						<input id="file" type="file" name="file" 
-						input-width="200"/>
-						<button id="ctlBtn" class="btn btn-default">开始上传</button>
-						<input id="seletpic" type="button" class="btn btn-success btn-small" 
-						onclick="selpic()" value="选择图标">
-						<input style="display:none;" type="button" class="btn btn-success btn-small" 
-							onclick="cleariocn()" value="默认图片">
+					
+						<!-- <div id="uploader-demo"> -->
+						    <!--用来存放item-->
+						    <div id="fileList" class="uploader-list"></div>
+						    <div id="filePicker">选择图片</div>
+						    <input  type="button" class="btn btn-success btn-small" 
+							onclick="selectpic()" value="默认图片">
+						<!-- </div> -->
 					</td>
+					<td id="showpic" colspan="2" style="text-align: left;display: none;">
+						<img id="icon2" width="100" height="100" src="${ctx}${jisApplication.icon}">
+					</td>
+					
 			</tr>
 			<tr>
 				<th style="text-align:left;"><b class="mustbe">*</b> 接口地址：</th>
@@ -492,9 +643,9 @@ $(function(){
 					<!-- <input id="id_setsso" type="button" class="btn btn-success btn-small" 
 					onclick="setsso()" value="接口配置"/></td> -->
 				</td>
-						
-				<th style="text-align:center;"><b class="mustbe">*</b> 登录地址：</th>
-				<td><input type="text" id="ssoUrl" name="ssoUrl" maxlength="100"
+				
+				<th id="ssoUrlh" style="text-align:center;"><b class="mustbe">*</b> 登录地址：</th>
+				<td id="ssoUrld"><input type="text" id="ssoUrl" name="ssoUrl" maxlength="100"
 						value="${jisApplication.ssoUrl }" />
 					<input id="id_checknet" type="button"
 						onclick="checknet()" value="测试网络"></td>
@@ -518,36 +669,28 @@ $(function(){
 					</c:if>
 				</td>
 				
-				<%-- <tr id="tr_ssoLogin">
-					<td align="right" class="label">账号设置</td>
-					<td class="required">
-						<h:tip title="用户预设账号：单点登录时，使用用户预设账号<br/>
-							统一用户账号：单点登录时，使用统一用户账号<br/>
-							固定账号：单点登录时，使用固定账号"></h:tip>
-					</td>
+				<tr id="tr_ssoLogin">
+					<th style="text-align:left;"><b class="mustbe">*</b>账号设置：</th>
 					<td><input type="radio" name="userDefined" value="0"
-						data-value="${app.userDefined }" onclick="setSsoLogin();">用户预设账号&nbsp;
+						data-value="${jisApplication.userDefined }" onclick="setSsoLogin(this.value);">用户预设账号&nbsp;
 						<input type="radio" name="userDefined" value="2"
-						data-value="${app.userDefined }" onclick="setSsoLogin();">统一用户账号&nbsp;
+						data-value="${jisApplication.userDefined }" onclick="setSsoLogin(this.value);">统一用户账号&nbsp;
 						<input type="radio" name="userDefined" value="1"
-						data-value="${app.userDefined }" onclick="setSsoLogin();">固定账号
+						data-value="${jisApplication.userDefined }" onclick="setSsoLogin(this.value);">固定账号
 					</td>
-					<td></td>
 				</tr>
 				<tr id="tr_ssoLogin_1">
-					<td align="right" class="label">固定用户名</td>
-					<td class="required">*</td>
-					<td><input type="text" id="allLoginiId" name="allLoginiId" maxlength="20"
-						class="input-text" value="${app.allLoginiId }" /></td>
+					<th style="text-align:left;"><b class="mustbe">*</b>固定用户名：</th>
+					<td><input type="text" id="allLoginIid" name="allLoginIid" maxlength="20"
+						class="input-text" value="${jisApplication.allLoginIid }" /></td>
 					<td></td>
 				</tr>
 				<tr id="tr_ssoLogin_2">
-					<td align="right" class="label">固定密码</td>
-					<td class="required">*</td>
+					<th style="text-align:left;"><b class="mustbe">*</b>固定密码：</th>
 					<td><input type="password" id="allPwd" name="allPwd" maxlength="20"
-						class="input-text" value="${app.allPwd }" /></td>
+						class="input-text" value="${jisApplication.allPwd }" /></td>
 					<td></td>
-				</tr> --%>
+				</tr>
 				
 				
 				<th style="text-align:center;"><b class="mustbe">*</b>前台是否显示：</th>
@@ -587,8 +730,8 @@ $(function(){
 					</c:if>
 				</td>
 				
-				<th style="text-align:center;"><b class="mustbe">*</b>是否统一注册：</th>
-				<td>
+				<th id="tr_isUniRgh" style="text-align:center;"><b class="mustbe">*</b>是否统一注册：</th>
+				<td id="tr_isUniRgd">
 					<c:if test="${jisApplication.isUnifyRegister=='0'}">
 						<input type="radio" name="isUnifyRegister" value="1"/>是&nbsp;&nbsp;
 						<input type="radio" name="isUnifyRegister" checked="checked" value="0"/>否
@@ -620,6 +763,7 @@ $(function(){
 			</table>
 	        <!-- </ul> -->
     </div>
+	
     <div style="clear:both;"></div>
     <!--表单的按钮组区域-->
     <div class="form-btn">
@@ -666,9 +810,41 @@ $(function(){
 				<input type="button" class="btn" value="取消" 
 					 onclick="javascript:window.location.href='${ctx}/application/applicationEdit?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}&iid=${jisApplication.iid}'" />
 			</div>
-			</div>
+		</div>
 		</form>
     </div>
+    
+    <div id="alertpic" class="alert_tb" style="display:none;"> 
+    	<form action="${ctx}/application/applicationSave">
+    	<table>
+    	<div style="font-size: 18px;">&nbsp;默认图标</div>
+    	<hr/>
+    		<tr>
+				<td ><div class="pic"><img id="img1" onclick="changSel(1);"  src="${ctx}/uploads/jcms.jpg"></div></td>
+				<td ><div class="pic"><img id="img2" onclick="changSel(2);"  src="${ctx}/uploads/jact.jpg"></div></td>
+				<td ><div class="pic"><img id="img3" onclick="changSel(3);"  src="${ctx}/uploads/oa.jpg"></div></td>
+				<td ><div class="pic"><img id="img4" onclick="changSel(4);"  src="${ctx}/uploads/email.jpg"></div></td>
+				<td ><div class="pic"><img id="img5" onclick="changSel(5);"  src="${ctx}/uploads/xxgk.jpg"></div></td>
+			</tr>
+			<tr>
+				<td><div class="title" onclick="changSel(1);"><input type="radio" name="selectpicname" value="img1" checked onfocus="this.blur()"/>JCMS</div></td>
+				<td><div class="title" onclick="changSel(2);"><input type="radio" name="selectpicname" value="img2" onfocus="this.blur()"/>互动平台</div></td>
+				<td><div class="title" onclick="changSel(3);"><input type="radio" name="selectpicname" value="img3" onfocus="this.blur()"/>OA</div></td>
+				<td><div class="title" onclick="changSel(4);"><input type="radio" name="selectpicname" value="img4" onfocus="this.blur()"/>信息公开</div></td>
+				<td><div class="title" onclick="changSel(5);"><input type="radio" name="selectpicname" value="img5" onfocus="this.blur()"/>电子邮件</div></td>
+			</tr>
+		</table>
+		<div id="dialogpic-toolbar" style="text-align: center;">
+			<div id="dialogpic-toolbar-panel">
+				<input type="button" class="btn bluegreen" value="保存" 
+				 onclick="selectpicSubmit();"/> 
+				<input type="button" class="btn" value="取消" 
+					 onclick="javascript:window.location.href='${ctx}/application/applicationEdit?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}&iid=${jisApplication.iid}'" />
+			</div>
+		</div>
+		</form>
+    </div>
+    
     <!--表单的底部区域-->
     <div class="form-footer"></div>
     <!--表单的预览或提示区域-->

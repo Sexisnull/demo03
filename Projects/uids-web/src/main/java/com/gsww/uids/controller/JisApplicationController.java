@@ -1,5 +1,6 @@
 package com.gsww.uids.controller;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -165,6 +166,13 @@ public class JisApplicationController extends BaseController{
 		
 		try {
 			if(jisApplication != null){
+				String picName=request.getParameter("picName");
+				String groupid=request.getParameter("groupid");
+				Integer groupId=Integer.parseInt(groupid);
+				System.out.println(groupId+"lllllllllllllllllll");
+				jisApplication.setGroupId(groupId);
+				String uploadFile="/uploads/"+picName;
+				jisApplication.setIcon(uploadFile);
 				jisApplicationService.save(jisApplication);
 				returnMsg("success","保存成功",request);
 			}
