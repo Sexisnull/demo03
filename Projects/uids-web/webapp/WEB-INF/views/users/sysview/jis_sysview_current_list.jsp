@@ -187,32 +187,26 @@ width: 100px !important;
 			</div>
 			
     <div class="search-content">
-				<form id="form1" name="pageForm" action="${ctx}/sysviewCurr/jisCurList" method="get">
+				<!--<form id="form1" name="pageForm" action="${ctx}/sysviewCurr/jisCurList" method="get">
 						<table class="advanced-content">
 							<tr>
 								<th style="padding-left: 350px">操作对象名称：</th>
 								<td>
 									<input type="text" id="objectNameSearch" name="search_LIKE_objectname" placeholder="操作对象名称" value="${sParams['LIKE_objectname']}" class="input" />
 								</td>
-								
 								<td class="btn-group">
 									<a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a>
 								</td>
 								<td class="btn-group"> <a id="advanced-btn" class="btnSearch" >高级搜索</a></td>
-							</tr>
+						    </tr>
 						</table>
-				</form>
+				</form>-->
 				<form id="form2" name="form2" action="${ctx}/sysviewCurr/jisCurList" >
 				    <input type="hidden" name="ishigh" value=""/>
-				        <table class="advanced-content" style="display: none;">
+				        <table class="advanced-content">
 							<tr>
 				                <th>所属应用：</th>
 								<td>
-								    <!--<input id="oldAppSearch" type="hidden" value="${sParams['EQ_appid']}">
-									<select id="appSearch" name="search_EQ_appid" class="select">
-										<option value="">--请选择--</option>
-									</select>-->
-									
 			                        <select name="search_EQ_appid" id="appSearch" class="select">
 					                     <option value="">--请选择--</option>
 					                     <c:forEach items="${applications}" var="application">
@@ -233,11 +227,6 @@ width: 100px !important;
 
 								<th>同步结果：</th>
 								<td>
-									<!--<input id="oldOptresultSearch" type="hidden" value="${sParams['EQ_optresult']}">
-									<select id="optresultSearch" name="search_EQ_optresult" class="select">
-										<option value="">--请选择--</option>
-									</select>-->
-									
 									<select name="search_EQ_optresult" id="optresultSearch" class="select">
 					                     <option value="">--请选择--</option>
 					                     <c:forEach items="${parameters}" var="parameter">

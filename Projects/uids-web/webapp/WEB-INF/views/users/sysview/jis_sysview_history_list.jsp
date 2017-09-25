@@ -99,7 +99,7 @@ width: 100px !important;
 			</div>
 			
     <div class="search-content">
-				<form id="form1" name="pageForm" action="${ctx}/sysviewHis/jisHisList" method="get">
+				<!--<form id="form1" name="pageForm" action="${ctx}/sysviewHis/jisHisList" method="get">
 						<table class="advanced-content">
 							<tr>
 								<th style="padding-left: 600px">操作对象名称：</th>
@@ -112,9 +112,9 @@ width: 100px !important;
 								<td class="btn-group"> <a id="advanced-btn" class="btnSearch" >高级搜索</a></td>
 							</tr>
 						</table>
-				</form>
+				</form>-->
 				<form id="form2" name="form2" action="${ctx}/sysviewHis/jisHisList" >
-				        <table class="advanced-content" style="display: none;">
+				        <table class="advanced-content">
 							<tr>
 				                <th>所属应用：</th>
 								<td>

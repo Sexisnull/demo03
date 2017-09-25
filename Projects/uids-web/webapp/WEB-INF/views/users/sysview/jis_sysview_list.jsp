@@ -9,10 +9,6 @@
 
 <script type="text/javascript">
 $(function(){	
-    //高级搜索按钮点击事件
-		$('#advanced-btn').on('click',function(){
-			$('.advanced-content').toggle('fast');
-		});
 		$("#advanced-search-btn").click(function(){
 			$("#form2").submit();
 		});
@@ -48,15 +44,6 @@ function selectItemByValue(objSelect,objItemText) {
     }  
 }
 
-    /**搜索表单校验**/
-	function checkSubmitForm() {
-		var objectnameSearch = $("#objectnameSearch").val();
-		if (objectnameSearch == '' || isChinaOrNumbOrLett(objectnameSearch)) {
-			form1.submit();
-		} else {
-			$.validator.errorShow($("#objectNameSearch"), '只能包括中英文、数字、@和下划线');
-		}
-	}
 /**详情*/
 function detail(url,param,obj){
   var singleId = $(obj).parents("td").parent().find('td:first').find('input').attr('id');
@@ -100,22 +87,8 @@ width: 100px !important;
 			</div>
 			
     <div class="search-content">
-				<form id="form1" name="pageForm" action="${ctx}/sysview/jisSysviewList" method="get">
-						<table class="advanced-content">
-							<tr>
-								<th style="padding-left: 600px">操作对象名称：</th>
-								<td>
-									<input type="text" id="objectnameSearch" name="search_LIKE_objectname" placeholder="操作对象名称" value="${sParams['LIKE_objectname']}" class="input" />
-								</td>
-								<td class="btn-group">
-									<a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a>
-								</td>
-								<td class="btn-group"> <a id="advanced-btn" class="btnSearch" >高级搜索</a></td>
-							</tr>
-						</table>
-				</form>
 				<form id="form2" name="form2" action="${ctx}/sysview/jisSysviewList" >
-				        <table class="advanced-content" style="display: none;">
+				        <table class="advanced-content">
 							<tr>
 				                <th>所属应用：</th>
 								<td>
