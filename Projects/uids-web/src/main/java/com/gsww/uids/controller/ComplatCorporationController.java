@@ -253,9 +253,9 @@ public class ComplatCorporationController extends BaseController{
 				if(enable == 1){
 					complatCorporation.setEnable(0);
 					complatCorporationService.save(complatCorporation);
-					returnMsg("success", "启用成功！", request);				
+					returnMsg("success", "关闭成功！", request);				
 				} else {
-					returnMsg("success", "账号已启用！", request);
+					returnMsg("success", "账号已关闭！", request);
 				}
 			}								
 		}catch(Exception e){

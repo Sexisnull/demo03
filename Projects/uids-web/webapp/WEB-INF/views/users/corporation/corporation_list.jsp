@@ -12,41 +12,59 @@
 	
 	/**搜索表单**/
 	function checkSubmitForm(){
-		/*$("#form1").validate({
-			rules:{
-				loginNameSearch:{
-					isCorporName:true
-				},
-				realNameSearch:{
-					isCorporName:true
-				},
-				nameSearch:{
-					nameSearch:true
-				},
-				cardNumberSearch:{
-					isIdCardNo:true
-				},
-			   submitHandler:function(form){        
-						 form.submit();		
-		        } 
-			}
-		});*/
 		var loginNameSearch = $("#loginNameSearch").val();
 		var realNameSearch = $("#realNameSearch").val();
 		var nameSearch = $("#nameSearch").val();
 		var cardNumberSearch = $("#cardNumberSearch").val();
-		form1.submit();
+		if(loginNameSearch == '' || isNumbOrLett1(loginNameSearch)){
+			if(realNameSearch == '' || isNumbOrLett1(realNameSearch)){
+				if(nameSearch == '' || isNumbOrLett1(nameSearch)){
+					if(cardNumberSearch == '' || isCardNumber(cardNumberSearch)){
+						form1.submit();
+					}else{
+						$.validator.errorShow($("#cardNumberSearch"),'只能包括数字和字母');
+					}	
+				}else{
+					$.validator.errorShow($("#nameSearch"),'名称只能由字母、数字、下划线、中文组成，不能以下划线开头和结尾');
+				}
+			}else{
+				$.validator.errorShow($("#realNameSearch"),'名称只能由字母、数字、下划线、中文组成，不能以下划线开头和结尾');
+			}
+ 		}else{
+ 			$.validator.errorShow($("#loginNameSearch"),'名称只能由字母、数字、下划线、中文组成，不能以下划线开头和结尾');
+ 		}
+	}
+	/*
+	用途：检查输入字符串是否只由汉字、字母、数字组成
+	输入：
+	value：字符串
+	返回：
+	如果通过验证返回true,否则返回false
+	*/
+	function isNumbOrLett1( s ){
+		var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;
+		var re = new RegExp(regu);
+		if (re.test(s)) {
+			return true;
+		}else{
+			return false;
+		}
+	}
+	/**
+	检查身份证
+	*/
+	function isCardNumber( s ){
+		var regu = /^([a-zA-Z0-9]+)$/;
+		var re = new RegExp(regu);
+		if (re.test(s)) {
+			return true;
+		}else{
+			return false;
+		}
 	}
 	
-/*	$().ready(function(){
-		//企业名称和法人名称校验     
-	     jQuery.validator.addMethod("isCorporName", function(value, element) { 
-	            var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;   
-	            return this.optional(element) || (corporName.test(value));     
-	     }, "名称只能由字母、数字、下划线、中文组成，不能以下划线开头和结尾"); 
-	});
-	*/
-
+	
+	
 	//弹出层
 	function openwindow(iid){
 	    var mybg = document.createElement("div"); 
