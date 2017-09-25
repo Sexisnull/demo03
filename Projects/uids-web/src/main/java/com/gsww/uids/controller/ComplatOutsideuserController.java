@@ -131,7 +131,6 @@ public class ComplatOutsideuserController extends BaseController {
 		try {
 			if (outsideUser != null) {
 				String iidStr = String.valueOf(outsideUser.getIid());
-				System.out.println(iidStr);
 				if (iidStr == "null" || iidStr.length() <= 0) {
 					Date d = new Date(); 
 					outsideUser.setEnable(1); // 是否禁用
