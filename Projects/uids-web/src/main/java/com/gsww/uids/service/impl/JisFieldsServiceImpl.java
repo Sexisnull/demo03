@@ -62,7 +62,7 @@ public class JisFieldsServiceImpl implements JisFieldsService {
 		Iterator<JisFields> jisFieldsIterable = jisFieldsIterables.iterator();
 		while (jisFieldsIterable.hasNext()) {
 			JisFields jisFields = (JisFields) jisFieldsIterable.next();
-			if (jisFields.getIssys() == 1) {
+			if (jisFields.getIssys()!=null && jisFields.getIssys() == 1) {
 				jisFieldsList.add(jisFields);
 			}
 		}
