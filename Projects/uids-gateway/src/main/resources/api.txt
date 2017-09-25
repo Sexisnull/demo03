@@ -1,0 +1,7 @@
+# 支付宝AliOauth接口（只用于登陆）
+https://openauth.alipaydev.com/oauth2/publicAppAuthorize.htm?app_id=2016080500171059&scope=auth_user&redirect_uri=http://127.0.0.1:8088/uids-web/ali/login
+
+# 绑定支付宝UserId与系统UserId
+127.0.0.1:8088/uids-web/ali/merge?aliUserId=(支付宝UserId)&userId=(系统userId)
+
+
