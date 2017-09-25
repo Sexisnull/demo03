@@ -411,7 +411,7 @@ $().ready(function() {
 var userNameInput=$("#userName").val();
  $("#editForm").validate({
     rules: {
-    	resName: {
+    	name: {
 	    required: true,
 	    /* cnRangelength: [0,32],
 	    stringCheck:userNameInput */
