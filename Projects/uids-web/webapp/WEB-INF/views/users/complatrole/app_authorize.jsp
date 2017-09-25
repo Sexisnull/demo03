@@ -49,6 +49,7 @@
 				if(result.success){
 					
 					alert("设置成功！");
+					location.href = '${ctx}/complat/croleList';
 					
 				}else{
 					alert("设置失败！");

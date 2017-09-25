@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import com.gsww.jup.entity.sys.SysDepartment;
 import com.gsww.jup.entity.sys.SysRoleAcctRel;
 import com.gsww.uids.entity.ComplatRolerelation;
 
@@ -17,5 +16,4 @@ JpaSpecificationExecutor<ComplatRolerelation>{
 	List<ComplatRolerelation> findByUserId(Integer userId);
 
 	List<ComplatRolerelation> findByRoleId(Integer roleId);
-	//删除
 }

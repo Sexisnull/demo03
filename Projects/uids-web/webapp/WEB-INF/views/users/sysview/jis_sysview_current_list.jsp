@@ -16,7 +16,12 @@ $(document).ready(function(){
 		$('.advanced-content').toggle('fast');
 	});
 	$("#advanced-search-btn").click(function(){
-		$("#form2").submit();
+	    var objectnameSearch = $("#objectnameSearchHigh").val();
+	    if (objectnameSearch == '' || isChinaOrNumbOrLett(objectnameSearch)) {
+		    $("#form2").submit();
+	    } else {
+		    $.validator.errorShow($("#objectnameSearchHigh"), '只能包括中英文、数字、@和下划线');
+	    }
 	});
 	//阻止按键盘Enter键提交表单
 	var $inp = $('input');
@@ -52,23 +57,56 @@ function selectItemByValue(objSelect,objItemText) {
 
 /**搜索表单校验**/
 function checkSubmitForm() {
-	var objectnameSearch = $("#objectnameSearch").val();
+	var objectnameSearch = $("#objectNameSearch").val();
 	if (objectnameSearch == '' || isChinaOrNumbOrLett(objectnameSearch)) {
 		form1.submit();
 	} else {
 		$.validator.errorShow($("#objectNameSearch"), '只能包括中英文、数字、@和下划线');
 	}
 }
-	
- /**同步**/
-function sync(url,param,obj){
-	var singleId = $(obj).parents("td").parent().find('td:first').find('input').attr('id');
-	$.dialog.confirm('您确认要同步吗？',function(){
-		window.location.href="${ctx}/"+url+"?"+param+"="+singleId;
+
+/**同步*/
+function sync1(url,param,obj){
+    var singleId = $(obj).parents("td").parent().find('td:first').find('input').attr('id');
+    $.dialog.confirm('您确认要同步吗？',function(){
+		 window.location.href="${ctx}/"+url+"?"+param+"="+singleId;
 	});
 }
+	
+ /**同步+校验**/
+function sync(url,param,obj){
+    var singleId = $(obj).parents("td").parent().find('td:first').find('input').attr('id');
+    $.get("${ctx}/sysviewCurr/checkSyncState", {"iid":singleId,"optresult":2}, function (data) {
+        if (data != null) {
+            if(data.success == 'true'){
+                $.dialog.alert('已同步成功，不能再次同步！',function(){ 
+				     return null;
+			    }); 
+            }else if(data.success == 'false'){
+                $.dialog.confirm('您确认要同步吗？',function(){
+		             window.location.href="${ctx}/"+url+"?"+param+"="+singleId;
+	            });
+            }
+        }
+    });
+}
 
-    /**批量同步**/
+/**校验是否已同步*/
+function checkSyncState(obj){
+    var singleId = $(obj).parents("td").parent().find('td:first').find('input').attr('id');
+     $.get("${ctx}/sysviewCurr/checkSyncState", {"iid":singleId,"optresult":2}, function (data) {
+         if (data != null) {
+            if(data.success == 'true'){
+                $.dialog.alert('已同步成功，不能删除和再次同步！',function(){ 
+				     $(obj).removeClass("active");
+				     var checkbok = $(obj).parents("td").parent().find('td:first').find('input').attr("checked",false);
+			    }); 
+            }
+        }
+     });
+}
+
+/**批量同步**/
 function batchSync(url,param){
 	//var iid=$(".iid").val();
 	if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checked').length!=0){
@@ -76,10 +114,26 @@ function batchSync(url,param){
 			var ids = "";
 			$('.list-table tbody input[type=checkbox]').each(function(i, o) {
 				if($(o).attr('checked')) {
-					ids += $(o).val() + ",";
+				     ids += $(o).val() + ",";
 				}
 			});
-			window.location.href="${ctx}/"+url+"?"+param+"="+ids.substring(0,ids.length-1);
+			if(ids != ""){
+			   $.get("${ctx}/sysviewCurr/checkSyncListState", {"iid":ids,"optresult":2}, function (data) {
+                           if (data != null) {
+                              if(data.success == 'true'){
+                                  $.dialog.alert('存在已同步成功，不能再次同步，请取消同步成功的数据！',function(){
+                                    ids = "";
+                                    return null;
+                                  });
+                                  return false
+                              }
+                              if(data.success == 'false'){
+                                 window.location.href="${ctx}/"+url+"?"+param+"="+ids.substring(0,ids.length-1);
+                              }
+                          }
+              });
+			   
+			}
 		});
 		
 	}else{
@@ -94,6 +148,8 @@ function detail(url,param,obj){
   var singleId = $(obj).parents("td").parent().find('td:first').find('input').attr('id');
   window.location.href="${ctx}/"+url+"?"+param+"="+singleId;
 }
+
+
 </script>
 <style type="text/css">
 .select{
@@ -103,7 +159,7 @@ padding: 3px 8px;
 height: 30px;
 width: 254px;
 }
-#objectnameSearch{
+#objectnameSearchHigh{
 width: 235px !important;
 }
 .syncTime{
@@ -118,7 +174,7 @@ width: 100px !important;
 			<div class="position">
 				<ol class="breadcrumb">
 					<li>
-						<a href="${ctx}/index" target="_top">首页</a>
+						<a href="${ctx}/backIndex" target="_top">首页</a>
 					</li>
 					<li class="split"></li>
 					<li>
@@ -135,9 +191,9 @@ width: 100px !important;
 				<form id="form1" name="pageForm" action="${ctx}/sysviewCurr/jisCurList" method="get">
 						<table class="advanced-content">
 							<tr>
-								<th style="padding-left: 600px">操作对象名称：</th>
+								<th style="padding-left: 350px">操作对象名称：</th>
 								<td>
-									<input type="text" id="objectnameSearch" name="search_LIKE_objectname" placeholder="操作对象名称" value="${sParams['LIKE_objectname']}" class="input" />
+									<input type="text" id="objectNameSearch" name="search_LIKE_objectname" placeholder="操作对象名称" value="${sParams['LIKE_objectname']}" class="input" />
 								</td>
 								
 								<td class="btn-group">
@@ -203,7 +259,7 @@ width: 100px !important;
 								</td>
 							    <th>操作对象名称：</th>
 								<td>
-									<input type="text" id="objectnameSearch" name="search_LIKE_objectname" placeholder="操作对象名称" value="${sParams['LIKE_objectname']}" class="input" />
+									<input type="text" id="objectnameSearchHigh" name="search_LIKE_objectname" placeholder="操作对象名称" value="${sParams['LIKE_objectname']}" class="input" />
 								</td>
 								<th></th>
 								<td >
@@ -225,7 +281,7 @@ width: 100px !important;
         </div>
         
         <!-- 提示信息开始 -->
-         <div class="form-alert;" >
+        <div class="form-alert;" >
          	<tags:message msgMap="${msgMap}"></tags:message>
     	</div>
     	<!-- 提示信息结束 -->
@@ -270,7 +326,8 @@ width: 100px !important;
 					<tr>
 					    <td>
 	                    	<div class="label">
-	                            <i class="check_btn"></i><input id="${jisCurrent.iid}" value="${jisCurrent.iid}" type="checkbox" class="check_btn" style="display:none;"/>
+	                    	<!--onclick="checkSyncState(this);"-->
+	                    	 <i class="check_btn"></i><input id="${jisCurrent.iid}" value="${jisCurrent.iid}" type="checkbox" class="check_btn" style="display:none;"/>
 	                        </div>
 	                    </td>
 						<td>

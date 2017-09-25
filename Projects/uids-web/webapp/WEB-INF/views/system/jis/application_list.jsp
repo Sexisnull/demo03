@@ -84,7 +84,7 @@ function resetform() {
 		if(nameSearch ==  '' || isNumbOrLett(nameSearch)){
 			form1.submit();
 		}else{
-			$.validator.errorShow($("#nameSearch"),'只能包括数字和字母');
+			/* $.validator.errorShow($("#nameSearch"),'只能包括数字和字母'); */
 		}
 		var groupname = $("#groupname").val();
 		if(groupname ==  '' ){
@@ -118,7 +118,7 @@ function resetform() {
 	<div class="position">
 		<ol class="breadcrumb">
 			<li>
-				<a href="${ctx}/index" target="_top">首页</a>
+				<a href="${ctx}/backIndex" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
 			<li>
@@ -141,7 +141,8 @@ function resetform() {
 						</td>
 					<th>所属机构：</th>
 						 <td>
-						 	<input name="groupname" id="groupname" value="" type="text" style="cursor: pointer;"/> 
+						 	<input id="groupname" value="${groupName}" name="groupname" type="text" style="cursor: pointer;"/> 
+							<input type="hidden" id="groupid" name="search_EQ_groupId">
 							<%-- <select  style="width: 170px;" placeholder="数据标识" value="${sParams['LIKE_remark']}" id="remarkSearch" name="search_LIKE_remark" /> --%>
 						</td> 
 					<td class="btn-group"> <a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a></td>
@@ -217,7 +218,7 @@ function resetform() {
 	                    	<div title="${application.mark}" class="word_break">${application.mark}</div>
 	                    </td>
 	                    <td style="text-align: center;">
-	                    	<div title="${application.complatGroup.name}" class="word_break">${application.complatGroup.name}</div>
+	                    	<div class="word_break">${groupMap[application.groupId]}</div>
 	                    </td>
 	                    <td style="text-align: center;">
 	                    	<c:if test="${application.isSyncGroup==1}">不支持</c:if>

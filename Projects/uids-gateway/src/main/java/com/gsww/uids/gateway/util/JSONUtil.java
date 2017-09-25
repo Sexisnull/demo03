@@ -410,4 +410,9 @@ public class JSONUtil {
 		}*/
 		
 	}
+
+	public static Map StringToObject(String args, Class<Map> class1) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

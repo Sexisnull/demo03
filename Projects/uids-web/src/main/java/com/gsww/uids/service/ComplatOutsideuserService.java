@@ -1,5 +1,10 @@
 package com.gsww.uids.service;
 
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpSession;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -42,4 +47,44 @@ public interface ComplatOutsideuserService {
 	 * @return
 	 */
 	void delete(ComplatOutsideuser outsideUser);
+
+	/**
+     * @discription  查询全部个人用户实体  
+     * @return
+	 */
+	public List<ComplatOutsideuser> findAll();
+	
+	/**
+	 * 关键字查询
+	 * @param keyword
+	 * @return
+	 */
+	public List<Map<String, Object>> findByNameOrPinYin(String keyword);
+
+	public ComplatOutsideuser findByMobile(String cellPhoneNum);
+
+	public ComplatOutsideuser findByIdCard(String IdCard);
+
+	public ComplatOutsideuser findByLoginName(String userName);
+
+	public ComplatOutsideuser checkUserLogin(String userName, String password, String ip);
+
+	public ComplatOutsideuser checkUserLogin(HttpSession session, String loginName, String password, String ip);
+
+	public boolean updateLoginIpAndLoginTime(ComplatOutsideuser user);
+
+	public boolean updatePwd(int iid, String pwd);
+
+	/**
+     * @discription   逻辑删除 
+     * @param iid
+	 */
+	void delete(Integer iid);
+	
+	/**
+     * @discription   验证loginName实体是否存在 
+     * @param loginName
+     * @return
+	 */
+	public ComplatOutsideuser findByLoginNameIsUsed(String loginName);
 }

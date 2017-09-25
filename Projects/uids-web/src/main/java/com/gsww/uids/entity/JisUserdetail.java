@@ -4,6 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import static javax.persistence.GenerationType.IDENTITY;
+
+
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -16,7 +18,7 @@ public class JisUserdetail implements java.io.Serializable {
 
 	// Fields
 
-	/**
+	/** 
 	 * 
 	 */
 	private static final long serialVersionUID = -6677370036147629509L;

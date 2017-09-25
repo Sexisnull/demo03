@@ -1,15 +1,21 @@
 package com.gsww.uids.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gsww.jup.entity.sys.SysMenu;
+import com.gsww.jup.util.ReflectionUtils;
+import com.gsww.jup.util.StringHelper;
 import com.gsww.uids.dao.ComplatGroupDao;
 import com.gsww.uids.entity.ComplatGroup;
+import com.gsww.uids.entity.ComplatUser;
 import com.gsww.uids.service.ComplatGroupService;
 
 import net.sf.json.JSONObject;
@@ -29,16 +35,14 @@ public class ComplatGroupServiceImpl implements ComplatGroupService{
 	private JdbcTemplate jdbcTemplate;
 	
 	@Override
-	public List<ComplatGroup> findByPid(Integer pid) {
-		// TODO Auto-generated method stub
-		
-		return complatGroupDao.findByPid(pid);
-		
+	public List<ComplatGroup> findByPid(Integer pid) throws Exception {
+		List<ComplatGroup> list=new ArrayList<ComplatGroup>();
+		list=complatGroupDao.findByPid(pid);
+		return list;	
 	}
 	
 	@Override
 	public List<ComplatGroup> findAll() {
-		// TODO Auto-generated method stub
 		String sql = "select * from complat_group";
 		return jdbcTemplate.queryForList(sql, ComplatGroup.class);
 		
@@ -70,8 +74,17 @@ public class ComplatGroupServiceImpl implements ComplatGroupService{
 	}
 
 	@Override
-	public ComplatGroup save(ComplatGroup entity) throws Exception {
-		return complatGroupDao.save(entity);
+	public ComplatGroup save(ComplatGroup complatGroup) throws Exception {
+		if(StringHelper.isNotBlack(String.valueOf(complatGroup.getIid()))){
+			ComplatGroup groupTemp = complatGroupDao.findByIid(complatGroup.getIid());
+			//将表单未携带的信息取出保存
+			BeanUtils.copyProperties(complatGroup, groupTemp, ReflectionUtils.getNullPropertyNames(complatGroup));
+			return complatGroupDao.save(groupTemp);
+		}else{
+			
+			return complatGroupDao.save(complatGroup);
+		}
+		
 	}
 
 	@Override
@@ -122,4 +135,48 @@ public class ComplatGroupServiceImpl implements ComplatGroupService{
 		return mapList;
 	}
 	
+	@Override
+	public List<Map<String,Object>> findChildGroupByIid(Integer iid) {
+		
+		String sql = "SELECT a.iid, a.name, a.codeid, a.pid, CASE WHEN EXISTS(SELECT 1 FROM complat_group b WHERE b.pid = a.iid AND opersign <> '3') THEN 1 ELSE 0 END isparent,a.spec,a.orderid,a.pinyin  FROM complat_group a ";
+		if(iid!=null && iid>0){
+			sql = sql + "WHERE a.pid="+iid;
+		}else{
+			sql = sql + "WHERE a.pid IS NULL";
+		}
+		sql = sql + " AND opersign <> '3' ";
+	    sql = sql + " ORDER BY a.orderid ASC,a.iid ASC";
+	    
+		return jdbcTemplate.queryForList(sql);
+	}
+
+	@Override
+	public List<Map<String, Object>> findByNameOrPinYin(String keyword) {
+		String sql = "SELECT iid, name, codeid FROM complat_group WHERE name" +
+				" LIKE '%"+keyword+"%' OR pinyin LIKE '%"+keyword+"%' AND opersign <> '3' ";
+		
+		return jdbcTemplate.queryForList(sql);
+	}
+	
+	@Override
+	public List<ComplatGroup> findByAllName(String name) {
+		List<ComplatGroup> list=new ArrayList<ComplatGroup>();
+		list=complatGroupDao.findByName(name);
+		return list;
+	}
+	
+	@Override
+	public List<Map<String,Object>> findAllIidsAndName() {
+		String sql = "select iid, name from complat_group where opersign<>3 ";
+		return jdbcTemplate.queryForList(sql);
+	}
+
+	@Override
+	public ComplatGroup findByIid(int iid) {	
+		ComplatGroup complatGroup = null;
+		complatGroup=complatGroupDao.findByIid(iid);
+		System.out.println(complatGroup);
+		return complatGroup;
+	}
+
 }

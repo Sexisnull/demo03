@@ -65,7 +65,7 @@
 								后台管理
 							</p>
 						</li>
-						<li class="speaker modify-msgs" onclick="javascript:window.location.href='${ctx}/complat/userSetUpEdit'">
+						<li class="speaker modify-msgs" onclick="javascript:window.location.href='${ctx}/complat/userSetUpEdit?userMenu=2'">
 							<p>
 								账户设置
 							</p>
@@ -101,18 +101,25 @@
 									<h3>
 										<span class="sso_h3_span2"> <a href='appSetting'>设置</a> </span>单点登录
 									</h3>
+									<c:if test="${fn:length(application)==0 }">
+											<div><p style='text-align: center;padding-top: 20px;'>没有操作应用的权限，请与管理员联系！</p></div>
+										</c:if>
 									<div class="sso_list2">
+										
+										<c:forEach items="${application}" var="app">
 										<li>
+											<input type="hidden" name="iid" value="${app.iid }"/>
 											<div style='width: 450px; height: 110px; padding-left: 30px;'>
-												<img style='cursor: pointer; float: left;' id="img1" name="img1" src='${ctx}/res/uids/app/img/icon/jcms.jpg' onclick='' title='网站管理系统' width='92' height='92' />
+												<img style='cursor: pointer; float: left;' id="img1" name="img1" src='${ctx}${app.icon}' onclick='' title='${app.name}' width='92' height='92' />
 												<ul>
-													<h4 title='网站管理系统' style='cursor: pointer' onclick=''>
-														网站管理系统
+													<h4 title='${app.name }' style='cursor: pointer' onclick=''>
+														${app.name }
 													</h4>
 													<p style='padding-right: 20px' title=''></p>
 												</ul>
 											</div>
 										</li>
+										</c:forEach>
 									</div>									
 								</div>
 							</div>
@@ -157,126 +164,9 @@
 			<!-- Jquery类库 -->
 			<script type="text/javascript" src="${ctx}/res/plugin/jquery/jquery-1.8.3.min.js"></script>
 			<script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgcore.lhgdialog.min.js"></script>
-			<!-- Handlebars模板组件 -->
-			<script type="text/javascript" src="${ctx}/res/plugin/handlebars/handlebars.js"></script>
-
-			<script type="text/javascript" src="${ctx}/res/plugin/jquery.layout/jquery.layout-latest.min.js"></script>
 			<!-- 滚动条组件 -->
-			<script type="text/javascript" src="${ctx}/res/plugin/scroll/jquery.mCustomScrollbar.concat.min.js"></script>
-			<%--	    <script type="text/javascript" src="${ctx}/res/plugin/nicescroll/jquery.nicescroll.min.js"></script>--%>
 			<script type="text/javascript" src="${ctx}/res/skin/login/js/login.js"></script>
-			<script type="text/javascript">
-	$(function() {
 
-		//$('#nav').height($(document).height()-$('#header').height());
-		$('#nav').mCustomScrollbar({
-			scrollButtons : {
-				enable : false
-			},
-			theme : "custom"
-		});
 
-		//生成NAV菜单
-		$.ajax({
-			url : "${ctx}/login/getSysMenuJson?rs=" + Math.random(),
-			dataType : "JSON",
-			async : false,
-			success : function(data) {
-				///alert(data);
-				//如果数据返回成功，则拼接HTML元素
-				var menuLength = data.length;
-				if (menuLength == 0) {
-					alert("您没有分配访问此系统的权限,请联系管理员!");
-					$.get("${ctx}/login/loginOut");
-					location.href = '${ctx}/login';
-				} else {
-					var nav_template = Handlebars.compile($("#nav_template")
-							.html());
-					$("#nav ul").html(nav_template(data));
-					if (menuLength == 1) {
-						$('.home').hide();
-						$('#nav ul li').eq(0).find("dt").slideUp(100);
-						$('#nav ul li').eq(0).addClass("active");
-						var url = $('#nav ul li').eq(0).find("dt").eq(0).find(
-								"a").attr("_href");
-						$('#nav ul li').eq(0).find("dt").eq(0).find("a").find(
-								"dl").eq(0).addClass("active");
-						;
-						$('#nav ul li').eq(0).find("dt").slideToggle(400);
-						if (url) {
-							$("#main").attr("src", url);
-						}
-					}
-				}
-			}
-		});
-
-		//导航菜单点击展开
-		$("#nav ul li").on("click", function() {
-			$(this).siblings('li').find("dt").slideUp(100);
-			$(this).siblings('li').removeClass("active");
-			$(this).addClass("active");
-			var url = $(this).find("a").attr("_href");
-			if (url) {
-				$("#main").attr("src", url);
-			} else {
-				$(this).find("dt").slideToggle(400);
-			}
-			setTimeout(function() {
-				$('#nav').mCustomScrollbar('update');
-			}, 400);
-
-			//$('#nav').mCustomScrollbar('update');
-		});
-
-		$("#nav ul li dt a").on("click", function(e) {
-			e = e || window.event;
-			if (e.preventDefault) {
-				e.preventDefault();
-				e.stopPropagation();
-			} else {
-				e.returnValue = false;
-				e.cancelBubble = true;
-			}
-
-			$(this).siblings("a").find("dl").removeClass("active");
-			$(this).find("dl").addClass("active");
-
-			var url = $(this).attr("_href");
-			if (url) {
-				$("#main").attr("src", url);
-			} else {
-				$(this).find("dt").slideToggle(400);
-			}
-		});
-		$('#36050').click(function() {
-			$("#36050").find("dt:first").hide();
-			iframe.location.href = "${ctx}/login/getSysMain";
-		});
-	});
-</script>
-<script type="text/javascript">
-
-	function fade() {
-
-		var docHeight = $(document).height(); //获取窗口高度  
-
-		$('body').append('<div id="overlay"></div>');
-
-		$('#overlay').height(docHeight).css({
-			'opacity' : .10, //透明度  
-			'position' : 'absolute',
-			'top' : 0,
-			'left' : 0,
-			'background-color' : '#E5E5E5',
-			'width' : '100%',
-			'z-index' : 5000
-		//保证这个悬浮层位于其它内容之上  
-		});
-		setTimeout(function() {
-			$('#overlay').fadeOut('slow')
-		}, 3000); //设置3秒后覆盖层自动淡出  
-	}
-</script>
 	</body>
 </html>

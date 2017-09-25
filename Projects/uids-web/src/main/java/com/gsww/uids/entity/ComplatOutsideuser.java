@@ -592,4 +592,5 @@ public class ComplatOutsideuser implements Serializable {
 
 	public ComplatOutsideuser() {
 	}
+
 }

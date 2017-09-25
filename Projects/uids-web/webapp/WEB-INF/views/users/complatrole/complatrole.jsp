@@ -12,7 +12,6 @@
 		<script type="text/javascript">
 		
 		function btnAuthorize(obj) {
-		
 		$(".list-page").css({'position':'absolute'});
 		$(".list-page").css({'bottom':'-100px'});
 		$("#list-warper").addClass("window-mask");
@@ -24,7 +23,7 @@
 		
 		var xyqx = "${ctx}/complat/croleAuthorizeShow?roleId=" + roleId;
 		var yyqx = "${ctx}/complat/appAuthorizeShow?roleId=" + roleId;
-		var yhjg = "${ctx}/complat/roleorganizationShow";
+		var yhjg = "${ctx}/complat/roleorganizationShow?roleId=" + roleId;
 		
 		$("#xtqx").attr("href",xyqx);
 		$("#yyqx").attr("href",yyqx);
@@ -41,6 +40,20 @@
 		      }
 		   });
 	};
+	
+	function modifyIsDefault(iid, checkbox) {
+		var isDefault = checkbox.checked ? 1 : 0; //切换当前角色缺省状态
+		$.ajax({
+			type : "POST",
+			url : "${ctx}/complat/isdefault_modify",
+			data : "iid=" + iid + "&isDefault=" + isDefault,
+			success : function(result) {
+				if (!result.success)
+					alert(result.message);
+			}
+		});
+	}
+	
 	/**搜索表单校验**/
 	function checkSubmitForm() {
 		var nameSearch = $("#nameSearch").val();
@@ -72,7 +85,7 @@
 			<!--列表的面包屑区域-->
 			<ol class="breadcrumb">
 				<li>
-					<a href="${ctx}/index" target="_top">首页</a>
+					<a href="${ctx}/backIndex" target="_top">首页</a>
 				</li>
 				<li class="split"></li>
 				<li>
@@ -114,7 +127,7 @@
 
 				</div>
 				<!-- 提示信息开始 -->
-				<div class="form-alert;">
+				<div class="form-alert">
 					<tags:message msgMap="${msgMap}"></tags:message>
 				</div>
 				<!-- 提示信息结束 -->
@@ -125,7 +138,7 @@
 							<th width="3%">
 								<div class="label">
 									<i class="check_btn check_all"></i>
-									<input id="${complatRole.iid}" value="${complatRole.iid}" type="checkbox" class="check_btn" style="display: none;" />
+									<input type="checkbox" class="check_btn" style="display: none;" />
 								</div>
 							</th>
 							<th width="80px" style="text-align: center">
@@ -158,7 +171,7 @@
 									${complatRole.spec}
 								</td>
 								<td style="text-align: center">
-									<input type="checkbox"/>
+									<input type="checkbox" <c:if test="${complatRole.isdeFault==1}">checked</c:if> onclick="modifyIsDefault(${complatRole.iid},this);"/>
 								</td>
 								<td class="position-content" style="text-align: center">
 									<div class="listOper">
@@ -192,7 +205,7 @@
 			<tags:pagination page="${pageInfo}" paginationSize="5" />
 		</div>
 	
-<div id="tabs" style="display:none;width: 65%;margin: auto;position: absolute;left: 165px;top: 104.5px">
+<div id="tabs" style="display:none;width: 65%;margin: auto;position: absolute;left: 165px;top: 50.5px">
  	<ul style="text-align: center;">
 	    <li style="text-align: center;width: 32.7%;"><a id="yhjg" style="width: 90%;" href="">用户机构管理</a></li>
 	    <li style="text-align: center;width: 32.7%;"><a id="yyqx" style="width: 90%;" href="">应用权限设置</a></li>

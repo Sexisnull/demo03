@@ -6,8 +6,8 @@
 
 <head>
 <title>甘肃万维JUP课题</title>
-<link rel="stylesheet" href="${ctx}/res/skin/default/plugin/z-tree/css/zTreeStyle/zTreeStyle.css" type="text/css"/>
-<script type="text/javascript" src="${ctx}/res/skin/default/plugin/z-tree/js/jquery.ztree.core-3.5.min.js"></script>
+<link rel="stylesheet" href="${ctx}/res/plugin/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css"/>
+<%-- <script type="text/javascript" src="${ctx}/res/skin/default/plugin/z-tree/js/jquery.ztree.core-3.5.min.js"></script> --%>
 <script type="text/javascript" src="${ctx}/res/plugin/uploadify/js/jquery.uploadify-3.1.min.js"></script>
 <style type="text/css">
 .ztree {margin-top: 10px;border: 1px solid #cfd9db; display:none;background: #f0f6e4;height:360px;overflow-y:scroll;overflow-x:auto;}
@@ -112,7 +112,7 @@ $(function(){
 	<div class="position">
 		<ol class="breadcrumb">
 			<li>
-				<a href="${ctx}/index" target="_top">首页</a>
+				<a href="${ctx}/backIndex" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
 			<li>

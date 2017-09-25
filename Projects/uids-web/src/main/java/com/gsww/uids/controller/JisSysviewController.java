@@ -98,7 +98,7 @@ public class JisSysviewController extends BaseController {
 			ex.printStackTrace();
 			logger.error("列表打开失败：" + ex.getMessage());
 			returnMsg("error", "列表打开失败", (HttpServletRequest) request);
-			return "redirect:/uids/jisSysviewList";
+			return "redirect:/sysview/jisSysviewList";
 		}
 		return "users/sysview/jis_sysview_list";
 	}

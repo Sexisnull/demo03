@@ -1,5 +1,7 @@
 package com.gsww.uids.service;
 
+import java.util.Map;
+
 import com.gsww.uids.entity.JisUserdetail;
 
 /**
@@ -19,7 +21,7 @@ public interface JisUserdetailService {
 	
 	void save(JisUserdetail jisUserdetail) throws Exception;
 	
-	void update(Integer iid,String cardId) throws Exception;
+	void update(Integer iid,String cardId,Map<String,String> userMap) throws Exception;
 	
     //动态addUserField
     public void addUserField(String fieldName) throws Exception;

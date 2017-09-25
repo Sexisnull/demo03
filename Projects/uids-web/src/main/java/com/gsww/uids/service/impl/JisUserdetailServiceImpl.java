@@ -1,9 +1,14 @@
 package com.gsww.uids.service.impl;
 
 
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import com.gsww.jup.dao.JdbcDAO;
 import com.gsww.uids.service.JisUserdetailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,8 +40,19 @@ public class JisUserdetailServiceImpl implements JisUserdetailService {
 	}
 
 	@Override
-	public void update(Integer iid, String cardId) throws Exception{
-		jisUserdetailDao.update(iid,cardId);
+	public void update(Integer iid, String cardId,Map<String,String> userMap) throws Exception{
+		Iterator it = userMap.entrySet().iterator();
+		String whereSqls = "";
+		while(it.hasNext()){
+			Map.Entry<String, String> map = (Entry<String, String>) it.next();
+			//System.out.println(map.getKey()+"============"+map.getKey());
+			String whereSql = map.getKey()+"='"+map.getValue()+"'";
+			whereSqls += whereSql + ",";
+		}
+		whereSqls = whereSqls.substring(0, whereSqls.length()-1);
+		String updateSql = "update jis_userdetail t set t.cardid = "+cardId+","+whereSqls+" where t.iid = "+iid;
+		//System.out.println("updateSql:"+updateSql);
+		jdbcDAO.execute(updateSql);
 	}
 	
 	/**

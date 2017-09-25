@@ -49,18 +49,19 @@ public class ExcelUtil {
 	/**
 	 * 
 	 * @param <T>
-	 * @param fileName 文件路径+文件名称
+	 * @param fileName 文件名称
+	 * @param is 读入文件流
 	 * @param entityClass
 	 * @param fieldMap
 	 *        fieldMap格式：map.put("0","属性名"); 从0开始，与导入模板的顺序对应
 	 * @return
 	 * @throws Exception
 	 */
-	public static<T> List<T> readXls(String fileName,Class<T> entityClass,LinkedHashMap<String, String> fieldMap) throws Exception {
+	public static<T> List<T> readXls(String fileName,InputStream is,Class<T> entityClass,LinkedHashMap<String, String> fieldMap) throws Exception {
 		//定义要返回的list
         List<T> resultList=new ArrayList<T>();
 		try {
-			Workbook workbook = getWeebWork(fileName);
+			Workbook workbook = getWeebWork(fileName,is);
 			// 循环工作表Sheet
 			for (int numSheet = 0; numSheet < workbook.getNumberOfSheets(); numSheet++) {
 				Sheet sheet = workbook.getSheetAt(numSheet);
@@ -72,10 +73,21 @@ public class ExcelUtil {
 					Row hssfRow = sheet.getRow(rowNum);
 					if (hssfRow != null) {
 						T entity=entityClass.newInstance();
-						int columnNum = hssfRow.getPhysicalNumberOfCells();
+						int columnNum=sheet.getRow(0).getPhysicalNumberOfCells();
 						//循环列col
 						for(int i = 0;i<columnNum;i++){
-							Object content = formatCell(hssfRow.getCell(i));
+							Object content = null;
+							if(hssfRow.getCell(i) != null){
+								content = formatCell(hssfRow.getCell(i));
+							}else{
+								content = "";
+							}
+							if("男".equals(content)){
+								content=1;
+							}else if("女".equals(content)){
+								content=0;
+							}
+							//content = formatCell(hssfRow.getCell(i));
 							String fieldName = fieldMap.get(String.valueOf(i));
 							setFieldValueByName(fieldName, content, entity);
 						}
@@ -98,16 +110,16 @@ public class ExcelUtil {
 	 * @return
 	 * @throws IOException
 	 */
-	public static Workbook getWeebWork(String filename) throws IOException {
+	public static Workbook getWeebWork(String filename,InputStream is) throws IOException {
 		Workbook workbook = null;
 		if (null != filename) {
 			String fileType = filename.substring(filename.lastIndexOf("."),
 					filename.length());
-			FileInputStream fileStream = new FileInputStream(new File(filename));
+			//FileInputStream fileStream = new FileInputStream(new File(filename));
 			if (".xls".equals(fileType.trim().toLowerCase())) {
-				workbook = new HSSFWorkbook(fileStream);// 创建 Excel 2003 工作簿对象
+				workbook = new HSSFWorkbook(is);// 创建 Excel 2003 工作簿对象
 			} else if (".xlsx".equals(fileType.trim().toLowerCase())) {
-				workbook = new XSSFWorkbook(fileStream);// 创建 Excel 2007 工作簿对象
+				workbook = new XSSFWorkbook(is);// 创建 Excel 2007 工作簿对象
 			}
 		}
 		return workbook;
@@ -123,6 +135,11 @@ public class ExcelUtil {
 			return String.valueOf(cell.getStringCellValue());
 		}
 	}
+	
+	
+	
+	
+	
 
     /**
      * 根据字段名给对象的字段赋值
@@ -214,10 +231,10 @@ public class ExcelUtil {
 				}
 			}
 			Date now = new Date();
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-			fileName = fileName+"_" + sdf.format(now).toString();
+			//SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+			//fileName = fileName+"111_" + sdf.format(now).toString();
 			response.setContentType("application/vnd.ms-excel");
-			response.setHeader("Content-disposition", "attachment;filename="+ fileName + ".xlsx");
+			response.setHeader("Content-disposition", "attachment;filename="+  new String(fileName.getBytes(),"iso-8859-1") + ".xlsx");
 			OutputStream out = response.getOutputStream();
 			wb.write(out);
 			out.flush();
@@ -238,7 +255,7 @@ public class ExcelUtil {
 		font.setFontName("宋体");
 		font.setFontHeightInPoints((short) 12);// 设置字体大小
 		font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);// 加粗
-		style.setFillForegroundColor(HSSFColor.LIME.index);// 设置背景色
+		style.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);// 设置背景色
 		style.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
 		style.setAlignment(HSSFCellStyle.SOLID_FOREGROUND);// 让单元格居中
 		// style.setWrapText(true);//设置自动换行

@@ -1,3 +1,5 @@
+
+
 <%@ page language="java" pageEncoding="utf-8"%>
 <!DOCTYPE html>
 <html>
@@ -16,40 +18,53 @@ var corNameInput=$("#name").val();
 	   name: {
 	    required: true,
 	    cnRangelength: [0,33],
-	    stringCheck:corNameInput  
+	    isCorporName:true  
 	   },
 	   realName:{
-	   	required: true	
+	   	required: true,
+	   	cnRangelength: [0,33],
+	   	isCorporName:true	
 	   },
 	   regNumber: {
-	    required: true	
+	    required: true
 	   },
 	   cardNumber:{
 	   	isIdCardNo:true,
-	   	 maxlength: 18
+	   	required:true,
+	   	maxlength: 18
 	   },
 	   orgNumber:{
 	   	required: true
 	   },
 	   loginName:{
-	   	required: true
+	   	required: true,
+	   	cnRangelength: [0,33],
+	   	isCorporName:true,
+	   	uniqueLoginName:true
 	   },
 	   mobile:{
 	   	isMobile:true,
 	   	required: true
 	   },
 	   pwd:{
-	   	required: true
+	   	required: true,
+	   	cnRangelength: [6,18]
 	   },
 	   email:{
+	   	required: true,
 	   	email:true
 	   },
 	   phone:{
 	   	isPhone:true
+	   },
+	   nation:{
+	   	required: true
 	   }
+	   
 	  }
     });
-    
+    // Ajax重命名校验
+	$.uniqueValidate('uniqueLoginName', '${ctx}/complat/checkCorporationLoginName', ['loginName','oldLoginName'], '对不起，这个账号重复了');
     //民族
 	var nations = ["汉族","壮族","回族","满族","维吾尔族","苗族","彝族","土家族","藏族","蒙古族",
 	               "侗族","布依族","瑶族","白族","朝鲜族","哈尼族","黎族","哈萨克族","傣族","畲族",
@@ -59,16 +74,20 @@ var corNameInput=$("#name").val();
 	               "鄂伦春族","独龙族","赫哲族","高山族","珞巴族","塔塔尔族"];
 	var nation = $("#nation");
 	for(var i=0;i<nations.length;i++){
-		nation.append("<option value='nations[i]'>"+nations[i]+"</option>");
+		nation.append("<option value='"+nations[i]+"'>"+nations[i]+"</option>");
+		
+		var corNation = document.getElementById("corNation").value;
+		if(corNation == nations[i]){
+			nation.attr("disabled","disabled");
+		}
 	}
-});
-
-$(function(){
-	// Ajax重命名校验
-	$.uniqueValidate('uniqueLoginAccount', '${ctx}/sys/checkAccount', ['loginAccount','oldLoginAccount'], '对不起，这个账号重复了');
-	$("#roleNames").Popup($(".ulRoleList"), { width: "auto" });
-	//
-	$(".icon-date-r").click(function(){ $(this).prev("input").click(); });
+	
+	
+	 //企业名称和法人名称校验     
+     jQuery.validator.addMethod("isCorporName", function(value, element) { 
+            var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;   
+            return this.optional(element) || (corporName.test(value));     
+     }, "名称只能由字母、数字、下划线、中文组成，不能以下划线开头和结尾"); 
 });
 
 
@@ -114,7 +133,7 @@ color: rgb(119, 119, 119);
 	<div class="position">
 		<ol class="breadcrumb">
 			<li>
-				<a href="${ctx}/index" target="_top">首页</a>
+				<a href="${ctx}/backIndex" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
 			<li>
@@ -136,6 +155,7 @@ color: rgb(119, 119, 119);
         <input type="hidden" id="authState" name="authState" value="${corporation.authState}"/>
     	<input type="hidden" id="isAuth" name="isAuth" value="${corporation.isAuth}"/>
     	<input type="hidden" id="time" name="time" value="${time}">
+    	<input type="hidden" name="corNation" id="corNation" value="${corNation}">
     </div>
     
     <!--表单的主内容区域-->
@@ -153,7 +173,7 @@ color: rgb(119, 119, 119);
 		<tr>
 			<th><b class="mustbe">*</b> 企业名称：</th>
 			 <td width="20%">
-				<input type="text" id="name" name="name" value="${corporation.name}" />
+				<input type="text" id="name" name="name" value="${corporation.name}" maxlength="33"/>
 			</td>
         	<th><b class="mustbe">*</b> 企业法人姓名：</th>
                <td>
@@ -163,24 +183,32 @@ color: rgb(119, 119, 119);
 		<tr>
 			<th><b class="mustbe">*</b> 企业法人身份证号：</th>
 				<td>
-					<input type="text" id="cardNumber" name="cardNumber" value="${corporation.cardNumber}"">
+<<<<<<< HEAD
+					<c:if test="${empty corporation.cardNumber}">
+						<input type="text" id="cardNumber" name="cardNumber"  maxlength="18">
+					</c:if>
+					<c:if test="${not empty corporation.cardNumber}">
+						<input type="text" id="cardNumber" name="cardNumber" value="${corporation.cardNumber}" maxlength="18" readonly="readonly">
+					</c:if>
+					
+=======
+					<input type="text" <c:if test="${corporation.cardNumber != null}">readonly="readonly"</c:if> id="cardNumber" name="cardNumber" value="${corporation.cardNumber}">
+>>>>>>> ee0c124ca97714d8fed1c99f8b06cf2cd148dc78
 	            </td>
 				<th> 企业法人民族：</th>
 				<td>
-					<select id="nation" name="nation">
-						<option value="">请选择</option>
-					</select>
+					<select id="nation" name="nation"></select>
 				</td>
 		</tr>
 		<tr>
 			<th class="td_3"><b class="mustbe">*</b>工商注册号/社会信用代码：</th>
 	        	 <td class="td_4">
-					<input type="text" id="regNumber" name="regNumber" value="${corporation.regNumber}" />
+					<input type="text" <c:if test="${corporation.regNumber != null}">readonly="readonly"</c:if> id="regNumber" name="regNumber" value="${corporation.regNumber}" />
 				</td>
-	            <c:if test="${corporation.iid==null}">
+	            <c:if test="${empty corporation.iid}">
 					<th class="td_5"> 组织机构代码：</th>
 					<td class="td_6">
-						<input type="text"  id="orgNumber" name="orgNumber" value="${corporation.orgNumber}" style=""/>
+						<input type="text"  id="orgNumber" name="orgNumber" value="${corporation.orgNumber}"/>
 					</td>
 				</c:if>
 		</tr>
@@ -190,8 +218,12 @@ color: rgb(119, 119, 119);
 			<td class="td_2" rowspan="4" tyle="max-width:0px;width:100px;ont-weight:bold;" align="center"">账户信息</td>
 			<th><b class="mustbe">*</b>用户名：</th>
 			<td>
-				<input type="text"  class="loginName" name="loginName" value="${corporation.loginName}" />
-            	
+<<<<<<< HEAD
+				<input type="text"  id="loginName" name="loginName" value="${corporation.loginName}" maxlength="33"/>
+=======
+				<input type="text"  id="loginName" name="loginName" value="${corporation.loginName}" />
+>>>>>>> ee0c124ca97714d8fed1c99f8b06cf2cd148dc78
+            	<input type="hidden"  id="oldLoginName" name="oldLoginName" value="${corporation.loginName}" />
             </td>
         	<th><b class="mustbe">*</b> 手机号码：</th>
         	<td>
@@ -201,11 +233,10 @@ color: rgb(119, 119, 119);
 		<tr>
 			<th> 密码：</th>
         	<td>
-        		<input type="password" id="pwd" name="pwd" value="${corporation.pwd}" 
-        		onkeyup="javascript:EvalPwd(this.value);"/>
+        		<input type="password" id="pwd" name="pwd"  value="${corporation.pwd}" onkeyup="javascript:EvalPwd(this.value);"/>
             	
         	</td>
-			<th>邮箱：</th>
+			<th><b class="mustbe">*</b>邮箱：</th>
 			<td>
 				<input type="text" class="input" id="email" name="email" value="${corporation.email}" />
             	<i class="form-icon-clear"></i>
@@ -214,13 +245,13 @@ color: rgb(119, 119, 119);
 		<tr>
 			<th>密码强度：</th>
 			<td>
-				<table id="pwdpower" title="字母加数字加符号就会强" style="width: 100%" cellspacing="0"
+				<table id="pwdpower" style="width: 84%" cellspacing="0"
 				cellpadding="0" border="0">
 					<tbody>
 						<tr>
-							<td id="pweak" style="">弱</td>
-							<td id="pmedium" style="">中</td>
-							<td id="pstrong" style="">强</td>
+							<td id="pweak" style="text-align: center;width: 100px;border: 1px solid  grey">弱</td>
+							<td id="pmedium" style="text-align: center;width: 100px;border: 1px solid  grey">中</td>
+							<td id="pstrong" style="text-align: center;width: 100px;border: 1px solid  grey">强</td>
 						</tr>
 					</tbody>
 				</table>

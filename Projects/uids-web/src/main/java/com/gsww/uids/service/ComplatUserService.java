@@ -2,6 +2,7 @@ package com.gsww.uids.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -54,7 +55,7 @@ public interface ComplatUserService {
 	/**
 	 * 根据用户名查询用户信息
 	 */
-	List<ComplatUser> findByUserName(String name);
+	List<ComplatUser> findByUserAllName(String loginallname);
 	
 	
 	/**
@@ -64,6 +65,13 @@ public interface ComplatUserService {
 	void updateUser(Integer iid,String name,String headShip,String phone,String mobile,String fax,
 			String email,String qq, Date modifyTime,String pwd) throws Exception;
 
-	
+	public List<Map<String,Object>> findByGroupIds(String id);
+
+	/**
+	 * 关键字查询
+	 * @param keyword
+	 * @return
+	 */
+	public List<Map<String, Object>> findByNameOrPinYin(String keyword);
 	
 }

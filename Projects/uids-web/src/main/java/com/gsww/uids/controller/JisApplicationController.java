@@ -21,13 +21,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.uids.entity.JisApplication;
+import com.gsww.uids.service.ComplatGroupService;
 import com.gsww.uids.service.JisApplicationService;
+import com.gsww.uids.util.HttpClientUtil;
 /**
  * 应用管理控制器
  * @author Seven
@@ -40,7 +43,8 @@ public class JisApplicationController extends BaseController{
 	private static Logger logger = LoggerFactory.getLogger(JisApplicationController.class);
 	@Autowired
 	private JisApplicationService jisApplicationService ;
-	
+	@Autowired
+	private ComplatGroupService complatGroupService ;
 	/**
 	 * 获取应用列表
 	 * @param pageNumber
@@ -72,11 +76,22 @@ public class JisApplicationController extends BaseController{
 			Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 			Specification<JisApplication>  spec=super.toNewSpecification(searchParams, JisApplication.class);
 			
+			// map放入
+			List<Map<String, Object>> groupList = new ArrayList<Map<String, Object>>();
+			Map<Integer, Object> groupMap = new HashMap<Integer, Object>();
+			groupList = complatGroupService.getComplatGroupList();
+			for (Map<String, Object> group : groupList) {
+				groupMap.put((Integer) group.get("iid"), group.get("name"));
+			}
+			
 			//分页
 			Page<JisApplication> pageInfo = jisApplicationService.getApplicationPage(spec,pageRequest);
 			model.addAttribute("pageInfo", pageInfo);
+			model.addAttribute("groupMap", groupMap);
 			
 			// 将搜索条件编码成字符串，用于排序，分页的URL
+			String groupName=request.getParameter("groupname");
+			model.addAttribute("groupName", groupName);
 			model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
 			model.addAttribute("sParams", searchParams);			
 			
@@ -244,4 +259,13 @@ public class JisApplicationController extends BaseController{
 			e.printStackTrace();
 		}
 	}
+	
+	
+	@RequestMapping({"checknet"})
+    @ResponseBody
+    public int checkNet(String url) {
+	    int overtime = 10000;
+	    int code = HttpClientUtil.getStatusCode(url, overtime);
+    return code;
+  }
 }

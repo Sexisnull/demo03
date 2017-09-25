@@ -1,18 +1,13 @@
 package com.gsww.uids.entity;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -67,7 +62,8 @@ public class ComplatUser implements java.io.Serializable{
 	private Date modifytime;         // 修改时间
 	private Integer synState;        // 0-未备份      1-备份失败         4-备份成功
 	private Integer Opersign;        // 1-新增      2-修改       3-假删
-		
+    private Date modifyPassTime;
+	
 	/** default constructor */
 	public ComplatUser() {
 		super();
@@ -390,5 +386,16 @@ public class ComplatUser implements java.io.Serializable{
 	public void setOpersign(Integer opersign) {
 		Opersign = opersign;
 	}
+
+    @Column(name="MODIFYPASSTIME")
+    public Date getModifyPassTime()
+    {
+      return this.modifyPassTime;
+    }
+    
+    public void setModifyPassTime(Date modifyPassTime) {
+        this.modifyPassTime = modifyPassTime;
+      }
+
 
 }

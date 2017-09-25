@@ -1,0 +1,130 @@
+接口说明：
+	
+1、大汉
+requestcod: I3eUZj
+username: tysfrzxt
+password: tysfrzxt
+
+
+云平台地址：http://10.20.26.19:8080/gov-apis
+政务外网地址:http://10.10.11.15:8081/gov-apis
+互联网地址：api.gszwfw.gov.cn:8081/gov-apis
+以上地址为正式环境地址
+
+说明：
+	1、首选通过授权接口，获取token。然后才能数据接口。
+	2、token是有有效期限的。超期后需要二次登录。如果上次的token未超期，进行二次登录，接口会记录数据，达到一定程度，则将账号冻结。
+	3、syscode  和  requestcod 等同。需要登录后才能访问的接口，必须传syscode 和 token
+	4、返回结果中。code=0 是调用接口成功，不代表业务。也需要结合返回的 rst 字段。
+	
+0.无授权接口
+	 0.1测试联通性
+		-api: http://localhost:8080/gov-apis/api/test/connect
+		-desc:如果系统接入方有必要判断能否连接到接口地址，可使用本地址测试
+		-params:无
+		-demo: 
+			curl -i -X POST -H "Content-Type: application/json" -H "Accept: application/json"  http://localhost:8080/gov-apis/api/test/connect
+		-result: {"error":{"code":0,"msg":"success"},"rst":"f77958d28a2c4c54963805233745f423","count":0}
+1.授权权接口
+	1.1 登录换取Token
+	-api: http://localhost:8080/gov-apis/api/auth/login
+	-desc:如果系统接入方有必要判断能否连接到接口地址，可使用本地址测试
+	-params:
+			@RequestParam("syscode") String syscode, // 系统Code
+			@RequestParam("username") String username, // 登录用户名
+			@RequestParam("password") String password// 登录密码
+			
+	-demo: 
+	curl -i -X POST -H "Content-Type: application/json" -H "Accept: application/json"  'http://localhost:8080/gov-apis/api/auth/login?syscode=BbEvae&username=jxstdev&password=123456'
+	-result: {"error":{"code":0,"msg":"success"},"rst":{"requestCode":"BbEvae","requestUid":"jxstdev","token":"jQvI7v","validateTime":1467797674166,"expired":1468056874166}}
+==============================
+法人相关接口
+==============================	
+1. 实名比对--实名认证
+	-api: http://localhost:8080/gov-apis/api/faren/verify/qyfr/{verify_mode}/{syscode}/{token}
+	-desc:如果系统接入方有必要判断能否连接到接口地址，可使用本地址测试
+	-params:	
+			 @PathVariable("verify_mode") int verify_mode, // 查询比对模式
+			 @PathVariable("syscode") String syscode, // 分配给的系统代码
+			 @PathVariable("token") String token, // 登陆完成之后返回的Token
+			 @RequestParam("zzjgdm") String zzjgdm, // 组织机构代码
+			 @RequestParam("tyshxydm") String tyshxydm, // 统一社会信用代码
+			 @RequestParam("gszch") String gszch, // 工商注册号
+			 @RequestParam("qymcqc") String qymcqc// 企业名称全称
+	匹配模式：	
+		Perfectly(1, "完全匹配"), //
+		Zzjgdm(2, "组织机构代码"), //
+		Tyshxydm(3, "统一社会信用代码证号"), //
+		Gszch(4, "工商注册号");//
+			
+	-demo: 
+
+	curl -i -X POST -H "Content-Type: application/json" -H "Accept: application/json"  'http://localhost:8080/gov-apis/api/faren/verify/qyfr/4/BbEvae/uU7VBz?zzjgdm=&tyshxydm=&gszch=99642480-6&qymcqc=兰州甘露商贸有限责任公司雅聚厅'
+	-result: {"error":{"code":0,"msg":"success"},"rst":true}
+
+2.实名认证--实名认证pi: http://localhost:8080/gov-apis/api/faren/verify/qfrpagerel/{verify_mode}/{syscode}/{token}
+	-desc:如果系统接入方有必要判断能否连接到接口地址，可使用本地址测试
+	-params:
+			 @PathVariable("syscode") String syscode, // 分配给的系统代码
+			 @PathVariable("token") String token, // 登陆完成之后返回的Token	
+			 @PathVariable("verify_mode") int verify_mode, // 查询比对模式
+			 @RequestParam("frmc") String frmc, // 法人名称
+			 @RequestParam("dbrxm") String dbrxm, // 法定代表人姓名
+			 @RequestParam("id") String id, // 身份证号码
+			 @RequestParam("tyshxydm") String tyshxydm, // 统一社会信用代码
+			 @RequestParam("zzjgdm") String zzjgdm, // 组织机构代码
+			 @RequestParam("gszch") String gszch // 工商注册号
+	匹配模式：	
+		Perfectly(1, "完全匹配"), //
+		Zzjgdm(2, "组织机构代码"), //
+		Tyshxydm(3, "统一社会信用代码证号"), //
+		Gszch(4, "工商注册号");//
+
+
+==============================
+个人相关接口
+==============================	
+6. 验证个人信息
+	-api: http://localhost:8080/gov-apis/api/rkxx/verify/sfzxx/{syscode}/{token}
+	-desc:如果系统接入方有必要判断能否连接到接口地址，可使用本地址测试
+	-params:	
+			final @PathVariable("syscode") String syscode, // 分配给的系统代码
+			final @PathVariable("token") String req_token, // token
+			final @RequestParam("id") String id,// 身份证号码
+			final @RequestParam("name") String name// 姓名
+		
+	-demo: 
+	curl -i -X POST -H "Content-Type: application/json" -H "Accept: application/json"  'http://localhost:8080/gov-apis/api/rkxx/verify/sfzxx/I3eUZj/3IRr2i?id=62000121321321321&name=张三'
+	-result:{"error":{"code":0,"msg":"success"},"rst":true}
+	
+	
+	
+==============================
+公务员相关接口
+==============================	
+	10. 公务人员身份认证接口
+	-api: http://localhost:8080/gov-apis/api/gwy/verify/gwyverify/{verify_mode}/{syscode}/{token}
+	-desc:如果系统接入方有必要判断能否连接到接口地址，可使用本地址测试
+	-params:	
+			final @PathVariable("verify_mode") int verify_mode, // 认证模式
+			final @PathVariable("syscode") String syscode, // 分配给的系统代码
+			final @PathVariable("token") String req_token, // token
+			final @RequestParam("id") String id, // 身份证号码
+			final @RequestParam("name") String name, // 姓名
+			final @RequestParam("jgbm") String jgbm, // 统一身份认证的机构代码
+			final @RequestParam("jgmc") String jgmc, // 机构名称
+			final @RequestParam("qybm") String qybm) // 区域编码
+			
+		 认证模式（0：默认模式--身份证号码+姓名，
+				1：完全匹配--默认+机构编码+机构名称+区域编码，
+				2：机构代码--默认+机构编码，
+				3：机构名称--默认+机构名称，
+				4：区域编码--默认+区域编码）
+		
+	-demo: 
+	curl -i -X POST -H "Content-Type: application/json" -H "Accept: application/json"  'http://localhost:8080/gov-apis/api/gwy/verify/gwyverify/0/BbEvae/uU7VBz?id=620402199008172124&name=武东燕&jgbm=&jgmc=&qybm='
+	-result:{"error":{"code":0,"msg":"success"},"rst":true}
+	
+	
+	
+	

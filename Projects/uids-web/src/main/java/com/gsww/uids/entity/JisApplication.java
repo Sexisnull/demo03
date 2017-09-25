@@ -4,8 +4,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -27,7 +25,7 @@ public class JisApplication implements java.io.Serializable {
 	private String encryptKey;             //密钥
 	private String icon;                   //应用图标地址
 	private Integer synUser;               //同步用户，1：同步后台、前台用户，2：只同步后台，3：不同步
-	private Integer loginType;             //登录方式，1：统一用户且单点登录，2：仅单点登录
+	private Integer loginType;             //登录方式，0：统一用户且单点登录，1：仅单点登录
 	private Integer userDefined;           //是否支持自定义登录帐号/密码，1：自定义帐号，2：固定帐号
 	private String allLoginIid;            //统一帐号用户名
 	private String allPwd;                 //统一帐号密码(加密)
@@ -37,23 +35,22 @@ public class JisApplication implements java.io.Serializable {
 	private String appUrl;                 //应用地址
 	private String ssoUrl;                 //登录地址
 	private Integer isShow;                //是否在前台显示，0：否，1：是
-	private ComplatGroup complatGroup;     //所属机构
+	private Integer groupId;               //所属机构
 	private Integer transType;             //数据传送方式，1：HTTP，2：WebService
 	private Integer isLogOff;              //是否统一注销，0：否，1：是
 	private Integer isUnifyRegister;       //是否统一注册，0：否，1：是
-	private String logOffUrl;
+	private String logOffUrl;              //注销地址
 	private Integer netType;               //网络类型，0：外网，1：专网
 	
 	public JisApplication() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public JisApplication(Integer iid, String name, String mark, String spec,
 			String encryptKey, String icon,Integer synUser,Integer loginType,
 			Integer userDefined, String allLoginIid, String allPwd,
 			Integer encryptType, Integer isSyncGroup, Integer orderId,
-			String appUrl, String ssoUrl, Integer isShow, ComplatGroup complatGroup,
+			String appUrl, String ssoUrl, Integer isShow, Integer groupId,
 			Integer transType,Integer isLogOff, Integer isUnifyRegister, 
 			String logOffUrl,Integer netType) {
 		super();
@@ -74,7 +71,7 @@ public class JisApplication implements java.io.Serializable {
 		this.appUrl = appUrl;
 		this.ssoUrl = ssoUrl;
 		this.isShow = isShow;
-		this.complatGroup = complatGroup;
+		this.groupId = groupId;
 		this.transType = transType;
 		this.isLogOff = isLogOff;
 		this.isUnifyRegister = isUnifyRegister;
@@ -233,20 +230,19 @@ public class JisApplication implements java.io.Serializable {
 		return isShow;
 	}
 
-	@ManyToOne
-	@JoinColumn(name = "GROUPID")
-	public ComplatGroup getComplatGroup() {
-		return complatGroup;
-	}
-
-	public void setComplatGroup(ComplatGroup complatGroup) {
-		this.complatGroup = complatGroup;
-	}
-
 	public void setIsShow(Integer isShow) {
 		this.isShow = isShow;
 	}
 	
+	@Column(name = "GROUPID")
+	public Integer getGroupId() {
+		return groupId;
+	}
+
+	public void setGroupId(Integer groupId) {
+		this.groupId = groupId;
+	}
+
 	@Column(name = "TRANSTYPE")
 	public Integer getTransType() {
 		return transType;

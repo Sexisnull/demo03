@@ -284,7 +284,6 @@ public class JSONUtil {
 	}
 	
 	public String writeListMapSJSON(List<Map<String, Object>> firstList) {
-		// TODO Auto-generated method stub
 		String jsonString ="";
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {  

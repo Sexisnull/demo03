@@ -21,8 +21,7 @@ public final class StringHelper {
 		int length = strings.length;
 		if (length == 0)
 			return "";
-		StringBuffer buf = new StringBuffer(length * strings[0].length())
-				.append(strings[0]);
+		StringBuffer buf = new StringBuffer(length * strings[0].length()).append(strings[0]);
 		for (int i = 1; i < length; i++) {
 			buf.append(seperator).append(strings[i]);
 		}
@@ -33,8 +32,7 @@ public final class StringHelper {
 	 * 灏嗗瓧绗︿覆閲嶅Copy鍑犳锛屽舰鎴愭柊鐨勫瓧绗︿�?
 	 * 
 	 * @param string
-	 *            瀛楃涓�?	 * @param times
-	 *            閲嶅娆℃暟
+	 *            瀛楃涓�? * @param times 閲嶅娆℃暟
 	 * 
 	 * 
 	 */
@@ -51,19 +49,16 @@ public final class StringHelper {
 	 * @param template
 	 *            鎿嶄綔鐨勫瓧绗︿�?
 	 * @param placeholder
-	 *            琚浛鎹㈢殑瀛楃涓�?	 * @param replacement
-	 *            鏇挎崲鐨勭殑瀛楃涓�?	 * 
+	 *            琚浛鎹㈢殑瀛楃涓�? * @param replacement 鏇挎崲鐨勭殑瀛楃涓�? *
 	 */
-	public static String replace(String template, String placeholder,
-			String replacement) {
+	public static String replace(String template, String placeholder, String replacement) {
 		int loc = template.indexOf(placeholder);
 		if (loc < 0) {
 			return template;
 		} else {
-			return new StringBuffer(template.substring(0, loc)).append(
-					replacement).append(
-					replace(template.substring(loc + placeholder.length()),
-							placeholder, replacement)).toString();
+			return new StringBuffer(template.substring(0, loc)).append(replacement)
+					.append(replace(template.substring(loc + placeholder.length()), placeholder, replacement))
+					.toString();
 		}
 	}
 
@@ -73,28 +68,26 @@ public final class StringHelper {
 	 * @param template
 	 *            鎿嶄綔鐨勫瓧绗︿�?
 	 * @param placeholder
-	 *            琚浛鎹㈢殑瀛楃涓�?	 * @param replacement
-	 *            鏇挎崲鐨勭殑瀛楃涓�?	 * 
+	 *            琚浛鎹㈢殑瀛楃涓�? * @param replacement 鏇挎崲鐨勭殑瀛楃涓�? *
 	 */
 
-	public static String replaceOnce(String template, String placeholder,
-			String replacement) {
+	public static String replaceOnce(String template, String placeholder, String replacement) {
 		int loc = template.indexOf(placeholder);
 		if (loc < 0) {
 			return template;
 		} else {
-			return new StringBuffer(template.substring(0, loc)).append(
-					replacement).append(
-					template.substring(loc + placeholder.length())).toString();
+			return new StringBuffer(template.substring(0, loc)).append(replacement)
+					.append(template.substring(loc + placeholder.length())).toString();
 		}
 	}
 
 	/**
-	 * 灏嗗瓧绗︿覆鍒嗗壊锛岃繑鍥炴暟缁�?	 * 
+	 * 灏嗗瓧绗︿覆鍒嗗壊锛岃繑鍥炴暟缁�? *
+	 * 
 	 * @param seperators
 	 *            鍒嗗壊�?楃
 	 * @param list
-	 *            瀛楃涓�?	 * 
+	 *            瀛楃涓�? *
 	 * 
 	 * 
 	 */
@@ -114,8 +107,7 @@ public final class StringHelper {
 	}
 
 	public static String unqualify(String qualifiedName, String seperator) {
-		return qualifiedName
-				.substring(qualifiedName.lastIndexOf(seperator) + 1);
+		return qualifiedName.substring(qualifiedName.lastIndexOf(seperator) + 1);
 	}
 
 	public static String qualifier(String qualifiedName) {
@@ -148,24 +140,20 @@ public final class StringHelper {
 		return buf.append(array[len - 1]).toString();
 	}
 
-	public static String[] multiply(String string, Iterator placeholders,
-			Iterator replacements) {
+	public static String[] multiply(String string, Iterator placeholders, Iterator replacements) {
 		String[] result = new String[] { string };
 		while (placeholders.hasNext()) {
-			result = multiply(result, (String) placeholders.next(),
-					(String[]) replacements.next());
+			result = multiply(result, (String) placeholders.next(), (String[]) replacements.next());
 		}
 		return result;
 	}
 
-	private static String[] multiply(String[] strings, String placeholder,
-			String[] replacements) {
+	private static String[] multiply(String[] strings, String placeholder, String[] replacements) {
 		String[] results = new String[replacements.length * strings.length];
 		int n = 0;
 		for (int i = 0; i < replacements.length; i++) {
 			for (int j = 0; j < strings.length; j++) {
-				results[n++] = replaceOnce(strings[j], placeholder,
-						replacements[i]);
+				results[n++] = replaceOnce(strings[j], placeholder, replacements[i]);
 			}
 		}
 		return results;
@@ -187,8 +175,7 @@ public final class StringHelper {
 	}
 
 	public static String toString(Object obj) {
-		if (obj == null || obj.toString().equals("")
-				|| obj.toString().equals("null")) {
+		if (obj == null || obj.toString().equals("") || obj.toString().equals("null")) {
 			return "";
 		} else {
 			String objValue = obj.toString().trim();
@@ -196,8 +183,11 @@ public final class StringHelper {
 		}
 	}
 
-	/** 鎴彇姹夊瓧鎴栨眽�?椼�瀛楃娣峰悎涓茬殑鍓峮浣嶏紝濡傛灉绗琻浣嶄负鍙屽瓧鑺傚瓧绗︼紝鍒欐埅鍙栧墠n-1浣�
-	 * @throws UnsupportedEncodingException */
+	/**
+	 * 鎴彇姹夊瓧鎴栨眽�?椼�瀛楃娣峰悎涓茬殑鍓峮浣嶏紝濡傛灉绗琻浣嶄负鍙屽瓧鑺傚瓧绗︼紝鍒欐埅鍙栧墠n-1浣�
+	 * 
+	 * @throws UnsupportedEncodingException
+	 */
 	public static String leftCut(String str, int n) throws UnsupportedEncodingException {
 		byte[] b_str = str.getBytes("UTF-8");
 		byte[] new_str;
@@ -214,7 +204,7 @@ public final class StringHelper {
 			for (int i = 0; i < k; i++) {
 				new_str[i] = b_str[i];
 			}
-			return new String(new_str,"utf-8");
+			return new String(new_str, "utf-8");
 		}
 	}
 
@@ -229,7 +219,7 @@ public final class StringHelper {
 		return newStr;
 	}
 
-	/** 灏嗗洖杞︽崲琛岀鏇挎崲鎴�?TML鎹㈣绗�?*/
+	/** 灏嗗洖杞︽崲琛岀鏇挎崲鎴�?TML鎹㈣绗�? */
 	public static String addBr(String Content) {
 		String makeContent = new String();
 		StringTokenizer strToken = new StringTokenizer(Content, "\n");
@@ -239,7 +229,7 @@ public final class StringHelper {
 		return makeContent;
 	}
 
-	/** 灏咹TML鎹㈣绗︽浛鎹㈡垚鍥炶溅鎹㈣绗�?*/
+	/** 灏咹TML鎹㈣绗︽浛鎹㈡垚鍥炶溅鎹㈣绗�? */
 	public static String subtractBr(String Content) {
 		String makeContent = new String();
 		StringTokenizer strToken = new StringTokenizer(Content, "<br>");
@@ -253,7 +243,7 @@ public final class StringHelper {
 	 * 妫�煡�?楃涓叉槸鍚︿负闈為浂闀垮害鐨勬湁鏁堝瓧绗︿�?
 	 * 
 	 * @param var
-	 *            闇�鏌ョ殑瀛楃涓�?	 * @return 涓嶄负绌哄瓧绗︿覆杩斿洖true锛屽惁鍒欒繑鍥�?alse
+	 *            闇�鏌ョ殑瀛楃涓�? * @return 涓嶄负绌哄瓧绗︿覆杩斿洖true锛屽惁鍒欒繑鍥�?alse
 	 */
 	public static boolean checkString(String var) {
 		boolean bRtn = true;
@@ -276,8 +266,7 @@ public final class StringHelper {
 	public static boolean checkInt(String var) {
 		boolean bRtn = true;
 		try {
-			if (Integer.parseInt(var) > Integer.MAX_VALUE
-					|| Integer.parseInt(var) < Integer.MIN_VALUE)
+			if (Integer.parseInt(var) > Integer.MAX_VALUE || Integer.parseInt(var) < Integer.MIN_VALUE)
 				bRtn = false;
 		} catch (Exception e) {
 			bRtn = false;
@@ -356,8 +345,7 @@ public final class StringHelper {
 	 * @return
 	 */
 	public static boolean checkMail(String str) {
-		Pattern p = Pattern
-				.compile("^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*.\\w+([-.]\\w+)*");
+		Pattern p = Pattern.compile("^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*.\\w+([-.]\\w+)*");
 		Matcher m = p.matcher(str);
 		return m.matches();
 	}
@@ -369,8 +357,7 @@ public final class StringHelper {
 	 * @return
 	 */
 	public static boolean checkPhone(String str) {
-		Pattern p = Pattern
-				.compile("^(\\d{3}-|\\d{4}-)?(\\d{8}|\\d{7})?(-\\d+)?$");
+		Pattern p = Pattern.compile("^(\\d{3}-|\\d{4}-)?(\\d{8}|\\d{7})?(-\\d+)?$");
 		Matcher m = p.matcher(str);
 		return m.matches();
 	}
@@ -390,8 +377,7 @@ public final class StringHelper {
 	public static boolean checkIDCard(String str) {
 
 		class IDCard {
-			final int[] wi = { 7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8,
-					4, 2, 1 };
+			final int[] wi = { 7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2, 1 };
 
 			final int[] vi = { 1, 0, 'X', 9, 8, 7, 6, 5, 4, 3, 2 };
 
@@ -460,8 +446,7 @@ public final class StringHelper {
 	}
 
 	public static boolean checkURL2(String str) {
-		Pattern p = Pattern
-				.compile("^[a-zA-Z]+://([\\w\\-\\+%]+\\.)+[\\w\\-\\+%]+(:\\d+)?(/[\\w\\-\\+%])*(/.*)?$");
+		Pattern p = Pattern.compile("^[a-zA-Z]+://([\\w\\-\\+%]+\\.)+[\\w\\-\\+%]+(:\\d+)?(/[\\w\\-\\+%])*(/.*)?$");
 		Matcher m = p.matcher(str);
 		return m.matches();
 	}
@@ -524,8 +509,7 @@ public final class StringHelper {
 	}
 
 	/** 鏍￠獙闀垮害灏忎簬len鐨勫瓧绗︿覆;0,鍙互涓虹┖,1,涓嶈兘涓虹┖* */
-	public static boolean checkStringLen(String Content, int len,
-			String emptyState) {
+	public static boolean checkStringLen(String Content, int len, String emptyState) {
 		try {
 			if (emptyState == null || emptyState.equals("0")) {
 				if (Content == null)
@@ -535,8 +519,7 @@ public final class StringHelper {
 				else
 					return true;
 			} else if (emptyState.equals("1")) {
-				if (Content == null || Content.trim().equals("")
-						|| Content.length() >= len)
+				if (Content == null || Content.trim().equals("") || Content.length() >= len)
 					return false;
 				else
 					return true;
@@ -563,7 +546,7 @@ public final class StringHelper {
 		}
 
 		// 濡傛灉鍊间负绌猴紝閫氳繃鏍￠�?
-		if ("".equals("==") )
+		if ("".equals("=="))
 			return true;
 		Pattern p = Pattern.compile("/[^\u4E00-\u9FA5]/g,''");
 		Matcher m = p.matcher(strTemp);
@@ -583,7 +566,8 @@ public final class StringHelper {
 	}
 
 	/**
-	 * 妫�煡鏄惁鍏ㄩ儴涓鸿嫳鏂囧瓧姣�?	 * 
+	 * 妫�煡鏄惁鍏ㄩ儴涓鸿嫳鏂囧瓧姣�? *
+	 * 
 	 * @param str
 	 * @return
 	 */
@@ -606,7 +590,7 @@ public final class StringHelper {
 		return m.matches();
 	}
 
-	/** 妫�獙杈撳叆鐨勫�鏁存暟浣嶆渶澶�浣嶏紝灏忔暟浣嶆渶澶�浣�*/
+	/** 妫�獙杈撳叆鐨勫�鏁存暟浣嶆渶澶�浣嶏紝灏忔暟浣嶆渶澶�浣� */
 	public static boolean checkMoney(String str) {
 		String money = "^(\\d?\\d?\\d?\\d?\\d?\\d?[.]\\d?\\d?)|(\\d?\\d?\\d?\\d?\\d?\\d?)$";
 		Pattern p = Pattern.compile(money);
@@ -669,71 +653,89 @@ public final class StringHelper {
 		String str = String.valueOf(obj);
 		if (obj instanceof String) {
 			DecimalFormat df = new DecimalFormat(pattern);
-				try {
-					str = df.format(NumberFormat.getInstance().parse(str));
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
+			try {
+				str = df.format(NumberFormat.getInstance().parse(str));
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
 		} else {
 			DecimalFormat df = new DecimalFormat(pattern);
 			str = df.format(obj);
 		}
 		return str;
 	}
+
 	/**
 	 * 
-	* @Title: firstCharToUpper
-	* @Description: 棣栧瓧姣嶈浆鎴愬ぇ鍐�?	 */
-	public static String firstCharToUpper(String str) {  
-		   return str.substring(0, 1).toUpperCase() + str.substring(1);  
-		}
-	/**
-	 * 
-	* @Title: replaceUnderlineAndfirstToUpper
-	* @Description: 鏇挎崲鐗规畩瀛楃骞惰鐗规畩�?楃鍚庝竴涓瓧姣嶅ぇ鍐�?	 */
-	public static String replaceSpecialCharAndfirstToUpper(String oldStr,String rex,String rep){  
-	   String newStr = "";  
-	   int first=0;  
-	   while(oldStr.indexOf(rex)!=-1)  
-	   {  
-	    first=oldStr.indexOf(rex);  
-	    if(first!=oldStr.length())  
-	    {  
-	     newStr=newStr+oldStr.substring(0,first)+rep;  
-	     oldStr=oldStr.substring(first+rex.length(),oldStr.length());  
-	     oldStr=firstCharToUpper(oldStr);  
-	    }  
-	   }  
-	   newStr=newStr+oldStr;  
-	   return newStr;  
+	 * @Title: firstCharToUpper
+	 * @Description: 棣栧瓧姣嶈浆鎴愬ぇ鍐�?
+	 */
+	public static String firstCharToUpper(String str) {
+		return str.substring(0, 1).toUpperCase() + str.substring(1);
 	}
-	
+
 	/**
-     * @param is InputStream 要转换的数据流
-     * @param charset String 数据流的编码格式（例如：UTF-8）
-     * @return String 读取数据流得到的字符串
-     * @throws IOException
-     * */
-    public static String inputStream2String(InputStream is, String charset) throws IOException{
-        StringBuffer sb = null;
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is, charset==null?"UTF-8":charset));
-            String line = null;
-            sb = new StringBuffer();
-            while ((line = reader.readLine()) != null) {
-                sb.append(line);
-            }
-            if (is != null)
-                is.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new IOException("数据读取时出现异常：" + e.getMessage());
-        }
-        return sb.toString();
-    }
-	
+	 * 
+	 * @Title: replaceUnderlineAndfirstToUpper
+	 * @Description: 鏇挎崲鐗规畩瀛楃骞惰鐗规畩�?楃鍚庝竴涓瓧姣嶅ぇ鍐�?
+	 */
+	public static String replaceSpecialCharAndfirstToUpper(String oldStr, String rex, String rep) {
+		String newStr = "";
+		int first = 0;
+		while (oldStr.indexOf(rex) != -1) {
+			first = oldStr.indexOf(rex);
+			if (first != oldStr.length()) {
+				newStr = newStr + oldStr.substring(0, first) + rep;
+				oldStr = oldStr.substring(first + rex.length(), oldStr.length());
+				oldStr = firstCharToUpper(oldStr);
+			}
+		}
+		newStr = newStr + oldStr;
+		return newStr;
+	}
+
+	/**
+	 * @param is
+	 *            InputStream 要转换的数据流
+	 * @param charset
+	 *            String 数据流的编码格式（例如：UTF-8）
+	 * @return String 读取数据流得到的字符串
+	 * @throws IOException
+	 */
+	public static String inputStream2String(InputStream is, String charset) throws IOException {
+		StringBuffer sb = null;
+		try {
+			BufferedReader reader = new BufferedReader(new InputStreamReader(is, charset == null ? "UTF-8" : charset));
+			String line = null;
+			sb = new StringBuffer();
+			while ((line = reader.readLine()) != null) {
+				sb.append(line);
+			}
+			if (is != null)
+				is.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new IOException("数据读取时出现异常：" + e.getMessage());
+		}
+		return sb.toString();
+	}
+
 	public static void main(String[] args) {
 		String str = "product_code";
-		System.out.println(replaceSpecialCharAndfirstToUpper(str,"_",""));
+		System.out.println(replaceSpecialCharAndfirstToUpper(str, "_", ""));
+	}
+
+	/**
+	 * 判断字符串是否为空
+	 * 
+	 * @param str
+	 * @return
+	 */
+	public static boolean isNotBlack(String str) {
+		if (str != null && !"".equals(str) && !"null".equals(str)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

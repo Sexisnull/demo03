@@ -73,7 +73,6 @@ public class JisLogController extends BaseController {
 		try {
 			Page<Map<String, String>> pageInfo = jisLogService.getJisLogPage(
 					pageNo, pageSize, this.getSearchCondition(request));
-			System.out.println("pageInfo:" + pageInfo);
 			model.addAttribute("pageInfo", pageInfo);
 		} catch (Exception ex) {
 			ex.printStackTrace();

@@ -1,0 +1,129 @@
+/*网页全局样式开始*/
+	body
+	{
+		/*body基本样式开始*/
+			font-size: 9pt; color:#000000; FONT-FAMILY: 宋体,verdana;
+			margin:0px; padding:0px;
+		/*body基本样式结束*/
+
+		/*body扩展样式开始*/
+			background-repeat: repeat-y;
+			background-position: center;
+			scrollbar-face-color:#b9b9b9;
+			scrollbar-highlight-color:#b9b9b9;
+			scrollbar-shadow-color:#b9b9b9;
+			scrollbar-3dlight-color:#b9b9b9;
+			scrollbar-darkshadow-color:#b9b9b9;
+			scrollbar-arrow-color:#F0F0F0;
+			scrollbar-track-color:#F0F0F0;
+			scrollbar-base-color:#F0F0F0;
+
+			/*拖动条的表面颜色*/
+			scrollbar-face-color:#fbf6e8; MARGIN: 0px;  
+
+			/*亮边*/  
+			scrollbar-highlight-color:#fbf6e8;
+
+			/*暗边*/
+			scrollbar-shadow-color:#aaaaaa;
+			scrollbar-3dlight-color:#aaaaaa; 
+			
+			/*箭头颜色*/
+			scrollbar-arrow-color:#aaaaaa;  
+
+			/*拖动区域(TrackBar)颜色*/
+			scrollbar-track-color:#fbf6e8;	
+			scrollbar-darkshadow-color:#fbf6e8
+		/*body扩展样式结束*/
+	}
+
+	tr {font-size:9pt;FONT-FAMILY: 宋体;text-align: left;}
+	td {font-size:9pt;FONT-FAMILY: 宋体; line-height:24px;}
+/*网页全局样式结束*/
+
+
+/*版通基本样式开始*/
+	/*文章标题样式*/
+	.title{font-size:16pt;color:#000000;font-weight:bold;line-height:35px;}
+
+	/*首页、频道页栏目默认标题列表样式 小字体*/
+	.bt_link{font-size: 9pt; text-decoration:none; color:#494949 ;line-height:24px;}
+
+	/*底层栏目页标题列表及文章正文样式 大字体*/
+	.bt_content{font-size: 10.5pt; text-decoration:none; color:#000000 ;line-height:26px; }
+
+	/*时间显示样式*/
+	.bt_time {  font-size: 7pt; color: #999999; FONT-FAMILY: Verdana}	
+	.bt_date {  font-size: 7pt; color: #999999; FONT-FAMILY: Verdana}	
+
+	/*"更多"显示样式*/
+	.bt_more {font-size:9pt ;text-decoration:underline; color:#494949}
+/*版通基本样式结束*/
+
+
+	/*各种颜色样式 可自行扩展*/
+	.blue{color:#406EC2; font-size: 9pt; text-decoration:underline; }
+	.white{color:#ffffff; font-size: 9pt; text-decoration:none; }
+	.red {text-decoration:underline;color:#C70506; }
+	.yellow {text-decoration:none;color:#FFB900; }
+	.green {text-decoration:underline;color:#038C54; }
+	.coffee {color:#A70404;font-size: 9pt; text-decoration:none; }
+	.sanjilanmu {color:#FF8315;font-size:9pt; font-weight:bold; }
+
+/* 自定义样式结束 */
+
+
+/*超链接样式开始 可自行扩展*/
+
+	a.bt_more { text-decoration:none; color:#000000;}
+	a.bt_more:hover { text-decoration:none; color:#000000;} 
+
+	a { text-decoration:none; color:#000000;font-size:9pt;line-height:24px;}
+	a:hover { color:#ff0000;text-decoration:none;font-size:9pt;line-height:24px;}
+	
+	a.white { text-decoration:none; color:#000;font-size:10.5pt; font-weight:bold }
+	a.white:hover { text-decoration:none; color:#ff0000;font-size:10.5pt;font-weight:bold}
+
+	a.white_title { text-decoration:none; color:#ffffff;font-size:9pt; font-weight:normal}
+	a.white_title:hover { text-decoration:none; color:#ffbd49;font-size:9pt;font-weight:normal}
+	
+	a.title { text-decoration:none; color:#000000;font-size:14px; font-weight:bold; line-height:24px}
+	a.title:hover { color:#ff0000;text-decoration:none;font-size:14px;font-weight:bold; line-height:24px}
+
+	
+/*超链接样式结束*/
+
+/*通用边框样式*/
+.biankuang{ border:1px solid #BFBFBF}
+
+
+/*标题样式*/
+.logo_title{ color:#FFFFFF; font-size:24pt;line-height:50px;font-family:黑体}
+.white_title{font-size:10.5pt; color:#FFFFFF; font-weight:bold}
+
+.test{cursor: pointer}
+
+#pwdpower {
+	width: 170px;
+	border: 0px none;
+	background-color: #f1f1f1
+}
+
+#pwdpower td {
+	text-align: center;
+	vertical-align: middle;
+	padding: 1px;
+	color: #adadac;
+}
+
+#pwdpower #pweak {
+	border-right: 1px solid #dedede;
+}
+
+#pwdpower #pmedium {
+	border-right: 1px solid #dedede;
+}
+
+#pwdpower #pstrong {
+	
+}

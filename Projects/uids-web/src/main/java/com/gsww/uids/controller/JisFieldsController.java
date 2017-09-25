@@ -26,6 +26,7 @@ import org.springside.modules.web.Servlets;
 import com.gsww.jup.controller.BaseController;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.jup.util.StringHelper;
+import com.gsww.uids.entity.ComplatZone;
 import com.gsww.uids.entity.JisFields;
 import com.gsww.uids.service.JisFieldsService;
 
@@ -90,12 +91,12 @@ public class JisFieldsController extends BaseController {
 			// 将搜索条件编码成字符串，用于排序，分页的URL
 			model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
 			model.addAttribute("sParams", searchParams);
-
+            
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			logger.error("列表打开失败：" + ex.getMessage());
 			returnMsg("error", "列表打开失败", (HttpServletRequest) request);
-			return "redirect:/jis/fieldsList";
+			//return "redirect:/jis/fieldsList";
 		}
 		return "system/jis/fields_list";
 	}
@@ -148,6 +149,25 @@ public class JisFieldsController extends BaseController {
 					jisUserdetailService.addUserField(jisFields.getFieldname());
 					returnMsg("success", "保存成功", request);
 				} else { // 编辑
+					int type = jisFields.getType();
+					if (type == 1) {//字符串
+						jisFields.setDefvalue("");
+						jisFields.setFieldkeys("");
+						jisFields.setFieldvalues("");
+					} 
+					if (type == 2) {//枚举值
+						jisFields.setDefvalue("");
+						String keys = StringUtils.substringBeforeLast(jisFields.getFieldkeys(), ",");
+						String values = StringUtils.substringBeforeLast(jisFields.getFieldvalues(), ",");
+						jisFields.setFieldkeys(keys);
+						jisFields.setFieldvalues(values);
+					}
+					if (type == 3) {
+						jisFields.setFieldkeys("");
+						jisFields.setFieldvalues("");
+						String defvalue = StringUtils.substringBeforeLast(jisFields.getDefvalue(), ",");
+						jisFields.setDefvalue(defvalue);
+					}
 					jisFieldsService.save(jisFields);
 					returnMsg("success", "编辑成功", request);
 				}
@@ -225,5 +245,39 @@ public class JisFieldsController extends BaseController {
 			returnMsg("error", "设置失败", request);
 		}
 		return "redirect:/jis/fieldsList";
+	}
+	
+	@RequestMapping(value = "/checkFieldname", method = RequestMethod.GET)
+	public void checkFieldname(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		JisFields jisFieldsSame = null;
+		try {
+			boolean flag = true;//true 不重名  false 重名
+			String fieldname = StringUtils.trim((String) request.getParameter("fieldname"));
+			String iidStr = StringUtils.trim((String) request.getParameter("iid"));
+			if (iidStr != null && iidStr != "") {
+				int iid = Integer.parseInt(iidStr);
+				jisFieldsSame = jisFieldsService.findByKey(iid);
+			}
+			if (fieldname != "null") {
+				List<JisFields> jisFieldsList = jisFieldsService.findAllJisFields();
+				for (JisFields jisFields : jisFieldsList) {
+					if (fieldname.equals(jisFields.getFieldname())) {
+						if (!fieldname.equals(jisFieldsSame.getFieldname())) {
+							flag = false;
+							break;
+						}
+					}
+				}
+			} else {
+				
+			} 
+			if (flag) {
+				response.getWriter().write("1");
+			} else {
+				response.getWriter().write("0");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

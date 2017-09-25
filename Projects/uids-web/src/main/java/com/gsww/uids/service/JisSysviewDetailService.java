@@ -5,4 +5,6 @@ import com.gsww.uids.entity.JisSysviewDetail;
 public interface JisSysviewDetailService {
 
 	public JisSysviewDetail findByIid(int iid);
+	
+	public void delete(JisSysviewDetail jisSysviewDetail);
 }

@@ -2,6 +2,7 @@ package com.gsww.uids.controller;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,7 @@ import com.google.common.collect.Maps;
 import com.gsww.jup.controller.BaseController;
 import com.gsww.jup.entity.sys.SysUserSession;
 import com.gsww.jup.util.PageUtils;
+import com.gsww.uids.entity.ComplatOutsideuser;
 import com.gsww.uids.entity.ComplatZone;
 import com.gsww.uids.service.ComplatZoneService;
 
@@ -315,6 +317,7 @@ public class ComplatZoneController extends BaseController {
 	 */
 	@RequestMapping(value = "/saveZone", method = RequestMethod.POST)
 	public void treeSave(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ComplatZone complatZone = null;
 		try {
 			String seq = request.getParameter("seq");
 			String name = request.getParameter("name");
@@ -329,7 +332,7 @@ public class ComplatZoneController extends BaseController {
 				Map<String, Object> resMap = new HashMap<String, Object>();
 				SysUserSession sysUserSession = (SysUserSession) ((HttpServletRequest) request).getSession()
 						.getAttribute("sysUserSession");
-				ComplatZone complatZone = new ComplatZone();
+				complatZone = new ComplatZone();
 				complatZone.setName(name);
 				complatZone.setPid(Integer.parseInt(parId));
 				complatZone.setCodeId(dcode);
@@ -340,7 +343,11 @@ public class ComplatZoneController extends BaseController {
 				resMap.put("ret", 1);
 				resMap.put("id", complatZoneSave.getIid());
 				response.getWriter().write(org.json.simple.JSONObject.toJSONString(resMap));
-			} else {
+			} if (type > 3) {
+				Map<String, Object> resMap = new HashMap<String, Object>();
+				resMap.put("ret", 4);
+				response.getWriter().write(org.json.simple.JSONObject.toJSONString(resMap));
+			}else if(complatZone == null){
 				Map<String, Object> resMap = new HashMap<String, Object>();
 				resMap.put("ret", 0);
 				response.getWriter().write(org.json.simple.JSONObject.toJSONString(resMap));
@@ -383,6 +390,31 @@ public class ComplatZoneController extends BaseController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	/**
+     * @discription  表单修改保存  
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+	 */
+	@SuppressWarnings("finally")
+	@RequestMapping(value = "/zoneFormSave", method = RequestMethod.POST)
+	public ModelAndView zoneFormSave(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		try {
+			String deptIid = StringUtils.trim((String) request.getParameter("iid"));
+			String deptCode = StringUtils.trim((String) request.getParameter("deptCode1"));
+			ComplatZone complatZone = complatZoneService.fingByKey(Integer.parseInt(deptIid));
+			complatZone.setCodeId(deptCode);
+			complatZoneService.save(complatZone);
+		} catch (Exception e) {
+			e.printStackTrace();
+			returnMsg("error", "保存失败", request);
+		} finally {
+			return new ModelAndView("redirect:/complat/zoneList");
 		}
 	}
 }

@@ -11,10 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gsww.jup.dao.sys.SysRoleAcctRelDao;
-import com.gsww.jup.dao.sys.SysRoleDao;
 import com.gsww.jup.entity.sys.SysRoleAcctRel;
 import com.gsww.jup.entity.sys.SysUserSession;
 import com.gsww.jup.service.sys.SysLoginService;
+import com.gsww.uids.dao.ComplatRoleDao;
 import com.gsww.uids.dao.ComplatUserDao;
 import com.gsww.uids.entity.ComplatUser;
 
@@ -37,7 +37,7 @@ public class SysLoginServiceImpl implements SysLoginService {
 	@Autowired
 	private SysRoleAcctRelDao sysRoleAcctRelDao;
 	@Autowired
-	private SysRoleDao sysRoleDao;
+	private ComplatRoleDao complatRoleDao;
 	
 	@Override
 	public SysUserSession login(String userName, String password,String groupId, String ip) throws Exception {
@@ -58,7 +58,7 @@ public class SysLoginServiceImpl implements SysLoginService {
 			if(roleList!=null && roleList.size()>0){
 				for(SysRoleAcctRel ra : roleList){
 					roles += ra.getRoleId().toString()+",";
-					roleNames += sysRoleDao.findByRoleId(ra.getRoleId()).getRoleName()+",";
+					roleNames += complatRoleDao.findByIid(Integer.parseInt(ra.getRoleId())).getName()+",";
 				}
 				roles = roles.substring(0, roles.length()-1);
 				roleNames = roleNames.substring(0, roleNames.length()-1);

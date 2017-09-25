@@ -9,17 +9,20 @@
 <script type="text/javascript">
 $().ready(function() {
 	//表单校验
+	//var fieldName=$("#fieldname").val();
 	$("#editForm").validate({
 		rules: {
 			//校验内容
-			showname : {//显示名
-				required: true,
-				cnRangelength: [0,50]
-			},
-			fieldname : {//字段名
-				required: true,
-				cnRangelength: [0,25]
-			},
+			showname: {
+		     required: true,
+		   	 maxlength: 50,
+		   	},
+		    fieldname : {
+		     required: true,
+		     maxlength: 50,
+		     uniqueName : true
+		     //stringCheck:fieldName
+		    },
 			defvalue : {
 				cnRangelength: [0,25]
 			},
@@ -34,6 +37,8 @@ $().ready(function() {
 			}
 		}
 	});
+	// Ajax重命名校验
+	$.uniqueValidate('uniqueName', '${ctx}/jis/checkFieldname', ['fieldname','iid'], '对不起，这个字段名称重复了');
 });
 
 $(document).on("change",'select#fieldsType',function(){
@@ -64,7 +69,7 @@ $(document).on("change",'select#fieldsType',function(){
 	<div class="position">
 		<ol class="breadcrumb">
 			<li>
-				<a href="${ctx}/index" target="_top">首页</a>
+				<a href="${ctx}/backIndex" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
 			<li>
@@ -100,7 +105,7 @@ $(document).on("change",'select#fieldsType',function(){
 			<tr>
 				<th><b class="mustbe">*</b>字段名：</th>
 				<td>
-					<input type="text"  class="fieldname" name="fieldname" <c:if test="${jisFields.fieldname != '' && jisFields.fieldname != null}">value="${jisFields.fieldname}" readonly="readonly"</c:if> value="ex_"/>
+					<input type="text"  class="fieldname" id="fieldname" name="fieldname" <c:if test="${jisFields.fieldname != '' && jisFields.fieldname != null}">value="${jisFields.fieldname}" readonly="readonly"</c:if> value="ex_"/>
 				</td>
 				<th></th>
 				<td></td>
@@ -130,7 +135,7 @@ $(document).on("change",'select#fieldsType',function(){
 			<tr id = "tr_3" style="display: none;">
 				<th><b class="mustbe">*</b>固定值：</th>
 				<td>
-					<input type="text"  class="defvalue" name="defvalue" value="${jisFields.defvalue}" />
+					<input type="text"  class="defvalue" name="defvalue" />
 				</td>
 				<th></th>
 				<td></td>
@@ -156,7 +161,7 @@ $(document).on("change",'select#fieldsType',function(){
 			<tr id = "tr_2_1" style="display: none;">
 				<th><b class="mustbe">*</b>Key串：</th>
 				<td>
-					<input type="text"  class="fieldkeys" name="fieldkeys" value="${jisFields.fieldkeys}" />
+					<input type="text"  class="fieldkeys" name="fieldkeys" />
 				</td>
 				<th></th>
 				<td></td>
@@ -164,7 +169,7 @@ $(document).on("change",'select#fieldsType',function(){
 			<tr id = "tr_2_2" style="display: none;">
 				<th><b class="mustbe">*</b>Value串：</th>
 				<td>
-					<input type="text"  class="fieldvalues" name="fieldvalues" value="${jisFields.fieldvalues}" />
+					<input type="text"  class="fieldvalues" name="fieldvalues" />
 				</td>
 				<th></th>
 				<td></td>

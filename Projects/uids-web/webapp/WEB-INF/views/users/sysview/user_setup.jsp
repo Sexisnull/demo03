@@ -1,4 +1,5 @@
 
+
 <%@page language="java" pageEncoding="UTF-8"%>
 <!doctype html>
 <%@ include file="/include/meta.jsp"%>
@@ -56,20 +57,92 @@
 					   	isPhone:true
 					   }
 					  }
-				    });
+				    }); 
 				    
 				    
-				    //用户扩展属性
-				   var fileds = $(".form-table");
-				   for(var i= 0 ;i <= 8;i++){
-				   	if(i%2 == 0){
-				   		fileds.append("<tr><th>yaoxi2：</th><td><input type='text' id='yaox' name='yaox'></td>"+
-				  		    "<th>yaoxi4：</th><td><input type='text' id='yaox' name='yaox'></td></tr>");
-				   	}else{
-				   		fileds.append("<tr><th>yaoxi1：</th><td><input type='text' id='yaox' name='yaox'></td></tr>");
-				   	}
-				   		
-				   }
+				    //获取用户扩展属性
+				    var htmlString=[];
+				    var count = 1;
+				    var table = $(".form-table");
+				    var fieldsListMap = eval('${fieldsListMap}');
+				    for(var i=0;i<fieldsListMap.length;i++){
+				    	var fieldsList = fieldsListMap[i];
+				    	for(var j = 0;j<fieldsList.length;j++){
+				    		var fields = fieldsList[j];
+				    		if(fields.type==1){
+				    		   for(var key in fields){
+				    			var value = fields[key];
+				    			if(key!='type' && key !='userid'){
+				    			    if(count%2==1){
+				    			       htmlString.push("<tr><th>"+key+"</th><td><input name='"+key+"' type='text' value='"+value+"'></td>");
+				    			    }
+				    			    if(count%2==0){
+				    			       htmlString.push("<th>"+key+"</th><td><input type='text' name='"+key+"' value='"+value+"'></td></tr>");
+				    			    }
+				    			    count++;
+				    			}
+				    		   } 
+				    		}
+				    		
+				    		var values;
+				    		var keys;
+				    		if(fields.type==2){
+				    		   for(var key in fields){
+				    			var value = fields[key];
+				    			if(key == 'fieldkeys'){
+				    				keys = value.split(",");
+				    			}
+				    			
+				    			if(key == 'fieldvalues'){
+				    				values = value.split(",");
+				    			}
+				    			if(key!='type' && key !='userid'){
+				    			    if(key == 'fieldname'){
+				    			    if(count%2==1){
+				    			    	
+				    			    	htmlString.push("<tr><th>"+value+"</th><td><select id='"+value+"' name= '"+value+"'>");
+				    			    	//循环key；
+				    			        for(var i=0;i<keys.length;i++){
+				    			 			htmlString.push("<option value='"+keys[i]+"'");
+				    			          //获取下拉列表默认值
+										    var select = eval('${jsonMap}');
+										    for(var selectKey in select[0]){
+										    	var selectValue = select[0][selectKey];
+										    	if(selectValue == keys[i]){
+				    			        			htmlString.push("selected = 'selected'");
+				    			        		}
+									    	}
+									    	htmlString.push(">"+values[i]+"</option>");
+				    				    }
+				    			       htmlString.push("</select></td>");
+				    			       
+				    				   
+				    			    }
+				    			    if(count%2==0){
+				    			    	htmlString.push("<th>"+value+"</th><td><select id='"+value+"' name= '"+value+"'>");
+				    			    	//循环key；
+				    			        for(var i=0;i<keys.length;i++){
+				    			        	htmlString.push("<option value='"+keys[i]+"'");
+				    			          //获取下拉列表默认值
+										    var select = eval('${jsonMap}');
+										    for(var selectKey in select[0]){
+										    	var selectValue = select[0][selectKey];
+										    	if(selectValue == keys[i]){
+				    			        			htmlString.push("selected = 'selected'");
+				    			        		}
+									    	}
+									    	htmlString.push(">"+values[i]+"</option>");
+				    				    }
+				    			       htmlString.push("</select></td></tr>");
+				    			    }
+				    			    count++;
+				    			   	}
+				    			}
+				    		  } 
+				    		}
+				    	}
+				    }
+				    table.append(htmlString.join(""));
 			});
 		</script>
 		<style type="text/css">
@@ -103,7 +176,7 @@
                     <li class="home" onclick="toFront();">
                         <p>返回首页</p>
                     </li>
-                    <li class="speaker modify-msgs">
+                    <li class="speaker modify-msgs" onclick="javascript:window.location.href='${ctx}/complat/userSetUpEdit?userMenu=2'">
                     	<p>账户设置</p>
                     </li>
                     <li class="pwd modify-pwd"  onclick="javascript:window.location.href='${ctx}/jisLog/countUser'">
@@ -134,7 +207,7 @@
 		<div class="position">
 			<ol class="breadcrumb">
 				<li>
-					<a href="${ctx}/index" target="_top">首页</a>
+					<a href="${ctx}/backIndex" target="_top">首页</a>
 				</li>
 				<li class="split"></li>
 				<li>
@@ -149,6 +222,7 @@
 		    <div style="display:none;">
 		    	<input type="hidden" id="iid" name="iid" value="${complatUser.iid}"/>
 		    	<input type="hidden" id="userDetailIid" name="userDetailIid" value="${userDetail.iid}">
+		    	
 		    </div>
 		    
 		    <!--表单的主内容区域-->
@@ -243,7 +317,7 @@
 		    <div class="form-btn">
 		    	<input type="submit" tabindex="15" id="submit-btn" value="保存" class="btn bluegreen"/>
 		    	&nbsp;&nbsp;
-		        <input type="button" tabindex="16" value="返回" onclick="javascript:window.location.href='${ctx}/complat/corporationList?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}'" class="btn gray"/>
+		        <input type="button" tabindex="16" value="返回" onclick="javascript:window.history.back();" class="btn gray"/>
 		    </div>
 	    </form>
 		
@@ -258,6 +332,9 @@
 		<script type="text/javascript" src="${ctx}/res/skin/login/js/login.js"></script>
 		<!-- 密码强度校验 -->
 		<script type="text/javascript" src="${ctx}/res/js/region/checkpwd.js"></script>
+		
+		<!-- 用户扩展属性 -->
+		<script type="text/javascript" src="${ctx}/res/js/region/userFields.js"></script>
     	<script type="text/javascript">
 			
 		

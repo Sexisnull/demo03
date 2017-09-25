@@ -6,6 +6,7 @@ package com.gsww.jup.controller.sys;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,8 +35,10 @@ import com.gsww.jup.util.JSONUtil;
 import com.gsww.jup.util.TimeHelper;
 import com.gsww.uids.entity.ComplatGroup;
 import com.gsww.uids.entity.ComplatUser;
+import com.gsww.uids.entity.JisLog;
 import com.gsww.uids.service.ComplatGroupService;
 import com.gsww.uids.service.ComplatUserService;
+import com.gsww.uids.service.JisLogService;
 
 /**
  * <p>Copyright: Copyright (c) 2011</p>
@@ -61,6 +64,8 @@ public class SysLoginController extends BaseController{
 	private SysMenuService sysMenuService;
 	@Autowired
 	private ComplatGroupService complatGroupService;
+	@Autowired
+	private JisLogService jisLogService;
 	
 	private static Logger logger = LoggerFactory.getLogger(SysLoginController.class);
 
@@ -94,35 +99,33 @@ public class SysLoginController extends BaseController{
 						response.getWriter().write(JSONObject.toJSONString(resMap));
 						try {
 							// 登录日志
-//							SysLog log = new SysLog();
-//							log.setUserAcctId(sysUserSession.getAccountId());
-//							log.setLogIp(sysUserSession.getUserIp());
-//							log.setLogModel("系统登录");
-//							log.setLogModelOperator(userName);
-//							log.setLogType("1");
-//							log.setLogContent("成功");
-//							log.setOperatorTime(TimeHelper.getCurrentTime());
-//							sysLogService.logInsert(log);
+							JisLog log = new JisLog();
+							log.setUserId(sysUserSession.getAccountId());
+							log.setIp(sysUserSession.getUserIp());
+							log.setOperateTime(new Date());
+							log.setSpec("系统登录成功");
+							log.setModuleName(8);
+							log.setOperateType(9);
+							jisLogService.save(log);
+
 						} catch (Exception e) {
-							e.printStackTrace();
+							logger.error(e.getMessage(),e);
 						}
 					}else{
 						resMap.put("ret", "3");
 						resMap.put("msg", "用户已停用！");
 						response.getWriter().write(JSONObject.toJSONString(resMap));
 						try {
-							// 登录日志
-//							SysLog log = new SysLog();
-//							log.setUserAcctId(sysUserSession.getAccountId());
-//							log.setLogIp(sysUserSession.getUserIp());
-//							log.setLogModel("系统登录");
-//							log.setLogModelOperator(userName);
-//							log.setLogType("1");
-//							log.setLogContent("失败");
-//							log.setOperatorTime(TimeHelper.getCurrentTime());
-//							sysLogService.logInsert(log);
+							JisLog log = new JisLog();
+							log.setUserId(sysUserSession.getAccountId());
+							log.setIp(sysUserSession.getUserIp());
+							log.setOperateTime(new Date());
+							log.setSpec("系统登录失败[停用]");
+							log.setModuleName(8);
+							log.setOperateType(9);
+							jisLogService.save(log);
 						} catch (Exception e) {
-							e.printStackTrace();
+							logger.error(e.getMessage(),e);
 						}
 					}
 				} else {
@@ -130,23 +133,20 @@ public class SysLoginController extends BaseController{
 					resMap.put("msg", "用户名或密码错误！");
 					response.getWriter().write(JSONObject.toJSONString(resMap));
 					try {
-						// 登录日志
-//						SysLog log = new SysLog();
-//						log.setUserAcctId("-999");
-//						log.setLogIp(loginIp);
-//						log.setLogModel("系统登录");
-//						log.setLogModelOperator(userName);
-//						log.setLogType("1");
-//						log.setLogContent("失败");
-//						log.setOperatorTime(TimeHelper.getCurrentTime());
-//						sysLogService.logInsert(log);
+						JisLog log = new JisLog();
+						log.setUserId(userName);
+						log.setIp(loginIp);
+						log.setOperateTime(new Date());
+						log.setSpec("系统登录失败[用户名密码错误]");
+						log.setModuleName(8);
+						log.setOperateType(9);
+						jisLogService.save(log);
 					} catch (Exception e) {
-						e.printStackTrace();
+						logger.error(e.getMessage(),e);
 					}
 				}
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error(e.getMessage(),e);
 				resMap.put("ret", "4");
 				resMap.put("msg", "系统错误！");
 				response.getWriter().write(JSONObject.toJSONString(resMap));
@@ -159,82 +159,7 @@ public class SysLoginController extends BaseController{
 		}
 	}
 
-	/**
-	 * 验证用户账号及密码
-	 * @param request
-	 * @param response
-	 * @return mav
-	 * @throws IOException 
-	 */
-	@RequestMapping(value = "/withOutlogin", method = RequestMethod.GET)
-	public ModelAndView withOutLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		AttributePrincipal principal = (AttributePrincipal) request.getUserPrincipal();
-		String userName = principal.getName();
-		Map<String, Object> resMap = new HashMap<String, Object>();
-		String loginIp = getIpAddr(request);
-		//为了自动化测试先屏蔽掉验证码，请大家先别修改回去，手下留情。谢谢。
-		if (true) {
-//		if (sessionKaptcha.equals(inputKaptcha)) {
-			// 验证码正确，检查用户名和密码
-			try {
-				SysUserSession sysUserSession = sysLoginService.login(userName);
-				if (sysUserSession != null) {
-					if(sysUserSession.getUserState().equals("1")){
-						request.getSession().setAttribute("sysUserSession", sysUserSession);
-						response.getWriter().write(JSONObject.toJSONString(resMap));
-						try {
-							// 登录日志
-//							SysLog log = new SysLog();
-//							log.setUserAcctId(sysUserSession.getAccountId());
-//							log.setLogIp(sysUserSession.getUserIp());
-//							log.setLogModel("系统登录");
-//							log.setLogModelOperator(userName);
-//							log.setLogType("1");
-//							log.setLogContent("成功");
-//							log.setOperatorTime(TimeHelper.getCurrentTime());
-//							sysLogService.logInsert(log);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}else{
-						try {
-							// 登录日志
-//							SysLog log = new SysLog();
-//							log.setUserAcctId(sysUserSession.getAccountId());
-//							log.setLogIp(sysUserSession.getUserIp());
-//							log.setLogModel("CAS系统登录");
-//							log.setLogModelOperator(userName);
-//							log.setLogType("1");
-//							log.setLogContent("失败");
-//							log.setOperatorTime(TimeHelper.getCurrentTime());
-//							sysLogService.logInsert(log);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}
-				} else {
-					try {
-						// 登录日志
-//						SysLog log = new SysLog();
-//						log.setUserAcctId("-999");
-//						log.setLogIp(loginIp);
-//						log.setLogModel("系统登录");
-//						log.setLogModelOperator(userName);
-//						log.setLogType("1");
-//						log.setLogContent("失败");
-//						log.setOperatorTime(TimeHelper.getCurrentTime());
-//						sysLogService.logInsert(log);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return  new ModelAndView("redirect:/frontIndex");
-	}
+	
 	/**
 	 * 用户退出
 	 * @param request
@@ -266,11 +191,11 @@ public class SysLoginController extends BaseController{
 	@RequestMapping(value = "/login/getSysMain")
 	public String getSysIndexMain(ServletRequest request) {
 		try {
-
+			
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error(ex.getMessage(),ex);
 		}
-		return "main/main";
+		return "redirect:/complat/complatList";
 	}
 
 	/**
@@ -288,7 +213,7 @@ public class SysLoginController extends BaseController{
 			response.getWriter().write(sysMenuService.getSysMenu(roleIds));
 			response.flushBuffer();
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error(ex.getMessage(),ex);
 		}
 	}
 	/**
@@ -306,7 +231,7 @@ public class SysLoginController extends BaseController{
 			response.getWriter().write(sysMenuService.getSysMenuJson(roleIds));
 			response.flushBuffer();
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error(ex.getMessage(),ex);
 		}
 	}
 	/**
@@ -324,7 +249,7 @@ public class SysLoginController extends BaseController{
 			mav.addObject("sysAccount", sysAccount);
 			mav.setViewName("/main/userDetail");
 		}catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error(ex.getMessage(),ex);
 		}
 		return mav;
 	}
@@ -369,7 +294,6 @@ public class SysLoginController extends BaseController{
 			}
 			response.getWriter().write(returnStr);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			returnStr = "没有找到用户或存在同名账号的用户，请联系管理员！";
 			e.printStackTrace();
 		}
@@ -408,7 +332,7 @@ public class SysLoginController extends BaseController{
 
 			List<ComplatGroup> list = new ArrayList<ComplatGroup>();
 			
-			if(!"0".equals(groupId)){
+			if(!"0".equals(groupId)&&StringUtils.isNotBlank(groupId)){
 				list = complatGroupService.findByPid(Integer.parseInt(groupId));
 			}else{
 				list.add(complatGroupService.findByIid(128));
@@ -453,7 +377,7 @@ public class SysLoginController extends BaseController{
 			response.getWriter().write(groups);
 			
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error(ex.getMessage(),ex);
 		}
 	}
 
