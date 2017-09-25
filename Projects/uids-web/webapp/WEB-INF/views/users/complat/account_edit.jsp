@@ -459,14 +459,14 @@ var complatUserNameInput=$("#name").val();
 				  </td>				
 			    </tr>-->			   		
 		        <tr>
-		           <td class="td_1" rowspan="3" style="max-width:0px;width:100px;ont-weight:bold;" align="center"">账号信息</td>
+		           <td class="td_1" rowspan="4" style="max-width:0px;width:100px;ont-weight:bold;" align="center"">账号信息</td>
                    <th><b class="mustbe">*</b>登录名：</th>
                    <td style="width:300px;">
 					  <input type="text"  class="loginname" name="loginname" value="${complatUser.loginname}" />
 	               </td>
 	        	   <th>姓名的首字母全称：</th>
 	        	   <td style="width:300px;">
-	        		  <input type="text" id="loginallname" name="loginallname" value="${complatUser.loginallname}" />
+	        		  <input type="text" id="pinyin" name="pinyin" value="${complatUser.pinyin}" />
 	        	   </td>
 			    </tr>	
 				<tr style="width:300px;">		
@@ -480,8 +480,8 @@ var complatUserNameInput=$("#name").val();
 				   </td>
 			    </tr>
 			    <tr>				
-		           <th class="td_5"> 密码强度：</th>
-			       <td class="td_3" style="width:300px;">			                 
+		           <th> 密码强度：</th>
+			       <td style="width:300px;">			                 
 				      <table id="pwdpower" style="width: 86%" cellspacing="0"
 							cellpadding="0" border="0">
 						<tbody>
@@ -493,11 +493,19 @@ var complatUserNameInput=$("#name").val();
 						</tbody>
 				</table>
 			       </td>
-			       <th class="td_6"><b class="mustbe">*</b> 请设置密码找回问题答案：</th>
-				   <td class="td_4" style="width:300px;">
+			       <th><b class="mustbe">*</b> 请设置密码找回问题答案：</th>
+				   <td style="width:300px;">
 					  <input type="text"  class="input" id="pwdanswer" name="pwdanswer" value="${complatUser.pwdanswer}"  />
 				   </td>
 			    </tr>	
+			    <tr>		
+				   <th class="td_5"><b class="mustbe">*</b> 登录名全称：</th>
+	        	   <td class="td_3" style="width:300px;">
+	        		  <input type="text" id="loginallname" name="loginallname" value="${complatUser.loginallname}" />	            	
+	        	   </td>
+				   <th class="td_6"></th>
+				   <td class="td_4" style="width:300px;"></td>
+			    </tr>
 	    </table>
   </div> 
     
