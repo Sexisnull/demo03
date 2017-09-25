@@ -460,7 +460,7 @@ $(function(){
 								请输入姓名：
 							</th>
 							<td width="20%">
-								<input type="text" style="width: 170px;" placeholder="请输入姓名:"
+								<input type="text" style="width: 170px;" placeholder="请输入姓名"
 									value="${sParams['LIKE_name']}" id="nameSearch"
 									name="search_LIKE_name" />
 							</td>
@@ -468,7 +468,7 @@ $(function(){
 								请输入登录名：
 							</th>
 							<td width="20%">
-								<input type="text" style="width: 170px;" placeholder="请输入登录名:"
+								<input type="text" style="width: 170px;" placeholder="请输入登录名"
 									value="${sParams['LIKE_loginname']}" id="loginnameSearch"
 									name="search_LIKE_loginname" />
 							</td>
@@ -476,7 +476,7 @@ $(function(){
 								请输入登录名全称：
 							</th>
 							<td width="20%">
-								<input type="text" style="width: 170px;" placeholder="请输入登录名全称:"
+								<input type="text" style="width: 170px;" placeholder="请输入登录名全称"
 									value="${sParams['LIKE_loginallname']}" id="loginallnameSearch"
 									name="search_LIKE_loginallname" />
 							</td>

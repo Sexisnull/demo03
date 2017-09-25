@@ -21,26 +21,29 @@
 
 <style type="text/css">
 .form-table td{
-width: 0;
-color: rgb(119, 119, 119);
+    width: 0;
+    color: rgb(119, 119, 119);
 }
 .form-table th:first-child {
     padding-left: 0px;
 	width:130px;
+	
 }
 .form-table td {
     height: 32px;
     line-height: 32px;
-    white-space: nowrap;
+    white-space: nowrap;    
     padding: 2px 2px;
 }
 
 .td_1 {
 	border-bottom : 1px solid #C6E6FF;
 	border-right : 1px solid #C6E6FF;
+	width:100px;
 }
 .td_2 {
 	border-right : 1px solid #C6E6FF;
+	width:100px;
 }
 .td_3 {
 	border-bottom : 1px solid #C6E6FF;
@@ -54,11 +57,14 @@ color: rgb(119, 119, 119);
 .td_6 {
 	border-bottom : 1px solid #C6E6FF;
 }  
-#complatKzsx {
-    max-width:0px;
-    width:100px;
-    ont-weight:bold;
+.td_7{
+   border-right : 1px solid #C6E6FF;  
 }
+#td_7{
+   align:center;
+    vertical-align: middle;
+}
+
 
 
 /*角色信息分区样式*/
@@ -150,7 +156,7 @@ function resetform() {
 $().ready(function() {
 
 //表单校验
-/*var complatUserNameInput=$("#name").val();
+var complatUserNameInput=$("#name").val();
  $("#editForm").validate({
     rules: {
 	   name: {
@@ -211,7 +217,7 @@ $().ready(function() {
 				 form.submit();		
         } 
      }
-   }); */  
+   });   
 
 
    
@@ -220,9 +226,9 @@ $().ready(function() {
     var htmlString=[];
     var count = 1;
     var table = $(".form-table");
-    ///var kzsx=table.append("<tr><td  class='td_2' rowspan='count' align='center'>"+"扩展属性"+"</td>");
+    //htmlString.push("<tr><td  class='td_2' rowspan='"+count+"' align='center'>"+"扩展属性"+"</td>");
     var fieldsListMap = eval('${fieldsListMap}');
-    htmlString.push("<tr><td  class='td_2' rowspan='"+count+"' align='center'>"+"扩展属性"+"</td>");
+    htmlString.push("<tr><td  class='td_2' id='td_7' rowspan='"+count+"' align='center'>"+"扩展属性"+"</td>");
     for(var i=0;i<fieldsListMap.length;i++){
     	 
     	var fieldsList = fieldsListMap[i];
@@ -232,12 +238,24 @@ $().ready(function() {
     		   for(var key in fields){    			   
     			var value = fields[key];
     			if(key!='type' && key !='userid'){
-    			    if(count%2==1){
-    			       htmlString.push("<th>"+key+"</th><td><input name='"+key+"' type='text' value='"+value+"'></td>");
-    			    }
-    			    if(count%2==0){
-    			       htmlString.push("<th>"+key+"</th><td><input type='text' name='"+key+"' value='"+value+"'></td></tr>");
-    			    }
+    				if(count==1){   
+    					 if(count%2==1){
+  	    			       htmlString.push("<th>"+key+"</th><td><input name='"+key+"' type='text' value='"+value+"'></td>");
+  	    			    }
+    					 if(count%2==0){
+    	    			       htmlString.push("<th>"+key+"</th><td><input type='text' name='"+key+"' value='"+value+"'></td></tr>");
+    	    			    }
+    					//htmlString.push("<th>"+key+"</th><td><input name='"+key+"' type='text' value='"+value+"'></td><th></th><td></td></tr>");
+    				}else{
+    					 if(count%2==1){
+    	    			       htmlString.push("<td class='td_7'></td><th>"+key+"</th><td><input name='"+key+"' type='text' value='"+value+"'></td>");
+    	    			    }
+    	    			    if(count%2==0){
+    	    			       htmlString.push("<th>"+key+"</th><td><input type='text' name='"+key+"' value='"+value+"'></td></tr>");
+    	    			    }
+    					
+    				}
+    			   
     			    count++;
     			}
     		   } 
@@ -259,7 +277,7 @@ $().ready(function() {
     			    if(key == 'fieldname'){
     			    if(count%2==1){
     			    	
-    			    	htmlString.push("<tr><th>"+value+"</th><td><select id='"+value+"' name= '"+value+"'>");
+    			    	htmlString.push("<tr><td class='td_7'></td><th>"+value+"</th><td><select id='"+value+"' name= '"+value+"' style='width:260px;'>");
     			    	//循环key；
     			        for(var i=0;i<keys.length;i++){
     			 			htmlString.push("<option value='"+keys[i]+"'");
@@ -278,7 +296,7 @@ $().ready(function() {
     				   
     			    }
     			    if(count%2==0){
-    			    	htmlString.push("<th>"+value+"</th><td><select id='"+value+"' name= '"+value+"'>");
+    			    	htmlString.push("<th>"+value+"</th><td><select id='"+value+"' name= '"+value+"' style='width:260px;'>");
     			    	//循环key；
     			        for(var i=0;i<keys.length;i++){
     			        	htmlString.push("<option value='"+keys[i]+"'");
@@ -348,52 +366,52 @@ $().ready(function() {
 		 		<tr>
 		 		  <td class="td_1" rowspan="5" style="max-width:0px;width:100px;ont-weight:bold;" align="center">基本属性</td>
 				  <th><b class="mustbe">*</b>姓名：</th>
-				  <td>
+				  <td style="width:300px;">
 					<input type="text" id="name" name="name" value="${complatUser.name}" />
 	        	    <input type="hidden" id="croleId" class="input" name="iid" value="${complatUser.iid}"  />	  
 	              </td>
 	        	  <th><b class="mustbe">*</b>性别：</th>
-				  <td>	
+				  <td style="width:300px;">	
 				 	<gsww:checkboxTag name="type" defaultValue="1" type="ZFYHXB" inputType="radio" value="${complatUser.sex}"></gsww:checkboxTag>
 				  </td>
 		 		</tr> 
 		 		<tr>  
 		 		  <th><b class="mustbe">*</b> 年龄：</th>
-				  <td>
+				  <td style="width:300px;">
 					<input type="text" id="age" name="age" value="${complatUser.age}"">
 	              </td>
 	        	   <th><b class="mustbe">*</b> 用户职务：</th>
-				  <td>
+				  <td style="width:300px;">
 					<input type="text" id="headship" name="headship" value="${complatUser.headship}"">
 				  </td>
 			    </tr>			    
 			    <tr>
 			      <th><b class="mustbe">*</b> 固定电话：</th>
-				  <td>
+				  <td style="width:300px;">
 					<input type="text"  id="phone" name="phone" value="${complatUser.phone}" />
 				  </td>
 				  <th><b class="mustbe">*</b> 移动电话：</th>
-                  <td>
+                  <td style="width:300px;">
                 	<input type="text"  id="mobile" name="mobile" value="${complatUser.mobile}" />
                   </td>				
 			    </tr>
 			    <tr>
 				  <th> 传真：</th>
-				  <td>
+				  <td style="width:300px;">
 					<input type="text" id="fax" name="fax" value="${complatUser.fax}" />
 				  </td>
 				  <th><b class="mustbe">*</b> Email：</th>				
-				  <td>
+				  <td style="width:300px;">
 					<input type="text"  id="email" name="email" value="${complatUser.email}" />
 				  </td>
 			    </tr>			    
 			    <tr>
-				  <th> QQ：</th>
-				  <td>
+				  <th class="td_5"> QQ：</th>
+				  <td class="td_3" style="width:300px;">
 					<input type="text" id="qq" name="qq" value="${complatUser.qq}" />
 				  </td>
-				  <th><b class="mustbe">*</b> 所属机构：</th>
-				  <td>
+				  <th class="td_6"><b class="mustbe">*</b> 所属机构：</th>
+				  <td class="td_4" style="width:300px;">
 				    <c:if test="${empty complatUser.iid}">
 				        <input id="groupname" value="${groupMap[complatUser.groupid]}" name="groupname" type="text" style="cursor: pointer;"/> 
 					    <input type="hidden" id="groupid" name="groupid">	
@@ -443,28 +461,28 @@ $().ready(function() {
 		        <tr>
 		           <td class="td_1" rowspan="3" style="max-width:0px;width:100px;ont-weight:bold;" align="center"">账号信息</td>
                    <th><b class="mustbe">*</b>登录名：</th>
-                   <td>
+                   <td style="width:300px;">
 					  <input type="text"  class="loginname" name="loginname" value="${complatUser.loginname}" />
 	               </td>
 	        	   <th>姓名的首字母全称：</th>
-	        	   <td>
+	        	   <td style="width:300px;">
 	        		  <input type="text" id="loginallname" name="loginallname" value="${complatUser.loginallname}" />
 	        	   </td>
 			    </tr>	
-				<tr>		
+				<tr style="width:300px;">		
 				   <th><b class="mustbe">*</b> 密码：</th>
-	        	   <td>
+	        	   <td style="width:300px;">
 	        		  <input type="password" id="pwd" name="pwd" value="${complatUser.pwd}" onkeyup="javascript:EvalPwd(this.value);"/>	            	
 	        	   </td>
 				   <th><b class="mustbe">*</b> 请设置密码找回问题：</th>
-				   <td>
+				   <td style="width:300px;">
 					  <input type="text"  class="input" id="pwdquestion" name="pwdquestion" value="${complatUser.pwdquestion}"  />
 				   </td>
 			    </tr>
 			    <tr>				
 		           <th class="td_5"> 密码强度：</th>
-			       <td class="td_3">			                 
-				      <table id="pwdpower" style="width: 85%" cellspacing="0"
+			       <td class="td_3" style="width:300px;">			                 
+				      <table id="pwdpower" style="width: 86%" cellspacing="0"
 							cellpadding="0" border="0">
 						<tbody>
 							<tr>
@@ -476,7 +494,7 @@ $().ready(function() {
 				</table>
 			       </td>
 			       <th class="td_6"><b class="mustbe">*</b> 请设置密码找回问题答案：</th>
-				   <td class="td_4">
+				   <td class="td_4" style="width:300px;">
 					  <input type="text"  class="input" id="pwdanswer" name="pwdanswer" value="${complatUser.pwdanswer}"  />
 				   </td>
 			    </tr>	
