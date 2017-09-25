@@ -62,7 +62,7 @@ public class JisFieldsServiceImpl implements JisFieldsService {
 		Iterator<JisFields> jisFieldsIterable = jisFieldsIterables.iterator();
 		while (jisFieldsIterable.hasNext()) {
 			JisFields jisFields = (JisFields) jisFieldsIterable.next();
-			if (jisFields.getIssys()!=null && jisFields.getIssys() == 1) {
+			if (jisFields.getIssys() != null && jisFields.getIssys() == 1) {
 				jisFieldsList.add(jisFields);
 			}
 		}
@@ -149,8 +149,8 @@ public class JisFieldsServiceImpl implements JisFieldsService {
 		return fieldsMap;
 	}
 
-	
-	
-	
-
+	@Override
+	public List<JisFields> findByFieldname(String fieldname) {
+		return jisFieldsDao.findByFieldname(fieldname);
+	}
 }

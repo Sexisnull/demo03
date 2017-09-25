@@ -29,5 +29,10 @@ public interface JisFieldsDao
 	
 	List<JisFields> findByType(Integer type);
 	
-	
+	/**
+     * @discription    根据fieldname查找用户扩展属性实体集合
+     * @param fieldname
+     * @return
+	 */
+	List<JisFields> findByFieldname(String fieldname);
 }
