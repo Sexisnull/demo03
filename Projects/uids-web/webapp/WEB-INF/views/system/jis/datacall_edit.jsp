@@ -21,11 +21,14 @@ var userNameInput=$("#userName").val();
     rules: {
     	resName: {
 	    required: true,
-	    /* cnRangelength: [0,32],
-	    stringCheck:userNameInput */
+	    cnRangelength: [0,32],
+	   
+	    /* stringCheck:userNameInput */
 	   },
 	   remark: {
-	    required: true
+	    required: true,
+	    maxlength: 32,
+	    uniqueRemark:true
 	   },
 	   callingType: {
 	    required: true,
@@ -34,7 +37,8 @@ var userNameInput=$("#userName").val();
 	    maxlength: 32 */
 	   },
 	   resUrl:{
-	   required: true
+	   required: true,
+	   maxlength: 32
 	   },
 	   isVerification:{
 	   required: true
@@ -98,9 +102,9 @@ $(function(){
 	});
 	
 	// Ajax重命名校验
-	/* $.uniqueValidate('uniqueLoginAccount', '${ctx}/sys/checkAccount', ['loginAccount','oldLoginAccount'], '对不起，这个账号重复了');
+	$.uniqueValidate('uniqueRemark', '${ctx}/datacall/checkRemark', ['remark','oldRemark'], '对不起，此标识已存在');
 	$("#roleNames").Popup($(".ulRoleList"), { width: "auto" });
-	$(".icon-date-r").click(function(){ $(this).prev("input").click(); }); */
+	$(".icon-date-r").click(function(){ $(this).prev("input").click(); }); 
 });
 
 </script>
@@ -112,7 +116,7 @@ $(function(){
 	<div class="position">
 		<ol class="breadcrumb">
 			<li>
-				<a href="${ctx}/backIndex" target="_top">首页</a>
+				<a href="${ctx}/index" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
 			<li>

@@ -177,8 +177,21 @@ public class JisDatacallController extends BaseController{
 	 */
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/datacallDelete", method = RequestMethod.GET)
-	public ModelAndView datacallDelete(Integer iid,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+	public ModelAndView datacallDelete(String iid,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		try {
+			String[] para=iid.split(",");
+			JisDatacall jisDatacall = null;
+			for(int i=0;i<para.length;i++){
+				Integer Iid = Integer.parseInt(para[i].trim());
+				jisDatacall=jisDatacallService.findByKey(Iid);
+				jisDatacallService.delete(jisDatacall);
+							}
+			returnMsg("success","删除成功",request);
+		} catch (Exception e) {
+			e.printStackTrace();
+			returnMsg("error", "删除失败",request);
+		
+		/*try {
 			JisDatacall jisDatacall = null;
 			jisDatacall=jisDatacallService.findByKey(iid);
 			jisDatacallService.delete(jisDatacall);
@@ -190,7 +203,7 @@ public class JisDatacallController extends BaseController{
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			returnMsg("error", "删除失败",request);			
+			returnMsg("error", "删除失败",request);	*/		
 		} finally{
 			return  new ModelAndView("redirect:/datacall/datacallList");
 		}
