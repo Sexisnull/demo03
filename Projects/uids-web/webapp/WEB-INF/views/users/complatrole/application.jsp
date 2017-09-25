@@ -342,7 +342,7 @@ body {
 								</table>
 							</div>
 						</div>
-						<div class="datagrid-body" style="width: 710px; height: 360px; overflow-x: hidden;">
+						<div class="datagrid-body" style="width: 710px; height: 215px; overflow-x: hidden;">
 							<table id="datatable" class="datagrid-btable" cellspacing="0" cellpadding="0" border="0" style="width:710px;table-layout: auto;">
 								<tbody>
 									
