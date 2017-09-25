@@ -289,13 +289,13 @@ public class JisSysviewCurrentController extends BaseController{
 	public Map<String,Object> checkSyncState(@RequestParam("iid")String iid,@RequestParam("optresult")int optresult,Model model) throws Exception{
 		String[] para=iid.split(",");
 		Map<String,Object> returnMap = new HashMap<String, Object>();
+		returnMap.put("success", "false") ;
 		for(int i=0;i<para.length;i++){
 			JisSysviewCurrent jisSysviewCurrent = jisSysviewCurrentService.findByIid(Integer.valueOf(para[i]));
 			if(null!=jisSysviewCurrent){
 				if(optresult == jisSysviewCurrent.getOptresult()){
 					returnMap.put("success", "true") ;
-				}else{
-					returnMap.put("success", "false") ;
+					break;
 				}
 			}
 		}
