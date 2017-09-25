@@ -116,10 +116,10 @@ width: 100px !important;
 				<form id="form2" name="form2" action="${ctx}/sysviewHis/jisHisList" >
 				        <table class="advanced-content">
 							<tr>
-				                <th>所属应用：</th>
+				                <th>应用名称：</th>
 								<td>
 								    <select name="search_EQ_appid" id="appSearch" class="select">
-					                     <option value="">--请选择--</option>
+					                     <option value="">--请选择应用名称--</option>
 					                     <c:forEach items="${applications}" var="application">
 						                     <option value="${application.iid}"
 							              <c:if test="${sParams['EQ_appid']==application.iid}">selected </c:if>>${application.name}</option>
@@ -131,14 +131,14 @@ width: 100px !important;
 								<td>
 									<input id="oldOperatetypeSearch" type="hidden" value="${sParams['EQ_operatetype']}">
 									<select id="operatetypeSearch" name="search_EQ_operatetype" class="select">
-										<option value="">--请选择--</option>
+										<option value="">--请选择操作类型--</option>
 									</select>
 								</td>
 
 								<th>同步结果：</th>
 								<td>
 									<select name="search_EQ_optresult" id="optresultSearch" class="select">
-					                     <option value="">--请选择--</option>
+					                     <option value="">--请选择同步结果--</option>
 					                     <c:forEach items="${parameters}" var="parameter">
 						                     <option value="${parameter.PARA_CODE}"
 							              <c:if test="${sParams['EQ_optresult']==parameter.PARA_CODE}">selected </c:if>>${parameter.PARA_NAME}</option>
