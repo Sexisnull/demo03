@@ -84,6 +84,9 @@ function hideGroupMenu(){
 function onClickGroup(event, treeId, treeNode) {
 	$('#groupid').val(treeNode.id);
 	$('#groupname').val(treeNode.name);
+	
+	$('#groupid').val(treeNode.id);
+	$('#groupname1').val(treeNode.name);
 	hideGroupMenu();
 }
 function onDbClickGroup(event, treeId, treeNode) {
@@ -94,6 +97,11 @@ function onDbClickGroup(event, treeId, treeNode) {
 		return;
 	$('#groupid').val(treeNode.id);
 	$('#groupname').val(treeNode.name);
+	$('#groupname_menu').fadeOut(50);
+	
+	
+	$('#groupid').val(treeNode.id);
+	$('#groupname1').val(treeNode.name);
 	$('#groupname_menu').fadeOut(50);
 }
 
@@ -135,7 +143,7 @@ function resetform() {
 $().ready(function() {
 
 //表单校验
-var complatUserNameInput=$("#name").val();
+/*var complatUserNameInput=$("#name").val();
  $("#editForm").validate({
     rules: {
 	   name: {
@@ -196,97 +204,102 @@ var complatUserNameInput=$("#name").val();
 				 form.submit();		
         } 
      }
-   });   
+   }); */  
 
 
-
-   //用户扩展属性
-  /* var table = $("#dataTable");
-   var tr=$("#kzsxTr");
-   var list=eval('${fieldsListMap}');
-   var td1="";
-   var td2="";
-   table.append("<tr><td class='td_2' rowspan='6' style='max-width:0px;width:100px;ont-weight:bold;' align='center'>"+"扩展属性"+"</td></tr>");
-   var type="2";//1：字符型     2：枚举型
-   for(var i=0;i<5;i++){  
-        if(type=="2"){
-            td1=table.append("<tr id='kzsxTr'><th>"+"shenxh"+"</th><td>"+"<input type='text'/>"+"</td></tr>");   
-       }else if(type=="2"){
-            td2=tr.append("<tr id='kzsxTr'><th>"+"shenxh"+"</th><td>"+"<select id=''><option>"+"政府干部"+"</option>"+"</td></tr>"); 
-       }     
-   }*/
    
    
-   //获取用户扩展属性				   
-	var count = 1;						
-	var table = $(".form-table");		
-	var fieldsListMap = eval('${fieldsListMap}');	
-	var size=fieldsListMap.length;
-	/*if(size%2==1){
-	   var rows=(size/2)+1;
-	   table.append("<tr><td class='td_2' rowspan='rows' style='max-width:0px;width:100px;ont-weight:bold;' align='center'>"+"扩展属性"+"</td></tr>");	
-	}
-	if(size%2==0){
-	   var rows=(size/2);
-	   table.append("<tr><td class='td_2' rowspan='rows' style='max-width:0px;width:100px;ont-weight:bold;' align='center'>"+"扩展属性"+"</td></tr>");	
-	}*/								
-	for ( var i = 0; i < size; i++) {
-		var fieldsList = fieldsListMap[i];
-		for ( var j = 0; j < fieldsList.length; j++) {
-			var fields = fieldsList[j];
-			if (fields.type == 1) {
-				for ( var key in fields) {
-					var value = fields[key];
-					if (key != 'type' && key != 'userid') {
-						alert(count % 2);
-					    if (count % 2 == 1) {
-							table.append("<tr><th>"+ key+ "</th><td><input type='text' value='"+value+"'></td>");
-						}
-						if (count % 2 == 0) {
-							table.append("<th>"+ key+ "</th><td><input type='text' value='"+value+"'></td></tr>");
-						}
-						count++;
-					}
-				}
-			}
-
-			var values;
-			if (fields.type == 2) {
-			   for ( var key in fields) {
-			      var value = fields[key];
-			      //alert("key:"+key+"  value:"+value);
-			      if (key == 'fieldkeys') {
-				      keys = value.split(",");
-			      }
-
-			      if (key == 'fieldvalues') {
-				      values = value.split(",");
-			      }
-
-			      if (key != 'type' && key != 'userid') {
-				      if (key == 'fieldname') {
-					      table.append("<th>"+ value+ "</th><td><select id='filedValues'><select></td></tr>");
-				      }
-			      }
-		      }
-	      }
-		}
-	}
-
+	 //获取用户扩展属性
+    var htmlString=[];
+    var count = 1;
+    var table = $(".form-table");
+    var fieldsListMap = eval('${fieldsListMap}');
+    htmlString.push("<tr ><th>"+"扩展属性"+"</th></tr>");
+    for(var i=0;i<fieldsListMap.length;i++){
+    	var fieldsList = fieldsListMap[i];
+    	for(var j = 0;j<fieldsList.length;j++){
+    		var fields = fieldsList[j];
+    		if(fields.type==1){
+    		   for(var key in fields){    			   
+    			var value = fields[key];
+    			if(key!='type' && key !='userid'){
+    			    if(count%2==1){
+    			       htmlString.push("<tr><th>"+key+"</th><td><input name='"+key+"' type='text' value='"+value+"'></td>");
+    			    }
+    			    if(count%2==0){
+    			       htmlString.push("<th>"+key+"</th><td><input type='text' name='"+key+"' value='"+value+"'></td></tr>");
+    			    }
+    			    count++;
+    			}
+    		   } 
+    		}
+    		
+    		var values;
+    		var keys;
+    		if(fields.type==2){
+    		   for(var key in fields){
+    			var value = fields[key];
+    			if(key == 'fieldkeys'){
+    				keys = value.split(",");
+    			}
+    			
+    			if(key == 'fieldvalues'){
+    				values = value.split(",");
+    			}
+    			if(key!='type' && key !='userid'){
+    			    if(key == 'fieldname'){
+    			    if(count%2==1){
+    			    	
+    			    	htmlString.push("<tr><th>"+value+"</th><td><select id='"+value+"' name= '"+value+"'>");
+    			    	//循环key；
+    			        for(var i=0;i<keys.length;i++){
+    			 			htmlString.push("<option value='"+keys[i]+"'");
+    			          //获取下拉列表默认值
+						    var select = eval('${jsonMap}');
+						    for(var selectKey in select[0]){
+						    	var selectValue = select[0][selectKey];
+						    	if(selectValue == keys[i]){
+    			        			htmlString.push("selected = 'selected'");
+    			        		}
+					    	}
+					    	htmlString.push(">"+values[i]+"</option>");
+    				    }
+    			       htmlString.push("</select></td>");
+    			       
+    				   
+    			    }
+    			    if(count%2==0){
+    			    	htmlString.push("<th>"+value+"</th><td><select id='"+value+"' name= '"+value+"'>");
+    			    	//循环key；
+    			        for(var i=0;i<keys.length;i++){
+    			        	htmlString.push("<option value='"+keys[i]+"'");
+    			          //获取下拉列表默认值
+						    var select = eval('${jsonMap}');
+						    for(var selectKey in select[0]){
+						    	var selectValue = select[0][selectKey];
+						    	if(selectValue == keys[i]){
+    			        			htmlString.push("selected = 'selected'");
+    			        		}
+					    	}
+					    	htmlString.push(">"+values[i]+"</option>");
+    				    }
+    			       htmlString.push("</select></td></tr>");
+    			    }
+    			    count++;
+    			   	}
+    			}
+    		  } 
+    		}
+    	}
+    }
+    table.append(htmlString.join(""));
 });
 
 
 
 
 
-$(function(){
-    $("#p1").click(function(){
-      $("#p1").css("display","none");
-      var p = $("#p1").val().trim();
-      $("#p1").css("display","none");
-      $("#b1").val(p);
-    });
-});
+
 
 
 </script>
@@ -324,7 +337,7 @@ $(function(){
      <div class="form-content">
 		 	<table class="form-table" id="dataTable">
 		 		<tr>
-		 		  <td class="td_1" rowspan="6" style="max-width:0px;width:100px;ont-weight:bold;" align="center">基本属性</td>
+		 		  <td class="td_1" rowspan="5" style="max-width:0px;width:100px;ont-weight:bold;" align="center">基本属性</td>
 				  <th><b class="mustbe">*</b>姓名：</th>
 				  <td>
 					<input type="text" id="name" name="name" value="${complatUser.name}" />
@@ -373,15 +386,16 @@ $(function(){
 				  <th><b class="mustbe">*</b> 所属机构：</th>
 				  <td>
 				    <c:if test="${empty complatUser.iid}">
-				        <input id="groupname" value="${groupName}" name="groupid" type="text" style="cursor: pointer;"/> 
-					    <input type="hidden" id="groupid" name="search_EQ_groupId">	
+				        <input id="groupname" value="${groupMap[complatUser.groupid]}" name="groupname" type="text" style="cursor: pointer;"/> 
+					    <input type="hidden" id="groupid" name="groupid">	
 				    </c:if>
 				    <c:if test="${not empty complatUser.iid}">
-				        <input id="groupname1" value="${groupMap[complatUser.groupid]}" readonly="readonly" type="text" style="cursor: pointer;"/> 
+				        <input id="groupname" value="${groupMap[complatUser.groupid]}" name="groupname" type="text" style="cursor: pointer;"/> 
 					    <input type="hidden" id="groupid" name="groupid">	
 				    </c:if>											
 				  </td>
 			    </tr>
+			    <%--
 			    <tr>
 			       <th><b class="mustbe">*</b> 角色信息：</th>
 			       <td>			          
@@ -407,7 +421,7 @@ $(function(){
 					  </ul>
 				   </td>
 			    </tr>
-			    <!--<tr>
+			    --%><!--<tr>
 			      <th class="td_5"><b class="mustbe">*</b>地址：</th>
 				  <td class="td_3">					
 					 <input type="text" id="address" name="address" value="${complatUser.address}" />

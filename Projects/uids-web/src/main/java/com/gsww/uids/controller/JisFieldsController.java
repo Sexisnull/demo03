@@ -91,12 +91,12 @@ public class JisFieldsController extends BaseController {
 			// 将搜索条件编码成字符串，用于排序，分页的URL
 			model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
 			model.addAttribute("sParams", searchParams);
-
+            
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			logger.error("列表打开失败：" + ex.getMessage());
 			returnMsg("error", "列表打开失败", (HttpServletRequest) request);
-			return "redirect:/jis/fieldsList";
+			//return "redirect:/jis/fieldsList";
 		}
 		return "system/jis/fields_list";
 	}

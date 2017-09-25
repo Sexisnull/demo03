@@ -106,9 +106,14 @@ public class JisFieldsServiceImpl implements JisFieldsService {
 				}
 			}
 			whereFieldsName = whereFieldsName.substring(0,whereFieldsName.length()-1);
+			if(userId==null){
+				querySql = "select distinct type,"+ queryFieldsName +" from jis_fields a  where"+
+				"type = '1' and a.fieldname in("+whereFieldsName+")";
+			}else{
+				querySql = "select distinct b.userid,type,"+ queryFieldsName +" from jis_fields a ,jis_userdetail b where b.userid = '"+userId+"'" +
+				" and type = '1' and a.fieldname in("+whereFieldsName+")";
+			}
 			
-			querySql = "select distinct b.userid,type,"+ queryFieldsName +" from jis_fields a ,jis_userdetail b where b.userId = '"+userId+"'" +
-			" and type = '1' and a.fieldname in("+whereFieldsName+")";
 		}else if(type == 2){
 			querySql = "select a.fieldkeys,a.fieldvalues,type,a.fieldname from jis_fields a where type = '2'";
 		}

@@ -199,7 +199,7 @@ public class ComplatUserController extends BaseController {
 				complatUser = new ComplatUser();
 			}
 			model.addAttribute("complatUser", complatUser);
-			//this.extendsAttr(model, request, response);			
+			this.extendsAttr(model, request, response);			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -222,16 +222,17 @@ public class ComplatUserController extends BaseController {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		try {
-			if (complatUser != null) {
-				String iidStr = String.valueOf(complatUser.getIid());
-				System.out.println(iidStr);
-				if (iidStr == "null" || iidStr.length() <= 0) {
+			if (complatUser != null) {				
+					if(complatUser.getOpersign() == null){
+						complatUser.setOpersign(1);
+					}else{
+						complatUser.setOpersign(2);
+					}
 					Date d = new Date();
 					complatUser.setEnable(1); // 是否禁用
 					// complatUser.setAuthState(0); // 审核状态
 					// complatUser.setIsAuth(0); // 是否审核
 					complatUser.setCreatetime(d);// 创建时间
-					System.out.println("新增groupid========="+complatUser.getGroupid());
 					complatUserService.save(complatUser);
 					returnMsg("success", "保存成功", request);
 				} else {
@@ -240,12 +241,9 @@ public class ComplatUserController extends BaseController {
 					String time = request.getParameter("time");
 					Date createTime = sdf.parse(time);
 					complatUser.setCreatetime(createTime);
-					System.out.println("编辑groupid============"+complatUser.getGroupid());
 					complatUserService.save(complatUser);
-					
 					returnMsg("success", "编辑成功", request);
 				}
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			returnMsg("error", "保存失败", request);
@@ -332,24 +330,22 @@ public class ComplatUserController extends BaseController {
 		fieldMap.put("1", "age");
 		fieldMap.put("2", "sex");
 		fieldMap.put("3", "groupid");
-		fieldMap.put("4", "groupid");
-		fieldMap.put("5", "headship");
-		fieldMap.put("6", "phone");
-		fieldMap.put("7", "mobile");
-		fieldMap.put("8", "address");
-		fieldMap.put("9", "post");
-		fieldMap.put("10", "ip");
-		fieldMap.put("11", "fax");
-		fieldMap.put("12", "email");
-		fieldMap.put("13", "qq");
-		fieldMap.put("14", "loginname");
-		fieldMap.put("15", "loginallname");
-		fieldMap.put("16", "pwd");
-		fieldMap.put("17", "pwdquestion");
-		fieldMap.put("18", "pwdanswer");
-		fieldMap.put("19", "pinyin");
-		fieldMap.put("20", "createtime");
-		List<ComplatUser> users = ExcelUtil.readXls(fileName,multipartFile.getInputStream(), ComplatUser.class, fieldMap);
+		fieldMap.put("4", "headship");
+		fieldMap.put("5", "phone");
+		fieldMap.put("6", "mobile");
+		fieldMap.put("7", "address");
+		fieldMap.put("8", "post");
+		fieldMap.put("9", "ip");
+		fieldMap.put("10", "fax");
+		fieldMap.put("11", "email");
+		fieldMap.put("12", "qq");
+		fieldMap.put("13", "loginname");
+		fieldMap.put("14", "loginallname");
+		fieldMap.put("15", "pwd");
+		fieldMap.put("16", "pwdquestion");
+		fieldMap.put("17", "pwdanswer");
+		fieldMap.put("18", "pinyin");
+		List<ComplatUser> users = ExcelUtil.readXls(fileName,multipartFile.getInputStream(), ComplatUser.class, fieldMap);		
 		// 判断是哪行导入失败
 		int row = 1;
 		boolean flag = true;
@@ -359,13 +355,7 @@ public class ComplatUserController extends BaseController {
 				//从解析出来的集合中获取机构id
 				int groupId = complatUser.getGroupid();
 				//依据机构id在机构表中查询当前机构id的机构对象
-				ComplatGroup complatGroup = complatGroupService.findByIid(groupId);
-				String name=complatGroup.getName();//获取到机构名称
-				if("".equals(name)){
-					
-				}else{
-					returnMsg("error", "导入失败", request);
-				}
+			   
 				List<ComplatUser> list = complatUserService.findByUserAllName(complatUser.getLoginallname());
 				if (list.size() == 0) {
 					if (StringHelper.isNotBlack(complatUser.getName())) { // 判断excel表格导入的数据是否规范
@@ -378,16 +368,6 @@ public class ComplatUserController extends BaseController {
 						String time = format.format(date);
 						Date createTime = sdf.parse(time);
 						complatUser.setCreatetime(createTime);
-						//设置性别
-                        
-						
-						
-						
-						
-						// 设置groupId
-						
-						
-						
 						// 设置状态值
 	                    complatUser.setEnable(0);
 						complatUser.setOpersign(1);
@@ -409,7 +389,7 @@ public class ComplatUserController extends BaseController {
 			e.printStackTrace();
 			returnMsg("error", "导入失败", request);
 		}
-		return new ModelAndView("redirect:/uids/complatList");
+		return new ModelAndView("redirect:/complat/complatList");
 	}
 
 	/**
