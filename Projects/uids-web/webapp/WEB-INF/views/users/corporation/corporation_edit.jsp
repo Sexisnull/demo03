@@ -1,5 +1,6 @@
 
 
+
 <%@ page language="java" pageEncoding="utf-8"%>
 <!DOCTYPE html>
 <html>
@@ -219,11 +220,9 @@ color: rgb(119, 119, 119);
 			<th><b class="mustbe">*</b>用户名：</th>
 			<td>
 <<<<<<< HEAD
+
 				<input type="text"  id="loginName" name="loginName" value="${corporation.loginName}" maxlength="33"/>
-=======
-				<input type="text"  id="loginName" name="loginName" value="${corporation.loginName}" />
->>>>>>> ee0c124ca97714d8fed1c99f8b06cf2cd148dc78
-            	<input type="hidden"  id="oldLoginName" name="oldLoginName" value="${corporation.loginName}" />
+       			<input type="hidden"  id="oldLoginName" name="oldLoginName" value="${corporation.loginName}" />
             </td>
         	<th><b class="mustbe">*</b> 手机号码：</th>
         	<td>

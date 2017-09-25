@@ -568,7 +568,9 @@ public class ComplatUserController extends BaseController {
 
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/userSetUpSave", method = RequestMethod.POST)
-	public ModelAndView userSetUpSave(ComplatUser complatUser,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+	public void userSetUpSave(ComplatUser complatUser,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+		
+		Map<String, Object> resMap = new HashMap<String, Object>();
 		try {
 			Integer userId = null;
 			if(complatUser != null){
@@ -598,13 +600,15 @@ public class ComplatUserController extends BaseController {
 					jisUserdetailService.update(jisUserdetail.getIid(),cardId,userMap);
 				}
 			}			
-			returnMsg("success","保存成功",request);
+			resMap.put("ret", "0");
+			resMap.put("msg", "保存成功！");
+			response.getWriter().write(JSONObject.toJSONString(resMap));
 		} catch (Exception e) {
 			e.printStackTrace();
-			returnMsg("error","保存失败",request);
-		} finally{
-			return  new ModelAndView("redirect:/complat/complatList");
-		}
+			resMap.put("ret", "1");
+			resMap.put("msg", "保存失败！");
+			response.getWriter().write(JSONObject.toJSONString(resMap));
+		} 
 		
 	}
 
