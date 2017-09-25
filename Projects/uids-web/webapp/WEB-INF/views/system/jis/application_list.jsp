@@ -4,8 +4,8 @@
 
 <%@ include file="/include/meta.jsp"%>
 <script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgcore.lhgdialog.min.js"></script>
-	<script type="text/javascript" src="${ctx}/res/plugin/ztree/js/jquery.ztree.all-3.5.js"></script>
-	<link rel="stylesheet" href="${ctx}/res/plugin/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css"></link>
+<script type="text/javascript" src="${ctx}/res/plugin/ztree/js/jquery.ztree.all-3.5.js"></script>
+<link rel="stylesheet" href="${ctx}/res/plugin/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css"></link>
 <head>
 <meta charset="utf-8"/>
 <title>甘肃万维JUP课题</title>
@@ -118,7 +118,7 @@ function resetform() {
 	<div class="position">
 		<ol class="breadcrumb">
 			<li>
-				<a href="${ctx}/backIndex" target="_top">首页</a>
+				<a href="${ctx}/index" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
 			<li>
@@ -221,8 +221,8 @@ function resetform() {
 	                    	<div class="word_break">${groupMap[application.groupId]}</div>
 	                    </td>
 	                    <td style="text-align: center;">
-	                    	<c:if test="${application.isSyncGroup==1}">不支持</c:if>
-							<c:if test="${application.isSyncGroup==2}">支持</c:if>
+	                    	<c:if test="${application.isSyncGroup==0}">不支持</c:if>
+							<c:if test="${application.isSyncGroup==1}">支持</c:if>
 	                    </td>
 	                	<td class="position-content" style="text-align: center;" >
 	                        <gsww:opTag menuId="8a929cb35e7a893b015e7a925b900001" tabIndex="1" operatorType="2"></gsww:opTag>
