@@ -26,7 +26,7 @@ import com.gsww.uids.service.ComplatRoleService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("/applicationContext.xml")
-public class ComplatRoleServiceTest extends BaseController{
+public class ComplatRoleServiceTest{
 
 	@Autowired
 	private ComplatRoleService complatRoleService;
@@ -36,18 +36,10 @@ public class ComplatRoleServiceTest extends BaseController{
 	/**
 	 * 
 	 */
-	/*@Test
-	public void testGetRolePage(){
-		Map<String, Object> searchParams = new HashMap<String, Object>();
-		Specification<ComplatRole> spec=super.toSpecification(searchParams, ComplatRole.class);
-		PageRequest pageRequest=new PageRequest(0, 10);
-		Page<ComplatRole> pageComplatRole=complatRoleService.getRolePage(spec, pageRequest);
-		System.out.println(pageComplatRole);
-		assertTrue(true);
-	}
 	@Test
 	public void save(){
-		ComplatRole entity=new ComplatRole(null, "超级管理员", "最高权限", null, null, null);
+		ComplatRole entity=new ComplatRole();
+		entity.setName("dahan");
 		try {
 			complatRoleService.save(entity);
 		} catch (Exception e) {
@@ -57,9 +49,9 @@ public class ComplatRoleServiceTest extends BaseController{
 	}
 	@Test
 	public void delete(){
-		int id=41;
+		int id=50;
 		try {
-			complatRoleService.delete(id);
+			complatRoleService.delete(id++);
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}
@@ -71,17 +63,6 @@ public class ComplatRoleServiceTest extends BaseController{
 		try {
 			ComplatRole role=complatRoleService.findByKey(id);
 			System.out.println(role.getName());
-		} catch (Exception e) {
-			logger.error(e.getMessage(),e);
-		}
-		assertTrue(true);
-	}
-	@Test
-	public void findAcctByroleId(){
-		int id=1;
-		try {
-			List<ComplatRolerelation> list=complatRoleService.findAcctByroleId(id);
-			System.out.println(list);
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}
@@ -103,15 +84,7 @@ public class ComplatRoleServiceTest extends BaseController{
 			logger.error(e.getMessage(),e);
 		}
 		assertTrue(true);
-	}*/
-	/*@Test
-	public void saveAuthorize(){
-		String id="6";
-		String keys="8a929c3f5e5660a6015e5663c1420002,8a92012d5e7de06a015e7de18b3a0001,O_8a92012d5e7e48a8015e7e5000bc0061,O_8a92012d5e7e48a8015e7e50f6bc0062,O_8a92012d5e7e48a8015e7e516d700063,O_8a92012d5e7f3472015e7f3682360000";
-		String types="res,res,oper,oper,oper,oper";
-		complatRoleService.saveAuthorize(id, keys, types);
-		assertTrue(true);
-	}*/
+	}
 	@Test
 	public void findRoleList(){
 		try {

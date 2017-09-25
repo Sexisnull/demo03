@@ -250,8 +250,8 @@ width: 100px !important;
 									<input type="text" id="objectnameSearchHigh" name="search_LIKE_objectname" placeholder="操作对象名称" value="${sParams['LIKE_objectname']}" class="input" />
 								</td>
 								<th></th>
-								<td >
-								<!-- style="text-align:right;padding-right: 6%" -->
+								<td style="text-align:right;padding-right: 2.5%">
+							
 								    <a class="btnSearch" id="advanced-search-btn">搜索</a>
 								</td>
 							</tr>

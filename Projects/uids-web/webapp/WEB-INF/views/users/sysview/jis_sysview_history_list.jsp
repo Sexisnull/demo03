@@ -159,8 +159,8 @@ width: 100px !important;
 									<input type="text" id="objectnameSearch" name="search_LIKE_objectname" placeholder="操作对象名称" value="${sParams['LIKE_objectname']}" class="input" />
 								</td>
 								<th></th>
-								<td >
-								<!-- style="text-align:right;padding-right: 6%" -->
+								<td  style="text-align:right;padding-right: 3%" >
+								 
 								    <a class="btnSearch" id="advanced-search-btn">搜索</a>
 								</td>
 							</tr>
@@ -171,11 +171,7 @@ width: 100px !important;
 	<div class="list">
 		<input type="hidden" id="orderField" name="orderField" value="${orderField}"/> 
 		<input type="hidden" id="orderSort" name="orderSort" value="${orderSort}"/>
-        <div class="list-topBar">
-        	 <div class="list-toolbar">
-	             <!--<gsww:opTag menuId="297e40e05e5f7a4f015e5f93f7b20002" tabIndex="1" operatorType="1"></gsww:opTag>
-            --></div> 
-        </div>
+        
         
         <!-- 提示信息开始 -->
          <div class="form-alert;" >

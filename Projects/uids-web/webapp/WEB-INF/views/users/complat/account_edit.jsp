@@ -54,6 +54,13 @@ color: rgb(119, 119, 119);
 .td_6 {
 	border-bottom : 1px solid #C6E6FF;
 }  
+#complatKzsx {
+    max-width:0px;
+    width:100px;
+    ont-weight:bold;
+}
+
+
 /*角色信息分区样式*/
 .role1,.role2{
     border:1px solid #000;
@@ -213,9 +220,11 @@ $().ready(function() {
     var htmlString=[];
     var count = 1;
     var table = $(".form-table");
+    ///var kzsx=table.append("<tr><td  class='td_2' rowspan='count' align='center'>"+"扩展属性"+"</td>");
     var fieldsListMap = eval('${fieldsListMap}');
-    htmlString.push("<tr ><th>"+"扩展属性"+"</th></tr>");
+    htmlString.push("<tr><td  class='td_2' rowspan='"+count+"' align='center'>"+"扩展属性"+"</td>");
     for(var i=0;i<fieldsListMap.length;i++){
+    	 
     	var fieldsList = fieldsListMap[i];
     	for(var j = 0;j<fieldsList.length;j++){
     		var fields = fieldsList[j];
@@ -224,7 +233,7 @@ $().ready(function() {
     			var value = fields[key];
     			if(key!='type' && key !='userid'){
     			    if(count%2==1){
-    			       htmlString.push("<tr><th>"+key+"</th><td><input name='"+key+"' type='text' value='"+value+"'></td>");
+    			       htmlString.push("<th>"+key+"</th><td><input name='"+key+"' type='text' value='"+value+"'></td>");
     			    }
     			    if(count%2==0){
     			       htmlString.push("<th>"+key+"</th><td><input type='text' name='"+key+"' value='"+value+"'></td></tr>");

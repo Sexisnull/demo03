@@ -229,7 +229,7 @@ public class ComplatCorporationController extends BaseController{
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
-			return  new ModelAndView("redirect:/complat/outsideuserList");
+			return  new ModelAndView("redirect:/complat/corporationList");
 		}
 	}
 	
@@ -261,7 +261,7 @@ public class ComplatCorporationController extends BaseController{
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
-			return  new ModelAndView("redirect:/complat/outsideuserList");
+			return  new ModelAndView("redirect:/complat/corporationList");
 		}
 	}
 	

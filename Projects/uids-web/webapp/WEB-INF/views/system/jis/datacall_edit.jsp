@@ -21,20 +21,17 @@ var userNameInput=$("#userName").val();
     rules: {
     	resName: {
 	    required: true,
+	    userName:true,
 	    cnRangelength: [0,32],
-	   
-	    /* stringCheck:userNameInput */
 	   },
 	   remark: {
 	    required: true,
+	    charNo:true,
 	    maxlength: 32,
 	    uniqueRemark:true
 	   },
 	   callingType: {
 	    required: true,
-	   /*  chrnum:true,
-	    uniqueLoginAccount:true,
-	    maxlength: 32 */
 	   },
 	   resUrl:{
 	   required: true,
@@ -147,11 +144,11 @@ $(function(){
     		<tr>
 	        	 <th><b class="mustbe">*</b> 请输入数据调用名称：</th>
 	        	 <td>
-					<input type="text" placeholder="格式：字母、数字、下划线或中文" id="resName" name="resName" value="${jisDatacall.resName}" />
+					<input type="text" placeholder="字母、数字、下划线或中文" id="resName" name="resName" value="${jisDatacall.resName}" />
 				</td>
 				<th><b class="mustbe">*</b> 请输入标识：</th>
 				<td>
-					<input type="text" placeholder="格式：英文名或数字且唯一" id="remark" name="remark" value="${jisDatacall.remark}" />
+					<input type="text" placeholder="英文名或数字且唯一" id="remark" name="remark" value="${jisDatacall.remark}" />
 					<input type="hidden" id="oldRemark" name="oldRemark" value="${jisDatacall.remark}"/>
 				</td>
 			</tr>

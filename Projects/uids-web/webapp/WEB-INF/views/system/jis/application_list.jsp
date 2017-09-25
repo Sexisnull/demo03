@@ -82,16 +82,16 @@ function resetform() {
 	function checkSubmitForm(){
 		var nameSearch = $("#nameSearch").val();
 		if(nameSearch ==  '' || isNumbOrLett(nameSearch)){
-			form1.submit();
 		}else{
-			/* $.validator.errorShow($("#nameSearch"),'只能包括数字和字母'); */
+			$.validator.errorShow($("#nameSearch"),'只能包括数字、字母、下划线或中文');
+			return;
 		}
 		var groupname = $("#groupname").val();
 		if(groupname ==  '' ){
-			form1.submit();
 		}else{
 			/* $.validator.errorShow($("#groupname"),'只能包括数字和字母'); */
 		}
+		$("#form1").submit();
 	}
 	/*
 	用途：检查输入字符串是否只由汉字、字母、数字组成
@@ -101,8 +101,7 @@ function resetform() {
 	如果通过验证返回true,否则返回false
 	*/
 	function isNumbOrLett( s ){//判断是否是字母、数字组成
-		//var regu = "^[0-9a-zA-Z\u4e00-\u9fa5]+$";
-		var regu = /^([a-zA-Z0-9]+)$/;
+		var regu = /^(\w|[\u4E00-\u9FA5])*$/;/* /^([a-zA-Z0-9]+)$/ */
 		var re = new RegExp(regu);
 		if (re.test(s)) {
 			return true;
@@ -142,7 +141,7 @@ function resetform() {
 					<th>所属机构：</th>
 						 <td>
 						 	<input id="groupname" value="${groupName}" name="groupname" type="text" style="cursor: pointer;"/> 
-							<input type="hidden" id="groupid" name="search_EQ_groupId">
+							<input type="hidden" id="groupid" value="${sParams['EQ_groupId']}" name="search_EQ_groupId">
 							<%-- <select  style="width: 170px;" placeholder="数据标识" value="${sParams['LIKE_remark']}" id="remarkSearch" name="search_LIKE_remark" /> --%>
 						</td> 
 					<td class="btn-group"> <a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a></td>

@@ -32,7 +32,8 @@ public class JisUserdetailServiceTest {
 	}
 	@Test
 	public void save(){
-		JisUserdetail detail=new JisUserdetail(null, null, "123456789");
+		JisUserdetail detail=new JisUserdetail();
+		detail.setComptel("detail");
 		try {
 			jisUserdetailService.save(detail);
 		} catch (Exception e) {
@@ -40,15 +41,4 @@ public class JisUserdetailServiceTest {
 		}
 		assertTrue(true);
 	}
-	/*@Test
-	public void update(){
-		int iid=20519;
-		String cardId="123456";
-		try {
-			jisUserdetailService.update(iid, cardId);
-		} catch (Exception e) {
-			logger.error(e.getMessage(),e);
-		}
-		assertTrue(true);
-	}*/
 }

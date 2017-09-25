@@ -74,7 +74,7 @@ public class AliOauthService {
 				System.out.println(userinfoShareResponse.getBody());
 			} catch (AlipayApiException e) {
 				// 处理异常
-				e.printStackTrace();
+				logger.error("<AliOauth接口>异常", e);
 			}
 		}
 		return flag;

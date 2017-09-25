@@ -24,7 +24,8 @@ public class JisApplicationServiceTest {
 	private static Logger logger = LoggerFactory.getLogger(JisApplicationServiceTest.class);
 	@Test
 	public void save(){
-		JisApplication entity=new JisApplication(null, "uids管理系统", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+		JisApplication entity=new JisApplication();
+		entity.setName("u-i-d-s");
 		try {
 			jisApplicationService.save(entity);
 		} catch (Exception e) {
