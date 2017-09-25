@@ -423,7 +423,7 @@ background: #249bf3;color: #fff;border: 1px solid #249BF3;}
 			</li>
 			<li class="split"></li>
 			<li>
-				<a >业务系统管理</a>
+				<a >系统管理</a>
 			</li>
 			<li class="split"></li>
 			<li class="active">
