@@ -22,7 +22,7 @@ function toBack(){
 	window.location.href="/uids-web/backIndex";
 }
 function toFront(){
-	window.location.href="frontIndex";
+	window.location.href="/uids-web/frontIndex";
 }
 
 function toCountUser(){
