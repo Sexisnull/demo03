@@ -30,6 +30,8 @@ import com.gsww.jup.util.StringHelper;
 import com.gsww.uids.entity.ComplatOutsideuser;
 import com.gsww.uids.service.ComplatOutsideuserService;
 
+import net.sf.json.JSONObject;
+
 /**
  * Title: OutsideUserController.java Description: 个人用户控制层
  * 
@@ -344,4 +346,24 @@ public class ComplatOutsideuserController extends BaseController {
 			e.printStackTrace();
 		}
 	}
+	
+	public static String sendAuthInfo() {
+		return null;
+	}
+	
+	
+	/**
+     * @discription    字符串转json
+     * @param adata
+     * @return
+	 */
+	private static String getStringFromJson(JSONObject adata) {  
+        StringBuffer sb = new StringBuffer();  
+        sb.append("{");  
+        for(Object key:adata.keySet()){  
+            sb.append("\""+key+"\":\""+adata.get(key)+"\",");  
+        }  
+        String rtn = sb.toString().substring(0, sb.toString().length()-1)+"}";  
+        return rtn;  
+    }  
 }
