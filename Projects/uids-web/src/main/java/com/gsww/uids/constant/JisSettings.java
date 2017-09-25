@@ -331,7 +331,7 @@ public class JisSettings
 
   public static JisSettings getSettings()
   {
-    return (JisSettings)SpringUtil.getBean("jis_Settings", JisSettings.class);
+    return (JisSettings)SpringUtil.getBean(JisSettings.class);
   }
 
   public String getSysName() {
