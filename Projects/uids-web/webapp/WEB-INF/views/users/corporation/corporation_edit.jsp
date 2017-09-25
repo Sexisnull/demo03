@@ -184,15 +184,7 @@ color: rgb(119, 119, 119);
 		<tr>
 			<th><b class="mustbe">*</b> 企业法人身份证号：</th>
 				<td>
-					<c:if test="${empty corporation.cardNumber}">
-						<input type="text" id="cardNumber" name="cardNumber"  maxlength="18">
-					</c:if>
-					<c:if test="${not empty corporation.cardNumber}">
-						<input type="text" id="cardNumber" name="cardNumber" value="${corporation.cardNumber}" maxlength="18" readonly="readonly">
-					</c:if>
-
 					<input type="text" <c:if test="${corporation.cardNumber != null}">readonly="readonly"</c:if> id="cardNumber" name="cardNumber" value="${corporation.cardNumber}">
-
 	            </td>
 				<th> 企业法人民族：</th>
 				<td>
@@ -218,12 +210,12 @@ color: rgb(119, 119, 119);
 			<th><b class="mustbe">*</b>用户名：</th>
 			<td>
 				<input type="text"  id="loginName" name="loginName" value="${corporation.loginName}" maxlength="33"/>
-       	<input type="hidden"  id="oldLoginName" name="oldLoginName" value="${corporation.loginName}" />
-      </td>
-    	<th><b class="mustbe">*</b> 手机号码：</th>
-    	<td>
-    		<input type="text" id="mobile" name="mobile" value="${corporation.mobile}" />
-    	</td>
+       			<input type="hidden"  id="oldLoginName" name="oldLoginName" value="${corporation.loginName}" />
+     		 </td>
+		     <th><b class="mustbe">*</b> 手机号码：</th>
+		     <td>
+		    	<input type="text" id="mobile" name="mobile" value="${corporation.mobile}" />
+		     </td>
 		</tr>
 		<tr>
 			<th> 密码：</th>
