@@ -1,0 +1,17 @@
+@CHARSET "UTF-8";
+
+.upload_filelist {
+	margin-top: 10px;
+}
+
+.upload_filelist .icon-minus-sign {
+	color: #FF3300;
+	cursor: pointer;
+	margin-right: 5px;
+}
+
+.upload_filelist li {
+	color: #999;
+	height: 30px;
+	line-height: 30px;
+}

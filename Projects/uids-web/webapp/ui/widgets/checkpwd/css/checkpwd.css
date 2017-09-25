@@ -1,0 +1,20 @@
+#pwdpower {
+    width:195px;
+    border:0px none;
+    background-color:#f1f1f1;
+}
+#pwdpower td {
+    text-align:center;
+    vertical-align:middle;
+    padding:1px;
+    color:#adadac;
+}
+#pwdpower #pweak{
+    border-right:1px solid #dedede;
+}
+#pwdpower #pmedium{
+    border-right:1px solid #dedede;
+}
+#pwdpower #pstrong{
+
+}
