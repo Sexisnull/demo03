@@ -108,7 +108,6 @@ function checkSyncState(obj){
 
 /**批量同步**/
 function batchSync(url,param){
-	//var iid=$(".iid").val();
 	if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checked').length!=0){
 		$.dialog.confirm('您确认要同步吗？',function(){
 			var ids = "";
@@ -119,18 +118,18 @@ function batchSync(url,param){
 			});
 			if(ids != ""){
 			   $.get("${ctx}/sysviewCurr/checkSyncListState", {"iid":ids,"optresult":2}, function (data) {
-                           if (data != null) {
-                              if(data.success == 'true'){
-                                  $.dialog.alert('存在已同步成功，不能再次同步，请取消同步成功的数据！',function(){
-                                    ids = "";
-                                    return null;
-                                  });
-                                  return false
-                              }
-                              if(data.success == 'false'){
-                                 window.location.href="${ctx}/"+url+"?"+param+"="+ids.substring(0,ids.length-1);
-                              }
+                     if (data != null) {
+                          if(data.success == 'true'){
+                              $.dialog.alert('存在已同步成功数据，不能再次同步，请取消同步成功的数据！',function(){
+                                  ids = "";
+                                  return null;
+                              });
+                             return false
                           }
+                          if(data.success == 'false'){
+                             window.location.href="${ctx}/"+url+"?"+param+"="+ids.substring(0,ids.length-1);
+                          }
+                     }
               });
 			   
 			}
