@@ -127,6 +127,7 @@ public class ComplatRoleController extends BaseController {
 	@RequestMapping(value = "/isdefault_modify", method = RequestMethod.POST)
 	public void isdefaultModify(String iid, String isDefault,HttpServletRequest request,
 			HttpServletResponse response){
+		SysUserSession sysUserSession =(SysUserSession)request.getSession().getAttribute("sysUserSession");
 		if(!StringHelper.isNotBlack(iid)){
 			return;
 		}
@@ -139,6 +140,8 @@ public class ComplatRoleController extends BaseController {
 			response.setContentType("text/json");
 			response.setCharacterEncoding("UTF-8");
 			response.getWriter().write(JSONUtil.writeMapJSON(result));
+			String desc=sysUserSession.getUserName()+"修改了"+cr.getName();
+			jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(), desc, 3, 2);
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}
@@ -151,13 +154,15 @@ public class ComplatRoleController extends BaseController {
 	@RequestMapping(value = "/croleSave", method = RequestMethod.POST)
 	public ModelAndView roleSave(ComplatRole cRole, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
+		SysUserSession sysUserSession =(SysUserSession)request.getSession().getAttribute("sysUserSession");
 		try {
-			/*
-			 * ComplatRole role = new ComplatRole();
-			 * if(StringHelper.isNotBlack(croleId)){ role =
-			 * roleService.findByKey(Integer.parseInt(croleId)); }
-			 * role.setName(cRole.getName()); role.setSpec(cRole.getSpec());
-			 */
+			if(cRole.getIid()==null){
+				String desc=sysUserSession.getUserName()+"新增了"+cRole.getName();
+				jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(), desc, 3, 1);
+			}else{
+				String desc=sysUserSession.getUserName()+"修改了"+cRole.getName();
+				jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(), desc, 3, 2);
+			}
 			complatRoleService.save(cRole);
 			returnMsg("success", "保存成功", request);
 		} catch (Exception e) {
@@ -182,13 +187,14 @@ public class ComplatRoleController extends BaseController {
                 ComplatRole role = complatRoleService.findByKey(Integer.parseInt(para[i].trim()));
                 complatRoleService.delete(Integer.parseInt(para[i].trim()));
                 jisRoleobjectService.deleteByRoleId(Integer.parseInt(para[i].trim()));
-                JisLog log = new JisLog();
+               /* JisLog log = new JisLog();
                 log.setOperateType(3);
                 log.setModuleName(3);
                 log.setSpec(role.getName());
-                log.setUserId(session.getAccountId());
-                log.setOperateTime(new Date());
-                jisLogService.save(log);
+                log.setUserId(session.getUserName());
+                log.setOperateTime(new Date());*/
+                String desc=session.getUserName()+"删除了"+role.getName();
+                jisLogService.save(session.getUserName(),session.getUserIp(), desc, 3, 1);
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
