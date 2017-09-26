@@ -13,10 +13,15 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gsww.jup.Constants;
 import com.gsww.jup.ServiceException;
 import com.gsww.uids.dao.JisLogDao;
 import com.gsww.uids.entity.JisLog;
 import com.gsww.uids.service.JisLogService;
+import com.hanweb.common.util.NumberUtil;
+import com.hanweb.common.util.StringUtil;
+import com.hanweb.common.util.mvc.ControllerUtil;
+
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -179,4 +184,86 @@ public class JisLogServiceImpl implements JisLogService {
 		
 	}
 
+	@Override
+	public boolean add(Integer operatetype, Integer modulename, String spec) {
+		 String userid = "";
+		    if ((operatetype.intValue() == 12) && (modulename.intValue() == 12)) {
+		      userid = "外网用户注册";
+		      String tempspec = getOprSpec(modulename, operatetype, spec, userid);
+		      JisLog log = new JisLog();
+		      log.setUserId(userid);
+		      log.setIp(ControllerUtil.getIp());
+		      log.setModuleName(modulename);
+		      log.setOperateType(operatetype);
+		      log.setOperateTime(new Date());
+		      log.setSpec(tempspec);
+		      boolean res = this.jisLogDao.save(log) !=null;
+		      return res;
+		    }
+		    
+		    // TODO 统一注册判断当前登录用户
+		   /* if (getCurrentLoginName() != null) {
+		      userid = getCurrentLoginName();
+		    }
+		    else {
+		      userid = "接口调用";
+		    }*/
+
+		    if (StringUtil.isNotEmpty(userid)) {
+		      String tempspec = getOprSpec(modulename, operatetype, spec, userid);
+		      JisLog log = new JisLog();
+		      log.setUserId(userid);
+		      log.setIp(ControllerUtil.getIp());
+		      log.setModuleName(modulename);
+		      log.setOperateType(operatetype);
+		      log.setOperateTime(new Date());
+		      log.setSpec(tempspec);
+		      boolean res = this.jisLogDao.save(log) !=null;
+		      return res;
+		    }
+		return false;
+	}
+	
+	private String getOprSpec(Integer moduleId, Integer oprtypeId, String spec, String username)
+	  {
+	    String oprSpec = "";
+	    String operatetype = getArrName(Constants.OPR_ARRAY, oprtypeId);
+	    String modulename = getArrName(Constants.MOD_ARRAY, moduleId);
+	    if ((StringUtil.isNotEmpty(operatetype)) && (StringUtil.isNotEmpty(modulename))) {
+	      if (StringUtil.isEmpty(spec)) {
+	        oprSpec = username + operatetype + modulename;
+	      }
+	      else if (moduleId.intValue() == 8)
+	        oprSpec = username + operatetype + "系统";
+	      else {
+	        oprSpec = username + operatetype + modulename + "【" + spec + "】";
+	      }
+	    }
+
+	    return oprSpec;
+	  }
+
+	/*public String getCurrentLoginName()
+	  {
+	    String loginName = "";
+
+	    AbstractUser user = UserSessionInfo.getFrontCurrentUserInfo();
+	    if (user == null) {
+	      return "webservice接口调用";
+	    }
+
+	    loginName = user.getLoginName();
+
+	    return loginName;
+	  }*/
+	
+	public String getArrName(String[][] str, Integer id)
+	  {
+	    for (int i = 0; i < str.length; i++) {
+	      if (id.intValue() == NumberUtil.getInt(str[i][0])) {
+	        return str[i][1];
+	      }
+	    }
+	    return "";
+	  }
 }

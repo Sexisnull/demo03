@@ -87,4 +87,6 @@ public interface ComplatOutsideuserService {
      * @return
 	 */
 	public ComplatOutsideuser findByLoginNameIsUsed(String loginName);
+	
+	boolean insert(ComplatOutsideuser outsideUser);
 }
