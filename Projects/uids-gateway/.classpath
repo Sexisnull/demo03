@@ -98,6 +98,10 @@
 	<classpathentry kind="lib" path="lib/ojdbc14-10.2.0.2.0.jar"/>
 	<classpathentry kind="lib" path="lib/commons-pool2-2.4.2.jar"/>
 	<classpathentry kind="lib" path="lib/ldapmd51.3.jar" sourcepath="C:/Users/Administrator/Desktop/项目资料/统一身份认证资料/jar包/ldapmd51.3.jar"/>
+	<classpathentry kind="lib" path="lib/spring-test-4.1.6.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/alipay-sdk-java20170615110434.jar"/>
+	<classpathentry kind="lib" path="lib/alipay-sdk-java20170615110434-source.jar"/>
+	<classpathentry kind="lib" path="lib/gson-2.7.jar"/>
 	<classpathentry kind="src" path="src/main/app"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
