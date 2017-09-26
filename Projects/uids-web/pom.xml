@@ -55,6 +55,11 @@
 	</properties>
 	<!-- 依赖项定义 -->
 	<dependencies>
+		<dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk16</artifactId>
+            <version>1.46</version>
+        </dependency>
 		<!-- j2ee web spec -->
 		<dependency>
 			<groupId>net.sf.json-lib</groupId>

@@ -61,6 +61,8 @@ public interface SysOperatorService {
 	 * @param roleIds
 	 * @return
 	 */
-	public List<Map<String, Object>> getOptionByPageName(String roleIds, String menuId, String operatorType, String tabIndex) throws Exception; 
+	public List<Map<String, Object>> getOptionByPageName(String roleIds, String menuId, String operatorType, String tabIndex) throws Exception;
+
+	public List<SysOperator> findList(Object object); 
 
 }

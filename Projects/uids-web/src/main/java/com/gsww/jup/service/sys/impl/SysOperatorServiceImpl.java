@@ -93,4 +93,8 @@ public class SysOperatorServiceImpl implements SysOperatorService{
 		}
 		return role.substring(0, role.length()-1);
 	}
+	@Override
+	public List<SysOperator> findList(Object object) {
+		return null;
+	}
 }

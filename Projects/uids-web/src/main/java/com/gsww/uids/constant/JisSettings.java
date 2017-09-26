@@ -6,141 +6,141 @@ public class JisSettings
 {
   private String sysName = "统一身份认证系统";
 
-  private String sysUrl = "";
+  private String sysUrl = "http://29.22.105.43:8080/gsjis/";
 
-  private String copyRight = "";
+  private String copyRight = "甘肃省人民政府办公厅版权所有";
 
-  private String isRegister = "";
+  private String isRegister = "1";
 
-  private String registerType = "";
+  private String registerType = "0";
 
-  private String isFindPwd = "";
+  private String isFindPwd = "1";
 
-  private String pwdLevel = "1";
+  private String ppdLevel = "2";
 
-  private String isLoginfail = "";
+  private String isLoginfail = "1";
 
   private int loginError = 3;
 
   private int banTimes = 15;
 
-  private String emailSmtp = "";
+  private String emailSmtp = "smtp.163.com";
 
-  private String emailPort = "";
+  private String emailPort = "25";
 
-  private String emailBox = "";
+  private String emailBox = "xxx@163.com";
 
   private String emailPassword = "";
 
-  private String emailSender = "";
+  private String emailSender = "甘肃政务服务网";
 
-  private String emailTitle = "";
+  private String emailTitle = "统一身份认证系统邮箱激活";
 
-  private String emailContent = "";
+  private String emailContent = "{name}，您好：您本次的邮箱验证码是：{emailcode}，有效时间30分钟。";
 
-  private String emailFindPassTitle = "";
+  private String emailFindPassTitle = "统一用户系统账号";
 
-  private String emailFindPassContent = "";
+  private String emailFindPassContent = "{name}，你好：{uri} 提示：24小时后此链接会失效。";
 
-  private String syncTime = "";
+  private String syncTime = "300";
 
-  private String clearLogTime = "";
+  private String clearLogTime = "1296000";
 
-  private String ticketEffectiveTime = "";
+  private String ticketEffectiveTime = "10";
 
-  private String tokenEffectiveTime = "";
+  private String tokenEffectiveTime = "14400";
 
   private int perSessionTime = 30;
 
   private int corSessionTime = 30;
 
-  private String perGotoUrl = "";
+  private String perGotoUrl = "http://www.gszwfw.gov.cn/gszw/member/login/getgrinfo.do";
 
-  private String corGotoUrl = "";
+  private String corGotoUrl = "http://www.gszwfw.gov.cn/gszw/member/login/getfrinfo.do";
 
-  private String netType = "1";
+  private String netType = "2";
 
   private String enableSynTask = "1";
 
-  private String enableBackupsTask = "1";
+  private String enableBackupsTask = "0";
 
   private String realNameAuth = "1";
 
   private String realNameAuthUrl = "";
 
-  private String appId = "";
+  private String appId = "62000001";
 
-  private String appName = "";
+  private String appName = "统一身份认证系统";
 
-  private String appAcc = "";
+  private String appAcc = "gsjis";
 
-  private String appPwd = "";
+  private String appPwd = "111111";
 
-  private String importantLevel = "";
+  private String importantLevel = "2";
 
-  private String isSendAgain = "";
+  private String isSendAgain = "1";
 
-  private String isLose = "";
+  private String isLose = "1";
 
-  private String isUpstream = "";
+  private String isUpstream = "0";
 
-  private String urlRoot = "";
+  private String urlRoot = "http://10.10.11.15:8081/sms/sendsms";
 
-  private String validityPeriod = "";
+  private String validityPeriod = "10";
 
-  private String dynamicPwdMessageContent = "";
+  private String dynamicPwdMessageContent = "您的动态密码为cellphoneDynamicPwdMadeByJava，请于validityPeriod分钟内完成登录，密码告知他人将导致账号被盗，请勿泄露。[甘肃政务服务网]";
 
-  private String businessIdForGettingDynamicPwd = "";
+  private String businessIdForGettingDynamicPwd = "6200000104";
 
-  private String businessNameForGettingDynamicPwd = "";
+  private String businessNameForGettingDynamicPwd = "动态获取密码";
 
-  private String businessIdForRegestingPer = "";
+  private String businessIdForRegestingPer = "6200000101";
 
-  private String businessNameForRegestingPer = "";
+  private String businessNameForRegestingPer = "个人注册";
 
-  private String registPerMessageContent = "";
+  private String registPerMessageContent = "您注册所需要的验证码为cellphoneShortMessageRandomCodeMadeByJava[甘肃政务服务网]";
 
-  private String businessIdForRecovingPwd = "";
+  private String businessIdForRecovingPpd = "6200000103";
 
-  private String businessNameForRecovingPwd = "";
+  private String businessNameForRecovingPpd = "密码找回";
 
-  private String recovingPwdContent = "";
+  private String recovingPpdContent = "您找回密码所需要的验证码为cellphoneShortMessageRandomCodeMadeByJava[甘肃政务服务网]";
 
-  private String businessIdForRegestingCor = "";
+  private String businessIdForRegestingCor = "6200000102";
 
-  private String businessNameForRegestingCor = "";
+  private String businessNameForRegestingCor = "6200000102";
 
-  private String registCorMessageContent = "";
+  private String registCorMessageContent = "您注册所需要的验证码为cellphoneShortMessageRandomCodeMadeByJava[甘肃政务服务网]";
 
   private String enableCorRealNameAuth = "0";
 
-  private String corRequestCod = "";
+  private String corRequestCod = "I3eUZj";
 
-  private String corRealUsername = "";
+  private String corRealUsername = "tysfrzxt";
 
-  private String corRealPassword = "";
+  private String corRealPassword = "tysfrzxt";
 
-  private String corExchangeTokenUrl = "";
+  private String corExchangeTokenUrl = "http://10.10.11.15:8081/gov-apis/api/auth/login";
 
-  private String corCompareRealNameUrl = "";
+  private String corCompareRealNameUrl = "http://10.10.11.15:8081/gov-apis/api/faren/verify/qyfr";
 
-  private String perCompareRealNameUrl = "";
+  private String perCompareRealNameUrl = "http://10.10.11.15:8081/gov-apis/api/rkxx/verify/sfzxx";
 
-  private String corDetailRealNameUrl = "";
+  private String corDetailRealNameUrl = "http://10.10.11.15:8081/gov-apis/api/faren/verify/qyfrdetail";
 
-  private String govRequestCod = "";
+  private String govRequestCod = "I3eUZj";
 
-  private String govRealUsername = "";
+  private String govRealUsername = "tysfrzxt";
 
-  private String govRealPassword = "";
+  private String govRealPassword = "tysfrzxt";
 
-  private String govCompareRealNameUrl = "";
-  private Integer verify_mode;
-  private String enableGovRealNameAuth = "";
+  private String govCompareRealNameUrl = "http://10.10.11.15:8081/gov-apis/api/gwy/verify/gwyverify";
+  private Integer verify_mode = 4;
+  private String enableGovRealNameAuth = "0";
 
-  private String govExchangeTokenUrl = "";
+  private String govExchangeTokenUrl = "http://10.10.11.15:8081/gov-apis/api/auth/login";
 
-  private String modifyPassTime = "0";
+  private String modifyPassTime = "10";
 
   public String getModifyPassTime()
   {
@@ -175,28 +175,28 @@ public class JisSettings
     this.registCorMessageContent = registCorMessageContent;
   }
 
-  public String getBusinessIdForRecovingPwd() {
-    return this.businessIdForRecovingPwd;
+  public String getBusinessIdForRecovingPpd() {
+    return this.businessIdForRecovingPpd;
   }
 
-  public void setBusinessIdForRecovingPwd(String businessIdForRecovingPwd) {
-    this.businessIdForRecovingPwd = businessIdForRecovingPwd;
+  public void setBusinessIdForRecovingPpd(String businessIdForRecovingPpd) {
+    this.businessIdForRecovingPpd = businessIdForRecovingPpd;
   }
 
-  public String getBusinessNameForRecovingPwd() {
-    return this.businessNameForRecovingPwd;
+  public String getBusinessNameForRecovingPpd() {
+    return this.businessNameForRecovingPpd;
   }
 
-  public void setBusinessNameForRecovingPwd(String businessNameForRecovingPwd) {
-    this.businessNameForRecovingPwd = businessNameForRecovingPwd;
+  public void setBusinessNameForRecovingPwd(String businessNameForRecovingPpd) {
+    this.businessNameForRecovingPpd = businessNameForRecovingPpd;
   }
 
-  public String getRecovingPwdContent() {
-    return this.recovingPwdContent;
+  public String getRecovingPpdContent() {
+    return this.recovingPpdContent;
   }
 
-  public void setRecovingPwdContent(String recovingPwdContent) {
-    this.recovingPwdContent = recovingPwdContent;
+  public void setRecovingPpdContent(String recovingPpdContent) {
+    this.recovingPpdContent = recovingPpdContent;
   }
 
   public String getRegistPerMessageContent() {
@@ -383,11 +383,11 @@ public class JisSettings
   }
 
   public String getPwdLevel() {
-    return this.pwdLevel;
+    return this.ppdLevel;
   }
 
-  public void setPwdLevel(String pwdLevel) {
-    this.pwdLevel = pwdLevel;
+  public void setPwdLevel(String ppdLevel) {
+    this.ppdLevel = ppdLevel;
   }
 
   public String getIsLoginfail() {

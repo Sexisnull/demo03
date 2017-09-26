@@ -57,6 +57,11 @@
 	<dependencies>
 		<!-- j2ee web spec -->
 		<dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk16</artifactId>
+            <version>1.46</version>
+        </dependency>
+		<dependency>
 			<groupId>net.sf.json-lib</groupId>
 			<artifactId>json-lib</artifactId>
 			<version>${json-lib.version}</version>
