@@ -356,34 +356,33 @@ function exportGroup() {
 		<form id="form1" name="pageForm" action="${ctx}/uids/complatgroupList" method="get">
 			<table class="advanced-content">
 			    <tr>
-					<th>机构名称:</th>
+					<th style="padding-left: 5px">机构名称:</th>
 					<td width="15%">
 						<input type="text" class="input" name="search_LIKE_name" value="${sParams['LIKE_name']}"/>
 					</td>
-					<th>机构编码:</th>
+					<th style="padding-left: 5px">机构编码:</th>
 					<td width="15%">
               			<input type="text" class="input" name="search_LIKE_codeid" value="${sParams['LIKE_codeid']}"/>
 					</td>
-					<th>组织机构代码:</th>
+					<th style="padding-left: 5px">组织机构代码:</th>
 					<td width="15%">
               			<input type="text" class="input" name="search_LIKE_orgcode" value="${sParams['LIKE_orgcode']}"/>
 					</td>
-					<th>区域代码:</th>
+					<th style="padding-left: 5px">区域代码:</th>
 					<td width="15%">
               			<input type="text" class="input" name="search_LIKE_areacode" value="${sParams['LIKE_areacode']}"/>
 					</td>
-					<td class="btn-group"> <a class="btnSearch" id="advanced-search-btn">搜索</a></td>
 				</tr>
 				<tr height="10px"></tr>
 				<tr>
-				    <th>上级机构：</th>
+				    <th style="padding-left: 5px">上级机构:</th>
 					<td width="15%">
               			<input name="groupname" id="groupname" value="${groupName}" type="text" style="cursor: pointer;"/>
 					    <input type="hidden" id="groupid" name="search_EQ_pid">
 					</td>
-				    <th>节点类型:</th>
+				    <th style="padding-left: 5px">节点类型:</th>
 					<td width="15%">
-	                <select id="search_EQ_nodetype"  name="search_EQ_nodetype"  style="width:198px;height:32px;font-size: 14px;">
+	                <select id="search_EQ_nodetype"  name="search_EQ_nodetype"  style="width:168px;height:32px;font-size: 14px;">
 	                	<option value="">---请选择节点类型---</option>
 						<c:forEach var="nodetype" items="${nodetypeMap}">
 							<option value="${nodetype.key}"
@@ -391,15 +390,20 @@ function exportGroup() {
 						</c:forEach>
 	                </select>
 					</td>
-					<th>区域类型:</th>
+					<th style="padding-left: 5px">区域类型:</th>
 					<td width="15%">
-						<select id="search_EQ_areatype"  name="search_EQ_areatype" style="width:198px;height:32px;font-size: 14px;">
+						<select id="search_EQ_areatype"  name="search_EQ_areatype" style="width:168px;height:32px;font-size: 14px;">
 	                		<option value="">---请选择区域类型---</option>
 							<c:forEach var="areatype" items="${areatypeMap}">
 								<option value="${areatype.key}"
 								<c:if test="${sParams['EQ_areatype']==areatype.key}">selected </c:if>>${areatype.value}</option>
 							</c:forEach>
 	                	</select>	
+					</td>
+					<th style="padding-left: 5px"></th>
+					<td class="btn-group" style="text-align:right;">
+				
+					    <a class="btnSearch" id="advanced-search-btn">搜索</a>
 					</td>
 				</tr>
 			</table>

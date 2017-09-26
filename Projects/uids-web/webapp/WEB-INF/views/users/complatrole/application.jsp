@@ -290,7 +290,7 @@ body {
 					</option>
 				</select>
 				成员名称:
-				<input name="memberName" placeholder="成员名称" type="text" id="advanceMemeberName" class="input-text" value="${memberName}" style="width: 138px; margin: 0 20px 0 10px;" />
+				<input name="memberName" placeholder="成员名称" type="text" id="advanceMemeberName" class="input-text" value="${memberName}" style="width: 138px; margin: auto;" />
 				<a class="datagrid-toolbar-btn btn-primary"  onclick="toLoadUser('advan');" style="margin-right: 5px;margin-left: 10px;"><i class="icon-trash"></i>检索</a>
 				<a class="datagrid-toolbar-btn" onclick="toolbarAction('add')"><i class="icon-plus-sign"></i>新增</a>
 				<a class="datagrid-toolbar-btn" onclick="toolbarAction('remove')"><i class="icon-minus-sign"></i>删除</a>

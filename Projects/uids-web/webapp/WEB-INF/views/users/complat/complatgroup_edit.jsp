@@ -195,7 +195,7 @@ $("#editForm").validate({
 			<tr>
 				<th>请输入组织机构代码：</th>
 				<td>
-					<input type="text" placeholder="请填写组织机构代码" class="input" name="orgcode" value="${complatGroup.orgcode}" />
+					<input type="text" placeholder="请填写标准的九位机构代码" class="input" name="orgcode" value="${complatGroup.orgcode}" />
 	            </td>
 	        	<th>请输入上级机构：</th>
 	        	<td>
