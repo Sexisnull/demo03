@@ -231,7 +231,7 @@ public class ComplatUserController extends BaseController {
 						complatUser.setOpersign(2);
 					}
 					Date d = new Date();
-					complatUser.setEnable(1); // 是否禁用
+					complatUser.setEnable(0); // 是否禁用
 					// complatUser.setAuthState(0); // 审核状态
 					// complatUser.setIsAuth(0); // 是否审核
 					complatUser.setCreatetime(d);// 创建时间

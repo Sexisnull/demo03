@@ -200,13 +200,13 @@ function checkSubmitForm(){
 				if(loginallnameSearchvar ==  '' || isNumbOrLett3(loginallnameSearchvar)){
 			       form1.submit();
 		        }else{
-			       $.validator.errorShow($("#loginallnameSearch"),'只能包括字母、数字、下划线');
+			       $.validator.errorShow($("#loginallnameSearch"),'名称只能由字母、数字、下划线、中文组成，不能以下划线开头和结尾');
 		        }  
 		    }else{
-		    	$.validator.errorShow($("#loginnameSearch"),'只能包括字母、数字、下划线');
+		    	$.validator.errorShow($("#loginnameSearch"),'名称只能由字母、数字、下划线组成，不能以下划线开头和结尾');
 		    }
 		}else{
-			$.validator.errorShow($("#nameSearch"),'只能包括数字和字母');
+			$.validator.errorShow($("#nameSearch"),'名称只能由字母、数字、下划线、中文组成，不能以下划线开头和结尾');
 		}
 }
 	
@@ -509,9 +509,7 @@ $(function(){
 									value="${sParams['LIKE_loginallname']}" id="loginallnameSearch"
 									name="search_LIKE_loginallname" />
 							</td>
-							<td class="btn-group">
-								<a id="advanced-search-btn" class="btnSearch">搜索</a>
-							</td>
+							<td style="padding-right: 30px" class="btn-group"> <a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a></td>
 						</tr>
 					</table>
 				</form>
@@ -604,7 +602,7 @@ $(function(){
 									</th>
 
 
-									<th width="15%" style="text-align: center;">
+									<th width="21%" style="text-align: center;">
 										姓名
 									</th>
 									<th width="15%" style="text-align: center;">
@@ -613,16 +611,16 @@ $(function(){
 									<th width="15%" style="text-align: center;">
 										登录全名
 									</th>
-									<th width="15%" style="text-align: center;">
+									<th width="30%" style="text-align: center;">
 										所属机构
 									</th>
-									<th width="15%" class="alignL" style="text-align: center;">
+									<th width="2%" class="alignL" style="text-align: center;">
 										用户职务
 									</th>
-									<th width="10%" style="text-align: center;">
+									<th width="5%" style="text-align: center;">
 										办公电话
 									</th>
-									<th width="5%" style="text-align: center;">
+									<th width="2%" style="text-align: center;">
 										账号开启
 									</th>
 									<!--                                                     

@@ -117,6 +117,7 @@ public class JisFieldsServiceImpl implements JisFieldsService {
 			querySql = "select a.fieldkeys,a.fieldvalues,type,a.fieldname from jis_fields a where type = '2'";
 		}
 		listMap = jdbcTemplate.queryForList(querySql);
+		System.out.println("listMap=============="+listMap);
 		return listMap;
 	}
 
@@ -146,6 +147,7 @@ public class JisFieldsServiceImpl implements JisFieldsService {
 		names = names.substring(0, names.length()-1);
 		String querySql = "select distinct "+names+" from jis_fields a ,jis_userdetail b where  a.type='2' and b.userid = '1'";
 		fieldsMap = jdbcTemplate.queryForMap(querySql);
+		System.out.println("fieldsMap=============="+fieldsMap);
 		return fieldsMap;
 	}
 
