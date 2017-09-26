@@ -187,12 +187,6 @@ public class ComplatRoleController extends BaseController {
                 ComplatRole role = complatRoleService.findByKey(Integer.parseInt(para[i].trim()));
                 complatRoleService.delete(Integer.parseInt(para[i].trim()));
                 jisRoleobjectService.deleteByRoleId(Integer.parseInt(para[i].trim()));
-               /* JisLog log = new JisLog();
-                log.setOperateType(3);
-                log.setModuleName(3);
-                log.setSpec(role.getName());
-                log.setUserId(session.getUserName());
-                log.setOperateTime(new Date());*/
                 String desc=session.getUserName()+"删除了"+role.getName();
                 jisLogService.save(session.getUserName(),session.getUserIp(), desc, 3, 3);
 			}

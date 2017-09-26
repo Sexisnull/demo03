@@ -113,7 +113,7 @@
 				</li>
 				<li class="split"></li>
 				<li>
-					<a href="#">系统管理</a>
+					<a href="#">角色管理</a>
 				</li>
 				<li class="split"></li>
 				<li class="active">
