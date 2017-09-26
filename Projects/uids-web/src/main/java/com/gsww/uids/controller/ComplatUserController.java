@@ -56,6 +56,7 @@ import com.gsww.uids.service.ComplatGroupService;
 import com.gsww.uids.service.ComplatRoleService;
 import com.gsww.uids.service.ComplatUserService;
 import com.gsww.uids.service.JisFieldsService;
+import com.gsww.uids.service.JisLogService;
 import com.gsww.uids.service.JisUserdetailService;
 
 /**
@@ -102,6 +103,8 @@ public class ComplatUserController extends BaseController {
 	@Autowired
 	private JisFieldsService jisFieldsService;
 
+	@Autowired
+	private JisLogService jisLogService;
 	/**
 	 * 获取政府用户列表
 	 * 
@@ -223,6 +226,7 @@ public class ComplatUserController extends BaseController {
 	public ModelAndView complatSave(ComplatUser complatUser,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
+		SysUserSession sysUserSession =(SysUserSession)request.getSession().getAttribute("sysUserSession");
 		try {
 			if (complatUser != null) {				
 					if(complatUser.getOpersign() == null){
@@ -236,7 +240,11 @@ public class ComplatUserController extends BaseController {
 					// complatUser.setIsAuth(0); // 是否审核
 					complatUser.setCreatetime(d);// 创建时间
 					complatUserService.save(complatUser);
-					returnMsg("success", "保存成功", request);
+					returnMsg("success", "保存成功", request);					
+					if(complatUser.getIid()==null){
+						String desc=sysUserSession.getUserName()+"新增了"+complatUser.getName();
+						jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(), desc, 2, 1);
+					}										
 				} else {
 					// 注册时间
 					complatUser.setEnable(1); // 是否禁用
@@ -245,6 +253,10 @@ public class ComplatUserController extends BaseController {
 					complatUser.setCreatetime(createTime);
 					complatUserService.save(complatUser);
 					returnMsg("success", "编辑成功", request);
+					if(complatUser.getIid()!=null){
+						String desc=sysUserSession.getUserName()+"修改了"+complatUser.getName();
+						jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(), desc, 2, 2);
+					}
 				}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -270,6 +282,7 @@ public class ComplatUserController extends BaseController {
 	public ModelAndView complatUserDelete(String iid,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
+		SysUserSession session = (SysUserSession) request.getSession().getAttribute("sysUserSession");
 		try {
 			String[] para = iid.split(",");
 			ComplatUser complatUser = null;
@@ -280,7 +293,10 @@ public class ComplatUserController extends BaseController {
 					complatUserService.delete(complatUser);
 					returnMsg("success", "删除成功", request);
 				}
+				String desc=session.getUserName()+"删除了"+complatUser.getName();
+	            jisLogService.save(session.getUserName(),session.getUserIp(), desc, 2, 3);
 			}
+			 
 		} catch (Exception e) {
 			e.printStackTrace();
 			returnMsg("error", "删除失败", request);
@@ -326,6 +342,7 @@ public class ComplatUserController extends BaseController {
 			@RequestParam("files") MultipartFile multipartFile,
 			HttpServletRequest request, Model model,
 			HttpServletResponse response) throws Exception {
+		SysUserSession session = (SysUserSession) request.getSession().getAttribute("sysUserSession");
 		Map resMap = new HashMap();
 		String fileName = multipartFile.getOriginalFilename();
 		LinkedHashMap<String, String> fieldMap = new LinkedHashMap<String, String>();
@@ -376,6 +393,8 @@ public class ComplatUserController extends BaseController {
 						complatUser.setOpersign(1);
 						complatUser.setSynState(2);
 						complatUserService.save(complatUser);
+						String desc=session.getUserName()+"导入了"+complatUser.getName();
+			            jisLogService.save(session.getUserName(),session.getUserIp(), desc, 2, 5);
 					} else {
 						flag = false;
 						strRow = strRow + row + "、"; // 记录第几行数据导入失败
@@ -383,23 +402,17 @@ public class ComplatUserController extends BaseController {
 					row++;// 导入行数加一
 				}// if(list
 			}// for
+			
+			
 			if(flag){
 				resMap.put("ret", "1");
 				resMap.put("msg", "导入成功！");
-				response.getWriter().write(JSONObject.toJSONString(resMap));
+				response.getWriter().write(JSONObject.toJSONString(resMap));				
 			}else{
 				resMap.put("ret", "0");
 				resMap.put("msg", "导入失败！");
 				response.getWriter().write(JSONObject.toJSONString(resMap));
-			}
-			
-
-//			if (flag) {
-//				returnMsg("success", "导入成功", request);
-//			} else {
-//				returnMsg("error", "导入失败,第" + strRow + "数据不符合规范！", request);
-//			}
-			
+			}		
 		} catch (Exception e) {
 			e.printStackTrace();
 			//returnMsg("error", "导入失败", request);
@@ -420,6 +433,7 @@ public class ComplatUserController extends BaseController {
 	@RequestMapping(value = "/complatExport", method = RequestMethod.GET)
 	public ModelAndView complatExport(Model model, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
+		SysUserSession session = (SysUserSession) request.getSession().getAttribute("sysUserSession");
 		String userIid = request.getParameter("iid");
 		String[] complatUserIds = userIid.split(",");
 		String fileName = "政府用户信息统计列表";
@@ -449,10 +463,10 @@ public class ComplatUserController extends BaseController {
 		headList.add("创建日期");
 
 		Workbook wb = new XSSFWorkbook(); // 导出 Excel为2007 工作簿对象
-
+		ComplatUser complatUser = null;
 		List dataList = new ArrayList();
 		for (String iid : complatUserIds) {
-			ComplatUser complatUser = complatUserService.findByKey(Integer.parseInt(iid));
+			complatUser = complatUserService.findByKey(Integer.parseInt(iid));
 			TreeMap<String, Object> treeMap = new TreeMap<String, Object>();
 			treeMap.put("10", complatUser.getName());// 用户姓名
 			treeMap.put("11", complatUser.getAge());// 年龄
@@ -490,6 +504,8 @@ public class ComplatUserController extends BaseController {
 			treeMap.put("31", complatUser.getCreatetime());// 创建日期
 			dataList.add(treeMap);
 		}
+		String desc=session.getUserName()+"导出了"+complatUser.getName();
+        jisLogService.save(session.getUserName(),session.getUserIp(), desc, 2, 4);
 		map.put(ExcelUtil.HEADERINFO, headList);
 		map.put(ExcelUtil.DATAINFON, dataList);
 		ExcelUtil.writeExcel(map, wb, response, fileName);
