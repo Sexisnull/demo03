@@ -194,7 +194,7 @@ public class ComplatRoleController extends BaseController {
                 log.setUserId(session.getUserName());
                 log.setOperateTime(new Date());*/
                 String desc=session.getUserName()+"删除了"+role.getName();
-                jisLogService.save(session.getUserName(),session.getUserIp(), desc, 3, 1);
+                jisLogService.save(session.getUserName(),session.getUserIp(), desc, 3, 3);
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
