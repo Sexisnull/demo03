@@ -37,10 +37,12 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
+import com.gsww.jup.entity.sys.SysUserSession;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.jup.util.StringHelper;
 import com.gsww.uids.entity.ComplatOutsideuser;
 import com.gsww.uids.service.ComplatOutsideuserService;
+import com.gsww.uids.service.JisLogService;
 
 import net.sf.json.JSONObject;
 
@@ -57,6 +59,8 @@ public class ComplatOutsideuserController extends BaseController {
 	private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	@Autowired
 	private ComplatOutsideuserService outsideUserService;
+	@Autowired
+	private JisLogService jisLogService;
 
 	@RequestMapping(value = "/outsideuserList", method = RequestMethod.GET)
 	public String accountList(@RequestParam(value = "page", defaultValue = "1") int pageNo,
@@ -84,7 +88,7 @@ public class ComplatOutsideuserController extends BaseController {
 			// 分页
 			Page<ComplatOutsideuser> pageInfo = outsideUserService.getOutsideUserPage(spec, pageRequest);
 			model.addAttribute("pageInfo", pageInfo);
-
+			
 			// 将搜索条件编码成字符串，用于排序，分页的URL
 			model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
 			model.addAttribute("sParams", searchParams);
@@ -141,6 +145,7 @@ public class ComplatOutsideuserController extends BaseController {
 	public ModelAndView accountSave(ComplatOutsideuser outsideUser, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		try {
+			SysUserSession sysUserSession =  (SysUserSession) ((HttpServletRequest) request).getSession().getAttribute("sysUserSession");
 			if (outsideUser != null) {
 				String iidStr = String.valueOf(outsideUser.getIid());
 				if (iidStr == "null" || iidStr.length() <= 0) {
@@ -152,6 +157,8 @@ public class ComplatOutsideuserController extends BaseController {
 					outsideUser.setOperSign(1);//更新操作状态
 					outsideUserService.save(outsideUser);
 					returnMsg("success", "保存成功", request);
+					String desc = sysUserSession.getUserName() + "新增个人用户:" + outsideUser.getName(); 
+					jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,10,1);
 				} else {
 					//注册时间
 					String time = request.getParameter("time");
@@ -160,6 +167,8 @@ public class ComplatOutsideuserController extends BaseController {
 					outsideUser.setOperSign(2);//更新操作状态
 					outsideUserService.save(outsideUser);
 					returnMsg("success", "编辑成功", request);
+					String desc = sysUserSession.getUserName() + "修改个人用户:" + outsideUser.getName(); 
+					jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,10,2);
 				}
 			}
 		} catch (Exception e) {
@@ -183,7 +192,10 @@ public class ComplatOutsideuserController extends BaseController {
 	public ModelAndView accountDelete(String corporationId, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		try {
+			SysUserSession sysUserSession =  (SysUserSession) ((HttpServletRequest) request).getSession().getAttribute("sysUserSession");
 			String[] para = corporationId.split(",");
+			String desc = sysUserSession.getUserName() + "删除id为：" + para +"的个人用户"; 
+			jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,10,3);
 			for (int i = 0; i < para.length; i++) {
 				Integer corId = Integer.parseInt(para[i].trim());
 				outsideUserService.delete(corId);
@@ -333,7 +345,8 @@ public class ComplatOutsideuserController extends BaseController {
 	@RequestMapping(value = "/outsideuserAuth", method = RequestMethod.GET)
 	public ModelAndView outsideuserAuth(Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		ComplatOutsideuser complatOutsideuser = null;
-		try{			
+		try{
+			SysUserSession sysUserSession =  (SysUserSession) ((HttpServletRequest) request).getSession().getAttribute("sysUserSession");
 			String iid = StringUtils.trim((String) request.getParameter("iid"));
 			String outsideUserType = StringUtils.trim((String) request.getParameter("outsideUserType"));
 			String rejectReason2 = StringUtils.trim((String) request.getParameter("rejectReason2"));
@@ -347,9 +360,12 @@ public class ComplatOutsideuserController extends BaseController {
 					complatOutsideuser.setAuthState(1);
 					outsideUserService.save(complatOutsideuser);
 					returnMsg("success", "用户认证成功！", request);
+					String desc = sysUserSession.getUserName() + "对个人用户:" + complatOutsideuser.getName() + "认证通过"; 
+					jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,10,12);
 				} else {
 					returnMsg("success", "用户已认证！", request);
 				}
+				
 			} else if (type == 0) {
 				complatOutsideuser.setIsAuth(0);
 				complatOutsideuser.setAuthState(2);
@@ -358,6 +374,8 @@ public class ComplatOutsideuserController extends BaseController {
 				}
 				outsideUserService.save(complatOutsideuser);
 				returnMsg("success", "用户认证已拒绝！", request);
+				String desc = sysUserSession.getUserName() + "对个人用户:" + complatOutsideuser.getName() + "拒绝认证"; 
+				jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,10,12);
 			} 
 		}catch(Exception e){
 			logger.error(e.getMessage(), e);
@@ -447,7 +465,7 @@ public class ComplatOutsideuserController extends BaseController {
                 String conResult = EntityUtils.toString(response  
                         .getEntity());  
                 JSONObject sobj = new JSONObject();  
-                sobj = sobj.fromObject(conResult);  
+                sobj = JSONObject.fromObject(conResult);  
                 String result = sobj.getString("result");  
                 String code = sobj.getString("code");  
                 if(result.equals("1")){  

@@ -31,6 +31,7 @@ import com.gsww.jup.entity.sys.SysUserSession;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.uids.entity.ComplatZone;
 import com.gsww.uids.service.ComplatZoneService;
+import com.gsww.uids.service.JisLogService;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -48,6 +49,8 @@ public class ComplatZoneController extends BaseController {
 
 	@Autowired
 	private ComplatZoneService complatZoneService;
+	@Autowired
+	private JisLogService jisLogService;
 
 	private static final String PAGE_SIZE = "10";
 	private static Map<String, String> sortTypes = Maps.newLinkedHashMap();
@@ -167,6 +170,7 @@ public class ComplatZoneController extends BaseController {
 	@RequestMapping(value = "/updateName", method = RequestMethod.POST)
 	public void updateName(HttpServletRequest request, HttpServletResponse response) {
 		try {
+			SysUserSession sysUserSession =  (SysUserSession) ((HttpServletRequest) request).getSession().getAttribute("sysUserSession");
 			String iid = request.getParameter("key");
 			ComplatZone complatZone = complatZoneService.fingByKey(Integer.parseInt(iid));
 			String newName = request.getParameter("newName");
@@ -177,6 +181,8 @@ public class ComplatZoneController extends BaseController {
 				response.getWriter().write("success");
 				complatZone.setName(newName);
 				complatZoneService.save(complatZone);
+				String desc = sysUserSession.getUserName() + "将" + oldName +"区域名称" + "修改为" + newName; 
+				jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,11,2);
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
@@ -242,6 +248,7 @@ public class ComplatZoneController extends BaseController {
 	@RequestMapping(value = "/zonedelete", method = RequestMethod.POST)
 	public void delete(HttpServletRequest request, HttpServletResponse response) {
 		try {
+			SysUserSession sysUserSession =  (SysUserSession) ((HttpServletRequest) request).getSession().getAttribute("sysUserSession");
 			boolean flag = false;
 			String iid = request.getParameter("key");
 			Integer iidInteger = Integer.parseInt(iid);
@@ -258,6 +265,8 @@ public class ComplatZoneController extends BaseController {
 			if (flag) {
 				complatZoneService.delete(complatZoneDel);
 				response.getWriter().write("success");
+				String desc = sysUserSession.getUserName() + "删除了区域:" + complatZoneDel.getName(); 
+				jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,11,3);
 			} else {
 				response.getWriter().write("exist");
 			}
@@ -341,6 +350,8 @@ public class ComplatZoneController extends BaseController {
 				resMap.put("ret", 1);
 				resMap.put("id", complatZoneSave.getIid());
 				response.getWriter().write(org.json.simple.JSONObject.toJSONString(resMap));
+				String desc = sysUserSession.getUserName() + "新增区域：" + name; 
+				jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,11,1);
 			} if (type > 3) {
 				Map<String, Object> resMap = new HashMap<String, Object>();
 				resMap.put("ret", 4);
@@ -403,11 +414,14 @@ public class ComplatZoneController extends BaseController {
 	public ModelAndView zoneFormSave(HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		try {
+			SysUserSession sysUserSession =  (SysUserSession) ((HttpServletRequest) request).getSession().getAttribute("sysUserSession");
 			String deptIid = StringUtils.trim((String) request.getParameter("iid"));
 			String deptCode = StringUtils.trim((String) request.getParameter("deptCode1"));
 			ComplatZone complatZone = complatZoneService.fingByKey(Integer.parseInt(deptIid));
 			complatZone.setCodeId(deptCode);
 			complatZoneService.save(complatZone);
+			String desc = sysUserSession.getUserName() + "将" + complatZone.getName() + "区域编码修改为" + deptCode; 
+			jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,11,2);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			returnMsg("error", "保存失败", request);
