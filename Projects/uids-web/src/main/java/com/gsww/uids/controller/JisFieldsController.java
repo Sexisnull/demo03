@@ -26,7 +26,6 @@ import org.springside.modules.web.Servlets;
 import com.gsww.jup.controller.BaseController;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.jup.util.StringHelper;
-import com.gsww.uids.entity.ComplatZone;
 import com.gsww.uids.entity.JisFields;
 import com.gsww.uids.service.JisFieldsService;
 
@@ -91,12 +90,11 @@ public class JisFieldsController extends BaseController {
 			// 将搜索条件编码成字符串，用于排序，分页的URL
 			model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
 			model.addAttribute("sParams", searchParams);
-
+            
 		} catch (Exception ex) {
-			ex.printStackTrace();
 			logger.error("列表打开失败：" + ex.getMessage());
 			returnMsg("error", "列表打开失败", (HttpServletRequest) request);
-			return "redirect:/jis/fieldsList";
+			//return "redirect:/jis/fieldsList";
 		}
 		return "system/jis/fields_list";
 	}
@@ -122,7 +120,7 @@ public class JisFieldsController extends BaseController {
 			}
 			model.addAttribute("jisFields", jisFields);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return "system/jis/fields_edit";
 	}
@@ -173,7 +171,7 @@ public class JisFieldsController extends BaseController {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 			returnMsg("error", "保存失败", request);
 		} finally {
 			return new ModelAndView("redirect:/jis/fieldsList");
@@ -205,7 +203,7 @@ public class JisFieldsController extends BaseController {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 			returnMsg("error", "删除失败", request);
 		} finally {
 			return new ModelAndView("redirect:/jis/fieldsList");
@@ -241,43 +239,29 @@ public class JisFieldsController extends BaseController {
 				returnMsg("success", "设置成功", request);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 			returnMsg("error", "设置失败", request);
 		}
 		return "redirect:/jis/fieldsList";
 	}
 	
 	@RequestMapping(value = "/checkFieldname", method = RequestMethod.GET)
-	public void checkFieldname(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		JisFields jisFieldsSame = null;
+	public void checkFieldname(String fieldname,HttpServletRequest request, HttpServletResponse response) throws Exception {
 		try {
-			boolean flag = true;//true 不重名  false 重名
-			String fieldname = StringUtils.trim((String) request.getParameter("fieldname"));
-			String iidStr = StringUtils.trim((String) request.getParameter("iid"));
-			if (iidStr != null && iidStr != "") {
-				int iid = Integer.parseInt(iidStr);
-				jisFieldsSame = jisFieldsService.findByKey(iid);
-			}
-			if (fieldname != "null") {
-				List<JisFields> jisFieldsList = jisFieldsService.findAllJisFields();
-				for (JisFields jisFields : jisFieldsList) {
-					if (fieldname.equals(jisFields.getFieldname())) {
-						if (!fieldname.equals(jisFieldsSame.getFieldname())) {
-							flag = false;
-							break;
-						}
-					}
+			String fieldnameInput = StringUtils.trim((String) request.getParameter("fieldname"));
+			String oldFieldname = StringUtils.trim((String) request.getParameter("oldFieldname"));
+			if(!fieldnameInput.equals(oldFieldname)){
+				List<JisFields> jisFields = jisFieldsService.findByFieldname(fieldname);
+				if(!jisFields.isEmpty()){					
+					response.getWriter().write("0");								
+				}else{
+					response.getWriter().write("1");
 				}
-			} else {
-				
-			} 
-			if (flag) {
+			}else{
 				response.getWriter().write("1");
-			} else {
-				response.getWriter().write("0");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 }

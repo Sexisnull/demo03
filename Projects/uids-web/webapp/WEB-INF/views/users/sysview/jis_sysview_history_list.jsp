@@ -99,7 +99,7 @@ width: 100px !important;
 			</div>
 			
     <div class="search-content">
-				<form id="form1" name="pageForm" action="${ctx}/sysviewHis/jisHisList" method="get">
+				<!--<form id="form1" name="pageForm" action="${ctx}/sysviewHis/jisHisList" method="get">
 						<table class="advanced-content">
 							<tr>
 								<th style="padding-left: 600px">操作对象名称：</th>
@@ -112,14 +112,14 @@ width: 100px !important;
 								<td class="btn-group"> <a id="advanced-btn" class="btnSearch" >高级搜索</a></td>
 							</tr>
 						</table>
-				</form>
+				</form>-->
 				<form id="form2" name="form2" action="${ctx}/sysviewHis/jisHisList" >
-				        <table class="advanced-content" style="display: none;">
+				        <table class="advanced-content">
 							<tr>
-				                <th>所属应用：</th>
+				                <th>应用名称：</th>
 								<td>
 								    <select name="search_EQ_appid" id="appSearch" class="select">
-					                     <option value="">--请选择--</option>
+					                     <option value="">--请选择应用名称--</option>
 					                     <c:forEach items="${applications}" var="application">
 						                     <option value="${application.iid}"
 							              <c:if test="${sParams['EQ_appid']==application.iid}">selected </c:if>>${application.name}</option>
@@ -131,14 +131,14 @@ width: 100px !important;
 								<td>
 									<input id="oldOperatetypeSearch" type="hidden" value="${sParams['EQ_operatetype']}">
 									<select id="operatetypeSearch" name="search_EQ_operatetype" class="select">
-										<option value="">--请选择--</option>
+										<option value="">--请选择操作类型--</option>
 									</select>
 								</td>
 
 								<th>同步结果：</th>
 								<td>
 									<select name="search_EQ_optresult" id="optresultSearch" class="select">
-					                     <option value="">--请选择--</option>
+					                     <option value="">--请选择同步结果--</option>
 					                     <c:forEach items="${parameters}" var="parameter">
 						                     <option value="${parameter.PARA_CODE}"
 							              <c:if test="${sParams['EQ_optresult']==parameter.PARA_CODE}">selected </c:if>>${parameter.PARA_NAME}</option>
@@ -159,8 +159,8 @@ width: 100px !important;
 									<input type="text" id="objectnameSearch" name="search_LIKE_objectname" placeholder="操作对象名称" value="${sParams['LIKE_objectname']}" class="input" />
 								</td>
 								<th></th>
-								<td >
-								<!-- style="text-align:right;padding-right: 6%" -->
+								<td  style="text-align:right;padding-right: 3%" >
+								 
 								    <a class="btnSearch" id="advanced-search-btn">搜索</a>
 								</td>
 							</tr>
@@ -171,11 +171,7 @@ width: 100px !important;
 	<div class="list">
 		<input type="hidden" id="orderField" name="orderField" value="${orderField}"/> 
 		<input type="hidden" id="orderSort" name="orderSort" value="${orderSort}"/>
-        <div class="list-topBar">
-        	 <div class="list-toolbar">
-	             <!--<gsww:opTag menuId="297e40e05e5f7a4f015e5f93f7b20002" tabIndex="1" operatorType="1"></gsww:opTag>
-            --></div> 
-        </div>
+        
         
         <!-- 提示信息开始 -->
          <div class="form-alert;" >

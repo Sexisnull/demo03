@@ -66,7 +66,7 @@ function checkSubmitForm() {
 }
 
 /**同步*/
-function sync(url,param,obj){
+function sync1(url,param,obj){
     var singleId = $(obj).parents("td").parent().find('td:first').find('input').attr('id');
     $.dialog.confirm('您确认要同步吗？',function(){
 		 window.location.href="${ctx}/"+url+"?"+param+"="+singleId;
@@ -74,7 +74,7 @@ function sync(url,param,obj){
 }
 	
  /**同步+校验**/
-function sync1(url,param,obj){
+function sync(url,param,obj){
     var singleId = $(obj).parents("td").parent().find('td:first').find('input').attr('id');
     $.get("${ctx}/sysviewCurr/checkSyncState", {"iid":singleId,"optresult":2}, function (data) {
         if (data != null) {
@@ -108,16 +108,31 @@ function checkSyncState(obj){
 
 /**批量同步**/
 function batchSync(url,param){
-	//var iid=$(".iid").val();
 	if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checked').length!=0){
 		$.dialog.confirm('您确认要同步吗？',function(){
 			var ids = "";
 			$('.list-table tbody input[type=checkbox]').each(function(i, o) {
 				if($(o).attr('checked')) {
-					ids += $(o).val() + ",";
+				     ids += $(o).val() + ",";
 				}
 			});
-			window.location.href="${ctx}/"+url+"?"+param+"="+ids.substring(0,ids.length-1);
+			if(ids != ""){
+			   $.get("${ctx}/sysviewCurr/checkSyncListState", {"iid":ids,"optresult":2}, function (data) {
+                     if (data != null) {
+                          if(data.success == 'true'){
+                              $.dialog.alert('存在已同步成功数据，不能再次同步，请取消同步成功的数据！',function(){
+                                  ids = "";
+                                  return null;
+                              });
+                             return false
+                          }
+                          if(data.success == 'false'){
+                             window.location.href="${ctx}/"+url+"?"+param+"="+ids.substring(0,ids.length-1);
+                          }
+                     }
+              });
+			   
+			}
 		});
 		
 	}else{
@@ -172,34 +187,28 @@ width: 100px !important;
 			</div>
 			
     <div class="search-content">
-				<form id="form1" name="pageForm" action="${ctx}/sysviewCurr/jisCurList" method="get">
+				<!--<form id="form1" name="pageForm" action="${ctx}/sysviewCurr/jisCurList" method="get">
 						<table class="advanced-content">
 							<tr>
 								<th style="padding-left: 350px">操作对象名称：</th>
 								<td>
 									<input type="text" id="objectNameSearch" name="search_LIKE_objectname" placeholder="操作对象名称" value="${sParams['LIKE_objectname']}" class="input" />
 								</td>
-								
 								<td class="btn-group">
 									<a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a>
 								</td>
 								<td class="btn-group"> <a id="advanced-btn" class="btnSearch" >高级搜索</a></td>
-							</tr>
+						    </tr>
 						</table>
-				</form>
+				</form>-->
 				<form id="form2" name="form2" action="${ctx}/sysviewCurr/jisCurList" >
 				    <input type="hidden" name="ishigh" value=""/>
-				        <table class="advanced-content" style="display: none;">
+				        <table class="advanced-content">
 							<tr>
-				                <th>所属应用：</th>
+				                <th>应用名称：</th>
 								<td>
-								    <!--<input id="oldAppSearch" type="hidden" value="${sParams['EQ_appid']}">
-									<select id="appSearch" name="search_EQ_appid" class="select">
-										<option value="">--请选择--</option>
-									</select>-->
-									
 			                        <select name="search_EQ_appid" id="appSearch" class="select">
-					                     <option value="">--请选择--</option>
+					                     <option value="">--请选择应用名称--</option>
 					                     <c:forEach items="${applications}" var="application">
 						                     <option value="${application.iid}"
 							              <c:if test="${sParams['EQ_appid']==application.iid}">selected </c:if>>${application.name}</option>
@@ -212,19 +221,14 @@ width: 100px !important;
 								<td>
 									<input id="oldOperatetypeSearch" type="hidden" value="${sParams['EQ_operatetype']}"/>
 									<select id="operatetypeSearch" name="search_EQ_operatetype" class="select">
-										<option value="">--请选择--</option>
+										<option value="">--请选择操作类型--</option>
 									</select>
 								</td>
 
 								<th>同步结果：</th>
 								<td>
-									<!--<input id="oldOptresultSearch" type="hidden" value="${sParams['EQ_optresult']}">
-									<select id="optresultSearch" name="search_EQ_optresult" class="select">
-										<option value="">--请选择--</option>
-									</select>-->
-									
 									<select name="search_EQ_optresult" id="optresultSearch" class="select">
-					                     <option value="">--请选择--</option>
+					                     <option value="">--请选择同步结果--</option>
 					                     <c:forEach items="${parameters}" var="parameter">
 						                     <option value="${parameter.PARA_CODE}"
 							              <c:if test="${sParams['EQ_optresult']==parameter.PARA_CODE}">selected </c:if>>${parameter.PARA_NAME}</option>
@@ -246,8 +250,8 @@ width: 100px !important;
 									<input type="text" id="objectnameSearchHigh" name="search_LIKE_objectname" placeholder="操作对象名称" value="${sParams['LIKE_objectname']}" class="input" />
 								</td>
 								<th></th>
-								<td >
-								<!-- style="text-align:right;padding-right: 6%" -->
+								<td style="text-align:right;padding-right: 2.5%">
+							
 								    <a class="btnSearch" id="advanced-search-btn">搜索</a>
 								</td>
 							</tr>

@@ -35,6 +35,7 @@
 		    color: white;
 		    font-size: 27px;
 		    font-weight: 600;
+		    font-weight: normal;
 		}
 		</style>
 	</head>

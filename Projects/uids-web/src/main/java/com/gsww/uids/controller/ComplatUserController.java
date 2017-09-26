@@ -17,11 +17,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONArray;
+
 import net.sourceforge.pinyin4j.PinyinHelper;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.json.simple.JSONObject;
 
 import org.slf4j.LoggerFactory;
 
@@ -199,7 +201,7 @@ public class ComplatUserController extends BaseController {
 				complatUser = new ComplatUser();
 			}
 			model.addAttribute("complatUser", complatUser);
-			//this.extendsAttr(model, request, response);			
+			this.extendsAttr(model, request, response);			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -222,16 +224,17 @@ public class ComplatUserController extends BaseController {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		try {
-			if (complatUser != null) {
-				String iidStr = String.valueOf(complatUser.getIid());
-				System.out.println(iidStr);
-				if (iidStr == "null" || iidStr.length() <= 0) {
+			if (complatUser != null) {				
+					if(complatUser.getOpersign() == null){
+						complatUser.setOpersign(1);
+					}else{
+						complatUser.setOpersign(2);
+					}
 					Date d = new Date();
 					complatUser.setEnable(1); // 是否禁用
 					// complatUser.setAuthState(0); // 审核状态
 					// complatUser.setIsAuth(0); // 是否审核
 					complatUser.setCreatetime(d);// 创建时间
-					System.out.println("新增groupid========="+complatUser.getGroupid());
 					complatUserService.save(complatUser);
 					returnMsg("success", "保存成功", request);
 				} else {
@@ -240,12 +243,9 @@ public class ComplatUserController extends BaseController {
 					String time = request.getParameter("time");
 					Date createTime = sdf.parse(time);
 					complatUser.setCreatetime(createTime);
-					System.out.println("编辑groupid============"+complatUser.getGroupid());
 					complatUserService.save(complatUser);
-					
 					returnMsg("success", "编辑成功", request);
 				}
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			returnMsg("error", "保存失败", request);
@@ -326,30 +326,29 @@ public class ComplatUserController extends BaseController {
 			@RequestParam("files") MultipartFile multipartFile,
 			HttpServletRequest request, Model model,
 			HttpServletResponse response) throws Exception {
+		Map resMap = new HashMap();
 		String fileName = multipartFile.getOriginalFilename();
 		LinkedHashMap<String, String> fieldMap = new LinkedHashMap<String, String>();
 		fieldMap.put("0", "name");
 		fieldMap.put("1", "age");
 		fieldMap.put("2", "sex");
 		fieldMap.put("3", "groupid");
-		fieldMap.put("4", "groupid");
-		fieldMap.put("5", "headship");
-		fieldMap.put("6", "phone");
-		fieldMap.put("7", "mobile");
-		fieldMap.put("8", "address");
-		fieldMap.put("9", "post");
-		fieldMap.put("10", "ip");
-		fieldMap.put("11", "fax");
-		fieldMap.put("12", "email");
-		fieldMap.put("13", "qq");
-		fieldMap.put("14", "loginname");
-		fieldMap.put("15", "loginallname");
-		fieldMap.put("16", "pwd");
-		fieldMap.put("17", "pwdquestion");
-		fieldMap.put("18", "pwdanswer");
-		fieldMap.put("19", "pinyin");
-		fieldMap.put("20", "createtime");
-		List<ComplatUser> users = ExcelUtil.readXls(fileName,multipartFile.getInputStream(), ComplatUser.class, fieldMap);
+		fieldMap.put("4", "headship");
+		fieldMap.put("5", "phone");
+		fieldMap.put("6", "mobile");
+		fieldMap.put("7", "address");
+		fieldMap.put("8", "post");
+		fieldMap.put("9", "ip");
+		fieldMap.put("10", "fax");
+		fieldMap.put("11", "email");
+		fieldMap.put("12", "qq");
+		fieldMap.put("13", "loginname");
+		fieldMap.put("14", "loginallname");
+		fieldMap.put("15", "pwd");
+		fieldMap.put("16", "pwdquestion");
+		fieldMap.put("17", "pwdanswer");
+		fieldMap.put("18", "pinyin");
+		List<ComplatUser> users = ExcelUtil.readXls(fileName,multipartFile.getInputStream(), ComplatUser.class, fieldMap);		
 		// 判断是哪行导入失败
 		int row = 1;
 		boolean flag = true;
@@ -359,13 +358,7 @@ public class ComplatUserController extends BaseController {
 				//从解析出来的集合中获取机构id
 				int groupId = complatUser.getGroupid();
 				//依据机构id在机构表中查询当前机构id的机构对象
-				ComplatGroup complatGroup = complatGroupService.findByIid(groupId);
-				String name=complatGroup.getName();//获取到机构名称
-				if("".equals(name)){
-					
-				}else{
-					returnMsg("error", "导入失败", request);
-				}
+			   
 				List<ComplatUser> list = complatUserService.findByUserAllName(complatUser.getLoginallname());
 				if (list.size() == 0) {
 					if (StringHelper.isNotBlack(complatUser.getName())) { // 判断excel表格导入的数据是否规范
@@ -378,16 +371,6 @@ public class ComplatUserController extends BaseController {
 						String time = format.format(date);
 						Date createTime = sdf.parse(time);
 						complatUser.setCreatetime(createTime);
-						//设置性别
-                        
-						
-						
-						
-						
-						// 设置groupId
-						
-						
-						
 						// 设置状态值
 	                    complatUser.setEnable(0);
 						complatUser.setOpersign(1);
@@ -400,16 +383,28 @@ public class ComplatUserController extends BaseController {
 					row++;// 导入行数加一
 				}// if(list
 			}// for
-			if (flag) {
-				returnMsg("success", "导入成功", request);
-			} else {
-				returnMsg("error", "导入失败,第" + strRow + "数据不符合规范！", request);
+			if(flag){
+				resMap.put("ret", "1");
+				resMap.put("msg", "导入成功！");
+				response.getWriter().write(JSONObject.toJSONString(resMap));
+			}else{
+				resMap.put("ret", "0");
+				resMap.put("msg", "导入失败！");
+				response.getWriter().write(JSONObject.toJSONString(resMap));
 			}
+			
+
+//			if (flag) {
+//				returnMsg("success", "导入成功", request);
+//			} else {
+//				returnMsg("error", "导入失败,第" + strRow + "数据不符合规范！", request);
+//			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
-			returnMsg("error", "导入失败", request);
+			//returnMsg("error", "导入失败", request);
 		}
-		return new ModelAndView("redirect:/uids/complatList");
+		return new ModelAndView("redirect:/complat/complatList");
 	}
 
 	/**
@@ -423,7 +418,7 @@ public class ComplatUserController extends BaseController {
 	 * @author <a href=" ">shenxh</a>
 	 */
 	@RequestMapping(value = "/complatExport", method = RequestMethod.GET)
-	public void complatExport(Model model, HttpServletRequest request,
+	public ModelAndView complatExport(Model model, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		String userIid = request.getParameter("iid");
 		String[] complatUserIds = userIid.split(",");
@@ -457,8 +452,7 @@ public class ComplatUserController extends BaseController {
 
 		List dataList = new ArrayList();
 		for (String iid : complatUserIds) {
-			ComplatUser complatUser = complatUserService.findByKey(Integer
-					.parseInt(iid));
+			ComplatUser complatUser = complatUserService.findByKey(Integer.parseInt(iid));
 			TreeMap<String, Object> treeMap = new TreeMap<String, Object>();
 			treeMap.put("10", complatUser.getName());// 用户姓名
 			treeMap.put("11", complatUser.getAge());// 年龄
@@ -499,8 +493,13 @@ public class ComplatUserController extends BaseController {
 		map.put(ExcelUtil.HEADERINFO, headList);
 		map.put(ExcelUtil.DATAINFON, dataList);
 		ExcelUtil.writeExcel(map, wb, response, fileName);
+		return  new ModelAndView("redirect:/complat/complatList");
+
 	}
 
+	
+	
+	
 	/**
 	 * 用户设置模块,点击用户设置按钮，页面跳转
 	 * 
@@ -569,7 +568,9 @@ public class ComplatUserController extends BaseController {
 
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/userSetUpSave", method = RequestMethod.POST)
-	public ModelAndView userSetUpSave(ComplatUser complatUser,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+	public void userSetUpSave(ComplatUser complatUser,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+		
+		Map<String, Object> resMap = new HashMap<String, Object>();
 		try {
 			Integer userId = null;
 			if(complatUser != null){
@@ -599,13 +600,15 @@ public class ComplatUserController extends BaseController {
 					jisUserdetailService.update(jisUserdetail.getIid(),cardId,userMap);
 				}
 			}			
-			returnMsg("success","保存成功",request);
+			resMap.put("ret", "0");
+			resMap.put("msg", "保存成功！");
+			response.getWriter().write(JSONObject.toJSONString(resMap));
 		} catch (Exception e) {
 			e.printStackTrace();
-			returnMsg("error","保存失败",request);
-		} finally{
-			return  new ModelAndView("redirect:/complat/complatList");
-		}
+			resMap.put("ret", "1");
+			resMap.put("msg", "保存失败！");
+			response.getWriter().write(JSONObject.toJSONString(resMap));
+		} 
 		
 	}
 

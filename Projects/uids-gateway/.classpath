@@ -104,5 +104,6 @@
 	<classpathentry kind="lib" path="lib/gson-2.7.jar"/>
 	<classpathentry kind="src" path="src/main/app"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="lib/alipay-sdk-java20170615110434.jar" sourcepath="lib/alipay-sdk-java20170615110434-source.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

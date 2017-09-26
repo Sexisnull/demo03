@@ -13,16 +13,17 @@
 	function checkSubmitForm(){
 		var resNameSearch = $("#resNameSearch").val();
 		if(resNameSearch ==  '' || isNumbOrLett(resNameSearch)){
-			form1.submit();
 		}else{
-			$.validator.errorShow($("#resNameSearch"),'只能包括数字和字母');
+			$.validator.errorShow($("#resNameSearch"),'只能包括数字、字母、下划线或中文');
+			return;
 		}
 		var remarkSearch = $("#remarkSearch").val();
 		if(remarkSearch ==  '' || isNumbOrLett(remarkSearch)){
-			form1.submit();
 		}else{
 			$.validator.errorShow($("#remarkSearch"),'只能包括数字和字母');
+			return;
 		}
+		form1.submit();
 	}
 	/*
 	用途：检查输入字符串是否只由汉字、字母、数字组成
@@ -32,8 +33,7 @@
 	如果通过验证返回true,否则返回false
 	*/
 	function isNumbOrLett( s ){//判断是否是字母、数字组成
-		//var regu = "^[0-9a-zA-Z\u4e00-\u9fa5]+$";
-		var regu = /^([a-zA-Z0-9]+)$/;
+		var regu = /^(\w|[\u4E00-\u9FA5])*$/;/* /^([a-zA-Z0-9]+)$/ */
 		var re = new RegExp(regu);
 		if (re.test(s)) {
 			return true;
@@ -49,7 +49,7 @@
 	<div class="position">
 		<ol class="breadcrumb">
 			<li>
-				<a href="${ctx}/backIndex" target="_top">首页</a>
+				<a href="${ctx}/index" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
 			<li>
@@ -127,8 +127,8 @@
                     <th width="10%" style="text-align: center;">
                   ID        
                     </th>
-                    <th width="15%" style="text-align: center;">名称</th>
-                    <th width="15%" style="text-align: center;">标识</th>
+                    <th width="15%" style="text-align: center;">数据名称</th>
+                    <th width="15%" style="text-align: center;">数据标识</th>
                     <th width="15%" style="text-align: center;">地址</th>
                     <th width="15%" class="alignL" style="text-align: center;">调用方式</th>
                     <th width="10%" class="alignL" style="text-align: center;">验证</th>

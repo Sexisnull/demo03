@@ -19,14 +19,14 @@ public class JisDatacallDaoTest {
 	private JisDatacallDao jisDatacallDao;
 	@Test
 	public void findByIid(){
-		int iid=8;
+		int iid=1;
 		JisDatacall call=jisDatacallDao.findByIid(iid);
 		System.out.println(call.getResName());
 		assertTrue(true);
 	}
 	@Test
 	public void findByRemark(){
-		String remark="@#￥";
+		String remark="XXkk";
 		List<JisDatacall> list=jisDatacallDao.findByRemark(remark);
 		System.out.println(list.get(0).getResName());
 		assertTrue(true);

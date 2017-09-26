@@ -1,19 +1,22 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>甘肃政务服务网-登录</title>
-<link rel="stylesheet" type="text/css" href="./images/style.css"/>
-<link rel="stylesheet" type="text/css" href="./images/syl_fpqd.css"/>
-<script type="text/javascript" src="../ui/lib/security/jquery.cookie.js"></script>
-<script type="text/javascript" src="../ui/lib/security/base64.js"></script>
-<script type="text/javascript" src="../ui/lib/security/jsencrypt.min.js"></script>
-<script type="text/javascript" src="../ui/lib/security/rsa_util.js"></script>
-<script type="text/javascript" src="../ui/lib/security/security.js"></script>
+<link rel="stylesheet" type="text/css" href="${ctx}/ui/images/style.css"/>
+<link rel="stylesheet" type="text/css" href="${ctx}/ui/images/syl_fpqd.css"/>
+<%-- <script type="text/javascript" src="${ctx}/ui/images/jquery-1.7.min.js"/> --%>
+<script type="text/javascript" src="${ctx}/res/plugin/jquery/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="${ctx}/ui/lib/security/jquery.cookie.js"></script>
+<script type="text/javascript" src="${ctx}/ui/lib/security/base64.js"></script>
+<script type="text/javascript" src="${ctx}/ui/lib/security/jsencrypt.min.js"></script>
+<script type="text/javascript" src="${ctx}/ui/lib/security/rsa_util.js"></script>
+<script type="text/javascript" src="${ctx}/ui/lib/security/security.js"></script>
 <script type="text/javascript">
 window.alert = function (msg,type,fu){
 	top.$.messager.alert(' ',msg,type,fu);
@@ -54,7 +57,7 @@ window.confirm = function(msg,okCall,cancelCall){
 					var gotoUrl = $('#gotoUrl').val();
 					var gotoUrlFlag = result.params.gotoUrlFlag;
 					if(gotoUrlFlag == ""){						
-						top.location.href = 'perindex.do';
+						top.location.href = 'perindex';
 					}else {
 						var ticket = result.params.ticket;
 						location.href = gotoUrlFlag + '?ticket='+ticket + "&gotoUrl="+gotoUrl;;
@@ -62,12 +65,12 @@ window.confirm = function(msg,okCall,cancelCall){
 				}else{
 					if(result.params.adminerror == "1"){
 						alert("系统管理员请从后台登录", "", function(){
-							location.href='../login.do'; 
+							location.href='${ctx}/uids-web/login'; 
 						});
 					}else{
 						
 						alert(result.message);
-						$('#verifyImg').click();//李德隆加于20160324
+						$('#verifyImg').click();
 					}
 				}
 			}
@@ -76,19 +79,16 @@ window.confirm = function(msg,okCall,cancelCall){
 	
 	$(document).keyup(function(event){
 		  if(event.keyCode ==13){
-		    $("#submit").trigger("click");
+		    $("#submitBtn").trigger("click");
 		  }
 		});
 	
 	//获取动态密码  李德隆于20160630 加置灰、以及倒数六十秒。
 	function getDynamicPwd(){//[daɪ'næmɪk]		
 		var telNum = $("#username").val();//			
-		var sendUrl = "./sendDynamicPwd.do";//或直接sendDynamicPwd.do
+		var sendUrl = "${ctx}/front/sendDynamicPwd";//或直接sendDynamicPwd.do
 		
 		$("#dynamicPwd").val("正在发送...").attr("disabled", true).css({"color":"#000000" ,"background":"#ccc"});//点击了“发送”按钮后，点击失效。
-
-			
-			
 		$.ajax({
 			type:"post",//post要用引号引起来
 			url: sendUrl,
@@ -155,11 +155,11 @@ window.confirm = function(msg,okCall,cancelCall){
 <div>
   <div class="top">
     <div class="pagecon"> 
-      <script language="javascript" src="http://www.gszwfw.gov.cn/script/0/1601131651091634.js"></script> 
+      <script language="javascript" src="${ctx}/ui/js/1601131651091634.js"></script> 
     </div>
   </div>
   <div class=""> 
-    <script language="javascript" src="http://www.gszwfw.gov.cn/script/0/1512101146476750.js"></script> 
+    <script language="javascript" src="${ctx}/ui/js/1512101146476750.js"></script> 
   </div>
   <div class="nav" style="height:5px;">  
   </div>
@@ -185,11 +185,11 @@ window.confirm = function(msg,okCall,cancelCall){
         	<table border="0" width="100%" cellpadding="0" cellspacing="0">
         	       
             	<tr>
-                	<td height="49"  style=" line-height:0px; font-size:0px"><img style="cursor:pointer;" border="0" src="./images/grdl.png" width="199" height="49" /></td>
-                    <td style=" line-height:0px; font-size:0px"><img style="cursor:pointer;" id="corlogin" border="0" src="./images/frdl.png" width="198" height="49" /></td>
+                	<td height="49"  style=" line-height:0px; font-size:0px"><img style="cursor:pointer;" border="0" src="${ctx}/ui/images/grdl.png" width="199" height="49" /></td>
+                    <td style=" line-height:0px; font-size:0px"><img style="cursor:pointer;" id="corlogin" border="0" src="${ctx}/ui/images/frdl.png" width="198" height="49" /></td>
                 </tr>
             </table>
-            <table border="0" width="100%"  height="295" cellpadding="0" cellspacing="0" style="background:url(./images/lmz_dl_03.png) repeat-x;">
+            <table border="0" width="100%"  height="295" cellpadding="0" cellspacing="0" style="background:url(${ctx}/ui/images/lmz_dl_03.png) repeat-x;">
             	<tr>
                 	<td valign="top">
                     	<table border="0" width="100%" cellpadding="0" cellspacing="0" style="margin-top:35px;">
@@ -199,7 +199,7 @@ window.confirm = function(msg,okCall,cancelCall){
                                 	<input id="username" placeholder="请输入登录名/身份证号/手机号" 
                                 		onBlur=checkIfTelNum(this);
                                 		style="line-height:40px; height:40px; width:256px; border:0px; padding-left:8px; 
-                                		background:url(./images/lmz_dl_04.jpg) no-repeat;">
+                                		background:url(${ctx}/ui/images/lmz_dl_04.jpg) no-repeat;">
                                 </td>
                                 <td></td>
                             </tr>
@@ -210,7 +210,7 @@ window.confirm = function(msg,okCall,cancelCall){
                             	<td align="right" height="40" style="font-weight:bold; font-size:15px; padding-right:10px;">密　码：</td>
                                 <td style="position:relative">
                                 	<input id="password" placeholder="请输入密码" type="password" style="line-height:40px; 
-                                	height:40px; width:256px; border:0px; padding-left:8px; background:url(./images/lmz_dl_04.jpg) no-repeat;">
+                                	height:40px; width:256px; border:0px; padding-left:8px; background:url(${ctx}/ui/images/lmz_dl_04.jpg) no-repeat;">
                                    <!-- 暂加动态密码于此。 --> 
 								<input type=button  id="dynamicPwd" name="dynamicPwd" onclick="getDynamicPwd()" 
 								style="height:36px; padding:0 5px; position:absolute;right: 38px;top: 2px; background:#4393DC; color:#fff; 
@@ -230,7 +230,7 @@ window.confirm = function(msg,okCall,cancelCall){
                             <tr>
                             	<td align="right" height="40" style="font-weight:bold; font-size:15px; padding-right:10px;">验证码：</td>
                                 <td>
-                                	<input id="randomVeryfyCode" name="randomVeryfyCode" placeholder="请输入验证码"  style="line-height:40px; height:40px; width:100px; border:0px; padding-left:8px; background:url(./images/lmz_dl_04.jpg) no-repeat;">
+                                	<input id="randomVeryfyCode" name="randomVeryfyCode" placeholder="请输入验证码"  style="line-height:40px; height:40px; width:100px; border:0px; padding-left:8px; background:url(${ctx}/ui/images/lmz_dl_04.jpg) no-repeat;">
                                 ${verifycodeimg}</td>
                                 
                             </tr>
@@ -246,12 +246,12 @@ window.confirm = function(msg,okCall,cancelCall){
                                 <td width="156" >
                                 
                                 
-                                <input type="button" id="submit" class="sub" value="登&nbsp;&nbsp;录"onClick="$('#loginform').submit()" /> 							
+                                <input type="button" id="submitBtn" class="sub" value="登&nbsp;&nbsp;录" onClick="$('#loginform').submit()" /> 							
 								</td>
-                                <td align="center" width="140"><a style="color:#37a1ec; font-size:14px;" href="pwdRecover_select.do?typeEntity=per">忘记密码？</a></td>
-                                <td align="left" width="65"><a style="color:#37a1ec; font-size:14px;" href="register/perregister.do">注册</a></td>
+                                <td align="center" width="140"><a style="color:#37a1ec; font-size:14px;" href="pwdRecover_select?typeEntity=per">忘记密码？</a></td>
+                                <td align="left" width="65"><a style="color:#37a1ec; font-size:14px;" href="register/perregister">注册</a></td>
                             </tr>
-                            <tr><td width="36"></td><td colspan="3"><img src="./images/denglutishi.png"/></td></tr>
+                            <tr><td width="36"></td><td colspan="3"><img src="${ctx}/ui/images/denglutishi.png"/></td></tr>
                         </table>
                     </td>
                 </tr>               
@@ -266,7 +266,7 @@ window.confirm = function(msg,okCall,cancelCall){
   </div>
   <div id="foot">
     <div> 
-      <script language="javascript" src="http://www.gszwfw.gov.cn/script/0/1512101421288942.js"></script> 
+      <script language="javascript" src="${ctx}/ui/js/1512101421288942.js"></script> 
     </div>
   </div>
 </div>
@@ -305,14 +305,14 @@ $("#bm").click(function(){
 		$("#corlogin").click(function(){
 			var appmark = $('#appmark').val();
 			if(appmark != "") {
-				window.location.href = "./corlogin.do?appmark="+appmark;
+				window.location.href = "${ctx}/uids-web/front/corlogin?appmark="+appmark;
 			}else {		
-				window.location.href = "./corlogin.do";
+				window.location.href = "${ctx}/uids-web/front/corlogin";
 			}
 		});
 	});
 
 </script>
-<script language="javascript" src="./images/jquery.JPlaceholder.js"/></script>
+<script language="javascript" src="${ctx}/ui/images/jquery.JPlaceholder.js"/></script>
 </body>
 </html>

@@ -9,34 +9,31 @@
 <title>甘肃万维JUP课题</title>
 
 <script type="text/javascript"> 
-	$(function(){
-		//高级搜索按钮点击事件
-		$('#advanced-btn').on('click',function(){
-			$('.advanced-content').toggle('fast');
-		});
-		$("#advanced-search-btn").click(function(){
-			$("#form2").submit();
-		});
-		//阻止按键盘Enter键提交表单
-		var $inp = $('input');
-		$inp.keypress(function (e) { 
-		    var key = e.which; 
-		    if (key == 13) {
-		        return false;
-		    }
-		});
-	});
 	
-
+	/**搜索表单**/
 	function checkSubmitForm(){
 		var loginNameSearch = $("#loginNameSearch").val();
-		if(loginNameSearch ==  '' || isNumbOrLett(loginNameSearch)){
-			form1.submit();
-		}else{
-			$.validator.errorShow($("#loginNameSearch"),'只能包括数字和字母');
-		}
+		var realNameSearch = $("#realNameSearch").val();
+		var nameSearch = $("#nameSearch").val();
+		var cardNumberSearch = $("#cardNumberSearch").val();
+		if(loginNameSearch == '' || isNumbOrLett1(loginNameSearch)){
+			if(realNameSearch == '' || isNumbOrLett1(realNameSearch)){
+				if(nameSearch == '' || isNumbOrLett1(nameSearch)){
+					if(cardNumberSearch == '' || isCardNumber(cardNumberSearch)){
+						form1.submit();
+					}else{
+						$.validator.errorShow($("#cardNumberSearch"),'只能包括数字和字母');
+					}	
+				}else{
+					$.validator.errorShow($("#nameSearch"),'名称只能由字母、数字、下划线、中文组成，不能以下划线开头和结尾');
+				}
+			}else{
+				$.validator.errorShow($("#realNameSearch"),'名称只能由字母、数字、下划线、中文组成，不能以下划线开头和结尾');
+			}
+ 		}else{
+ 			$.validator.errorShow($("#loginNameSearch"),'名称只能由字母、数字、下划线、中文组成，不能以下划线开头和结尾');
+ 		}
 	}
-	
 	/*
 	用途：检查输入字符串是否只由汉字、字母、数字组成
 	输入：
@@ -44,8 +41,19 @@
 	返回：
 	如果通过验证返回true,否则返回false
 	*/
-	function isNumbOrLett( s ){//判断是否是字母、数字组成
-		//var regu = "^[0-9a-zA-Z\u4e00-\u9fa5]+$";
+	function isNumbOrLett1( s ){
+		var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;
+		var re = new RegExp(regu);
+		if (re.test(s)) {
+			return true;
+		}else{
+			return false;
+		}
+	}
+	/**
+	检查身份证
+	*/
+	function isCardNumber( s ){
 		var regu = /^([a-zA-Z0-9]+)$/;
 		var re = new RegExp(regu);
 		if (re.test(s)) {
@@ -54,6 +62,8 @@
 			return false;
 		}
 	}
+	
+	
 	
 	//弹出层
 	function openwindow(iid){
@@ -154,7 +164,7 @@
 			</li>
 			<li class="split"></li>
 			<li>
-				<a >用户管理</a>
+				<a >公网用户</a>
 			</li>
 			<li class="split"></li>
 			<li class="active">
@@ -167,38 +177,25 @@
 			<table class="advanced-content">
 				<tr>
 					<th>用户登录名：</th>
-						<td width="20%">
-							<input type="text" placeholder="用户登录名" value="${sParams['LIKE_loginName']}" id="loginNameSearch" name="search_LIKE_loginName" class="input"/>
-						</td>
-					<td class="btn-group"> <a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a></td>
-					<td class="btn-group"> <a id="advanced-btn" class="btnSearch" >高级搜索</a></td>
-				</tr>
-			</table>
-		</form>
-		<!-- 高级探索表单 -->
-		<form id="form2" name="form2" action="${ctx}/complat/corporationList">
-      			<table class="advanced-content" style="display: none">
-      				<tr>
+					<td width="15%">
+						<input type="text" placeholder="用户登录名" value="${sParams['LIKE_loginName']}" id="loginNameSearch" name="search_LIKE_loginName" class="input"/>
+					</td>
 					<th>姓名:</th>
 					<td width="15%">
-						<input type="text" class="input" name="search_LIKE_realName" value="${sParams['LIKE_realName']}"/>
-					</td>
-					<th>登录名:</th>
-					<td width="15%">
-              				<input type="text" class="input" name="search_LIKE_loginName" value="${sParams['LIKE_loginName']}"/>
+						<input type="text" placeholder="姓名" class="input" name="search_LIKE_realName" id="realNameSearch" value="${sParams['LIKE_realName']}"/>
 					</td>
 					<th>企业或机构名称:</th>
 					<td width="15%">
-						<input type="text" class="input" name="search_LIKE_name" value="${sParams['LIKE_name']}"/>
+						<input type="text" placeholder="企业或机构名称" class="input" name="search_LIKE_name" id="nameSearch" value="${sParams['LIKE_name']}"/>
 					</td>
 					<th>身份证号码:</th>
 					<td width="15%">
-						<input type="text" class="input" name="search_LIKE_cardNumber" value="${sParams['LIKE_cardNumber']}"/>
+						<input type="text" placeholder="身份证号码" class="input" name="search_LIKE_cardNumber" id="cardNumberSearch" value="${sParams['LIKE_cardNumber']}"/>
 					</td>
-					<td class="btn-group"> <a class="btnSearch" id="advanced-search-btn">搜索</a></td>
+					<td class="btn-group"> <a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a></td>
 				</tr>
-      		</table>  
-     	</form>
+			</table>
+		</form>
 	</div>
 	<!--列表内容区域-->
 	<div class="list">
@@ -315,7 +312,7 @@
     <div id="alerttb" class="alert_tb" style="display:none;"> 
       <div class="input_one">
 		<span id="inputUser">用户认证</span>
-		<i class="close"><a  id="close"  href="${ctx}/complat/corporationList">X&nbsp</a></i>
+		<i class="close"><a  id="close"  href="${ctx}/complat/corporationList"></a></i>
       </div>   
       <div class="input_two">
 	     <form align = "center" id="oprform" name="oprform" action="${ctx}/complat/corporationAuth" method="get">

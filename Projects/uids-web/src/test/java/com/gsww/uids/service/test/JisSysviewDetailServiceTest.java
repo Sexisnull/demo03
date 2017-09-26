@@ -25,7 +25,9 @@ public class JisSysviewDetailServiceTest {
 	@Test
 	public void delete(){
 		JisSysviewDetail detail=jisSysviewDetailService.findByIid(3242);
-		jisSysviewDetailService.delete(detail);
+		if(detail!=null){
+			jisSysviewDetailService.delete(detail);
+		}
 		assertTrue(true);
 	}
 }

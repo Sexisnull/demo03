@@ -21,26 +21,29 @@
 
 <style type="text/css">
 .form-table td{
-width: 0;
-color: rgb(119, 119, 119);
+    width: 0;
+    color: rgb(119, 119, 119);
 }
 .form-table th:first-child {
     padding-left: 0px;
 	width:130px;
+	
 }
 .form-table td {
     height: 32px;
     line-height: 32px;
-    white-space: nowrap;
+    white-space: nowrap;    
     padding: 2px 2px;
 }
 
 .td_1 {
 	border-bottom : 1px solid #C6E6FF;
 	border-right : 1px solid #C6E6FF;
+	width:100px;
 }
 .td_2 {
 	border-right : 1px solid #C6E6FF;
+	width:100px;
 }
 .td_3 {
 	border-bottom : 1px solid #C6E6FF;
@@ -54,6 +57,16 @@ color: rgb(119, 119, 119);
 .td_6 {
 	border-bottom : 1px solid #C6E6FF;
 }  
+.td_7{
+   border-right : 1px solid #C6E6FF;  
+}
+#td_7{
+   align:center;
+    vertical-align: middle;
+}
+
+
+
 /*角色信息分区样式*/
 .role1,.role2{
     border:1px solid #000;
@@ -84,6 +97,9 @@ function hideGroupMenu(){
 function onClickGroup(event, treeId, treeNode) {
 	$('#groupid').val(treeNode.id);
 	$('#groupname').val(treeNode.name);
+	
+	$('#groupid').val(treeNode.id);
+	$('#groupname1').val(treeNode.name);
 	hideGroupMenu();
 }
 function onDbClickGroup(event, treeId, treeNode) {
@@ -94,6 +110,11 @@ function onDbClickGroup(event, treeId, treeNode) {
 		return;
 	$('#groupid').val(treeNode.id);
 	$('#groupname').val(treeNode.name);
+	$('#groupname_menu').fadeOut(50);
+	
+	
+	$('#groupid').val(treeNode.id);
+	$('#groupname1').val(treeNode.name);
 	$('#groupname_menu').fadeOut(50);
 }
 
@@ -199,94 +220,113 @@ var complatUserNameInput=$("#name").val();
    });   
 
 
-
-   //用户扩展属性
-  /* var table = $("#dataTable");
-   var tr=$("#kzsxTr");
-   var list=eval('${fieldsListMap}');
-   var td1="";
-   var td2="";
-   table.append("<tr><td class='td_2' rowspan='6' style='max-width:0px;width:100px;ont-weight:bold;' align='center'>"+"扩展属性"+"</td></tr>");
-   var type="2";//1：字符型     2：枚举型
-   for(var i=0;i<5;i++){  
-        if(type=="2"){
-            td1=table.append("<tr id='kzsxTr'><th>"+"shenxh"+"</th><td>"+"<input type='text'/>"+"</td></tr>");   
-       }else if(type=="2"){
-            td2=tr.append("<tr id='kzsxTr'><th>"+"shenxh"+"</th><td>"+"<select id=''><option>"+"政府干部"+"</option>"+"</td></tr>"); 
-       }     
-   }*/
    
    
-   //获取用户扩展属性				   
-	var count = 1;						
-	var table = $(".form-table");		
-	var fieldsListMap = eval('${fieldsListMap}');	
-	var size=fieldsListMap.length;
-	/*if(size%2==1){
-	   var rows=(size/2)+1;
-	   table.append("<tr><td class='td_2' rowspan='rows' style='max-width:0px;width:100px;ont-weight:bold;' align='center'>"+"扩展属性"+"</td></tr>");	
-	}
-	if(size%2==0){
-	   var rows=(size/2);
-	   table.append("<tr><td class='td_2' rowspan='rows' style='max-width:0px;width:100px;ont-weight:bold;' align='center'>"+"扩展属性"+"</td></tr>");	
-	}*/								
-	for ( var i = 0; i < size; i++) {
-		var fieldsList = fieldsListMap[i];
-		for ( var j = 0; j < fieldsList.length; j++) {
-			var fields = fieldsList[j];
-			if (fields.type == 1) {
-				for ( var key in fields) {
-					var value = fields[key];
-					if (key != 'type' && key != 'userid') {
-						alert(count % 2);
-					    if (count % 2 == 1) {
-							table.append("<tr><th>"+ key+ "</th><td><input type='text' value='"+value+"'></td>");
-						}
-						if (count % 2 == 0) {
-							table.append("<th>"+ key+ "</th><td><input type='text' value='"+value+"'></td></tr>");
-						}
-						count++;
-					}
-				}
-			}
-
-			var values;
-			if (fields.type == 2) {
-			   for ( var key in fields) {
-			      var value = fields[key];
-			      //alert("key:"+key+"  value:"+value);
-			      if (key == 'fieldkeys') {
-				      keys = value.split(",");
-			      }
-
-			      if (key == 'fieldvalues') {
-				      values = value.split(",");
-			      }
-
-			      if (key != 'type' && key != 'userid') {
-				      if (key == 'fieldname') {
-					      table.append("<th>"+ value+ "</th><td><select id='filedValues'><select></td></tr>");
-				      }
-			      }
-		      }
-	      }
-		}
-	}
-
+	 //获取用户扩展属性
+    var htmlString=[];
+    var count = 1;
+    var table = $(".form-table");
+    //htmlString.push("<tr><td  class='td_2' rowspan='"+count+"' align='center'>"+"扩展属性"+"</td>");
+    var fieldsListMap = eval('${fieldsListMap}');
+    htmlString.push("<tr><td  class='td_2' id='td_7' rowspan='"+count+"' align='center'>"+"扩展属性"+"</td>");
+    for(var i=0;i<fieldsListMap.length;i++){
+    	 
+    	var fieldsList = fieldsListMap[i];
+    	for(var j = 0;j<fieldsList.length;j++){
+    		var fields = fieldsList[j];
+    		if(fields.type==1){
+    		   for(var key in fields){    			   
+    			var value = fields[key];
+    			if(key!='type' && key !='userid'){
+    				if(count==1){   
+    					 if(count%2==1){
+  	    			       htmlString.push("<th>"+key+"</th><td><input name='"+key+"' type='text' value='"+value+"'></td>");
+  	    			    }
+    					 if(count%2==0){
+    	    			       htmlString.push("<th>"+key+"</th><td><input type='text' name='"+key+"' value='"+value+"'></td></tr>");
+    	    			    }
+    					//htmlString.push("<th>"+key+"</th><td><input name='"+key+"' type='text' value='"+value+"'></td><th></th><td></td></tr>");
+    				}else{
+    					 if(count%2==1){
+    	    			       htmlString.push("<td class='td_7'></td><th>"+key+"</th><td><input name='"+key+"' type='text' value='"+value+"'></td>");
+    	    			    }
+    	    			    if(count%2==0){
+    	    			       htmlString.push("<th>"+key+"</th><td><input type='text' name='"+key+"' value='"+value+"'></td></tr>");
+    	    			    }
+    					
+    				}
+    			   
+    			    count++;
+    			}
+    		   } 
+    		}
+    		
+    		var values;
+    		var keys;
+    		if(fields.type==2){
+    		   for(var key in fields){
+    			var value = fields[key];
+    			if(key == 'fieldkeys'){
+    				keys = value.split(",");
+    			}
+    			
+    			if(key == 'fieldvalues'){
+    				values = value.split(",");
+    			}
+    			if(key!='type' && key !='userid'){
+    			    if(key == 'fieldname'){
+    			    if(count%2==1){
+    			    	
+    			    	htmlString.push("<tr><td class='td_7'></td><th>"+value+"</th><td><select id='"+value+"' name= '"+value+"' style='width:260px;'>");
+    			    	//循环key；
+    			        for(var i=0;i<keys.length;i++){
+    			 			htmlString.push("<option value='"+keys[i]+"'");
+    			          //获取下拉列表默认值
+						    var select = eval('${jsonMap}');
+						    for(var selectKey in select[0]){
+						    	var selectValue = select[0][selectKey];
+						    	if(selectValue == keys[i]){
+    			        			htmlString.push("selected = 'selected'");
+    			        		}
+					    	}
+					    	htmlString.push(">"+values[i]+"</option>");
+    				    }
+    			       htmlString.push("</select></td>");
+    			       
+    				   
+    			    }
+    			    if(count%2==0){
+    			    	htmlString.push("<th>"+value+"</th><td><select id='"+value+"' name= '"+value+"' style='width:260px;'>");
+    			    	//循环key；
+    			        for(var i=0;i<keys.length;i++){
+    			        	htmlString.push("<option value='"+keys[i]+"'");
+    			          //获取下拉列表默认值
+						    var select = eval('${jsonMap}');
+						    for(var selectKey in select[0]){
+						    	var selectValue = select[0][selectKey];
+						    	if(selectValue == keys[i]){
+    			        			htmlString.push("selected = 'selected'");
+    			        		}
+					    	}
+					    	htmlString.push(">"+values[i]+"</option>");
+    				    }
+    			       htmlString.push("</select></td></tr>");
+    			    }
+    			    count++;
+    			   	}
+    			}
+    		  } 
+    		}
+    	}
+    }
+    table.append(htmlString.join(""));
 });
 
 
 
 
 
-$(function(){
-    $("#p1").click(function(){
-      $("#p1").css("display","none");
-      var p = $("#p1").val().trim();
-      $("#p1").css("display","none");
-      $("#b1").val(p);
-    });
-});
+
 
 
 </script>
@@ -324,64 +364,65 @@ $(function(){
      <div class="form-content">
 		 	<table class="form-table" id="dataTable">
 		 		<tr>
-		 		  <td class="td_1" rowspan="6" style="max-width:0px;width:100px;ont-weight:bold;" align="center">基本属性</td>
+		 		  <td class="td_1" rowspan="5" style="max-width:0px;width:100px;ont-weight:bold;" align="center">基本属性</td>
 				  <th><b class="mustbe">*</b>姓名：</th>
-				  <td>
+				  <td style="width:300px;">
 					<input type="text" id="name" name="name" value="${complatUser.name}" />
 	        	    <input type="hidden" id="croleId" class="input" name="iid" value="${complatUser.iid}"  />	  
 	              </td>
 	        	  <th><b class="mustbe">*</b>性别：</th>
-				  <td>	
+				  <td style="width:300px;">	
 				 	<gsww:checkboxTag name="type" defaultValue="1" type="ZFYHXB" inputType="radio" value="${complatUser.sex}"></gsww:checkboxTag>
 				  </td>
 		 		</tr> 
 		 		<tr>  
 		 		  <th><b class="mustbe">*</b> 年龄：</th>
-				  <td>
+				  <td style="width:300px;">
 					<input type="text" id="age" name="age" value="${complatUser.age}"">
 	              </td>
 	        	   <th><b class="mustbe">*</b> 用户职务：</th>
-				  <td>
+				  <td style="width:300px;">
 					<input type="text" id="headship" name="headship" value="${complatUser.headship}"">
 				  </td>
 			    </tr>			    
 			    <tr>
 			      <th><b class="mustbe">*</b> 固定电话：</th>
-				  <td>
+				  <td style="width:300px;">
 					<input type="text"  id="phone" name="phone" value="${complatUser.phone}" />
 				  </td>
 				  <th><b class="mustbe">*</b> 移动电话：</th>
-                  <td>
+                  <td style="width:300px;">
                 	<input type="text"  id="mobile" name="mobile" value="${complatUser.mobile}" />
                   </td>				
 			    </tr>
 			    <tr>
 				  <th> 传真：</th>
-				  <td>
+				  <td style="width:300px;">
 					<input type="text" id="fax" name="fax" value="${complatUser.fax}" />
 				  </td>
 				  <th><b class="mustbe">*</b> Email：</th>				
-				  <td>
+				  <td style="width:300px;">
 					<input type="text"  id="email" name="email" value="${complatUser.email}" />
 				  </td>
 			    </tr>			    
 			    <tr>
-				  <th> QQ：</th>
-				  <td>
+				  <th class="td_5"> QQ：</th>
+				  <td class="td_3" style="width:300px;">
 					<input type="text" id="qq" name="qq" value="${complatUser.qq}" />
 				  </td>
-				  <th><b class="mustbe">*</b> 所属机构：</th>
-				  <td>
+				  <th class="td_6"><b class="mustbe">*</b> 所属机构：</th>
+				  <td class="td_4" style="width:300px;">
 				    <c:if test="${empty complatUser.iid}">
-				        <input id="groupname" value="${groupName}" name="groupid" type="text" style="cursor: pointer;"/> 
-					    <input type="hidden" id="groupid" name="search_EQ_groupId">	
+				        <input id="groupname" value="${groupMap[complatUser.groupid]}" name="groupname" type="text" style="cursor: pointer;"/> 
+					    <input type="hidden" id="groupid" name="groupid">	
 				    </c:if>
 				    <c:if test="${not empty complatUser.iid}">
-				        <input id="groupname1" value="${groupMap[complatUser.groupid]}" readonly="readonly" type="text" style="cursor: pointer;"/> 
+				        <input id="groupname" value="${groupMap[complatUser.groupid]}" name="groupname" type="text" style="cursor: pointer;"/> 
 					    <input type="hidden" id="groupid" name="groupid">	
 				    </c:if>											
 				  </td>
 			    </tr>
+			    <%--
 			    <tr>
 			       <th><b class="mustbe">*</b> 角色信息：</th>
 			       <td>			          
@@ -407,7 +448,7 @@ $(function(){
 					  </ul>
 				   </td>
 			    </tr>
-			    <!--<tr>
+			    --%><!--<tr>
 			      <th class="td_5"><b class="mustbe">*</b>地址：</th>
 				  <td class="td_3">					
 					 <input type="text" id="address" name="address" value="${complatUser.address}" />
@@ -418,30 +459,30 @@ $(function(){
 				  </td>				
 			    </tr>-->			   		
 		        <tr>
-		           <td class="td_1" rowspan="3" style="max-width:0px;width:100px;ont-weight:bold;" align="center"">账号信息</td>
+		           <td class="td_1" rowspan="4" style="max-width:0px;width:100px;ont-weight:bold;" align="center"">账号信息</td>
                    <th><b class="mustbe">*</b>登录名：</th>
-                   <td>
+                   <td style="width:300px;">
 					  <input type="text"  class="loginname" name="loginname" value="${complatUser.loginname}" />
 	               </td>
 	        	   <th>姓名的首字母全称：</th>
-	        	   <td>
-	        		  <input type="text" id="loginallname" name="loginallname" value="${complatUser.loginallname}" />
+	        	   <td style="width:300px;">
+	        		  <input type="text" id="pinyin" name="pinyin" value="${complatUser.pinyin}" />
 	        	   </td>
 			    </tr>	
-				<tr>		
+				<tr style="width:300px;">		
 				   <th><b class="mustbe">*</b> 密码：</th>
-	        	   <td>
+	        	   <td style="width:300px;">
 	        		  <input type="password" id="pwd" name="pwd" value="${complatUser.pwd}" onkeyup="javascript:EvalPwd(this.value);"/>	            	
 	        	   </td>
 				   <th><b class="mustbe">*</b> 请设置密码找回问题：</th>
-				   <td>
+				   <td style="width:300px;">
 					  <input type="text"  class="input" id="pwdquestion" name="pwdquestion" value="${complatUser.pwdquestion}"  />
 				   </td>
 			    </tr>
 			    <tr>				
-		           <th class="td_5"> 密码强度：</th>
-			       <td class="td_3">			                 
-				      <table id="pwdpower" style="width: 85%" cellspacing="0"
+		           <th> 密码强度：</th>
+			       <td style="width:300px;">			                 
+				      <table id="pwdpower" style="width: 86%" cellspacing="0"
 							cellpadding="0" border="0">
 						<tbody>
 							<tr>
@@ -452,11 +493,19 @@ $(function(){
 						</tbody>
 				</table>
 			       </td>
-			       <th class="td_6"><b class="mustbe">*</b> 请设置密码找回问题答案：</th>
-				   <td class="td_4">
+			       <th><b class="mustbe">*</b> 请设置密码找回问题答案：</th>
+				   <td style="width:300px;">
 					  <input type="text"  class="input" id="pwdanswer" name="pwdanswer" value="${complatUser.pwdanswer}"  />
 				   </td>
 			    </tr>	
+			    <tr>		
+				   <th class="td_5"><b class="mustbe">*</b> 登录名全称：</th>
+	        	   <td class="td_3" style="width:300px;">
+	        		  <input type="text" id="loginallname" name="loginallname" value="${complatUser.loginallname}" />	            	
+	        	   </td>
+				   <th class="td_6"></th>
+				   <td class="td_4" style="width:300px;"></td>
+			    </tr>
 	    </table>
   </div> 
     

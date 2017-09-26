@@ -97,13 +97,13 @@ public class ComplatGroupServiceImpl implements ComplatGroupService{
 		}
 	}
 	@Override
-	public ComplatGroup queryNameIsUsed(String name) throws Exception {
-		List<ComplatGroup> list = complatGroupDao.findByName(name);
-		if (CollectionUtils.isNotEmpty(list)){
-			return list.get(0);
-		}else{
-			return null;
-		}
+	public boolean queryNameIsUsed(String name, Integer pid) throws Exception {
+		String sql = "SELECT iid FROM complat_group WHERE name LIKE '%" + name + "%' AND pid LIKE '%" + pid + "%' AND opersign <> '3'";
+	    if (jdbcTemplate.queryForList(sql).size() > 0) {
+	        return true;
+	    }else{
+	        return false;
+	    }
 	}	
 	
 //	/**
@@ -172,11 +172,12 @@ public class ComplatGroupServiceImpl implements ComplatGroupService{
 	}
 
 	@Override
-	public ComplatGroup findByIid(int iid) {	
-		ComplatGroup complatGroup = null;
-		complatGroup=complatGroupDao.findByIid(iid);
-		System.out.println(complatGroup);
-		return complatGroup;
+	public ComplatGroup findByCodeid(String codeid) throws Exception {
+		List<ComplatGroup> list = complatGroupDao.findByCodeid(codeid);
+		if(list.size()!=0){
+			return complatGroupDao.findByCodeid(codeid).get(0);
+		}else{
+			return null;
+		}
 	}
-
 }

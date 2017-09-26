@@ -42,14 +42,18 @@ public class ComplatOutsideuserServiceTest extends BaseController{
 	}
 	@Test
 	public void save(){
-		ComplatOutsideuser user=new ComplatOutsideuser(null, null, "哈哈哈1", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+		ComplatOutsideuser user=new ComplatOutsideuser();
+		user.setLoginName("uids");
 		complatOutSideUserService.save(user);
 		assertTrue(true);
 	}
 	@Test
 	public void delete(){
 		ComplatOutsideuser user=complatOutSideUserService.findByKey(10);
-		complatOutSideUserService.delete(user);
+		if(user!=null){
+			complatOutSideUserService.delete(user);
+		}
+		assertTrue(true);
 	}
 	@Test
 	public void findAll(){

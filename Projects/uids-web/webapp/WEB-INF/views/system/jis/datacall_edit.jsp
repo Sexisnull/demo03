@@ -21,20 +21,21 @@ var userNameInput=$("#userName").val();
     rules: {
     	resName: {
 	    required: true,
-	    /* cnRangelength: [0,32],
-	    stringCheck:userNameInput */
+	    userName:true,
+	    cnRangelength: [0,32],
 	   },
 	   remark: {
-	    required: true
+	    required: true,
+	    charNo:true,
+	    maxlength: 32,
+	    uniqueRemark:true
 	   },
 	   callingType: {
 	    required: true,
-	   /*  chrnum:true,
-	    uniqueLoginAccount:true,
-	    maxlength: 32 */
 	   },
 	   resUrl:{
-	   required: true
+	   required: true,
+	   maxlength: 32
 	   },
 	   isVerification:{
 	   required: true
@@ -98,9 +99,9 @@ $(function(){
 	});
 	
 	// Ajax重命名校验
-	/* $.uniqueValidate('uniqueLoginAccount', '${ctx}/sys/checkAccount', ['loginAccount','oldLoginAccount'], '对不起，这个账号重复了');
+	$.uniqueValidate('uniqueRemark', '${ctx}/datacall/checkRemark', ['remark','oldRemark'], '对不起，此标识已存在');
 	$("#roleNames").Popup($(".ulRoleList"), { width: "auto" });
-	$(".icon-date-r").click(function(){ $(this).prev("input").click(); }); */
+	$(".icon-date-r").click(function(){ $(this).prev("input").click(); }); 
 });
 
 </script>
@@ -112,7 +113,7 @@ $(function(){
 	<div class="position">
 		<ol class="breadcrumb">
 			<li>
-				<a href="${ctx}/backIndex" target="_top">首页</a>
+				<a href="${ctx}/index" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
 			<li>
@@ -143,11 +144,11 @@ $(function(){
     		<tr>
 	        	 <th><b class="mustbe">*</b> 请输入数据调用名称：</th>
 	        	 <td>
-					<input type="text" placeholder="格式：字母、数字、下划线或中文" id="resName" name="resName" value="${jisDatacall.resName}" />
+					<input type="text" placeholder="字母、数字、下划线或中文" id="resName" name="resName" value="${jisDatacall.resName}" />
 				</td>
 				<th><b class="mustbe">*</b> 请输入标识：</th>
 				<td>
-					<input type="text" placeholder="格式：英文名或数字且唯一" id="remark" name="remark" value="${jisDatacall.remark}" />
+					<input type="text" placeholder="英文名或数字且唯一" id="remark" name="remark" value="${jisDatacall.remark}" />
 					<input type="hidden" id="oldRemark" name="oldRemark" value="${jisDatacall.remark}"/>
 				</td>
 			</tr>

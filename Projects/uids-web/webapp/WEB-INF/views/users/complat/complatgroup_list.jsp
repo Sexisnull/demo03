@@ -337,7 +337,6 @@ function exportGroup() {
 	</div>
 	<form id="form3" name="form3" action="${ctx}/uids/complatgroupImport" method="post" enctype="multipart/form-data">
 		<div class="upload">
-			<!-- form 提交 -->
 			<label for="fileupload">
 			<input type="file" id="excelFile" class="required" name="excelFile">
 			</label>
@@ -355,7 +354,7 @@ function exportGroup() {
 	<div class="position">
 		<ol class="breadcrumb">
 			<li>
-				<a href="${ctx}/backIndex" target="_top">首页</a>
+				<a href="${ctx}/index" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
 			<li>
@@ -378,7 +377,7 @@ function exportGroup() {
 						</td>
 					<th>上级机构：</th>
 						<td>
-						    <input name="groupname" id="groupname" type="text" style="cursor: pointer;"/>
+						    <input name="groupname" id="groupname" value="${groupName}" type="text" style="cursor: pointer;"/>
 						    <input type="hidden" id="groupid" name="search_EQ_pid">
 						</td>
 					<td class="btn-group"> <a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a></td>
@@ -442,7 +441,6 @@ function exportGroup() {
 	<div class="list">
 	<input type="hidden" id="orderField" name="orderField" value="${orderField}"/> 
 	<input type="hidden" id="orderSort" name="orderSort" value="${orderSort}"/>
-		
         <div class="list-topBar  advanced-search">
            	<div class="list-toolbar">
             <!-- 操作按钮开始	 -->
@@ -506,7 +504,6 @@ function exportGroup() {
 	                    			<c:if test="${complatGroup.nodetype == 1}">区域</c:if>
 	                           		<c:if test="${complatGroup.nodetype == 2}">单位</c:if>
 	                           		<c:if test="${complatGroup.nodetype == 3}">部门或处室</c:if>
-	                           		<c:if test="${complatGroup.nodetype == 4}">下属单位</c:if>
 	                    		</div>
 	                        </div>
 	                    </td>

@@ -187,4 +187,9 @@ public class ComplatOutsideuserServiceImpl implements ComplatOutsideuserService 
 	    }
 	    return outsideUser;
 	}
+
+	@Override
+	public boolean insert(ComplatOutsideuser outsideUser) {
+		return outsideUserDao.save(outsideUser) !=null;
+	}
 }

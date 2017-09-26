@@ -27,24 +27,20 @@ public class JisFieldsServiceTest {
 	}
 	@Test
 	public void save(){
-		JisFields jis=new JisFields("啦啦啦", null, null, null, null, null, null, null);
+		JisFields jis=new JisFields();
+		jis.setFieldname("名称");
 		jisFieldsService.save(jis);
 		assertTrue(true);
 	}
 	@Test
 	public void delete(){
 		JisFields jis=jisFieldsService.findByKey(34);
-		jisFieldsService.delete(jis);
-		assertTrue(true);
-	}
-	@Test
-	public void findAllJisFields(){
-		List<JisFields> list=jisFieldsService.findAllJisFields();
-		for(JisFields jis : list){
-			System.out.println(jis.getShowname());
+		if(jis!=null){
+			jisFieldsService.delete(jis);
 		}
 		assertTrue(true);
 	}
+	
 	@Test
 	public void findFieldsType(){
 		List<Integer> list;
@@ -56,4 +52,5 @@ public class JisFieldsServiceTest {
 		}
 		assertTrue(true);
 	}
+
 }
