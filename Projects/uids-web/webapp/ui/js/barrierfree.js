@@ -2337,7 +2337,7 @@ $(function() {
 	  };
 	}
 	if(pathname.indexOf("/view/")!=-1){
-		path = pathname.substr(0,pathname.indexOf("/web")) + "../ui/js/barrierfree.config.js";
+		path = pathname.substr(0,pathname.indexOf("/web")) + "../../ui/js/barrierfree.config.js";
 //		if(pathname.indexOf("col")!=-1){
 //			path = "../../../module/accessiblereading/js/barrierfree.config.js";
 //		}else if(pathname.indexOf("art")!=-1){
@@ -2346,7 +2346,7 @@ $(function() {
 //			path = "../module/accessiblereading/js/barrierfree.config.js";
 //		}
 	}else{
-		path = "../ui/js/barrierfree.config.js";
+		path = "../../ui/js/barrierfree.config.js";
 //		if(pathname.indexOf("col")!=-1){
 //			path = "../../module/accessiblereading/js/barrierfree.config.js";
 //		}else if(pathname.indexOf("art")!=-1){
