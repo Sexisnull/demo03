@@ -1,1 +1,1 @@
-$.getScript('/module/jslib/accessiblereading/js/barrierfree.js');
+$.getScript('/ui/js/barrierfree.js');
