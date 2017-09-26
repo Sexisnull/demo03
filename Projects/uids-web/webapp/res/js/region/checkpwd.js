@@ -46,6 +46,8 @@ function EvalPwd(sP)
     oW.color=aPQ[3];
     oM.color=aPQ[4];
     oS.color=aPQ[5];
+    var levp=GEId("pwdpower");
+    levp.title= level;
 }
 //*
 
