@@ -1,5 +1,6 @@
 package com.gsww.uids.service.impl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -162,6 +163,19 @@ public class JisLogServiceImpl implements JisLogService {
 		if(log!=null){
 			jisLogDao.save(log);
 		}
+		
+	}
+	@Override
+	public void save(String loginName, String loginIp, String desc,
+			Integer moduleName, Integer operatorType) {
+		JisLog log = new JisLog();
+		log.setUserId(loginName);
+		log.setIp(loginIp);
+		log.setOperateTime(new Date());
+		log.setSpec(desc);
+		log.setModuleName(moduleName);
+		log.setOperateType(operatorType);
+		jisLogDao.save(log);
 		
 	}
 

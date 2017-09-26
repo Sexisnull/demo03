@@ -70,4 +70,14 @@ public interface JisLogService {
 	public List<JisLog> findBySpec(String spec) throws Exception;
 
 	public void save(JisLog log);
+	/**
+	 * 保存操作日志
+	 * @param loginName 用户登陆名
+	 * @param loginIp 用户登陆IP
+	 * @param desc 操作描述
+	 * @param moduleName 模块编号
+	 * @param operatorType 操作类型
+	 */
+	public void save(String loginName,String loginIp,String desc,
+			Integer moduleName,Integer operatorType);
 }

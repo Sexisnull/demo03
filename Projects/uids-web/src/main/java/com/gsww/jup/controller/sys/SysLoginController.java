@@ -99,14 +99,9 @@ public class SysLoginController extends BaseController{
 						response.getWriter().write(JSONObject.toJSONString(resMap));
 						try {
 							// 登录日志
-							JisLog log = new JisLog();
-							log.setUserId(sysUserSession.getUserName());
-							log.setIp(sysUserSession.getUserIp());
-							log.setOperateTime(new Date());
-							log.setSpec(userName+"系统登录成功");
-							log.setModuleName(8);
-							log.setOperateType(9);
-							jisLogService.save(log);
+							jisLogService.save(sysUserSession.getUserName(),
+									sysUserSession.getUserIp(), 
+									userName+"系统登录成功", 8, 9);
 
 						} catch (Exception e) {
 							logger.error(e.getMessage(),e);
