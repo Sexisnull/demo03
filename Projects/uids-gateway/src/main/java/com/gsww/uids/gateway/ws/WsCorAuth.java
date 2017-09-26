@@ -10,7 +10,6 @@ import javax.jws.soap.SOAPBinding;
 
 import org.apache.log4j.Logger;
 
-import com.gsww.uids.gateway.dao.application.ApplicationDao;
 import com.gsww.uids.gateway.entity.Application;
 import com.gsww.uids.gateway.entity.Corporation;
 import com.gsww.uids.gateway.entity.JisAuthLog;
