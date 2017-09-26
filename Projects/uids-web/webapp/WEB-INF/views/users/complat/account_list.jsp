@@ -192,13 +192,23 @@
 </style>
 		<script type="text/javascript"> 
 function checkSubmitForm(){
+		var nameSearch = $("#nameSearch").val();
 		var loginnameSearch = $("#loginnameSearch").val();
-		if(loginnameSearch ==  '' || isNumbOrLett(loginnameSearch)){
-			form1.submit();
+		var loginallnameSearch = $("#loginallnameSearch").val();
+		if(nameSearch ==  '' || isNumbOrLett1(nameSearch)){
+			if(loginnameSearch ==  '' || isNumbOrLett2(loginnameSearch)){
+				if(loginallnameSearchvar ==  '' || isNumbOrLett3(loginallnameSearchvar)){
+			       form1.submit();
+		        }else{
+			       $.validator.errorShow($("#loginallnameSearch"),'只能包括字母、数字、下划线');
+		        }  
+		    }else{
+		    	$.validator.errorShow($("#loginnameSearch"),'只能包括字母、数字、下划线');
+		    }
 		}else{
-			$.validator.errorShow($("#loginnameSearch"),'只能包括数字和字母');
+			$.validator.errorShow($("#nameSearch"),'只能包括数字和字母');
 		}
-	}
+}
 	
 	/*
 	用途：检查输入字符串是否只由汉字、字母、数字组成
@@ -207,16 +217,35 @@ function checkSubmitForm(){
 	返回：
 	如果通过验证返回true,否则返回false
 	*/
-	function isNumbOrLett( s ){//判断是否是字母、数字组成
-		//var regu = "^[0-9a-zA-Z\u4e00-\u9fa5]+$";
-		var regu = /^([a-zA-Z0-9]+)$/;
-		var re = new RegExp(regu);
-		if (re.test(s)) {
-			return true;
-		}else{
-			return false;
-		}
-	}
+			function isNumbOrLett1( s ){
+				var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;
+				var re = new RegExp(regu);
+				if (re.test(s)) {
+					return true;
+				}else{
+					return false;
+				}
+			}
+			
+			function isNumbOrLett2( s ){
+				var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_]+$/;
+				var re = new RegExp(regu);
+				if (re.test(s)) {
+					return true;
+				}else{
+					return false;
+				}
+			}
+			
+			function isNumbOrLett3( s ){
+				var regu = /^([a-zA-Z0-9]+)$/;
+				var re = new RegExp(regu);
+				if (re.test(s)) {
+					return true;
+				}else{
+					return false;
+				}
+			}
 	
 
 		$(function(){
@@ -457,26 +486,26 @@ $(function(){
 					<table class="advanced-content">
 						<tr>
 							<th style="padding-left: 10px">
-								请输入姓名：
+								姓名：
 							</th>
 							<td width="20%">
-								<input type="text" style="width: 170px;" placeholder="请输入姓名"
+								<input type="text" style="width: 170px;" placeholder="姓名"
 									value="${sParams['LIKE_name']}" id="nameSearch"
 									name="search_LIKE_name" />
 							</td>
 							<th style="padding-left: 5px">
-								请输入登录名：
+								登录名：
 							</th>
 							<td width="20%">
-								<input type="text" style="width: 170px;" placeholder="请输入登录名"
+								<input type="text" style="width: 170px;" placeholder="登录名"
 									value="${sParams['LIKE_loginname']}" id="loginnameSearch"
 									name="search_LIKE_loginname" />
 							</td>
 							<th style="padding-left: 10px">
-								请输入登录名全称：
+								登录名全称：
 							</th>
 							<td width="20%">
-								<input type="text" style="width: 170px;" placeholder="请输入登录名全称"
+								<input type="text" style="width: 170px;" placeholder="登录名全称"
 									value="${sParams['LIKE_loginallname']}" id="loginallnameSearch"
 									name="search_LIKE_loginallname" />
 							</td>

@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -87,6 +88,10 @@ public class ExcelUtil {
 							}else if("女".equals(content)){
 								content=0;
 							}
+							//java导入excel文件时,数字显示
+//							DecimalFormat df = new DecimalFormat("0");  							      
+//							String phone = df.format(content.getNumericCellValue()); 
+//							String mobil = df.format(content.getNumericCellValue()); 
 							//content = formatCell(hssfRow.getCell(i));
 							String fieldName = fieldMap.get(String.valueOf(i));
 							setFieldValueByName(fieldName, content, entity);
