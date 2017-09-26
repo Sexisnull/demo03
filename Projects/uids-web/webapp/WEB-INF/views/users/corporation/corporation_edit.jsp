@@ -161,6 +161,7 @@ color: rgb(119, 119, 119);
     	<input type="hidden" id="isAuth" name="isAuth" value="${corporation.isAuth}"/>
     	<input type="hidden" id="time" name="time" value="${time}">
     	<input type="hidden" name="corNation" id="corNation" value="${corNation}">
+    	<input type="hidden" name="operSign" id="operSign" value="${corporation.operSign}">
     </div>
     
     <!--表单的主内容区域-->
