@@ -140,7 +140,7 @@ function resetform() {
 						</td>
 					<th>所属机构：</th>
 						 <td>
-						 	<input id="groupname" value="${groupName}" name="groupname" type="text" style="cursor: pointer;"/> 
+						 	<input id="groupname" value="${groupName}" name="groupname" type="text" style="cursor: pointer;" placeholder="所属机构"/> 
 							<input type="hidden" id="groupid" value="${sParams['EQ_groupId']}" name="search_EQ_groupId">
 							<%-- <select  style="width: 170px;" placeholder="数据标识" value="${sParams['LIKE_remark']}" id="remarkSearch" name="search_LIKE_remark" /> --%>
 						</td> 
