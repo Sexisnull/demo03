@@ -136,7 +136,7 @@
 					<tr>
 						<th style="padding-left: 300px">显示名称：</th>
 						<td width="20%"><input type="text" style="width: 170px;"
-							placeholder="请输入显示名称" value="${sParams['LIKE_showname']}"
+							placeholder="显示名称" value="${sParams['LIKE_showname']}"
 							id="shownameSearch" name="search_LIKE_showname" /></td>
 						<td class="btn-group"><a class="btnSearch"
 							onclick="javascript:checkSubmitForm()">搜索</a></td>

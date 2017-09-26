@@ -1,10 +1,10 @@
 document.writeln("	<table cellpadding=\'0\' cellspacing=\'0\' border=\'0\' align=\'center\' width=\'1000\' height=\'118\' class=\'topcon\'>");
 document.writeln("    	<tr>");
-document.writeln("        	<td width=\'370\'><a href=\'/\'><img src=\'../ui/images/1512101414170262604.png\' height=\'79\' width=\'353\' /></a></td>");
+document.writeln("        	<td width=\'370\'><a href=\'/\'><img src=\'../../ui/images/1512101414170262604.png\' height=\'79\' width=\'353\' /></a></td>");
 document.writeln("            <td>");
 document.writeln("<div class=\'shizhouclass\' id=\'shizhouclass\'> </div>");
-document.writeln("<img style=\'margin-left:-10px;\' src=\'../ui/images/1512261630146211853.png\'  id=\'shixian\'/>");
-document.writeln("<img src=\'../ui/images/1512261630144185847.png\' id=\'shengji\'/>");
+document.writeln("<img style=\'margin-left:-10px;\' src=\'../../ui/images/1512261630146211853.png\'  id=\'shixian\'/>");
+document.writeln("<img src=\'../../ui/images/1512261630144185847.png\' id=\'shengji\'/>");
 document.writeln("<span class=\'szw_lj\' style=\' margin: 0 0 0 5px; font-size:15px; position:absolute; font-weight:bold\'>");
 document.writeln("            	<a target=\'_blank\' href=\'http://www.gszwfw.gov.cn/col/col406257/index.html\'>省政府政务大厅</a>");
 document.writeln("            </span>");
@@ -21,7 +21,7 @@ document.writeln("                                            <input id=\'p\' na
 document.writeln("               <input id=\'q\' name=\'q\' autocomplete=\'off\' type=\'text\' value=\'请输入关键字\' onfocus=\"if (value ==\'请输入关键字\'){value =\'\'}\" onblur=\"if (value ==\'\'){value=\'请输入关键字\'}\" class=\'searchinput\' />");
 document.writeln("                                        </li>");
 document.writeln("                                        <li style=\'width:40px; float:right;\'>");
-document.writeln("                                        	<input type=\'submit\' style=\'background:url(../ui/images/1512101414175613338.png) center no-repeat; height:40px; width:40px; border:none; cursor:pointer;\' value=\'\' /></form>");
+document.writeln("                                        	<input type=\'submit\' style=\'background:url(../../ui/images/1512101414175613338.png) center no-repeat; height:40px; width:40px; border:none; cursor:pointer;\' value=\'\' /></form>");
 document.writeln("                                        </li></ul>");
 document.writeln("            </td>");
 document.writeln("        </tr>");

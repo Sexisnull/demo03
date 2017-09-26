@@ -5,10 +5,12 @@
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <title>找回密码</title>
-<link href="./images/wj.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" type="text/css" href="./images/style.css"/>
-<link rel="stylesheet" type="text/css" href="./images/syl_fpqd.css"/>
+<link href="${ctx}/ui/images/wj.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/ui/images/style.css"/>
+<link rel="stylesheet" type="text/css" href="${ctx}/ui/images/syl_fpqd.css"/>
+<script type="text/javascript" src="${ctx}/res/plugin/jquery/jquery-1.8.3.min.js"></script>
 <style>
 #scrollUp { display:none;}
 </style>
@@ -22,11 +24,11 @@
 <div id="gsbody">
   <div class="top">
     <div class="pagecon"> 
-      <script language="javascript" src="http://www.gszwfw.gov.cn/script/0/1512101421282896.js"></script>
+      <script language="javascript" src="${ctx }/ui/js/1512101421282896.js"></script>
     </div>
   </div>
   <div class=""> 
-    <script language="javascript" src="http://www.gszwfw.gov.cn/script/0/1512101146476750.js"></script>
+    <script language="javascript" src="${ctx }/ui/js/1512101146476750.js"></script>
   </div>
   <div class="nav" style="height:5px;"> 
   </div>
@@ -35,13 +37,13 @@
   
     <div class="content">
       <div class="top_wj">
-        <div class="toplogo"><img src="./images/gszw_06.jpg" width="47" height="47" /></div>
+        <div class="toplogo"><img src="${ctx}/ui/images/gszw_06.jpg" width="47" height="47" /></div>
             <div class="topmasg" style="border-bottom:2px solid #D43700">
               <div class="titlemsg">找回密码</div>
             </div>
       </div>
       <div class="zhmm_pic1">
-      	<img src="./images/gszw_11.jpg" width="507" height="25" />
+      	<img src="${ctx}/ui/images/gszw_11.jpg" width="507" height="25" />
         <div class="yzfs">选择验证方式</div>
         <div class="aqyz">安全验证</div>
         <div class="cxmm">重置密码</div>
@@ -49,13 +51,13 @@
      
      
      <div class="findpd1">
-          <div class="findpdstep1"><img src="./images/gszw_12.jpg" width="15" height="16" /></div>
+          <div class="findpdstep1"><img src="${ctx}/ui/images/gszw_12.jpg" width="15" height="16" /></div>
           <div class="findpdstep2"><a href="recoverPwdByPhone_show.do "><!--  <a href="#" onclick="javascript:alert('暂时未开通手机号码找回服务')">-->1. 通过手机短信找回密码</a></div>
       </div>
      
      
       <div class="findpd2">
-          <div class="findpdstep3"><img src="./images/gszw_12.jpg" width="15" height="16" /></div>
+          <div class="findpdstep3"><img src="${ctx}/ui/images/gszw_12.jpg" width="15" height="16" /></div>
           <div class="findpdstep4"><a href="#" onclick="javascript:alert('暂时未开通电子邮件找回服务')">2. 通过电子邮件找回密码</a></div>
       </div>   
                
@@ -64,7 +66,7 @@
   </div>
    <div id="foot">
     <div> 
-      <script language="javascript" src="http://www.gszwfw.gov.cn/script/0/1512101421288942.js"></script>
+      <script language="javascript" src="${ctx }/ui/js/1512101421288942.js"></script>
     </div>
   </div>     
      

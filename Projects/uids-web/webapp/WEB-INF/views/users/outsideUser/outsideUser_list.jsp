@@ -126,6 +126,43 @@
 	$(".close").click(function() {
         $("#alerttb").hide();
     });
+    
+    /**批量关闭操作**/	
+	function stopData(url,parm){
+		if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checked').length!=0){
+			$.dialog.confirm('您确认要关闭吗？',function(){
+				var ids = "";
+				$('.list-table tbody input[type=checkbox]').each(function(i, o) {
+					if($(o).attr('checked')) {
+						ids += $(o).val() + ",";
+					}
+				});
+				window.location.href="${ctx}/"+url+"?"+parm+"="+ids.substring(0,ids.length-1);
+			});
+		}else{
+			$.dialog.alert('请您至少选择一条数据',function(){
+				return null;
+			});
+		}
+	}
+	/**批量开启操作**/	
+	function startData(url,parm){
+		if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checked').length!=0){
+			$.dialog.confirm('您确认要开启吗？',function(){
+				var ids = "";
+				$('.list-table tbody input[type=checkbox]').each(function(i, o) {
+					if($(o).attr('checked')) {
+						ids += $(o).val() + ",";
+					}
+				});
+				window.location.href="${ctx}/"+url+"?"+parm+"="+ids.substring(0,ids.length-1);
+			});
+		}else{
+			$.dialog.alert('请您至少选择一条数据',function(){
+				return null;
+			});
+		}
+	}
 </script>
 <style type="text/css">
 /*设置弹出层样式*/
@@ -201,15 +238,15 @@
 				<tr>
 					<th style="padding-left: 30px">姓名：</th>
 						<td width="33%">
-							<input type="text"  style="width: 170px;" placeholder="" value="${sParams['LIKE_name']}" id="nameSearch" name="search_LIKE_name" />
+							<input type="text"  style="width: 170px;" placeholder="姓名" value="${sParams['LIKE_name']}" id="nameSearch" name="search_LIKE_name" />
 						</td>
 					<th style="padding-left: 20px">登录名：</th>
 						<td width="33%">
-							<input type="text"  style="width: 170px;" placeholder="" value="${sParams['LIKE_loginName']}" id="loginNameSearch" name="search_LIKE_loginName" />
+							<input type="text"  style="width: 170px;" placeholder="登录名" value="${sParams['LIKE_loginName']}" id="loginNameSearch" name="search_LIKE_loginName" />
 						</td>
 					<th style="padding-left: 20px">身份证号码：</th>
 						<td width="33%">
-							<input type="text"  style="width: 170px;" placeholder="" value="${sParams['LIKE_papersNumber']}" id="papersNumberSearch" name="search_LIKE_papersNumber" />
+							<input type="text"  style="width: 170px;" placeholder="身份证号码" value="${sParams['LIKE_papersNumber']}" id="papersNumberSearch" name="search_LIKE_papersNumber" />
 						</td>
 					<td style="padding-right: 30px" class="btn-group"> <a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a></td>
 				</tr>

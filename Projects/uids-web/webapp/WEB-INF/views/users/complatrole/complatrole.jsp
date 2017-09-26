@@ -113,7 +113,7 @@
 				</li>
 				<li class="split"></li>
 				<li>
-					<a href="#">系统管理</a>
+					<a href="#">角色管理</a>
 				</li>
 				<li class="split"></li>
 				<li class="active">
@@ -233,7 +233,7 @@
 			<tags:pagination page="${pageInfo}" paginationSize="5" />
 		</div>
 	
-<div id="tabs" style="display:none;width: 65%;margin: auto;position: absolute;left: 165px;top: 50.5px">
+<div id="tabs" style="display:none;width: 68%;margin: auto;position: absolute;left: 165px;top: 50.5px">
  	<ul style="text-align: center;">
 	    <li style="text-align: center;width: 32.7%;"><a id="yhjg" style="width: 90%;" href="">用户机构管理</a></li>
 	    <li style="text-align: center;width: 32.7%;"><a id="yyqx" style="width: 90%;" href="">应用权限设置</a></li>

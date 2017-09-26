@@ -72,7 +72,7 @@
 										登录全名：
 									</th>
 									<td width="20%">
-									<input type="text" placeholder="输入登录全名" id="loginnameSearch" name="search_LIKE_loginname"  value="${sParams['LIKE_loginname']}" class="input"/>
+									<input type="text" placeholder="登录全名" id="loginnameSearch" name="search_LIKE_loginname"  value="${sParams['LIKE_loginname']}" class="input"/>
 									</td>
 									<td class="btn-group">
 										<a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a>

@@ -138,7 +138,11 @@ color: rgb(119, 119, 119);
 			</li>
 			<li class="split"></li>
 			<li>
-				<a>法人管理</a>
+				<a>公网用户</a>
+			</li>
+			<li class="split"></li>
+			<li>
+				<a>法人用户</a>
 			</li>
 			<li class="split"></li>
 			<li class="active">

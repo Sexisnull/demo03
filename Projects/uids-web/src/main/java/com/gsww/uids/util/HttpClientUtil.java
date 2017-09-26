@@ -1,12 +1,18 @@
 package com.gsww.uids.util;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.HttpClient;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -21,7 +27,9 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpProtocolParams;
+import org.apache.http.util.EntityUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.NameValuePair;
 
 public class HttpClientUtil {
 	
@@ -29,6 +37,7 @@ public class HttpClientUtil {
 	private static Log log = LogFactory.getLog(HttpClientUtil.class);
 	 private static EncodeUtil encodeUtil = new EncodeUtil();
 	 private static HttpParams httpParams = null;
+	 private static int overtime = 30000;
 	
     public static int getStatusCode(String strUrl, int overtime)
 	  {
@@ -123,5 +132,88 @@ public class HttpClientUtil {
         httpParams.setParameter("http.protocol.cookie-policy", "compatibility");
       }
       return new DefaultHttpClient(connectionManager, httpParams);
+    }
+    
+    public static String postInfo(String strUrl, List<NameValuePair> qparams, String charset)
+    {
+      HttpClient httpClient = getHttpClient(overtime);
+      HttpPost post = getPostMethod(overtime);
+      HttpEntity entity = null;
+      String htmlcontent = "";
+      try {
+        if ((charset == null) || ("".equals(charset))) {
+          charset = encodeUtil.getURLEncoding(new URL(strUrl));
+        }
+        post.setURI(formatURI(strUrl, charset));
+        post.setEntity(new UrlEncodedFormEntity(qparams, charset));
+
+        HttpResponse response = httpClient.execute(post);
+        entity = response.getEntity();
+        int statusCode = response.getStatusLine().getStatusCode();
+        if (statusCode == 200)
+          htmlcontent = httpEnToString(entity, charset);
+        else {
+          htmlcontent = "connect error:" + statusCode;
+        }
+        EntityUtils.consume(entity);
+      } catch (Exception e) {
+        log.debug("postInfo：" + e);
+        htmlcontent = "connect error";
+      } finally {
+        post.abort();
+      }
+      return htmlcontent;
+    }
+    
+    private static String httpEnToString(HttpEntity httpEntity, String charset)
+    {
+      StringBuffer html = new StringBuffer();
+      BufferedReader reader = null;
+      try {
+        reader = new BufferedReader(new InputStreamReader(httpEntity
+          .getContent(), charset));
+
+        String inputLine = null;
+        while ((inputLine = reader.readLine()) != null) {
+          html.append(inputLine);
+          html.append("\n");
+        }
+      }
+      catch (Exception e) {
+        log.debug("httpEnToString：" + e);
+        html.delete(0, html.length());
+        html.append("connect error");
+
+        if (reader != null)
+          try {
+            reader.close();
+          }
+          catch (IOException localIOException)
+          {
+          }
+      }
+      finally
+      {
+        if (reader != null)
+          try {
+            reader.close();
+          }
+          catch (IOException localIOException1) {
+          }
+      }
+      return html.toString();
+    }
+    
+    private static HttpPost getPostMethod(int overtime)
+    {
+      HttpPost postMethod = new HttpPost();
+      postMethod.setHeader("Connection", "close");
+      postMethod.getParams().setParameter("http.socket.timeout", 
+        Integer.valueOf(overtime));
+      postMethod.getParams().setParameter("http.protocol.head-body-timeout", 
+        Integer.valueOf(overtime));
+      postMethod.getParams().setParameter(
+        "http.protocol.expect-continue", Boolean.valueOf(false));
+      return postMethod;
     }
 }

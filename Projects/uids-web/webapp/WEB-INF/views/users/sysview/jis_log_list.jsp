@@ -39,7 +39,7 @@
 				</li>
 				<li class="split"></li>
 				<li>
-					<a href="#">业务系统管理</a>
+					<a href="#">系统管理</a>
 				</li>
 				<li class="split"></li>
 				<li class="active">

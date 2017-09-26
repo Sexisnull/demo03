@@ -4,39 +4,16 @@
 
 	<%@ include file="/include/meta.jsp"%>
 	<script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgcore.lhgdialog.min.js"></script>
-	<script type="text/javascript" src="${ctx}/res/plugin/ztree/js/jquery.ztree.all-3.5.js"></script>
 	<script type="text/javascript" src="${ctx}/res/plugin/uploadify/js/jquery.uploadify-3.1.js"></script>
 	<script type="text/javascript" src="${ctx}/res/plugin/uploadify/js/uploadifyLang_zh.js"></script>
+	<script type="text/javascript" src="${ctx}/res/plugin/ztree/js/jquery.ztree.all-3.5.js"></script>
+	<script type="text/javascript" src="${ctx}/res/skin/login/js/tree.js"></script>
+	<script type="text/javascript" src="${ctx}/res/skin/login/js/menu.js"></script>
 	<link type="text/css" rel="stylesheet" href="${ctx}/res/skin/login/css/menu.css" />
 	<link rel="stylesheet" type="text/css" href="${ctx}/res/plugin/uploadify/css/uploadify.css">
-	<link rel="stylesheet" href="${ctx}/res/plugin/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css"></link>
-	<style type="text/css">
-/* 	.menuContent{background: #fff;
-    width: 270px;
-    border: 1px solid #ccc;
-    height: 400px;
-    border-top: 0px;
-    overflow-y: auto;} */
-.menuContent {
-	border: 1px solid #ddd;
-	overflow-x: auto;
-	overflow-y: auto;
-	float: left;
-}
-
-.menuContent #areaTree {
-	width: 450px;
-	display: block;
-	height: 450px;
-	float: left;
-	overflow-x: auto;
-	overflow-y: auto;
-}
-
-.form-content {
-	margin-left: 200px;
-}
-</style>
+	<link type="text/css" rel="stylesheet" href="${ctx}/res/jslib/ztree/css/zTreeStyle/zTreeStyle.css" />
+	<link type="text/css" rel="stylesheet" href="${ctx}/res/skin/login/css/tree.css" />
+	
 	<head>
 		<meta charset="utf-8" />
 		<title>甘肃万维JUP课题</title>
@@ -190,15 +167,25 @@
 	filter: Alpha(opacity =   30);
 }
 </style>
-		<script type="text/javascript"> 
+<script type="text/javascript"> 
 function checkSubmitForm(){
+		var nameSearch = $("#nameSearch").val();
 		var loginnameSearch = $("#loginnameSearch").val();
-		if(loginnameSearch ==  '' || isNumbOrLett(loginnameSearch)){
-			form1.submit();
+		var loginallnameSearch = $("#loginallnameSearch").val();
+		if(nameSearch ==  '' || isNumbOrLett1(nameSearch)){
+			if(loginnameSearch ==  '' || isNumbOrLett2(loginnameSearch)){
+				if(loginallnameSearchvar ==  '' || isNumbOrLett3(loginallnameSearchvar)){
+			       form1.submit();
+		        }else{
+			       $.validator.errorShow($("#loginallnameSearch"),'只能包括字母、数字、下划线');
+		        }  
+		    }else{
+		    	$.validator.errorShow($("#loginnameSearch"),'只能包括字母、数字、下划线');
+		    }
 		}else{
-			$.validator.errorShow($("#loginnameSearch"),'只能包括数字和字母');
+			$.validator.errorShow($("#nameSearch"),'只能包括数字和字母');
 		}
-	}
+}
 	
 	/*
 	用途：检查输入字符串是否只由汉字、字母、数字组成
@@ -207,16 +194,35 @@ function checkSubmitForm(){
 	返回：
 	如果通过验证返回true,否则返回false
 	*/
-	function isNumbOrLett( s ){//判断是否是字母、数字组成
-		//var regu = "^[0-9a-zA-Z\u4e00-\u9fa5]+$";
-		var regu = /^([a-zA-Z0-9]+)$/;
-		var re = new RegExp(regu);
-		if (re.test(s)) {
-			return true;
-		}else{
-			return false;
-		}
-	}
+			function isNumbOrLett1( s ){
+				var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;
+				var re = new RegExp(regu);
+				if (re.test(s)) {
+					return true;
+				}else{
+					return false;
+				}
+			}
+			
+			function isNumbOrLett2( s ){
+				var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_]+$/;
+				var re = new RegExp(regu);
+				if (re.test(s)) {
+					return true;
+				}else{
+					return false;
+				}
+			}
+			
+			function isNumbOrLett3( s ){
+				var regu = /^([a-zA-Z0-9]+)$/;
+				var re = new RegExp(regu);
+				if (re.test(s)) {
+					return true;
+				}else{
+					return false;
+				}
+			}
 	
 
 		$(function(){
@@ -398,7 +404,77 @@ $(function(){
     });
 });
 
+/*********************机构树开始************************/
+$(function(){
+	var groupMenu = [{"name":"单位选择","id":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
 
+	$('#groupname').menu({
+		tree : 'groupmenu',
+		height : 200,
+		init : function() {
+			setting('groupmenu', onClickGroup, onDbClickGroup, groupMenu);
+		}
+	});
+});
+function hideGroupMenu(){
+	$('#groupname_menu').css('display','none');
+}
+function onClickGroup(event, treeId, treeNode) {
+	$('#groupid').val(treeNode.id);
+	$('#groupname').val(treeNode.name);
+	
+	$('#groupid').val(treeNode.id);
+	$('#groupname1').val(treeNode.name);
+	hideGroupMenu();
+}
+function onDbClickGroup(event, treeId, treeNode) {
+	if(treeNode == null){
+		return;
+	}
+	if (treeNode.isDisabled )//根节点及失效节点双击无效
+		return;
+	$('#groupid').val(treeNode.id);
+	$('#groupname').val(treeNode.name);
+	$('#groupname_menu').fadeOut(50);
+	
+	
+	$('#groupid').val(treeNode.id);
+	$('#groupname1').val(treeNode.name);
+	$('#groupname_menu').fadeOut(50);
+}
+
+/**
+ *	初始化树
+ */
+function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
+	var setting = {
+		async : {
+			enable : true,
+			url : '../login/getGroup',
+			autoParam : [ "id=groupId", "isDisabled" ]
+		},
+		callback : {
+			beforeClick : beforeClick,
+			onClick : onClickFunction,
+			onDblClick : onDblClickFunction
+		}
+	};
+	console.log("-----"+treeName);
+	$("#" + treeName).tree(setting, rootNode);
+//	$("#" + treeName).tree().refreshNode('');
+}
+/**
+ *	机构选择节点点击前回调
+ */
+function beforeClick(treeId, treeNode, clickFlag) {
+	if (treeNode.isDisabled)
+		return false;
+	return (treeNode.id != 0);
+}
+function resetform() {
+	$('form').find(':input').not(':button,:hidden,:submit,:reset').val('');
+}
+/*********************机构树结束************************/
 </script>
 
 	</head>
@@ -456,27 +532,34 @@ $(function(){
 					method="get">
 					<table class="advanced-content">
 						<tr>
-							<th style="padding-left: 10px">
-								请输入姓名：
+							<th style="padding-left: 5px">
+								所属机构：
 							</th>
 							<td width="20%">
-								<input type="text" style="width: 170px;" placeholder="请输入姓名"
+							    <input name="groupname" id="groupname" value="" type="text" style="cursor: pointer;width: 170px;" placeholder="所属机构"/>
+							    <input type="hidden" id="groupid" name="search_EQ_groupid">
+							</td>
+							<th style="padding-left: 5px">
+								姓名：
+							</th>
+							<td width="20%">
+								<input type="text" style="width: 170px;" placeholder="姓名"
 									value="${sParams['LIKE_name']}" id="nameSearch"
 									name="search_LIKE_name" />
 							</td>
 							<th style="padding-left: 5px">
-								请输入登录名：
+								登录名：
 							</th>
 							<td width="20%">
-								<input type="text" style="width: 170px;" placeholder="请输入登录名"
+								<input type="text" style="width: 170px;" placeholder="登录名"
 									value="${sParams['LIKE_loginname']}" id="loginnameSearch"
 									name="search_LIKE_loginname" />
 							</td>
-							<th style="padding-left: 10px">
-								请输入登录名全称：
+							<th style="padding-left: 5px">
+								登录名全称：
 							</th>
 							<td width="20%">
-								<input type="text" style="width: 170px;" placeholder="请输入登录名全称"
+								<input type="text" style="width: 170px;" placeholder="登录名全称"
 									value="${sParams['LIKE_loginallname']}" id="loginallnameSearch"
 									name="search_LIKE_loginallname" />
 							</td>
@@ -557,11 +640,6 @@ $(function(){
 					</div>
 					<!-- 提示信息结束 -->
 					<!-- 列表开始 -->
-					<div id="menuContent" class="menuContent">
-						<ul id="areaTree" class="ztree"
-							style="margin-top: 0; width: 180px;"></ul>
-					</div>
-					<div class="form-content">
 						<table cellpadding="0" cellspacing="0" border="0" width="100%"
 							id="list-table" class="list-table">
 							<thead>
@@ -676,98 +754,5 @@ $(function(){
 			</div>
 		</div>
 	</body>
-	<script type="text/javascript">
-$(function(){
-var zNodes = [];
-		var setting = {
-			async : {
-				enable : true,
-				type:"post",
-				//url : "${ctx}/area/areaTree" //获取节点数据的URL地址
-				url:"${ctx}/login/getGroup",
-		        autoParam: ["id=groupId", "isDisabled"],
-		        otherParam: { "type": "1" }
-			},
-			data : {
-				simpleData : {
-					enable : true
-				}
-			},
-			callback : {
-				
-				onClick : function(event, treeId, treeNode){
-					var zTree = $.fn.zTree.getZTreeObj("areaTree");
-					var nodes = zTree.getSelectedNodes();
-					nodes.sort(function compare(a, b) {
-						return a.id - b.id;
-					});
-					
-					var _name=$.trim(nodes[0].name);
-					var _code=nodes[0].id;
-					alert(_name+"--"+_code);
-					var param="";
-					 $.ajax({
-					       type:"get",
-					       url:  "${ctx}/complat/complatList",
-					       data:{"search_EQ_groupid":_code},
-					       datatype:  "json",
-					       success: function (value) {
-						     /*  alert(value)	;				      
-	                           alert("请求成功"+_code);   */                                                                     
-	                           var   data=JSON.parse(value);                         
-	                           handleResponse(data) ;
-                           }, 
-                           
-                           error: function (returnValue) {
-                       /*   alert(_code);*/
-                           }
-					});
-					
-					if(_code!="1"&&_code.length>0 && _name.length>0)
-						param="?search_EQ_groupid="+_code;
-						
-					if(_code.length>0 && _name.length>0){
-						window.location.href="${ctx}/complat/complatList"+param;
-					}
-					$("#areacode").next('.error').hide();
-				}
-			}
-		};
-		
-		//初始化组织机构树
-		$.fn.zTree.init($("#areaTree"), setting, zNodes);
-		
-	});
-
-	function beforeClick(treeId, treeNode) {
-		var check = (treeNode && !treeNode.isParent);
-		if (!check) return false;
-		return check;
-	}
 	
-	function showMenu() {
-		var cityObj = $("#areaname");
-		var cityOffset = $("#areaname").offset();
-		$("#menuContent").css({left:cityOffset.left + "px", top:cityOffset.top + cityObj.outerHeight() + "px"}).slideDown("fast");
-
-		$("body").bind("mousedown", onBodyDown);
-	}
-	function hideMenu() {
-		$("#menuContent").fadeOut("fast");
-		$("body").unbind("mousedown", onBodyDown);
-	}
-	function onBodyDown(event) {
-		if (!(event.target.id == "menuBtn" || event.target.id == "menuContent" || $(event.target).parents("#menuContent").length>0)) {
-			hideMenu();
-		}
-	}
-	function checkSubmit(){
-		var powername=$("#qlName").val();
-		var name=$.trim(powername);
-		$("#qlName").val(name);
-		form1.submit();
-	}
-
-
-</script>
 </html>
