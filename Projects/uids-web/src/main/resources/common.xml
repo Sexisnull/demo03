@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa" xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.3.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.2.xsd"
+	default-lazy-init="true">
+	
+    <context:property-placeholder ignore-resource-not-found="true" ignore-unresolvable="true" location="classpath*:jis.properties" />
+    
+	<bean id="settings" class="com.gsww.uids.constant.JisSettings">
+		<property name="sysName" value="${sysName}"/>
+		<property name="sysUrl" value="${sysUrl}"/>
+		<property name="copyRight" value="${copyRight}"/>
+
+		<property name="isRegister" value="${isRegister}"/>
+		<property name="registerType" value="${registerType}"/>
+		<property name="isFindPwd" value="${isFindPwd}"/>
+		<property name="pwdLevel" value="${pwdLevel}"/>
+		<property name="isLoginfail" value="${isLoginfail}"/>
+		<property name="loginError" value="${loginError}"/>
+		<property name="banTimes" value="${banTimes}"/>
+		
+		<property name="emailSmtp" value="${emailSmtp}"/>
+		<property name="emailPort" value="${emailPort}"/>
+		<property name="emailBox" value="${emailBox}"/>
+		<property name="emailPassword" value="${emailPassword}"/>
+		<property name="emailSender" value="${emailSender}"/>
+		<property name="emailTitle" value="${emailTitle}"/>
+		<property name="emailContent" value="${emailContent}"/>
+		<property name="emailFindPassTitle" value="${emailFindPassTitle}"/>
+		<property name="emailFindPassContent" value="${emailFindPassContent}"/>
+		
+		<property name="syncTime" value="${syncTime}"/>
+		<property name="clearLogTime" value="${clearLogTime}"/>
+		<property name="ticketEffectiveTime" value="${ticketEffectiveTime}"/>
+		<property name="tokenEffectiveTime" value="${tokenEffectiveTime}"/>
+		<property name="perSessionTime" value="${perSessionTime}"/>
+		<property name="corSessionTime" value="${corSessionTime}"/>
+		<property name="perGotoUrl" value="${perGotoUrl}"/>
+		<property name="corGotoUrl" value="${corGotoUrl}"/>	
+		<property name="netType" value="${netType}"/>
+		<property name="modifyPassTime" value="${modifyPassTime}"/>
+		<property name="enableSynTask" value="${enableSynTask}"/>	
+		<property name="enableBackupsTask" value="${enableBackupsTask}"/>
+		<property name="realNameAuth" value="${realNameAuth}"/>
+		<property name="realNameAuthUrl" value="${realNameAuthUrl}"/>
+		
+		<!-- 李德隆于20160606加如下字段。用于发送短信用。-->		
+		<property name="appId" value="${appId}"/>
+		<property name="appName" value="${appName}"/>
+		<property name="appAcc" value="${appAcc}"/>
+		<property name="appPwd" value="${appPwd}"/>
+		<property name="importantLevel" value="${importantLevel}"/>		
+		<property name="isSendAgain" value="${isSendAgain}"/>
+		<property name="isLose" value="${isLose}"/>
+		<property name="isUpstream" value="${isUpstream}"/>		 
+		<property name="urlRoot" value="${urlRoot}"/>
+		<!-- 登陆时动态密码相关 -->
+		<property name="validityPeriod" value="${validityPeriod}"/>				 
+		<property name="dynamicPwdMessageContent" value="${dynamicPwdMessageContent}"/> 		
+		<property name="businessIdForGettingDynamicPwd" value="${businessIdForGettingDynamicPwd}"/> 
+		<property name="businessNameForGettingDynamicPwd" value="${businessNameForGettingDynamicPwd}"/> 
+		<!-- 个人注册发短信用 -->
+		<property name="businessIdForRegestingPer" value="${businessIdForRegestingPer}"/> 
+		<property name="businessNameForRegestingPer" value="${businessNameForRegestingPer}"/>
+		<property name="registPerMessageContent" value="${registPerMessageContent}"/>  
+		<!-- 法人注册发短信用 -->
+		<property name="businessIdForRegestingCor" value="${businessIdForRegestingCor}"/> 
+		<property name="businessNameForRegestingCor" value="${businessNameForRegestingCor}"/>
+		<property name="registCorMessageContent" value="${registCorMessageContent}"/>  
+		<!-- 找回密码用 -->		
+		<property name="businessIdForRecovingPwd" value="${businessIdForRecovingPwd}"/> 
+		<property name="businessNameForRecovingPwd" value="${businessNameForRecovingPwd}"/>
+		<property name="recovingPwdContent" value="${recovingPwdContent}"/>
+		<!--实名认证配置项 -->
+		<property name="enableCorRealNameAuth" value="${enableCorRealNameAuth}"></property>
+		<property name="corRequestCod" value="${corRequestCod}"></property>
+		<property name="corRealUsername" value="${corRealUsername}"></property>
+		<property name="corRealPassword" value="${corRealPassword}"></property>
+		<property name="corExchangeTokenUrl" value="${corExchangeTokenUrl}"></property>
+		<property name="corCompareRealNameUrl" value="${corCompareRealNameUrl}"></property>
+		<property name="perCompareRealNameUrl" value="${perCompareRealNameUrl}"></property>
+		<property name="corDetailRealNameUrl" value="${corDetailRealNameUrl}"></property>
+		<!-- 政府用户配置项 (D)-->
+		<property name="govRequestCod" value="${govRequestCod}"></property>
+		<property name="govRealUsername" value="${govRealUsername}"></property>
+		<property name="govRealPassword" value="${govRealPassword}"></property>
+		<property name="govExchangeTokenUrl" value="${govExchangeTokenUrl}"></property>
+		<property name="govCompareRealNameUrl" value="${govCompareRealNameUrl}"></property>
+		<property name="verify_mode" value="${verify_mode}"></property>
+		<property name="enableGovRealNameAuth" value="${enableGovRealNameAuth}"></property>
+		
+	</bean>
+</beans>

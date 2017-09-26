@@ -81,5 +81,12 @@ public interface JisLogService {
 	public void save(String loginName,String loginIp,String desc,
 			Integer moduleName,Integer operatorType);
 	
+	/**
+	 * 添加日志，统一注册使用
+	 * @param operatetype
+	 * @param modulename
+	 * @param spec
+	 * @return
+	 */
 	public boolean add(Integer operatetype, Integer modulename, String spec);
 }
