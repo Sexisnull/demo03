@@ -206,7 +206,7 @@ color: rgb(119, 119, 119);
 		
 		
 		<tr>
-			<td class="td_2" rowspan="4" tyle="max-width:0px;width:100px;ont-weight:bold;" align="center"">账户信息</td>
+			<td class="td_2" rowspan="4" tyle="max-width:0px;width:100px;ont-weight:bold;" align="center">账户信息</td>
 			<th><b class="mustbe">*</b>用户名：</th>
 			<td>
 				<input type="text"  id="loginName" name="loginName" value="${corporation.loginName}" maxlength="33"/>

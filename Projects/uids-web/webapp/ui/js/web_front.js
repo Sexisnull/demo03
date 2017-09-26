@@ -1,0 +1,1 @@
+$.getScript('/module/jslib/accessiblereading/js/barrierfree.js');

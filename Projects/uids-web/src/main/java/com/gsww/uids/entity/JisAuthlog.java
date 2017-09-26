@@ -32,8 +32,8 @@ public class JisAuthlog implements java.io.Serializable {
 	private String token;
 	private Integer state;
 	private Timestamp createtime;
-	private Timestamp outTicketTime;
-	private Timestamp outTokenTime;
+	private Timestamp outtickettime;
+	private Timestamp outtokentime;
 	private String spec;
 
 	/** default constructor */
@@ -141,7 +141,7 @@ public class JisAuthlog implements java.io.Serializable {
 		this.state = state;
 	}
 
-	@Column(name = "createtime", length = 0)
+	@Column(name = "createtime")
 	public Timestamp getCreatetime() {
 		return this.createtime;
 	}
@@ -159,7 +159,25 @@ public class JisAuthlog implements java.io.Serializable {
 		this.spec = spec;
 	}
 
-	public JisAuthlog(Integer iid, Integer usertype, Integer authtype, Integer userid, String loginname, String username, Integer appid, String appmark, String ticket, String token, Integer state, Timestamp createtime, Timestamp outTicketTime, Timestamp outTokenTime, String spec) {
+	@Column(name="outtickettime")
+	public Timestamp getOuttickettime() {
+		return outtickettime;
+	}
+
+	public void setOuttickettime(Timestamp outtickettime) {
+		this.outtickettime = outtickettime;
+	}
+
+	@Column(name="outtokentime")
+	public Timestamp getOuttokentime() {
+		return outtokentime;
+	}
+
+	public void setOuttokentime(Timestamp outtokentime) {
+		this.outtokentime = outtokentime;
+	}
+
+	public JisAuthlog(Integer iid, Integer usertype, Integer authtype, Integer userid, String loginname, String username, Integer appid, String appmark, String ticket, String token, Integer state, Timestamp createtime, Timestamp outtickettime, Timestamp outtokentime, String spec) {
 		super();
 		this.iid = iid;
 		this.usertype = usertype;
@@ -173,28 +191,9 @@ public class JisAuthlog implements java.io.Serializable {
 		this.token = token;
 		this.state = state;
 		this.createtime = createtime;
-		this.outTicketTime = outTicketTime;
-		this.outTokenTime = outTokenTime;
+		this.outtickettime = outtickettime;
+		this.outtokentime = outtokentime;
 		this.spec = spec;
 	}
 
-	@Column(name="outtickettime")
-	public Timestamp getOutTicketTime() {
-		return outTicketTime;
-	}
-
-	public void setOutTicketTime(Timestamp outTicketTime) {
-		this.outTicketTime = outTicketTime;
-	}
-
-	@Column(name="outtokentime")
-	public Timestamp getOutTokenTime() {
-		return outTokenTime;
-	}
-
-	public void setOutTokenTime(Timestamp outTokenTime) {
-		this.outTokenTime = outTokenTime;
-	}
-
-	
 }
