@@ -275,10 +275,10 @@ body {
 			</iframe>
 		</div>
 	
-		<div class="grid-advsearch" style="display: none;">
+		<div class="grid-advsearch" style="display: block;">
 			<form>
-				成员类型
-				<select name="memberType" id="advanceMemeberType"  style="width: 100px; margin: 0 30px 0 10px;">
+				成员类型:
+				<select name="memberType" id="advanceMemeberType"  style="width: 150px; height:32px; margin: 0 30px 0 10px;">
 					<option value="0">
 						全部
 					</option>
@@ -289,31 +289,18 @@ body {
 						用户
 					</option>
 				</select>
-				成员名称
-				<input name="memberName" type="text" id="advanceMemeberName" class="input-text" value="${memberName}" style="width: 150px; margin: 0 20px 0 10px;" />
-				<input type="button" class="btn btn-small btn-primary" value="检索" onclick="toLoadUser('advan');" style="margin-right: 5px;margin-left: 85px;" />
-				<input type="button" class="btn btn-small advsearch-cancel" value="返回" />
-				<div class="line-dotted" style="border:1px solid grey;"></div>
+				成员名称:
+				<input name="memberName" placeholder="成员名称" type="text" id="advanceMemeberName" class="input-text" value="${memberName}" style="width: 138px; margin: 0 20px 0 10px;" />
+				<a class="datagrid-toolbar-btn btn-primary"  onclick="toLoadUser('advan');" style="margin-right: 5px;margin-left: 10px;"><i class="icon-trash"></i>检索</a>
+				<a class="datagrid-toolbar-btn" onclick="toolbarAction('add')"><i class="icon-plus-sign"></i>新增</a>
+				<a class="datagrid-toolbar-btn" onclick="toolbarAction('remove')"><i class="icon-minus-sign"></i>删除</a>
+				<a class="datagrid-toolbar-btn" onclick="toolbarAction('clean')"><i class="icon-trash"></i>清空</a>
+				<!-- <div class="line-dotted" style="border:1px solid grey;"></div> -->
 			</form>
 		</div>
+		<div></div>
 		<div class="panel datagrid" style="width: auto;">
 			<div class="datagrid-wrap panel-body panel-body-noheader panel-body-noborder" title="" style=" height: 300px;">
-				<div id="grid_toolbar" class="datagrid-toolbar">
-					<div class="datagrid-toolbar-btn-wrap">
-						<a class="datagrid-toolbar-btn" onclick="toolbarAction('add')"><i class="icon-plus-sign"></i>新增</a>
-						<a class="datagrid-toolbar-btn" onclick="toolbarAction('remove')"><i class="icon-minus-sign"></i>删除</a>
-						<a class="datagrid-toolbar-btn" onclick="toolbarAction('clean')"><i class="icon-trash"></i>清空</a>
-					</div>
-					<div class="datagrid-toolbar-search-wrap" style="display: block;">
-						<div class="datagrid-toolbar-simple-search">
-							<form>
-								<input type="text" id="grid_simple_search" class="input-text" style="width: 150px;" name="searchText" value="" placeholder="请输入成员名称">
-							</form>
-							<input type="button" class="btn btn-small btn-primary" style="margin-left: 5px;" value="检索" onclick="toLoadUser();">
-						</div>
-						<input type="button" class="btn btn-small btn-advsearch" style="margin-left: 5px;" value="高级检索">
-					</div>
-				</div>
 				<div class="datagrid-view" style=" height: 396px;">
 					
 					<div class="datagrid-view2" style="width: 710px;">
@@ -403,7 +390,7 @@ body {
 							<div class="datagrid-footer-inner" style="display: none;"></div>
 						</div>
 					</div>
-					
+			
 					
 <style type="text/css">
 	.datagrid-cell-c1-name {

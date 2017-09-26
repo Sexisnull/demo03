@@ -88,4 +88,12 @@ public class Constants {
 		PARAMETER_TYPE_LABEL.put(PARAMETER_TYPE_LIST, "有序列表");
 		PARAMETER_TYPE_LABEL.put(PARAMETER_TYPE_MAP, "键值对");
 	}
+	
+	public static final String[][] MOD_ARRAY = { { "1", "机构" }, { "2", "政府用户" }, { "3", "角色" }, 
+	    { "4", "应用" }, { "5", "模板" }, { "6", "属性" }, { "7", "数据调用" }, { "8", "登录" }, 
+	    { "9", "同步列表" }, { "10", "公网用户" }, { "11", "应用系统" }, { "12", "身份证" } };
+	
+	public static final String[][] OPR_ARRAY = { { "1", "新增" }, { "2", "修改" }, { "3", "删除" }, 
+		    { "4", "导出" }, { "5", "导入" }, { "6", "排序" }, { "7", "清空" }, { "8", "设置" }, 
+		    { "9", "登录" }, { "10", "注销" }, { "11", "单点登录" }, { "12", "实名认证" } };
 }

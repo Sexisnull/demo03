@@ -132,8 +132,9 @@ public class ComplatGroupServiceTest {
 	public void queryNameIsUsed(){
 		try {
 			String name = "林业局";
-			ComplatGroup complatGroup = complatGroupService.queryNameIsUsed(name);
-			System.out.println("根据名称查找机构信息"+JSONArray.fromObject(complatGroup).toString());
+			int pid=253;
+			boolean bool = complatGroupService.queryNameIsUsed(name, pid);
+			System.out.println(bool);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

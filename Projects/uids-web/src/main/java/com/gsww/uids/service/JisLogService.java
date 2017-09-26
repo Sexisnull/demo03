@@ -80,4 +80,6 @@ public interface JisLogService {
 	 */
 	public void save(String loginName,String loginIp,String desc,
 			Integer moduleName,Integer operatorType);
+	
+	public boolean add(Integer operatetype, Integer modulename, String spec);
 }
