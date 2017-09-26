@@ -92,7 +92,6 @@ public class JisFieldsController extends BaseController {
 			model.addAttribute("sParams", searchParams);
             
 		} catch (Exception ex) {
-			ex.printStackTrace();
 			logger.error("列表打开失败：" + ex.getMessage());
 			returnMsg("error", "列表打开失败", (HttpServletRequest) request);
 			//return "redirect:/jis/fieldsList";
@@ -121,7 +120,7 @@ public class JisFieldsController extends BaseController {
 			}
 			model.addAttribute("jisFields", jisFields);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return "system/jis/fields_edit";
 	}
@@ -172,7 +171,7 @@ public class JisFieldsController extends BaseController {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 			returnMsg("error", "保存失败", request);
 		} finally {
 			return new ModelAndView("redirect:/jis/fieldsList");
@@ -204,7 +203,7 @@ public class JisFieldsController extends BaseController {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 			returnMsg("error", "删除失败", request);
 		} finally {
 			return new ModelAndView("redirect:/jis/fieldsList");
@@ -240,7 +239,7 @@ public class JisFieldsController extends BaseController {
 				returnMsg("success", "设置成功", request);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 			returnMsg("error", "设置失败", request);
 		}
 		return "redirect:/jis/fieldsList";
@@ -262,7 +261,7 @@ public class JisFieldsController extends BaseController {
 				response.getWriter().write("1");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 }

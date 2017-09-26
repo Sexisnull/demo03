@@ -2,7 +2,6 @@ package com.gsww.uids.controller;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +29,6 @@ import com.google.common.collect.Maps;
 import com.gsww.jup.controller.BaseController;
 import com.gsww.jup.entity.sys.SysUserSession;
 import com.gsww.jup.util.PageUtils;
-import com.gsww.uids.entity.ComplatOutsideuser;
 import com.gsww.uids.entity.ComplatZone;
 import com.gsww.uids.service.ComplatZoneService;
 
@@ -112,10 +110,10 @@ public class ComplatZoneController extends BaseController {
 				model.addAttribute("alertType", alertType);
 				alertType = "";
 			} catch (Exception ex) {
-				ex.printStackTrace();
+				logger.error(ex.getMessage(), ex);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return new ModelAndView("system/area/zone_list");
 	}
@@ -152,7 +150,7 @@ public class ComplatZoneController extends BaseController {
 			String json = array.toString();
 			out.write(json);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 
@@ -181,11 +179,11 @@ public class ComplatZoneController extends BaseController {
 				complatZoneService.save(complatZone);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 			try {
 				response.getWriter().write(e.getLocalizedMessage());
 			} catch (Exception ex) {
-
+				logger.error(ex.getMessage(), ex);
 			}
 		}
 	}
@@ -209,7 +207,7 @@ public class ComplatZoneController extends BaseController {
 				out.write(json);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 
@@ -231,12 +229,12 @@ public class ComplatZoneController extends BaseController {
 				out.write(json);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 
 	/**
-	 * 在树结构上删除区域 （逻辑删除）
+	 * 在树结构上删除区域
 	 * 
 	 * @param request
 	 * @param response
@@ -264,11 +262,11 @@ public class ComplatZoneController extends BaseController {
 				response.getWriter().write("exist");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 			try {
 				response.getWriter().write(e.getLocalizedMessage());
 			} catch (Exception ex) {
-
+				logger.error(ex.getMessage(), ex);
 			}
 		}
 	}
@@ -300,11 +298,11 @@ public class ComplatZoneController extends BaseController {
 				response.getWriter().write("exist");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 			try {
 				response.getWriter().write(e.getLocalizedMessage());
 			} catch (Exception ex) {
-
+				logger.error(ex.getMessage(), ex);
 			}
 		}
 	}
@@ -353,13 +351,13 @@ public class ComplatZoneController extends BaseController {
 				response.getWriter().write(org.json.simple.JSONObject.toJSONString(resMap));
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 			try {
 				Map<String, Object> resMap = new HashMap<String, Object>();
 				resMap.put("ret", 0);
 				response.getWriter().write(org.json.simple.JSONObject.toJSONString(resMap));
 			} catch (Exception ex) {
-
+				logger.error(ex.getMessage(), ex);
 			}
 		}
 	}
@@ -377,7 +375,7 @@ public class ComplatZoneController extends BaseController {
 			String deptNameInput = StringUtils.trim((String) request.getParameter("regionName"));
 			String deptNameold = StringUtils.trim((String) request.getParameter("oldRoleName"));
 			String deptCode = StringUtils.trim((String) request.getParameter("regionCode"));
-			String deptCodeNew = deptCode.substring(0, deptCode.length() - 3) + "___";
+			//String deptCodeNew = deptCode.substring(0, deptCode.length() - 3) + "___";
 			if (!deptNameInput.equals(deptNameold)) {
 				List<ComplatZone> complatZones = complatZoneService.checkUniqueDeptName(deptNameInput, deptCode);
 				if (complatZones != null && complatZones.size() > 0) {
@@ -389,7 +387,7 @@ public class ComplatZoneController extends BaseController {
 				response.getWriter().write("1");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 	
@@ -411,7 +409,7 @@ public class ComplatZoneController extends BaseController {
 			complatZone.setCodeId(deptCode);
 			complatZoneService.save(complatZone);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 			returnMsg("error", "保存失败", request);
 		} finally {
 			return new ModelAndView("redirect:/complat/zoneList");
