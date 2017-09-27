@@ -56,13 +56,13 @@ font-size: 12px;
 border: 1px solid #dddddd;
 padding: 3px 8px;
 height: 30px;
-width: 254px;
+width: 186px;
 }
-#objectnameSearch{
-width: 235px !important;
+#objectnameSearchHigh{
+width: 168px !important;
 }
 .syncTime{
-width: 100px !important;
+width: 65px !important;
 }
 </style>
 </head>
@@ -122,19 +122,18 @@ width: 100px !important;
 							</tr>
 							<tr height="10px"></tr>
 							<tr>
-							    <th>操作时间：</th>
+							    <th>操作对象名称：</th>
+								<td>
+									<input type="text" id="objectnameSearchHigh" name="search_LIKE_objectname" placeholder="操作对象名称" value="${sParams['LIKE_objectname']}" class="input" />
+								</td>
+								<th>操作时间：</th>
 								<td>
 									<input type="text" class="syncTime Wdate" id="synctimeSearchStart" name="search_GTE_synctime" placeholder="起始时间" value="${sParams['GTE_synctime']}" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" />
 									 至 <input class="syncTime Wdate" type="text" id="synctimeSearchEnd" name="search_LTE_synctime" placeholder="结束时间" value="${sParams['LTE_synctime']}" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" />
 									<!-- search_LIKE_ -->
 								</td>
-							    <th>操作对象名称：</th>
-								<td>
-									<input type="text" id="objectnameSearch" name="search_LIKE_objectname" placeholder="操作对象名称" value="${sParams['LIKE_objectname']}" class="input" />
-								</td>
 								<th></th>
-								<td style="text-align:right;padding-right: 2.5%" >
-						
+								<td class="btn-group" style="text-align:right;">
 								    <a class="btnSearch" id="advanced-search-btn">搜索</a>
 								</td>
 							</tr>

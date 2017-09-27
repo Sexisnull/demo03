@@ -88,5 +88,10 @@ public interface ComplatOutsideuserService {
 	 */
 	public ComplatOutsideuser findByLoginNameIsUsed(String loginName);
 	
+	/**
+	 * 统一注册插入个人用户
+	 * @param outsideUser
+	 * @return
+	 */
 	boolean insert(ComplatOutsideuser outsideUser);
 }

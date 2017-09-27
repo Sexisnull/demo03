@@ -24,10 +24,12 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
+import com.gsww.jup.entity.sys.SysUserSession;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.jup.util.StringHelper;
 import com.gsww.uids.entity.JisFields;
 import com.gsww.uids.service.JisFieldsService;
+import com.gsww.uids.service.JisLogService;
 
 /**
  * Title: JisFieldsController.java Description: 用户扩展属性controller
@@ -44,6 +46,8 @@ public class JisFieldsController extends BaseController {
 	private JisFieldsService jisFieldsService;
 	@Autowired
 	private JisUserdetailService jisUserdetailService;
+	@Autowired
+	private JisLogService jisLogService;
 
 	/**
 	 * @discription 用户扩展属性展示列表
@@ -138,6 +142,7 @@ public class JisFieldsController extends BaseController {
 	public ModelAndView accountSave(JisFields jisFields, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		try {
+			SysUserSession sysUserSession =  (SysUserSession) ((HttpServletRequest) request).getSession().getAttribute("sysUserSession");
 			if (jisFields != null) {
 				String iidStr = String.valueOf(jisFields.getIid());
 				if (iidStr == "null" || iidStr.length() <= 0) { // 新增
@@ -146,6 +151,8 @@ public class JisFieldsController extends BaseController {
 					jisFieldsService.save(jisFields);
 					jisUserdetailService.addUserField(jisFields.getFieldname());
 					returnMsg("success", "保存成功", request);
+					String desc = sysUserSession.getUserName() + "新增用户扩展属性:" + jisFields.getShowname(); 
+					jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,6,1);
 				} else { // 编辑
 					int type = jisFields.getType();
 					if (type == 1) {//字符串
@@ -168,6 +175,8 @@ public class JisFieldsController extends BaseController {
 					}
 					jisFieldsService.save(jisFields);
 					returnMsg("success", "编辑成功", request);
+					String desc = sysUserSession.getUserName() + "修改了用户扩展属性:" + jisFields.getShowname(); 
+					jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,6,2);
 				}
 			}
 		} catch (Exception e) {
@@ -191,12 +200,15 @@ public class JisFieldsController extends BaseController {
 	public ModelAndView accountDelete(String fieldsId, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		try {
+			SysUserSession sysUserSession =  (SysUserSession) ((HttpServletRequest) request).getSession().getAttribute("sysUserSession");
 			String[] para = fieldsId.split(",");
 			JisFields jisFields = null;
 			for (int i = 0; i < para.length; i++) {
 				Integer iid = Integer.parseInt(para[i].trim());
 				jisFields = jisFieldsService.findByKey(iid);
 				if (jisFields != null) {
+					String desc = sysUserSession.getUserName() + "删除了用户扩展属性:" + jisFields.getShowname(); 
+					jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,6,3);
 					jisFieldsService.delete(jisFields);
 					jisUserdetailService.delUserField(jisFields.getFieldname());
 					returnMsg("success", "删除成功", request);
@@ -221,6 +233,7 @@ public class JisFieldsController extends BaseController {
 	public String fieldsOperate(String fieldiid, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		try {
+			SysUserSession sysUserSession =  (SysUserSession) ((HttpServletRequest) request).getSession().getAttribute("sysUserSession");
 			if(fieldiid != null) {
 				String[] para = fieldiid.split(",");
 				for (int i = 0; i < para.length; i++) {
@@ -229,6 +242,8 @@ public class JisFieldsController extends BaseController {
 					jisFields.setIswrite(1);
 					jisFieldsService.save(jisFields);
 					returnMsg("success", "设置成功", request);
+					String desc = sysUserSession.getUserName() + "设置了用户扩展属性:" + jisFields.getShowname() + "必填项"; 
+					jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,6,8);
 				}
 			} else {
 				List<JisFields> jisFieldsList = jisFieldsService.findAllJisFields();
@@ -236,6 +251,8 @@ public class JisFieldsController extends BaseController {
 					jisFields.setIswrite(0);
 					jisFieldsService.save(jisFields);
 				}
+				String desc = sysUserSession.getUserName() + "设置了所有用户扩展属性必填项"; 
+				jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,6,8);
 				returnMsg("success", "设置成功", request);
 			}
 		} catch (Exception e) {
@@ -245,6 +262,13 @@ public class JisFieldsController extends BaseController {
 		return "redirect:/jis/fieldsList";
 	}
 	
+	/**
+     * @discription    重命名校验
+     * @param fieldname
+     * @param request
+     * @param response
+     * @throws Exception
+	 */
 	@RequestMapping(value = "/checkFieldname", method = RequestMethod.GET)
 	public void checkFieldname(String fieldname,HttpServletRequest request, HttpServletResponse response) throws Exception {
 		try {

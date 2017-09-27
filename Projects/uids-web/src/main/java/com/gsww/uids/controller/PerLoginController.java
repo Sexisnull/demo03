@@ -8,7 +8,6 @@ import com.hanweb.common.util.StringUtil;
 import com.hanweb.common.util.mvc.ControllerUtil;
 import com.hanweb.common.util.mvc.JsonResult;
 import com.hanweb.common.util.mvc.ResultState;
-import com.hanweb.common.util.security.SecurityUtil;
 import com.gsww.uids.entity.ComplatCorporation;
 import com.gsww.uids.entity.ComplatOutsideuser;
 import com.gsww.uids.service.ComplatCorporationService;
@@ -19,6 +18,7 @@ import com.gsww.uids.service.JisApplicationService;
 import com.gsww.uids.service.impl.AuthLogServiceImpl;
 import com.gsww.uids.util.AccessUtil;
 import com.gsww.jup.util.CellphoneShortMessageUtil;
+import com.gsww.jup.util.RSAUtil;
 import com.gsww.jup.util.RandomCodeUtil;
 import com.gsww.jup.util.SafeUtil;
 import com.gsww.jup.util.UserUtil;
@@ -29,6 +29,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.POST;
@@ -60,8 +62,10 @@ public class PerLoginController{
 
   @Autowired
   private AuthLogServiceImpl authLogService;
+  
+  private static JisSettings jisSettings = new JisSettings();
 
-  @RequestMapping(value = "/perlogin")
+  @RequestMapping(value = "/perlogin.do")
   public String personalLogin(HttpServletResponse response, String action, String appmark, 
 		  String gotoUrl, String domain,Model model)
   {
@@ -72,8 +76,9 @@ public class PerLoginController{
       appmark = "";
     }
     if ((SafeUtil.isSqlAndXss(action)) || (SafeUtil.isSqlAndXss(appmark)) || (SafeUtil.isSqlAndXss(gotoUrl)) || 
-      (SafeUtil.isSqlAndXss(domain)))
-      return null;
+      (SafeUtil.isSqlAndXss(domain))){
+    	return null;
+    }
     HttpSession session = SpringUtil.getRequest().getSession();
     if (StringUtil.isEmpty(gotoUrl)) {
       gotoUrl = (String)session.getAttribute("gotoUrl");
@@ -98,7 +103,6 @@ public class PerLoginController{
       appmark = "gszw";
     }
     session.setAttribute("appmark", appmark);
-    JisSettings jisSettings = new JisSettings();
     model.addAttribute("sysName",jisSettings.getSysName());
     model.addAttribute("url","doperlogin" );
     model.addAttribute("verifycodeimg","<img id='verifyImg' src='../verifyCode?code=4&var=rand&width=162&height=30&"
@@ -116,7 +120,7 @@ public class PerLoginController{
   @POST
   @RequestMapping(value="/doperlogin")
   @ResponseBody
-  public JsonResult personalDoLogin(@RequestParam(value="username", required=false) String userName, @RequestParam(value="password", required=false) String password, @RequestParam(value="randomVeryfyCode", required=false) String randomVeryfyCode, @RequestParam(value="action", required=false) String action, @RequestParam(value="appmark", required=false) String appmark, @RequestParam(value="gotoUrl", required=false) String gotoUrl, HttpSession session, HttpServletResponse response)
+  public JsonResult personalDoLogin(@RequestParam(value="username", required=false) String userName, @RequestParam(value="password", required=false) String password, @RequestParam(value="randomVeryfyCode", required=false) String randomVeryfyCode, @RequestParam(value="action", required=false) String action, @RequestParam(value="appmark", required=false) String appmark, @RequestParam(value="gotoUrl", required=false) String gotoUrl, HttpSession session,HttpServletRequest request, HttpServletResponse response)
   {
     if (!AccessUtil.checkAccess(SpringUtil.getRequest())) {
       return null;
@@ -140,8 +144,18 @@ public class PerLoginController{
       if ((StringUtil.isEmpty(userName)) || (StringUtil.isEmpty(password))) {
     	  logger.error("login.error");
       }
-      userName = SecurityUtil.RSAdecode(userName);
-      password = SecurityUtil.RSAdecode(password);
+      
+      String en_password = "";
+      try{
+          byte[] en_result = hexStringToBytes(password);  
+          byte[] de_result = RSAUtil.decrypt(RSAUtil.getKeyPair(request).getPrivate(), en_result);  
+          StringBuffer sb = new StringBuffer();  
+          sb.append(new String(de_result));  
+          en_password= sb.reverse().toString(); 
+      } catch(Exception ex){
+    	  logger.error(ex.getMessage());
+      }
+      password = en_password;
 
       int wayOfLogin = 0;
       ComplatOutsideuser outsideUser;
@@ -185,8 +199,7 @@ public class PerLoginController{
 
           String domain = StringUtil.getString(session.getAttribute("domain"));
 
-          JisSettings settings = JisSettings.getSettings();
-          gotoUrlFlag = settings.getPerGotoUrl();
+          gotoUrlFlag = jisSettings.getPerGotoUrl();
           if (StringUtil.isNotEmpty(domain)) {
             try {
 				domain = URLDecoder.decode(domain,"UTF-8");
@@ -239,10 +252,10 @@ public class PerLoginController{
       return "jis/front/perlogin";
     }
     
-    model.addAttribute("sysName", JisSettings.getSettings().getSysName());
+    model.addAttribute("sysName", jisSettings.getSysName());
     model.addAttribute("logouturl", logouturl);
     model.addAttribute("loginname", loginname);
-    model.addAttribute("copyRight", JisSettings.getSettings().getCopyRight());
+    model.addAttribute("copyRight", jisSettings.getCopyRight());
     model.addAttribute("verifycodeimg", "<img id='verifyImg' src='../verifyCode?code=4&"
     		+ "var=rand&width=162&height=55&random=" + (int)(Math.random() * 100000000.0D) 
     		+"'onclick=\"this.src='../verifyCode?code=4&var=rand&width=162&height=55&"
@@ -309,20 +322,20 @@ public class PerLoginController{
     String cellphoneDynamicPwdMadeByJava = RandomCodeUtil.getRandomNumber(6);
     session.setAttribute("cellphoneDynamicPwdMadeByJava", cellphoneDynamicPwdMadeByJava);
 
-    int validityPeriodInt = Integer.parseInt(JisSettings.getSettings().getValidityPeriod().trim());
+    int validityPeriodInt = Integer.parseInt(jisSettings.getValidityPeriod().trim());
 
-    String content = JisSettings.getSettings().getDynamicPwdMessageContent().trim()
+    String content = jisSettings.getDynamicPwdMessageContent().trim()
       .replace("cellphoneDynamicPwdMadeByJava", cellphoneDynamicPwdMadeByJava)
       .replace("validityPeriod", String.valueOf(validityPeriodInt));
-    String appBusinessId = JisSettings.getSettings().getBusinessIdForGettingDynamicPwd().trim();
-    String appBusinessName = JisSettings.getSettings().getBusinessNameForGettingDynamicPwd().trim();
+    String appBusinessId = jisSettings.getBusinessIdForGettingDynamicPwd().trim();
+    String appBusinessName = jisSettings.getBusinessNameForGettingDynamicPwd().trim();
     int loseTime = 60;
     CellphoneShortMessageUtil cellMesUtil = new CellphoneShortMessageUtil();
     String jsonRe = cellMesUtil.sendPhoneShortMessage(telNum, content, appBusinessId, appBusinessName, loseTime);
     map = (Map)JsonUtil.StringToObject(jsonRe, Map.class);
     if (Integer.parseInt(map.get("code")) == 1) {
       session.setAttribute("timeSendDynamicPwd", Long.valueOf(System.currentTimeMillis()));
-      int validityPeriod = Integer.parseInt(JisSettings.getSettings().getValidityPeriod()) * 60;
+      int validityPeriod = Integer.parseInt(jisSettings.getValidityPeriod()) * 60;
       session.setMaxInactiveInterval(validityPeriod);
     }
     return jsonRe;
@@ -492,10 +505,10 @@ public class PerLoginController{
     }
     String cellphoneShortMessageRandomCodeMadeByJava = RandomCodeUtil.getRandomNumber(6);
     session.setAttribute("cellphoneShortMessageRandomCodeMadeByJava", cellphoneShortMessageRandomCodeMadeByJava);
-    String content = JisSettings.getSettings().getRecovingPwdContent().trim()
+    String content = jisSettings.getRecovingPpdContent().trim()
       .replace("cellphoneShortMessageRandomCodeMadeByJava", cellphoneShortMessageRandomCodeMadeByJava);
-    String appBusinessId = JisSettings.getSettings().getBusinessIdForRecovingPwd().trim();
-    String appBusinessName = JisSettings.getSettings().getBusinessNameForRecovingPwd().trim();
+    String appBusinessId = jisSettings.getBusinessIdForRecovingPpd().trim();
+    String appBusinessName = jisSettings.getBusinessNameForRecovingPpd().trim();
 
     int loseTime = 60;
     CellphoneShortMessageUtil cellMesUtil = new CellphoneShortMessageUtil();
@@ -617,5 +630,33 @@ public class PerLoginController{
       jsonResult.set(ResultState.MODIFY_FAIL);
     }
     return jsonResult;
+  }
+  
+  /**
+   * 16进制 To byte[]
+   * @param hexString
+   * @return byte[]
+   */
+  public static byte[] hexStringToBytes(String hexString) {
+      if (hexString == null || hexString.equals("")) {
+          return null;
+      }
+      hexString = hexString.toUpperCase();
+      int length = hexString.length() / 2;
+      char[] hexChars = hexString.toCharArray();
+      byte[] d = new byte[length];
+      for (int i = 0; i < length; i++) {
+          int pos = i * 2;
+          d[i] = (byte) (charToByte(hexChars[pos]) << 4 | charToByte(hexChars[pos + 1]));
+      }
+      return d;
+  }
+  /**
+   * Convert char to byte
+   * @param c char
+   * @return byte
+   */
+   private static byte charToByte(char c) {
+      return (byte) "0123456789ABCDEF".indexOf(c);
   }
 }

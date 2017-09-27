@@ -10,13 +10,27 @@
 <title>甘肃政务服务网-登录</title>
 <link rel="stylesheet" type="text/css" href="${ctx}/ui/images/style.css"/>
 <link rel="stylesheet" type="text/css" href="${ctx}/ui/images/syl_fpqd.css"/>
-<%-- <script type="text/javascript" src="${ctx}/ui/images/jquery-1.7.min.js"/> --%>
-<script type="text/javascript" src="${ctx}/res/plugin/jquery/jquery-1.8.3.min.js"></script>
+<link type="text/css" rel="stylesheet" href="${ctx}/ui/css/global.css"/>
+<script type="text/javascript" src="${ctx}/ui/lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="${ctx}/ui/widgets/hanweb/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="${ctx}/ui/lib/easyui/plugins/jquery.parser.js"></script>
+<link type="text/css" rel="stylesheet" href="${ctx}/ui/lib/easyui/themes/bootstrap/linkbutton.css"/>
+<script type="text/javascript" src="${ctx}/ui/lib/easyui/plugins/jquery.linkbutton.js"></script>
+<script type="text/javascript" src="${ctx}/ui/lib/easyui/plugins/jquery.resizable.js"></script>
+<script type="text/javascript" src="${ctx}/ui/lib/easyui/plugins/jquery.draggable.js"></script>
+<link type="text/css" rel="stylesheet" href="${ctx}/ui/lib/easyui/themes/bootstrap/panel.css"/>
+<script type="text/javascript" src="${ctx}/ui/lib/easyui/plugins/jquery.panel.js"></script>
+<link type="text/css" rel="stylesheet" href="${ctx}/ui/lib/easyui/themes/bootstrap/window.css"/>
+<script type="text/javascript" src="${ctx}/ui/lib/easyui/plugins/jquery.window.js"></script>
+<link type="text/css" rel="stylesheet" href="${ctx}/ui/lib/easyui/themes/bootstrap/messager.css"/>
+<script type="text/javascript" src="${ctx}/ui/lib/easyui/plugins/jquery.messager.js"></script>
+<link type="text/css" rel="stylesheet" href="${ctx}/ui/widgets/hanweb/validity/css/validity.css"/>
+<script type="text/javascript" src="${ctx}/ui/widgets/validity/validity.js"></script>
+<script type="text/javascript" src="${ctx}/ui/widgets/hanweb/validity/validity.js"></script>
 <script type="text/javascript" src="${ctx}/ui/lib/security/jquery.cookie.js"></script>
-<script type="text/javascript" src="${ctx}/ui/lib/security/base64.js"></script>
-<script type="text/javascript" src="${ctx}/ui/lib/security/jsencrypt.min.js"></script>
-<script type="text/javascript" src="${ctx}/ui/lib/security/rsa_util.js"></script>
-<script type="text/javascript" src="${ctx}/ui/lib/security/security.js"></script>
+<script type="text/javascript" src="${ctx}/res/skin/default/plugin/rsa/BigInt.js"></script>
+<script type="text/javascript" src="${ctx}/res/skin/default/plugin/rsa/Barrett.js"></script>
+<script type="text/javascript" src="${ctx}/res/skin/default/plugin/rsa/RSA.js"></script>
 <script type="text/javascript">
 window.alert = function (msg,type,fu){
 	top.$.messager.alert(' ',msg,type,fu);
@@ -48,11 +62,31 @@ window.confirm = function(msg,okCall,cancelCall){
 			$('#randomVeryfyCode').require('请填写验证码');
 		},{
 			beforeSubmit:function(result) {
-				$("#enc_username").val(RSAencode($("#username").val()));
-				$("#enc_password").val(RSAencode($("#password").val()));
+                var tempPassword = $("#password").val();
+                $.ajax({
+                	type : "post",
+					url : "../sys/mybatis/getkey",
+					data : {},
+					dataType : "json",
+					async: false,
+					success : function(data) {
+		                  //data为获取到的公钥数据
+		                  var pubexponent =data.pubexponent;
+		                  var pubmodules =data.pubmodules;
+		                  setMaxDigits(200);  
+		                  var key = new RSAKeyPair(pubexponent, "", pubmodules); 
+		                  var password=$("#password").val();
+		                  var encrypedPwd = encryptedString(key, encodeURIComponent(password));
+		                  $("#enc_password").val(encrypedPwd);
+		                  var name = $("#username").val();
+		                  $("#enc_username").val(name);
+		                  console.log(name);
+		                  console.log(password);
+		                  console.log(encrypedPwd);
+					},
+                });
 			},
 			success:function(result){		
-				
 				if(result.success){
 					var gotoUrl = $('#gotoUrl').val();
 					var gotoUrlFlag = result.params.gotoUrlFlag;
@@ -94,7 +128,7 @@ window.confirm = function(msg,okCall,cancelCall){
 			url: sendUrl,
 			data : "telNum=" + telNum, 
 			dataType:'json',
-			success:function(result){					
+			success:function(result){
 				if(result.code=="1"){
 					alert("动态密码已经发送，请在有效期内登陆！");					
 					countBackwards();
@@ -180,8 +214,8 @@ window.confirm = function(msg,okCall,cancelCall){
         	<input type="hidden" name="action" id="action" value="${action}"/>
 			<input type="hidden" name="appmark" id="appmark" value="${appmark}"/>
 			<input type="hidden" name="gotoUrl" id="gotoUrl" value="${gotoUrl}"/>
-			<input type="hidden" name="username" id="enc_username" />
-			<input type="hidden" name="password" id="enc_password" />
+			<input type="hidden" name="username" id="enc_username"/>
+			<input type="hidden" name="password" id="enc_password"/>
         	<table border="0" width="100%" cellpadding="0" cellspacing="0">
         	       
             	<tr>
@@ -234,11 +268,6 @@ window.confirm = function(msg,okCall,cancelCall){
                                 ${verifycodeimg}</td>
                                 
                             </tr>
-                            
-                            
-                            
-                            
-                            
                         </table>
                         <table border="0" cellpadding="0" cellspacing="0" width="100%" style=" margin-top:35px;">
                             <tr>
@@ -305,9 +334,9 @@ $("#bm").click(function(){
 		$("#corlogin").click(function(){
 			var appmark = $('#appmark').val();
 			if(appmark != "") {
-				window.location.href = "${ctx}/uids-web/front/corlogin?appmark="+appmark;
+				window.location.href = "${ctx}/uids-web/front/corlogin.do?appmark="+appmark;
 			}else {		
-				window.location.href = "${ctx}/uids-web/front/corlogin";
+				window.location.href = "${ctx}/uids-web/front/corlogin.do";
 			}
 		});
 	});

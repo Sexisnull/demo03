@@ -1,4 +1,5 @@
 function RSAencode(str){
+	debugger;
 	var pubk = $.cookie('_pubk');
 	var result = '';
 	if(pubk && str){

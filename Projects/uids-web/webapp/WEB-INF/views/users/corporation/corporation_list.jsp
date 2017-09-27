@@ -104,6 +104,45 @@
 		$("#input_three")[0].style.display = 'none';
 		$("#outsideUserType").attr("value", 1);
 	}
+	
+	
+	/**批量启用操作**/	
+	function startData(url,parm){
+		if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checked').length!=0){
+			$.dialog.confirm('您确认要启用吗？',function(){
+				var ids = "";
+				$('.list-table tbody input[type=checkbox]').each(function(i, o) {
+					if($(o).attr('checked')) {
+						ids += $(o).val() + ",";
+					}
+				});
+				window.location.href="${ctx}/"+url+"?"+parm+"="+ids.substring(0,ids.length-1);
+			});
+		}else{
+			$.dialog.alert('请您至少选择一条数据',function(){
+				return null;
+			});
+		}
+	}
+	
+	/**批量停用操作**/	
+	function stopData(url,parm){
+		if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checked').length!=0){
+			$.dialog.confirm('您确认要停用吗？',function(){
+				var ids = "";
+				$('.list-table tbody input[type=checkbox]').each(function(i, o) {
+					if($(o).attr('checked')) {
+						ids += $(o).val() + ",";
+					}
+				});
+				window.location.href="${ctx}/"+url+"?"+parm+"="+ids.substring(0,ids.length-1);
+			});
+		}else{
+			$.dialog.alert('请您至少选择一条数据',function(){
+				return null;
+			});
+		}
+	}
 </script>
 <style type="text/css">
 /*设置弹出层样式*/
@@ -175,24 +214,24 @@
     <div class="search-content">
 		<form id="form1" name="pageForm" action="${ctx}/complat/corporationList" method="get">
 			<table class="advanced-content">
-				<tr>
-					<th>用户登录名：</th>
+				<tr style="width: 100%">
+					<th style="width: 7%">登录名：</th>
 					<td width="15%">
-						<input type="text" placeholder="用户登录名" value="${sParams['LIKE_loginName']}" id="loginNameSearch" name="search_LIKE_loginName" class="input"/>
+						<input type="text" placeholder="登录名" value="${sParams['LIKE_loginName']}" id="loginNameSearch" name="search_LIKE_loginName" class="input"/>
 					</td>
-					<th>姓名:</th>
+					<th style="width: 6%">姓名:</th>
 					<td width="15%">
 						<input type="text" placeholder="姓名" class="input" name="search_LIKE_realName" id="realNameSearch" value="${sParams['LIKE_realName']}"/>
 					</td>
-					<th>企业或机构名称:</th>
+					<th style="width: 12%">企业（机构）名称:</th>
 					<td width="15%">
-						<input type="text" placeholder="企业或机构名称" class="input" name="search_LIKE_name" id="nameSearch" value="${sParams['LIKE_name']}"/>
+						<input type="text" placeholder="企业（机构）名称" class="input" name="search_LIKE_name" id="nameSearch" value="${sParams['LIKE_name']}"/>
 					</td>
-					<th>身份证号码:</th>
+					<th style="width: 9%">身份证号码:</th>
 					<td width="15%">
 						<input type="text" placeholder="身份证号码" class="input" name="search_LIKE_cardNumber" id="cardNumberSearch" value="${sParams['LIKE_cardNumber']}"/>
 					</td>
-					<td class="btn-group"> <a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a></td>
+					<td class="btn-group" style="width: 6%"> <a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a></td>
 				</tr>
 			</table>
 		</form>

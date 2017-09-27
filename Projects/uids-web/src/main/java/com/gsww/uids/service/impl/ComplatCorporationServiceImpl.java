@@ -68,5 +68,6 @@ public class ComplatCorporationServiceImpl implements ComplatCorporationService{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 	
 }

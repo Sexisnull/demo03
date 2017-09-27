@@ -55,4 +55,5 @@ public interface ComplatCorporationService {
      * @return
 	 */
 	public ComplatCorporation findByLoginNameIsUsed(String loginName);
+	
 }
