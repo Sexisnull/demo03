@@ -1,6 +1,7 @@
 
 
 
+
 <%@page language="java" pageEncoding="UTF-8"%>
 <!doctype html>
 <%@ include file="/include/meta.jsp"%>
@@ -73,6 +74,9 @@
 				    		if(fields.type==1){
 				    		   for(var key in fields){
 				    			var value = fields[key];
+				    			if(value == null){
+				    				value = "";
+				    			}
 				    			if(key!='type' && key !='userid'){
 				    			    if(count%2==1){
 				    			       htmlString.push("<tr><th>"+key+"</th><td><input name='"+key+"' type='text' value='"+value+"'></td>");

@@ -165,6 +165,7 @@ public class JisApplicationController extends BaseController{
 		
 		try {
 			if(jisApplication != null){
+				
 				String picName=request.getParameter("picName");
 				String groupid=request.getParameter("groupid");
 				Integer groupId=Integer.parseInt(groupid);

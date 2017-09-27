@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.gsww.uids.entity.ComplatCorporation;
-import com.hanweb.complat.entity.Corporation;
 /**
  * <p>Copyright: Copyright (c) 2014</p>
  * <p>公司名称 : 中国电信甘肃万维公司</p>
@@ -43,9 +42,15 @@ public interface ComplatCorporationDao extends  PagingAndSortingRepository<Compl
 	
 	@Modifying
 	@Query("update ComplatCorporation t set t.pwd = ?2 where t.loginName = ?1")
-	public boolean updatePwd(String loginName, String pwd);
-
-	public ComplatCorporation findByRegNumber(String regnumber);
+	public int updatePwd(String loginName, String pwd);
 
 	public List<ComplatCorporation> findByOrgNumber(String orgnumber);
+	
+	/**
+	 * 根据工商注册编码查询法人用户
+	 * @param regNum
+	 * @return
+	 */
+	public ComplatCorporation findByRegNumber(String regNum);
+	
 }

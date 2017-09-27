@@ -28,14 +28,13 @@ public interface ComplatUserDao extends PagingAndSortingRepository<ComplatUser, 
 	ComplatUser findByIid(Integer iid);
 
 	/**
-	 * 根据登录名称和密码获取用户实体
+	 * 根据登录名称获取用户实体
 	 * @param userName
 	 * @param password
 	 * @author 张磊
 	 * @return
 	 */
-	public List<ComplatUser> findByLoginnameAndPwdAndGroupid(String userName,
-			String password,Integer groupId);
+	public List<ComplatUser> findByLoginnameAndGroupid(String userName,Integer groupId);
 	
 	
 	

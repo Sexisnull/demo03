@@ -46,12 +46,12 @@ public class ComplatUserDaoTest {
 	}
 	
 	@Test
-	public void findByLoginnameAndPwdAndGroupid(){
+	public void findByLoginnameAndGroupid(){
 		try {
 			String userName = "admin";
 			String password = "111111";
 			Integer groupId = 128;
-			List<ComplatUser> complatUsers = complatUserDao.findByLoginnameAndPwdAndGroupid(userName,password,groupId);
+			List<ComplatUser> complatUsers = complatUserDao.findByLoginnameAndGroupid(userName,groupId);
 			System.out.println("根据名称获取政府用户信息list"+JSONArray.fromObject(complatUsers).toString());
 		} catch (Exception e) {
 			e.printStackTrace();

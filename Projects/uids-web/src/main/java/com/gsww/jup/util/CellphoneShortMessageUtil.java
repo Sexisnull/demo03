@@ -18,7 +18,7 @@ public class CellphoneShortMessageUtil
     String appId = settings.getAppId().trim();
     String appName = settings.getAppName().trim();
     String appAcc = settings.getAppAcc().trim();
-    String appPwd = settings.getAppPwd().trim();
+    String appPwd = settings.getAppPpd().trim();
     String importantLevel = settings.getImportantLevel().trim();
     String isSendAgain = settings.getIsSendAgain().trim();
     String isLose = settings.getIsLose().trim();

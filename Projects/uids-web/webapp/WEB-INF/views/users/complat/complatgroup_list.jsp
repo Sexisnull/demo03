@@ -18,6 +18,20 @@
 	<script type="text/javascript" src="${ctx}/res/skin/login/js/tree.js"></script>
     
 <style>
+.select{
+font-size: 12px;
+border: 1px solid #dddddd;
+padding: 3px 8px;
+height: 30px;
+width: 167px;
+}
+.search-content table td input[type=text] {
+    border: 1px solid #dddddd;
+    padding: 3px 8px;
+    height: 22px;
+    line-height: 22px;
+    width: 89%;
+}
 .dialog{
 	display:none;
 	position:absolute;
@@ -325,7 +339,7 @@ function exportGroup() {
 			<label for="fileupload">
 			<input type="file" id="excelFile" class="required" name="excelFile">
 			</label>
-			<a class="download" href="${ctx}/uploadFile/complat/机构列表.xlsx">下载参考样例</a>
+			<a class="download" href="${ctx}/uploadFile/complat/groupList.xlsx">下载参考样例</a>
 		</div>
 		<div class="btnarea">
 			<span class="confirm-btn" onclick="fileUpload()">确认</span>
@@ -354,7 +368,7 @@ function exportGroup() {
     
     <div class="search-content">
 		<form id="form1" name="pageForm" action="${ctx}/uids/complatgroupList" method="get">
-			<table class="advanced-content">
+			<table class="advanced-content" width="100%">
 			    <tr>
 					<th style="padding-left: 5px">机构名称:</th>
 					<td width="15%">
@@ -377,12 +391,12 @@ function exportGroup() {
 				<tr>
 				    <th style="padding-left: 5px">上级机构:</th>
 					<td width="15%">
-              			<input name="groupname" id="groupname" value="${groupName}" type="text" style="cursor: pointer;"/>
+              			<input name="groupname" id="groupname" value="${groupName}" type="text" style="cursor: pointer;" placeholder="上级机构"/>
 					    <input type="hidden" id="groupid" name="search_EQ_pid">
 					</td>
 				    <th style="padding-left: 5px">节点类型:</th>
 					<td width="15%">
-	                <select id="search_EQ_nodetype"  name="search_EQ_nodetype"  style="width:168px;height:32px;font-size: 14px;">
+	                <select id="search_EQ_nodetype"  name="search_EQ_nodetype" class="select" >
 	                	<option value="">---请选择节点类型---</option>
 						<c:forEach var="nodetype" items="${nodetypeMap}">
 							<option value="${nodetype.key}"
@@ -392,7 +406,7 @@ function exportGroup() {
 					</td>
 					<th style="padding-left: 5px">区域类型:</th>
 					<td width="15%">
-						<select id="search_EQ_areatype"  name="search_EQ_areatype" style="width:168px;height:32px;font-size: 14px;">
+						<select id="search_EQ_areatype"  name="search_EQ_areatype" class="select" >
 	                		<option value="">---请选择区域类型---</option>
 							<c:forEach var="areatype" items="${areatypeMap}">
 								<option value="${areatype.key}"
@@ -403,7 +417,7 @@ function exportGroup() {
 					<th style="padding-left: 5px"></th>
 					<td class="btn-group" style="text-align:right;">
 				
-					    <a class="btnSearch" id="advanced-search-btn">搜索</a>
+					    <a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a>
 					</td>
 				</tr>
 			</table>

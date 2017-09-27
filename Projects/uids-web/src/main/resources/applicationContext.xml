@@ -17,7 +17,7 @@
 	<description>Spring公共配置</description>
 
 	<!-- production环境 -->
-	<context:property-placeholder ignore-resource-not-found="true" location="classpath*:jdbc.properties" />
+	<context:property-placeholder ignore-resource-not-found="true" ignore-unresolvable="true" location="classpath*:jdbc.properties" />
 
 	<!--登录页面校验码配置 使用com.google.code.kaptcha -->
 	<bean id="captchaProducer" class="com.google.code.kaptcha.impl.DefaultKaptcha">
@@ -106,4 +106,5 @@
 	   </property>  
 	</bean>
 	
+	<import resource="classpath*:common.xml"/>
 </beans>

@@ -18,6 +18,7 @@ import com.gsww.uids.constant.PersonalSessionInfo;
 import com.gsww.uids.service.JisApplicationService;
 import com.gsww.uids.util.AccessUtil;
 import com.gsww.jup.util.CellphoneShortMessageUtil;
+import com.gsww.jup.util.JSONUtil;
 import com.gsww.jup.util.RSAUtil;
 import com.gsww.jup.util.RandomCodeUtil;
 import com.gsww.jup.util.SafeUtil;
@@ -325,11 +326,11 @@ public class PerLoginController{
 
     int validityPeriodInt = Integer.parseInt(jisSettings.getValidityPeriod().trim());
 
-    String content = jisSettings.getDynamicPwdMessageContent().trim()
+    String content = jisSettings.getDynamicPpdMessageContent().trim()
       .replace("cellphoneDynamicPwdMadeByJava", cellphoneDynamicPwdMadeByJava)
       .replace("validityPeriod", String.valueOf(validityPeriodInt));
-    String appBusinessId = jisSettings.getBusinessIdForGettingDynamicPwd().trim();
-    String appBusinessName = jisSettings.getBusinessNameForGettingDynamicPwd().trim();
+    String appBusinessId = jisSettings.getBusinessIdForGettingDynamicPpd().trim();
+    String appBusinessName = jisSettings.getBusinessNameForGettingDynamicPpd().trim();
     int loseTime = 60;
     CellphoneShortMessageUtil cellMesUtil = new CellphoneShortMessageUtil();
     String jsonRe = cellMesUtil.sendPhoneShortMessage(telNum, content, appBusinessId, appBusinessName, loseTime);
@@ -342,297 +343,6 @@ public class PerLoginController{
     return jsonRe;
   }
 
-  @RequestMapping(value="/pwdRecover_select")
-  public String pwdRecover_selectForPer(HttpSession session, String typeEntity,Model model)
-  {
-    if ("per".equals(typeEntity))
-      session.setAttribute("typeEntity", "per");
-    else {
-      session.setAttribute("typeEntity", "cor");
-    }
-    return "jis/front/pwdRecover_select";
-  }
-
-  @RequestMapping(value="/recoverPwdByPhone_show")
-  public String verifyByPhone(HttpSession session,Model model)
-  {
-    if (!AccessUtil.checkAccess(SpringUtil.getRequest())) {
-      return null;
-    }
-
-    session.setAttribute("mobilesend", RandomCodeUtil.getRandomNumber(9));
-
-    String typeEntity = (String)session.getAttribute("typeEntity");
-    if (typeEntity == null) {
-      return null;
-    }
-    
-    model.addAttribute("url", "recoverPwdByPhone_submit");
-    model.addAttribute("typeEntity", typeEntity);
-
-    return "jis/front/phone_recoverPwd";
-  }
-
-  @RequestMapping(value="/recoverPwdByEmail_show")
-  public String verifyByEmail(HttpSession session,Model model) {
-    if (!AccessUtil.checkAccess(SpringUtil.getRequest())) {
-      return null;
-    }
-    
-    model.addAttribute("url", "emailverify_submit");
-    
-    return "jis/front/email_verify";
-  }
-  
-  @RequestMapping(value="/emailverify_submit")
-  @ResponseBody
-  public JsonResult submitEmailverify(HttpSession session, String loginName, String emailcode) {
-    if (!AccessUtil.checkAccess(SpringUtil.getRequest())) {
-      return null;
-    }
-    if ((SafeUtil.isSqlAndXss(loginName)) || (SafeUtil.isSqlAndXss(emailcode))) {
-      return null;
-    }
-    JsonResult jsonResult = JsonResult.getInstance();
-    int type = ((Integer)session.getAttribute("type")).intValue();
-    if (type == 1) {
-      ComplatCorporation corporation = this.corporationService.findByLoginName(loginName);
-      if (corporation == null) {
-        jsonResult.setMessage("用户名不存在！");
-        jsonResult.set(ResultState.OPR_FAIL);
-        return jsonResult;
-      }
-      session.setAttribute("username", corporation.getLoginName());
-    }
-    else {
-      ComplatOutsideuser outuser = this.OutsideUserService.findByLoginName(loginName);
-      if (outuser == null) {
-        jsonResult.setMessage("用户名不存在！");
-        jsonResult.set(ResultState.OPR_FAIL);
-        return jsonResult;
-      }
-      session.setAttribute("username", outuser.getLoginName());
-    }
-
-    if (StringUtil.isNotEmpty(emailcode)) {
-      if (!StringUtil.equals(emailcode, 
-        StringUtil.getString(session.getAttribute("emailcode")))) {
-        jsonResult.setMessage("邮箱验证码错误！");
-        jsonResult.set(ResultState.OPR_FAIL);
-        return jsonResult;
-      }
-      jsonResult.set(ResultState.OPR_SUCCESS);
-    }
-    else {
-      jsonResult.set(ResultState.OPR_FAIL);
-    }
-
-    return jsonResult;
-  }
-
-  @RequestMapping(value="/checkPerWhetherInputByGuestExist")
-  @ResponseBody
-  public JsonResult checkWhetherInputByGuestExist(HttpSession session, String inputByGuest)
-  {
-    JsonResult jsonResult = JsonResult.getInstance();
-    if (StringUtil.isEmpty(inputByGuest)) {
-      jsonResult.setSuccess(false);
-      return jsonResult;
-    }
-    ComplatOutsideuser outsideUser;
-    if (UserUtil.isMobilelegal(inputByGuest)) {
-      outsideUser = this.OutsideUserService.findByMobile(inputByGuest);
-    }
-    else
-    {
-      if (UserUtil.isIDnumberlegal(inputByGuest))
-        outsideUser = this.OutsideUserService.findByIdCard(inputByGuest);
-      else {
-        outsideUser = this.OutsideUserService.findByLoginName(inputByGuest);
-      }
-    }
-    if (outsideUser == null) {
-      jsonResult.setSuccess(false);
-    } else {
-      session.setAttribute("outsideUser", outsideUser);
-      jsonResult.setSuccess(true);
-    }
-    return jsonResult;
-  }
-
-  @RequestMapping(value="/sendCellphoneShortMessageUserPwdRecover")
-  @ResponseBody
-  public String sendCellphoneShortMessageUserPwdRecover(HttpSession session)
-  {
-    Map<String,String> map1 = new HashMap<String,String>();
-    Object mobileSend = session.getAttribute("mobilesend");
-    if (mobileSend == null) {
-      map1.put("msg", "参数为空");
-      map1.put("success", "false");
-      map1.put("code", "0");
-      return JsonUtil.objectToString(map1);
-    }
-
-    Object currentTimes = session.getAttribute("mobiletimes");
-    if (currentTimes != null) {
-      int times = NumberUtil.getInt(currentTimes);
-      if (times > 5) {
-        map1.put("message", "超过最大短信发送次数");
-        map1.put("success", "false");
-        map1.put("code", "0");
-        return JsonUtil.objectToString(map1);
-      }
-    }
-
-    String typeEntity = (String)session.getAttribute("typeEntity");
-    ComplatOutsideuser outsideUser = null;
-    ComplatCorporation corporation = null;
-    String phoneNumber;
-    if ("per".equals(typeEntity)) {
-      outsideUser = (ComplatOutsideuser)session.getAttribute("outsideUser");
-      phoneNumber = outsideUser.getMobile();
-    }
-    else {
-      corporation = (ComplatCorporation)session.getAttribute("corporation");
-      phoneNumber = corporation.getMobile();
-    }
-
-    if ((outsideUser == null) && (corporation == null)) {
-      Map<String,String> mapInfo = new HashMap<String,String>();
-      mapInfo.put("success", "false");
-      mapInfo.put("code", "0");
-      mapInfo.put("msg", "无此用户");
-      return JsonUtil.objectToString(mapInfo);
-    }
-    String cellphoneShortMessageRandomCodeMadeByJava = RandomCodeUtil.getRandomNumber(6);
-    session.setAttribute("cellphoneShortMessageRandomCodeMadeByJava", cellphoneShortMessageRandomCodeMadeByJava);
-    String content = jisSettings.getRecovingPpdContent().trim()
-      .replace("cellphoneShortMessageRandomCodeMadeByJava", cellphoneShortMessageRandomCodeMadeByJava);
-    String appBusinessId = jisSettings.getBusinessIdForRecovingPpd().trim();
-    String appBusinessName = jisSettings.getBusinessNameForRecovingPpd().trim();
-
-    int loseTime = 60;
-    CellphoneShortMessageUtil cellMesUtil = new CellphoneShortMessageUtil();
-    String resultJson = cellMesUtil.sendPhoneShortMessage(phoneNumber, content, appBusinessId, appBusinessName, loseTime);
-    Map map = (Map)JsonUtil.StringToObject(resultJson, Map.class);
-    if ("true".equals(map.get("success")))
-    {
-      if (currentTimes == null) {
-        session.setAttribute("mobiletimes", Integer.valueOf(1));
-      } else {
-        int times = NumberUtil.getInt(currentTimes);
-        session.setAttribute("mobiletimes", Integer.valueOf(times + 1));
-      }
-    }
-
-    return resultJson;
-  }
-
-  @RequestMapping(value="/recoverPwdByPhone_submit")
-  @ResponseBody
-  public JsonResult submitPhoneverify(HttpSession session, String cellphoneShortMessageRandomCodeWritenByGuest)
-  {
-    if (!AccessUtil.checkAccess(SpringUtil.getRequest())) {
-      return null;
-    }
-    if ((SafeUtil.isSqlAndXss(cellphoneShortMessageRandomCodeWritenByGuest)) || 
-      (SafeUtil.isSqlAndXss(cellphoneShortMessageRandomCodeWritenByGuest))) {
-      return null;
-    }
-
-    JsonResult jsonResult = JsonResult.getInstance();
-    session.setAttribute("cellphoneShortMessageRandomCodeWritenByGuest", cellphoneShortMessageRandomCodeWritenByGuest);
-
-    if (StringUtil.isNotEmpty(cellphoneShortMessageRandomCodeWritenByGuest)) {
-      if (!StringUtil.equals(cellphoneShortMessageRandomCodeWritenByGuest, 
-        StringUtil.getString(session.getAttribute("cellphoneShortMessageRandomCodeMadeByJava")))) {
-        jsonResult.setMessage("手机验证码错误！");
-        jsonResult.set(ResultState.OPR_FAIL);
-        return jsonResult;
-      }
-      jsonResult.set(ResultState.OPR_SUCCESS);
-    }
-    else {
-      jsonResult.set(ResultState.OPR_FAIL);
-    }
-    return jsonResult;
-  }
-
-  @RequestMapping(value="/resetpwd_show")
-  public String resetPwd(HttpSession session,Model model)
-  {
-    String typeEntity = (String)session.getAttribute("typeEntity");
-    String loginName = "";
-    if (StringUtil.isNotEmpty(typeEntity)) {
-      if ("per".equals(typeEntity)) {
-        ComplatOutsideuser outsideUser = (ComplatOutsideuser)session.getAttribute("outsideUser");
-        if (outsideUser != null)
-          loginName = outsideUser.getLoginName();
-      }
-      else {
-        ComplatCorporation corporation = (ComplatCorporation)session.getAttribute("corporation");
-        if (corporation != null)
-          loginName = corporation.getLoginName();
-      }
-    }
-    else {
-      model.addAttribute("appmark", "gszw");
-      return "jis/front/perlogin";
-    }
-    Object randCode = session.getAttribute("cellphoneShortMessageRandomCodeMadeByJava");
-    if ((randCode == null) || (StringUtil.isEmpty(loginName))) {
-        model.addAttribute("appmark", "gszw");
-        return "jis/front/perlogin";
-    }
-    Object randCode2 = session.getAttribute("cellphoneShortMessageRandomCodeWritenByGuest");
-    if (!randCode.equals(randCode2)) {
-        model.addAttribute("appmark", "gszw");
-        return "jis/front/perlogin";
-    }
-
-    String appmark = (String)session.getAttribute("appmark");
-    if (appmark == null) {
-      appmark = "";
-    }
-    model.addAttribute("loginName", loginName);
-    model.addAttribute("url", "resetpwd_submit");
-    model.addAttribute("typeEntity", typeEntity);
-    model.addAttribute("appmark", appmark);
-    
-    return "jis/front/resetpwd";
-  }
-
-  @RequestMapping(value="resetpwd_submit")
-  @ResponseBody
-  public JsonResult submitResetPwd(HttpSession session, String pwd)
-  {
-    JsonResult jsonResult = JsonResult.getInstance();
-    String typeEntity = (String)session.getAttribute("typeEntity");
-
-    boolean isSuccess = false;
-    if (("".equals(typeEntity)) || (typeEntity == null)) {
-      jsonResult.set(ResultState.MODIFY_FAIL);
-      return jsonResult;
-    }
-    if ("per".equals(typeEntity)) {
-      ComplatOutsideuser outsideUser = (ComplatOutsideuser)session.getAttribute("outsideUser");
-      String loginName = outsideUser.getLoginName();
-      isSuccess = this.OutsideUserService.updatePwd(Integer.parseInt(loginName), Md5Util.md5encode(pwd));
-    } else {
-      ComplatCorporation corporation = (ComplatCorporation)session.getAttribute("corporation");
-      String loginName = corporation.getLoginName();
-      isSuccess = this.corporationService.updatePwd(loginName, Md5Util.md5encode(pwd));
-    }
-
-    if (isSuccess) {
-      session.invalidate();
-      jsonResult.set(ResultState.MODIFY_SUCCESS);
-    } else {
-      jsonResult.set(ResultState.MODIFY_FAIL);
-    }
-    return jsonResult;
-  }
-  
   /**
    * 16进制 To byte[]
    * @param hexString
@@ -660,4 +370,573 @@ public class PerLoginController{
    private static byte charToByte(char c) {
       return (byte) "0123456789ABCDEF".indexOf(c);
   }
+   
+	@RequestMapping(value = "/pwdRecover_select")
+	public String pwdRecover_selectForPer(HttpSession session,
+			String typeEntity, Model model) {
+		if ("per".equals(typeEntity))
+			session.setAttribute("typeEntity", "per");
+		else {
+			session.setAttribute("typeEntity", "cor");
+		}
+		return "jis/front/pwdRecover_select";
+	}
+
+	@RequestMapping(value = "/recoverPwdByPhone_show")
+	public String verifyByPhone(HttpSession session, Model model) {
+		if (!AccessUtil.checkAccess(SpringUtil.getRequest())) {
+			return null;
+		}
+
+		session.setAttribute("mobilesend", RandomCodeUtil.getRandomNumber(9));
+
+		String typeEntity = (String) session.getAttribute("typeEntity");
+		if (typeEntity == null) {
+			return null;
+		}
+		String varicode = "<img id='verifyImg' src='../verifyCode.do?code=4&var=rand&width=162&height=30&random="
+				+ (int) (Math.random() * 100000000.0D)
+				+ "'"
+				+ " onclick=\"this.src='../verifyCode.do?code=4&var=rand&width=140&height=30&random='+ Math.random()"
+				+ ";\" style='cursor:pointer'  width='140'  height='30' />";
+		model.addAttribute("url", "recoverPwdByPhone_submit");
+		model.addAttribute("verifycodeimg", varicode);
+		model.addAttribute("typeEntity", typeEntity);
+
+		return "jis/front/phone_recoverPwd";
+	}
+
+	@RequestMapping(value = "/recoverPwdByEmail_show")
+	public String verifyByEmail(HttpSession session, Model model) {
+		if (!AccessUtil.checkAccess(SpringUtil.getRequest())) {
+			return null;
+		}
+
+		model.addAttribute("url", "emailverify_submit");
+
+		return "jis/front/email_verify";
+	}
+
+	@RequestMapping(value = "/emailverify_submit")
+	@ResponseBody
+	public JsonResult submitEmailverify(HttpSession session, String loginName,
+			String emailcode) {
+		if (!AccessUtil.checkAccess(SpringUtil.getRequest())) {
+			return null;
+		}
+		if ((SafeUtil.isSqlAndXss(loginName))
+				|| (SafeUtil.isSqlAndXss(emailcode))) {
+			return null;
+		}
+		JsonResult jsonResult = JsonResult.getInstance();
+		int type = ((Integer) session.getAttribute("type")).intValue();
+		if (type == 1) {
+			ComplatCorporation corporation = this.corporationService
+					.findByLoginName(loginName);
+			if (corporation == null) {
+				jsonResult.setMessage("用户名不存在！");
+				jsonResult.set(ResultState.OPR_FAIL);
+				return jsonResult;
+			}
+			session.setAttribute("username", corporation.getLoginName());
+		} else {
+			ComplatOutsideuser outuser = this.OutsideUserService
+					.findByLoginName(loginName);
+			if (outuser == null) {
+				jsonResult.setMessage("用户名不存在！");
+				jsonResult.set(ResultState.OPR_FAIL);
+				return jsonResult;
+			}
+			session.setAttribute("username", outuser.getLoginName());
+		}
+
+		if (StringUtil.isNotEmpty(emailcode)) {
+			if (!StringUtil.equals(emailcode,
+					StringUtil.getString(session.getAttribute("emailcode")))) {
+				jsonResult.setMessage("邮箱验证码错误！");
+				jsonResult.set(ResultState.OPR_FAIL);
+				return jsonResult;
+			}
+			jsonResult.set(ResultState.OPR_SUCCESS);
+		} else {
+			jsonResult.set(ResultState.OPR_FAIL);
+		}
+
+		return jsonResult;
+	}
+
+	@RequestMapping(value = "/checkPerWhetherInputByGuestExist")
+	@ResponseBody
+	public JsonResult checkWhetherInputByGuestExist(HttpSession session,
+			String inputByGuest) {
+		JsonResult jsonResult = JsonResult.getInstance();
+		if (StringUtil.isEmpty(inputByGuest)) {
+			jsonResult.setSuccess(false);
+			return jsonResult;
+		}
+		ComplatOutsideuser outsideUser;
+		if (UserUtil.isMobilelegal(inputByGuest)) {
+			outsideUser = this.OutsideUserService.findByMobile(inputByGuest);
+		} else {
+			if (UserUtil.isIDnumberlegal(inputByGuest))
+				outsideUser = this.OutsideUserService
+						.findByIdCard(inputByGuest);
+			else {
+				outsideUser = this.OutsideUserService
+						.findByLoginName(inputByGuest);
+			}
+		}
+		if (outsideUser == null) {
+			jsonResult.setSuccess(false);
+		} else {
+			session.setAttribute("outsideUser", outsideUser);
+			jsonResult.setSuccess(true);
+		}
+		return jsonResult;
+	}
+
+	@RequestMapping(value = "/sendCellphoneShortMessageUserPwdRecover")
+	@ResponseBody
+	public String sendCellphoneShortMessageUserPwdRecover(HttpSession session,
+			String inputByGuest, String randCode) {
+		String resultJson = "";
+		if (!AccessUtil.checkAccess(SpringUtil.getRequest())) {
+			return null;
+		}
+		Map<String, Object> map1 = new HashMap<String, Object>();
+		String typeEntity = (String) session.getAttribute("typeEntity");
+		ComplatCorporation corporation = null;
+
+		if (StringUtil.isEmpty(inputByGuest)) {
+			map1.put("msg", "账号不能为空");
+			map1.put("success", "false");
+			map1.put("code", "4");
+			return JsonUtil.objectToString(map1);
+		}
+		if (StringUtil.isEmpty(randCode)) {
+			map1.put("msg", "验证码不能为空");
+			map1.put("success", "false");
+			map1.put("code", "6");
+			return JsonUtil.objectToString(map1);
+		}
+		ComplatOutsideuser outsideUser = null;
+
+		if ("per".equals(typeEntity)) {
+			if (UserUtil.isMobilelegal(inputByGuest))
+				outsideUser = this.OutsideUserService
+						.findByMobile(inputByGuest);
+			else if (UserUtil.isIDnumberlegal(inputByGuest)) {
+				outsideUser = this.OutsideUserService
+						.findByIdCard(inputByGuest);
+			} else
+				outsideUser = this.OutsideUserService
+						.findByLoginName(inputByGuest);
+
+			if (outsideUser == null) {
+				map1.put("msg", "用户不存在");
+				map1.put("success", "false");
+				map1.put("code", "1");
+				return JsonUtil.objectToString(map1);
+			}
+
+			String sessionCode = StringUtil.getString(session
+					.getAttribute("rand"));
+			if (!randCode.equalsIgnoreCase(sessionCode)) {
+				map1.put("msg", "验证码不正确");
+				map1.put("success", "false");
+				map1.put("code", "5");
+				return JsonUtil.objectToString(map1);
+			}
+
+			session.setAttribute("outsideUser", outsideUser);
+
+			Object mobileSend = session.getAttribute("mobilesend");
+			if (mobileSend == null) {
+				map1.put("msg", "参数为空");
+				map1.put("success", "false");
+				map1.put("code", "0");
+				return JsonUtil.objectToString(map1);
+			}
+
+			Object currentTimes = session.getAttribute("mobiletimes");
+			if (currentTimes != null) {
+				int times = NumberUtil.getInt(currentTimes);
+				if (times > 10) {
+					map1.put("msg", "超过最大短信发送次数");
+					map1.put("success", "false");
+					map1.put("code", "2");
+					return JsonUtil.objectToString(map1);
+				}
+
+			}
+
+			outsideUser = (ComplatOutsideuser) session
+					.getAttribute("outsideUser");
+			String phoneNumber = outsideUser.getMobile();
+
+			String cellphoneShortMessageRandomCodeMadeByJava = RandomCodeUtil
+					.getRandomNumber(6);
+			session.setAttribute("cellphoneShortMessageRandomCodeMadeByJava",
+					cellphoneShortMessageRandomCodeMadeByJava);
+			String content = JisSettings
+					.getSettings()
+					.getRecovingPpdContent()
+					.trim()
+					.replace("cellphoneShortMessageRandomCodeMadeByJava",
+							cellphoneShortMessageRandomCodeMadeByJava);
+			String appBusinessId = JisSettings.getSettings()
+					.getBusinessIdForRecovingPpd().trim();
+			String appBusinessName = JisSettings.getSettings()
+					.getBusinessNameForRecovingPpd().trim();
+
+			int loseTime = 60;
+			// CellphoneShortMessageUtil cellMesUtil = new
+			// CellphoneShortMessageUtil();
+			resultJson = "{'success':'true'}";// cellMesUtil.sendPhoneShortMessage(phoneNumber,content,
+												// appBusinessId,
+												// appBusinessName, loseTime);
+			Map map = (Map) JsonUtil.StringToObject(resultJson, Map.class);
+			if (StringUtil.getString(map.get("success")).equals("true")) {
+				if (currentTimes == null) {
+					session.setAttribute("mobiletimes", Integer.valueOf(1));
+				} else {
+					int times = NumberUtil.getInt(currentTimes);
+					session.setAttribute("mobiletimes",
+							Integer.valueOf(times + 1));
+				}
+				map1.put("success", "true");
+				map1.put("code", "3");
+				return JsonUtil.objectToString(map1);
+			}
+
+		} else {
+			corporation = this.corporationService.findByManyWay(inputByGuest);
+			if (corporation == null) {
+				map1.put("msg", "用户不存在");
+				map1.put("success", "false");
+				map1.put("code", "1");
+				return JsonUtil.objectToString(map1);
+			}
+
+			String sessionCode = StringUtil.getString(session
+					.getAttribute("rand"));
+			if (!randCode.equalsIgnoreCase(sessionCode)) {
+				map1.put("msg", "验证码不正确");
+				map1.put("success", "false");
+				map1.put("code", "5");
+				return JsonUtil.objectToString(map1);
+			}
+
+			session.setAttribute("corporation", corporation);
+
+			Object currentTimes = session.getAttribute("mobiletimes");
+			if (currentTimes != null) {
+				int times = NumberUtil.getInt(currentTimes);
+				if (times > 10) {
+					map1.put("msg", "超过最大短信发送次数");
+					map1.put("success", "false");
+					map1.put("code", "2");
+					return JsonUtil.objectToString(map1);
+				}
+			}
+
+			corporation = (ComplatCorporation) session
+					.getAttribute("corporation");
+			String phoneNumber = corporation.getMobile();
+
+			String cellphoneShortMessageRandomCodeMadeByJava = RandomCodeUtil
+					.getRandomNumber(6);
+			session.setAttribute("cellphoneShortMessageRandomCodeMadeByJava",
+					cellphoneShortMessageRandomCodeMadeByJava);
+			String content = JisSettings
+					.getSettings()
+					.getRecovingPpdContent()
+					.trim()
+					.replace("cellphoneShortMessageRandomCodeMadeByJava",
+							cellphoneShortMessageRandomCodeMadeByJava);
+			String appBusinessId = JisSettings.getSettings()
+					.getBusinessIdForRecovingPpd().trim();
+			String appBusinessName = JisSettings.getSettings()
+					.getBusinessNameForRecovingPpd().trim();
+
+			int loseTime = 60;
+			// CellphoneShortMessageUtil cellMesUtil = new
+			// CellphoneShortMessageUtil();
+			resultJson = "{'success':'true'}";// cellMesUtil.sendPhoneShortMessage(phoneNumber,content,
+												// appBusinessId,
+												// appBusinessName, loseTime);
+			Map map = (Map) JsonUtil.StringToObject(resultJson, Map.class);
+			if (StringUtil.getString(map.get("success")).equals("true")) {
+				if (currentTimes == null) {
+					session.setAttribute("mobiletimes", Integer.valueOf(1));
+				} else {
+					int times = NumberUtil.getInt(currentTimes);
+					session.setAttribute("mobiletimes",
+							Integer.valueOf(times + 1));
+				}
+				map1.put("success", "true");
+				map1.put("code", "3");
+				return JsonUtil.objectToString(map1);
+			}
+
+		}
+
+		return resultJson;
+	}
+
+	@RequestMapping(value = "/recoverPwdByPhone_submit")
+	@ResponseBody
+	public void submitPhoneverify(
+			HttpServletRequest request,
+			HttpServletResponse response,
+			@RequestParam(value = "username", required = false) String userName,
+			HttpSession session,
+			String cellphoneShortMessageRandomCodeWritenByGuest, String randCode) {
+		try {
+
+			if (!AccessUtil.checkAccess(request)) {
+				return;
+			}
+			if ((SafeUtil
+					.isSqlAndXss(cellphoneShortMessageRandomCodeWritenByGuest))
+					|| (SafeUtil
+							.isSqlAndXss(cellphoneShortMessageRandomCodeWritenByGuest))) {
+				return;
+			}
+			Map<String, Object> result = new HashMap<String, Object>();
+			session.setAttribute(
+					"cellphoneShortMessageRandomCodeWritenByGuest",
+					cellphoneShortMessageRandomCodeWritenByGuest);
+
+			if (StringUtil.isNotEmpty(randCode)) {
+				String rand = (String) session.getAttribute("rand");
+				if (!rand.equalsIgnoreCase(randCode)) {
+					result.put("success", false);
+					result.put("message", "验证码错误,请重新输入!");
+					response.setContentType("text/json");
+					response.setCharacterEncoding("UTF-8");
+					response.getWriter().write(JSONUtil.writeMapJSON(result));
+					return;
+				}
+			}
+			if (StringUtil
+					.isNotEmpty(cellphoneShortMessageRandomCodeWritenByGuest)) {
+				if (!StringUtil
+						.equals(cellphoneShortMessageRandomCodeWritenByGuest,
+								StringUtil.getString(session
+										.getAttribute("cellphoneShortMessageRandomCodeMadeByJava")))) {
+					result.put("success", false);
+					result.put("message", "短信验证码错误,请重新输入!");
+					response.setContentType("text/json");
+					response.setCharacterEncoding("UTF-8");
+					response.getWriter().write(JSONUtil.writeMapJSON(result));
+					return;
+				}
+				result.put("success", true);
+				result.put("message", "验证成功!");
+				response.setContentType("text/json");
+				response.setCharacterEncoding("UTF-8");
+				response.getWriter().write(JSONUtil.writeMapJSON(result));
+				return;
+			} else {
+				result.put("success", false);
+				result.put("message", "短信验证码错误,请重新输入!");
+				response.setContentType("text/json");
+				response.setCharacterEncoding("UTF-8");
+				response.getWriter().write(JSONUtil.writeMapJSON(result));
+				return;
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+	}
+
+	@RequestMapping(value = "/resetpwd_show")
+	public String resetPwd(HttpSession session, Model model) {
+		String typeEntity = (String) session.getAttribute("typeEntity");
+		String loginName = "";
+		if (StringUtil.isNotEmpty(typeEntity)) {
+			if ("per".equals(typeEntity)) {
+				ComplatOutsideuser outsideUser = (ComplatOutsideuser) session
+						.getAttribute("outsideUser");
+				if (outsideUser != null)
+					loginName = outsideUser.getLoginName();
+			} else {
+				ComplatCorporation corporation = (ComplatCorporation) session
+						.getAttribute("corporation");
+				if (corporation != null)
+					loginName = corporation.getLoginName();
+			}
+		} else {
+			model.addAttribute("appmark", "gszw");
+			return "jis/front/perlogin";
+		}
+		Object randCode = session
+				.getAttribute("cellphoneShortMessageRandomCodeMadeByJava");
+		if ((randCode == null) || (StringUtil.isEmpty(loginName))) {
+			model.addAttribute("appmark", "gszw");
+			return "jis/front/perlogin";
+		}
+		Object randCode2 = session
+				.getAttribute("cellphoneShortMessageRandomCodeWritenByGuest");
+		if (!randCode.equals(randCode2)) {
+			model.addAttribute("appmark", "gszw");
+			return "jis/front/perlogin";
+		}
+
+		String appmark = (String) session.getAttribute("appmark");
+		if (appmark == null) {
+			appmark = "";
+		}
+		model.addAttribute("loginName", loginName);
+		model.addAttribute("url", "resetpwd_submit");
+		model.addAttribute("typeEntity", typeEntity);
+		model.addAttribute("appmark", appmark);
+
+		return "jis/front/resetpwd";
+	}
+
+	@RequestMapping(value = "resetpwd_submit")
+	@ResponseBody
+	public void submitResetPwd(HttpSession session, String pwd,HttpServletResponse response) {
+		try {
+			Map<String,Object> result = new HashMap<String,Object>();
+			String typeEntity = (String)session.getAttribute("typeEntity");
+
+		    boolean isSuccess = false;
+		    if (("".equals(typeEntity)) || (typeEntity == null)) {
+		    	result.put("success", false);
+				result.put("message", "验证超时，请重新尝试！");
+				response.setContentType("text/json");
+				response.setCharacterEncoding("UTF-8");
+				response.getWriter().write(JSONUtil.writeMapJSON(result));
+				return;
+		    }
+		    if ("per".equals(typeEntity)) {
+		    	ComplatOutsideuser outsideUser = (ComplatOutsideuser)session
+		        .getAttribute("outsideUser");
+		      isSuccess = this.OutsideUserService.updatePwd(outsideUser.getIid(), 
+		        Md5Util.md5encode(pwd));
+		    } else {
+		    	ComplatCorporation corporation = (ComplatCorporation)session
+		        .getAttribute("corporation");
+		      String loginName = corporation.getLoginName();
+		      isSuccess = this.corporationService.updatePwd(loginName, 
+		        Md5Util.md5encode(pwd));
+		    }
+		    if (isSuccess) {
+		      session.invalidate();
+		      result.put("success", true);
+				result.put("message", "密码修改成功！");
+				response.setContentType("text/json");
+				response.setCharacterEncoding("UTF-8");
+				response.getWriter().write(JSONUtil.writeMapJSON(result));
+				return;
+		    } else {
+		    	result.put("success", false);
+				result.put("message", "密码修改失败！");
+				response.setContentType("text/json");
+				response.setCharacterEncoding("UTF-8");
+				response.getWriter().write(JSONUtil.writeMapJSON(result));
+				return;
+		    }
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
+	}
+
+	@RequestMapping(value = "userresult")
+	public void userResult(HttpServletRequest request,
+			HttpServletResponse response, String webId, String domain,
+			String callback) {
+
+		String html = callback
+				+ "({\"html\":\"<table border='0' cellpadding='0' cellspacing='0' >"
+				+ "<tr><td  id='loginbtn' onmouseout='hidelogin();'  onmouseover='showlogin();'>"
+				+ "<a  style='cursor:pointer; font-size:13px; text-align:center;margin:0px;' >登录</a>"
+				+ "<td style='text-align:center;width:20px;' >|</td></td>"
+				+ "<td  onmouseover='showregedit();' onmouseout='hideregedit();' align='center' id='regeditbtn'>"
+				+ "<a style='cursor:pointer;text-decoration:none; font-size:13px; margin:0; '>注册</a></td></tr></table>"
+				+ "<script>var grloginurl='http://"
+				+ domain
+				+ ":8080/gsjis/front/per/interface.do?action=ticketLogin&appmark=gszw&domain="
+				+ domain
+				+ ":8080&gotoUrl=';"
+				+ "var grregediturl='http://"
+				+ domain
+				+ ":8080/gsjis/front/register/perregister.do';"
+				+ "var frloginurl='http://"
+				+ domain
+				+ ":8080/gsjis/front/cor/interface.do?action=ticketLogin&appmark=gszw&domain="
+				+ domain
+				+ ":8080&gotoUrl=';"
+				+ "var frregediturl='http://"
+				+ domain
+				+ ":8080/gsjis/front/register/corregister.do';"
+				+ "var grinfo='http://"
+				+ domain
+				+ ":8080/gsjis/front/modifyperinfo_show.do';"
+				+ "var frinfo='http://"
+				+ domain
+				+ ":8080/gsjis/front/modifycorinfo_show.do';</script>﻿"
+				+ "<style>.login_li{color:#000;}  .selected{  background:#999999;  color:#FFF;  }    </style>"
+				+ "<script>  function showuserinfo(){   $('#userinfomenu').show();  }    "
+				+ "function hideuserinfo(){   $('#userinfomenu').hide();  }    "
+				+ "function showlogin(){   $('#loginmenu').show();    }    "
+				+ "function hidelogin(){   $('#loginmenu').hide();  }    "
+				+ "function showregedit(){   $('#regeditmenu').show();  }    "
+				+ "function hideregedit(){   $('#regeditmenu').hide();  }  "
+				+ "var domain='"
+				+ domain
+				+ ":8080'; "
+				+ "function showgrzx(){"
+				+ "window.open('http://'+domain+'/gszw/member/main/index.do?webid='+webid+'&domain='+encodeURIComponent(encodeURIComponent(domain)));  }"
+				+ "function showzhsz(){   if(type=='gr' || type=='个人'||type=='1'){   window.open(grinfo);}"
+				+ "else if(type=='fr'||type=='法人'||type=='2'){window.open(frinfo);}}"
+				+ "function exit(){var src=window.location.href;src=encodeURIComponent(src);"
+				+ "var rand=Math.random();   if(type=='gr' || type=='个人'||type=='1'){"
+				+ "location.href='http://'+domain+'/gszw/member/login/logout.do?domain='+encodeURIComponent(encodeURIComponent(domain));}"
+				+ "else if(type=='fr'||type=='法人'||type=='2'){location.href='http://'+domain+'/gszw/member/login/logout.do?domain='+encodeURIComponent(encodeURIComponent(domain));}}"
+				+ "function showgrlogin(){var src=window.location.href;src=encodeURIComponent(src);"
+				+ "grloginurl=encodeURIComponent(grloginurl);   "
+				+ "location.href='http://'+domain+'/gszw/member/login/login.do?url='+grloginurl+'&src='+src+'&domain='+encodeURIComponent(encodeURIComponent(domain));}"
+				+ " function showfrlogin(){var src=window.location.href;src=encodeURIComponent(src);   "
+				+ "frloginurl=encodeURIComponent(frloginurl);   "
+				+ "location.href='http://'+domain+'/gszw/member/login/login.do?url1='+frloginurl+'&src='+src+'&domain='+encodeURIComponent(encodeURIComponent(domain));  }"
+				+ "function showgrregedit(){"
+				+ "window.open(grregediturl);  }function showfrregedit(){window.open(frregediturl);}"
+				+ "$(function(){var $div_li =$('div.userinfomenu ul li');"
+				+ "$div_li.mouseover(function(){$(this).addClass('selected').siblings().removeClass('selected');});"
+				+ "$div_li.mouseout(function(){$(this).removeClass('selected');});var $login_li =$('div.loginmenu ul li');"
+				+ "$login_li.mouseover(function(){$(this).addClass('selected').siblings().removeClass('selected');});    "
+				+ "$login_li.mouseout(function(){$(this).removeClass('selected');});"
+				+ "var $regedit_li =$('div.regeditmenu ul li'); $regedit_li.mouseover(function(){$(this).addClass('selected').siblings().removeClass('selected'); }); "
+				+ "$regedit_li.mouseout(function(){$(this).removeClass('selected');});"
+				+ "$('#userinfomenu').mouseover(function(){$('#userinfomenu').show();});"
+				+ " $('#userinfomenu').bind('mouseleave',function(){$('#userinfomenu').hide();});"
+				+ "$('#loginmenu').mouseover(function(){$('#loginmenu').show();});"
+				+ "$('#loginmenu').bind('mouseleave',function(){$('#loginmenu').hide();}); "
+				+ "$('#regeditmenu').mouseover(function(){ $('#regeditmenu').show(); });"
+				+ "$('#regeditmenu').bind('mouseleave',function(){$('#regeditmenu').hide();});});</script>"
+				+ "<div id='userinfomenu' class='userinfomenu' style='position: absolute;z-index:999;right:-15px;;top:25px;display:none;background:url(http://www.gszwfw.gov.cn/gszw/resources/bscx/member/images/loginmenubg2.png) no-repeat;width:80px;height:65px;text-align:center;'>"
+				+ "<ul style='list-style:none;height:53px;width:100%;padding:0px;margin:0px;margin-top:8px;text-align:center;'>"
+				+ "<li class='login_li' style='width:98%;height:27px;line-height:27px;text-align:center;v-align:middle;cursor: pointer;margin:0 auto;' onclick='showzhsz();'>账户设置</li> "
+				+ " <li class='login_li' style='width:98%;height:26px;line-height:26px;text-align:center;v-align:middle;cursor: pointer;margin:0 auto; '  onclick='exit();'>退出</li>  </ul>  "
+				+ "</div>  <div id='loginmenu' class='loginmenu' style='position: absolute;z-index:999;left:-27px;top:25px;display:none;background:url(http://www.gszwfw.gov.cn/gszw/resources/bscx/member/images/loginmenubg2.png) no-repeat;width:80px;height:65px;text-align:center;'>  "
+				+ "<ul style='list-style:none;height:100%;width:100%;padding:0px;margin:0px;margin-top:8px;text-align:center;'>  "
+				+ "<li class='login_li' style='width:98%;height:27px;line-height:27px;text-align:center;v-align:middle;cursor: pointer;margin:0 auto; '  onclick='showgrlogin();'>个人登录</li> "
+				+ " <li class='login_li' style='width:98%;height:28px;line-height:28px;text-align:center;v-align:middle;cursor: pointer;margin:0 auto; '  onclick='showfrlogin();'>法人登录</li>  </ul> </div> "
+				+ " <div id='regeditmenu' class='regeditmenu' style='position: absolute;z-index:999;left:19px;top:25px;display:none;background:url(http://www.gszwfw.gov.cn/gszw/resources/bscx/member/images/loginmenubg2.png) no-repeat;width:80px;height:65px;text-align:center;'>  "
+				+ "<ul style='list-style:none;height:100%;width:100%;padding:0px;margin:0px;margin-top:8px;text-align:center;'>  "
+				+ "<li class='login_li' style='width:98%;height:27px;line-height:27px;text-align:center;v-align:middle;cursor: pointer;margin:0 auto; '  onclick='showgrregedit();'>个人注册</li> "
+				+ " <li class='login_li' style='width:98%;height:28px;line-height:28px;text-align:center;v-align:middle;cursor: pointer;margin:0 auto; '  onclick='showfrregedit();'>法人注册</li>  </ul>  </div>\"});";
+		try {
+			response.setContentType("text/json");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().write(html);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+
+	}
 }

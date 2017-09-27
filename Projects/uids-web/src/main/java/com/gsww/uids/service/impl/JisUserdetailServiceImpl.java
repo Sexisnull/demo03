@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.gsww.jup.dao.JdbcDAO;
+import com.gsww.jup.util.StringHelper;
 import com.gsww.uids.service.JisUserdetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -45,14 +46,23 @@ public class JisUserdetailServiceImpl implements JisUserdetailService {
 		String whereSqls = "";
 		while(it.hasNext()){
 			Map.Entry<String, String> map = (Entry<String, String>) it.next();
-			//System.out.println(map.getKey()+"============"+map.getKey());
 			String whereSql = map.getKey()+"='"+map.getValue()+"'";
 			whereSqls += whereSql + ",";
 		}
-		whereSqls = whereSqls.substring(0, whereSqls.length()-1);
-		String updateSql = "update jis_userdetail t set t.cardid = "+cardId+","+whereSqls+" where t.iid = "+iid;
-		//System.out.println("updateSql:"+updateSql);
-		jdbcDAO.execute(updateSql);
+		if(StringHelper.isNotBlack(whereSqls)){
+			whereSqls = whereSqls.substring(0, whereSqls.length()-1);
+		}
+		String updateSql = "";
+		if(StringHelper.isNotBlack(cardId) && StringHelper.isNotBlack(whereSqls)){
+			updateSql = "update jis_userdetail t set t.cardid = "+cardId+","+whereSqls+" where t.iid = "+iid;
+			jdbcDAO.execute(updateSql);
+		}else if(!StringHelper.isNotBlack(cardId) && StringHelper.isNotBlack(whereSqls)){
+			updateSql = "update jis_userdetail t set "+whereSqls+" where t.iid = "+iid;
+			jdbcDAO.execute(updateSql);
+		}else if(StringHelper.isNotBlack(cardId) && !StringHelper.isNotBlack(whereSqls)){
+			updateSql = "update jis_userdetail t set t.cardid = "+cardId+" where t.iid = "+iid;
+			jdbcDAO.execute(updateSql);
+		}		
 	}
 	
 	/**

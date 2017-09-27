@@ -345,14 +345,14 @@ function outPutComplatUser() {
 
 /***用户导入***/
 //弹出层
-function intPutComplatUser(){
+/*function intPutComplatUser(){
     var mybg = document.createElement("div"); 
 	mybg.setAttribute("class","mybg"); 
 	$(".mybg").addClass("mybg");
     document.body.appendChild(mybg);
 	document.body.style.overflow = "hidden"; 
 	$(".Popup").show(); 				
-}
+}*/
 	
  
  
@@ -536,14 +536,14 @@ function resetform() {
 								所属机构：
 							</th>
 							<td width="20%">
-							    <input name="groupname" id="groupname" value="" type="text" style="cursor: pointer;width: 170px;" placeholder="所属机构"/>
+							    <input name="groupname" id="groupname" value="${groupName }" readonly="true" type="text" style="cursor: pointer;width: 150px;" placeholder="所属机构"/>
 							    <input type="hidden" id="groupid" name="search_EQ_groupid">
 							</td>
 							<th style="padding-left: 5px">
 								姓名：
 							</th>
 							<td width="20%">
-								<input type="text" style="width: 170px;" placeholder="姓名"
+								<input type="text" style="width: 150px;" placeholder="姓名"
 									value="${sParams['LIKE_name']}" id="nameSearch"
 									name="search_LIKE_name" />
 							</td>
@@ -551,7 +551,7 @@ function resetform() {
 								登录名：
 							</th>
 							<td width="20%">
-								<input type="text" style="width: 170px;" placeholder="登录名"
+								<input type="text" style="width: 150px;" placeholder="登录名"
 									value="${sParams['LIKE_loginname']}" id="loginnameSearch"
 									name="search_LIKE_loginname" />
 							</td>
@@ -559,7 +559,7 @@ function resetform() {
 								登录名全称：
 							</th>
 							<td width="20%">
-								<input type="text" style="width: 170px;" placeholder="登录名全称"
+								<input type="text" style="width: 150px;" placeholder="登录名全称"
 									value="${sParams['LIKE_loginallname']}" id="loginallnameSearch"
 									name="search_LIKE_loginallname" />
 							</td>

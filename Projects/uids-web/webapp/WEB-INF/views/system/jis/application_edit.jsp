@@ -438,7 +438,10 @@ $().ready(function() {
 	   netType:{
 	   required: true
 	   },
-	   allLoginIid:{
+	   groupname:{
+	   required: true
+	   },
+	   /* allLoginIid:{
 	   required: true,
 	   maxlength: 50,
 	   userName:true
@@ -452,7 +455,7 @@ $().ready(function() {
 	   required: true, 
 	   maxlength: 255,
 	   url:true
-	   },
+	   }, */
 	  },submitHandler:function(form){
             var callingType=$("#callingType").val(); 
             var isVerification=$("#isVerification").val();
@@ -568,7 +571,7 @@ $(function(){
 					<input id="groupname" value="${groupName}" name="groupname" type="text" style="cursor: pointer;"/> 
 				</td>
 				<th style="text-align:center;"><b class="mustbe">&nbsp;&nbsp;</b> 同步用户：</th>
-                <td>
+                <td>   
                 	<select name="synctype" id="synctype" data-value="${jisApplication.loginType}${jisApplication.isSyncGroup}" 
 						onchange="setLoginType();">  
 						<option value="">--请选择--</option>   

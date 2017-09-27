@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
-import net.sf.json.JSONArray;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -28,11 +27,15 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
+import com.gsww.jup.entity.sys.SysUserSession;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.jup.util.StringHelper;
 import com.gsww.jup.util.TimeHelper;
 import com.gsww.uids.entity.ComplatCorporation;
+import com.gsww.uids.entity.JisLog;
 import com.gsww.uids.service.ComplatCorporationService;
+import com.gsww.uids.service.JisLogService;
+import com.hanweb.common.util.Md5Util;
 /**
  * <p>Copyright: Copyright (c) 2014</p>
  * <p>公司名称 : 中国电信甘肃万维公司</p>
@@ -51,6 +54,9 @@ public class ComplatCorporationController extends BaseController{
 	
 	@Autowired
 	private ComplatCorporationService complatCorporationService;
+	
+	@Autowired
+	private JisLogService jisLogService;
 	
 	/**
 	 * 获取法人列表
@@ -118,6 +124,13 @@ public class ComplatCorporationController extends BaseController{
 					String time = sdf.format(createTime);
 					model.addAttribute("time",time);
 				}
+				
+				//判断密码是否存在，若存在则解密
+				String pwd = corporation.getPwd();
+				if(StringHelper.isNotBlack(pwd)){
+					String minWenPwd = Md5Util.md5decode(pwd);
+					corporation.setPwd(minWenPwd);
+				}
 			}else{
 				corporation = new ComplatCorporation();
 			}
@@ -136,6 +149,7 @@ public class ComplatCorporationController extends BaseController{
 	public ModelAndView corporationSave(ComplatCorporation corporation,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		 
 		try {
+			Integer operType = null;
 			if(corporation != null){
 				if(corporation.getauthState() == null){
 					corporation.setauthState(0);
@@ -148,8 +162,10 @@ public class ComplatCorporationController extends BaseController{
 				}
 				if(corporation.getOperSign() == null){
 					corporation.setOperSign(1);
+					operType = 1;
 				}else{
 					corporation.setOperSign(2);
+					operType = 2;
 				}
 				
 				//对注册时间进行转换
@@ -161,9 +177,20 @@ public class ComplatCorporationController extends BaseController{
 				}else{
 					createTime = sdf.parse(time);
 				}
+				
+				//对密码加密
+				String JiaMiPWD = Md5Util.md5encode(corporation.getPwd());
+				corporation.setPwd(JiaMiPWD);
 				corporation.setCreateTime(createTime);
+				
+				corporation.setLoginIp(this.getIpAddr(request));
+				//最后一次登录时间
+				corporation.setLoginTime(sdf.parse(TimeHelper.getCurrentTime()));
 				complatCorporationService.save(corporation);
 				returnMsg("success","保存成功",request);
+				
+				//记录日志
+				this.addJisLog(corporation, request,operType);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -190,10 +217,14 @@ public class ComplatCorporationController extends BaseController{
 					Integer iid = corporation.getIid();
 					complatCorporationService.updateCorporation(iid);
 					returnMsg("success", "删除成功", request);
+					
+					//记录日志
+					Integer operType = 3;
+					this.addJisLog(corporation, request,operType);
 				}
+				
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
 			returnMsg("error", "删除失败",request);			
 		} finally{
 			return  new ModelAndView("redirect:/complat/corporationList");
@@ -214,10 +245,11 @@ public class ComplatCorporationController extends BaseController{
 	@RequestMapping(value = "/corporationStart", method = RequestMethod.GET)
 	public ModelAndView corporationStart(String corporationIid,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		ComplatCorporation complatCorporation = null;
-		try{			
-			if (StringHelper.isNotBlack(corporationIid)) {
-				complatCorporation = complatCorporationService.findByKey(Integer.parseInt(corporationIid));
-			Integer enable = complatCorporation.getEnable(); 
+		try{
+			String[] para = corporationIid.split(",");
+			for(int i=0;i<para.length;i++){
+				complatCorporation = complatCorporationService.findByKey(Integer.parseInt(para[i]));
+				Integer enable = complatCorporation.getEnable(); 
 				if(enable == 0){
 					complatCorporation.setEnable(1);
 					complatCorporationService.save(complatCorporation);
@@ -225,9 +257,9 @@ public class ComplatCorporationController extends BaseController{
 				} else {
 					returnMsg("success", "账号已启用！", request);
 				}
-			}								
+			}
 		}catch(Exception e){
-			e.printStackTrace();
+			returnMsg("error", "账号启用失败！", request);
 		}finally{
 			return  new ModelAndView("redirect:/complat/corporationList");
 		}
@@ -246,10 +278,11 @@ public class ComplatCorporationController extends BaseController{
 	@RequestMapping(value = "/corporationStop", method = RequestMethod.GET)
 	public ModelAndView corporationStop(String corporationIid,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		ComplatCorporation complatCorporation = null;
-		try{			
-			if (StringHelper.isNotBlack(corporationIid)) {
-				complatCorporation = complatCorporationService.findByKey(Integer.parseInt(corporationIid));
-			Integer enable = complatCorporation.getEnable(); 
+		try{
+			String[] para = corporationIid.split(",");
+			for(int i=0;i<para.length;i++){
+				complatCorporation = complatCorporationService.findByKey(Integer.parseInt(para[i]));
+				Integer enable = complatCorporation.getEnable(); 
 				if(enable == 1){
 					complatCorporation.setEnable(0);
 					complatCorporationService.save(complatCorporation);
@@ -257,9 +290,9 @@ public class ComplatCorporationController extends BaseController{
 				} else {
 					returnMsg("success", "账号已关闭！", request);
 				}
-			}								
+			}
 		}catch(Exception e){
-			e.printStackTrace();
+			returnMsg("error", "账号关闭失败！", request);
 		}finally{
 			return  new ModelAndView("redirect:/complat/corporationList");
 		}
@@ -361,5 +394,56 @@ public class ComplatCorporationController extends BaseController{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	
+	/**
+	 * 获取客户端IP
+	 */
+	  private String getIpAddr(HttpServletRequest request) {     
+	      String ip = request.getHeader("x-forwarded-for");     
+	      if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {     
+	         ip = request.getHeader("Proxy-Client-IP");     
+	     }     
+	      if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {     
+	         ip = request.getHeader("WL-Proxy-Client-IP");     
+	      }     
+	     if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {     
+	          ip = request.getRemoteAddr();     
+	     }     
+	     return ip;     
+	}  
+	
+	  
+	/**
+	 * 日志记录
+	 * @param corporation
+	 * @param request
+	 * @param operType
+	 * @throws Exception
+	 */
+	private void addJisLog(ComplatCorporation corporation,HttpServletRequest request,Integer operType) throws Exception{
+		//日志记录JisLog
+		//获取当前登录用户,即操作用户
+		SysUserSession sysUserSession = (SysUserSession) request.getSession().getAttribute("sysUserSession");
+		String userName = sysUserSession.getUserName();
+		JisLog jisLog = new JisLog();
+		jisLog.setUserId(userName);
+		jisLog.setIp(sysUserSession.getUserIp());
+		jisLog.setOperateTime(sdf.parse(TimeHelper.getCurrentTime()));
+		jisLog.setModuleName(10);//10-法人管理
+		String spec = "";
+		if(operType == 1){
+			jisLog.setOperateType(operType);
+			spec = userName+"增加【"+corporation.getLoginName()+"】法人用户";
+		}else if(operType == 2){
+			jisLog.setOperateType(operType);
+			spec = userName+"修改【"+corporation.getLoginName()+"】法人用户";
+		}else{
+			jisLog.setOperateType(operType);
+			spec = userName+"删除【"+corporation.getLoginName()+"】法人用户";
+		}
+		jisLog.setSpec(spec);
+		jisLogService.save(jisLog);
 	}
 }

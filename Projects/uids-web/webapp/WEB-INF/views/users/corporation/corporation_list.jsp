@@ -104,6 +104,45 @@
 		$("#input_three")[0].style.display = 'none';
 		$("#outsideUserType").attr("value", 1);
 	}
+	
+	
+	/**批量启用操作**/	
+	function startData(url,parm){
+		if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checked').length!=0){
+			$.dialog.confirm('您确认要启用吗？',function(){
+				var ids = "";
+				$('.list-table tbody input[type=checkbox]').each(function(i, o) {
+					if($(o).attr('checked')) {
+						ids += $(o).val() + ",";
+					}
+				});
+				window.location.href="${ctx}/"+url+"?"+parm+"="+ids.substring(0,ids.length-1);
+			});
+		}else{
+			$.dialog.alert('请您至少选择一条数据',function(){
+				return null;
+			});
+		}
+	}
+	
+	/**批量停用操作**/	
+	function stopData(url,parm){
+		if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checked').length!=0){
+			$.dialog.confirm('您确认要停用吗？',function(){
+				var ids = "";
+				$('.list-table tbody input[type=checkbox]').each(function(i, o) {
+					if($(o).attr('checked')) {
+						ids += $(o).val() + ",";
+					}
+				});
+				window.location.href="${ctx}/"+url+"?"+parm+"="+ids.substring(0,ids.length-1);
+			});
+		}else{
+			$.dialog.alert('请您至少选择一条数据',function(){
+				return null;
+			});
+		}
+	}
 </script>
 <style type="text/css">
 /*设置弹出层样式*/
@@ -176,20 +215,20 @@
 		<form id="form1" name="pageForm" action="${ctx}/complat/corporationList" method="get">
 			<table class="advanced-content">
 				<tr>
-					<th>用户登录名：</th>
-					<td width="15%">
-						<input type="text" placeholder="用户登录名" value="${sParams['LIKE_loginName']}" id="loginNameSearch" name="search_LIKE_loginName" class="input"/>
+					<th>登录名：</th>
+					<td>
+						<input type="text" placeholder="登录名" value="${sParams['LIKE_loginName']}" id="loginNameSearch" name="search_LIKE_loginName" class="input"/>
 					</td>
-					<th>姓名:</th>
-					<td width="15%">
+					<th style="width: 5%">姓名:</th>
+					<td>
 						<input type="text" placeholder="姓名" class="input" name="search_LIKE_realName" id="realNameSearch" value="${sParams['LIKE_realName']}"/>
 					</td>
-					<th>企业或机构名称:</th>
-					<td width="15%">
-						<input type="text" placeholder="企业或机构名称" class="input" name="search_LIKE_name" id="nameSearch" value="${sParams['LIKE_name']}"/>
+					<th>企业（机构）名称:</th>
+					<td>
+						<input type="text" placeholder="企业（机构）名称" class="input" name="search_LIKE_name" id="nameSearch" value="${sParams['LIKE_name']}"/>
 					</td>
 					<th>身份证号码:</th>
-					<td width="15%">
+					<td>
 						<input type="text" placeholder="身份证号码" class="input" name="search_LIKE_cardNumber" id="cardNumberSearch" value="${sParams['LIKE_cardNumber']}"/>
 					</td>
 					<td class="btn-group"> <a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a></td>
@@ -203,7 +242,7 @@
 		<input type="hidden" id="orderSort" name="orderSort" value="${orderSort}"/>
         <div class="list-topBar">
         	 <div class="list-toolbar">
-             <!-- 操作按钮开始  测试：8a92e1025e5672aa015e56798c830001  本地:402880e85e5c3efe015e5c43d4da0001-->	 
+             <!-- 操作按钮开始-->	 
 	             <gsww:opTag menuId="8a92e1025e5672aa015e56798c830001" tabIndex="1" operatorType="1"></gsww:opTag>
             </div> 
         </div>

@@ -1,146 +1,146 @@
 package com.gsww.uids.constant;
 
-import com.hanweb.common.util.SpringUtil;
+import com.gsww.jup.SpringContextHolder;
 
 public class JisSettings
 {
   private String sysName = "统一身份认证系统";
 
-  private String sysUrl = "http://29.22.105.43:8080/gsjis/";
+  private String sysUrl = "";
 
-  private String copyRight = "甘肃省人民政府办公厅版权所有";
+  private String copyRight = "";
 
-  private String isRegister = "1";
+  private String isRegister = "";
 
-  private String registerType = "0";
+  private String registerType = "";
 
-  private String isFindPwd = "1";
+  private String isFindPpd = "";
 
-  private String ppdLevel = "2";
+  private String ppdLevel = "1";
 
-  private String isLoginfail = "1";
+  private String isLoginfail = "";
 
   private int loginError = 3;
 
   private int banTimes = 15;
 
-  private String emailSmtp = "smtp.163.com";
+  private String emailSmtp = "";
 
-  private String emailPort = "25";
+  private String emailPort = "";
 
-  private String emailBox = "xxx@163.com";
+  private String emailBox = "";
 
   private String emailPassword = "";
 
-  private String emailSender = "甘肃政务服务网";
+  private String emailSender = "";
 
-  private String emailTitle = "统一身份认证系统邮箱激活";
+  private String emailTitle = "";
 
-  private String emailContent = "{name}，您好：您本次的邮箱验证码是：{emailcode}，有效时间30分钟。";
+  private String emailContent = "";
 
-  private String emailFindPassTitle = "统一用户系统账号";
+  private String emailFindPassTitle = "";
 
-  private String emailFindPassContent = "{name}，你好：{uri} 提示：24小时后此链接会失效。";
+  private String emailFindPassContent = "";
 
-  private String syncTime = "300";
+  private String syncTime = "";
 
-  private String clearLogTime = "1296000";
+  private String clearLogTime = "";
 
-  private String ticketEffectiveTime = "10";
+  private String ticketEffectiveTime = "";
 
-  private String tokenEffectiveTime = "14400";
+  private String tokenEffectiveTime = "";
 
   private int perSessionTime = 30;
 
   private int corSessionTime = 30;
 
-  private String perGotoUrl = "http://www.gszwfw.gov.cn/gszw/member/login/getgrinfo.do";
+  private String perGotoUrl = "";
 
-  private String corGotoUrl = "http://www.gszwfw.gov.cn/gszw/member/login/getfrinfo.do";
+  private String corGotoUrl = "";
 
-  private String netType = "2";
+  private String netType = "1";
 
   private String enableSynTask = "1";
 
-  private String enableBackupsTask = "0";
+  private String enableBackupsTask = "1";
 
   private String realNameAuth = "1";
 
   private String realNameAuthUrl = "";
 
-  private String appId = "62000001";
+  private String appId = "";
 
-  private String appName = "统一身份认证系统";
+  private String appName = "";
 
-  private String appAcc = "gsjis";
+  private String appAcc = "";
 
-  private String appPwd = "111111";
+  private String appPpd = "";
 
-  private String importantLevel = "2";
+  private String importantLevel = "";
 
-  private String isSendAgain = "1";
+  private String isSendAgain = "";
 
-  private String isLose = "1";
+  private String isLose = "";
 
-  private String isUpstream = "0";
+  private String isUpstream = "";
 
-  private String urlRoot = "http://10.10.11.15:8081/sms/sendsms";
+  private String urlRoot = "";
 
-  private String validityPeriod = "10";
+  private String validityPeriod = "";
 
-  private String dynamicPwdMessageContent = "您的动态密码为cellphoneDynamicPwdMadeByJava，请于validityPeriod分钟内完成登录，密码告知他人将导致账号被盗，请勿泄露。[甘肃政务服务网]";
+  private String dynamicPpdMessageContent = "";
 
-  private String businessIdForGettingDynamicPwd = "6200000104";
+  private String businessIdForGettingDynamicPpd = "";
 
-  private String businessNameForGettingDynamicPwd = "动态获取密码";
+  private String businessNameForGettingDynamicPpd = "";
 
-  private String businessIdForRegestingPer = "6200000101";
+  private String businessIdForRegestingPer = "";
 
-  private String businessNameForRegestingPer = "个人注册";
+  private String businessNameForRegestingPer = "";
 
   private String registPerMessageContent = "您注册所需要的验证码为cellphoneShortMessageRandomCodeMadeByJava[甘肃政务服务网]";
 
-  private String businessIdForRecovingPpd = "6200000103";
+  private String businessIdForRecovingPpd = "";
 
-  private String businessNameForRecovingPpd = "密码找回";
+  private String businessNameForRecovingPpd = "";
 
-  private String recovingPpdContent = "您找回密码所需要的验证码为cellphoneShortMessageRandomCodeMadeByJava[甘肃政务服务网]";
+  private String recovingPpdContent = "";
 
-  private String businessIdForRegestingCor = "6200000102";
+  private String businessIdForRegestingCor = "";
 
-  private String businessNameForRegestingCor = "6200000102";
+  private String businessNameForRegestingCor = "";
 
-  private String registCorMessageContent = "您注册所需要的验证码为cellphoneShortMessageRandomCodeMadeByJava[甘肃政务服务网]";
+  private String registCorMessageContent = "";
 
   private String enableCorRealNameAuth = "0";
 
-  private String corRequestCod = "I3eUZj";
+  private String corRequestCod = "";
 
-  private String corRealUsername = "tysfrzxt";
+  private String corRealUsername = "";
 
-  private String corRealPassword = "tysfrzxt";
+  private String corRealPassword = "";
 
-  private String corExchangeTokenUrl = "http://10.10.11.15:8081/gov-apis/api/auth/login";
+  private String corExchangeTokenUrl = "";
 
-  private String corCompareRealNameUrl = "http://10.10.11.15:8081/gov-apis/api/faren/verify/qyfr";
+  private String corCompareRealNameUrl = "";
 
-  private String perCompareRealNameUrl = "http://10.10.11.15:8081/gov-apis/api/rkxx/verify/sfzxx";
+  private String perCompareRealNameUrl = "";
 
-  private String corDetailRealNameUrl = "http://10.10.11.15:8081/gov-apis/api/faren/verify/qyfrdetail";
+  private String corDetailRealNameUrl = "";
 
-  private String govRequestCod = "I3eUZj";
+  private String govRequestCod = "";
 
-  private String govRealUsername = "tysfrzxt";
+  private String govRealUsername = "";
 
-  private String govRealPassword = "tysfrzxt";
+  private String govRealPassword = "";
 
-  private String govCompareRealNameUrl = "http://10.10.11.15:8081/gov-apis/api/gwy/verify/gwyverify";
-  private Integer verify_mode = 4;
-  private String enableGovRealNameAuth = "0";
+  private String govCompareRealNameUrl = "";
+  private Integer verify_mode;
+  private String enableGovRealNameAuth = "";
 
-  private String govExchangeTokenUrl = "http://10.10.11.15:8081/gov-apis/api/auth/login";
+  private String govExchangeTokenUrl = "";
 
-  private String modifyPassTime = "10";
+  private String modifyPassTime = "0";
 
   public String getModifyPassTime()
   {
@@ -187,7 +187,7 @@ public class JisSettings
     return this.businessNameForRecovingPpd;
   }
 
-  public void setBusinessNameForRecovingPwd(String businessNameForRecovingPpd) {
+  public void setBusinessNameForRecovingPpd(String businessNameForRecovingPpd) {
     this.businessNameForRecovingPpd = businessNameForRecovingPpd;
   }
 
@@ -223,22 +223,22 @@ public class JisSettings
     this.businessNameForRegestingPer = businessNameForRegestingPer;
   }
 
-  public String getBusinessNameForGettingDynamicPwd() {
-    return this.businessNameForGettingDynamicPwd;
+  public String getBusinessNameForGettingDynamicPpd() {
+    return this.businessNameForGettingDynamicPpd;
   }
 
-  public void setBusinessNameForGettingDynamicPwd(String businessNameForGettingDynamicPwd)
+  public void setBusinessNameForGettingDynamicPpd(String businessNameForGettingDynamicPpd)
   {
-    this.businessNameForGettingDynamicPwd = businessNameForGettingDynamicPwd;
+    this.businessNameForGettingDynamicPpd = businessNameForGettingDynamicPpd;
   }
 
-  public String getBusinessIdForGettingDynamicPwd() {
-    return this.businessIdForGettingDynamicPwd;
+  public String getBusinessIdForGettingDynamicPpd() {
+    return this.businessIdForGettingDynamicPpd;
   }
 
-  public void setBusinessIdForGettingDynamicPwd(String businessIdForGettingDynamicPwd)
+  public void setBusinessIdForGettingDynamicPpd(String businessIdForGettingDynamicPpd)
   {
-    this.businessIdForGettingDynamicPwd = businessIdForGettingDynamicPwd;
+    this.businessIdForGettingDynamicPpd = businessIdForGettingDynamicPpd;
   }
 
   public String getAppId() {
@@ -265,12 +265,12 @@ public class JisSettings
     this.appAcc = appAcc;
   }
 
-  public String getAppPwd() {
-    return this.appPwd;
+  public String getAppPpd() {
+    return this.appPpd;
   }
 
-  public void setAppPwd(String appPwd) {
-    this.appPwd = appPwd;
+  public void setAppPpd(String appPpd) {
+    this.appPpd = appPpd;
   }
 
   public String getImportantLevel() {
@@ -321,17 +321,18 @@ public class JisSettings
     this.validityPeriod = validityPeriod;
   }
 
-  public String getDynamicPwdMessageContent() {
-    return this.dynamicPwdMessageContent;
+  public String getDynamicPpdMessageContent() {
+    return this.dynamicPpdMessageContent;
   }
 
-  public void setDynamicPwdMessageContent(String dynamicPwdMessageContent) {
-    this.dynamicPwdMessageContent = dynamicPwdMessageContent;
+  public void setDynamicPpdMessageContent(String dynamicPpdMessageContent) {
+    this.dynamicPpdMessageContent = dynamicPpdMessageContent;
   }
 
   public static JisSettings getSettings()
   {
-    return (JisSettings)SpringUtil.getBean(JisSettings.class);
+    //return (JisSettings)SpringUtil.getBean(JisSettings.class);
+	  return SpringContextHolder.getBean("settings");
   }
 
   public String getSysName() {
@@ -374,19 +375,19 @@ public class JisSettings
     this.registerType = registerType;
   }
 
-  public String getIsFindPwd() {
-    return this.isFindPwd;
+  public String getIsFindPpd() {
+    return this.isFindPpd;
   }
 
-  public void setIsFindPwd(String isFindPwd) {
-    this.isFindPwd = isFindPwd;
+  public void setIsFindPpd(String isFindPpd) {
+    this.isFindPpd = isFindPpd;
   }
 
-  public String getPwdLevel() {
+  public String getPpdLevel() {
     return this.ppdLevel;
   }
 
-  public void setPwdLevel(String ppdLevel) {
+  public void setPpdLevel(String ppdLevel) {
     this.ppdLevel = ppdLevel;
   }
 

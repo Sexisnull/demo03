@@ -1278,7 +1278,7 @@ function toggleToolBar() {
 //			path = "../module/accessiblereading/css/barrierfree.css";
 //		}
 	}else{
-		path = "/module/jslib/accessiblereading/css/barrierfree.css";
+		path = "../ui/css/barrierfree.css";
 //		if(pathname.indexOf("col")!=-1){
 //			path = "../../module/accessiblereading/css/barrierfree.css";
 //		}else if(pathname.indexOf("art")!=-1){

@@ -17,8 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import com.hanweb.common.util.Md5Util;
 import com.hanweb.common.util.StringUtil;
-import com.hanweb.complat.entity.Corporation;
-import com.gsww.uids.controller.ComplatRoleController;
+import com.gsww.jup.util.StringHelper;
 import com.gsww.uids.dao.ComplatCorporationDao;
 import com.gsww.uids.entity.ComplatCorporation;
 import com.gsww.uids.service.ComplatCorporationService;
@@ -66,7 +65,8 @@ public class ComplatCorporationServiceImpl implements ComplatCorporationService{
 	    if (StringUtil.isEmpty(loginName)) {
 	        return false;
 	      }
-	      return this.complatCorporationDao.updatePwd(loginName, pwd);
+	    int i = this.complatCorporationDao.updatePwd(loginName, pwd);
+	      return i==1;
 	}
 	
 	  public ComplatCorporation findByLoginName1(String loginName)
@@ -74,12 +74,6 @@ public class ComplatCorporationServiceImpl implements ComplatCorporationService{
 	    return this.complatCorporationDao.findByLoginName(loginName);
 	  }
 
-	@Override
-	public ComplatCorporation findByLoginNameIsUsed(String loginName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 	  public ComplatCorporation findByRegNumber(String regnumber){
 		  
 		    if (("".equals(regnumber)) || (regnumber.length() == 0)) {
@@ -129,8 +123,37 @@ public class ComplatCorporationServiceImpl implements ComplatCorporationService{
 	}
 
 	@Override
+	public ComplatCorporation findByRegNum(String regNum) {
+		if("".equals(regNum) || regNum.length()==0){
+			return null;
+		}
+		return complatCorporationDao.findByRegNumber(regNum);
+	}
+	
+	@Override
+	public ComplatCorporation findByOrgName(String inputByGuest) {
+		return complatCorporationDao.findByOrgNumber(inputByGuest).get(0);
+	}
+	
+	@Override
 	public ComplatCorporation findByManyWay(String inputByGuest) {
+		ComplatCorporation cor= null;
+		if(StringHelper.isNotBlack(inputByGuest)){
+			cor = findByLoginName(inputByGuest);
+			if(cor==null){
+				cor = findByRegNum(inputByGuest);
+				if(cor==null){
+					cor = findByOrgName(inputByGuest);
+				}
+			}
+		}
+		return cor;
+	}
+
+	@Override
+	public ComplatCorporation findByLoginNameIsUsed(String loginName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 }
