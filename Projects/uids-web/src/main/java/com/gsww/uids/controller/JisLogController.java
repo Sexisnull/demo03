@@ -124,7 +124,7 @@ public class JisLogController extends BaseController {
 	public String logList(
 			@RequestParam(value = "page", defaultValue = "1") int pageNo,
 			@RequestParam(value = "page.size", defaultValue = PAGE_SIZE) int pageSize,
-			@RequestParam(value = "order.field", defaultValue = "spec") String orderField,
+			@RequestParam(value = "order.field", defaultValue = "operateTime") String orderField,
 			@RequestParam(value = "order.sort", defaultValue = "DESC") String orderSort,
 			@RequestParam(value = "findNowPage", defaultValue = "false") String findNowPage,
 			Model model, ServletRequest request, HttpServletRequest hrequest) {

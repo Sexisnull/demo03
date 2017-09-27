@@ -165,7 +165,8 @@ public class ComplatOutsideuserServiceImpl implements ComplatOutsideuserService 
 
 	@Override
 	public boolean updatePwd(int iid, String pwd) {
-		return this.outsideUserDao.updatePwd(iid, pwd);
+		int i = this.outsideUserDao.updatePwd(iid, pwd);
+		return i==1;
 	}
 
 	@Override
