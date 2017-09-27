@@ -345,14 +345,14 @@ function outPutComplatUser() {
 
 /***用户导入***/
 //弹出层
-function intPutComplatUser(){
+/*function intPutComplatUser(){
     var mybg = document.createElement("div"); 
 	mybg.setAttribute("class","mybg"); 
 	$(".mybg").addClass("mybg");
     document.body.appendChild(mybg);
 	document.body.style.overflow = "hidden"; 
 	$(".Popup").show(); 				
-}
+}*/
 	
  
  

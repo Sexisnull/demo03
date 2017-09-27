@@ -267,7 +267,9 @@ var complatUserNameInput=$("#name").val();
     			if(value==null){
     				value="";
     			}
+
     			if(key!='type' && key !='userid'){
+    				 
     				if(count==1){  
     					if(count%2==1){
    	    			       htmlString.push("<th>"+key+"</th><td><input name='"+key+"' type='text' value='"+value+"'></td>");
