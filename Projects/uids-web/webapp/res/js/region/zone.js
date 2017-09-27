@@ -361,13 +361,13 @@ function onClick(e, treeId, treeNode, clickFlag) {			//点击区域将数据填�
 					$("#iid").attr("value", jsonStr.iid);
 					$("#pid").attr("value", jsonStr.pid);
 					/*$("#type").attr("value", jsonStr.type);*/
-					if(jsonStr.type == 0) {
+					if(jsonStr.type == 1) {
 						$("#typeName").html("省");
-					} else if(jsonStr.type == 1) {
-						$("#typeName").html("市");
 					} else if(jsonStr.type == 2) {
-						$("#typeName").html("区县");
+						$("#typeName").html("市");
 					} else if(jsonStr.type == 3) {
+						$("#typeName").html("区县");
+					} else if(jsonStr.type == 4) {
 						$("#typeName").html("乡镇");
 					} else {
 						$("#typeName").html("");

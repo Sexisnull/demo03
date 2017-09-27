@@ -109,6 +109,7 @@ public class JisFieldsServiceImpl implements JisFieldsService {
 			if(userId==null){
 				querySql = "select distinct type,"+ "b."+queryFieldsName +" from jis_fields a,jis_userdetail b where "+
 				"type = '1' and a.fieldname in("+whereFieldsName+")";
+				System.out.println("新增扩展属性============"+querySql);
 			}else{
 				querySql = "select distinct b.userid,type,"+ queryFieldsName +" from jis_fields a ,jis_userdetail b where b.userid = '"+userId+"' " +
 				" and type = '1' and a.fieldname in("+whereFieldsName+")";
@@ -117,6 +118,7 @@ public class JisFieldsServiceImpl implements JisFieldsService {
 			querySql = "select a.fieldkeys,a.fieldvalues,type,a.fieldname from jis_fields a where type = '2'";
 		}
 		listMap = jdbcTemplate.queryForList(querySql);
+		System.out.println("新增扩展属性============"+listMap);
 		return listMap;
 	}
 

@@ -58,6 +58,8 @@ import com.gsww.uids.service.ComplatUserService;
 import com.gsww.uids.service.JisFieldsService;
 import com.gsww.uids.service.JisLogService;
 import com.gsww.uids.service.JisUserdetailService;
+import com.hanweb.common.util.Md5Util;
+
 
 /**
  * <p>
@@ -193,6 +195,12 @@ public class ComplatUserController extends BaseController {
 			if (StringHelper.isNotBlack(iid)) {
 				complatUser = complatUserService.findByKey(Integer.parseInt(iid));
 				Date createTime = complatUser.getCreatetime();
+				//对密码进行解密
+				String pwd = complatUser.getPwd();
+				if(StringHelper.isNotBlack(pwd)){
+					String p = Md5Util.md5decode(pwd);
+					complatUser.setPwd(p);
+				}
 				if (createTime != null) {
 					String time = sdf.format(createTime);
 					model.addAttribute("time", time);
@@ -246,7 +254,11 @@ public class ComplatUserController extends BaseController {
 					complatUser.setEnable(0); // 是否禁用
 					Date d = new Date();
 					complatUser.setCreatetime(d);// 创建时间
-					complatUserService.save(complatUser);		
+					complatUserService.save(complatUser);	
+					//对密码进行加密
+					String pwd = complatUser.getPwd();
+					String p = Md5Util.md5encode(pwd);
+					complatUser.setPwd(p);
 					//身份证号处理 JisUserdetail
 					String cardId = request.getParameter("cardid");
 					JisUserdetail jisUserdetail = jisUserdetailService.findByUserid(userId);
@@ -269,6 +281,11 @@ public class ComplatUserController extends BaseController {
 					jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,2,1);					
 					
 				}else {
+					
+					//对密码进行加密
+					String pwd = complatUser.getPwd();
+					String p = Md5Util.md5encode(pwd);
+					complatUser.setPwd(p);
 					//注册时间
 					String time = TimeHelper.getCurrentTime();
 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -416,11 +433,7 @@ public class ComplatUserController extends BaseController {
 		boolean flag = true;
 		String strRow = "";
 		try {
-			for (ComplatUser complatUser : users) {
-				//从解析出来的集合中获取机构id
-				int groupId = complatUser.getGroupid();
-				//依据机构id在机构表中查询当前机构id的机构对象
-			   
+			for (ComplatUser complatUser : users) {			   
 				List<ComplatUser> list = complatUserService.findByUserAllName(complatUser.getLoginallname());
 				if (list.size() == 0) {
 					if (StringHelper.isNotBlack(complatUser.getName())) { // 判断excel表格导入的数据是否规范
@@ -437,6 +450,11 @@ public class ComplatUserController extends BaseController {
 	                    complatUser.setEnable(0);
 						complatUser.setOpersign(1);
 						complatUser.setSynState(2);
+						
+						//对密码进行加密
+						String pwd = complatUser.getPwd();
+						String p = Md5Util.md5encode(pwd);
+						complatUser.setPwd(p);
 						complatUserService.save(complatUser);
 						String desc=session.getUserName()+"导入了"+complatUser.getName();
 			            jisLogService.save(session.getUserName(),session.getUserIp(), desc, 2, 5);
