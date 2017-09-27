@@ -156,7 +156,7 @@ function resetform() {
 $().ready(function() {
 
 //表单校验
-/*var complatUserNameInput=$("#name").val();
+var complatUserNameInput=$("#name").val();
  $("#editForm").validate({
     rules: {
 	   name: {
@@ -221,7 +221,7 @@ $().ready(function() {
 				 form.submit();		
         } 
      }
-   });   */
+   });   
 
     // Ajax重命名校验
 	//$.uniqueValidate('uniqueLoginName', '${ctx}/complat/checkOutisideUserLoginName', ['loginName','oldLoginName'], '对不起，这个账号重复了');
@@ -273,18 +273,16 @@ $().ready(function() {
    	    			       htmlString.push("<th>"+key+"</th><td><input name='"+key+"' type='text' value='"+value+"'></td>");
    	    			    }
      					 if(count%2==0){
-     	    			       htmlString.push("<th>"+key+"</th><td><input type='text' name='"+key+"' value='"+value+"'></td></tr>");
+     	    			   htmlString.push("<th>"+key+"</th><td><input type='text' name='"+key+"' value='"+value+"'></td></tr>");
      	    			}   					
     				}else{
     					 if(count%2==1){
-    	    			       htmlString.push("<td class='td_7'></td><th>"+key+"</th><td><input name='"+key+"' type='text' value='"+value+"'></td>");
-    	    			    }
-    	    			    if(count%2==0){
-    	    			       htmlString.push("<th>"+key+"</th><td><input type='text' name='"+key+"' value='"+value+"'></td></tr>");
-    	    			    }
-    					
+    	    			   htmlString.push("<td class='td_7'></td><th>"+key+"</th><td><input name='"+key+"' type='text' value='"+value+"'></td>");
+    	    			 }
+    	    			 if(count%2==0){
+    	    			   htmlString.push("<th>"+key+"</th><td><input type='text' name='"+key+"' value='"+value+"'></td></tr>");
+    	    			 }
     				}
-    			   
     			    count++;
     			}
     		   } 
@@ -303,9 +301,6 @@ $().ready(function() {
     				values = value.split(",");
     			}
     			if(key!='type' && key !='userid'){
-    				
-    				
-    				
     			    if(key == 'fieldname'){
     			    	if(count == 1){
     			    		if(count%2==1){
@@ -561,8 +556,8 @@ $().ready(function() {
 				   </td>
 			    </tr>
 			    <tr>				
-		           <th> 密码强度：</th>
-			       <td style="width:300px;">			                 
+		           <th class="td_5"> 密码强度：</th>
+			       <td class="td_3" style="width:300px;">			                 
 				      <table id="pwdpower" style="width: 86%" cellspacing="0"
 							cellpadding="0" border="0">
 						<tbody>
@@ -574,8 +569,8 @@ $().ready(function() {
 						</tbody>
 				</table>
 			       </td>
-			       <th><b class="mustbe">*</b> 请设置密码找回问题答案：</th>
-				   <td style="width:300px;">
+			       <th class="td_6"><b class="mustbe">*</b> 请设置密码找回问题答案：</th>
+				   <td class="td_4" style="width:300px;">
 					  <input type="text"  class="input" id="pwdanswer" name="pwdanswer" value="${complatUser.pwdanswer}"  />
 				   </td>
 			    </tr>	
