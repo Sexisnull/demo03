@@ -1,7 +1,6 @@
 package com.gsww.uids.controller;
 
 import java.io.PrintWriter;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -11,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
-import net.sf.json.JSONArray;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -37,6 +35,7 @@ import com.gsww.uids.entity.ComplatCorporation;
 import com.gsww.uids.entity.JisLog;
 import com.gsww.uids.service.ComplatCorporationService;
 import com.gsww.uids.service.JisLogService;
+import com.hanweb.common.util.Md5Util;
 /**
  * <p>Copyright: Copyright (c) 2014</p>
  * <p>公司名称 : 中国电信甘肃万维公司</p>
@@ -125,6 +124,13 @@ public class ComplatCorporationController extends BaseController{
 					String time = sdf.format(createTime);
 					model.addAttribute("time",time);
 				}
+				
+				//判断密码是否存在，若存在则解密
+				String pwd = corporation.getPwd();
+				if(StringHelper.isNotBlack(pwd)){
+					String minWenPwd = Md5Util.md5decode(pwd);
+					corporation.setPwd(minWenPwd);
+				}
 			}else{
 				corporation = new ComplatCorporation();
 			}
@@ -171,10 +177,13 @@ public class ComplatCorporationController extends BaseController{
 				}else{
 					createTime = sdf.parse(time);
 				}
+				
+				//对密码加密
+				String JiaMiPWD = Md5Util.md5encode(corporation.getPwd());
+				corporation.setPwd(JiaMiPWD);
 				corporation.setCreateTime(createTime);
 				
-				String ip = this.getIpAddr(request);
-				corporation.setLoginIp(ip);
+				corporation.setLoginIp(this.getIpAddr(request));
 				//最后一次登录时间
 				corporation.setLoginTime(sdf.parse(TimeHelper.getCurrentTime()));
 				complatCorporationService.save(corporation);
@@ -404,20 +413,24 @@ public class ComplatCorporationController extends BaseController{
 	     }     
 	     return ip;     
 	}  
+	
 	  
+	/**
+	 * 日志记录
+	 * @param corporation
+	 * @param request
+	 * @param operType
+	 * @throws Exception
+	 */
 	private void addJisLog(ComplatCorporation corporation,HttpServletRequest request,Integer operType) throws Exception{
 		//日志记录JisLog
 		//获取当前登录用户,即操作用户
 		SysUserSession sysUserSession = (SysUserSession) request.getSession().getAttribute("sysUserSession");
 		String userName = sysUserSession.getUserName();
-		//获取操作时间
-		String currentTime = TimeHelper.getCurrentTime();
-		//获取IP
-		String ip = new ComplatCorporationController().getIpAddr(request);
 		JisLog jisLog = new JisLog();
 		jisLog.setUserId(userName);
-		jisLog.setIp(ip);
-		jisLog.setOperateTime(sdf.parse(currentTime));
+		jisLog.setIp(sysUserSession.getUserIp());
+		jisLog.setOperateTime(sdf.parse(TimeHelper.getCurrentTime()));
 		jisLog.setModuleName(10);//10-法人管理
 		String spec = "";
 		if(operType == 1){
