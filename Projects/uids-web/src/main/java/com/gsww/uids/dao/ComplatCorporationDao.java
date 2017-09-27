@@ -40,6 +40,20 @@ public interface ComplatCorporationDao extends  PagingAndSortingRepository<Compl
 	
 	@Modifying
 	@Query("update ComplatCorporation t set t.pwd = ?2 where t.loginName = ?1")
-	public boolean updatePwd(String loginName, String pwd);
+	public int updatePwd(String loginName, String pwd);
+	
+	/**
+	 * 根据工商注册编码查询法人用户
+	 * @param regNum
+	 * @return
+	 */
+	public ComplatCorporation findByRegNumber(String regNum);
+	
+	/**
+	 * 根据组织机构编码查询法人用户
+	 * @param inputByGuest
+	 * @return
+	 */
+	public ComplatCorporation findByOrgNumber(String inputByGuest);
 	
 }

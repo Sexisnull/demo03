@@ -80,7 +80,7 @@ $("[src='/tysb/resources/front/tysb/declare/zxtx/dzzz1.jpg']").hide();
 $("[src='/tysb/resources/front/tysb/declare/zxtx/dzzz2.jpg']").hide();
 
 //无障碍
-document.writeln("<script language='javascript' src='../../ui/js/barrierfree.js'></script><link type='text/css' rel='stylesheet' href='../../ui/css/barrierfree.css'>");
+document.writeln("<script language='javascript' src='../ui/js/barrierfree.js'></script><link type='text/css' rel='stylesheet' href='../ui/css/barrierfree.css'>");
 
 
 var bc=$("#barrierfree_container").index();
