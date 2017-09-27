@@ -4,8 +4,10 @@ import com.gsww.uids.gateway.dao.authlog.AuthLogDao;
 import com.gsww.uids.gateway.entity.JisAuthLog;
 import com.gsww.uids.gateway.util.SpringContextHolder;
 import com.gsww.uids.gateway.util.StringHelper;
+
 /**
  * AuthLogService
+ * 
  * @author zcc
  *
  */
@@ -22,10 +24,6 @@ public class AuthLogService {
 				// System.out.println("jisAuthLog==null!!!");
 			} else {
 			}
-			// System.out.println("AuthLogService---findByTicket--outTicketTime"
-			// + jisAuthLog.getOuttickettime());
-			// System.out.println("AuthLogService---findByTicket--createTime" +
-			// jisAuthLog.getCreatetime());
 			return jisAuthLog;
 		} else {
 			return null;

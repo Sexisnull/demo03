@@ -1,0 +1,155 @@
+*html{background-image:url(about:blank);background-attachment:fixed;}
+body{ margin:0 auto; padding:0;}
+ol,ul,li{list-style:none;}
+
+#wcagnav input{ border:0;}
+
+focus { outline: none; }
+#gettextmessagebox input{ border:0; outline: none; }
+#gettextmessagebox input:hover{ background:#d42a2b; outline: none; }
+#wcagnav {height:50px;}
+
+
+
+
+.disabilitiesNav{ width:100%; height:96px; position:fixed; top:0; left:0; z-index:9999999; text-align:center;_position:absolute;_left:expression(eval(document.documentElement.scrollLeft));_top:expression(eval(document.documentElement.scrollTop));}
+.disabilitiesNav .disabilitiesTopBg{ width:100%; height:100px; position:absolute; top:0; left:0; background-color:#353535;
+-webkit-box-shadow: #000 0 2px 3px;
+-moz-box-shadow: #000 0 2px 3px;
+box-shadow: #000 0 2px 3px;}
+.disabilitiesNav .disabilitiesMain{ width:100%; height:96px; margin:0 auto; padding:10px 0; z-index:9999999; position:absolute; top:0; left:0;}
+.disabilitiesNav .disabilitiesMain .disabilitiesContent{ width:980px; height:96px; margin:0 auto; overflow: visible;}
+
+.barrierfree_btn {cursor:pointer;background-repeat:no-repeat}
+
+.disabilitiesNav .barrierfree_logo {display:none;}
+
+.disabilitiesNav .btn_big {width:87px;height:76px;display:inline-block;*display:inline;*zoom:1;;margin-right:5px;}
+.disabilitiesNav .btn_small {width:57px;height:38px;display:inline-block;*display:inline;*zoom:1;;margin-right:4px;}
+.disabilitiesNav .btn_long {width:240px;height:35px;margin-top:3px;}
+.disabilitiesNav .btn_half {width:99px;height:35px;margin-right:5px;}
+.disabilitiesNav .btn_group {margin-right:5px;display:inline-block;*display:inline;*zoom:1;;vertical-align:top;}
+
+.disabilitiesNav .btn_01 {background-image:url(../images/bt_wza_fdj_link_01.png);}
+.disabilitiesNav .btn_02 {background-image:url(../images/bt_wza_fdj_link_02.png);}
+.disabilitiesNav .btn_03{background-image:url(../images/bt_wza_sb_link_02.png);}
+.disabilitiesNav .btn_04{background-image:url(../images/bt_wza_sb_link_03.png);}
+.disabilitiesNav .btn_05{background-image:url(../images/bt_wza_sb_link_05.png);}
+.disabilitiesNav .btn_06{background-image:url(../images/bt_wza_sb_link_04.png);}
+.disabilitiesNav .btn_07{background-image:url(../images/bt_wza_sb_link_01.png);}
+.disabilitiesNav .btn_08{background-image:url(../images/bt_wza_wb_link.png);}
+.disabilitiesNav .btn_09{background-image:url(../images/bt_wza_fp_link.png);}
+.disabilitiesNav .btn_10{background-image:url(../images/bt_wza_fzx_link.png);}
+.disabilitiesNav .btn_11{background-image:url(../images/bt_wza_cz_link.png);}
+.disabilitiesNav .btn_12{background-image:url(../images/bt_wza_zd_link.png);margin-top:6px;}
+.disabilitiesNav .btn_13{background-image:url(../images/bt_wza_bz_link.png);}
+
+.disabilitiesNav .btn_01.hover {background-image:url(../images/bt_wza_fdj_hover_01.png);}
+.disabilitiesNav .btn_02.hover {background-image:url(../images/bt_wza_fdj_hover_02.png);}
+.disabilitiesNav .btn_03.hover {background-image:url(../images/bt_wza_sb_hover_02.png);}
+.disabilitiesNav .btn_04.hover {background-image:url(../images/bt_wza_sb_hover_03.png);}
+.disabilitiesNav .btn_05.hover {background-image:url(../images/bt_wza_sb_hover_05.png);}
+.disabilitiesNav .btn_06.hover {background-image:url(../images/bt_wza_sb_hover_04.png);}
+.disabilitiesNav .btn_07.hover {background-image:url(../images/bt_wza_sb_hover_01.png);}
+.disabilitiesNav .btn_08.hover {background-image:url(../images/bt_wza_wb_hover.png);}
+.disabilitiesNav .btn_09.hover {background-image:url(../images/bt_wza_fp_hover.png);}
+.disabilitiesNav .btn_10.hover {background-image:url(../images/bt_wza_fzx_hover.png);}
+.disabilitiesNav .btn_11.hover {background-image:url(../images/bt_wza_cz_hover.png);}
+.disabilitiesNav .btn_12.hover {background-image:url(../images/bt_wza_zd_hover.png);}
+.disabilitiesNav .btn_13.hover {background-image:url(../images/bt_wza_bz_hover.png);}
+
+.disabilitiesNav .btn_03.active {background-image:url(../images/bt_wza_sb_active_02.png);}
+.disabilitiesNav .btn_04.active {background-image:url(../images/bt_wza_sb_active_03.png);}
+.disabilitiesNav .btn_05.active {background-image:url(../images/bt_wza_sb_active_05.png);}
+.disabilitiesNav .btn_06.active {background-image:url(../images/bt_wza_sb_active_04.png);}
+.disabilitiesNav .btn_07.active {background-image:url(../images/bt_wza_sb_active_01.png);}
+.disabilitiesNav .btn_08.active {background-image:url(../images/bt_wza_tw_link.png);}
+.disabilitiesNav .btn_09.active {background-image:url(../images/bt_wza_fp_active.png);}
+.disabilitiesNav .btn_10.active {background-image:url(../images/bt_wza_fzx_active.png);}
+
+.disabilitiesNav .btn_close {background:url(../images/bt_wza_x.png) no-repeat center; width: 55px;height: 76px;display:inline-block;*display:inline;*zoom:1;;cursor:pointer;}
+
+
+.disabilitiesNavFold{ width:100%; height:45px; position:fixed; top:0; left:0; text-align:center; z-index:9999999;_position:absolute;_left:expression(eval(document.documentElement.scrollLeft));_top:expression(eval(document.documentElement.scrollTop))}
+.disabilitiesNavFold .disabilitiesTopBg{ width:100%; height:49px; position:absolute; top:0; left:0;background-color:#353535;
+-webkit-box-shadow: #000 0 2px 3px;
+-moz-box-shadow: #000 0 2px 3px;
+box-shadow: #000 0 2px 3px;}
+.disabilitiesNavFold .disabilitiesMain{ width:100%; height:45px; margin:0 auto; z-index:9999999; position:absolute; top:0; left:0;}
+.disabilitiesNavFold .disabilitiesMain .disabilitiesContent{ width:980px; height:45px; margin:0 auto;}
+
+.disabilitiesNavFold .barrierfree_logo {width:140px;height:45px;background:url(../images/bt_wza_x_bt.png) no-repeat;display:inline-block;*display:inline;*zoom:1;;}
+
+.disabilitiesNavFold .btn_big {width:58px;height:45px;display:inline-block;*display:inline;*zoom:1;;margin-right:5px;}
+.disabilitiesNavFold .btn_small {width:49px;height:45px;display:inline-block;*display:inline;*zoom:1;;margin-right:4px;background-position:center;}
+.disabilitiesNavFold .btn_long {width:49px;height:45px;display:inline-block;*display:inline;*zoom:1;;background-position:center;}
+.disabilitiesNavFold .btn_half {width:58px;height:45px;display:inline-block;*display:inline;*zoom:1;;margin-right:4px;}
+.disabilitiesNavFold .btn_group {margin-right:5px;display:inline-block;*display:inline;*zoom:1;;}
+.disabilitiesNavFold .barrierfree_tr {margin:0;display:inline-block;*display:inline;*zoom:1;;}
+
+.disabilitiesNavFold .btn_01 {background-image:url(../images/bt_wza_xfdj_link_01.png);}
+.disabilitiesNavFold .btn_02 {background-image:url(../images/bt_wza_xfdj_link_02.png);}
+.disabilitiesNavFold .btn_03{background-image:url(../images/bt_wza_xsb_link_02.png);}
+.disabilitiesNavFold .btn_04{background-image:url(../images/bt_wza_xsb_link_03.png);}
+.disabilitiesNavFold .btn_05{background-image:url(../images/bt_wza_xsb_link_05.png);}
+.disabilitiesNavFold .btn_06{background-image:url(../images/bt_wza_xsb_link_04.png);}
+.disabilitiesNavFold .btn_07{background-image:url(../images/bt_wza_xsb_link_01.png);}
+.disabilitiesNavFold .btn_08{background-image:url(../images/bt_wza_xwb_link.png);}
+.disabilitiesNavFold .btn_09{background-image:url(../images/bt_wza_xfp_link.png);}
+.disabilitiesNavFold .btn_10{background-image:url(../images/bt_wza_xfzx_link.png);}
+.disabilitiesNavFold .btn_11{background-image:url(../images/bt_wza_xcz_link.png);}
+.disabilitiesNavFold .btn_12{background-image:url(../images/bt_wza_xkz_link.png);}
+.disabilitiesNavFold .btn_13{background-image:url(../images/bt_wza_xbz_link.png);}
+
+
+.disabilitiesNavFold .btn_01.hover {background-image:url(../images/bt_wza_xfdj_hover_01.png);}
+.disabilitiesNavFold .btn_02.hover {background-image:url(../images/bt_wza_xfdj_hover_02.png);}
+.disabilitiesNavFold .btn_03.hover {background-image:url(../images/bt_wza_xsb_active_02.png);}
+.disabilitiesNavFold .btn_04.hover {background-image:url(../images/bt_wza_xsb_active_03.png);}
+.disabilitiesNavFold .btn_05.hover {background-image:url(../images/bt_wza_xsb_active_05.png);}
+.disabilitiesNavFold .btn_06.hover {background-image:url(../images/bt_wza_xsb_active_04.png);}
+.disabilitiesNavFold .btn_07.hover {background-image:url(../images/bt_wza_xsb_active_01.png);}
+.disabilitiesNavFold .btn_08.hover {background-image:url(../images/bt_wza_xwb_hover.png);}
+.disabilitiesNavFold .btn_09.hover {background-image:url(../images/bt_wza_xfp_hover.png);}
+.disabilitiesNavFold .btn_10.hover {background-image:url(../images/bt_wza_xfzx_hover.png);}
+.disabilitiesNavFold .btn_11.hover {background-image:url(../images/bt_wza_xcz_hover.png);}
+.disabilitiesNavFold .btn_12.hover {background-image:url(../images/bt_wza_xzk_hover.png);}
+.disabilitiesNavFold .btn_13.hover {background-image:url(../images/bt_wza_xbz_hover.png);}
+
+.disabilitiesNavFold .btn_03.active {background-image:url(../images/bt_wza_xsb_active_02.png);}
+.disabilitiesNavFold .btn_04.active {background-image:url(../images/bt_wza_xsb_active_03.png);}
+.disabilitiesNavFold .btn_05.active {background-image:url(../images/bt_wza_xsb_active_05.png);}
+.disabilitiesNavFold .btn_06.active {background-image:url(../images/bt_wza_xsb_active_04.png);}
+.disabilitiesNavFold .btn_07.active {background-image:url(../images/bt_wza_xsb_active_01.png);}
+.disabilitiesNavFold .btn_08.active {background-image:url(../images/bt_wza_xtw_link.png);}
+.disabilitiesNavFold .btn_09.active {background-image:url(../images/bt_wza_xfp_active.png);}
+.disabilitiesNavFold .btn_10.active {background-image:url(../images/bt_wza_xfzx_active.png);}
+
+.disabilitiesNavFold .btn_close {background:url(../images/bt_wza_xwb_xlink.png) no-repeat center; width: 40px;height: 45px;display:inline-block;*display:inline;*zoom:1;;cursor:pointer;}
+
+/*==========================================*/
+.disabilitiesLanguage{ width:100%; height:160px; overflow:hidden; position:fixed; bottom:0; left:0; z-index:9999999999; background:fixed;_position:absolute; _bottom:auto; _top:expression(eval(document.documentElement.scrollTop+document.documentElement.clientHeight-this.offsetHeight-(parseInt(this.currentStyle.marginTop,10)||0)-(parseInt(this.currentStyle.marginBottom,10)||0)));}
+.disabilitiesLanguage .disabilitiesFooterBg{ width:100%; height:160px; position:absolute; top:0; left:0;background-color:#6D6E6E;}
+.disabilitiesLanguage .LanguageMain{ position:absolute; top:10px; left:20px; z-index:99999999;width: 100px;}
+.disabilitiesLanguage .LanguageMain ul{padding:0; margin: 0; float: left;}
+.disabilitiesLanguage .font_titleBar li{ float:left;}
+
+.disabilitiesLanguage li input{ width:48px; height:48px; cursor:pointer;color:#EFEFEF;font-size:24px; background-color:#474747;margin:1px;}
+.disabilitiesLanguage li.disabilitiesNow input{ background-color:#b60203}
+.disabilitiesLanguage li.disabilitiesNow input:hover{ background-color:#b60203;}
+
+.disabilitiesLanguage li.barrierfree_open input {background-color:#b60203;}
+.disabilitiesLanguage li.barrierfree_close input {background-color:#474747;}
+
+.disabilitiesLanguage .LanguageSpell li input{ width:98px; height:45px; border:none; cursor:pointer;color:#EFEFEF;font-size:24px;}
+.disabilitiesLanguage .Languagetext{ width:100%; position:absolute; top:10px; left:130px; z-index:99999999; overflow: ;}
+.disabilitiesLanguage .LanguageTextMin{ padding-right:140px;}
+.disabilitiesLanguage .LanguageTextMin .LanguageTextContent{ width:100%;height:142px; background:#dee0e0;}
+.disabilitiesLanguage .LanguageTextMin .LanguageTextContent p{ width:90%; margin:0 auto;padding: 0;}
+.disabilitiesLanguage .LanguageTextMin .LanguageTextContent table{ width:100%; height:138px; margin:0 auto;}
+.disabilitiesLanguage .LanguageTextMin .LanguageTextContent table td{ font-size:32px!important; line-height:1.2em!important;font-family:"Microsoft YaHei";text-align:center;vertical-align:middle;}
+.disabilitiesLanguage .LanguageTextMin .LanguageTextContent table td.barrierfree_pinyin{ font-size:22px!important;}
+.disabilitiesLanguage .LanguageTextMin .LanguageTextContent table td#helper_messageBoxText{ width:100%; height:100%;  }
+samp {
+	font-family: inherit;
+}

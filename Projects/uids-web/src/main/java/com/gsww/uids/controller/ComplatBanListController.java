@@ -21,9 +21,11 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
+import com.gsww.jup.entity.sys.SysUserSession;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.uids.entity.ComplatBanlist;
 import com.gsww.uids.service.ComplatBanListService;
+import com.gsww.uids.service.JisLogService;
 
 @Controller
 @RequestMapping(value = "/uids")
@@ -31,6 +33,8 @@ public class ComplatBanListController extends BaseController {
 	private static Logger logger = LoggerFactory.getLogger(ComplatBanListController.class);
 	@Autowired
 	private ComplatBanListService complatBanListService;
+	@Autowired
+	private JisLogService jisLogService;
 	
 	@RequestMapping(value = "/complatBanList", method = RequestMethod.GET)
 	public String complatBanList(
@@ -71,6 +75,7 @@ public class ComplatBanListController extends BaseController {
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/complatbanlistDelete", method = RequestMethod.GET)
 	public ModelAndView complatbanlistDelete(String iid, HttpServletRequest request,HttpServletResponse response)  throws Exception {
+		 SysUserSession session = (SysUserSession) request.getSession().getAttribute("sysUserSession");
 		try {
 			String[] para=iid.split(",");
 			ComplatBanlist complatBanlist = null;
@@ -78,6 +83,8 @@ public class ComplatBanListController extends BaseController {
 				Integer Iid = Integer.parseInt(para[i].trim());
 				complatBanlist=complatBanListService.findByIid(Iid);
 				complatBanListService.delete(complatBanlist);
+				 String desc=session.getUserName()+"删除了"+complatBanlist.getLoginname();
+	                jisLogService.save(session.getUserName(),session.getUserIp(), desc, 3, 1);
 							}
 			returnMsg("success","删除成功",request);
 		} catch (Exception e) {

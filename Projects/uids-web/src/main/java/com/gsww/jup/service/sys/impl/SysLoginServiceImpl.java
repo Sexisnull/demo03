@@ -17,15 +17,26 @@ import com.gsww.jup.service.sys.SysLoginService;
 import com.gsww.uids.dao.ComplatRoleDao;
 import com.gsww.uids.dao.ComplatUserDao;
 import com.gsww.uids.entity.ComplatUser;
+import com.hanweb.common.util.Md5Util;
 
 /**
- * <p>Copyright: Copyright (c) 2011</p>
- * <p>公司名称 : 中国电信甘肃万维公司</p>
- * <p>项目名称 : jup-core</p>
- * <p>创建时间 : 2014年7月23日 下午11:36:33</p>
- * <p>类描述 : 用户登录实现类        </p>
- *
- *
+ * <p>
+ * Copyright: Copyright (c) 2011
+ * </p>
+ * <p>
+ * 公司名称 : 中国电信甘肃万维公司
+ * </p>
+ * <p>
+ * 项目名称 : jup-core
+ * </p>
+ * <p>
+ * 创建时间 : 2014年7月23日 下午11:36:33
+ * </p>
+ * <p>
+ * 类描述 : 用户登录实现类
+ * </p>
+ * 
+ * 
  * @version 1.0.0
  * @author <a href=" ">lzxij</a>
  */
@@ -38,69 +49,80 @@ public class SysLoginServiceImpl implements SysLoginService {
 	private SysRoleAcctRelDao sysRoleAcctRelDao;
 	@Autowired
 	private ComplatRoleDao complatRoleDao;
-	
+
 	@Override
-	public SysUserSession login(String userName, String password,String groupId, String ip) throws Exception {
-		
-		List<ComplatUser> userList = complatUserDao.findByLoginnameAndPwdAndGroupid(userName,password,Integer.parseInt(groupId));
+	public SysUserSession login(String userName, String password,
+			String groupId, String ip) throws Exception {
+
+		List<ComplatUser> userList = complatUserDao.findByLoginnameAndGroupid(
+				userName, Integer.parseInt(groupId));
 		if (userList != null && userList.size() == 1) {
 			ComplatUser user = userList.get(0);
-			SysUserSession sysUserSession = new SysUserSession();
-			sysUserSession.setAccountId(user.getIid()+"");
-			sysUserSession.setUserName(user.getName());
-/*			sysUserSession.setDeptId(user.getSysDepartment().getDeptId());
-			sysUserSession.setDeptCode(user.getSysDepartment().getDeptCode());
-			sysUserSession.setDeptName(user.getSysDepartment().getDeptName());*/
-			sysUserSession.setUserIp(ip);
-			List<SysRoleAcctRel> roleList = sysRoleAcctRelDao.findByUserAcctId(user.getIid()+"");
-			String roles = "";
-			String roleNames = "";
-			if(roleList!=null && roleList.size()>0){
-				for(SysRoleAcctRel ra : roleList){
-					roles += ra.getRoleId().toString()+",";
-					roleNames += complatRoleDao.findByIid(Integer.parseInt(ra.getRoleId())).getName()+",";
+			String pwd = Md5Util.md5decode(user.getPwd());
+			if (!pwd.equals(password)) {
+				return null;
+			} else {
+				SysUserSession sysUserSession = new SysUserSession();
+				sysUserSession.setAccountId(user.getIid() + "");
+				sysUserSession.setUserName(user.getName());
+				/*
+				 * sysUserSession.setDeptId(user.getSysDepartment().getDeptId());
+				 * sysUserSession
+				 * .setDeptCode(user.getSysDepartment().getDeptCode());
+				 * sysUserSession
+				 * .setDeptName(user.getSysDepartment().getDeptName());
+				 */
+				sysUserSession.setUserIp(ip);
+				List<SysRoleAcctRel> roleList = sysRoleAcctRelDao
+						.findByUserAcctId(user.getIid() + "");
+				String roles = "";
+				String roleNames = "";
+				if (roleList != null && roleList.size() > 0) {
+					for (SysRoleAcctRel ra : roleList) {
+						roles += ra.getRoleId().toString() + ",";
+						roleNames += complatRoleDao.findByIid(
+								Integer.parseInt(ra.getRoleId())).getName()
+								+ ",";
+					}
+					roles = roles.substring(0, roles.length() - 1);
+					roleNames = roleNames.substring(0, roleNames.length() - 1);
 				}
-				roles = roles.substring(0, roles.length()-1);
-				roleNames = roleNames.substring(0, roleNames.length()-1);
+				sysUserSession.setRoleIds(roles);
+				sysUserSession.setUserSex(user.getSex() + "");
+				sysUserSession.setRoleNames(roleNames);
+				sysUserSession.setUserState(user.getEnable() + "");
+				return sysUserSession;
 			}
-			sysUserSession.setRoleIds(roles);
-			sysUserSession.setUserSex(user.getSex()+"");
-			sysUserSession.setRoleNames(roleNames);
-			sysUserSession.setUserState(user.getEnable()+"");
-			return sysUserSession;
 		}
 		return null;
 	}
 
 	@Override
 	public SysUserSession login(String userName) throws Exception {
-		/*List<SysAccount> userList = complatUserDao.findByLoginAccount(userName);
-		if (userList != null && userList.size() == 1) {
-			SysAccount user = userList.get(0);
-			SysUserSession sysUserSession = new SysUserSession();
-			sysUserSession.setAccountId(user.getUserAcctId());
-			sysUserSession.setUserName(user.getUserName());
-			sysUserSession.setDeptId(user.getSysDepartment().getDeptId());
-			sysUserSession.setDeptCode(user.getSysDepartment().getDeptCode());
-			sysUserSession.setDeptName(user.getSysDepartment().getDeptName());
-			List<SysRoleAcctRel> roleList = sysRoleAcctRelDao.findByUserAcctId(user.getUserAcctId());
-			String roles = "";
-			String roleNames = "";
-			if(roleList!=null && roleList.size()>0){
-				for(SysRoleAcctRel ra : roleList){
-					roles += ra.getRoleId().toString()+",";
-					roleNames += sysRoleDao.findByRoleId(ra.getRoleId()).getRoleName()+",";
-				}
-				roles = roles.substring(0, roles.length()-1);
-				roleNames = roleNames.substring(0, roleNames.length()-1);
-			}
-			sysUserSession.setRoleIds(roles);
-			sysUserSession.setUserSex(user.getUserSex());
-			sysUserSession.setRoleNames(roleNames);
-			sysUserSession.setUserState(user.getUserState());
-			return sysUserSession;
-		}
-		return null;*/
+		/*
+		 * List<SysAccount> userList =
+		 * complatUserDao.findByLoginAccount(userName); if (userList != null &&
+		 * userList.size() == 1) { SysAccount user = userList.get(0);
+		 * SysUserSession sysUserSession = new SysUserSession();
+		 * sysUserSession.setAccountId(user.getUserAcctId());
+		 * sysUserSession.setUserName(user.getUserName());
+		 * sysUserSession.setDeptId(user.getSysDepartment().getDeptId());
+		 * sysUserSession.setDeptCode(user.getSysDepartment().getDeptCode());
+		 * sysUserSession.setDeptName(user.getSysDepartment().getDeptName());
+		 * List<SysRoleAcctRel> roleList =
+		 * sysRoleAcctRelDao.findByUserAcctId(user.getUserAcctId()); String
+		 * roles = ""; String roleNames = ""; if(roleList!=null &&
+		 * roleList.size()>0){ for(SysRoleAcctRel ra : roleList){ roles +=
+		 * ra.getRoleId().toString()+","; roleNames +=
+		 * sysRoleDao.findByRoleId(ra.getRoleId()).getRoleName()+","; } roles =
+		 * roles.substring(0, roles.length()-1); roleNames =
+		 * roleNames.substring(0, roleNames.length()-1); }
+		 * sysUserSession.setRoleIds(roles);
+		 * sysUserSession.setUserSex(user.getUserSex());
+		 * sysUserSession.setRoleNames(roleNames);
+		 * sysUserSession.setUserState(user.getUserState()); return
+		 * sysUserSession; } return null;
+		 */
 		return null;
 	}
 

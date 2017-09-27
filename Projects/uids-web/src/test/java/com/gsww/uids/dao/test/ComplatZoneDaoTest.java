@@ -19,7 +19,7 @@ public class ComplatZoneDaoTest {
 	private ComplatZoneDao complatZoneDao;
 	@Test
 	public void findByIid(){
-		int iid=57;
+		int iid=1;
 		ComplatZone zone=complatZoneDao.findByIid(iid);
 		System.out.println(zone.getName());
 		assertTrue(true);

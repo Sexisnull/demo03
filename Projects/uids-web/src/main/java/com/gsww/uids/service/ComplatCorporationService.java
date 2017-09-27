@@ -55,4 +55,26 @@ public interface ComplatCorporationService {
      * @return
 	 */
 	public ComplatCorporation findByLoginNameIsUsed(String loginName);
+	
+	/**
+	 * 根据工商注册查询法人用户
+	 * @param regNum
+	 * @return
+	 */
+	public ComplatCorporation findByRegNum(String regNum);
+	
+	/**
+	 * 根据组织机构编码查询法人用户列表
+	 * @param inputByGuest
+	 * @return
+	 */
+	public ComplatCorporation findByOrgName(String inputByGuest);
+	
+	/**
+	 * 多个字段匹配查找用户
+	 * @param inputByGuest
+	 * @return
+	 */
+	public ComplatCorporation findByManyWay(String inputByGuest);
+	
 }

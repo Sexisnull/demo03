@@ -416,29 +416,4 @@ public class MD5 {
 	    }return null;
 	  }
 
-	public static void main(String args[]) {
-
-		MD5 m = new MD5();
-/*		if (Array.getLength(args) == 0) { // 如果没有参数，执行标准的Test Suite
-
-			System.out.println("MD5 Test suite:");
-			System.out.println("MD5(\"\"):" + m.getMD5ofStr(""));
-			System.out.println("MD5(\"a\"):" + m.getMD5ofStr("a"));
-			System.out.println("MD5(\"abc\"):" + m.getMD5ofStr("abc"));
-			System.out.println("MD5(\"message digest\"):"
-					+ m.getMD5ofStr("message digest"));
-			System.out.println("MD5(\"abcdefghijklmnopqrstuvwxyz\"):"
-					+ m.getMD5ofStr("abcdefghijklmnopqrstuvwxyz"));
-			System.out
-					.println("MD5(\"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\"):"
-							+ m
-									.getMD5ofStr("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"));
-		} else{
-			System.out.println("MD5(" + args[0] + ")=" + m.getMD5ofStr(args[0]));
-		}*/
-		String password="gszw@888888";
-		System.out.println("MD5 Test suite:"+m.getMD5ofStr(password));
-		System.out.println("MD5 Test suite:"+m.getMD5ofStr(m.getMD5ofStr(password)));		
-	}
-
 }

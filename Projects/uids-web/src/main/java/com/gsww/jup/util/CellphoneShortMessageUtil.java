@@ -14,7 +14,7 @@ public class CellphoneShortMessageUtil
 {
   public String sendPhoneShortMessage(String telNum, String content, String appBusinessId, String appBusinessName, int loseTime)
   {
-    JisSettings settings = JisSettings.getSettings();
+    JisSettings settings = new JisSettings();
     String appId = settings.getAppId().trim();
     String appName = settings.getAppName().trim();
     String appAcc = settings.getAppAcc().trim();
@@ -71,13 +71,20 @@ public class CellphoneShortMessageUtil
       http.setDefaultUseCaches(false);
       http.setDoOutput(true);
 
-      read = new BufferedReader(new InputStreamReader(http.getInputStream(), "UTF-8"));
-      String line;
-      while ((line = read.readLine()) != null)
-      {
-        result = result + line;
-      }
-      return result;
+      //TODO 注释短信下发访问
+//      read = new BufferedReader(new InputStreamReader(http.getInputStream(), "UTF-8"));
+//      String line;
+//      while ((line = read.readLine()) != null)
+//      {
+//        result = result + line;
+//      }
+//      return result;
+      Map<String,String> map = new HashMap<String,String>();
+      String success = "短信密码下发成功！";
+      map.put("success", "true");
+      map.put("code", "1");
+      map.put("msg", success);
+      return JsonUtil.objectToString(map);
     }
     catch (Exception e)
     {

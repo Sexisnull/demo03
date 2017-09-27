@@ -1,0 +1,1 @@
+$.getScript('/ui/js/barrierfree.js');

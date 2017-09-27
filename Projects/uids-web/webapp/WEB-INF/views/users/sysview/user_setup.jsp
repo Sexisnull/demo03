@@ -1,5 +1,6 @@
 
 
+
 <%@page language="java" pageEncoding="UTF-8"%>
 <!doctype html>
 <%@ include file="/include/meta.jsp"%>
@@ -72,6 +73,9 @@
 				    		if(fields.type==1){
 				    		   for(var key in fields){
 				    			var value = fields[key];
+				    			if(value == null){
+				    				value = "";
+				    			}
 				    			if(key!='type' && key !='userid'){
 				    			    if(count%2==1){
 				    			       htmlString.push("<tr><th>"+key+"</th><td><input name='"+key+"' type='text' value='"+value+"'></td>");
@@ -144,6 +148,23 @@
 				    }
 				    table.append(htmlString.join(""));
 			});
+			
+			
+			function saveData(){
+				$.ajax({
+					type : "POST",
+					url : '${ctx}/complat/userSetUpSave',
+					data:$("#editForm").serialize(),
+					dataType : "json",
+					success:function(data){
+						if(data.ret == 0){
+							alert(data.msg);
+						}else if(data.ret == 1){
+							alert(data.msg);
+						}
+					}
+				});
+			}
 		</script>
 		<style type="text/css">
 		.logo-font{
@@ -217,12 +238,11 @@
 	   		</ol>
     	</div>
     	<!--表单的标题区域--> 
-	    <form id="editForm" method="post" action="${ctx}/complat/userSetUpSave">
+	    <form id="editForm">
 	    
 		    <div style="display:none;">
 		    	<input type="hidden" id="iid" name="iid" value="${complatUser.iid}"/>
 		    	<input type="hidden" id="userDetailIid" name="userDetailIid" value="${userDetail.iid}">
-		    	
 		    </div>
 		    
 		    <!--表单的主内容区域-->
@@ -251,12 +271,13 @@
 					<tr>
 						<th>密码强度：</th>
 						<td>
-							<table id="pwdpower" style="width: 84%">
+							<table id="pwdpower" style="width: 84%" cellspacing="0"
+								cellpadding="0" border="0">
 								<tbody>
 									<tr>
-										<td id="pweak" style="">弱</td>
-										<td id="pmedium" style="">中</td>
-										<td id="pstrong" style="">强</td>
+										<td id="pweak" style="text-align: center;width: 100px;border: 1px solid  grey">弱</td>
+										<td id="pmedium" style="text-align: center;width: 100px;border: 1px solid  grey">中</td>
+										<td id="pstrong" style="text-align: center;width: 100px;border: 1px solid  grey">强</td>
 									</tr>
 								</tbody>
 							</table>
@@ -315,7 +336,7 @@
 	    	<div style="clear:both;"></div>
 		    <!--表单的按钮组区域-->
 		    <div class="form-btn">
-		    	<input type="submit" tabindex="15" id="submit-btn" value="保存" class="btn bluegreen"/>
+		    	<input type="submit" tabindex="15" id="submit-btn" value="保存" class="btn bluegreen" onclick="saveData();"/>
 		    	&nbsp;&nbsp;
 		        <input type="button" tabindex="16" value="返回" onclick="javascript:window.history.back();" class="btn gray"/>
 		    </div>

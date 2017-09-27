@@ -193,11 +193,46 @@ public class ComplatGroupController extends BaseController{
 			}
 			//将上级机构名称转换成pid
 			String parentName = request.getParameter("groupname");
-			if(StringHelper.isNotBlack(parentName)){
-				complatGroup.setPid(complatGroupService.findByName(parentName).getIid());
-			}
-			complatGroup = complatGroupService.save(complatGroup);
-			returnMsg("success","保存成功",request);
+		    String name = request.getParameter("name");
+		    if (StringHelper.isNotBlack(parentName)){
+		        Integer pId = complatGroupService.findByName(parentName).getIid();
+		        if (complatGroupService.queryNameIsUsed(name, pId)){
+		        	returnMsg("error", "保存失败,机构名称重复", request);
+		        }else{
+		        	String codeId = this.complatGroupService.findByIid(pId).getCodeid() + "001";
+		        	while (codeId.compareTo(codeId + "001") < 0){
+		        		if (complatGroupService.findByCodeid(codeId) == null) {
+		        			break;
+		        		}
+		            int num = Integer.valueOf(codeId.substring(codeId.length() - 4, codeId.length())).intValue() + 1;
+		            codeId = codeId.substring(0, codeId.length() - 4) + String.valueOf(num);
+		        	}
+		        	complatGroup.setCodeid(codeId);
+		        	complatGroup.setPid(pId);
+		        	complatGroup = complatGroupService.save(complatGroup);
+		        	returnMsg("success", "保存成功", request);
+		        }
+		    }else{
+		        String codeId = "001";
+		        boolean isExist = false;
+		        while (codeId.compareTo(codeId + "001") < 0){
+		        	if (complatGroupService.findByCodeid(codeId) == null) {
+		        		break;
+		        	}
+		        	if (complatGroupService.findByCodeid(codeId).getName().equals(name)) {
+		        		isExist = true;
+		        	}
+		        	int num = Integer.valueOf("1" + codeId).intValue() + 1;
+					codeId = String.valueOf(num).substring(1, 4);
+		        }
+		        if (isExist){
+		        	returnMsg("error", "保存失败,机构名称重复", request);
+		        }else{
+		        	complatGroup.setCodeid(codeId);
+		        	complatGroup = this.complatGroupService.save(complatGroup);
+		        	returnMsg("success", "保存成功", request);
+		        }
+		     }
 		} catch (Exception e) {
 			e.printStackTrace();
 			returnMsg("error","保存失败",request);
@@ -281,72 +316,100 @@ public class ComplatGroupController extends BaseController{
 		String fileName = multipartFile.getOriginalFilename();	
 		LinkedHashMap<String, String> fieldMap = new LinkedHashMap<String, String>();
 		fieldMap.put("0", "name");
-		fieldMap.put("1", "strNodeType");
-		fieldMap.put("2", "codeid");
-		fieldMap.put("3", "suffix");
-		fieldMap.put("4", "groupallname");
-		fieldMap.put("5", "orgcode");
-		fieldMap.put("6", "orgtype");
-		fieldMap.put("7", "strAreaType");
-		fieldMap.put("8", "areacode");
-		fieldMap.put("9", "strIsCombine");
-		fieldMap.put("10", "parentName");
-		fieldMap.put("11", "spec");
+	    fieldMap.put("1", "strNodeType");
+	    fieldMap.put("2", "suffix");
+	    fieldMap.put("3", "groupallname");
+	    fieldMap.put("4", "orgcode");
+	    fieldMap.put("5", "orgtype");
+	    fieldMap.put("6", "strAreaType");
+	    fieldMap.put("7", "areacode");
+	    fieldMap.put("8", "strIsCombine");
+	    fieldMap.put("9", "parentName");
+	    fieldMap.put("10", "parentCode");
+	    fieldMap.put("11", "spec");
 		//List<ComplatUser> users= ExcelUtil.readXls(absoluteFilePath+"/"+uuidFileName,ComplatUser.class,fieldMap);
-		List<ComplatGroup> group= ExcelUtil.readXls(fileName,multipartFile.getInputStream(),ComplatGroup.class,fieldMap);
-		//判断是哪行导入失败
-		int row = 1;
-		boolean flag=true;
-		String strRow = "";
+	    List<ComplatGroup> group = ExcelUtil.readXls(fileName, multipartFile.getInputStream(), ComplatGroup.class, fieldMap);
+	    
+	    int row = 1;
+	    boolean flag = true;
+	    String strRow = "";
 		try {
-			for(ComplatGroup complatGroup:group){
-				List<ComplatGroup> list = complatGroupService.findByAllName(complatGroup.getName());	
-				if(list.size()==0){		
-					if(StringHelper.isNotBlack(complatGroup.getName())){  //判断excel表格导入的数据是否规范
-						//判断并设置节点类型的值
-						if(complatGroup.getStrNodeType().equals("区域")){
-							complatGroup.setNodetype(1);
-						}else if(complatGroup.getStrNodeType().equals("单位")){
-							complatGroup.setNodetype(2);
-						}else if(complatGroup.getStrNodeType().equals("部门或处室")){
-							complatGroup.setNodetype(3);
-						}else{	}
-						//判断并设置区域类型的值
-						if(complatGroup.getStrAreaType().equals("省级")){
-							complatGroup.setAreatype(1);
-						}else if((complatGroup.getStrAreaType().equals("市（州）级")) || (complatGroup.getStrAreaType().equals("市(州)级"))){
-							complatGroup.setAreatype(2);
-						}else if(complatGroup.getStrAreaType().equals("区县")){
-							complatGroup.setAreatype(3);
-						}else if(complatGroup.getStrAreaType().equals("乡镇街道")){
-							complatGroup.setAreatype(3);
-						}else if(complatGroup.getStrAreaType().equals("其他")){
-							complatGroup.setAreatype(3);
-						}else{  }
-						//判断是否为合并单位，并设置值
-						if(complatGroup.getStrIsCombine().equals("否")){
-							complatGroup.setIscombine(0);
-						}else if(complatGroup.getStrIsCombine().equals("是")){
-							complatGroup.setIscombine(1);
+			for (ComplatGroup complatGroup : group) {
+				if (StringHelper.isNotBlack(complatGroup.getName())) {
+					if ((StringHelper.isNotBlack(complatGroup.getParentName()))&& (complatGroup.getParentCode().isEmpty())) {
+						flag = false;
+						strRow = strRow + "<" + row + ">";
+					} else {
+						if (complatGroup.getStrNodeType().equals("区域")) {
+							complatGroup.setNodetype(Integer.valueOf(1));
+						} else if (complatGroup.getStrNodeType().equals("单位")) {
+							complatGroup.setNodetype(Integer.valueOf(2));
+						} else if (complatGroup.getStrNodeType().equals("部门或处室")) {
+							complatGroup.setNodetype(Integer.valueOf(3));
 						}
-						//新增时将机构名汉字转换成首字母大写保存到pinyin字段中
+						if (complatGroup.getStrAreaType().equals("省级")) {
+							complatGroup.setAreatype(Integer.valueOf(1));
+						} else if ((complatGroup.getStrAreaType().equals("市（州）级"))|| (complatGroup.getStrAreaType().equals("市(州)级"))) {
+							complatGroup.setAreatype(Integer.valueOf(2));
+						} else if (complatGroup.getStrAreaType().equals("区县")) {
+							complatGroup.setAreatype(Integer.valueOf(3));
+						} else if (complatGroup.getStrAreaType().equals("乡镇街道")) {
+							complatGroup.setAreatype(Integer.valueOf(4));
+						} else if (complatGroup.getStrAreaType().equals("其他")) {
+							complatGroup.setAreatype(Integer.valueOf(5));
+						}
+						if (complatGroup.getStrIsCombine().equals("否")) {
+							complatGroup.setIscombine(Integer.valueOf(0));
+						} else if (complatGroup.getStrIsCombine().equals("是")) {
+							complatGroup.setIscombine(Integer.valueOf(1));
+						}
 						String daPinYin = getPinYinHeadChar(complatGroup.getName());
 						complatGroup.setPinyin(daPinYin);
-						//设置创建时间
 						complatGroup.setCreatetime(Timestamp.valueOf(TimeHelper.getCurrentTime()));
-						//设置pid
-						complatGroup.setPid(complatGroupService.findByName(complatGroup.getParentName()).getIid());
-						//设置状态值
-						complatGroup.setOpersign(1);
-						complatGroup.setSynState(2);
-						complatGroupService.save(complatGroup);
-					}else{
-						flag = false;
-						strRow = strRow + "<" + row + ">"; //记录第几行数据导入失败
-					}//else
-					row++;//导入行数加一
-				}//if(list
-			}//for
+						complatGroup.setOpersign(Integer.valueOf(1));
+						complatGroup.setSynState(Integer.valueOf(2));
+						String parentCode = complatGroup.getParentCode();
+						String name = complatGroup.getName();
+						if (StringHelper.isNotBlack(parentCode)) {
+							Integer pId = this.complatGroupService.findByCodeid(parentCode).getIid();
+							if (complatGroupService.queryNameIsUsed(name, pId)) {
+								flag = false;
+								strRow = strRow + "<" + row + ">";
+							} else {
+								String codeId = this.complatGroupService.findByIid(pId).getCodeid() + "001";
+								while (codeId.compareTo(codeId + "001") < 0) {
+									if (this.complatGroupService.findByCodeid(codeId) == null) {
+										break;
+									}
+									int num = Integer.valueOf(codeId.substring(codeId.length()-4,codeId.length())).intValue() + 1;
+									codeId = codeId.substring(0,codeId.length() - 4) + String.valueOf(num);
+								}
+								complatGroup.setCodeid(codeId);
+								complatGroup.setPid(pId);
+								complatGroup = complatGroupService.save(complatGroup);
+							}
+						} else {
+							String codeId = "001";
+							boolean isExist = false;
+							do {
+								int num = Integer.valueOf("1" + codeId).intValue() + 1;
+								codeId = String.valueOf(num).substring(1, 4);
+							} while ((codeId.compareTo(codeId + "001") < 0) && ((this.complatGroupService.findByCodeid(codeId) == null) || (this.complatGroupService.findByCodeid(codeId).getName().equals(name))));
+							if (isExist) {
+								flag = false;
+								strRow = strRow + "<" + row + ">";
+							} else {
+								complatGroup.setCodeid(codeId);
+								complatGroup = complatGroupService.save(complatGroup);
+							}
+						}
+					}
+				} else {
+					flag = false;
+					strRow = strRow + "<" + row + ">";
+				}
+				row++;
+			}
 			if(flag){
 				returnMsg("success","导入成功",request);
 			}else{

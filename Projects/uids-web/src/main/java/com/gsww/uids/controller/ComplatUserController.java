@@ -17,11 +17,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONArray;
+
 import net.sourceforge.pinyin4j.PinyinHelper;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.json.simple.JSONObject;
 
 import org.slf4j.LoggerFactory;
 
@@ -54,7 +56,10 @@ import com.gsww.uids.service.ComplatGroupService;
 import com.gsww.uids.service.ComplatRoleService;
 import com.gsww.uids.service.ComplatUserService;
 import com.gsww.uids.service.JisFieldsService;
+import com.gsww.uids.service.JisLogService;
 import com.gsww.uids.service.JisUserdetailService;
+import com.hanweb.common.util.Md5Util;
+
 
 /**
  * <p>
@@ -100,6 +105,8 @@ public class ComplatUserController extends BaseController {
 	@Autowired
 	private JisFieldsService jisFieldsService;
 
+	@Autowired
+	private JisLogService jisLogService;
 	/**
 	 * 获取政府用户列表
 	 * 
@@ -156,6 +163,11 @@ public class ComplatUserController extends BaseController {
 			model.addAttribute("searchParams", Servlets
 					.encodeParameterStringWithPrefix(searchParams, "search_"));
 			model.addAttribute("sParams", searchParams);
+			
+			//点击完查询时组织机构名称回显
+			String groupName = request.getParameter("groupname");
+			model.addAttribute("groupName", groupName);
+			
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			logger.error("列表打开失败：" + ex.getMessage());
@@ -183,6 +195,12 @@ public class ComplatUserController extends BaseController {
 			if (StringHelper.isNotBlack(iid)) {
 				complatUser = complatUserService.findByKey(Integer.parseInt(iid));
 				Date createTime = complatUser.getCreatetime();
+				//对密码进行解密
+				String pwd = complatUser.getPwd();
+				if(StringHelper.isNotBlack(pwd)){
+					String p = Md5Util.md5decode(pwd);
+					complatUser.setPwd(p);
+				}
 				if (createTime != null) {
 					String time = sdf.format(createTime);
 					model.addAttribute("time", time);
@@ -195,6 +213,11 @@ public class ComplatUserController extends BaseController {
 					}
 					model.addAttribute("groupMap", groupMap);
 				}
+				//查询扩展属性和身份证号		
+				JisUserdetail userDetail = new JisUserdetail();
+				Integer userId = complatUser.getIid();			
+				userDetail=jisUserdetailService.findByUserid(userId);
+				model.addAttribute("userDetail", userDetail);
 			} else {
 				complatUser = new ComplatUser();
 			}
@@ -221,29 +244,82 @@ public class ComplatUserController extends BaseController {
 	public ModelAndView complatSave(ComplatUser complatUser,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
+		SysUserSession sysUserSession =(SysUserSession)request.getSession().getAttribute("sysUserSession");
 		try {
-			if (complatUser != null) {				
-					if(complatUser.getOpersign() == null){
-						complatUser.setOpersign(1);
-					}else{
-						complatUser.setOpersign(2);
-					}
+			Integer userId = null;
+			if (complatUser != null) {	
+				String iid = String.valueOf(complatUser.getIid());
+				if (iid == "null" || iid.length() <= 0) {					
+					complatUser.setOpersign(1);						
+					complatUser.setEnable(0); // 是否禁用
 					Date d = new Date();
-					complatUser.setEnable(1); // 是否禁用
-					// complatUser.setAuthState(0); // 审核状态
-					// complatUser.setIsAuth(0); // 是否审核
 					complatUser.setCreatetime(d);// 创建时间
+					complatUserService.save(complatUser);	
+					//对密码进行加密
+					String pwd = complatUser.getPwd();
+					String p = Md5Util.md5encode(pwd);
+					complatUser.setPwd(p);
+					//身份证号处理 JisUserdetail
+					String cardId = request.getParameter("cardid");
+					JisUserdetail jisUserdetail = jisUserdetailService.findByUserid(userId);
+					
+					if(jisUserdetail.getIid() == null){
+						JisUserdetail jisUser = new JisUserdetail();
+						jisUser.setCardid(cardId);
+						jisUser.setIid(userId);
+						jisUser.setUserid(userId);
+						jisUserdetailService.save(jisUser);
+					}else{
+						//扩展属性
+						Map<String,String> userMap = this.saveExendsAttr(userId, request);
+						//对身份证号和用户扩展属性update
+						jisUserdetailService.update(jisUserdetail.getIid(),cardId,userMap);
+					}
+					returnMsg("success", "保存成功", request);	
+					
+					String desc = sysUserSession.getUserName() + "新增政府用户:" + complatUser.getName(); 				
+					jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,2,1);					
+					
+				}else {
+					
+					//对密码进行加密
+					String pwd = complatUser.getPwd();
+					String p = Md5Util.md5encode(pwd);
+					complatUser.setPwd(p);
+					//注册时间
+					String time = TimeHelper.getCurrentTime();
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					Date modifyTime = sdf.parse(time);
+					complatUser.setModifytime(modifyTime);
+					Date d = new Date();
+					complatUser.setCreatetime(d);// 创建时间
+					//转换保存创建时间
+					userId = complatUser.getIid();
+					complatUser.setEnable(1); // 是否禁用	
+					complatUser.setOpersign(2);//更新操作状态
 					complatUserService.save(complatUser);
-					returnMsg("success", "保存成功", request);
-				} else {
-					// 注册时间
-					complatUser.setEnable(1); // 是否禁用
-					String time = request.getParameter("time");
-					Date createTime = sdf.parse(time);
-					complatUser.setCreatetime(createTime);
-					complatUserService.save(complatUser);
-					returnMsg("success", "编辑成功", request);
-				}
+					
+					//身份证号处理 JisUserdetail
+					String cardId = request.getParameter("cardid");
+					JisUserdetail jisUserdetail = jisUserdetailService.findByUserid(userId);
+					if(jisUserdetail == null){
+						JisUserdetail jisUser = new JisUserdetail();
+						jisUser.setCardid(cardId);
+						jisUser.setIid(userId);
+						jisUser.setUserid(userId);
+						jisUserdetailService.save(jisUser);
+					}else{
+						//扩展属性
+						Map<String,String> userMap = this.saveExendsAttr(userId, request);
+						//对身份证号和用户扩展属性update
+						jisUserdetailService.update(jisUserdetail.getIid(),cardId,userMap);
+					}
+					
+					returnMsg("success", "编辑成功", request);								
+					String desc = sysUserSession.getUserName() + "修改政府用户:" + complatUser.getName(); 
+					jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,2,2);				
+				}	
+			} 
 		} catch (Exception e) {
 			e.printStackTrace();
 			returnMsg("error", "保存失败", request);
@@ -268,6 +344,7 @@ public class ComplatUserController extends BaseController {
 	public ModelAndView complatUserDelete(String iid,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
+		SysUserSession session = (SysUserSession) request.getSession().getAttribute("sysUserSession");
 		try {
 			String[] para = iid.split(",");
 			ComplatUser complatUser = null;
@@ -278,7 +355,10 @@ public class ComplatUserController extends BaseController {
 					complatUserService.delete(complatUser);
 					returnMsg("success", "删除成功", request);
 				}
+				String desc=session.getUserName()+"删除了"+complatUser.getName();
+	            jisLogService.save(session.getUserName(),session.getUserIp(), desc, 2, 3);
 			}
+			 
 		} catch (Exception e) {
 			e.printStackTrace();
 			returnMsg("error", "删除失败", request);
@@ -324,6 +404,8 @@ public class ComplatUserController extends BaseController {
 			@RequestParam("files") MultipartFile multipartFile,
 			HttpServletRequest request, Model model,
 			HttpServletResponse response) throws Exception {
+		SysUserSession session = (SysUserSession) request.getSession().getAttribute("sysUserSession");
+		Map resMap = new HashMap();
 		String fileName = multipartFile.getOriginalFilename();
 		LinkedHashMap<String, String> fieldMap = new LinkedHashMap<String, String>();
 		fieldMap.put("0", "name");
@@ -351,11 +433,7 @@ public class ComplatUserController extends BaseController {
 		boolean flag = true;
 		String strRow = "";
 		try {
-			for (ComplatUser complatUser : users) {
-				//从解析出来的集合中获取机构id
-				int groupId = complatUser.getGroupid();
-				//依据机构id在机构表中查询当前机构id的机构对象
-			   
+			for (ComplatUser complatUser : users) {			   
 				List<ComplatUser> list = complatUserService.findByUserAllName(complatUser.getLoginallname());
 				if (list.size() == 0) {
 					if (StringHelper.isNotBlack(complatUser.getName())) { // 判断excel表格导入的数据是否规范
@@ -372,7 +450,14 @@ public class ComplatUserController extends BaseController {
 	                    complatUser.setEnable(0);
 						complatUser.setOpersign(1);
 						complatUser.setSynState(2);
+						
+						//对密码进行加密
+						String pwd = complatUser.getPwd();
+						String p = Md5Util.md5encode(pwd);
+						complatUser.setPwd(p);
 						complatUserService.save(complatUser);
+						String desc=session.getUserName()+"导入了"+complatUser.getName();
+			            jisLogService.save(session.getUserName(),session.getUserIp(), desc, 2, 5);
 					} else {
 						flag = false;
 						strRow = strRow + row + "、"; // 记录第几行数据导入失败
@@ -380,14 +465,20 @@ public class ComplatUserController extends BaseController {
 					row++;// 导入行数加一
 				}// if(list
 			}// for
-			if (flag) {
-				returnMsg("success", "导入成功", request);
-			} else {
-				returnMsg("error", "导入失败,第" + strRow + "数据不符合规范！", request);
-			}
+			
+			
+			if(flag){
+				resMap.put("ret", "1");
+				resMap.put("msg", "导入成功！");
+				response.getWriter().write(JSONObject.toJSONString(resMap));				
+			}else{
+				resMap.put("ret", "0");
+				resMap.put("msg", "导入失败！");
+				response.getWriter().write(JSONObject.toJSONString(resMap));
+			}		
 		} catch (Exception e) {
 			e.printStackTrace();
-			returnMsg("error", "导入失败", request);
+			//returnMsg("error", "导入失败", request);
 		}
 		return new ModelAndView("redirect:/complat/complatList");
 	}
@@ -403,8 +494,9 @@ public class ComplatUserController extends BaseController {
 	 * @author <a href=" ">shenxh</a>
 	 */
 	@RequestMapping(value = "/complatExport", method = RequestMethod.GET)
-	public void complatExport(Model model, HttpServletRequest request,
+	public ModelAndView complatExport(Model model, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
+		SysUserSession session = (SysUserSession) request.getSession().getAttribute("sysUserSession");
 		String userIid = request.getParameter("iid");
 		String[] complatUserIds = userIid.split(",");
 		String fileName = "政府用户信息统计列表";
@@ -434,11 +526,10 @@ public class ComplatUserController extends BaseController {
 		headList.add("创建日期");
 
 		Workbook wb = new XSSFWorkbook(); // 导出 Excel为2007 工作簿对象
-
+		ComplatUser complatUser = null;
 		List dataList = new ArrayList();
 		for (String iid : complatUserIds) {
-			ComplatUser complatUser = complatUserService.findByKey(Integer
-					.parseInt(iid));
+			complatUser = complatUserService.findByKey(Integer.parseInt(iid));
 			TreeMap<String, Object> treeMap = new TreeMap<String, Object>();
 			treeMap.put("10", complatUser.getName());// 用户姓名
 			treeMap.put("11", complatUser.getAge());// 年龄
@@ -476,11 +567,18 @@ public class ComplatUserController extends BaseController {
 			treeMap.put("31", complatUser.getCreatetime());// 创建日期
 			dataList.add(treeMap);
 		}
+		String desc=session.getUserName()+"导出了"+complatUser.getName();
+        jisLogService.save(session.getUserName(),session.getUserIp(), desc, 2, 4);
 		map.put(ExcelUtil.HEADERINFO, headList);
 		map.put(ExcelUtil.DATAINFON, dataList);
 		ExcelUtil.writeExcel(map, wb, response, fileName);
+		return  new ModelAndView("redirect:/complat/complatList");
+
 	}
 
+	
+	
+	
 	/**
 	 * 用户设置模块,点击用户设置按钮，页面跳转
 	 * 
@@ -549,7 +647,9 @@ public class ComplatUserController extends BaseController {
 
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/userSetUpSave", method = RequestMethod.POST)
-	public ModelAndView userSetUpSave(ComplatUser complatUser,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+	public void userSetUpSave(ComplatUser complatUser,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+		
+		Map<String, Object> resMap = new HashMap<String, Object>();
 		try {
 			Integer userId = null;
 			if(complatUser != null){
@@ -579,13 +679,15 @@ public class ComplatUserController extends BaseController {
 					jisUserdetailService.update(jisUserdetail.getIid(),cardId,userMap);
 				}
 			}			
-			returnMsg("success","保存成功",request);
+			resMap.put("ret", "0");
+			resMap.put("msg", "保存成功！");
+			response.getWriter().write(JSONObject.toJSONString(resMap));
 		} catch (Exception e) {
 			e.printStackTrace();
-			returnMsg("error","保存失败",request);
-		} finally{
-			return  new ModelAndView("redirect:/complat/complatList");
-		}
+			resMap.put("ret", "1");
+			resMap.put("msg", "保存失败！");
+			response.getWriter().write(JSONObject.toJSONString(resMap));
+		} 
 		
 	}
 

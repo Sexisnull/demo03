@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -72,25 +73,34 @@ public class ExcelUtil {
 				for (int rowNum = 1; rowNum <= sheet.getLastRowNum(); rowNum++) {
 					Row hssfRow = sheet.getRow(rowNum);
 					if (hssfRow != null) {
-						T entity=entityClass.newInstance();
+						T entity=entityClass.newInstance();						
 						int columnNum=sheet.getRow(0).getPhysicalNumberOfCells();
 						//循环列col
 						for(int i = 0;i<columnNum;i++){
 							Object content = null;
 							if(hssfRow.getCell(i) != null){
 								content = formatCell(hssfRow.getCell(i));
+								if(i==2){
+									if("男".equals(content)){
+										content=1;
+									}else if("女".equals(content)){
+										content=0;
+									}
+								}
+								/*if(i==5 || i== 6){
+									//java导入excel文件时,数字显示	
+									DecimalFormat dfs = new DecimalFormat("0");
+									content = dfs.format(hssfRow.getCell(i));
+								}*/
 							}else{
 								content = "";
 							}
-							if("男".equals(content)){
-								content=1;
-							}else if("女".equals(content)){
-								content=0;
-							}
-							//content = formatCell(hssfRow.getCell(i));
+							
+							
 							String fieldName = fieldMap.get(String.valueOf(i));
 							setFieldValueByName(fieldName, content, entity);
 						}
+						
 						resultList.add(entity);
 					}
 				}
@@ -130,7 +140,8 @@ public class ExcelUtil {
 		if (cell.getCellType() == cell.CELL_TYPE_BOOLEAN) {
 			return String.valueOf(cell.getBooleanCellValue());
 		} else if (cell.getCellType() == cell.CELL_TYPE_NUMERIC) {
-			return String.valueOf(cell.getNumericCellValue());
+			DecimalFormat dfs = new DecimalFormat("0");
+			return String.valueOf(dfs.format(cell.getNumericCellValue()));
 		} else {
 			return String.valueOf(cell.getStringCellValue());
 		}

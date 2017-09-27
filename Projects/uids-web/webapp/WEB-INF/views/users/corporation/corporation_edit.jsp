@@ -1,5 +1,6 @@
 
 
+
 <%@ page language="java" pageEncoding="utf-8"%>
 <!DOCTYPE html>
 <html>
@@ -137,7 +138,11 @@ color: rgb(119, 119, 119);
 			</li>
 			<li class="split"></li>
 			<li>
-				<a>法人管理</a>
+				<a>公网用户</a>
+			</li>
+			<li class="split"></li>
+			<li>
+				<a>法人用户</a>
 			</li>
 			<li class="split"></li>
 			<li class="active">
@@ -156,6 +161,7 @@ color: rgb(119, 119, 119);
     	<input type="hidden" id="isAuth" name="isAuth" value="${corporation.isAuth}"/>
     	<input type="hidden" id="time" name="time" value="${time}">
     	<input type="hidden" name="corNation" id="corNation" value="${corNation}">
+    	<input type="hidden" name="operSign" id="operSign" value="${corporation.operSign}">
     </div>
     
     <!--表单的主内容区域-->
@@ -183,17 +189,7 @@ color: rgb(119, 119, 119);
 		<tr>
 			<th><b class="mustbe">*</b> 企业法人身份证号：</th>
 				<td>
-<<<<<<< HEAD
-					<c:if test="${empty corporation.cardNumber}">
-						<input type="text" id="cardNumber" name="cardNumber"  maxlength="18">
-					</c:if>
-					<c:if test="${not empty corporation.cardNumber}">
-						<input type="text" id="cardNumber" name="cardNumber" value="${corporation.cardNumber}" maxlength="18" readonly="readonly">
-					</c:if>
-					
-=======
 					<input type="text" <c:if test="${corporation.cardNumber != null}">readonly="readonly"</c:if> id="cardNumber" name="cardNumber" value="${corporation.cardNumber}">
->>>>>>> ee0c124ca97714d8fed1c99f8b06cf2cd148dc78
 	            </td>
 				<th> 企业法人民族：</th>
 				<td>
@@ -215,20 +211,16 @@ color: rgb(119, 119, 119);
 		
 		
 		<tr>
-			<td class="td_2" rowspan="4" tyle="max-width:0px;width:100px;ont-weight:bold;" align="center"">账户信息</td>
+			<td class="td_2" rowspan="4" tyle="max-width:0px;width:100px;ont-weight:bold;" align="center">账户信息</td>
 			<th><b class="mustbe">*</b>用户名：</th>
 			<td>
-<<<<<<< HEAD
 				<input type="text"  id="loginName" name="loginName" value="${corporation.loginName}" maxlength="33"/>
-=======
-				<input type="text"  id="loginName" name="loginName" value="${corporation.loginName}" />
->>>>>>> ee0c124ca97714d8fed1c99f8b06cf2cd148dc78
-            	<input type="hidden"  id="oldLoginName" name="oldLoginName" value="${corporation.loginName}" />
-            </td>
-        	<th><b class="mustbe">*</b> 手机号码：</th>
-        	<td>
-        		<input type="text" id="mobile" name="mobile" value="${corporation.mobile}" />
-        	</td>
+       			<input type="hidden"  id="oldLoginName" name="oldLoginName" value="${corporation.loginName}" />
+     		 </td>
+		     <th><b class="mustbe">*</b> 手机号码：</th>
+		     <td>
+		    	<input type="text" id="mobile" name="mobile" value="${corporation.mobile}" />
+		     </td>
 		</tr>
 		<tr>
 			<th> 密码：</th>

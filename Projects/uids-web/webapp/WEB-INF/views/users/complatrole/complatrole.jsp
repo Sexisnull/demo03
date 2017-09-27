@@ -7,6 +7,7 @@
 		<title></title>
 		<script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgcore.lhgdialog.min.js"></script>
 		<link rel="stylesheet" href="${ctx}/res/skin/default/css/jquery-ui.css">
+		<link type="text/css" rel="stylesheet" href="${ctx}/res/skin/login/css/menu.css" />
 		<script type="text/javascript" src="${ctx}/res/skin/default/js/jquery-ui.js"></script>
 		
 		<script type="text/javascript">
@@ -63,6 +64,29 @@
 			$.validator.errorShow($("#nameSearch"), '只能包括中英文、数字、@和下划线');
 		}
 	}
+	function deleteRole() {
+		var paraTypeId=$(".croleId").val();
+		if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checked').length!=0){
+				$.dialog.confirm('您确认要删除吗？',function(){
+					var ids = "";
+					$('.list-table tbody .check_btn').each(function(i, o) {
+						console.log($(o));
+						if($(o).attr('checked')) {
+							ids += $(o).val() + ",";
+						}
+					});
+					window.location.href="${ctx}/complat/croleDelete?croleId="+ids.substring(0,ids.length-1);
+				});
+				
+			}else{
+				$.dialog.confirm('请您至少选择一条数据',function(){
+					return null;
+				});
+			}
+	}
+	/* function add(){
+	     window.location.href="${ctx}/complat/croleEdit";
+	} */
 </script>
 <style>
 .window-mask {
@@ -89,7 +113,7 @@
 				</li>
 				<li class="split"></li>
 				<li>
-					<a href="#">系统管理</a>
+					<a href="#">角色管理</a>
 				</li>
 				<li class="split"></li>
 				<li class="active">
@@ -121,7 +145,11 @@
 					<!-- 搜索内容结束 -->
 					<!-- 操作按钮开始 -->
 					<div class="list-toolbar">
-						<gsww:opTag menuId="8a9200c05e5f797f015e5f8c0ee10003" tabIndex="1" operatorType="1"></gsww:opTag>
+						<%-- <gsww:opTag menuId="8a9200c05e5f797f015e5f8c0ee10003" tabIndex="1" operatorType="1"></gsww:opTag> --%>
+						<ul class="list-Topbtn">
+							<li class="add"><a title="新增" onclick="add('complat/croleEdit');">新增</a></li>
+							<li class="del"><a title="删除" onclick="deleteRole();">删除</a></li>
+						</ul>
 					</div>
 					<!-- 操作按钮结束 -->
 
@@ -205,7 +233,7 @@
 			<tags:pagination page="${pageInfo}" paginationSize="5" />
 		</div>
 	
-<div id="tabs" style="display:none;width: 65%;margin: auto;position: absolute;left: 165px;top: 50.5px">
+<div id="tabs" style="display:none;width: 68%;margin: auto;position: absolute;left: 165px;top: 50.5px">
  	<ul style="text-align: center;">
 	    <li style="text-align: center;width: 32.7%;"><a id="yhjg" style="width: 90%;" href="">用户机构管理</a></li>
 	    <li style="text-align: center;width: 32.7%;"><a id="yyqx" style="width: 90%;" href="">应用权限设置</a></li>

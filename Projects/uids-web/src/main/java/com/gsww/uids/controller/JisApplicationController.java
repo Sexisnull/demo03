@@ -165,6 +165,13 @@ public class JisApplicationController extends BaseController{
 		
 		try {
 			if(jisApplication != null){
+				String picName=request.getParameter("picName");
+				String groupid=request.getParameter("groupid");
+				Integer groupId=Integer.parseInt(groupid);
+				System.out.println(groupId+"lllllllllllllllllll");
+				jisApplication.setGroupId(groupId);
+				String uploadFile="/uploads/"+picName;
+				jisApplication.setIcon(uploadFile);
 				jisApplicationService.save(jisApplication);
 				returnMsg("success","保存成功",request);
 			}
@@ -192,8 +199,21 @@ public class JisApplicationController extends BaseController{
 	 */
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/applicationDelete", method = RequestMethod.GET)
-	public ModelAndView applicationDelete(Integer iid,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+	public ModelAndView applicationDelete(String iid,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		try {
+			String[] para=iid.split(",");
+			JisApplication jisApplication = null;
+			for(int i=0;i<para.length;i++){
+				Integer Iid = Integer.parseInt(para[i].trim());
+				jisApplication=jisApplicationService.findByKey(Iid);
+				jisApplicationService.delete(jisApplication);
+							}
+			returnMsg("success","删除成功",request);
+		} catch (Exception e) {
+			e.printStackTrace();
+			returnMsg("error", "删除失败",request);
+		
+		/*try {
 			JisApplication jisApplication = null;
 			jisApplication=jisApplicationService.findByKey(iid);
 			jisApplicationService.delete(jisApplication);
@@ -205,7 +225,7 @@ public class JisApplicationController extends BaseController{
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			returnMsg("error", "删除失败",request);			
+			returnMsg("error", "删除失败",request);*/			
 		} finally{
 			return  new ModelAndView("redirect:/application/applicationList");
 		}

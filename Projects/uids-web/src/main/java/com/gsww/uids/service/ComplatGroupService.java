@@ -65,7 +65,7 @@ public interface ComplatGroupService {
 	 * @return
 	 * @throws Exception
 	 */
-	public ComplatGroup queryNameIsUsed(String name)throws Exception;
+	public boolean queryNameIsUsed(String name, Integer pid)throws Exception;
 	
 
 	/**
@@ -101,7 +101,7 @@ public interface ComplatGroupService {
 	public List<Map<String,Object>> findAllIidsAndName();
 	
 	
-	public ComplatGroup findByIid(int iid);
+	public ComplatGroup findByCodeid(String codeid) throws Exception;
 	
 
 }

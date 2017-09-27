@@ -1,8 +1,11 @@
 package com.gsww.uids.controller;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletRequest;
@@ -10,6 +13,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +37,15 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
+import com.gsww.jup.entity.sys.SysUserSession;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.jup.util.StringHelper;
 import com.gsww.uids.entity.ComplatOutsideuser;
 import com.gsww.uids.service.ComplatOutsideuserService;
+import com.gsww.uids.service.JisLogService;
+import com.hanweb.common.util.Md5Util;
+
+import net.sf.json.JSONObject;
 
 /**
  * Title: OutsideUserController.java Description: 个人用户控制层
@@ -43,6 +60,8 @@ public class ComplatOutsideuserController extends BaseController {
 	private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	@Autowired
 	private ComplatOutsideuserService outsideUserService;
+	@Autowired
+	private JisLogService jisLogService;
 
 	@RequestMapping(value = "/outsideuserList", method = RequestMethod.GET)
 	public String accountList(@RequestParam(value = "page", defaultValue = "1") int pageNo,
@@ -70,13 +89,13 @@ public class ComplatOutsideuserController extends BaseController {
 			// 分页
 			Page<ComplatOutsideuser> pageInfo = outsideUserService.getOutsideUserPage(spec, pageRequest);
 			model.addAttribute("pageInfo", pageInfo);
-
+			
 			// 将搜索条件编码成字符串，用于排序，分页的URL
 			model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
 			model.addAttribute("sParams", searchParams);
 
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error(ex.getMessage(), ex);
 			logger.error("列表打开失败：" + ex.getMessage());
 			returnMsg("error", "列表打开失败", (HttpServletRequest) request);
 			return "redirect:/complat/outsideuserList";
@@ -103,13 +122,16 @@ public class ComplatOutsideuserController extends BaseController {
 				outsideUser = outsideUserService.findByKey(Integer.parseInt(outsideuserId));
 				Date createTime = outsideUser.getCreateTime();
 				String time = sdf.format(createTime);
+				String pwdString = outsideUser.getPwd();
+				String pwd = Md5Util.md5decode(pwdString);//解密
+				outsideUser.setPwd(pwd);
 				model.addAttribute("time", time);
 			} else {
 				outsideUser = new ComplatOutsideuser();
 			}
 			model.addAttribute("outsideUser", outsideUser);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return "users/outsideUser/outsideUser_edit";
 	}
@@ -127,9 +149,9 @@ public class ComplatOutsideuserController extends BaseController {
 	public ModelAndView accountSave(ComplatOutsideuser outsideUser, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		try {
+			SysUserSession sysUserSession =  (SysUserSession) ((HttpServletRequest) request).getSession().getAttribute("sysUserSession");
 			if (outsideUser != null) {
 				String iidStr = String.valueOf(outsideUser.getIid());
-				System.out.println(iidStr);
 				if (iidStr == "null" || iidStr.length() <= 0) {
 					Date d = new Date(); 
 					outsideUser.setEnable(1); // 是否禁用
@@ -137,20 +159,30 @@ public class ComplatOutsideuserController extends BaseController {
 					outsideUser.setIsAuth(0); // 是否审核
 					outsideUser.setCreateTime(d);//创建时间
 					outsideUser.setOperSign(1);//更新操作状态
+					String pwdString = outsideUser.getPwd();
+					String pwd = Md5Util.md5encode(pwdString);//加密
+					outsideUser.setPwd(pwd);
 					outsideUserService.save(outsideUser);
 					returnMsg("success", "保存成功", request);
+					String desc = sysUserSession.getUserName() + "新增个人用户:" + outsideUser.getName(); 
+					jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,10,1);
 				} else {
 					//注册时间
 					String time = request.getParameter("time");
 					Date createTime = sdf.parse(time);
 					outsideUser.setCreateTime(createTime);//转换保存创建时间
 					outsideUser.setOperSign(2);//更新操作状态
+					String pwdString = outsideUser.getPwd();
+					String pwd = Md5Util.md5encode(pwdString);
+					outsideUser.setPwd(pwd);
 					outsideUserService.save(outsideUser);
 					returnMsg("success", "编辑成功", request);
+					String desc = sysUserSession.getUserName() + "修改个人用户:" + outsideUser.getName(); 
+					jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,10,2);
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 			returnMsg("error", "保存失败", request);
 		} finally {
 			return new ModelAndView("redirect:/complat/outsideuserList");
@@ -170,14 +202,17 @@ public class ComplatOutsideuserController extends BaseController {
 	public ModelAndView accountDelete(String corporationId, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		try {
+			SysUserSession sysUserSession =  (SysUserSession) ((HttpServletRequest) request).getSession().getAttribute("sysUserSession");
 			String[] para = corporationId.split(",");
+			String desc = sysUserSession.getUserName() + "删除id为：" + para +"的个人用户"; 
+			jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,10,3);
 			for (int i = 0; i < para.length; i++) {
 				Integer corId = Integer.parseInt(para[i].trim());
 				outsideUserService.delete(corId);
 				returnMsg("success", "删除成功", request);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 			returnMsg("error", "删除失败", request);
 		} finally {
 			return new ModelAndView("redirect:/complat/outsideuserList");
@@ -203,13 +238,13 @@ public class ComplatOutsideuserController extends BaseController {
 				if(enable == 0){
 					complatOutsideuser.setEnable(1);
 					outsideUserService.save(complatOutsideuser);
-					returnMsg("success", "启用成功！", request);				
+					returnMsg("success", "开启成功！", request);				
 				} else {
-					returnMsg("success", "账号已启用！", request);
+					returnMsg("success", "账号已开启！", request);
 				}
 			}								
 		}catch(Exception e){
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}finally{
 			return  new ModelAndView("redirect:/complat/outsideuserList");
 		}
@@ -241,7 +276,67 @@ public class ComplatOutsideuserController extends BaseController {
 				}
 			}								
 		}catch(Exception e){
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
+		}finally{
+			return  new ModelAndView("redirect:/complat/outsideuserList");
+		}
+	}
+	
+	/**
+     * @discription  批量开启账号  
+     * @param iid
+     * @param model
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+	 */
+	@SuppressWarnings("finally")
+	@RequestMapping(value = "/outsideuserOperatrStart", method = RequestMethod.GET)
+	public ModelAndView outsideuserOperatrStart(String outsideuserOperatorId,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+		ComplatOutsideuser complatOutsideuser = null;
+		try{
+			String[] para = outsideuserOperatorId.split(",");
+			for (int i = 0; i < para.length; i++) {
+				Integer corId = Integer.parseInt(para[i].trim());
+				complatOutsideuser = outsideUserService.findByKey(corId);
+				complatOutsideuser.setEnable(1);
+				outsideUserService.save(complatOutsideuser);
+			}
+			returnMsg("success", "开启成功！", request);				
+		}catch(Exception e){
+			logger.error(e.getMessage(), e);
+			returnMsg("error", "开启失败！", request);
+		}finally{
+			return  new ModelAndView("redirect:/complat/outsideuserList");
+		}
+	}
+	
+	/**
+     * @discription   批量关闭账号
+     * @param iid
+     * @param model
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+	 */
+	@SuppressWarnings("finally")
+	@RequestMapping(value = "/outsideuserOperatorStop", method = RequestMethod.GET)
+	public ModelAndView outsideuserOperatorStop(String outsideuserOperatorId,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+		ComplatOutsideuser complatOutsideuser = null;
+		try{			
+			String[] para = outsideuserOperatorId.split(",");
+			for (int i = 0; i < para.length; i++) {
+				Integer corId = Integer.parseInt(para[i].trim());
+				complatOutsideuser = outsideUserService.findByKey(corId);
+				complatOutsideuser.setEnable(0);
+				outsideUserService.save(complatOutsideuser);
+			}
+			returnMsg("success", "关闭成功！", request);								
+		}catch(Exception e){
+			logger.error(e.getMessage(), e);
+			returnMsg("error", "关闭失败！", request);
 		}finally{
 			return  new ModelAndView("redirect:/complat/outsideuserList");
 		}
@@ -260,7 +355,8 @@ public class ComplatOutsideuserController extends BaseController {
 	@RequestMapping(value = "/outsideuserAuth", method = RequestMethod.GET)
 	public ModelAndView outsideuserAuth(Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		ComplatOutsideuser complatOutsideuser = null;
-		try{			
+		try{
+			SysUserSession sysUserSession =  (SysUserSession) ((HttpServletRequest) request).getSession().getAttribute("sysUserSession");
 			String iid = StringUtils.trim((String) request.getParameter("iid"));
 			String outsideUserType = StringUtils.trim((String) request.getParameter("outsideUserType"));
 			String rejectReason2 = StringUtils.trim((String) request.getParameter("rejectReason2"));
@@ -269,13 +365,17 @@ public class ComplatOutsideuserController extends BaseController {
 			if(type == 1) {
 				int isAuth = complatOutsideuser.getIsAuth();
 				if (isAuth == 0) {
+					//认证接口调用
 					complatOutsideuser.setIsAuth(1);
 					complatOutsideuser.setAuthState(1);
 					outsideUserService.save(complatOutsideuser);
 					returnMsg("success", "用户认证成功！", request);
+					String desc = sysUserSession.getUserName() + "对个人用户:" + complatOutsideuser.getName() + "认证通过"; 
+					jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,10,12);
 				} else {
 					returnMsg("success", "用户已认证！", request);
 				}
+				
 			} else if (type == 0) {
 				complatOutsideuser.setIsAuth(0);
 				complatOutsideuser.setAuthState(2);
@@ -284,9 +384,11 @@ public class ComplatOutsideuserController extends BaseController {
 				}
 				outsideUserService.save(complatOutsideuser);
 				returnMsg("success", "用户认证已拒绝！", request);
+				String desc = sysUserSession.getUserName() + "对个人用户:" + complatOutsideuser.getName() + "拒绝认证"; 
+				jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,10,12);
 			} 
 		}catch(Exception e){
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 			returnMsg("error", "认证失败！", (HttpServletRequest) request);
 		}finally{
 			return  new ModelAndView("redirect:/complat/outsideuserList");
@@ -311,7 +413,7 @@ public class ComplatOutsideuserController extends BaseController {
 				out.write(json);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 	
@@ -341,7 +443,72 @@ public class ComplatOutsideuserController extends BaseController {
 			}
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
+	/**
+     * @discription    认证调用接口实现
+     * @param verifyMode 认证模式
+     * @param syscode 分配给的系统代码
+     * @param token token
+     * @param idCard  身份证号码
+     * @param name 姓名
+     * @return
+	 */
+	public static String sendAuthInfo(Integer verifyMode, String syscode, String token, String idCard, String name) {
+		HttpClient httpclient = new DefaultHttpClient();
+		String gwyverifyUrl = "http://localhost:8080/gov-apis/api/gwy/verify/gwyverify/" + verifyMode + "/" + syscode + "/" + token;
+		HttpPost httppost = new HttpPost(gwyverifyUrl);
+		String strResult = "";
+		try {  
+            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();  
+            JSONObject jobj = new JSONObject();  
+            jobj.put("id", idCard);  
+            jobj.put("name", name);  
+            nameValuePairs.add(new BasicNameValuePair("msg", getStringFromJson(jobj)));  
+            httppost.addHeader("Content-type", "application/x-www-form-urlencoded");  
+            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs,"UTF-8"));  
+              
+            HttpResponse response = httpclient.execute(httppost);  
+            if (response.getStatusLine().getStatusCode() == 200) {  
+                /*读返回数据*/  
+                String conResult = EntityUtils.toString(response  
+                        .getEntity());  
+                JSONObject sobj = new JSONObject();  
+                sobj = JSONObject.fromObject(conResult);  
+                String result = sobj.getString("result");  
+                String code = sobj.getString("code");  
+                if(result.equals("1")){  
+                    strResult += "发送成功";  
+                }else{  
+                    strResult += "发送失败，"+code;  
+                }  
+                  
+            } else {  
+                String err = response.getStatusLine().getStatusCode()+"";  
+                strResult += "发送失败:"+err;  
+            }  
+    } catch (ClientProtocolException e) {  
+    	logger.error(e.getMessage(), e);  
+    } catch (IOException e) {  
+    	logger.error(e.getMessage(), e);  
+    }  
+    return strResult;
+	}
+	
+	
+	/**
+     * @discription    字符串转json
+     * @param adata
+     * @return
+	 */
+	private static String getStringFromJson(JSONObject adata) {  
+        StringBuffer sb = new StringBuffer();  
+        sb.append("{");  
+        for(Object key:adata.keySet()){  
+            sb.append("\""+key+"\":\""+adata.get(key)+"\",");  
+        }  
+        String rtn = sb.toString().substring(0, sb.toString().length()-1)+"}";  
+        return rtn;  
+    }  
 }

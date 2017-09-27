@@ -10,12 +10,12 @@
 <script type="text/javascript">
 $().ready(function() {
 	//表单校验
-	var outisideUserNameInput=$("#name").val();
 	$("#editForm").validate({
 		rules: {
 			loginName : {//重命名校验*
 				required: true,
 				cnRangelength: [0,127],
+				isLoginName : true,
 				uniqueLoginName: true 
 			},
 		   	pwd : {
@@ -25,7 +25,7 @@ $().ready(function() {
 			name : {
 				required: true,
 				cnRangelength: [0,32],
-		    	stringCheck: outisideUserNameInput
+		    	isName: true
 			},
 			email : {//email校验
 				required: true,
@@ -39,11 +39,16 @@ $().ready(function() {
 			},
 			residenceDetail : {
 				required: true,
-				cnRangelength: [0,127]
+				cnRangelength: [0,127],
+				isName:true
+				/* isResidenceDetail：true */
+				
 			},
 			livingAreaDetail : {
 				required: true,
-				cnRangelength: [0,127]
+				/* isAddressInfo：true, */
+				cnRangelength: [0,127],
+				isName:true
 			},
 			sex : {
 				required: true
@@ -82,18 +87,37 @@ $().ready(function() {
 		   		cnRangelength: [0,64]
 		   	},
 			post:{
-		   		maxlength: 6
+				/* isEmail：true, */
+		   		maxlength: 6,
+		   		isPost:true
 		   	},
 			address:{
+				/* isAddressInfo:true, */
 		   		cnRangelength: [0,127]
 		   	},
 		   	submitHandler:function(form){
-					 form.submit();
+				form.submit();
 			}
 		}
 	});
 	// Ajax重命名校验
 	$.uniqueValidate('uniqueLoginName', '${ctx}/complat/checkOutisideUserLoginName', ['loginName','oldLoginName'], '对不起，这个账号重复了');
+
+	//个人用户名校验     
+    jQuery.validator.addMethod("isName", function(value, element) { 
+           var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "名称只能由字母、数字、下划线、中文组成，不能以下划线开头和结尾");
+    
+    jQuery.validator.addMethod("isLoginName", function(value, element) { 
+           var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9_]+$/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "名称只能由字母、数字、下划线组成，不能以下划线开头和结尾");
+    
+    jQuery.validator.addMethod("isPost", function(value, element) { 
+           var corporName = /^[1-9][0-9]{5}$/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "邮政编码格式不正确（共6位,开头不能为0)");
 });
 </script>
 
@@ -144,7 +168,11 @@ color: rgb(119, 119, 119);
 			</li>
 			<li class="split"></li>
 			<li>
-				<a>用户管理</a>
+				<a>公网用户</a>
+			</li>
+			<li class="split"></li>
+			<li>
+				<a>个人用户</a>
 			</li>
 			<li class="split"></li>
 			<li class="active">
@@ -317,7 +345,7 @@ color: rgb(119, 119, 119);
 				</td>
 				<th>邮编：</th>
 				<td>
-					<input type="text"  class="post" name="post" value="${outsideUser.post}" />
+					<input type="text"  class="post" id="post" name="post" value="${outsideUser.post}" />
 				</td>
 			</tr>
 			<tr>

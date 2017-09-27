@@ -25,12 +25,14 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
+import com.gsww.jup.entity.sys.SysUserSession;
 import com.gsww.jup.service.sys.SysParaService;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.uids.entity.JisSysview;
 import com.gsww.uids.entity.JisSysviewCurrent;
 import com.gsww.uids.entity.JisSysviewDetail;
 import com.gsww.uids.service.JisApplicationService;
+import com.gsww.uids.service.JisLogService;
 import com.gsww.uids.service.JisSysviewCurrentService;
 import com.gsww.uids.service.JisSysviewDetailService;
 import com.gsww.uids.service.JisSysviewService;
@@ -49,6 +51,8 @@ public class JisSysviewCurrentController extends BaseController{
 	private SysParaService sysParaService;
 	@Autowired
 	private JisSysviewDetailService jisSysviewDetailService;
+	@Autowired
+	private JisLogService jisLogService;
 	
 	@RequestMapping(value="/jisCurList",method = RequestMethod.GET)
 	public String jisCurList(@RequestParam(value = "page", defaultValue = "1") int pageNo,
@@ -112,6 +116,7 @@ public class JisSysviewCurrentController extends BaseController{
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/jisCurDelete", method = RequestMethod.GET)
 	public ModelAndView jisCurDelete(String iid, HttpServletRequest request,HttpServletResponse response)  throws Exception {
+		 SysUserSession session = (SysUserSession) request.getSession().getAttribute("sysUserSession");
 		try {
 			String[] para=iid.split(",");
 			JisSysviewCurrent jisCurrent = null;
@@ -120,11 +125,14 @@ public class JisSysviewCurrentController extends BaseController{
 				jisCurrent=jisSysviewCurrentService.findByIid(Iid);
 				if(null != jisCurrent){
 					jisSysviewCurrentService.delete(jisCurrent);
+					 String desc=session.getUserName()+"删除了"+jisCurrent.getObjectname();
+		                jisLogService.save(session.getUserName(),session.getUserIp(), desc, 3, 1);
 				}
 				//级联删除明细
 			    JisSysviewDetail sysviewDetail = jisSysviewDetailService.findByIid(Iid);
 			    if(null!=sysviewDetail){
 			    	jisSysviewDetailService.delete(sysviewDetail);
+			    	
 			    }
 			}
 			returnMsg("success","删除成功",request);
@@ -146,13 +154,15 @@ public class JisSysviewCurrentController extends BaseController{
 	 */
 	@RequestMapping(value="/syncSysview")
 	public ModelAndView syncSysview(int iid, HttpServletRequest request,HttpServletResponse response){
-		
+		 SysUserSession session = (SysUserSession) request.getSession().getAttribute("sysUserSession");
 		try {
 			JisSysviewCurrent sysviewCurrent = jisSysviewCurrentService.findByIid(iid);
 			if(null != sysviewCurrent){
 				JisSysview sysview = convertToJisSysview(sysviewCurrent);
 				jisSysviewService.save(sysview);
 				jisSysviewCurrentService.delete(sysviewCurrent);
+				 String desc=session.getUserName()+"同步了"+sysviewCurrent.getObjectname();
+	                jisLogService.save(session.getUserName(),session.getUserIp(), desc, 3, 1);
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -170,6 +180,7 @@ public class JisSysviewCurrentController extends BaseController{
 	 */
 	@RequestMapping(value="/batchSyncSysview")
 	public ModelAndView batchSyncSysview(String iid, HttpServletRequest request,HttpServletResponse response){
+		SysUserSession session = (SysUserSession) request.getSession().getAttribute("sysUserSession");
 		try {
 			String[] para=iid.split(",");
 			for(int i=0;i<para.length;i++){
@@ -178,6 +189,8 @@ public class JisSysviewCurrentController extends BaseController{
 					JisSysview sysview = convertToJisSysview(sysviewCurrent);
 					jisSysviewService.save(sysview);
 					jisSysviewCurrentService.delete(sysviewCurrent);
+					 String desc=session.getUserName()+"批量同步了"+sysviewCurrent.getObjectname();
+		                jisLogService.save(session.getUserName(),session.getUserIp(), desc, 3, 1);
 				}
 			}
 		}catch (Exception e) {
@@ -289,13 +302,13 @@ public class JisSysviewCurrentController extends BaseController{
 	public Map<String,Object> checkSyncState(@RequestParam("iid")String iid,@RequestParam("optresult")int optresult,Model model) throws Exception{
 		String[] para=iid.split(",");
 		Map<String,Object> returnMap = new HashMap<String, Object>();
+		returnMap.put("success", "false") ;
 		for(int i=0;i<para.length;i++){
 			JisSysviewCurrent jisSysviewCurrent = jisSysviewCurrentService.findByIid(Integer.valueOf(para[i]));
 			if(null!=jisSysviewCurrent){
 				if(optresult == jisSysviewCurrent.getOptresult()){
 					returnMap.put("success", "true") ;
-				}else{
-					returnMap.put("success", "false") ;
+					break;
 				}
 			}
 		}

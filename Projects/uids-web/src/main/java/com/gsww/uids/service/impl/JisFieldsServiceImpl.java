@@ -62,7 +62,7 @@ public class JisFieldsServiceImpl implements JisFieldsService {
 		Iterator<JisFields> jisFieldsIterable = jisFieldsIterables.iterator();
 		while (jisFieldsIterable.hasNext()) {
 			JisFields jisFields = (JisFields) jisFieldsIterable.next();
-			if (jisFields.getIssys() == 1) {
+			if (jisFields.getIssys() != null && jisFields.getIssys() == 1) {
 				jisFieldsList.add(jisFields);
 			}
 		}
@@ -106,18 +106,23 @@ public class JisFieldsServiceImpl implements JisFieldsService {
 				}
 			}
 			whereFieldsName = whereFieldsName.substring(0,whereFieldsName.length()-1);
-			if(userId==null){
-				querySql = "select distinct type,"+ queryFieldsName +" from jis_fields a  where"+
+			/*if(userId==null){
+				querySql="select fieldname from jis_fields  where type = '1'";
+				listMap= jdbcTemplate.queryForList(querySql);
+				querySql = "select distinct a.fieldname,"+queryFieldsName +" from jis_fields a,jis_userdetail b where "+
 				"type = '1' and a.fieldname in("+whereFieldsName+")";
-			}else{
-				querySql = "select distinct b.userid,type,"+ queryFieldsName +" from jis_fields a ,jis_userdetail b where b.userid = '"+userId+"'" +
+				System.out.println("新增扩展属性input============"+listMap);
+				
+			}else{*/
+				querySql = "select distinct b.userid,type,"+ queryFieldsName +" from jis_fields a ,jis_userdetail b where b.userid = '"+userId+"' " +
 				" and type = '1' and a.fieldname in("+whereFieldsName+")";
-			}
-			
+				
+			//}			
 		}else if(type == 2){
 			querySql = "select a.fieldkeys,a.fieldvalues,type,a.fieldname from jis_fields a where type = '2'";
 		}
 		listMap = jdbcTemplate.queryForList(querySql);
+		//System.out.println("新增扩展属性============"+listMap);
 		return listMap;
 	}
 
@@ -150,8 +155,8 @@ public class JisFieldsServiceImpl implements JisFieldsService {
 		return fieldsMap;
 	}
 
-	
-	
-	
-
+	@Override
+	public List<JisFields> findByFieldname(String fieldname) {
+		return jisFieldsDao.findByFieldname(fieldname);
+	}
 }

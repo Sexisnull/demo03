@@ -20,7 +20,8 @@ public class JisDatacallServiceTest {
 	private static Logger logger = LoggerFactory.getLogger(JisDatacallServiceTest.class);
 	@Test
 	public void save(){
-		JisDatacall call=new JisDatacall(0, null, null, 0, 0, 0, null, null, 0, null, 0);
+		JisDatacall call=new JisDatacall();
+		call.setContent("内容");
 		try {
 			jisDatacallService.save(call);
 		} catch (Exception e) {

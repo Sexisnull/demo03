@@ -78,6 +78,10 @@ public interface JisFieldsService {
 	 */
 	Map<String,Object> findByUserIdAndType(List<JisFields> fieldsList,Integer userId) throws Exception;
 	
-	
-	
+	/**
+     * @discription   根据fieldname查找用户扩展属性实体集合 
+     * @param fieldname
+     * @return
+	 */
+	List<JisFields> findByFieldname(String fieldname);
 }

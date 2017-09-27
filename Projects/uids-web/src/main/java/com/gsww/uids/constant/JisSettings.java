@@ -1,5 +1,6 @@
 package com.gsww.uids.constant;
 
+import com.gsww.jup.SpringContextHolder;
 import com.hanweb.common.util.SpringUtil;
 
 public class JisSettings
@@ -98,7 +99,7 @@ public class JisSettings
 
   private String businessNameForRegestingPer = "";
 
-  private String registPerMessageContent = "";
+  private String registPerMessageContent = "您注册所需要的验证码为cellphoneShortMessageRandomCodeMadeByJava[甘肃政务服务网]";
 
   private String businessIdForRecovingPwd = "";
 
@@ -331,7 +332,8 @@ public class JisSettings
 
   public static JisSettings getSettings()
   {
-    return (JisSettings)SpringUtil.getBean("jis_Settings", JisSettings.class);
+    //return (JisSettings)SpringUtil.getBean(JisSettings.class);
+	  return SpringContextHolder.getBean("settings");
   }
 
   public String getSysName() {

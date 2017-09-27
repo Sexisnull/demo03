@@ -32,7 +32,8 @@ public class ComplatCorporationServiceTest {
 	}
 	@Test
 	public void save(){
-		ComplatCorporation corporation=new ComplatCorporation(null, null, null, null, "星星", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+		ComplatCorporation corporation=new ComplatCorporation();
+		corporation.setcardPic("123");
 		try {
 			complatCorporationService.save(corporation);
 		} catch (Exception e) {

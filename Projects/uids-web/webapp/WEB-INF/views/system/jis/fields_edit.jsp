@@ -38,7 +38,7 @@ $().ready(function() {
 		}
 	});
 	// Ajax重命名校验
-	$.uniqueValidate('uniqueName', '${ctx}/jis/checkFieldname', ['fieldname','iid'], '对不起，这个字段名称重复了');
+	$.uniqueValidate('uniqueName', '${ctx}/jis/checkFieldname', ['fieldname','oldFieldname'], '对不起，这个字段名称重复了');
 });
 
 $(document).on("change",'select#fieldsType',function(){
@@ -106,6 +106,7 @@ $(document).on("change",'select#fieldsType',function(){
 				<th><b class="mustbe">*</b>字段名：</th>
 				<td>
 					<input type="text"  class="fieldname" id="fieldname" name="fieldname" <c:if test="${jisFields.fieldname != '' && jisFields.fieldname != null}">value="${jisFields.fieldname}" readonly="readonly"</c:if> value="ex_"/>
+					<input type="hidden"  class="oldFieldname" id="oldFieldname" name="oldFieldname" value="${jisFields.fieldname}"/>
 				</td>
 				<th></th>
 				<td></td>

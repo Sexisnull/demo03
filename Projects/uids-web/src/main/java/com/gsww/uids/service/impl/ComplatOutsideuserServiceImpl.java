@@ -6,7 +6,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
-import com.hanweb.common.util.Md5Util;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +17,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gsww.uids.util.MD5;
+import com.hanweb.common.util.Md5Util;
 //import com.gsww.uids.controller.ComplatRoleController;
 import com.gsww.uids.dao.ComplatOutsideuserDao;
 import com.gsww.uids.entity.ComplatOutsideuser;
@@ -164,7 +165,8 @@ public class ComplatOutsideuserServiceImpl implements ComplatOutsideuserService 
 
 	@Override
 	public boolean updatePwd(int iid, String pwd) {
-		return this.outsideUserDao.updatePwd(iid, pwd);
+		int i = this.outsideUserDao.updatePwd(iid, pwd);
+		return i==1;
 	}
 
 	@Override
@@ -175,7 +177,14 @@ public class ComplatOutsideuserServiceImpl implements ComplatOutsideuserService 
 	      if (outsideUser.getEnable().intValue() == 0) {
 	        logger.error("login.isnotallowed");
 	      }
-	      String password = Md5Util.md5decode(outsideUser.getPwd());
+	      MD5 md5 = new MD5();
+	      String a = "jcms2008";
+	      String password = "";
+	      try{
+	    	  password = md5.decrypt(outsideUser.getPwd(), a);
+	      }catch (Exception e) {
+	    	  e.printStackTrace();
+		}
 	      if (StringUtils.equals(password, pwd))
 	      {
 	        outsideUser.setLoginIp(ip);
@@ -186,5 +195,10 @@ public class ComplatOutsideuserServiceImpl implements ComplatOutsideuserService 
 	      }
 	    }
 	    return outsideUser;
+	}
+
+	@Override
+	public boolean insert(ComplatOutsideuser outsideUser) {
+		return outsideUserDao.save(outsideUser) !=null;
 	}
 }
