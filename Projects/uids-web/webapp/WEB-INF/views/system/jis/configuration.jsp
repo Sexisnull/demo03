@@ -1,12 +1,9 @@
 <%@ page language="java" pageEncoding="utf-8"%>
 <!DOCTYPE html>
-<html>
-
-<%@ include file="/include/meta.jsp"%> 
-
+<%@ include file="/include/meta.jsp"%>
 <head>
 <title>甘肃万维JUP课题</title>
-<link rel="stylesheet" href="${ctx}/res/plugin/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css"/>
+<%-- <link rel="stylesheet" href="${ctx}/res/plugin/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css"/> --%>
 <%-- <script type="text/javascript" src="${ctx}/res/skin/default/plugin/z-tree/js/jquery.ztree.core-3.5.min.js"></script> --%>
 <script type="text/javascript" src="${ctx}/res/plugin/uploadify/js/jquery.uploadify-3.1.min.js"></script>
 
@@ -164,9 +161,9 @@ function showRealNameAuthUrl(){
 	}
 }
 </script>
-<style type="text/css">
+ <style type="text/css">
 	<!--/*--><![CDATA[/*><!--*/
-	body {margin:0 auto;padding:0;font:62.5%/2em "MingLiu" Arial;text-align:center;}
+	body {margin:0 auto;padding:0;font:/* 62.5%/2em "MingLiu" Arial */22px;text-align:center;}
 	img, a img {border:0;display:block;}
 	.clearfix:after {content:".";display:block;height:0;clear:both;visibility:hidden;}
 	.clearfix {display:inline-block;}
@@ -183,9 +180,9 @@ function showRealNameAuthUrl(){
 	/*对点击下栏显示边框的代码进行美化*/
 	.hackBox {display:none;padding:4px;margin:0 0 0 4px;}
 	.hackBox p {margin:0 1em 1em;color:#333;font-size:1.1em;text-align:left;}
-	.hackBox img {float:left;width:100px;margin:0 .8em .4em 0;}
+	.hackBox img {float:center;width:100px;margin:0 .4em .4em 0;}
 	/*]]>*/-->
-	</style>
+	</style> 
 
 </head>
 <body>
