@@ -536,7 +536,7 @@ function resetform() {
 								所属机构：
 							</th>
 							<td width="20%">
-							    <input name="groupname" id="groupname" value="${groupMap[complatUser.groupid]}" readonly="true" type="text" style="cursor: pointer;width: 150px;" placeholder="所属机构"/>
+							    <input name="groupname" id="groupname" value="${groupName }" readonly="true" type="text" style="cursor: pointer;width: 150px;" placeholder="所属机构"/>
 							    <input type="hidden" id="groupid" name="search_EQ_groupid">
 							</td>
 							<th style="padding-left: 5px">

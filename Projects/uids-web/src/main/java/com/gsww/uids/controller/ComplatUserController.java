@@ -161,6 +161,11 @@ public class ComplatUserController extends BaseController {
 			model.addAttribute("searchParams", Servlets
 					.encodeParameterStringWithPrefix(searchParams, "search_"));
 			model.addAttribute("sParams", searchParams);
+			
+			//点击完查询时组织机构名称回显
+			String groupName = request.getParameter("groupname");
+			model.addAttribute("groupName", groupName);
+			
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			logger.error("列表打开失败：" + ex.getMessage());
@@ -200,6 +205,11 @@ public class ComplatUserController extends BaseController {
 					}
 					model.addAttribute("groupMap", groupMap);
 				}
+				//查询扩展属性和身份证号		
+				JisUserdetail userDetail = new JisUserdetail();
+				Integer userId = complatUser.getIid();			
+				userDetail=jisUserdetailService.findByUserid(userId);
+				model.addAttribute("userDetail", userDetail);
 			} else {
 				complatUser = new ComplatUser();
 			}
@@ -228,36 +238,71 @@ public class ComplatUserController extends BaseController {
 			throws Exception {
 		SysUserSession sysUserSession =(SysUserSession)request.getSession().getAttribute("sysUserSession");
 		try {
-			if (complatUser != null) {				
-					if(complatUser.getOpersign() == null){
-						complatUser.setOpersign(1);
-					}else{
-						complatUser.setOpersign(2);
-					}
-					Date d = new Date();
+			Integer userId = null;
+			if (complatUser != null) {	
+				String iid = String.valueOf(complatUser.getIid());
+				if (iid == "null" || iid.length() <= 0) {					
+					complatUser.setOpersign(1);						
 					complatUser.setEnable(0); // 是否禁用
-					// complatUser.setAuthState(0); // 审核状态
-					// complatUser.setIsAuth(0); // 是否审核
+					Date d = new Date();
 					complatUser.setCreatetime(d);// 创建时间
-					complatUserService.save(complatUser);
-					returnMsg("success", "保存成功", request);					
-					if(complatUser.getIid()==null){
-						String desc=sysUserSession.getUserName()+"新增了"+complatUser.getName();
-						jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(), desc, 2, 1);
-					}										
-				} else {
-					// 注册时间
-					complatUser.setEnable(1); // 是否禁用
-					String time = request.getParameter("time");
-					Date createTime = sdf.parse(time);
-					complatUser.setCreatetime(createTime);
-					complatUserService.save(complatUser);
-					returnMsg("success", "编辑成功", request);
-					if(complatUser.getIid()!=null){
-						String desc=sysUserSession.getUserName()+"修改了"+complatUser.getName();
-						jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(), desc, 2, 2);
+					complatUserService.save(complatUser);		
+					//身份证号处理 JisUserdetail
+					String cardId = request.getParameter("cardid");
+					JisUserdetail jisUserdetail = jisUserdetailService.findByUserid(userId);
+					
+					if(jisUserdetail.getIid() == null){
+						JisUserdetail jisUser = new JisUserdetail();
+						jisUser.setCardid(cardId);
+						jisUser.setIid(userId);
+						jisUser.setUserid(userId);
+						jisUserdetailService.save(jisUser);
+					}else{
+						//扩展属性
+						Map<String,String> userMap = this.saveExendsAttr(userId, request);
+						//对身份证号和用户扩展属性update
+						jisUserdetailService.update(jisUserdetail.getIid(),cardId,userMap);
 					}
-				}
+					returnMsg("success", "保存成功", request);	
+					
+					String desc = sysUserSession.getUserName() + "新增政府用户:" + complatUser.getName(); 				
+					jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,2,1);					
+					
+				}else {
+					//注册时间
+					String time = TimeHelper.getCurrentTime();
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					Date modifyTime = sdf.parse(time);
+					complatUser.setModifytime(modifyTime);
+					Date d = new Date();
+					complatUser.setCreatetime(d);// 创建时间
+					//转换保存创建时间
+					userId = complatUser.getIid();
+					complatUser.setEnable(1); // 是否禁用	
+					complatUser.setOpersign(2);//更新操作状态
+					complatUserService.save(complatUser);
+					
+					//身份证号处理 JisUserdetail
+					String cardId = request.getParameter("cardid");
+					JisUserdetail jisUserdetail = jisUserdetailService.findByUserid(userId);
+					if(jisUserdetail == null){
+						JisUserdetail jisUser = new JisUserdetail();
+						jisUser.setCardid(cardId);
+						jisUser.setIid(userId);
+						jisUser.setUserid(userId);
+						jisUserdetailService.save(jisUser);
+					}else{
+						//扩展属性
+						Map<String,String> userMap = this.saveExendsAttr(userId, request);
+						//对身份证号和用户扩展属性update
+						jisUserdetailService.update(jisUserdetail.getIid(),cardId,userMap);
+					}
+					
+					returnMsg("success", "编辑成功", request);								
+					String desc = sysUserSession.getUserName() + "修改政府用户:" + complatUser.getName(); 
+					jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,2,2);				
+				}	
+			} 
 		} catch (Exception e) {
 			e.printStackTrace();
 			returnMsg("error", "保存失败", request);

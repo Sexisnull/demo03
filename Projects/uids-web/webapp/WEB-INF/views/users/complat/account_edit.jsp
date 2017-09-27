@@ -156,7 +156,7 @@ function resetform() {
 $().ready(function() {
 
 //表单校验
-var complatUserNameInput=$("#name").val();
+/*var complatUserNameInput=$("#name").val();
  $("#editForm").validate({
     rules: {
 	   name: {
@@ -199,7 +199,11 @@ var complatUserNameInput=$("#name").val();
 		loginname : {//重命名校验*
 			required: true,
 			cnRangelength: [0,127]
-		}, 
+		},
+		cardid :{
+			isIdCardNo:true,
+		   	 maxlength: 18
+		},
 	    pwd : {
 			required: true,
 			cnRangelength: [6,18]
@@ -217,9 +221,28 @@ var complatUserNameInput=$("#name").val();
 				 form.submit();		
         } 
      }
-   });   
+   });   */
 
+    // Ajax重命名校验
+	//$.uniqueValidate('uniqueLoginName', '${ctx}/complat/checkOutisideUserLoginName', ['loginName','oldLoginName'], '对不起，这个账号重复了');
 
+	//个人用户名校验     
+   jQuery.validator.addMethod("isName", function(value, element) { 
+          var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;   
+          return this.optional(element) || (corporName.test(value));     
+   }, "只能由字母、数字、下划线、中文组成，不能以下划线开头和结尾");
+   
+   jQuery.validator.addMethod("isLoginName", function(value, element) { 
+          var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9_]+$/;   
+          return this.optional(element) || (corporName.test(value));     
+   }, "名称只能由字母、数字、下划线组成，不能以下划线开头和结尾");
+   
+   jQuery.validator.addMethod("isPost", function(value, element) { 
+          var corporName = /^[1-9][0-9]{5}$/;   
+          return this.optional(element) || (corporName.test(value));     
+   }, "邮政编码格式不正确（共6位,开头不能为0)");
+   
+   
    
    
 	 //获取用户扩展属性
@@ -412,7 +435,7 @@ var complatUserNameInput=$("#name").val();
      <div class="form-content">
 		 	<table class="form-table" id="dataTable">
 		 		<tr>
-		 		  <td class="td_1" rowspan="5" style="max-width:0px;width:100px;ont-weight:bold;" align="center">基本属性</td>
+		 		  <td class="td_1" rowspan="6" style="max-width:0px;width:100px;ont-weight:bold;" align="center">基本属性</td>
 				  <th><b class="mustbe">*</b>姓名：</th>
 				  <td style="width:300px;">
 					<input type="text" id="name" name="name" value="${complatUser.name}" />
@@ -428,11 +451,21 @@ var complatUserNameInput=$("#name").val();
 				  <td style="width:300px;">
 					<input type="text" id="age" name="age" value="${complatUser.age}"">
 	              </td>
-	        	   <th><b class="mustbe">*</b> 用户职务：</th>
-				  <td style="width:300px;">
-					<input type="text" id="headship" name="headship" value="${complatUser.headship}"">
-				  </td>
-			    </tr>			    
+	               <th>姓名的首字母全称：</th>
+	        	   <td style="width:300px;">
+	        		  <input type="text" id="pinyin" name="pinyin" value="${complatUser.pinyin}" />
+	        	   </td>
+			    </tr>	
+			    <tr>
+			       <th> QQ：</th>
+				   <td style="width:300px;">
+					   <input type="text" id="qq" name="qq" value="${complatUser.qq}" />
+				   </td>
+				   <th><b class="mustbe">*</b> 身份证号：</th>
+				   <td style="width:300px;">
+					   <input type="text"  class="input" name="cardid" id="cardid" value="${userDetail.cardid}"  />
+				   </td>
+			    </tr>		    
 			    <tr>
 			      <th><b class="mustbe">*</b> 固定电话：</th>
 				  <td style="width:300px;">
@@ -454,9 +487,9 @@ var complatUserNameInput=$("#name").val();
 				  </td>
 			    </tr>			    
 			    <tr>
-				  <th class="td_5"> QQ：</th>
+			      <th class="td_5"><b class="mustbe">*</b> 用户职务：</th>
 				  <td class="td_3" style="width:300px;">
-					<input type="text" id="qq" name="qq" value="${complatUser.qq}" />
+					<input type="text" id="headship" name="headship" value="${complatUser.headship}"">
 				  </td>
 				  <th class="td_6"><b class="mustbe">*</b> 所属机构：</th>
 				  <td class="td_4" style="width:300px;">
@@ -507,14 +540,14 @@ var complatUserNameInput=$("#name").val();
 				  </td>				
 			    </tr>-->			   		
 		        <tr>
-		           <td class="td_1" rowspan="4" style="max-width:0px;width:100px;ont-weight:bold;" align="center"">账号信息</td>
+		           <td class="td_1" rowspan="3" style="max-width:0px;width:100px;ont-weight:bold;" align="center"">账号信息</td>
                    <th><b class="mustbe">*</b>登录名：</th>
                    <td style="width:300px;">
 					  <input type="text"  class="loginname" name="loginname" value="${complatUser.loginname}" />
 	               </td>
-	        	   <th>姓名的首字母全称：</th>
+	        	   <th><b class="mustbe">*</b> 登录名全称：</th>
 	        	   <td style="width:300px;">
-	        		  <input type="text" id="pinyin" name="pinyin" value="${complatUser.pinyin}" />
+	        		  <input type="text" id="loginallname" name="loginallname" value="${complatUser.loginallname}" />	            	
 	        	   </td>
 			    </tr>	
 				<tr style="width:300px;">		
@@ -546,14 +579,6 @@ var complatUserNameInput=$("#name").val();
 					  <input type="text"  class="input" id="pwdanswer" name="pwdanswer" value="${complatUser.pwdanswer}"  />
 				   </td>
 			    </tr>	
-			    <tr>		
-				   <th class="td_5"><b class="mustbe">*</b> 登录名全称：</th>
-	        	   <td class="td_3" style="width:300px;">
-	        		  <input type="text" id="loginallname" name="loginallname" value="${complatUser.loginallname}" />	            	
-	        	   </td>
-				   <th class="td_6"></th>
-				   <td class="td_4" style="width:300px;"></td>
-			    </tr>
 	    </table>
   </div> 
     
