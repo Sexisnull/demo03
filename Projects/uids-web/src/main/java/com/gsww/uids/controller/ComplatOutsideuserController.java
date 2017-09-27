@@ -43,6 +43,7 @@ import com.gsww.jup.util.StringHelper;
 import com.gsww.uids.entity.ComplatOutsideuser;
 import com.gsww.uids.service.ComplatOutsideuserService;
 import com.gsww.uids.service.JisLogService;
+import com.hanweb.common.util.Md5Util;
 
 import net.sf.json.JSONObject;
 
@@ -121,6 +122,9 @@ public class ComplatOutsideuserController extends BaseController {
 				outsideUser = outsideUserService.findByKey(Integer.parseInt(outsideuserId));
 				Date createTime = outsideUser.getCreateTime();
 				String time = sdf.format(createTime);
+				String pwdString = outsideUser.getPwd();
+				String pwd = Md5Util.md5decode(pwdString);//解密
+				outsideUser.setPwd(pwd);
 				model.addAttribute("time", time);
 			} else {
 				outsideUser = new ComplatOutsideuser();
@@ -155,6 +159,9 @@ public class ComplatOutsideuserController extends BaseController {
 					outsideUser.setIsAuth(0); // 是否审核
 					outsideUser.setCreateTime(d);//创建时间
 					outsideUser.setOperSign(1);//更新操作状态
+					String pwdString = outsideUser.getPwd();
+					String pwd = Md5Util.md5encode(pwdString);//加密
+					outsideUser.setPwd(pwd);
 					outsideUserService.save(outsideUser);
 					returnMsg("success", "保存成功", request);
 					String desc = sysUserSession.getUserName() + "新增个人用户:" + outsideUser.getName(); 
@@ -165,6 +172,9 @@ public class ComplatOutsideuserController extends BaseController {
 					Date createTime = sdf.parse(time);
 					outsideUser.setCreateTime(createTime);//转换保存创建时间
 					outsideUser.setOperSign(2);//更新操作状态
+					String pwdString = outsideUser.getPwd();
+					String pwd = Md5Util.md5encode(pwdString);
+					outsideUser.setPwd(pwd);
 					outsideUserService.save(outsideUser);
 					returnMsg("success", "编辑成功", request);
 					String desc = sysUserSession.getUserName() + "修改个人用户:" + outsideUser.getName(); 
