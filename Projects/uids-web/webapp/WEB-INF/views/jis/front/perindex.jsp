@@ -1,13 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>首页</title>
-<link href="./images/css.css" rel="stylesheet" type="text/css" />
-<script src="./images/html5.js"></script>
+<link href="${ctx}/ui/images/css.css" rel="stylesheet" type="text/css" />
+<script src="${ctx}/ui/images/html5.js"></script>
 <style>
 body {
 	background-color:#F2F2F2;
@@ -24,9 +25,9 @@ body {
 	  	  <span style="padding-left: 5%;">${sysName}</span>
 		  <div class="hyzx">
 		  	<span>您好！${loginname}</span>
-			<span title="个人信息"><a href="modifyperinfo_show.do"><img  src="./images/vip_head.png" width="23" height="23"></a></span>
+			<span title="个人信息"><a href="modifyperinfo_show.do"><img  src="${ctx}/ui/images/vip_head.png" width="23" height="23"></a></span>
 			<!--  <span title="实名认证"><a href="register/perauth_show.do"><img  src="./images/vip_head.png" width="23" height="23"></a></span>-->
-			<span title="注销"><a href="perlogout.do"><img src="./images/logout.png" width="22" height="24"></a></span>
+			<span title="注销"><a href="perlogout.do"><img src="${ctx}/ui/images/logout.png" width="22" height="24"></a></span>
 		  </div>    	
 	  </div>   
 	</div>

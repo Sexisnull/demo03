@@ -80,9 +80,6 @@ window.confirm = function(msg,okCall,cancelCall){
 		                  $("#enc_password").val(encrypedPwd);
 		                  var name = $("#username").val();
 		                  $("#enc_username").val(name);
-		                  console.log(name);
-		                  console.log(password);
-		                  console.log(encrypedPwd);
 					},
                 });
 			},
@@ -99,7 +96,7 @@ window.confirm = function(msg,okCall,cancelCall){
 				}else{
 					if(result.params.adminerror == "1"){
 						alert("系统管理员请从后台登录", "", function(){
-							location.href='${ctx}/uids-web/login'; 
+							location.href='login'; 
 						});
 					}else{
 						
@@ -334,9 +331,9 @@ $("#bm").click(function(){
 		$("#corlogin").click(function(){
 			var appmark = $('#appmark').val();
 			if(appmark != "") {
-				window.location.href = "${ctx}/uids-web/front/corlogin.do?appmark="+appmark;
+				window.location.href = "corlogin.do?appmark="+appmark;
 			}else {		
-				window.location.href = "${ctx}/uids-web/front/corlogin.do";
+				window.location.href = "corlogin.do";
 			}
 		});
 	});

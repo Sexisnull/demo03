@@ -18,8 +18,8 @@ public class PersonalSessionInfo
       if (user != null) {
         HttpSession session = SpringUtil.getRequest().getSession();
         clearSession(session);
-
-        session.setMaxInactiveInterval(60 * JisSettings.getSettings().getPerSessionTime());
+        JisSettings jisSettings = new JisSettings();
+        session.setMaxInactiveInterval(60 * jisSettings.getPerSessionTime());
         session.setAttribute("personalinfo", user);
       }
     } catch (Exception e) {

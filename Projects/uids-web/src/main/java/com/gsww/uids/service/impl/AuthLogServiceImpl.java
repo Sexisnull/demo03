@@ -68,7 +68,7 @@ public class AuthLogServiceImpl implements AuthLogService{
 			Date createTime = new Date();
 			jisAuthLog.setCreatetime(new Timestamp(createTime.getTime()));
 			
-			ComplatSettings settings = ComplatSettings.getSettings();
+			ComplatSettings settings = new ComplatSettings();
 			String authEffectiveTime = settings.getTicketEffectiveTime();
 			long time = createTime.getTime() + NumberUtil.getLong(authEffectiveTime) * 1000L;
 			Date outTime = new Date(time);

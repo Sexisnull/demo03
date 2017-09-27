@@ -1,14 +1,24 @@
 package com.gsww.uids.service.impl;
 
 
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.hanweb.common.util.Md5Util;
 import com.hanweb.common.util.StringUtil;
+import com.hanweb.complat.entity.Corporation;
+import com.gsww.uids.controller.ComplatRoleController;
 import com.gsww.uids.dao.ComplatCorporationDao;
 import com.gsww.uids.entity.ComplatCorporation;
 import com.gsww.uids.service.ComplatCorporationService;
@@ -18,6 +28,7 @@ import com.gsww.uids.service.ComplatCorporationService;
 @Transactional
 @Service("ComplatCorporationService")
 public class ComplatCorporationServiceImpl implements ComplatCorporationService{
+	private static Logger logger = LoggerFactory.getLogger(ComplatCorporationServiceImpl.class);
 	
 	@Autowired
 	private ComplatCorporationDao complatCorporationDao;
@@ -69,4 +80,57 @@ public class ComplatCorporationServiceImpl implements ComplatCorporationService{
 		return null;
 	}
 	
+	  public ComplatCorporation findByRegNumber(String regnumber){
+		  
+		    if (("".equals(regnumber)) || (regnumber.length() == 0)) {
+		      return null;
+		    }
+		    return this.complatCorporationDao.findByRegNumber(regnumber);
+		  }
+
+	  public List<ComplatCorporation> findByOrgNumber(String orgnumber){
+	    return this.complatCorporationDao.findByOrgNumber(orgnumber);
+	  }
+	  
+	@Override
+	public synchronized ComplatCorporation checkUserLogin(String loginName, String pwd, String ip) {
+		
+		ComplatCorporation corporation = null;
+	    corporation = this.complatCorporationDao.findByLoginName(loginName);
+	      if (corporation == null) {
+		        corporation = findByRegNumber(loginName);
+		        if (corporation == null) {
+		          List<ComplatCorporation> corporationList = findByOrgNumber(loginName);
+		          if (CollectionUtils.isNotEmpty(corporationList)) {
+		            corporation = (ComplatCorporation)corporationList.get(0);
+		          }
+		        }
+	      }
+	      
+	      if (corporation != null) {
+	          if (corporation.getEnable().intValue() == 0) {
+	            logger.error("login.isnotallowed");
+	          }
+	          String password = Md5Util.md5decode(corporation.getPwd());
+	          if (!StringUtils.equals(password, pwd)) {
+	            corporation = null;
+	          } else {
+	            corporation.setLoginIp(ip);
+	            corporation.setLoginTime(new Date());
+	          }
+	        }
+	      
+	      return corporation;
+	}
+
+	@Override
+	public void updateLoginIpAndLoginTime(ComplatCorporation corporation) {
+		complatCorporationDao.save(corporation);
+	}
+
+	@Override
+	public ComplatCorporation findByManyWay(String inputByGuest) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

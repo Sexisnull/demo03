@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.gsww.uids.entity.ComplatCorporation;
+import com.hanweb.complat.entity.Corporation;
 
 
 /**
@@ -55,4 +56,10 @@ public interface ComplatCorporationService {
      * @return
 	 */
 	public ComplatCorporation findByLoginNameIsUsed(String loginName);
+
+	ComplatCorporation checkUserLogin(String userName, String password, String ip);
+
+	void updateLoginIpAndLoginTime(ComplatCorporation corporation);
+
+	ComplatCorporation findByManyWay(String inputByGuest);
 }

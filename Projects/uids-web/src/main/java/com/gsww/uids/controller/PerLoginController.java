@@ -10,12 +10,12 @@ import com.hanweb.common.util.mvc.JsonResult;
 import com.hanweb.common.util.mvc.ResultState;
 import com.gsww.uids.entity.ComplatCorporation;
 import com.gsww.uids.entity.ComplatOutsideuser;
+import com.gsww.uids.service.AuthLogService;
 import com.gsww.uids.service.ComplatCorporationService;
 import com.gsww.uids.service.ComplatOutsideuserService;
 import com.gsww.uids.constant.JisSettings;
 import com.gsww.uids.constant.PersonalSessionInfo;
 import com.gsww.uids.service.JisApplicationService;
-import com.gsww.uids.service.impl.AuthLogServiceImpl;
 import com.gsww.uids.util.AccessUtil;
 import com.gsww.jup.util.CellphoneShortMessageUtil;
 import com.gsww.jup.util.RSAUtil;
@@ -61,7 +61,7 @@ public class PerLoginController{
   private ComplatOutsideuserService OutsideUserService;
 
   @Autowired
-  private AuthLogServiceImpl authLogService;
+  private AuthLogService authLogService;
   
   private static JisSettings jisSettings = new JisSettings();
 
@@ -152,6 +152,7 @@ public class PerLoginController{
           StringBuffer sb = new StringBuffer();  
           sb.append(new String(de_result));  
           en_password= sb.reverse().toString(); 
+          en_password = URLDecoder.decode(en_password,"utf-8");
       } catch(Exception ex){
     	  logger.error(ex.getMessage());
       }
@@ -217,7 +218,7 @@ public class PerLoginController{
           jsonResult.addParam("ticket", ticket);
         }
         jsonResult.addParam("gotoUrlFlag", gotoUrlFlag);
-        this.OutsideUserService.updateLoginIpAndLoginTime(user);
+        this.OutsideUserService.save(user);
       }
       else {
         logger.error("您正在进行个人用户登录，用户名或密码不正确");
@@ -272,7 +273,7 @@ public class PerLoginController{
     }
     String appmark = StringUtil.getString(session.getAttribute("appmark"));
     ModelAndView modelAndView = new ModelAndView();
-    RedirectView redirectView = new RedirectView("perlogin");
+    RedirectView redirectView = new RedirectView("perlogin.do");
     modelAndView.addObject("appmark", appmark);
     modelAndView.setView(redirectView);
     return modelAndView;
