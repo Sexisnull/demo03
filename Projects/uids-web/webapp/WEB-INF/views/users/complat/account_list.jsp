@@ -654,7 +654,7 @@ function resetform() {
 						<ul class="list-Topbtn">
 							<li class="add"><a title="新增" onclick="addComplatUser()">新增</a></li>
 							<li class="del"><a title="删除" onclick="deleteData('complat/complatUserDelete','iid');">删除</a></li>
-							<li class="query"><a title="导入" onclick="intPutComplatUser(${complatUser.iid});">导入</a></li>
+							<li class="query"><a title="导入" onclick="intPutComplatUser();">导入</a></li>
 							<li class="exportData"><a title="导出" onclick="outPutComplatUser()">导出</a></li>
 							<li class="startData"><a title="启用" onclick="startData('complat/startUserEnable','iid');">启用</a></li>
 							<li class="edit"><a title="停用" onclick="stopData('complat/stopUserEnable','complatUserId');">停用</a></li>

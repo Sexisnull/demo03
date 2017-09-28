@@ -157,7 +157,7 @@ $().ready(function() {
 
 //表单校验
 var complatUserNameInput=$("#name").val();
- /*$("#editForm").validate({
+ $("#editForm").validate({
     rules: {
 	   name: {
 	        required: true,
@@ -221,7 +221,7 @@ var complatUserNameInput=$("#name").val();
 				 form.submit();		
         } 
      }
-   });*/   
+   });   
 
     // Ajax重命名校验
 	//$.uniqueValidate('uniqueLoginName', '${ctx}/complat/checkOutisideUserLoginName', ['loginName','oldLoginName'], '对不起，这个账号重复了');
