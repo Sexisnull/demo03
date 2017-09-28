@@ -425,6 +425,7 @@ var complatUserNameInput=$("#name").val();
     	<input type="hidden" id="iid" name="iid" value="${complatUser.iid}"/>
     	<input type="hidden" id="enable" name="enable" value="${complatUser.enable}"/>
     	<input type="hidden" id="time" name="time" value="${time}">
+    	<input type="hidden" id="level" name="level">
     </div>
 
     
@@ -559,7 +560,7 @@ var complatUserNameInput=$("#name").val();
 			    </tr>
 			    <tr>				
 		           <th class="td_5"> 密码强度：</th>
-			       <td class="td_3" style="width:300px;">			                 
+			       <td class="td_3" style="width:300px;">
 				      <table id="pwdpower" style="width: 86%" cellspacing="0"
 							cellpadding="0" border="0">
 						<tbody>
