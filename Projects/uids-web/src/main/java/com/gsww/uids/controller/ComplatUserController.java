@@ -264,7 +264,7 @@ public class ComplatUserController extends BaseController {
 	 */
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/complatSave", method = RequestMethod.POST)
-	public ModelAndView complatSave(ComplatUser complatUser,
+	public ModelAndView complatSave(ComplatUser complatUser, String level,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		SysUserSession sysUserSession =(SysUserSession)request.getSession().getAttribute("sysUserSession");
@@ -275,7 +275,7 @@ public class ComplatUserController extends BaseController {
 				String iid = String.valueOf(complatUser.getIid());
 				if (iid == null || iid.length() <= 0) {	
 					pwd=complatUser.getPwd();
-					if(checkPassword(pwd)){
+					if(level=="strong"||level.equals("strong")){
 						
 						complatUser.setOpersign(1);						
 						complatUser.setEnable(0); // 是否禁用
@@ -312,7 +312,7 @@ public class ComplatUserController extends BaseController {
 					}					
 				}else {
 					pwd=complatUser.getPwd();
-					if(checkPassword(pwd)){
+					if(level=="strong"||level.equals("strong")){
 						//对密码进行加密			
 						String p = Md5Util.md5encode(pwd);
 						complatUser.setPwd(p);
