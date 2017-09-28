@@ -38,6 +38,6 @@ public interface ComplatZoneDao
 	 * @param pid
 	 * @return
 	 */
-	@Query("select t from ComplatZone t where  t.pid =?1 ORDER BY t.orderId ASC,a.iid ASC")
+	@Query("select t from ComplatZone t where  t.pid =?1 ORDER BY t.orderId ASC,t.iid ASC")
 	public List<ComplatZone> findChildByPid(int pid);
 }
