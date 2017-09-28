@@ -1,4 +1,4 @@
-package com.gsww.uids.controller;
+/*package com.gsww.uids.controller;
 
 import com.gsww.jup.util.RSAUtil;
 import com.gsww.uids.constant.CorporationSessionInfo;
@@ -283,11 +283,11 @@ public class CorLoginController{
     return jsonResult;
   }
   
-  /**
+  *//**
    * 16进制 To byte[]
    * @param hexString
    * @return byte[]
-   */
+   *//*
   public static byte[] hexStringToBytes(String hexString) {
       if (hexString == null || hexString.equals("")) {
           return null;
@@ -302,12 +302,12 @@ public class CorLoginController{
       }
       return d;
   }
-  /**
+  *//**
    * Convert char to byte
    * @param c char
    * @return byte
-   */
+   *//*
    private static byte charToByte(char c) {
       return (byte) "0123456789ABCDEF".indexOf(c);
   }
-}
+}*/
