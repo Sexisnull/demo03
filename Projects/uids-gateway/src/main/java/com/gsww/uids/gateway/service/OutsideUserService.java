@@ -5,9 +5,12 @@ import java.util.Date;
 import com.gsww.uids.gateway.dao.outsideuser.OutsideUserDao;
 import com.gsww.uids.gateway.entity.OutsideUser;
 import com.gsww.uids.gateway.exception.LoginException;
+import com.gsww.uids.gateway.util.Md5Util;
 import com.gsww.uids.gateway.util.SpringContextHolder;
+
 /**
  * OutsideUserService
+ * 
  * @author zcc
  *
  */
@@ -45,7 +48,8 @@ public class OutsideUserService {
 			if (outsideUser.getEnable().intValue() == 0) {
 				throw new LoginException("login.isnotallowed");
 			}
-			String password = outsideUser.getPwd();
+			String password = Md5Util.md5decode(outsideUser.getPwd());
+			System.out.println(password);
 			if (password.equals(pwd)) {
 				outsideUser.setLoginip(ip);
 				outsideUser.setLogintime(new Date());

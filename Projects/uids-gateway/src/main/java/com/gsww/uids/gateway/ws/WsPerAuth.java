@@ -258,18 +258,18 @@ public class WsPerAuth {
 		JisAuthLog jisAuthLog = new JisAuthLog();
 		try {
 			if (UserUtil.isMobilelegal(loginname)) {
-				OutsideUser outsideUser = this.outsideUserService.findByMobile(loginname);
+				OutsideUser outsideUser = outsideUserService.findByMobile(loginname);
 				if (outsideUser != null) {
 					loginname = outsideUser.getLoginname();
 				}
 			} else if (UserUtil.isIDnumberlegal(loginname)) {
-				OutsideUser outsideUser = this.outsideUserService.findByIdCard(loginname);
+				OutsideUser outsideUser = outsideUserService.findByIdCard(loginname);
 				if (outsideUser != null) {
 					loginname = outsideUser.getLoginname();
 				}
 			}
 
-			OutsideUser outsideUser = this.outsideUserService.checkUserLogin(loginname, password, ip);
+			OutsideUser outsideUser = outsideUserService.checkUserLogin(loginname, password, ip);
 			if (outsideUser != null) {
 				jisAuthLog.setAppmark(appmark);
 				jisAuthLog.setLoginname(outsideUser.getLoginname());

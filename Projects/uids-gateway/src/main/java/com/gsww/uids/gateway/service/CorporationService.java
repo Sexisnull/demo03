@@ -23,7 +23,7 @@ public class CorporationService {
 
 	public Corporation findByLoginName(String loginName) {
 		Corporation corporation = null;
-		corporation = this.corporationDao.findByLoginName(loginName);
+		corporation = corporationDao.findByLoginName(loginName);
 		return corporation;
 	}
 
@@ -31,17 +31,17 @@ public class CorporationService {
 		if (("".equals(regnumber)) || (regnumber.length() == 0)) {
 			return null;
 		}
-		return this.corporationDao.findByRegNumber(regnumber);
+		return corporationDao.findByRegNumber(regnumber);
 	}
 
 	public List<Corporation> findByOrgNumber(String orgnumber) {
-		return this.corporationDao.findByOrgNumber(orgnumber);
+		return corporationDao.findByOrgNumber(orgnumber);
 	}
 
 	public synchronized Corporation checkUserLogin(String loginName, String pwd, String ip) throws LoginException {
 		Corporation corporation = null;
-		corporation = this.corporationDao.findByLoginName(loginName);
-		if (corporation != null) {
+		corporation = corporationDao.findByLoginName(loginName);
+		/*if (corporation != null) {
 			System.out.println("corporation" + corporation);
 			return corporation;
 			// com.gsww.uids.gateway.util.CacheUtil.setValue(loginName,
@@ -55,7 +55,7 @@ public class CorporationService {
 				}
 			}
 
-		}
+		}*/
 
 		if (corporation != null) {
 			if (corporation.getEnable().intValue() == 0) {
@@ -63,7 +63,8 @@ public class CorporationService {
 			}
 
 			String password = Md5Util.md5decode(corporation.getPwd());
-			if (password.equals(pwd)) {
+			System.out.println(password);
+			if (!password.equals(pwd)) {
 				corporation = null;
 			} else {
 				corporation.setLoginip(ip);

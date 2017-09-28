@@ -252,7 +252,8 @@ public class WsCorAuth {
 			}
 			String ip = "";
 			MD5 md5 = new MD5();
-			password = md5.decrypt(sign, time);
+			//password = md5.decrypt(sign, time);
+			System.out.println("password" + password);
 			JisAuthLog jisAuthLog = new JisAuthLog();
 			try {
 				Corporation corporation = this.corporationService.checkUserLogin(loginname, password, ip);
