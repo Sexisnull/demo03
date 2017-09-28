@@ -273,18 +273,19 @@ public class ComplatUserController extends BaseController {
             String pwd;			
 			if (complatUser != null) {	
 				String iid = String.valueOf(complatUser.getIid());
-				if (iid == "null" || iid.length() <= 0) {	
+				if (iid == null || iid.length() <= 0) {	
 					pwd=complatUser.getPwd();
 					if(checkPassword(pwd)){
-						pwd=pwd;
+						
 						complatUser.setOpersign(1);						
 						complatUser.setEnable(0); // 是否禁用
 						Date d = new Date();
 						complatUser.setCreatetime(d);// 创建时间
-						complatUserService.save(complatUser);	
+						
 						//对密码进行加密										
 						String p = Md5Util.md5encode(pwd);
 						complatUser.setPwd(p);
+						complatUserService.save(complatUser);	
 						//身份证号处理 JisUserdetail
 						String cardId = request.getParameter("cardid");
 						JisUserdetail jisUserdetail = jisUserdetailService.findByUserid(userId);
@@ -312,7 +313,6 @@ public class ComplatUserController extends BaseController {
 				}else {
 					pwd=complatUser.getPwd();
 					if(checkPassword(pwd)){
-						pwd=pwd;
 						//对密码进行加密			
 						String p = Md5Util.md5encode(pwd);
 						complatUser.setPwd(p);
