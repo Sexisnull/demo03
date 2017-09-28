@@ -149,9 +149,11 @@ public class JisFieldsServiceImpl implements JisFieldsService {
 			fieldName = fieldsList.get(i).getFieldname();
 			names += fieldName+",";
 		}
-		names = names.substring(0, names.length()-1);
-		String querySql = "select distinct "+names+" from jis_fields a ,jis_userdetail b where  a.type='2' and b.userid = '1'";
-		fieldsMap = jdbcTemplate.queryForMap(querySql);
+		if(StringHelper.isNotBlack(names)){
+			names = names.substring(0, names.length()-1);
+			String querySql = "select distinct "+names+" from jis_fields a ,jis_userdetail b where  a.type='2' and b.userid ="+userId;
+			fieldsMap = jdbcTemplate.queryForMap(querySql);
+		}
 		return fieldsMap;
 	}
 

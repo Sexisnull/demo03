@@ -49,13 +49,10 @@ public interface ComplatCorporationService {
 
 	boolean updatePwd(String loginName, String md5encode);
 	
-	/**
-     * @discription   验证loginName实体是否存在 
-     * @param loginName
-     * @return
-	 */
-	public ComplatCorporation findByLoginNameIsUsed(String loginName);
-	
+	ComplatCorporation checkUserLogin(String userName, String password, String ip);
+
+	void updateLoginIpAndLoginTime(ComplatCorporation corporation);
+
 	/**
 	 * 根据工商注册查询法人用户
 	 * @param regNum
@@ -76,5 +73,7 @@ public interface ComplatCorporationService {
 	 * @return
 	 */
 	public ComplatCorporation findByManyWay(String inputByGuest);
-	
+
+	ComplatCorporation findByLoginNameIsUsed(String loginName);
+
 }

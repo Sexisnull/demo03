@@ -214,24 +214,24 @@
     <div class="search-content">
 		<form id="form1" name="pageForm" action="${ctx}/complat/corporationList" method="get">
 			<table class="advanced-content">
-				<tr style="width: 100%">
-					<th style="width: 7%">登录名：</th>
-					<td width="15%">
+				<tr>
+					<th>登录名：</th>
+					<td>
 						<input type="text" placeholder="登录名" value="${sParams['LIKE_loginName']}" id="loginNameSearch" name="search_LIKE_loginName" class="input"/>
 					</td>
-					<th style="width: 6%">姓名:</th>
-					<td width="15%">
+					<th style="width: 5%">姓名:</th>
+					<td>
 						<input type="text" placeholder="姓名" class="input" name="search_LIKE_realName" id="realNameSearch" value="${sParams['LIKE_realName']}"/>
 					</td>
-					<th style="width: 12%">企业（机构）名称:</th>
-					<td width="15%">
+					<th>企业（机构）名称:</th>
+					<td>
 						<input type="text" placeholder="企业（机构）名称" class="input" name="search_LIKE_name" id="nameSearch" value="${sParams['LIKE_name']}"/>
 					</td>
-					<th style="width: 9%">身份证号码:</th>
-					<td width="15%">
+					<th>身份证号码:</th>
+					<td>
 						<input type="text" placeholder="身份证号码" class="input" name="search_LIKE_cardNumber" id="cardNumberSearch" value="${sParams['LIKE_cardNumber']}"/>
 					</td>
-					<td class="btn-group" style="width: 6%"> <a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a></td>
+					<td class="btn-group"> <a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a></td>
 				</tr>
 			</table>
 		</form>
@@ -242,7 +242,7 @@
 		<input type="hidden" id="orderSort" name="orderSort" value="${orderSort}"/>
         <div class="list-topBar">
         	 <div class="list-toolbar">
-             <!-- 操作按钮开始  测试：8a92e1025e5672aa015e56798c830001  本地:402880e85e5c3efe015e5c43d4da0001-->	 
+             <!-- 操作按钮开始-->	 
 	             <gsww:opTag menuId="8a92e1025e5672aa015e56798c830001" tabIndex="1" operatorType="1"></gsww:opTag>
             </div> 
         </div>

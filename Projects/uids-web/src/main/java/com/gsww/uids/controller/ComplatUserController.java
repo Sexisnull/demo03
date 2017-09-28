@@ -604,8 +604,12 @@ public class ComplatUserController extends BaseController {
 				// 查询用户信息
 				ComplatUser complatUser = complatUserService.findByKey(Integer
 						.parseInt(userSid));
+				String pwd = complatUser.getPwd();
+				if(StringHelper.isNotBlack(pwd)){
+					complatUser.setPwd(Md5Util.md5decode(pwd));
+				}
 				model.addAttribute("complatUser", complatUser);
-
+				
 				// 查询用户身份证号
 				JisUserdetail userDetail = jisUserdetailService
 						.findByUserid(Integer.parseInt(userSid));
@@ -655,7 +659,7 @@ public class ComplatUserController extends BaseController {
 			if(complatUser != null){
 				userId = complatUser.getIid();
 				String name = complatUser.getName();
-				String pwd = complatUser.getPwd();
+				String jiaMipwd = Md5Util.md5decode(complatUser.getPwd());
 				String headShip = complatUser.getHeadship();
 				String phone = complatUser.getPhone();//固定电话
 				String mobile = complatUser.getMobile();//移动电话
@@ -665,12 +669,14 @@ public class ComplatUserController extends BaseController {
 				String time = TimeHelper.getCurrentTime();
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				Date modifyTime = sdf.parse(time);
-				complatUserService.updateUser(userId,name,headShip,phone,mobile,fax,email,qq,modifyTime,pwd);
+				complatUserService.updateUser(userId,name,headShip,phone,mobile,fax,email,qq,modifyTime,jiaMipwd);
 				
 				//身份证号处理 JisUserdetail
 				String cardId = request.getParameter("cardid");
 				JisUserdetail jisUserdetail = jisUserdetailService.findByUserid(userId);
-				if(jisUserdetail.getIid() == null){
+				if(jisUserdetail == null){
+					jisUserdetail.setUserid(userId);
+					jisUserdetail.setCardid(cardId);
 					jisUserdetailService.save(jisUserdetail);
 				}else{
 					//扩展属性
@@ -698,7 +704,7 @@ public class ComplatUserController extends BaseController {
 	 */
 	private void extendsAttr(Model model,HttpServletRequest request,HttpServletResponse response) throws Exception{
 		List<List<Map<String,Object>>> fieldsListMap = new ArrayList<List<Map<String,Object>>>();
-		//判断是政府用户还是用户设置菜单，获取用户id。1-政府用户；2-用户设置
+		//判断是政府用户还是用户设置菜单，获取用户id。2-用户设置
 		String userMenu = request.getParameter("userMenu");
 		Integer userId = null;
 		if("2".equals(userMenu)){

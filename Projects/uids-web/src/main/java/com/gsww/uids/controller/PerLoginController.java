@@ -10,12 +10,12 @@ import com.hanweb.common.util.mvc.JsonResult;
 import com.hanweb.common.util.mvc.ResultState;
 import com.gsww.uids.entity.ComplatCorporation;
 import com.gsww.uids.entity.ComplatOutsideuser;
+import com.gsww.uids.service.AuthLogService;
 import com.gsww.uids.service.ComplatCorporationService;
 import com.gsww.uids.service.ComplatOutsideuserService;
 import com.gsww.uids.constant.JisSettings;
 import com.gsww.uids.constant.PersonalSessionInfo;
 import com.gsww.uids.service.JisApplicationService;
-import com.gsww.uids.service.impl.AuthLogServiceImpl;
 import com.gsww.uids.util.AccessUtil;
 import com.gsww.jup.util.CellphoneShortMessageUtil;
 import com.gsww.jup.util.JSONUtil;
@@ -48,331 +48,329 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
-@RequestMapping(value = "/front")
-public class PerLoginController {
-	private static Logger logger = LoggerFactory
-			.getLogger(ComplatRoleController.class);
+@RequestMapping(value="/front")
+public class PerLoginController{
+  private static Logger logger = LoggerFactory.getLogger(ComplatRoleController.class);
 
-	@Autowired
-	private ComplatCorporationService corporationService;
+  @Autowired
+  private ComplatCorporationService corporationService;
 
-	@Autowired
-	private JisApplicationService appService;
+  @Autowired
+  private JisApplicationService appService;
 
-	@Autowired
-	private ComplatOutsideuserService OutsideUserService;
+  @Autowired
+  private ComplatOutsideuserService OutsideUserService;
 
-	@Autowired
-	private AuthLogServiceImpl authLogService;
+  @Autowired
+  private AuthLogService authLogService;
+  
+  private static JisSettings jisSettings = new JisSettings();
 
-	private static JisSettings jisSettings = new JisSettings();
+  @RequestMapping(value = "/perlogin.do")
+  public String personalLogin(HttpServletResponse response, String action, String appmark, 
+		  String gotoUrl, String domain,Model model)
+  {
+    if (action == null) {
+      action = "";
+    }
+    if (appmark == null) {
+      appmark = "";
+    }
+    if ((SafeUtil.isSqlAndXss(action)) || (SafeUtil.isSqlAndXss(appmark)) || (SafeUtil.isSqlAndXss(gotoUrl)) || 
+      (SafeUtil.isSqlAndXss(domain))){
+    	return null;
+    }
+    HttpSession session = SpringUtil.getRequest().getSession();
+    if (StringUtil.isEmpty(gotoUrl)) {
+      gotoUrl = (String)session.getAttribute("gotoUrl");
+      if (gotoUrl == null)
+        gotoUrl = "";
+    }
+    else {
+      session.setAttribute("gotoUrl", gotoUrl);
+    }
+    if (StringUtil.isEmpty(domain)) {
+      domain = (String)session.getAttribute("domain");
+      if (domain == null)
+        domain = "";
+    }
+    else {
+      session.setAttribute("domain", domain);
+    }
 
-	@RequestMapping(value = "/perlogin.do")
-	public String personalLogin(HttpServletResponse response, String action,
-			String appmark, String gotoUrl, String domain, Model model) {
-		if (action == null) {
-			action = "";
-		}
-		if (appmark == null) {
-			appmark = "";
-		}
-		if ((SafeUtil.isSqlAndXss(action)) || (SafeUtil.isSqlAndXss(appmark))
-				|| (SafeUtil.isSqlAndXss(gotoUrl))
-				|| (SafeUtil.isSqlAndXss(domain))) {
-			return null;
-		}
-		HttpSession session = SpringUtil.getRequest().getSession();
-		if (StringUtil.isEmpty(gotoUrl)) {
-			gotoUrl = (String) session.getAttribute("gotoUrl");
-			if (gotoUrl == null)
-				gotoUrl = "";
-		} else {
-			session.setAttribute("gotoUrl", gotoUrl);
-		}
-		if (StringUtil.isEmpty(domain)) {
-			domain = (String) session.getAttribute("domain");
-			if (domain == null)
-				domain = "";
-		} else {
-			session.setAttribute("domain", domain);
-		}
+    if ((SafeUtil.isSqlAndXss(gotoUrl)) || (SafeUtil.isSqlAndXss(action)) || (SafeUtil.isSqlAndXss(appmark))) {
+      gotoUrl = "";
+      action = "";
+      appmark = "gszw";
+    }
+    session.setAttribute("appmark", appmark);
+    model.addAttribute("sysName",jisSettings.getSysName());
+    model.addAttribute("url","doperlogin" );
+    model.addAttribute("verifycodeimg","<img id='verifyImg' src='../verifyCode?code=4&var=rand&width=162&height=30&"
+    		+ "random=" +  (int)(Math.random() * 100000000.0D) + "'" + " onclick=\"this.src='../verifyCode?code=4&"
+    				+ "var=rand&width=140&height=30&random='+ Math.random();\" style='cursor:pointer'  width='140' "
+    				+ "height='30' />");
+    model.addAttribute("username", ControllerUtil.getCookieValue("frontuser"));
+    model.addAttribute("action", action);
+    model.addAttribute("appmark", appmark);
+    model.addAttribute("gotoUrl", gotoUrl);
+    
+    return "jis/front/perlogin";
+  }
 
-		if ((SafeUtil.isSqlAndXss(gotoUrl)) || (SafeUtil.isSqlAndXss(action))
-				|| (SafeUtil.isSqlAndXss(appmark))) {
-			gotoUrl = "";
-			action = "";
-			appmark = "gszw";
-		}
-		session.setAttribute("appmark", appmark);
-		model.addAttribute("sysName", jisSettings.getSysName());
-		model.addAttribute("url", "doperlogin");
-		model.addAttribute(
-				"verifycodeimg",
-				"<img id='verifyImg' src='../verifyCode?code=4&var=rand&width=162&height=30&"
-						+ "random="
-						+ (int) (Math.random() * 100000000.0D)
-						+ "'"
-						+ " onclick=\"this.src='../verifyCode?code=4&"
-						+ "var=rand&width=140&height=30&random='+ Math.random();\" style='cursor:pointer'  width='140' "
-						+ "height='30' />");
-		model.addAttribute("username",
-				ControllerUtil.getCookieValue("frontuser"));
-		model.addAttribute("action", action);
-		model.addAttribute("appmark", appmark);
-		model.addAttribute("gotoUrl", gotoUrl);
+  @POST
+  @RequestMapping(value="/doperlogin")
+  @ResponseBody
+  public JsonResult personalDoLogin(@RequestParam(value="username", required=false) String userName, @RequestParam(value="password", required=false) String password, @RequestParam(value="randomVeryfyCode", required=false) String randomVeryfyCode, @RequestParam(value="action", required=false) String action, @RequestParam(value="appmark", required=false) String appmark, @RequestParam(value="gotoUrl", required=false) String gotoUrl, HttpSession session,HttpServletRequest request, HttpServletResponse response)
+  {
+    if (!AccessUtil.checkAccess(SpringUtil.getRequest())) {
+      return null;
+    }
+    JsonResult jsonResult = JsonResult.getInstance();
+    String ip = ControllerUtil.getIp();
+    try
+    {
+      session.setAttribute("appmark", appmark);
 
-		return "jis/front/perlogin";
-	}
+      if ((String)session.getAttribute("rand") == null)
+        logger.error("verifycode.error");
+      if ((randomVeryfyCode == null) || ("".equals(randomVeryfyCode)) || (randomVeryfyCode.length() == 0)) {
+    	  logger.error("verifycode.error");
+      }
+      String rand = (String)session.getAttribute("rand");
+      if (!rand.equalsIgnoreCase(randomVeryfyCode)) {
+    	  logger.error("verifycode.error");
+      }
 
-	@POST
-	@RequestMapping(value = "/doperlogin")
-	@ResponseBody
-	public JsonResult personalDoLogin(
-			@RequestParam(value = "username", required = false) String userName,
-			@RequestParam(value = "password", required = false) String password,
-			@RequestParam(value = "randomVeryfyCode", required = false) String randomVeryfyCode,
-			@RequestParam(value = "action", required = false) String action,
-			@RequestParam(value = "appmark", required = false) String appmark,
-			@RequestParam(value = "gotoUrl", required = false) String gotoUrl,
-			HttpSession session, HttpServletRequest request,
-			HttpServletResponse response) {
-		if (!AccessUtil.checkAccess(SpringUtil.getRequest())) {
-			return null;
-		}
-		JsonResult jsonResult = JsonResult.getInstance();
-		String ip = ControllerUtil.getIp();
-		try {
-			session.setAttribute("appmark", appmark);
+      if ((StringUtil.isEmpty(userName)) || (StringUtil.isEmpty(password))) {
+    	  logger.error("login.error");
+      }
+      
+      String en_password = "";
+      try{
+          byte[] en_result = hexStringToBytes(password);  
+          byte[] de_result = RSAUtil.decrypt(RSAUtil.getKeyPair(request).getPrivate(), en_result);  
+          StringBuffer sb = new StringBuffer();  
+          sb.append(new String(de_result));  
+          en_password= sb.reverse().toString(); 
+          en_password = URLDecoder.decode(en_password,"utf-8");
+      } catch(Exception ex){
+    	  logger.error(ex.getMessage());
+      }
+      password = en_password;
 
-			if ((String) session.getAttribute("rand") == null)
-				logger.error("verifycode.error");
-			if ((randomVeryfyCode == null) || ("".equals(randomVeryfyCode))
-					|| (randomVeryfyCode.length() == 0)) {
-				logger.error("verifycode.error");
+      int wayOfLogin = 0;
+      ComplatOutsideuser outsideUser;
+      if (UserUtil.isMobilelegal(userName)) {
+        outsideUser = this.OutsideUserService.findByMobile(userName);
+        wayOfLogin = 0;
+      } else if (UserUtil.isIDnumberlegal(userName)) {
+        outsideUser = this.OutsideUserService.findByIdCard(userName);
+        wayOfLogin = 2;
+      } else {
+        outsideUser = this.OutsideUserService.findByLoginName(userName);
+      }
+
+      if (outsideUser == null) {
+        logger.error("login.error");
+      }
+      userName = outsideUser.getLoginName();
+
+      ComplatOutsideuser user = this.OutsideUserService.checkUserLogin(userName, password, ip);
+
+      if ((user == null) && (wayOfLogin == 0)) {
+        user = this.OutsideUserService.checkUserLogin(session, userName, password, ip);
+      }
+
+      if (user != null)
+      {
+        PersonalSessionInfo.setCurrentPersonalInfo(user);
+        jsonResult.setSuccess(true);
+        ControllerUtil.addCookie(response, "personalloginid", userName, 
+          604800);
+
+        String gotoUrlFlag = "";
+        if (StringUtil.isNotEmpty(appmark)) {
+          System.out.println("====user" + user);
+
+          String ticket = this.authLogService.add(user, appmark, 1);
+          System.out.println("====tickt" + ticket);
+          if (StringUtil.isEmpty(ticket)) {
+            logger.error("票据生成失败");
+          }
+
+          String domain = StringUtil.getString(session.getAttribute("domain"));
+
+          gotoUrlFlag = jisSettings.getPerGotoUrl();
+          if (StringUtil.isNotEmpty(domain)) {
+            try {
+				domain = URLDecoder.decode(domain,"UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
 			}
-			String rand = (String) session.getAttribute("rand");
-			if (!rand.equalsIgnoreCase(randomVeryfyCode)) {
-				logger.error("verifycode.error");
-			}
+            Pattern p = Pattern.compile("(?<=//|)((\\w)+\\.)+\\w+");
 
-			if ((StringUtil.isEmpty(userName))
-					|| (StringUtil.isEmpty(password))) {
-				logger.error("login.error");
-			}
+            Matcher m = p.matcher(gotoUrlFlag);
+            if (m.find()) {
+              gotoUrlFlag = StringUtil.replace(gotoUrlFlag, m.group(), domain);
+            }
+            session.removeAttribute("domain");
+          }
+          jsonResult.addParam("ticket", ticket);
+        }
+        jsonResult.addParam("gotoUrlFlag", gotoUrlFlag);
+        this.OutsideUserService.save(user);
+      }
+      else {
+        logger.error("您正在进行个人用户登录，用户名或密码不正确");
+      }
+    }
+    catch (Exception e) {
+      session.setAttribute("rand", StringUtil.getUUIDString().substring(0, 4));
+      if ("adminlogin.error".equals(e.getMessage())) {
+        jsonResult.setSuccess(false);
+        jsonResult.addParam("adminerror", "1");
+      } else if ("verifycode.error".equals(e.getMessage())) {
+        jsonResult.setMessage("验证码错误，请重新输入");
+        jsonResult.setSuccess(false);
+      } else {
+        jsonResult.setSuccess(false);
+        jsonResult.setMessage("您正在进行个人用户登录，用户名或密码不正确!");
+      }
+    }
+    return jsonResult;
+  }
 
-			String en_password = "";
-			try {
-				byte[] en_result = hexStringToBytes(password);
-				byte[] de_result = RSAUtil.decrypt(RSAUtil.getKeyPair(request)
-						.getPrivate(), en_result);
-				StringBuffer sb = new StringBuffer();
-				sb.append(new String(de_result));
-				en_password = sb.reverse().toString();
-			} catch (Exception ex) {
-				logger.error(ex.getMessage());
-			}
-			password = en_password;
+  @RequestMapping(value="/perindex")
+  public String perIndex(HttpServletResponse response,Model model) {
+    ComplatOutsideuser user = PersonalSessionInfo.getFrontCurrentPersonalInfo();
+    String logouturl = "";
+    String loginname = "";
+    if (user != null) {
+      logouturl = "perlogout";
+      loginname = user.getLoginName();
+    }
+    else {
+      return "jis/front/perlogin";
+    }
+    
+    model.addAttribute("sysName", jisSettings.getSysName());
+    model.addAttribute("logouturl", logouturl);
+    model.addAttribute("loginname", loginname);
+    model.addAttribute("copyRight", jisSettings.getCopyRight());
+    model.addAttribute("verifycodeimg", "<img id='verifyImg' src='../verifyCode?code=4&"
+    		+ "var=rand&width=162&height=55&random=" + (int)(Math.random() * 100000000.0D) 
+    		+"'onclick=\"this.src='../verifyCode?code=4&var=rand&width=162&height=55&"
+    		+ "random='+ Math.random();\" style='cursor:pointer'  width='162'  height='55' />");
+    model.addAttribute("username", ControllerUtil.getCookieValue("frontuser"));
+    
+    return "jis/front/perindex";
+  }
 
-			int wayOfLogin = 0;
-			ComplatOutsideuser outsideUser;
-			if (UserUtil.isMobilelegal(userName)) {
-				outsideUser = this.OutsideUserService.findByMobile(userName);
-				wayOfLogin = 0;
-			} else if (UserUtil.isIDnumberlegal(userName)) {
-				outsideUser = this.OutsideUserService.findByIdCard(userName);
-				wayOfLogin = 2;
-			} else {
-				outsideUser = this.OutsideUserService.findByLoginName(userName);
-			}
+  @RequestMapping(value="/perlogout")
+  public ModelAndView perLogout(HttpSession session) {
+    if (PersonalSessionInfo.getFrontCurrentPersonalInfo() != null) {
+      session.removeAttribute("personalinfo");
+    }
+    String appmark = StringUtil.getString(session.getAttribute("appmark"));
+    ModelAndView modelAndView = new ModelAndView();
+    RedirectView redirectView = new RedirectView("perlogin.do");
+    modelAndView.addObject("appmark", appmark);
+    modelAndView.setView(redirectView);
+    return modelAndView;
+  }
+  
+  @RequestMapping(value="/findperurl")
+  @ResponseBody
+  public JsonResult findPerLogoff() {
+    JsonResult jsonResult = JsonResult.getInstance();
+    String logoffurl = this.appService.findURLBylogoff(1);
+    if (logoffurl.length() > 0) {
+      jsonResult.set(ResultState.OPR_SUCCESS);
+      jsonResult.setMessage(JsonUtil.objectToString(logoffurl));
+    } else {
+      jsonResult.set(ResultState.OPR_FAIL);
+    }
+    return jsonResult;
+  }
 
-			if (outsideUser == null) {
-				logger.error("login.error");
-			}
-			userName = outsideUser.getLoginName();
+  @RequestMapping(value="/sendDynamicPwd")
+  @ResponseBody
+  public String sendDynamicPwd(String telNum, HttpSession session)
+  {
+    Map<String,String> map = new HashMap<String,String>();
+    if ((telNum == null) || ("".equals(telNum.trim())))
+    {
+      map.put("success", "false");
+      map.put("code", "0");
+      map.put("msg", "手机号不能为空");
+      return JsonUtil.objectToString(map);
+    }
+    if (!UserUtil.isMobilelegal(telNum)) {
+      map.put("success", "false");
+      map.put("code", "0");
+      map.put("msg", "请输入正确的手机号");
+      return JsonUtil.objectToString(map);
+    }
 
-			ComplatOutsideuser user = this.OutsideUserService.checkUserLogin(
-					userName, password, ip);
+    ComplatOutsideuser outsideUser = this.OutsideUserService.findByMobile(telNum);
+    if (outsideUser == null) {
+      map.put("success", "false");
+      map.put("code", "0");
+      map.put("msg", "无此帐号，请确认");
+      return JsonUtil.objectToString(map);
+    }
 
-			if ((user == null) && (wayOfLogin == 0)) {
-				user = this.OutsideUserService.checkUserLogin(session,
-						userName, password, ip);
-			}
+    String cellphoneDynamicPwdMadeByJava = RandomCodeUtil.getRandomNumber(6);
+    session.setAttribute("cellphoneDynamicPwdMadeByJava", cellphoneDynamicPwdMadeByJava);
 
-			if (user != null) {
-				PersonalSessionInfo.setCurrentPersonalInfo(user);
-				jsonResult.setSuccess(true);
-				ControllerUtil.addCookie(response, "personalloginid", userName,
-						604800);
+    int validityPeriodInt = Integer.parseInt(jisSettings.getValidityPeriod().trim());
 
-				String gotoUrlFlag = "";
-				if (StringUtil.isNotEmpty(appmark)) {
-					System.out.println("====user" + user);
+    String content = jisSettings.getDynamicPpdMessageContent().trim()
+      .replace("cellphoneDynamicPwdMadeByJava", cellphoneDynamicPwdMadeByJava)
+      .replace("validityPeriod", String.valueOf(validityPeriodInt));
+    String appBusinessId = jisSettings.getBusinessIdForGettingDynamicPpd().trim();
+    String appBusinessName = jisSettings.getBusinessNameForGettingDynamicPpd().trim();
+    int loseTime = 60;
+    CellphoneShortMessageUtil cellMesUtil = new CellphoneShortMessageUtil();
+    String jsonRe = cellMesUtil.sendPhoneShortMessage(telNum, content, appBusinessId, appBusinessName, loseTime);
+    map = (Map)JsonUtil.StringToObject(jsonRe, Map.class);
+    if (Integer.parseInt(map.get("code")) == 1) {
+      session.setAttribute("timeSendDynamicPwd", Long.valueOf(System.currentTimeMillis()));
+      int validityPeriod = Integer.parseInt(jisSettings.getValidityPeriod()) * 60;
+      session.setMaxInactiveInterval(validityPeriod);
+    }
+    return jsonRe;
+  }
 
-					String ticket = this.authLogService.add(user, appmark, 1);
-					System.out.println("====tickt" + ticket);
-					if (StringUtil.isEmpty(ticket)) {
-						logger.error("票据生成失败");
-					}
-
-					String domain = StringUtil.getString(session
-							.getAttribute("domain"));
-
-					gotoUrlFlag = jisSettings.getPerGotoUrl();
-					if (StringUtil.isNotEmpty(domain)) {
-						try {
-							domain = URLDecoder.decode(domain, "UTF-8");
-						} catch (UnsupportedEncodingException e) {
-							e.printStackTrace();
-						}
-						Pattern p = Pattern.compile("(?<=//|)((\\w)+\\.)+\\w+");
-
-						Matcher m = p.matcher(gotoUrlFlag);
-						if (m.find()) {
-							gotoUrlFlag = StringUtil.replace(gotoUrlFlag,
-									m.group(), domain);
-						}
-						session.removeAttribute("domain");
-					}
-					jsonResult.addParam("ticket", ticket);
-				}
-				jsonResult.addParam("gotoUrlFlag", gotoUrlFlag);
-				this.OutsideUserService.updateLoginIpAndLoginTime(user);
-			} else {
-				logger.error("您正在进行个人用户登录，用户名或密码不正确");
-			}
-		} catch (Exception e) {
-			session.setAttribute("rand",
-					StringUtil.getUUIDString().substring(0, 4));
-			if ("adminlogin.error".equals(e.getMessage())) {
-				jsonResult.setSuccess(false);
-				jsonResult.addParam("adminerror", "1");
-			} else if ("verifycode.error".equals(e.getMessage())) {
-				jsonResult.setMessage("验证码错误，请重新输入");
-				jsonResult.setSuccess(false);
-			} else {
-				jsonResult.setSuccess(false);
-				jsonResult.setMessage("您正在进行个人用户登录，用户名或密码不正确!");
-			}
-		}
-		return jsonResult;
-	}
-
-	@RequestMapping(value = "/perindex")
-	public String perIndex(HttpServletResponse response, Model model) {
-		ComplatOutsideuser user = PersonalSessionInfo
-				.getFrontCurrentPersonalInfo();
-		String logouturl = "";
-		String loginname = "";
-		if (user != null) {
-			logouturl = "perlogout";
-			loginname = user.getLoginName();
-		} else {
-			return "jis/front/perlogin";
-		}
-
-		model.addAttribute("sysName", jisSettings.getSysName());
-		model.addAttribute("logouturl", logouturl);
-		model.addAttribute("loginname", loginname);
-		model.addAttribute("copyRight", jisSettings.getCopyRight());
-		model.addAttribute(
-				"verifycodeimg",
-				"<img id='verifyImg' src='../verifyCode?code=4&"
-						+ "var=rand&width=162&height=55&random="
-						+ (int) (Math.random() * 100000000.0D)
-						+ "'onclick=\"this.src='../verifyCode?code=4&var=rand&width=162&height=55&"
-						+ "random='+ Math.random();\" style='cursor:pointer'  width='162'  height='55' />");
-		model.addAttribute("username",
-				ControllerUtil.getCookieValue("frontuser"));
-
-		return "jis/front/perindex";
-	}
-
-	@RequestMapping(value = "/perlogout")
-	public ModelAndView perLogout(HttpSession session) {
-		if (PersonalSessionInfo.getFrontCurrentPersonalInfo() != null) {
-			session.removeAttribute("personalinfo");
-		}
-		String appmark = StringUtil.getString(session.getAttribute("appmark"));
-		ModelAndView modelAndView = new ModelAndView();
-		RedirectView redirectView = new RedirectView("perlogin");
-		modelAndView.addObject("appmark", appmark);
-		modelAndView.setView(redirectView);
-		return modelAndView;
-	}
-
-	@RequestMapping(value = "/findperurl")
-	@ResponseBody
-	public JsonResult findPerLogoff() {
-		JsonResult jsonResult = JsonResult.getInstance();
-		String logoffurl = this.appService.findURLBylogoff(1);
-		if (logoffurl.length() > 0) {
-			jsonResult.set(ResultState.OPR_SUCCESS);
-			jsonResult.setMessage(JsonUtil.objectToString(logoffurl));
-		} else {
-			jsonResult.set(ResultState.OPR_FAIL);
-		}
-		return jsonResult;
-	}
-
-	@RequestMapping(value = "/sendDynamicPwd")
-	@ResponseBody
-	public String sendDynamicPwd(String telNum, HttpSession session) {
-		Map<String, String> map = new HashMap<String, String>();
-		if ((telNum == null) || ("".equals(telNum.trim()))) {
-			map.put("success", "false");
-			map.put("code", "0");
-			map.put("msg", "手机号不能为空");
-			return JsonUtil.objectToString(map);
-		}
-		if (!UserUtil.isMobilelegal(telNum)) {
-			map.put("success", "false");
-			map.put("code", "0");
-			map.put("msg", "请输入正确的手机号");
-			return JsonUtil.objectToString(map);
-		}
-
-		ComplatOutsideuser outsideUser = this.OutsideUserService
-				.findByMobile(telNum);
-		if (outsideUser == null) {
-			map.put("success", "false");
-			map.put("code", "0");
-			map.put("msg", "无此帐号，请确认");
-			return JsonUtil.objectToString(map);
-		}
-
-		String cellphoneDynamicPwdMadeByJava = RandomCodeUtil
-				.getRandomNumber(6);
-		session.setAttribute("cellphoneDynamicPwdMadeByJava",
-				cellphoneDynamicPwdMadeByJava);
-
-		int validityPeriodInt = Integer.parseInt(jisSettings
-				.getValidityPeriod().trim());
-
-		String content = jisSettings
-				.getDynamicPwdMessageContent()
-				.trim()
-				.replace("cellphoneDynamicPwdMadeByJava",
-						cellphoneDynamicPwdMadeByJava)
-				.replace("validityPeriod", String.valueOf(validityPeriodInt));
-		String appBusinessId = jisSettings.getBusinessIdForGettingDynamicPwd()
-				.trim();
-		String appBusinessName = jisSettings
-				.getBusinessNameForGettingDynamicPwd().trim();
-		int loseTime = 60;
-		CellphoneShortMessageUtil cellMesUtil = new CellphoneShortMessageUtil();
-		String jsonRe = cellMesUtil.sendPhoneShortMessage(telNum, content,
-				appBusinessId, appBusinessName, loseTime);
-		map = (Map) JsonUtil.StringToObject(jsonRe, Map.class);
-		if (Integer.parseInt(map.get("code")) == 1) {
-			session.setAttribute("timeSendDynamicPwd",
-					Long.valueOf(System.currentTimeMillis()));
-			int validityPeriod = Integer.parseInt(jisSettings
-					.getValidityPeriod()) * 60;
-			session.setMaxInactiveInterval(validityPeriod);
-		}
-		return jsonRe;
-	}
-
+  /**
+   * 16进制 To byte[]
+   * @param hexString
+   * @return byte[]
+   */
+  public static byte[] hexStringToBytes(String hexString) {
+      if (hexString == null || hexString.equals("")) {
+          return null;
+      }
+      hexString = hexString.toUpperCase();
+      int length = hexString.length() / 2;
+      char[] hexChars = hexString.toCharArray();
+      byte[] d = new byte[length];
+      for (int i = 0; i < length; i++) {
+          int pos = i * 2;
+          d[i] = (byte) (charToByte(hexChars[pos]) << 4 | charToByte(hexChars[pos + 1]));
+      }
+      return d;
+  }
+  /**
+   * Convert char to byte
+   * @param c char
+   * @return byte
+   */
+   private static byte charToByte(char c) {
+      return (byte) "0123456789ABCDEF".indexOf(c);
+  }
+   
 	@RequestMapping(value = "/pwdRecover_select")
 	public String pwdRecover_selectForPer(HttpSession session,
 			String typeEntity, Model model) {
@@ -582,14 +580,14 @@ public class PerLoginController {
 					cellphoneShortMessageRandomCodeMadeByJava);
 			String content = JisSettings
 					.getSettings()
-					.getRecovingPwdContent()
+					.getRecovingPpdContent()
 					.trim()
 					.replace("cellphoneShortMessageRandomCodeMadeByJava",
 							cellphoneShortMessageRandomCodeMadeByJava);
 			String appBusinessId = JisSettings.getSettings()
-					.getBusinessIdForRecovingPwd().trim();
+					.getBusinessIdForRecovingPpd().trim();
 			String appBusinessName = JisSettings.getSettings()
-					.getBusinessNameForRecovingPwd().trim();
+					.getBusinessNameForRecovingPpd().trim();
 
 			int loseTime = 60;
 			// CellphoneShortMessageUtil cellMesUtil = new
@@ -652,14 +650,14 @@ public class PerLoginController {
 					cellphoneShortMessageRandomCodeMadeByJava);
 			String content = JisSettings
 					.getSettings()
-					.getRecovingPwdContent()
+					.getRecovingPpdContent()
 					.trim()
 					.replace("cellphoneShortMessageRandomCodeMadeByJava",
 							cellphoneShortMessageRandomCodeMadeByJava);
 			String appBusinessId = JisSettings.getSettings()
-					.getBusinessIdForRecovingPwd().trim();
+					.getBusinessIdForRecovingPpd().trim();
 			String appBusinessName = JisSettings.getSettings()
-					.getBusinessNameForRecovingPwd().trim();
+					.getBusinessNameForRecovingPpd().trim();
 
 			int loseTime = 60;
 			// CellphoneShortMessageUtil cellMesUtil = new
@@ -940,37 +938,5 @@ public class PerLoginController {
 			logger.error(e.getMessage(), e);
 		}
 
-	}
-
-	/**
-	 * 16进制 To byte[]
-	 * 
-	 * @param hexString
-	 * @return byte[]
-	 */
-	public static byte[] hexStringToBytes(String hexString) {
-		if (hexString == null || hexString.equals("")) {
-			return null;
-		}
-		hexString = hexString.toUpperCase();
-		int length = hexString.length() / 2;
-		char[] hexChars = hexString.toCharArray();
-		byte[] d = new byte[length];
-		for (int i = 0; i < length; i++) {
-			int pos = i * 2;
-			d[i] = (byte) (charToByte(hexChars[pos]) << 4 | charToByte(hexChars[pos + 1]));
-		}
-		return d;
-	}
-
-	/**
-	 * Convert char to byte
-	 * 
-	 * @param c
-	 *            char
-	 * @return byte
-	 */
-	private static byte charToByte(char c) {
-		return (byte) "0123456789ABCDEF".indexOf(c);
 	}
 }

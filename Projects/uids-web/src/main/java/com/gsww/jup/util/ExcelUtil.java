@@ -70,7 +70,7 @@ public class ExcelUtil {
 					continue;
 				}
 				// 循环行Row
-				for (int rowNum = 1; rowNum <= sheet.getLastRowNum(); rowNum++) {
+				for (int rowNum = 1; rowNum < sheet.getLastRowNum(); rowNum++) {
 					Row hssfRow = sheet.getRow(rowNum);
 					if (hssfRow != null) {
 						T entity=entityClass.newInstance();						
