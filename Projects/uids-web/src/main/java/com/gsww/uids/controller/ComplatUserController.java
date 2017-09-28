@@ -270,87 +270,88 @@ public class ComplatUserController extends BaseController {
 		SysUserSession sysUserSession =(SysUserSession)request.getSession().getAttribute("sysUserSession");
 		try {
 			Integer userId = null;
+            String pwd;			
 			if (complatUser != null) {	
 				String iid = String.valueOf(complatUser.getIid());
-				String pwd=complatUser.getPwd();
-				if(checkPassword(pwd)){
-					pwd=pwd;
-				}else{
-					returnMsg("error", "密码强度不够，新增失败", request);	
-					return new ModelAndView("redirect:/complat/complatList");
-				}				
-				if (iid == "null" || iid.length() <= 0) {					
-					complatUser.setOpersign(1);						
-					complatUser.setEnable(0); // 是否禁用
-					Date d = new Date();
-					complatUser.setCreatetime(d);// 创建时间
-					complatUserService.save(complatUser);	
-					//对密码进行加密										
-					String p = Md5Util.md5encode(pwd);
-					complatUser.setPwd(p);
-					//身份证号处理 JisUserdetail
-					String cardId = request.getParameter("cardid");
-					JisUserdetail jisUserdetail = jisUserdetailService.findByUserid(userId);
-					
-					if(jisUserdetail.getIid() == null){
-						JisUserdetail jisUser = new JisUserdetail();
-						jisUser.setCardid(cardId);
-						jisUser.setIid(userId);
-						jisUser.setUserid(userId);
-						jisUserdetailService.save(jisUser);
-					}else{
-						//扩展属性
-						Map<String,String> userMap = this.saveExendsAttr(userId, request);
-						//对身份证号和用户扩展属性update
-						jisUserdetailService.update(jisUserdetail.getIid(),cardId,userMap);
-					}
-					returnMsg("success", "保存成功", request);	
-					
-					String desc = sysUserSession.getUserName() + "新增政府用户:" + complatUser.getName(); 				
-					jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,2,1);					
-					
-				}else {
+				if (iid == "null" || iid.length() <= 0) {	
+					pwd=complatUser.getPwd();
 					if(checkPassword(pwd)){
 						pwd=pwd;
+						complatUser.setOpersign(1);						
+						complatUser.setEnable(0); // 是否禁用
+						Date d = new Date();
+						complatUser.setCreatetime(d);// 创建时间
+						complatUserService.save(complatUser);	
+						//对密码进行加密										
+						String p = Md5Util.md5encode(pwd);
+						complatUser.setPwd(p);
+						//身份证号处理 JisUserdetail
+						String cardId = request.getParameter("cardid");
+						JisUserdetail jisUserdetail = jisUserdetailService.findByUserid(userId);
+						
+						if(jisUserdetail.getIid() == null){
+							JisUserdetail jisUser = new JisUserdetail();
+							jisUser.setCardid(cardId);
+							jisUser.setIid(userId);
+							jisUser.setUserid(userId);
+							jisUserdetailService.save(jisUser);
+						}else{
+							//扩展属性
+							Map<String,String> userMap = this.saveExendsAttr(userId, request);
+							//对身份证号和用户扩展属性update
+							jisUserdetailService.update(jisUserdetail.getIid(),cardId,userMap);
+						}
+						returnMsg("success", "保存成功", request);	
+						
+						String desc = sysUserSession.getUserName() + "新增政府用户:" + complatUser.getName(); 				
+						jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,2,1);											
+					}else{
+						returnMsg("error", "密码强度不够，新增失败", request);	
+						return new ModelAndView("redirect:/complat/complatList");
+					}					
+				}else {
+					pwd=complatUser.getPwd();
+					if(checkPassword(pwd)){
+						pwd=pwd;
+						//对密码进行加密			
+						String p = Md5Util.md5encode(pwd);
+						complatUser.setPwd(p);
+						//注册时间
+						String time = TimeHelper.getCurrentTime();
+						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+						Date modifyTime = sdf.parse(time);
+						complatUser.setModifytime(modifyTime);
+						Date d = new Date();
+						complatUser.setCreatetime(d);// 创建时间
+						//转换保存创建时间
+						userId = complatUser.getIid();
+						complatUser.setEnable(1); // 是否禁用	
+						complatUser.setOpersign(2);//更新操作状态
+						complatUserService.save(complatUser);
+						
+						//身份证号处理 JisUserdetail
+						String cardId = request.getParameter("cardid");
+						JisUserdetail jisUserdetail = jisUserdetailService.findByUserid(userId);
+						if(jisUserdetail == null){
+							JisUserdetail jisUser = new JisUserdetail();
+							jisUser.setCardid(cardId);
+							jisUser.setIid(userId);
+							jisUser.setUserid(userId);
+							jisUserdetailService.save(jisUser);
+						}else{
+							//扩展属性
+							Map<String,String> userMap = this.saveExendsAttr(userId, request);
+							//对身份证号和用户扩展属性update
+							jisUserdetailService.update(jisUserdetail.getIid(),cardId,userMap);
+						}
+						
+						returnMsg("success", "编辑成功", request);								
+						String desc = sysUserSession.getUserName() + "修改政府用户:" + complatUser.getName(); 
+						jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,2,2);				
 					}else{
 						returnMsg("error", "密码强度不够，修改失败", request);	
 						return new ModelAndView("redirect:/complat/complatList");
-					}
-					//对密码进行加密			
-					String p = Md5Util.md5encode(pwd);
-					complatUser.setPwd(p);
-					//注册时间
-					String time = TimeHelper.getCurrentTime();
-					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-					Date modifyTime = sdf.parse(time);
-					complatUser.setModifytime(modifyTime);
-					Date d = new Date();
-					complatUser.setCreatetime(d);// 创建时间
-					//转换保存创建时间
-					userId = complatUser.getIid();
-					complatUser.setEnable(1); // 是否禁用	
-					complatUser.setOpersign(2);//更新操作状态
-					complatUserService.save(complatUser);
-					
-					//身份证号处理 JisUserdetail
-					String cardId = request.getParameter("cardid");
-					JisUserdetail jisUserdetail = jisUserdetailService.findByUserid(userId);
-					if(jisUserdetail == null){
-						JisUserdetail jisUser = new JisUserdetail();
-						jisUser.setCardid(cardId);
-						jisUser.setIid(userId);
-						jisUser.setUserid(userId);
-						jisUserdetailService.save(jisUser);
-					}else{
-						//扩展属性
-						Map<String,String> userMap = this.saveExendsAttr(userId, request);
-						//对身份证号和用户扩展属性update
-						jisUserdetailService.update(jisUserdetail.getIid(),cardId,userMap);
-					}
-					
-					returnMsg("success", "编辑成功", request);								
-					String desc = sysUserSession.getUserName() + "修改政府用户:" + complatUser.getName(); 
-					jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,2,2);				
+					}					
 				}	
 			} 
 		} catch (Exception e) {

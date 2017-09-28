@@ -1,4 +1,4 @@
-/*package com.gsww.uids.controller;
+package com.gsww.uids.controller;
 
 import com.gsww.jup.util.RSAUtil;
 import com.gsww.uids.constant.CorporationSessionInfo;
@@ -13,10 +13,9 @@ import com.hanweb.common.util.StringUtil;
 import com.hanweb.common.util.mvc.ControllerUtil;
 import com.hanweb.common.util.mvc.JsonResult;
 import com.hanweb.common.util.mvc.ResultState;
-import com.hanweb.complat.exception.LoginException;
 import com.gsww.uids.service.JisApplicationService;
 import com.gsww.uids.util.AccessUtil;
-import com.hanweb.jis.util.SafeUtil;
+import com.gsww.jup.util.SafeUtil;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -122,20 +121,20 @@ public class CorLoginController{
     {
       if ((String)session.getAttribute("rand") == null)
       {
-        throw new LoginException("verifycode.error");
+        throw new Exception("verifycode.error");
       }
       if ((randomVeryfyCode == null) || ("".equals(randomVeryfyCode)) || (randomVeryfyCode.length() == 0))
       {
-        throw new LoginException("verifycode.error");
+        throw new Exception("verifycode.error");
       }
       String rand = (String)session.getAttribute("rand");
       if (!rand.equalsIgnoreCase(randomVeryfyCode))
       {
-        throw new LoginException("verifycode.error");
+        throw new Exception("verifycode.error");
       }
 
       if ((StringUtil.isEmpty(userName)) || (StringUtil.isEmpty(password))) {
-        throw new LoginException("login.error");
+        throw new Exception("login.error");
       }
       String en_password = "";
       try{
@@ -163,7 +162,7 @@ public class CorLoginController{
           String ticket = this.authLogService.add(corporation, appmark, 2);
 
           if (StringUtil.isEmpty(ticket)) {
-            throw new LoginException("票据生成失败");
+            throw new Exception("票据生成失败");
           }
 
           gotoUrlFlag = jisSettings.getCorGotoUrl();
@@ -190,10 +189,10 @@ public class CorLoginController{
 
         this.logService.add(Integer.valueOf(9), Integer.valueOf(8), userName);
       } else {
-        throw new LoginException("您正在进行法人用户登录，用户名或密码不正确!");
+        throw new Exception("您正在进行法人用户登录，用户名或密码不正确!");
       }
     }
-    catch (LoginException e)
+    catch (Exception e)
     {
       session.setAttribute("rand", StringUtil.getUUIDString().substring(0, 4));
       if ("adminlogin.error".equals(e.getMessage())) {
@@ -283,11 +282,11 @@ public class CorLoginController{
     return jsonResult;
   }
   
-  *//**
+ /**
    * 16进制 To byte[]
    * @param hexString
    * @return byte[]
-   *//*
+   */
   public static byte[] hexStringToBytes(String hexString) {
       if (hexString == null || hexString.equals("")) {
           return null;
@@ -302,12 +301,12 @@ public class CorLoginController{
       }
       return d;
   }
-  *//**
+  /**
    * Convert char to byte
    * @param c char
    * @return byte
-   *//*
+   */
    private static byte charToByte(char c) {
       return (byte) "0123456789ABCDEF".indexOf(c);
   }
-}*/
+}
