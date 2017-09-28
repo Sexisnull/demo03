@@ -354,7 +354,39 @@ function outPutComplatUser() {
 	$(".Popup").show(); 				
 }*/
 	
- 
+	
+function intPutComplatUser(userAcctId){
+	alert("=================");
+	//if(null != userAcctId && "" != userAcctId){
+		$.ajax( {
+			type : 'POST',
+			url : "deleteComplatUser",
+			dataType : "json",
+			data : 'iid=' + userAcctId,
+			success : function(msg) {
+				//if (msg.result == "true") {
+					//alert("该人员已配置窗口！");
+					//$.dialog.alert('该用户已配置窗口,请选择其它操作！');
+					//return;
+				//}else{
+					var api = $.dialog({
+						title : '政府用户-用户导入',
+						width : 400,
+						height: 130,
+						max : false,
+						min : false,
+						lock : true,
+						padding : '40px 20px',
+						content : 'url:${ctx}/userWin/addUserWin?userAcctId='+userAcctId,
+						fixed : true,
+						drag : false,
+						resize : false
+					});
+				//}
+			}
+		});
+	//}
+}
  
 //关闭的单击事件
 $(".close").click(function(){	
@@ -522,7 +554,7 @@ function resetform() {
 					</li>
 					<li class="split"></li>
 					<li class="active">
-						用户列表
+						<a>用户列表</a>
 					</li>
 				</ol>
 			</div>
@@ -622,8 +654,8 @@ function resetform() {
 						<ul class="list-Topbtn">
 							<li class="add"><a title="新增" onclick="addComplatUser()">新增</a></li>
 							<li class="del"><a title="删除" onclick="deleteData('complat/complatUserDelete','iid');">删除</a></li>
-							<li class="query" id="importFile" onclick="intPutComplatUser()"><a title="导入">导入</a>
-							</li><li class="exportData"><a title="导出" onclick="outPutComplatUser()">导出</a></li>
+							<li class="query"><a title="导入" onclick="intPutComplatUser(${complatUser.iid});">导入</a></li>
+							<li class="exportData"><a title="导出" onclick="outPutComplatUser()">导出</a></li>
 							<li class="startData"><a title="启用" onclick="startData('complat/startUserEnable','iid');">启用</a></li>
 							<li class="edit"><a title="停用" onclick="stopData('complat/stopUserEnable','complatUserId');">停用</a></li>
 						</ul>
