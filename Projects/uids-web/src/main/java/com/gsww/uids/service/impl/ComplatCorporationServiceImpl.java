@@ -152,8 +152,8 @@ public class ComplatCorporationServiceImpl implements ComplatCorporationService{
 
 	@Override
 	public ComplatCorporation findByLoginNameIsUsed(String loginName) {
-		// TODO Auto-generated method stub
-		return null;
+		return complatCorporationDao.findByLoginName(loginName);
+
 	}
 
 }

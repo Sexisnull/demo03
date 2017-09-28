@@ -163,7 +163,8 @@ public class ComplatOutsideuserServiceImpl implements ComplatOutsideuserService 
 	    if ((ids == null) || (ids.length() <= 0)) {
 	      return false;
 	    }
-	    return this.outsideUserDao.updateOpersign(ids, opersign);
+	    int i =this.outsideUserDao.updateOpersign(ids, opersign);
+	    return i==1;
 	  }
 
 	@Override

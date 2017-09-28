@@ -98,7 +98,13 @@
 		   	});	
 		}
 		
-		function waitToGetCellphoneCode(){			
+		function waitToGetCellphoneCode(){
+			var inputByGuest = $("#inputByGuest").val();
+			var randCode = $("#randCode").val();
+			if(inputByGuest=='' || randCode==''){
+				alert("登录名或验证码不能为空");
+				return;
+			}
 			$("#waitForCellphoneCode").val("正在发送短信验证码...").attr("disabled", true).addClass("disabled");//点击了“发送”按钮后，点击失效。
 			send(success_function,fail_function);		//该方法在Java中，有1秒延迟的模拟 效果。	
 		   }
@@ -191,30 +197,6 @@
 				
 		   	});			
 		}
-		
-		 function checkWhetherInputByGuestExist() {
-					 var inputByGuest =$("#inputByGuest").val() ;
-						var randCode = $("#randCode").val();
-						if($.trim(inputByGuest) ==""){//如果没有输入帐号
-							if("per"==typeEntity){
-								var msg = "帐号不能为空。请输入手机号/登录名/身份证号";
-							}else{
-								var msg = "帐号不能为空。请输入登录名、统一社会信用代码、工商注册号或组织机构代码";
-							}
-							alert(msg);
-							return false;
-						}else{
-						if($.trim(randCode) ==""){//如果没有输入随机验证码
-							if("per"==typeEntity){
-								var msg = "随机验证码不能为空";
-							}else{
-								var msg = "随机验证码不能为空";
-							}
-							alert(msg);
-							return false;
-						}	
-				   }
-				}
 </script>
 <style type="text/css">
 body {
@@ -279,7 +261,7 @@ body {
              <td style="background:url(${ctx }/ui/images/yxfind-pwd_05.png);height:40px; width:283px; background-repeat:no-repeat;
              	position: relative;background-position:center;">             
             	
-            	 <input id="inputByGuest" value=""   name="mobile" type="text"  onblur="checkWhetherInputByGuestExist(this)";  
+            	 <input id="inputByGuest" value=""   name="mobile" type="text" ;  
              	style="line-height:38px;  height:38px; width:275px; 
              	background: transparent;outline: none; top:0px;left: 0px; border:none;  padding-left:5px;
              	font-family:'微软雅黑'; font-size:14px; color:#a9a9a9;" placeholder="用户名/工商号/信用代码/组织机构码" /></td>

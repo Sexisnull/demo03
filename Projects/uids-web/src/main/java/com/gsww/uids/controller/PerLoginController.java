@@ -48,329 +48,364 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
-@RequestMapping(value="/front")
-public class PerLoginController{
-  private static Logger logger = LoggerFactory.getLogger(ComplatRoleController.class);
+@RequestMapping(value = "/front")
+public class PerLoginController {
+	private static Logger logger = LoggerFactory
+			.getLogger(ComplatRoleController.class);
 
-  @Autowired
-  private ComplatCorporationService corporationService;
+	@Autowired
+	private ComplatCorporationService corporationService;
 
-  @Autowired
-  private JisApplicationService appService;
+	@Autowired
+	private JisApplicationService appService;
 
-  @Autowired
-  private ComplatOutsideuserService OutsideUserService;
+	@Autowired
+	private ComplatOutsideuserService OutsideUserService;
 
-  @Autowired
-  private AuthLogService authLogService;
-  
-  private static JisSettings jisSettings = new JisSettings();
+	@Autowired
+	private AuthLogService authLogService;
 
-  @RequestMapping(value = "/perlogin.do")
-  public String personalLogin(HttpServletResponse response, String action, String appmark, 
-		  String gotoUrl, String domain,Model model)
-  {
-    if (action == null) {
-      action = "";
-    }
-    if (appmark == null) {
-      appmark = "";
-    }
-    if ((SafeUtil.isSqlAndXss(action)) || (SafeUtil.isSqlAndXss(appmark)) || (SafeUtil.isSqlAndXss(gotoUrl)) || 
-      (SafeUtil.isSqlAndXss(domain))){
-    	return null;
-    }
-    HttpSession session = SpringUtil.getRequest().getSession();
-    if (StringUtil.isEmpty(gotoUrl)) {
-      gotoUrl = (String)session.getAttribute("gotoUrl");
-      if (gotoUrl == null)
-        gotoUrl = "";
-    }
-    else {
-      session.setAttribute("gotoUrl", gotoUrl);
-    }
-    if (StringUtil.isEmpty(domain)) {
-      domain = (String)session.getAttribute("domain");
-      if (domain == null)
-        domain = "";
-    }
-    else {
-      session.setAttribute("domain", domain);
-    }
+	private static JisSettings jisSettings = new JisSettings();
 
-    if ((SafeUtil.isSqlAndXss(gotoUrl)) || (SafeUtil.isSqlAndXss(action)) || (SafeUtil.isSqlAndXss(appmark))) {
-      gotoUrl = "";
-      action = "";
-      appmark = "gszw";
-    }
-    session.setAttribute("appmark", appmark);
-    model.addAttribute("sysName",jisSettings.getSysName());
-    model.addAttribute("url","doperlogin" );
-    model.addAttribute("verifycodeimg","<img id='verifyImg' src='../verifyCode?code=4&var=rand&width=162&height=30&"
-    		+ "random=" +  (int)(Math.random() * 100000000.0D) + "'" + " onclick=\"this.src='../verifyCode?code=4&"
-    				+ "var=rand&width=140&height=30&random='+ Math.random();\" style='cursor:pointer'  width='140' "
-    				+ "height='30' />");
-    model.addAttribute("username", ControllerUtil.getCookieValue("frontuser"));
-    model.addAttribute("action", action);
-    model.addAttribute("appmark", appmark);
-    model.addAttribute("gotoUrl", gotoUrl);
-    
-    return "jis/front/perlogin";
-  }
+	@RequestMapping(value = "/perlogin.do")
+	public String personalLogin(HttpServletResponse response, String action,
+			String appmark, String gotoUrl, String domain, Model model) {
+		if (action == null) {
+			action = "";
+		}
+		if (appmark == null) {
+			appmark = "";
+		}
+		if ((SafeUtil.isSqlAndXss(action)) || (SafeUtil.isSqlAndXss(appmark))
+				|| (SafeUtil.isSqlAndXss(gotoUrl))
+				|| (SafeUtil.isSqlAndXss(domain))) {
+			return null;
+		}
+		HttpSession session = SpringUtil.getRequest().getSession();
+		if (StringUtil.isEmpty(gotoUrl)) {
+			gotoUrl = (String) session.getAttribute("gotoUrl");
+			if (gotoUrl == null)
+				gotoUrl = "";
+		} else {
+			session.setAttribute("gotoUrl", gotoUrl);
+		}
+		if (StringUtil.isEmpty(domain)) {
+			domain = (String) session.getAttribute("domain");
+			if (domain == null)
+				domain = "";
+		} else {
+			session.setAttribute("domain", domain);
+		}
 
-  @POST
-  @RequestMapping(value="/doperlogin")
-  @ResponseBody
-  public JsonResult personalDoLogin(@RequestParam(value="username", required=false) String userName, @RequestParam(value="password", required=false) String password, @RequestParam(value="randomVeryfyCode", required=false) String randomVeryfyCode, @RequestParam(value="action", required=false) String action, @RequestParam(value="appmark", required=false) String appmark, @RequestParam(value="gotoUrl", required=false) String gotoUrl, HttpSession session,HttpServletRequest request, HttpServletResponse response)
-  {
-    if (!AccessUtil.checkAccess(SpringUtil.getRequest())) {
-      return null;
-    }
-    JsonResult jsonResult = JsonResult.getInstance();
-    String ip = ControllerUtil.getIp();
-    try
-    {
-      session.setAttribute("appmark", appmark);
+		if ((SafeUtil.isSqlAndXss(gotoUrl)) || (SafeUtil.isSqlAndXss(action))
+				|| (SafeUtil.isSqlAndXss(appmark))) {
+			gotoUrl = "";
+			action = "";
+			appmark = "gszw";
+		}
+		session.setAttribute("appmark", appmark);
+		model.addAttribute("sysName", jisSettings.getSysName());
+		model.addAttribute("url", "doperlogin");
+		model.addAttribute(
+				"verifycodeimg",
+				"<img id='verifyImg' src='../verifyCode?code=4&var=rand&width=162&height=30&"
+						+ "random="
+						+ (int) (Math.random() * 100000000.0D)
+						+ "'"
+						+ " onclick=\"this.src='../verifyCode?code=4&"
+						+ "var=rand&width=140&height=30&random='+ Math.random();\" style='cursor:pointer'  width='140' "
+						+ "height='30' />");
+		model.addAttribute("username",
+				ControllerUtil.getCookieValue("frontuser"));
+		model.addAttribute("action", action);
+		model.addAttribute("appmark", appmark);
+		model.addAttribute("gotoUrl", gotoUrl);
 
-      if ((String)session.getAttribute("rand") == null)
-        logger.error("verifycode.error");
-      if ((randomVeryfyCode == null) || ("".equals(randomVeryfyCode)) || (randomVeryfyCode.length() == 0)) {
-    	  logger.error("verifycode.error");
-      }
-      String rand = (String)session.getAttribute("rand");
-      if (!rand.equalsIgnoreCase(randomVeryfyCode)) {
-    	  logger.error("verifycode.error");
-      }
+		return "jis/front/perlogin";
+	}
 
-      if ((StringUtil.isEmpty(userName)) || (StringUtil.isEmpty(password))) {
-    	  logger.error("login.error");
-      }
-      
-      String en_password = "";
-      try{
-          byte[] en_result = hexStringToBytes(password);  
-          byte[] de_result = RSAUtil.decrypt(RSAUtil.getKeyPair(request).getPrivate(), en_result);  
-          StringBuffer sb = new StringBuffer();  
-          sb.append(new String(de_result));  
-          en_password= sb.reverse().toString(); 
-          en_password = URLDecoder.decode(en_password,"utf-8");
-      } catch(Exception ex){
-    	  logger.error(ex.getMessage());
-      }
-      password = en_password;
+	@POST
+	@RequestMapping(value = "/doperlogin")
+	@ResponseBody
+	public JsonResult personalDoLogin(
+			@RequestParam(value = "username", required = false) String userName,
+			@RequestParam(value = "password", required = false) String password,
+			@RequestParam(value = "randomVeryfyCode", required = false) String randomVeryfyCode,
+			@RequestParam(value = "action", required = false) String action,
+			@RequestParam(value = "appmark", required = false) String appmark,
+			@RequestParam(value = "gotoUrl", required = false) String gotoUrl,
+			HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) {
+		if (!AccessUtil.checkAccess(SpringUtil.getRequest())) {
+			return null;
+		}
+		JsonResult jsonResult = JsonResult.getInstance();
+		String ip = ControllerUtil.getIp();
+		try {
+			session.setAttribute("appmark", appmark);
 
-      int wayOfLogin = 0;
-      ComplatOutsideuser outsideUser;
-      if (UserUtil.isMobilelegal(userName)) {
-        outsideUser = this.OutsideUserService.findByMobile(userName);
-        wayOfLogin = 0;
-      } else if (UserUtil.isIDnumberlegal(userName)) {
-        outsideUser = this.OutsideUserService.findByIdCard(userName);
-        wayOfLogin = 2;
-      } else {
-        outsideUser = this.OutsideUserService.findByLoginName(userName);
-      }
-
-      if (outsideUser == null) {
-        logger.error("login.error");
-      }
-      userName = outsideUser.getLoginName();
-
-      ComplatOutsideuser user = this.OutsideUserService.checkUserLogin(userName, password, ip);
-
-      if ((user == null) && (wayOfLogin == 0)) {
-        user = this.OutsideUserService.checkUserLogin(session, userName, password, ip);
-      }
-
-      if (user != null)
-      {
-        PersonalSessionInfo.setCurrentPersonalInfo(user);
-        jsonResult.setSuccess(true);
-        ControllerUtil.addCookie(response, "personalloginid", userName, 
-          604800);
-
-        String gotoUrlFlag = "";
-        if (StringUtil.isNotEmpty(appmark)) {
-          System.out.println("====user" + user);
-
-          String ticket = this.authLogService.add(user, appmark, 1);
-          System.out.println("====tickt" + ticket);
-          if (StringUtil.isEmpty(ticket)) {
-            logger.error("票据生成失败");
-          }
-
-          String domain = StringUtil.getString(session.getAttribute("domain"));
-
-          gotoUrlFlag = jisSettings.getPerGotoUrl();
-          if (StringUtil.isNotEmpty(domain)) {
-            try {
-				domain = URLDecoder.decode(domain,"UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
+			if ((String) session.getAttribute("rand") == null)
+				logger.error("verifycode.error");
+			if ((randomVeryfyCode == null) || ("".equals(randomVeryfyCode))
+					|| (randomVeryfyCode.length() == 0)) {
+				logger.error("verifycode.error");
 			}
-            Pattern p = Pattern.compile("(?<=//|)((\\w)+\\.)+\\w+");
+			String rand = (String) session.getAttribute("rand");
+			if (!rand.equalsIgnoreCase(randomVeryfyCode)) {
+				logger.error("verifycode.error");
+			}
 
-            Matcher m = p.matcher(gotoUrlFlag);
-            if (m.find()) {
-              gotoUrlFlag = StringUtil.replace(gotoUrlFlag, m.group(), domain);
-            }
-            session.removeAttribute("domain");
-          }
-          jsonResult.addParam("ticket", ticket);
-        }
-        jsonResult.addParam("gotoUrlFlag", gotoUrlFlag);
-        this.OutsideUserService.save(user);
-      }
-      else {
-        logger.error("您正在进行个人用户登录，用户名或密码不正确");
-      }
-    }
-    catch (Exception e) {
-      session.setAttribute("rand", StringUtil.getUUIDString().substring(0, 4));
-      if ("adminlogin.error".equals(e.getMessage())) {
-        jsonResult.setSuccess(false);
-        jsonResult.addParam("adminerror", "1");
-      } else if ("verifycode.error".equals(e.getMessage())) {
-        jsonResult.setMessage("验证码错误，请重新输入");
-        jsonResult.setSuccess(false);
-      } else {
-        jsonResult.setSuccess(false);
-        jsonResult.setMessage("您正在进行个人用户登录，用户名或密码不正确!");
-      }
-    }
-    return jsonResult;
-  }
+			if ((StringUtil.isEmpty(userName))
+					|| (StringUtil.isEmpty(password))) {
+				logger.error("login.error");
+			}
 
-  @RequestMapping(value="/perindex")
-  public String perIndex(HttpServletResponse response,Model model) {
-    ComplatOutsideuser user = PersonalSessionInfo.getFrontCurrentPersonalInfo();
-    String logouturl = "";
-    String loginname = "";
-    if (user != null) {
-      logouturl = "perlogout";
-      loginname = user.getLoginName();
-    }
-    else {
-      return "jis/front/perlogin";
-    }
-    
-    model.addAttribute("sysName", jisSettings.getSysName());
-    model.addAttribute("logouturl", logouturl);
-    model.addAttribute("loginname", loginname);
-    model.addAttribute("copyRight", jisSettings.getCopyRight());
-    model.addAttribute("verifycodeimg", "<img id='verifyImg' src='../verifyCode?code=4&"
-    		+ "var=rand&width=162&height=55&random=" + (int)(Math.random() * 100000000.0D) 
-    		+"'onclick=\"this.src='../verifyCode?code=4&var=rand&width=162&height=55&"
-    		+ "random='+ Math.random();\" style='cursor:pointer'  width='162'  height='55' />");
-    model.addAttribute("username", ControllerUtil.getCookieValue("frontuser"));
-    
-    return "jis/front/perindex";
-  }
+			String en_password = "";
+			try {
+				byte[] en_result = hexStringToBytes(password);
+				byte[] de_result = RSAUtil.decrypt(RSAUtil.getKeyPair(request)
+						.getPrivate(), en_result);
+				StringBuffer sb = new StringBuffer();
+				sb.append(new String(de_result));
+				en_password = sb.reverse().toString();
+				en_password = URLDecoder.decode(en_password, "utf-8");
+			} catch (Exception ex) {
+				logger.error(ex.getMessage());
+			}
+			password = en_password;
 
-  @RequestMapping(value="/perlogout")
-  public ModelAndView perLogout(HttpSession session) {
-    if (PersonalSessionInfo.getFrontCurrentPersonalInfo() != null) {
-      session.removeAttribute("personalinfo");
-    }
-    String appmark = StringUtil.getString(session.getAttribute("appmark"));
-    ModelAndView modelAndView = new ModelAndView();
-    RedirectView redirectView = new RedirectView("perlogin.do");
-    modelAndView.addObject("appmark", appmark);
-    modelAndView.setView(redirectView);
-    return modelAndView;
-  }
-  
-  @RequestMapping(value="/findperurl")
-  @ResponseBody
-  public JsonResult findPerLogoff() {
-    JsonResult jsonResult = JsonResult.getInstance();
-    String logoffurl = this.appService.findURLBylogoff(1);
-    if (logoffurl.length() > 0) {
-      jsonResult.set(ResultState.OPR_SUCCESS);
-      jsonResult.setMessage(JsonUtil.objectToString(logoffurl));
-    } else {
-      jsonResult.set(ResultState.OPR_FAIL);
-    }
-    return jsonResult;
-  }
+			int wayOfLogin = 0;
+			ComplatOutsideuser outsideUser;
+			if (UserUtil.isMobilelegal(userName)) {
+				outsideUser = this.OutsideUserService.findByMobile(userName);
+				wayOfLogin = 0;
+			} else if (UserUtil.isIDnumberlegal(userName)) {
+				outsideUser = this.OutsideUserService.findByIdCard(userName);
+				wayOfLogin = 2;
+			} else {
+				outsideUser = this.OutsideUserService.findByLoginName(userName);
+			}
 
-  @RequestMapping(value="/sendDynamicPwd")
-  @ResponseBody
-  public String sendDynamicPwd(String telNum, HttpSession session)
-  {
-    Map<String,String> map = new HashMap<String,String>();
-    if ((telNum == null) || ("".equals(telNum.trim())))
-    {
-      map.put("success", "false");
-      map.put("code", "0");
-      map.put("msg", "手机号不能为空");
-      return JsonUtil.objectToString(map);
-    }
-    if (!UserUtil.isMobilelegal(telNum)) {
-      map.put("success", "false");
-      map.put("code", "0");
-      map.put("msg", "请输入正确的手机号");
-      return JsonUtil.objectToString(map);
-    }
+			if (outsideUser == null) {
+				logger.error("login.error");
+			}
+			userName = outsideUser.getLoginName();
 
-    ComplatOutsideuser outsideUser = this.OutsideUserService.findByMobile(telNum);
-    if (outsideUser == null) {
-      map.put("success", "false");
-      map.put("code", "0");
-      map.put("msg", "无此帐号，请确认");
-      return JsonUtil.objectToString(map);
-    }
+			ComplatOutsideuser user = this.OutsideUserService.checkUserLogin(
+					userName, password, ip);
 
-    String cellphoneDynamicPwdMadeByJava = RandomCodeUtil.getRandomNumber(6);
-    session.setAttribute("cellphoneDynamicPwdMadeByJava", cellphoneDynamicPwdMadeByJava);
+			if ((user == null) && (wayOfLogin == 0)) {
+				user = this.OutsideUserService.checkUserLogin(session,
+						userName, password, ip);
+			}
 
-    int validityPeriodInt = Integer.parseInt(jisSettings.getValidityPeriod().trim());
+			if (user != null) {
+				PersonalSessionInfo.setCurrentPersonalInfo(user);
+				jsonResult.setSuccess(true);
+				ControllerUtil.addCookie(response, "personalloginid", userName,
+						604800);
 
-    String content = jisSettings.getDynamicPpdMessageContent().trim()
-      .replace("cellphoneDynamicPwdMadeByJava", cellphoneDynamicPwdMadeByJava)
-      .replace("validityPeriod", String.valueOf(validityPeriodInt));
-    String appBusinessId = jisSettings.getBusinessIdForGettingDynamicPpd().trim();
-    String appBusinessName = jisSettings.getBusinessNameForGettingDynamicPpd().trim();
-    int loseTime = 60;
-    CellphoneShortMessageUtil cellMesUtil = new CellphoneShortMessageUtil();
-    String jsonRe = cellMesUtil.sendPhoneShortMessage(telNum, content, appBusinessId, appBusinessName, loseTime);
-    map = (Map)JsonUtil.StringToObject(jsonRe, Map.class);
-    if (Integer.parseInt(map.get("code")) == 1) {
-      session.setAttribute("timeSendDynamicPwd", Long.valueOf(System.currentTimeMillis()));
-      int validityPeriod = Integer.parseInt(jisSettings.getValidityPeriod()) * 60;
-      session.setMaxInactiveInterval(validityPeriod);
-    }
-    return jsonRe;
-  }
+				String gotoUrlFlag = "";
+				if (StringUtil.isNotEmpty(appmark)) {
+					System.out.println("====user" + user);
 
-  /**
-   * 16进制 To byte[]
-   * @param hexString
-   * @return byte[]
-   */
-  public static byte[] hexStringToBytes(String hexString) {
-      if (hexString == null || hexString.equals("")) {
-          return null;
-      }
-      hexString = hexString.toUpperCase();
-      int length = hexString.length() / 2;
-      char[] hexChars = hexString.toCharArray();
-      byte[] d = new byte[length];
-      for (int i = 0; i < length; i++) {
-          int pos = i * 2;
-          d[i] = (byte) (charToByte(hexChars[pos]) << 4 | charToByte(hexChars[pos + 1]));
-      }
-      return d;
-  }
-  /**
-   * Convert char to byte
-   * @param c char
-   * @return byte
-   */
-   private static byte charToByte(char c) {
-      return (byte) "0123456789ABCDEF".indexOf(c);
-  }
-   
+					String ticket = this.authLogService.add(user, appmark, 1);
+					System.out.println("====tickt" + ticket);
+					if (StringUtil.isEmpty(ticket)) {
+						logger.error("票据生成失败");
+					}
+
+					String domain = StringUtil.getString(session
+							.getAttribute("domain"));
+
+					gotoUrlFlag = jisSettings.getPerGotoUrl();
+					if (StringUtil.isNotEmpty(domain)) {
+						try {
+							domain = URLDecoder.decode(domain, "UTF-8");
+						} catch (UnsupportedEncodingException e) {
+							e.printStackTrace();
+						}
+						Pattern p = Pattern.compile("(?<=//|)((\\w)+\\.)+\\w+");
+
+						Matcher m = p.matcher(gotoUrlFlag);
+						if (m.find()) {
+							gotoUrlFlag = StringUtil.replace(gotoUrlFlag,
+									m.group(), domain);
+						}
+						session.removeAttribute("domain");
+					}
+					jsonResult.addParam("ticket", ticket);
+				}
+				jsonResult.addParam("gotoUrlFlag", gotoUrlFlag);
+				this.OutsideUserService.save(user);
+			} else {
+				logger.error("您正在进行个人用户登录，用户名或密码不正确");
+			}
+		} catch (Exception e) {
+			session.setAttribute("rand",
+					StringUtil.getUUIDString().substring(0, 4));
+			if ("adminlogin.error".equals(e.getMessage())) {
+				jsonResult.setSuccess(false);
+				jsonResult.addParam("adminerror", "1");
+			} else if ("verifycode.error".equals(e.getMessage())) {
+				jsonResult.setMessage("验证码错误，请重新输入");
+				jsonResult.setSuccess(false);
+			} else {
+				jsonResult.setSuccess(false);
+				jsonResult.setMessage("您正在进行个人用户登录，用户名或密码不正确!");
+			}
+		}
+		return jsonResult;
+	}
+
+	@RequestMapping(value = "/perindex")
+	public String perIndex(HttpServletResponse response, Model model) {
+		ComplatOutsideuser user = PersonalSessionInfo
+				.getFrontCurrentPersonalInfo();
+		String logouturl = "";
+		String loginname = "";
+		if (user != null) {
+			logouturl = "perlogout";
+			loginname = user.getLoginName();
+		} else {
+			return "jis/front/perlogin";
+		}
+
+		model.addAttribute("sysName", jisSettings.getSysName());
+		model.addAttribute("logouturl", logouturl);
+		model.addAttribute("loginname", loginname);
+		model.addAttribute("copyRight", jisSettings.getCopyRight());
+		model.addAttribute(
+				"verifycodeimg",
+				"<img id='verifyImg' src='../verifyCode?code=4&"
+						+ "var=rand&width=162&height=55&random="
+						+ (int) (Math.random() * 100000000.0D)
+						+ "'onclick=\"this.src='../verifyCode?code=4&var=rand&width=162&height=55&"
+						+ "random='+ Math.random();\" style='cursor:pointer'  width='162'  height='55' />");
+		model.addAttribute("username",
+				ControllerUtil.getCookieValue("frontuser"));
+
+		return "jis/front/perindex";
+	}
+
+	@RequestMapping(value = "/perlogout")
+	public ModelAndView perLogout(HttpSession session) {
+		if (PersonalSessionInfo.getFrontCurrentPersonalInfo() != null) {
+			session.removeAttribute("personalinfo");
+		}
+		String appmark = StringUtil.getString(session.getAttribute("appmark"));
+		ModelAndView modelAndView = new ModelAndView();
+		RedirectView redirectView = new RedirectView("perlogin.do");
+		modelAndView.addObject("appmark", appmark);
+		modelAndView.setView(redirectView);
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/findperurl")
+	@ResponseBody
+	public JsonResult findPerLogoff() {
+		JsonResult jsonResult = JsonResult.getInstance();
+		String logoffurl = this.appService.findURLBylogoff(1);
+		if (logoffurl.length() > 0) {
+			jsonResult.set(ResultState.OPR_SUCCESS);
+			jsonResult.setMessage(JsonUtil.objectToString(logoffurl));
+		} else {
+			jsonResult.set(ResultState.OPR_FAIL);
+		}
+		return jsonResult;
+	}
+
+	@RequestMapping(value = "/sendDynamicPwd")
+	@ResponseBody
+	public String sendDynamicPwd(String telNum, HttpSession session) {
+		Map<String, String> map = new HashMap<String, String>();
+		if ((telNum == null) || ("".equals(telNum.trim()))) {
+			map.put("success", "false");
+			map.put("code", "0");
+			map.put("msg", "手机号不能为空");
+			return JsonUtil.objectToString(map);
+		}
+		if (!UserUtil.isMobilelegal(telNum)) {
+			map.put("success", "false");
+			map.put("code", "0");
+			map.put("msg", "请输入正确的手机号");
+			return JsonUtil.objectToString(map);
+		}
+
+		ComplatOutsideuser outsideUser = this.OutsideUserService
+				.findByMobile(telNum);
+		if (outsideUser == null) {
+			map.put("success", "false");
+			map.put("code", "0");
+			map.put("msg", "无此帐号，请确认");
+			return JsonUtil.objectToString(map);
+		}
+
+		String cellphoneDynamicPwdMadeByJava = RandomCodeUtil
+				.getRandomNumber(6);
+		session.setAttribute("cellphoneDynamicPwdMadeByJava",
+				cellphoneDynamicPwdMadeByJava);
+
+		int validityPeriodInt = Integer.parseInt(jisSettings
+				.getValidityPeriod().trim());
+
+		String content = jisSettings
+				.getDynamicPpdMessageContent()
+				.trim()
+				.replace("cellphoneDynamicPwdMadeByJava",
+						cellphoneDynamicPwdMadeByJava)
+				.replace("validityPeriod", String.valueOf(validityPeriodInt));
+		String appBusinessId = jisSettings.getBusinessIdForGettingDynamicPpd()
+				.trim();
+		String appBusinessName = jisSettings
+				.getBusinessNameForGettingDynamicPpd().trim();
+		int loseTime = 60;
+		CellphoneShortMessageUtil cellMesUtil = new CellphoneShortMessageUtil();
+		String jsonRe = cellMesUtil.sendPhoneShortMessage(telNum, content,
+				appBusinessId, appBusinessName, loseTime);
+		map = (Map) JsonUtil.StringToObject(jsonRe, Map.class);
+		if (Integer.parseInt(map.get("code")) == 1) {
+			session.setAttribute("timeSendDynamicPwd",
+					Long.valueOf(System.currentTimeMillis()));
+			int validityPeriod = Integer.parseInt(jisSettings
+					.getValidityPeriod()) * 60;
+			session.setMaxInactiveInterval(validityPeriod);
+		}
+		return jsonRe;
+	}
+
+	/**
+	 * 16进制 To byte[]
+	 * 
+	 * @param hexString
+	 * @return byte[]
+	 */
+	public static byte[] hexStringToBytes(String hexString) {
+		if (hexString == null || hexString.equals("")) {
+			return null;
+		}
+		hexString = hexString.toUpperCase();
+		int length = hexString.length() / 2;
+		char[] hexChars = hexString.toCharArray();
+		byte[] d = new byte[length];
+		for (int i = 0; i < length; i++) {
+			int pos = i * 2;
+			d[i] = (byte) (charToByte(hexChars[pos]) << 4 | charToByte(hexChars[pos + 1]));
+		}
+		return d;
+	}
+
+	/**
+	 * Convert char to byte
+	 * 
+	 * @param c
+	 *            char
+	 * @return byte
+	 */
+	private static byte charToByte(char c) {
+		return (byte) "0123456789ABCDEF".indexOf(c);
+	}
+
 	@RequestMapping(value = "/pwdRecover_select")
 	public String pwdRecover_selectForPer(HttpSession session,
 			String typeEntity, Model model) {
@@ -500,188 +535,199 @@ public class PerLoginController{
 	public String sendCellphoneShortMessageUserPwdRecover(HttpSession session,
 			String inputByGuest, String randCode) {
 		String resultJson = "";
-		if (!AccessUtil.checkAccess(SpringUtil.getRequest())) {
-			return null;
-		}
-		Map<String, Object> map1 = new HashMap<String, Object>();
-		String typeEntity = (String) session.getAttribute("typeEntity");
-		ComplatCorporation corporation = null;
+		try {
 
-		if (StringUtil.isEmpty(inputByGuest)) {
-			map1.put("msg", "账号不能为空");
-			map1.put("success", "false");
-			map1.put("code", "4");
-			return JsonUtil.objectToString(map1);
-		}
-		if (StringUtil.isEmpty(randCode)) {
-			map1.put("msg", "验证码不能为空");
-			map1.put("success", "false");
-			map1.put("code", "6");
-			return JsonUtil.objectToString(map1);
-		}
-		ComplatOutsideuser outsideUser = null;
+			if (!AccessUtil.checkAccess(SpringUtil.getRequest())) {
+				return null;
+			}
+			Map<String, Object> map1 = new HashMap<String, Object>();
+			String typeEntity = (String) session.getAttribute("typeEntity");
+			ComplatCorporation corporation = null;
 
-		if ("per".equals(typeEntity)) {
-			if (UserUtil.isMobilelegal(inputByGuest))
-				outsideUser = this.OutsideUserService
-						.findByMobile(inputByGuest);
-			else if (UserUtil.isIDnumberlegal(inputByGuest)) {
-				outsideUser = this.OutsideUserService
-						.findByIdCard(inputByGuest);
-			} else
-				outsideUser = this.OutsideUserService
-						.findByLoginName(inputByGuest);
-
-			if (outsideUser == null) {
-				map1.put("msg", "用户不存在");
+			if (StringUtil.isEmpty(inputByGuest)) {
+				map1.put("msg", "账号不能为空");
 				map1.put("success", "false");
-				map1.put("code", "1");
+				map1.put("code", "4");
 				return JsonUtil.objectToString(map1);
 			}
-
-			String sessionCode = StringUtil.getString(session
-					.getAttribute("rand"));
-			if (!randCode.equalsIgnoreCase(sessionCode)) {
-				map1.put("msg", "验证码不正确");
+			if (StringUtil.isEmpty(randCode)) {
+				map1.put("msg", "验证码不能为空");
 				map1.put("success", "false");
-				map1.put("code", "5");
+				map1.put("code", "6");
 				return JsonUtil.objectToString(map1);
 			}
+			ComplatOutsideuser outsideUser = null;
 
-			session.setAttribute("outsideUser", outsideUser);
+			if ("per".equals(typeEntity)) {
+				if (UserUtil.isMobilelegal(inputByGuest))
+					outsideUser = this.OutsideUserService
+							.findByMobile(inputByGuest);
+				else if (UserUtil.isIDnumberlegal(inputByGuest)) {
+					outsideUser = this.OutsideUserService
+							.findByIdCard(inputByGuest);
+				} else
+					outsideUser = this.OutsideUserService
+							.findByLoginName(inputByGuest);
 
-			Object mobileSend = session.getAttribute("mobilesend");
-			if (mobileSend == null) {
-				map1.put("msg", "参数为空");
-				map1.put("success", "false");
-				map1.put("code", "0");
-				return JsonUtil.objectToString(map1);
-			}
-
-			Object currentTimes = session.getAttribute("mobiletimes");
-			if (currentTimes != null) {
-				int times = NumberUtil.getInt(currentTimes);
-				if (times > 10) {
-					map1.put("msg", "超过最大短信发送次数");
+				if (outsideUser == null) {
+					map1.put("msg", "用户不存在");
 					map1.put("success", "false");
-					map1.put("code", "2");
+					map1.put("code", "1");
+					return JsonUtil.objectToString(map1);
+				}
+
+				String sessionCode = StringUtil.getString(session
+						.getAttribute("rand"));
+				if (!randCode.equalsIgnoreCase(sessionCode)) {
+					map1.put("msg", "验证码不正确");
+					map1.put("success", "false");
+					map1.put("code", "5");
+					return JsonUtil.objectToString(map1);
+				}
+
+				session.setAttribute("outsideUser", outsideUser);
+
+				Object mobileSend = session.getAttribute("mobilesend");
+				if (mobileSend == null) {
+					map1.put("msg", "参数为空");
+					map1.put("success", "false");
+					map1.put("code", "0");
+					return JsonUtil.objectToString(map1);
+				}
+
+				Object currentTimes = session.getAttribute("mobiletimes");
+				if (currentTimes != null) {
+					int times = NumberUtil.getInt(currentTimes);
+					if (times > 10) {
+						map1.put("msg", "超过最大短信发送次数");
+						map1.put("success", "false");
+						map1.put("code", "2");
+						return JsonUtil.objectToString(map1);
+					}
+
+				}
+
+				outsideUser = (ComplatOutsideuser) session
+						.getAttribute("outsideUser");
+				String phoneNumber = outsideUser.getMobile();
+
+				String cellphoneShortMessageRandomCodeMadeByJava = RandomCodeUtil
+						.getRandomNumber(6);
+				session.setAttribute(
+						"cellphoneShortMessageRandomCodeMadeByJava",
+						cellphoneShortMessageRandomCodeMadeByJava);
+				String content = JisSettings
+						.getSettings()
+						.getRecovingPpdContent()
+						.trim()
+						.replace("cellphoneShortMessageRandomCodeMadeByJava",
+								cellphoneShortMessageRandomCodeMadeByJava);
+				String appBusinessId = JisSettings.getSettings()
+						.getBusinessIdForRecovingPpd().trim();
+				String appBusinessName = JisSettings.getSettings()
+						.getBusinessNameForRecovingPpd().trim();
+
+				int loseTime = 60;
+				// CellphoneShortMessageUtil cellMesUtil = new
+				// CellphoneShortMessageUtil();
+				resultJson = "{'success':'true'}";// cellMesUtil.sendPhoneShortMessage(phoneNumber,content,
+													// appBusinessId,
+													// appBusinessName,
+													// loseTime);
+				Map map = (Map) JsonUtil.StringToObject(resultJson, Map.class);
+				if (StringUtil.getString(map.get("success")).equals("true")) {
+					if (currentTimes == null) {
+						session.setAttribute("mobiletimes", Integer.valueOf(1));
+					} else {
+						int times = NumberUtil.getInt(currentTimes);
+						session.setAttribute("mobiletimes",
+								Integer.valueOf(times + 1));
+					}
+					map1.put("success", "true");
+					map1.put("code", "3");
+					return JsonUtil.objectToString(map1);
+				}
+
+			} else {
+				corporation = this.corporationService
+						.findByManyWay(inputByGuest);
+				if (corporation == null) {
+					map1.put("msg", "用户不存在");
+					map1.put("success", "false");
+					map1.put("code", "1");
+					return JsonUtil.objectToString(map1);
+				}
+
+				String sessionCode = StringUtil.getString(session
+						.getAttribute("rand"));
+				if (!randCode.equalsIgnoreCase(sessionCode)) {
+					map1.put("msg", "验证码不正确");
+					map1.put("success", "false");
+					map1.put("code", "5");
+					return JsonUtil.objectToString(map1);
+				}
+
+				session.setAttribute("corporation", corporation);
+
+				Object currentTimes = session.getAttribute("mobiletimes");
+				if (currentTimes != null) {
+					int times = NumberUtil.getInt(currentTimes);
+					if (times > 10) {
+						map1.put("msg", "超过最大短信发送次数");
+						map1.put("success", "false");
+						map1.put("code", "2");
+						return JsonUtil.objectToString(map1);
+					}
+				}
+
+				corporation = (ComplatCorporation) session
+						.getAttribute("corporation");
+				String phoneNumber = corporation.getMobile();
+
+				String cellphoneShortMessageRandomCodeMadeByJava = RandomCodeUtil
+						.getRandomNumber(6);
+				session.setAttribute(
+						"cellphoneShortMessageRandomCodeMadeByJava",
+						cellphoneShortMessageRandomCodeMadeByJava);
+				String content = JisSettings
+						.getSettings()
+						.getRecovingPpdContent()
+						.trim()
+						.replace("cellphoneShortMessageRandomCodeMadeByJava",
+								cellphoneShortMessageRandomCodeMadeByJava);
+				String appBusinessId = JisSettings.getSettings()
+						.getBusinessIdForRecovingPpd().trim();
+				String appBusinessName = JisSettings.getSettings()
+						.getBusinessNameForRecovingPpd().trim();
+
+				int loseTime = 60;
+				// CellphoneShortMessageUtil cellMesUtil = new
+				// CellphoneShortMessageUtil();
+				resultJson = "{'success':'true'}";// cellMesUtil.sendPhoneShortMessage(phoneNumber,content,
+													// appBusinessId,
+													// appBusinessName,
+													// loseTime);
+				Map map = (Map) JsonUtil.StringToObject(resultJson, Map.class);
+				if (StringUtil.getString(map.get("success")).equals("true")) {
+					if (currentTimes == null) {
+						session.setAttribute("mobiletimes", Integer.valueOf(1));
+					} else {
+						int times = NumberUtil.getInt(currentTimes);
+						session.setAttribute("mobiletimes",
+								Integer.valueOf(times + 1));
+					}
+					map1.put("success", "true");
+					map1.put("code", "3");
 					return JsonUtil.objectToString(map1);
 				}
 
 			}
 
-			outsideUser = (ComplatOutsideuser) session
-					.getAttribute("outsideUser");
-			String phoneNumber = outsideUser.getMobile();
-
-			String cellphoneShortMessageRandomCodeMadeByJava = RandomCodeUtil
-					.getRandomNumber(6);
-			session.setAttribute("cellphoneShortMessageRandomCodeMadeByJava",
-					cellphoneShortMessageRandomCodeMadeByJava);
-			String content = JisSettings
-					.getSettings()
-					.getRecovingPpdContent()
-					.trim()
-					.replace("cellphoneShortMessageRandomCodeMadeByJava",
-							cellphoneShortMessageRandomCodeMadeByJava);
-			String appBusinessId = JisSettings.getSettings()
-					.getBusinessIdForRecovingPpd().trim();
-			String appBusinessName = JisSettings.getSettings()
-					.getBusinessNameForRecovingPpd().trim();
-
-			int loseTime = 60;
-			// CellphoneShortMessageUtil cellMesUtil = new
-			// CellphoneShortMessageUtil();
-			resultJson = "{'success':'true'}";// cellMesUtil.sendPhoneShortMessage(phoneNumber,content,
-												// appBusinessId,
-												// appBusinessName, loseTime);
-			Map map = (Map) JsonUtil.StringToObject(resultJson, Map.class);
-			if (StringUtil.getString(map.get("success")).equals("true")) {
-				if (currentTimes == null) {
-					session.setAttribute("mobiletimes", Integer.valueOf(1));
-				} else {
-					int times = NumberUtil.getInt(currentTimes);
-					session.setAttribute("mobiletimes",
-							Integer.valueOf(times + 1));
-				}
-				map1.put("success", "true");
-				map1.put("code", "3");
-				return JsonUtil.objectToString(map1);
-			}
-
-		} else {
-			corporation = this.corporationService.findByManyWay(inputByGuest);
-			if (corporation == null) {
-				map1.put("msg", "用户不存在");
-				map1.put("success", "false");
-				map1.put("code", "1");
-				return JsonUtil.objectToString(map1);
-			}
-
-			String sessionCode = StringUtil.getString(session
-					.getAttribute("rand"));
-			if (!randCode.equalsIgnoreCase(sessionCode)) {
-				map1.put("msg", "验证码不正确");
-				map1.put("success", "false");
-				map1.put("code", "5");
-				return JsonUtil.objectToString(map1);
-			}
-
-			session.setAttribute("corporation", corporation);
-
-			Object currentTimes = session.getAttribute("mobiletimes");
-			if (currentTimes != null) {
-				int times = NumberUtil.getInt(currentTimes);
-				if (times > 10) {
-					map1.put("msg", "超过最大短信发送次数");
-					map1.put("success", "false");
-					map1.put("code", "2");
-					return JsonUtil.objectToString(map1);
-				}
-			}
-
-			corporation = (ComplatCorporation) session
-					.getAttribute("corporation");
-			String phoneNumber = corporation.getMobile();
-
-			String cellphoneShortMessageRandomCodeMadeByJava = RandomCodeUtil
-					.getRandomNumber(6);
-			session.setAttribute("cellphoneShortMessageRandomCodeMadeByJava",
-					cellphoneShortMessageRandomCodeMadeByJava);
-			String content = JisSettings
-					.getSettings()
-					.getRecovingPpdContent()
-					.trim()
-					.replace("cellphoneShortMessageRandomCodeMadeByJava",
-							cellphoneShortMessageRandomCodeMadeByJava);
-			String appBusinessId = JisSettings.getSettings()
-					.getBusinessIdForRecovingPpd().trim();
-			String appBusinessName = JisSettings.getSettings()
-					.getBusinessNameForRecovingPpd().trim();
-
-			int loseTime = 60;
-			// CellphoneShortMessageUtil cellMesUtil = new
-			// CellphoneShortMessageUtil();
-			resultJson = "{'success':'true'}";// cellMesUtil.sendPhoneShortMessage(phoneNumber,content,
-												// appBusinessId,
-												// appBusinessName, loseTime);
-			Map map = (Map) JsonUtil.StringToObject(resultJson, Map.class);
-			if (StringUtil.getString(map.get("success")).equals("true")) {
-				if (currentTimes == null) {
-					session.setAttribute("mobiletimes", Integer.valueOf(1));
-				} else {
-					int times = NumberUtil.getInt(currentTimes);
-					session.setAttribute("mobiletimes",
-							Integer.valueOf(times + 1));
-				}
-				map1.put("success", "true");
-				map1.put("code", "3");
-				return JsonUtil.objectToString(map1);
-			}
-
+			return resultJson;
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-
-		return resultJson;
+		return null;
 	}
 
 	@RequestMapping(value = "/recoverPwdByPhone_submit")
@@ -798,50 +844,51 @@ public class PerLoginController{
 
 	@RequestMapping(value = "resetpwd_submit")
 	@ResponseBody
-	public void submitResetPwd(HttpSession session, String pwd,HttpServletResponse response) {
+	public void submitResetPwd(HttpSession session, String pwd,
+			HttpServletResponse response) {
 		try {
-			Map<String,Object> result = new HashMap<String,Object>();
-			String typeEntity = (String)session.getAttribute("typeEntity");
+			Map<String, Object> result = new HashMap<String, Object>();
+			String typeEntity = (String) session.getAttribute("typeEntity");
 
-		    boolean isSuccess = false;
-		    if (("".equals(typeEntity)) || (typeEntity == null)) {
-		    	result.put("success", false);
+			boolean isSuccess = false;
+			if (("".equals(typeEntity)) || (typeEntity == null)) {
+				result.put("success", false);
 				result.put("message", "验证超时，请重新尝试！");
 				response.setContentType("text/json");
 				response.setCharacterEncoding("UTF-8");
 				response.getWriter().write(JSONUtil.writeMapJSON(result));
 				return;
-		    }
-		    if ("per".equals(typeEntity)) {
-		    	ComplatOutsideuser outsideUser = (ComplatOutsideuser)session
-		        .getAttribute("outsideUser");
-		      isSuccess = this.OutsideUserService.updatePwd(outsideUser.getIid(), 
-		        Md5Util.md5encode(pwd));
-		    } else {
-		    	ComplatCorporation corporation = (ComplatCorporation)session
-		        .getAttribute("corporation");
-		      String loginName = corporation.getLoginName();
-		      isSuccess = this.corporationService.updatePwd(loginName, 
-		        Md5Util.md5encode(pwd));
-		    }
-		    if (isSuccess) {
-		      session.invalidate();
-		      result.put("success", true);
+			}
+			if ("per".equals(typeEntity)) {
+				ComplatOutsideuser outsideUser = (ComplatOutsideuser) session
+						.getAttribute("outsideUser");
+				isSuccess = this.OutsideUserService.updatePwd(
+						outsideUser.getIid(), Md5Util.md5encode(pwd));
+			} else {
+				ComplatCorporation corporation = (ComplatCorporation) session
+						.getAttribute("corporation");
+				String loginName = corporation.getLoginName();
+				isSuccess = this.corporationService.updatePwd(loginName,
+						Md5Util.md5encode(pwd));
+			}
+			if (isSuccess) {
+				session.invalidate();
+				result.put("success", true);
 				result.put("message", "密码修改成功！");
 				response.setContentType("text/json");
 				response.setCharacterEncoding("UTF-8");
 				response.getWriter().write(JSONUtil.writeMapJSON(result));
 				return;
-		    } else {
-		    	result.put("success", false);
+			} else {
+				result.put("success", false);
 				result.put("message", "密码修改失败！");
 				response.setContentType("text/json");
 				response.setCharacterEncoding("UTF-8");
 				response.getWriter().write(JSONUtil.writeMapJSON(result));
 				return;
-		    }
+			}
 		} catch (Exception e) {
-			logger.error(e.getMessage(),e);
+			logger.error(e.getMessage(), e);
 		}
 	}
 
@@ -938,5 +985,11 @@ public class PerLoginController{
 			logger.error(e.getMessage(), e);
 		}
 
+	}
+	
+	public static void main(String[] args) {
+		String pwd =Md5Util.md5decode("dXZ8G3Z0AA4EQwdDBzM=");
+		System.out.println(pwd);
+	
 	}
 }

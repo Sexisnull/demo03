@@ -23,8 +23,8 @@
 
 		<property name="isRegister" value="${isRegister}"/>
 		<property name="registerType" value="${registerType}"/>
-		<property name="isFindPwd" value="${isFindPwd}"/>
-		<property name="pwdLevel" value="${pwdLevel}"/>
+		<property name="isFindPpd" value="${isFindPwd}"/>
+		<property name="ppdLevel" value="${pwdLevel}"/>
 		<property name="isLoginfail" value="${isLoginfail}"/>
 		<property name="loginError" value="${loginError}"/>
 		<property name="banTimes" value="${banTimes}"/>
@@ -58,7 +58,7 @@
 		<property name="appId" value="${appId}"/>
 		<property name="appName" value="${appName}"/>
 		<property name="appAcc" value="${appAcc}"/>
-		<property name="appPwd" value="${appPwd}"/>
+		<property name="appPpd" value="${appPwd}"/>
 		<property name="importantLevel" value="${importantLevel}"/>		
 		<property name="isSendAgain" value="${isSendAgain}"/>
 		<property name="isLose" value="${isLose}"/>
@@ -66,9 +66,9 @@
 		<property name="urlRoot" value="${urlRoot}"/>
 		<!-- 登陆时动态密码相关 -->
 		<property name="validityPeriod" value="${validityPeriod}"/>				 
-		<property name="dynamicPwdMessageContent" value="${dynamicPwdMessageContent}"/> 		
-		<property name="businessIdForGettingDynamicPwd" value="${businessIdForGettingDynamicPwd}"/> 
-		<property name="businessNameForGettingDynamicPwd" value="${businessNameForGettingDynamicPwd}"/> 
+		<property name="dynamicPpdMessageContent" value="${dynamicPwdMessageContent}"/> 		
+		<property name="businessIdForGettingDynamicPpd" value="${businessIdForGettingDynamicPwd}"/> 
+		<property name="businessNameForGettingDynamicPpd" value="${businessNameForGettingDynamicPwd}"/> 
 		<!-- 个人注册发短信用 -->
 		<property name="businessIdForRegestingPer" value="${businessIdForRegestingPer}"/> 
 		<property name="businessNameForRegestingPer" value="${businessNameForRegestingPer}"/>
@@ -78,9 +78,9 @@
 		<property name="businessNameForRegestingCor" value="${businessNameForRegestingCor}"/>
 		<property name="registCorMessageContent" value="${registCorMessageContent}"/>  
 		<!-- 找回密码用 -->		
-		<property name="businessIdForRecovingPwd" value="${businessIdForRecovingPwd}"/> 
-		<property name="businessNameForRecovingPwd" value="${businessNameForRecovingPwd}"/>
-		<property name="recovingPwdContent" value="${recovingPwdContent}"/>
+		<property name="businessIdForRecovingPpd" value="${businessIdForRecovingPwd}"/> 
+		<property name="businessNameForRecovingPpd" value="${businessNameForRecovingPwd}"/>
+		<property name="recovingPpdContent" value="${recovingPwdContent}"/>
 		<!--实名认证配置项 -->
 		<property name="enableCorRealNameAuth" value="${enableCorRealNameAuth}"></property>
 		<property name="corRequestCod" value="${corRequestCod}"></property>
