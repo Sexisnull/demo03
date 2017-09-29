@@ -6,8 +6,9 @@ import com.hanweb.common.util.NumberUtil;
 import com.hanweb.common.util.SpringUtil;
 import com.hanweb.common.util.StringUtil;
 import com.hanweb.common.util.mvc.ControllerUtil;
-import com.hanweb.common.util.mvc.JsonResult;
-import com.hanweb.common.util.mvc.ResultState;
+import com.gsww.uids.util.JsonResult;
+import com.gsww.uids.util.ResultState;
+import com.hanweb.complat.exception.LoginException;
 import com.gsww.uids.entity.ComplatCorporation;
 import com.gsww.uids.entity.ComplatOutsideuser;
 import com.gsww.uids.service.AuthLogService;
@@ -65,7 +66,8 @@ public class PerLoginController {
 	@Autowired
 	private AuthLogService authLogService;
 
-	private static JisSettings jisSettings = new JisSettings();
+	@Autowired
+	private JisSettings jisSettings;
 
 	@RequestMapping(value = "/perlogin.do")
 	public String personalLogin(HttpServletResponse response, String action,
@@ -144,20 +146,25 @@ public class PerLoginController {
 		try {
 			session.setAttribute("appmark", appmark);
 
-			if ((String) session.getAttribute("rand") == null)
+			if ((String) session.getAttribute("rand") == null){
 				logger.error("verifycode.error");
+				throw new LoginException("verifycode.error");
+			}
 			if ((randomVeryfyCode == null) || ("".equals(randomVeryfyCode))
 					|| (randomVeryfyCode.length() == 0)) {
 				logger.error("verifycode.error");
+				throw new LoginException("verifycode.error");
 			}
 			String rand = (String) session.getAttribute("rand");
 			if (!rand.equalsIgnoreCase(randomVeryfyCode)) {
 				logger.error("verifycode.error");
+				throw new LoginException("verifycode.error");
 			}
 
 			if ((StringUtil.isEmpty(userName))
 					|| (StringUtil.isEmpty(password))) {
 				logger.error("login.error");
+				throw new LoginException("login.error");
 			}
 
 			String en_password = "";
@@ -171,6 +178,7 @@ public class PerLoginController {
 				en_password = URLDecoder.decode(en_password, "utf-8");
 			} catch (Exception ex) {
 				logger.error(ex.getMessage());
+				throw new LoginException("login.error");
 			}
 			password = en_password;
 
@@ -188,6 +196,7 @@ public class PerLoginController {
 
 			if (outsideUser == null) {
 				logger.error("login.error");
+				throw new LoginException("login.error");
 			}
 			userName = outsideUser.getLoginName();
 
@@ -213,6 +222,7 @@ public class PerLoginController {
 					System.out.println("====tickt" + ticket);
 					if (StringUtil.isEmpty(ticket)) {
 						logger.error("票据生成失败");
+						throw new LoginException("票据生成失败");
 					}
 
 					String domain = StringUtil.getString(session
@@ -240,8 +250,11 @@ public class PerLoginController {
 				this.OutsideUserService.save(user);
 			} else {
 				logger.error("您正在进行个人用户登录，用户名或密码不正确");
+				throw new LoginException("您正在进行个人用户登录，用户名或密码不正确");
 			}
 		} catch (Exception e) {
+			Map<String,String> map = new HashMap<String, String>();
+
 			session.setAttribute("rand",
 					StringUtil.getUUIDString().substring(0, 4));
 			if ("adminlogin.error".equals(e.getMessage())) {
@@ -255,6 +268,7 @@ public class PerLoginController {
 				jsonResult.setMessage("您正在进行个人用户登录，用户名或密码不正确!");
 			}
 		}
+		System.out.println(jsonResult.toString());
 		return jsonResult;
 	}
 

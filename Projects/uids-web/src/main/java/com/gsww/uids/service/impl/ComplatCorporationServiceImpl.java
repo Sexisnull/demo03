@@ -156,4 +156,15 @@ public class ComplatCorporationServiceImpl implements ComplatCorporationService{
 
 	}
 
+	@Override
+	public boolean updateIsUpload(int intValue, int i) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean modify(ComplatCorporation corporation) {
+		return complatCorporationDao.save(corporation) != null;
+	}
+
 }
