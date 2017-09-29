@@ -13,7 +13,6 @@ import com.hanweb.common.util.StringUtil;
 import com.hanweb.common.util.mvc.ControllerUtil;
 import com.gsww.uids.util.JsonResult;
 import com.gsww.uids.util.ResultState;
-import com.hanweb.complat.exception.LoginException;
 import com.gsww.uids.service.JisApplicationService;
 import com.gsww.uids.util.AccessUtil;
 import com.gsww.jup.util.SafeUtil;
@@ -22,6 +21,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;

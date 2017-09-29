@@ -1,13 +1,11 @@
 package com.gsww.uids.controller;
 
-import com.hanweb.common.BaseInfo;
 import com.hanweb.common.util.Md5Util;
 import com.hanweb.common.util.StringUtil;
 import com.hanweb.common.util.mvc.ControllerUtil;
 import com.gsww.uids.util.JsonResult;
 import com.gsww.uids.util.ResultState;
 import com.gsww.uids.entity.ComplatCorporation;
-import com.hanweb.complat.exception.OperationException;
 import com.gsww.uids.service.ComplatCorporationService;
 import com.gsww.uids.constant.CorporationSessionInfo;
 import javax.servlet.http.HttpServletResponse;

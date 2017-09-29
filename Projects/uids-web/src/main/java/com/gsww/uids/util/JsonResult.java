@@ -15,7 +15,7 @@ public class JsonResult
 
   private String c = null;
 
-  private Map<String, Object> d = new HashMap<>(3);
+  private Map<String, Object> d = new HashMap<String, Object>(3);
 
   public static JsonResult getInstance()
   {
