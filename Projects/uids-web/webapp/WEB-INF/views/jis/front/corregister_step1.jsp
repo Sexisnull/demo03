@@ -35,12 +35,12 @@
 <link rel="stylesheet" type="text/css" href="${ctx}/ui/images/style.css"/>
 <link rel="stylesheet" type="text/css" href="${ctx}/ui/images/syl_fpqd.css"/>
 
-<script type="text/javascript" src="../../ui/script/idcardValidity.js"></script>
-<script type="text/javascript" src="../../ui/lib/security/jquery.cookie.js"></script>
-<script type="text/javascript" src="../../ui/lib/security/base64.js"></script>
-<script type="text/javascript" src="../../ui/lib/security/jsencrypt.min.js"></script>
+<script type="text/javascript" src="${ctx}/ui/script/idcardValidity.js"></script>
+<script type="text/javascript" src="${ctx}/ui/lib/security/jquery.cookie.js"></script>
+<script type="text/javascript" src="${ctx}/ui/lib/security/base64.js"></script>
+<script type="text/javascript" src="${ctx}/ui/lib/security/jsencrypt.min.js"></script>
 <script type="text/javascript" src="${ctx}/ui/lib/security/rsa_util.js"></script>
-<script type="text/javascript" src="../../ui/lib/security/security.js"></script>
+<script type="text/javascript" src="${ctx}/ui/lib/security/security.js"></script>
 <script type="text/javascript" src="${ctx}/res/skin/default/plugin/rsa/BigInt.js"></script>
 <script type="text/javascript" src="${ctx}/res/skin/default/plugin/rsa/Barrett.js"></script>
 <script type="text/javascript" src="${ctx}/res/skin/default/plugin/rsa/RSA.js"></script>
@@ -247,10 +247,9 @@
 						{
 
 							beforeSubmit : function(result) {
-								$("#enc_username").val(
-										RSAencode($("#loginId").val()));
-								$("#enc_password").val(
-										RSAencode($("#password").val()));
+								//$("#enc_username").val(RSAencode($("#loginId").val()));
+								//$("#enc_password").val(RSAencode($("#password").val()));
+								enpwd();
 							},
 
 							success : function(result) {
@@ -262,7 +261,7 @@
 											top.location.href = 'corregsuccess.do';
 										});
 									}else{*/
-									top.location.href = 'corregsuccess.do';
+									top.location.href = 'corregsuccess';
 									//}
 
 								} else {
@@ -295,7 +294,32 @@
 			$(".qyfr").hide();
 		});
 	});
-
+	
+	function enpwd() {
+        $.ajax({
+            type: "post",
+            url: "${ctx}/sys/mybatis/getkey",
+            data: {},
+            dataType: "json",
+            async: false,
+            success: function(data) {
+                //data为获取到的公钥数据
+                var pubexponent = data.pubexponent;
+                var pubmodules = data.pubmodules;
+                setMaxDigits(200);
+                var key = new RSAKeyPair(pubexponent, "", pubmodules);
+                var password = $("#password").val();
+                var encrypedPwd = encryptedString(key, encodeURIComponent(password));
+                $("#enc_password").val(encrypedPwd);
+                var name = $("#loginId").val();
+                $("#enc_username").val(name);
+                console.log(name);
+                console.log(password);
+                console.log(encrypedPwd);
+            }
+        });
+    }
+	
 	function sexValidate(sex, idcard) {
 		var s;
 		if ('男' == sex) {
@@ -408,7 +432,7 @@
 		$.ajax({
 			//	async: false, //这个ajax请求则为同步请求，在没有返回值之前，ajax块外是不会执行的。
 			type : "post",
-			url : "sendCellphoneShortMessageCorRe.do",
+			url : "sendCellphoneShortMessageCorRe",
 			data : {
 				"telNum" : $("#mobile").val(),
 				"inputByGuest" : $("#loginId").val(),
@@ -743,13 +767,11 @@
 	<div>
 		<div class="top">
 			<div class="pagecon">
-				<script language="javascript"
-					src="http://www.gszwfw.gov.cn/script/0/1512101421282896.js"></script>
+				<script type="text/javascript" src="${ctx}/ui/js/1512101421282897.js"></script>
 			</div>
 		</div>
 		<div class="">
-			<script language="javascript"
-				src="http://www.gszwfw.gov.cn/script/0/1512101146476750.js"></script>
+			<script type="text/javascript" src="${ctx}/ui/js/1512101146476751.js"></script>
 		</div>
 		<div class="nav" style="height: 5px;"></div>
 		<div class="mainWth_faren back">
