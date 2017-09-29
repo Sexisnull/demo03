@@ -400,20 +400,20 @@ public class ComplatOutsideuserController extends BaseController {
      * @param request
      * @param response
 	 */
-	@RequestMapping(value = { "/getOutsideuserInfo" }, method = {RequestMethod.POST })
-	public void getOutsideuserInfo(HttpServletRequest request, HttpServletResponse response) {
+	@SuppressWarnings("finally")
+	@RequestMapping(value = { "/getOutsideuserInfo" }, method = {RequestMethod.GET })
+	public String getOutsideuserInfo(Model model, HttpServletRequest request, HttpServletResponse response) {
 		try {
 			String pidStr = request.getParameter("iid");
 			Integer pid = Integer.valueOf(Integer.parseInt(pidStr));
 			ComplatOutsideuser complatOutsideuser = outsideUserService.findByKey(pid);
 			if (complatOutsideuser != null) {
-				net.sf.json.JSONObject object = net.sf.json.JSONObject.fromObject(complatOutsideuser);
-				PrintWriter out = response.getWriter();
-				String json = object.toString();
-				out.write(json);
+				model.addAttribute("complatOutsideuser", complatOutsideuser);
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
+		} finally {
+			return "users/outsideUser/outsideUser_auth";
 		}
 	}
 	
