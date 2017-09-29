@@ -12,7 +12,7 @@ $().ready(function() {
 	    rules: {
 		   	name: {
 		    required: true,
-		    cnRangelength: [0,50],,
+		    cnRangelength: [0,50],
 		    uniqueRoleName:true,
 		    stringCheck:roleNameInput
 		   },

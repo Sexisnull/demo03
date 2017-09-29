@@ -423,7 +423,7 @@ $().ready(function() {
 	   encryptKey: {
 	    required: true,
 	    chrnum:true,
-	    maxlength: 19,
+	    maxlength: 19
 	   },
 	   appUrl:{
 	   required: true,
@@ -440,7 +440,7 @@ $().ready(function() {
 	   },
 	   groupname:{
 	   required: true
-	   },
+	   }
 	   /* allLoginIid:{
 	   required: true,
 	   maxlength: 50,

@@ -321,7 +321,7 @@ function resetform() {
 	                  var key = new RSAKeyPair(pubexponent, "", pubmodules);
 	                  passWord= encryptedString(key, encodeURIComponent(passWord));
 	                  userName = encryptedString(key, encodeURIComponent(userName));
-				},
+				}
          });
 		$.ajax({
 			type : "POST",
