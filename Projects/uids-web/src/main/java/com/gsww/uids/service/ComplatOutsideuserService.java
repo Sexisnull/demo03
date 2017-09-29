@@ -94,4 +94,6 @@ public interface ComplatOutsideuserService {
 	 * @return
 	 */
 	boolean insert(ComplatOutsideuser outsideUser);
+	
+	boolean modifyAuthing(ComplatOutsideuser outsideUser);
 }

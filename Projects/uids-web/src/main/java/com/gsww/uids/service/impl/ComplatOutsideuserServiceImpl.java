@@ -200,4 +200,9 @@ public class ComplatOutsideuserServiceImpl implements ComplatOutsideuserService 
 	public boolean insert(ComplatOutsideuser outsideUser) {
 		return outsideUserDao.save(outsideUser) !=null;
 	}
+
+	@Override
+	public boolean modifyAuthing(ComplatOutsideuser outsideUser) {
+		return false;
+	}
 }

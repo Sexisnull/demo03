@@ -149,6 +149,11 @@ a { text-decoration: none; }
 .pageBtn { border-color: #249bf3; color:#249bf3; }
 .btn.pageBtn:hover { background: #249bf3; color: #ffffff; }
 .btn.pageBtn:active { }
+
+.btnother { color: #4C5155; background: #ffffff; text-align: center; border: 1px solid #c5c5c5; padding: 4px 6px;cursor: pointer;margin-right: 0;}
+.btnother.blue { background: #659be0; color: #ffffff; }
+.btnother.blue:hover { background: #89b2e7; color: #ffffff; }
+
 .pageGoto .input { width: 95%; height: 21px; font-weight: bold; padding: 2px 5px; text-align: center;; outline: none; border: 1px solid #c5c5c5; resize: none; color: #4C5155; line-height: 21px; font-size: 12px; }
 .pageGoto .input.pageInput { width:15px;}
 .pageGoto .input.pageInput:focus  { border-color: #66afe9;-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075), 0 0 8px rgba(102,175,233,0.6);box-shadow: inset 0 1px 1px rgba(0,0,0,0.075), 0 0 8px rgba(102,175,233,0.6);}
