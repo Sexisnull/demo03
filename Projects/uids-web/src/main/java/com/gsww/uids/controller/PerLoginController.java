@@ -8,7 +8,6 @@ import com.hanweb.common.util.StringUtil;
 import com.hanweb.common.util.mvc.ControllerUtil;
 import com.gsww.uids.util.JsonResult;
 import com.gsww.uids.util.ResultState;
-import com.hanweb.complat.exception.LoginException;
 import com.gsww.uids.entity.ComplatCorporation;
 import com.gsww.uids.entity.ComplatOutsideuser;
 import com.gsww.uids.service.AuthLogService;
@@ -32,6 +31,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -746,24 +746,28 @@ public class PerLoginController {
 
 	@RequestMapping(value = "/recoverPwdByPhone_submit")
 	@ResponseBody
-	public void submitPhoneverify(
+	public JsonResult submitPhoneverify(
 			HttpServletRequest request,
 			HttpServletResponse response,
 			@RequestParam(value = "username", required = false) String userName,
 			HttpSession session,
 			String cellphoneShortMessageRandomCodeWritenByGuest, String randCode) {
+		JsonResult jsonResult = JsonResult.getInstance();
 		try {
 
 			if (!AccessUtil.checkAccess(request)) {
-				return;
+				jsonResult.setMessage("请求参数非法");
+				jsonResult.setSuccess(false);
+				return jsonResult;
 			}
 			if ((SafeUtil
 					.isSqlAndXss(cellphoneShortMessageRandomCodeWritenByGuest))
 					|| (SafeUtil
 							.isSqlAndXss(cellphoneShortMessageRandomCodeWritenByGuest))) {
-				return;
+				jsonResult.setMessage("请求参数非法");
+				jsonResult.setSuccess(false);
+				return jsonResult;
 			}
-			Map<String, Object> result = new HashMap<String, Object>();
 			session.setAttribute(
 					"cellphoneShortMessageRandomCodeWritenByGuest",
 					cellphoneShortMessageRandomCodeWritenByGuest);
@@ -771,12 +775,9 @@ public class PerLoginController {
 			if (StringUtil.isNotEmpty(randCode)) {
 				String rand = (String) session.getAttribute("rand");
 				if (!rand.equalsIgnoreCase(randCode)) {
-					result.put("success", false);
-					result.put("message", "验证码错误,请重新输入!");
-					response.setContentType("text/json");
-					response.setCharacterEncoding("UTF-8");
-					response.getWriter().write(JSONUtil.writeMapJSON(result));
-					return;
+					jsonResult.setMessage("验证码错误,请重新输入!");
+					jsonResult.setSuccess(false);
+					return jsonResult;
 				}
 			}
 			if (StringUtil
@@ -785,30 +786,22 @@ public class PerLoginController {
 						.equals(cellphoneShortMessageRandomCodeWritenByGuest,
 								StringUtil.getString(session
 										.getAttribute("cellphoneShortMessageRandomCodeMadeByJava")))) {
-					result.put("success", false);
-					result.put("message", "短信验证码错误,请重新输入!");
-					response.setContentType("text/json");
-					response.setCharacterEncoding("UTF-8");
-					response.getWriter().write(JSONUtil.writeMapJSON(result));
-					return;
+					jsonResult.setMessage("短信验证码错误,请重新输入!");
+					jsonResult.setSuccess(false);
+					return jsonResult;
 				}
-				result.put("success", true);
-				result.put("message", "验证成功!");
-				response.setContentType("text/json");
-				response.setCharacterEncoding("UTF-8");
-				response.getWriter().write(JSONUtil.writeMapJSON(result));
-				return;
+				jsonResult.setMessage("验证成功!");
+				jsonResult.setSuccess(true);
+				return jsonResult;
 			} else {
-				result.put("success", false);
-				result.put("message", "短信验证码错误,请重新输入!");
-				response.setContentType("text/json");
-				response.setCharacterEncoding("UTF-8");
-				response.getWriter().write(JSONUtil.writeMapJSON(result));
-				return;
+				jsonResult.setMessage("短信验证码错误,请重新输入!");
+				jsonResult.setSuccess(false);
+				return jsonResult;
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
+		return jsonResult;
 	}
 
 	@RequestMapping(value = "/resetpwd_show")
@@ -858,20 +851,17 @@ public class PerLoginController {
 
 	@RequestMapping(value = "resetpwd_submit")
 	@ResponseBody
-	public void submitResetPwd(HttpSession session, String pwd,
+	public JsonResult submitResetPwd(HttpSession session, String pwd,
 			HttpServletResponse response) {
+		JsonResult jsonResult = JsonResult.getInstance();
 		try {
-			Map<String, Object> result = new HashMap<String, Object>();
 			String typeEntity = (String) session.getAttribute("typeEntity");
-
+			
 			boolean isSuccess = false;
 			if (("".equals(typeEntity)) || (typeEntity == null)) {
-				result.put("success", false);
-				result.put("message", "验证超时，请重新尝试！");
-				response.setContentType("text/json");
-				response.setCharacterEncoding("UTF-8");
-				response.getWriter().write(JSONUtil.writeMapJSON(result));
-				return;
+				jsonResult.setMessage("验证超时，请重新尝试！");
+				jsonResult.setSuccess(false);
+				return jsonResult;
 			}
 			if ("per".equals(typeEntity)) {
 				ComplatOutsideuser outsideUser = (ComplatOutsideuser) session
@@ -887,23 +877,18 @@ public class PerLoginController {
 			}
 			if (isSuccess) {
 				session.invalidate();
-				result.put("success", true);
-				result.put("message", "密码修改成功！");
-				response.setContentType("text/json");
-				response.setCharacterEncoding("UTF-8");
-				response.getWriter().write(JSONUtil.writeMapJSON(result));
-				return;
+				jsonResult.setMessage("密码修改成功！");
+				jsonResult.setSuccess(true);
+				return jsonResult;
 			} else {
-				result.put("success", false);
-				result.put("message", "密码修改失败！");
-				response.setContentType("text/json");
-				response.setCharacterEncoding("UTF-8");
-				response.getWriter().write(JSONUtil.writeMapJSON(result));
-				return;
+				jsonResult.setMessage("密码修改失败！");
+				jsonResult.setSuccess(false);
+				return jsonResult;
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
+		return jsonResult;
 	}
 
 	@RequestMapping(value = "userresult")
