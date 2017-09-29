@@ -91,7 +91,7 @@ public class WeChatUtil {
 	}
 
 	/**
-	 * 获取用户信息
+	 * 获取微信用户信息
 	 *
 	 * @param accessToken
 	 * @param openId
