@@ -11,8 +11,9 @@ import com.hanweb.common.util.JsonUtil;
 import com.hanweb.common.util.SpringUtil;
 import com.hanweb.common.util.StringUtil;
 import com.hanweb.common.util.mvc.ControllerUtil;
-import com.hanweb.common.util.mvc.JsonResult;
-import com.hanweb.common.util.mvc.ResultState;
+import com.gsww.uids.util.JsonResult;
+import com.gsww.uids.util.ResultState;
+import com.hanweb.complat.exception.LoginException;
 import com.gsww.uids.service.JisApplicationService;
 import com.gsww.uids.util.AccessUtil;
 import com.gsww.jup.util.SafeUtil;
@@ -53,7 +54,8 @@ public class CorLoginController{
   @Autowired
   private JisLogService logService;
   
-  private static JisSettings jisSettings = new JisSettings();
+  @Autowired
+  private JisSettings jisSettings;
 
   @RequestMapping("/corlogin.do")
   public String corporationLogin(Model model,HttpServletResponse response, String action, String appmark, String gotoUrl, String domain)
@@ -121,20 +123,20 @@ public class CorLoginController{
     {
       if ((String)session.getAttribute("rand") == null)
       {
-        throw new Exception("verifycode.error");
+        throw new LoginException("verifycode.error");
       }
       if ((randomVeryfyCode == null) || ("".equals(randomVeryfyCode)) || (randomVeryfyCode.length() == 0))
       {
-        throw new Exception("verifycode.error");
+        throw new LoginException("verifycode.error");
       }
       String rand = (String)session.getAttribute("rand");
       if (!rand.equalsIgnoreCase(randomVeryfyCode))
       {
-        throw new Exception("verifycode.error");
+        throw new LoginException("verifycode.error");
       }
 
       if ((StringUtil.isEmpty(userName)) || (StringUtil.isEmpty(password))) {
-        throw new Exception("login.error");
+        throw new LoginException("login.error");
       }
       String en_password = "";
       try{
@@ -162,7 +164,7 @@ public class CorLoginController{
           String ticket = this.authLogService.add(corporation, appmark, 2);
 
           if (StringUtil.isEmpty(ticket)) {
-            throw new Exception("票据生成失败");
+            throw new LoginException("票据生成失败");
           }
 
           gotoUrlFlag = jisSettings.getCorGotoUrl();
@@ -189,7 +191,7 @@ public class CorLoginController{
 
         this.logService.add(Integer.valueOf(9), Integer.valueOf(8), userName);
       } else {
-        throw new Exception("您正在进行法人用户登录，用户名或密码不正确!");
+        throw new LoginException("您正在进行法人用户登录，用户名或密码不正确!");
       }
     }
     catch (Exception e)

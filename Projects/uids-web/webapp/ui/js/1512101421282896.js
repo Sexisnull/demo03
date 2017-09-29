@@ -11,7 +11,7 @@ document.writeln("        </div>");
 document.writeln("    </div> ");
 
 
-document.writeln("<script src='http://www.gszwfw.gov.cn/gszw/resources/bscx/sxcx/js/qlsx.js'></script>");
+document.writeln("<script src='../ui/js/qlsx.js'></script>");
 
 
 document.writeln("<script type=\"text/javascript\">var domain=document.domain;");

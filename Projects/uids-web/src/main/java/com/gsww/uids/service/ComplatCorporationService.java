@@ -76,4 +76,8 @@ public interface ComplatCorporationService {
 
 	ComplatCorporation findByLoginNameIsUsed(String loginName);
 
+	boolean updateIsUpload(int intValue, int i);
+
+	boolean modify(ComplatCorporation corporation);
+
 }
