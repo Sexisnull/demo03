@@ -15,7 +15,7 @@ import com.gsww.uids.gateway.util.ConvertSqlToDtoList;
 public class CorporationDao extends JdbcTemplateDao {
 	protected Logger logger = Logger.getLogger(getClass());
 	// findByLoginName
-	private static final String findByLoginName = "select *FROM complat_corporation where loginName = ?  AND opersign<>3";
+	private static final String findByLoginName = "select *FROM complat_corporation where loginname = ?  AND opersign<>3";
 	// findByRegNumber
 	private static final String findByRegNumber = "select *FROM complat_corporation where RegNumber = ?  AND opersign<>3";
 	// findByOrgNumber

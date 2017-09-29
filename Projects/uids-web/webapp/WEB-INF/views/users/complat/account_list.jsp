@@ -170,20 +170,23 @@
 <script type="text/javascript"> 
 function checkSubmitForm(){
 		var nameSearch = $("#nameSearch").val();
+		//alert(nameSearch);
 		var loginnameSearch = $("#loginnameSearch").val();
+		//alert(loginnameSearch);
 		var loginallnameSearch = $("#loginallnameSearch").val();
+		//alert(loginallnameSearch);
 		if(nameSearch ==  '' || isNumbOrLett1(nameSearch)){
 			if(loginnameSearch ==  '' || isNumbOrLett2(loginnameSearch)){
-				if(loginallnameSearchvar ==  '' || isNumbOrLett3(loginallnameSearchvar)){
+				if(loginallnameSearch ==  '' || isNumbOrLett3(loginallnameSearch)){
 			       form1.submit();
 		        }else{
-			       $.validator.errorShow($("#loginallnameSearch"),'只能包括字母、数字、下划线');
+			       $.validator.errorShow($("#loginallnameSearch"),'只能包括字母、数字、下划线、英文句号');
 		        }  
 		    }else{
 		    	$.validator.errorShow($("#loginnameSearch"),'只能包括字母、数字、下划线');
 		    }
 		}else{
-			$.validator.errorShow($("#nameSearch"),'只能包括数字和字母');
+			$.validator.errorShow($("#nameSearch"),'只能包括字母、数字、下划线、中文');
 		}
 }
 	
@@ -215,7 +218,7 @@ function checkSubmitForm(){
 			}
 			
 			function isNumbOrLett3( s ){
-				var regu = /^([a-zA-Z0-9]+)$/;
+				var regu = /^[a-zA-Z0-9_.]+$/;
 				var re = new RegExp(regu);
 				if (re.test(s)) {
 					return true;
@@ -355,37 +358,21 @@ function outPutComplatUser() {
 }*/
 	
 	
-function intPutComplatUser(userAcctId){
-	alert("=================");
-	//if(null != userAcctId && "" != userAcctId){
-		$.ajax( {
-			type : 'POST',
-			url : "deleteComplatUser",
-			dataType : "json",
-			data : 'iid=' + userAcctId,
-			success : function(msg) {
-				//if (msg.result == "true") {
-					//alert("该人员已配置窗口！");
-					//$.dialog.alert('该用户已配置窗口,请选择其它操作！');
-					//return;
-				//}else{
-					var api = $.dialog({
-						title : '政府用户-用户导入',
-						width : 400,
-						height: 130,
-						max : false,
-						min : false,
-						lock : true,
-						padding : '40px 20px',
-						content : 'url:${ctx}/userWin/addUserWin?userAcctId='+userAcctId,
-						fixed : true,
-						drag : false,
-						resize : false
-					});
-				//}
-			}
-		});
-	//}
+function intPutComplatUser(){
+	var api = $.dialog({
+    title : '政府用户-用户导入',
+	width : 400,
+	height: 120,
+	max : false,
+	min : false,
+	lock : false,
+	padding : '40px 20px',
+	content : 'url:${ctx}/complat/showInport',
+	fixed : true,
+	drag : false,
+	resize : false
+	});
+	
 }
  
 //关闭的单击事件
@@ -396,45 +383,7 @@ $(".close").click(function(){
 });
 
 
-//下载模板
-function downloadTemplate(fileName){	    
-	window.location.href="${ctx}/uploadFile/complat/userList.xlsx";
-}	  
 
-//导入
-$(function(){
-	//支持选择多个文件同时上传
-    $("#file_upload").uploadify({
-    	'swf': '${ctx}/res/plugin/uploadify/js/uploadify.swf',
-        multi: false,//是否能选择多个文件
-        auto:false,//文件选择完成后，是否自动上传
-        fileObjName : 'files',
-        'uploader' : '${ctx}/complat/complatImport',//文件上传后台处理类
-        // Your options here
-        'langFile':'${ctx}/res/plugin/uploadify/js/uploadifyLang_zh.js',
-        'height':28,
-        'width':100,
-        'fileSizeLimit':'1GB',//文件大小限制最大为1G
-        'buttonText':'选择文件',
-        fileTypeExts : '*.xls;*.xlsx',//允许上传的文件类型           
-        'removeCompleted':true,
-        onUploadSuccess : function(file,data,response) {//上传完成时触发（每个文件触发一次）
-        	var obj = JSON.parse(data);
-			if("1" == obj.flag){
-				Dialog.alert('导入成功！',function(){
-				  window.location.href = "${ctx}/complat/complatList";
-				});
-			    $(".Popup").hide();
-			}
-			/*if("0" == obj.flag){
-				 $("#msg").html("姓名重复，导入失败！");
-			}*/
-			}
-			/*onUploadError : function(file, data, response){
-				$("#msg").html("程序错误，导入失败！");
-			} */      
-    });
-});
 
 /*********************机构树开始************************/
 $(function(){
@@ -513,32 +462,7 @@ function resetform() {
 	<body>
 
 		<div class="list-warper">
-			<!-- 导入用户的弹出层 -->
-			<div class="Popup" style="display: none">
-				<!-- 隐藏div -->
-				<div class="Popup_top">
-					<h1>
-						<font color="red"> * </font> 用户导入：
-					</h1>
-					<%--<a href="${ctx}/complat/complatList" class="Close"><img
-							alt="关闭" /> </a>
-				--%>
-				    <h1><a href="${ctx}/complat/complatList" class="close">关闭</a></h1>  
-				</div>
-
-				<div class="Popup_cen">
-					<input type="file" id="file_upload" name="file_upload"
-						class="uploadify">
-					<div id="uploadfileQueue"
-						style="border-top: 1px #ccc solid; height: 55px;"></div>
-					<p id="msg" style="color: red;"></p>
-				</div>
-
-				<div class="Popup_bottom">
-					<input type="button" class="btn red btnImport" value="导入" onclick="javascript:$('#file_upload').uploadify('upload', '*')" />
-					<input id="templet" type="button" class="btn orange btnImport" value="模板下载" onclick="downloadTemplate()"/>
-				</div>
-			</div>
+			
 
 
 
@@ -560,7 +484,7 @@ function resetform() {
 			</div>
 
 			<div class="search-content">
-				<form id="form2" name="form2" action="${ctx}/complat/complatList"
+				<form id="form1" name="form2" action="${ctx}/complat/complatList"
 					method="get">
 					<table class="advanced-content">
 						<tr>
@@ -575,73 +499,26 @@ function resetform() {
 								姓名：
 							</th>
 							<td width="20%">
-								<input type="text" style="width: 150px;" placeholder="姓名"
-									value="${sParams['LIKE_name']}" id="nameSearch"
-									name="search_LIKE_name" />
+								<input type="text" style="width: 150px;" placeholder="姓名" value="${sParams['LIKE_name']}" id="nameSearch" name="search_LIKE_name" />
 							</td>
 							<th style="padding-left: 5px">
 								登录名：
 							</th>
 							<td width="20%">
-								<input type="text" style="width: 150px;" placeholder="登录名"
-									value="${sParams['LIKE_loginname']}" id="loginnameSearch"
-									name="search_LIKE_loginname" />
+								<input type="text" style="width: 150px;" placeholder="登录名" value="${sParams['LIKE_loginname']}" id="loginnameSearch" name="search_LIKE_loginname" />
 							</td>
 							<th style="padding-left: 5px">
 								登录名全称：
 							</th>
 							<td width="20%">
-								<input type="text" style="width: 150px;" placeholder="登录名全称"
-									value="${sParams['LIKE_loginallname']}" id="loginallnameSearch"
-									name="search_LIKE_loginallname" />
+								<input type="text" style="width: 150px;" placeholder="登录名全称" value="${sParams['LIKE_loginallname']}" id="loginallnameSearch" name="search_LIKE_loginallname" />
 							</td>
 							<td class="btn-group">
-								<a id="advanced-search-btn" class="btnSearch">搜索</a>
+								<a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a>
 							</td>
 						</tr>
 					</table>
 				</form>
-
-				<!-- 高级探索表单 -->
-				<%--<form id="form2" name="form2" action="${ctx}/complat/complatList"
-					method="get">
-					<table class="advanced-content" style="display: none;">
-						<tr>
-							<th style="padding-left: 10px">
-								请输入姓名：
-							</th>
-							<td width="20%">
-								<input type="text" style="width: 170px;" placeholder="请输入姓名:"
-									value="${sParams['LIKE_name']}" id="nameSearch"
-									name="search_LIKE_name" />
-							</td>
-							<th style="padding-left: 5px">
-								请输入登录名：
-							</th>
-							<td width="20%">
-								<input type="text" style="width: 170px;" placeholder="请输入登录名:"
-									value="${sParams['LIKE_loginname']}" id="loginnameSearch"
-									name="search_LIKE_loginname" />
-							</td>
-							<th style="padding-left: 10px">
-								请输入登录名全称：
-							</th>
-							<td width="20%">
-								<input type="text" style="width: 170px;" placeholder="请输入登录名全称:"
-									value="${sParams['LIKE_loginallname']}" id="loginallnameSearch"
-									name="search_LIKE_loginallname" />
-							</td>
-							<td class="btn-group">
-								<a id="advanced-search-btn" class="btnSearch">搜索</a>
-							</td>
-							<!--<td class="btn-group"> <a id="advanced-search-btn-cancel" class="btnSearch" >取消</a></td>-->
-						</tr>
-					</table>
-				</form>
-			--%></div>
-
-
-
 			<!--列表内容区域-->
 			<div class="list">
 				<input type="hidden" id="orderField" name="orderField"
@@ -654,7 +531,7 @@ function resetform() {
 						<ul class="list-Topbtn">
 							<li class="add"><a title="新增" onclick="addComplatUser()">新增</a></li>
 							<li class="del"><a title="删除" onclick="deleteData('complat/complatUserDelete','iid');">删除</a></li>
-							<li class="query"><a title="导入" onclick="intPutComplatUser();">导入</a></li>
+							<li class="query"><a title="导入" onclick="intPutComplatUser( ${ complatUser.iid});">导入</a></li>
 							<li class="exportData"><a title="导出" onclick="outPutComplatUser()">导出</a></li>
 							<li class="startData"><a title="启用" onclick="startData('complat/startUserEnable','iid');">启用</a></li>
 							<li class="edit"><a title="停用" onclick="stopData('complat/stopUserEnable','complatUserId');">停用</a></li>

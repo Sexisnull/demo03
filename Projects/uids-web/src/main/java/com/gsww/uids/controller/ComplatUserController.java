@@ -38,6 +38,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.web.Servlets;
 import org.springframework.web.multipart.MultipartFile;
@@ -264,7 +265,7 @@ public class ComplatUserController extends BaseController {
 	 */
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/complatSave", method = RequestMethod.POST)
-	public ModelAndView complatSave(ComplatUser complatUser,
+	public ModelAndView complatSave(ComplatUser complatUser, String level,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		SysUserSession sysUserSession =(SysUserSession)request.getSession().getAttribute("sysUserSession");
@@ -275,7 +276,7 @@ public class ComplatUserController extends BaseController {
 				String iid = String.valueOf(complatUser.getIid());
 				if (iid == null || iid.length() <= 0) {	
 					pwd=complatUser.getPwd();
-					if(checkPassword(pwd)){
+					if(level=="strong"||level.equals("strong")){
 						
 						complatUser.setOpersign(1);						
 						complatUser.setEnable(0); // 是否禁用
@@ -312,7 +313,7 @@ public class ComplatUserController extends BaseController {
 					}					
 				}else {
 					pwd=complatUser.getPwd();
-					if(checkPassword(pwd)){
+					if(level=="strong"||level.equals("strong")){
 						//对密码进行加密			
 						String p = Md5Util.md5encode(pwd);
 						complatUser.setPwd(p);
@@ -434,7 +435,8 @@ public class ComplatUserController extends BaseController {
 	 * @author <a href=" ">shenxh</a>
 	 */
 	@RequestMapping(value = "/complatImport", method = RequestMethod.POST)
-	public ModelAndView complatImport(
+	@ResponseBody
+	public void complatImport(
 			@RequestParam("files") MultipartFile multipartFile,
 			HttpServletRequest request, Model model,
 			HttpServletResponse response) throws Exception {
@@ -504,17 +506,19 @@ public class ComplatUserController extends BaseController {
 			if(flag){
 				resMap.put("ret", "1");
 				resMap.put("msg", "导入成功！");
+				System.out.println("导入成功"+resMap);
 				response.getWriter().write(JSONObject.toJSONString(resMap));				
 			}else{
 				resMap.put("ret", "0");
 				resMap.put("msg", "导入失败！");
+				System.out.println("导入失败"+resMap);
 				response.getWriter().write(JSONObject.toJSONString(resMap));
 			}		
 		} catch (Exception e) {
 			e.printStackTrace();
 			//returnMsg("error", "导入失败", request);
 		}
-		return new ModelAndView("redirect:/complat/complatList");
+		//return new ModelAndView("redirect:/complat/complatList");
 	}
 
 	/**
@@ -1006,10 +1010,16 @@ public class ComplatUserController extends BaseController {
 	 * 导入弹出框
 	 */
 	@SuppressWarnings("finally")
-	@RequestMapping(value = "/imporDiv", method = RequestMethod.GET)
-	public String imporDiv (String iid,HttpServletRequest request, HttpServletResponse response)
+	@RequestMapping(value = "/showInport", method = RequestMethod.GET)
+	public String showInport (HttpServletRequest request, HttpServletResponse response)
 	throws Exception {
-		
-		return "users/complat/account_list";
+		String str="";
+		try{
+			str="users/complat/account_inport";
+		}catch(Exception e){
+			logger.error(e.getMessage(), e);
+		}finally{
+			return str;		
+		}
 	}
 }
