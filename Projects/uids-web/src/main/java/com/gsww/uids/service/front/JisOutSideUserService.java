@@ -8,7 +8,6 @@ import com.gsww.uids.entity.ComplatOutsideuser;
 import com.gsww.uids.service.ComplatOutsideuserService;
 import com.gsww.uids.service.JisLogService;
 import com.gsww.uids.service.impl.AuthLogServiceImpl;
-import com.gsww.uids.util.exception.OperationException;
 
 @Transactional
 @Service("JisOutSideUserService")
@@ -22,7 +21,7 @@ public class JisOutSideUserService
   private JisLogService logService;
   
   public boolean addOutUserForReg(ComplatOutsideuser outsideUser, String appmark)
-    throws OperationException
+    throws Exception
   {
     if (outsideUser == null) {
       return false;
@@ -34,7 +33,7 @@ public class JisOutSideUserService
 
     isSuccess = this.outsideUserService.insert(outsideUser);
     if (!isSuccess) {
-      throw new OperationException("插入平台表失败！");
+      throw new Exception("插入平台表失败！");
     }
     //userId = this.outsideUserService.findByLoginName(loginName).getIid();
     ComplatOutsideuser complatOutsideuser = this.outsideUserService.findByLoginName(loginName);

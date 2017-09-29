@@ -10,11 +10,49 @@
 <title>个人信息修改</title>
 <link rel="stylesheet" type="text/css" href="${ctx }/ui/images/grzc.css"/>
 <link rel="stylesheet" type="text/css" href="${ctx }/ui/images/style.css"/>
-<script type="text/javascript" src="${ctx}/res/plugin/jquery/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="${ctx}/ui/lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="${ctx}/ui/widgets/hanweb/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="${ctx}/ui/lib/easyui/plugins/jquery.parser.js"></script>
+<link type="text/css" rel="stylesheet" href="${ctx}/ui/lib/easyui/themes/bootstrap/linkbutton.css"/>
+<script type="text/javascript" src="${ctx}/ui/lib/easyui/plugins/jquery.linkbutton.js"></script>
+<script type="text/javascript" src="${ctx}/ui/lib/easyui/plugins/jquery.resizable.js"></script>
+<script type="text/javascript" src="${ctx}/ui/lib/easyui/plugins/jquery.draggable.js"></script>
+<link type="text/css" rel="stylesheet" href="${ctx}/ui/lib/easyui/themes/bootstrap/panel.css"/>
+<script type="text/javascript" src="${ctx}/ui/lib/easyui/plugins/jquery.panel.js"></script>
+<link type="text/css" rel="stylesheet" href="${ctx}/ui/lib/easyui/themes/bootstrap/window.css"/>
+<script type="text/javascript" src="${ctx}/ui/lib/easyui/plugins/jquery.window.js"></script>
+<link type="text/css" rel="stylesheet" href="${ctx}/ui/lib/easyui/themes/bootstrap/messager.css"/>
+<script type="text/javascript" src="${ctx}/ui/lib/easyui/plugins/jquery.messager.js"></script>
+<link type="text/css" rel="stylesheet" href="${ctx}/ui/widgets/hanweb/validity/css/validity.css"/>
 <script type="text/javascript" src="${ctx}/ui/widgets/validity/validity.js"></script>
+<script type="text/javascript" src="${ctx}/ui/widgets/hanweb/validity/validity.js"></script>
+<script type="text/javascript" src="${ctx}/ui/lib/security/jquery.cookie.js"></script>
 <script type="text/javascript" src="${ctx }/ui/script/idcardValidity.js"></script>
+<link rel="stylesheet" href="${ctx }/ui/widgets/checkpwd/css/checkpwd.css" type="text/css"></link>
 <script>
-	var levelNum;
+window.alert = function (msg,type,fu){
+	top.$.messager.alert(' ',msg,type,fu);
+};
+
+$.validity.setup({
+	outputMode : "showErr"
+}); 
+
+window.confirm = function(msg,okCall,cancelCall){
+	top.$.messager.confirm(' ',msg,function(flag){
+		if(flag){
+			if(typeof(okCall) != 'undefined'){
+				okCall();
+			}
+		}else{
+			if(typeof(cancelCall) != 'undefined'){
+				cancelCall();
+			}
+		}
+	});
+};
+
+var levelNum;
 	function trim(str){
 		return str.replace(/(^\s*)|(\s*$)/g, "");
 	}//过滤左右空格
@@ -35,13 +73,13 @@
 
 	$(function(){
 		
-		var gpresidenceId='${gpresidenceId}';//这样rrr是可以取到的。且本来就是string类型。		
-		var presidenceId='${presidenceId}';
-		var residenceId='${residenceId}';  //这个引号不加，真是害死人。。。浪费了我至少一个钟头的时间。
+		var gpresidenceId='${user.gpresidenceId}';//这样rrr是可以取到的。且本来就是string类型。		
+		var presidenceId='${user.presidenceId}';
+		var residenceId='${user.residenceId}';  //这个引号不加，真是害死人。。。浪费了我至少一个钟头的时间。
 		
-		var  livingAreaId='${livingAreaId}';
-		var  plivingAreaId='${plivingAreaId}';
-		var  gplivingAreaId='${gplivingAreaId}';	
+		var  livingAreaId='${user.livingAreaId}';
+		var  plivingAreaId='${user.plivingAreaId}';
+		var  gplivingAreaId='${user.gplivingAreaId}';	
 	//	alert("看看六个iid是多少："+gpresidenceId+presidenceId+residenceId+livingAreaId+plivingAreaId+gplivingAreaId);
 			
 		//李德隆20160110 日曜 残业 独 访问本网页，自动加载省份。20160113夜大修
@@ -77,24 +115,24 @@
 		//degree
 		var select = document.getElementById("degree");  
 		for(var i=0; i<select.options.length; i++){  
-		    if(select.options[i].innerHTML == '${degree}'){  
+		    if(select.options[i].innerHTML == '${user.degree}'){  
 		        select.options[i].selected = true;  
 		        break;  
 		    }  
 		} 
-		if(${isauth} == 1){
+		if(${user.isAuth} == 1){
 			$(".baseinfo").attr("readonly","readonly");
 			$("#female").attr("disabled","disabled");
 			$("#male").attr("disabled","disabled");
-			if('${sex}' == '女'){
+			if('${user.sex}' == '女'){
 				$("#female").attr("checked","checked");
 			}else{
 				$("#male").attr("checked","checked");
 			}
 		}else{
-			if('${sex}' == '女'){
+			if('${user.sex}' == '女'){
 				$("#female").attr("checked","checked");
-			}else if('${sex}' == '男'){
+			}else if('${user.sex}' == '男'){
 				$("#male").attr("checked","checked");
 			}
 		} 
@@ -164,7 +202,7 @@
 			success:function(result){
 				if(result.success){
 					var appmark = result.message;
-					alert("修改成功！");
+					alert(appmark);
 					//window.location.href='perindex.do';
 				}else{
 					alert(result.message);
@@ -349,18 +387,18 @@ function  searchSubZoneByIidForHtml(iid,sel,optionIid){
 <div>
   <div class="top">
     <div class="pagecon"> 
-      <script language="javascript" src="http://www.gszwfw.gov.cn/script/0/1512101421282896.js"></script>
+      <script language="javascript" src="${ctx }/ui/js/1512101421282896.js"></script>
     </div>
   </div>
   <div class=""> 
-    <script language="javascript" src="http://www.gszwfw.gov.cn/script/0/1512101146476750.js"></script>
+    <script language="javascript" src="${ctx }/ui/js/1512101146476750.js"></script>
   </div>
   <div class="nav" style="height:5px;"> 
   </div>
 <div class="mainWth_faren back">
 <div class="main">
 	<div class="tb">
-    	<img src="./images/grzc_03.jpg" />
+    	<img src="${ctx }/ui/images/grzc_03.jpg" />
     </div>
     <div class="bt">
     	个人用户信息修改
@@ -371,14 +409,15 @@ function  searchSubZoneByIidForHtml(iid,sel,optionIid){
     </div>
     <form action="${url}" method="post" id="registerform">
     <div class="xxnr">
-    	<input type="hidden" name="headpic" value="${headpic}" />
-    	<input type="hidden" name="bodypic" value="${bodypic}" />
-    	<input type="hidden" name="headRenamePic" value="${headRenamePic}" />
-    	<input type="hidden" name="bodyRenamePic" value="${bodyRenamePic}" />
-    	<input type="hidden" name="isupload" value="${isupload}" />
-    	<input type="hidden" name="isauth" value="${isauth}" />
-    	<input type="hidden" name="authState" value="${authState}" />
-    	<input type="hidden" name="rejectReason" value="${rejectReason}" />
+    	<input type="hidden" name="headPic" value="${user.headPic}" />
+    	<input type="hidden" name="bodyPic" value="${user.bodyPic}" />
+    	<input type="hidden" name="headRenamePic" value="${user.headRenamePic}" />
+    	<input type="hidden" name="bodyRenamePic" value="${user.bodyRenamePic}" />
+    	<input type="hidden" name="isUpload" value="${user.isUpload}" />
+    	<input type="hidden" name="isAuth" value="${user.isAuth}" />
+    	<input type="hidden" name="authState" value="${user.authState}" />
+    	<input type="hidden" name="rejectReason" value="${user.rejectReason}" />
+    	
     	<table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
             <tr>
             	<td align="right" width="235px">
@@ -386,7 +425,7 @@ function  searchSubZoneByIidForHtml(iid,sel,optionIid){
                 </td>
                 <td width="20px" style="color:#ff0000; padding-top:5px; padding-right:5px;" align="center">*</td>
                 <td>
-                	<input id="loginId"  type="text" style=" width:283px; height:30px;" value="${loginName}" readonly="readonly"/>
+                	<input id="loginId"  type="text" name="loginName" style=" width:283px; height:30px;" value="${user.loginName}" readonly="readonly"/>
                 </td>
                 <td width="385px" style=" font-size:14px;" class="lg">
                 	用户名由字母、数字和下划线组成
@@ -415,6 +454,7 @@ function  searchSubZoneByIidForHtml(iid,sel,optionIid){
 						<td id="pmedium" style="">中</td>
 						<td id="pstrong" style="">强</td>
 							</tr>
+					<input type="hidden" id="level"/>
 				</table>
 				</td>
 			</tr>
@@ -436,7 +476,7 @@ function  searchSubZoneByIidForHtml(iid,sel,optionIid){
                 </td>
                 <td width="20px" style="color:#ff0000; padding-top:5px; padding-right:5px;" align="center">*</td>
                 <td>
-                	<input id="name"  type="text" style=" width:283px; height:30px;"  class="baseinfo" value="${name}"/>
+                	<input id="name"  type="text" name="name" style=" width:283px; height:30px;"  class="baseinfo" value="${user.name}"/>
                 </td>
                 <td width="385px" style=" font-size:14px;">
                 	请填写真实姓名
@@ -448,7 +488,7 @@ function  searchSubZoneByIidForHtml(iid,sel,optionIid){
                 </td>
                 <td width="20px" style="color:#ff0000; padding-top:5px; padding-right:5px;" align="center">*</td>
                 <td>
-                	<input id="email" name="email" type="text" style=" width:283px; height:30px;" value="${email}"/>
+                	<input id="email" name="email" type="text" style=" width:283px; height:30px;" value="${user.email}"/>
                 </td>
                 <td width="385px" style=" font-size:14px;">
                 	请填写正确邮箱，找回密码时使用
@@ -460,7 +500,7 @@ function  searchSubZoneByIidForHtml(iid,sel,optionIid){
                 </td>
                 <td width="20px" style="color:#ff0000; padding-top:5px; padding-right:5px;" align="center">*</td>
                 <td>
-                	<input id="mobile" name="mobile" type="text" style=" width:283px; height:30px;" value="${mobile}"/>
+                	<input id="mobile" name="mobile" type="text" style=" width:283px; height:30px;" value="${user.mobile}"/>
                 </td>
                 <td width="385px" style=" font-size:14px;">
                 	请填写正确的手机号码
@@ -479,7 +519,8 @@ function  searchSubZoneByIidForHtml(iid,sel,optionIid){
                 </td>
                 <td width="20px" style="color:#ff0000; padding-top:5px; padding-right:5px;" align="center">*</td>
                 <td>
-                	<input id="papersNumber"  class="baseinfo" type="text" style="width:283px; height:30px;" value="${papersNumber}"/>
+                	<input type="hidden" name="papersType" value="1"/>
+                	<input id="papersNumber" name="papersNumber" class="baseinfo" type="text" style="width:283px; height:30px;" value="${user.papersNumber}"/>
                 </td>
                 <td width="385px" style=" font-size:14px;">
                 	
@@ -525,7 +566,7 @@ function  searchSubZoneByIidForHtml(iid,sel,optionIid){
 						<td width="20px"
 							style="color: #ff0000; padding-top: 5px; padding-right: 5px;"
 							align="center">*</td>
-						<td><input type="text" id="residenceDetail" value="${residenceDetail}"
+						<td><input type="text" id="residenceDetail" value="${user.residenceDetail}"
 							name="residenceDetail" style="width: 283px; height: 30px;" />
 						</td>
 					</tr>
@@ -568,7 +609,7 @@ function  searchSubZoneByIidForHtml(iid,sel,optionIid){
 							style="color: #ff0000; padding-top: 5px; padding-right: 5px;"
 							align="center">*</td>
 						<td><input type="text" id="livingAreaDetail"
-							name="livingAreaDetail" value="${livingAreaDetail}" style="width: 283px; height: 30px;" />
+							name="livingAreaDetail" value="${user.livingAreaDetail}" style="width: 283px; height: 30px;" />
 						</td>
 					</tr>
             
@@ -593,7 +634,7 @@ function  searchSubZoneByIidForHtml(iid,sel,optionIid){
                 </td>
                 <td width="20px" style="color:#ff0000; padding-top:5px; padding-right:5px;" align="center"></td>
                 <td>
-                	<input id="age" name="age" type="text" style="width:283px; height:30px;" maxlength="3" value="${age}"/>
+                	<input id="age" name="age" type="text" style="width:283px; height:30px;" maxlength="3" value="${user.age}"/>
                 </td>
                 <td width="385px" style=" font-size:14px;">
                 	请填写数值
@@ -620,7 +661,7 @@ function  searchSubZoneByIidForHtml(iid,sel,optionIid){
                 </td>
                 <td width="20px" style="color:#ff0000; padding-top:5px; padding-right:5px;" align="center"></td>
                 <td>
-                	<select name="degree" id="degree" style=" width:286px; height:35px;" data-value="${degree}" > 
+                	<select name="degree" id="degree" style=" width:286px; height:35px;" data-value="${user.degree}" > 
                 	    <option value="">请选择学历</option>
                 		<option value="其他">其他</option>
                 		<option value="小学">小学</option>
@@ -641,7 +682,7 @@ function  searchSubZoneByIidForHtml(iid,sel,optionIid){
                 </td>
                 <td width="20px" style="color:#ff0000; padding-top:5px; padding-right:5px;" align="center"></td>
                 <td>
-                	<input id="workunit" name="workUnit" type="text" style=" width:283px; height:30px;" value="${workUnit}" maxlength="50"/>
+                	<input id="workunit" name="workUnit" type="text" style=" width:283px; height:30px;" value="${user.workUnit}" maxlength="50"/>
                 </td>
                 <td width="385px" style=" font-size:14px;" >
                 </td>
@@ -652,7 +693,7 @@ function  searchSubZoneByIidForHtml(iid,sel,optionIid){
                 </td>
                 <td width="20px" style="color:#ff0000; padding-top:5px; padding-right:5px;" align="center"></td>
                 <td>
-                	<input id="headship" name="headship" type="text" style=" width:283px; height:30px;" value="${headship}" maxlength="50"/>
+                	<input id="headship" name="headShip" type="text" style=" width:283px; height:30px;" value="${user.headShip}" maxlength="50"/>
                 </td>
                 <td width="385px" style=" font-size:14px;" >
                 </td>
@@ -663,7 +704,7 @@ function  searchSubZoneByIidForHtml(iid,sel,optionIid){
                 </td>
                 <td width="20px" style="color:#ff0000; padding-top:5px; padding-right:5px;" align="center"></td>
                 <td>
-                	<input id="fax" name="fax" type="text" style=" width:283px; height:30px;" value="${fax}" maxlength="30"/>
+                	<input id="fax" name="fax" type="text" style=" width:283px; height:30px;" value="${user.fax}" maxlength="30"/>
                 </td>
                 <td width="385px" style=" font-size:14px;">
                 </td>
@@ -674,7 +715,7 @@ function  searchSubZoneByIidForHtml(iid,sel,optionIid){
                 </td>
                 <td width="20px" style="color:#ff0000; padding-top:5px; padding-right:5px;" align="center"></td>
                 <td>
-                	<input id="phone" name="phone" type="text" style=" width:283px; height:30px;" value="${phone}" maxlength="30"/>
+                	<input id="phone" name="phone" type="text" style=" width:283px; height:30px;" value="${user.phone}" maxlength="30"/>
                 </td>
                 <td width="385px" style=" font-size:14px;" >
                 </td>
@@ -685,7 +726,7 @@ function  searchSubZoneByIidForHtml(iid,sel,optionIid){
                 </td>
                 <td width="20px" style="color:#ff0000; padding-top:5px; padding-right:5px;" align="center"></td>
                 <td>
-                	<input id="comptel" name="comptel" type="text" style=" width:283px; height:30px;" value="${comptel}" maxlength="30"/>
+                	<input id="comptel" name="compTel" type="text" style=" width:283px; height:30px;" value="${user.compTel}" maxlength="30"/>
                 </td>
                 <td width="385px" style=" font-size:14px;" >
                 </td>
@@ -696,7 +737,7 @@ function  searchSubZoneByIidForHtml(iid,sel,optionIid){
                 </td>
                 <td width="20px" style="color:#ff0000; padding-top:5px; padding-right:5px;" align="center"></td>
                 <td>
-                	<input id=qq name="qq" type="text" style=" width:283px; height:30px;" value="${qq}"/>
+                	<input id=qq name="qq" type="text" style=" width:283px; height:30px;" value="${user.qq}"/>
                 </td>
                 <td width="385px" style=" font-size:14px;" >
                 </td>
@@ -707,7 +748,7 @@ function  searchSubZoneByIidForHtml(iid,sel,optionIid){
                 </td>
                 <td width="20px" style="color:#ff0000; padding-top:5px; padding-right:5px;" align="center"></td>
                 <td>
-                	<input id=msn name="msn" type="text" style=" width:283px; height:30px;" value="${msn}"/>
+                	<input id=msn name="msn" type="text" style=" width:283px; height:30px;" value="${user.msn}"/>
                 </td>
                 <td width="385px" style=" font-size:14px;" >
                 </td>
@@ -718,7 +759,7 @@ function  searchSubZoneByIidForHtml(iid,sel,optionIid){
                 </td>
                 <td width="20px" style="color:#ff0000; padding-top:5px; padding-right:5px;" align="center"></td>
                 <td>
-                	<input id=post name="post" type="text" style=" width:283px; height:30px;" value="${post}" maxlength="6"/>
+                	<input id=post name="post" type="text" style=" width:283px; height:30px;" value="${user.post}" maxlength="6"/>
                 </td>
                 <td width="385px" style=" font-size:14px;" >
                	 请填写6位数字的邮编
@@ -730,7 +771,7 @@ function  searchSubZoneByIidForHtml(iid,sel,optionIid){
                </td>
                <td width="20px" style="color:#ff0000; padding-top:5px; padding-right:5px;" align="center"></td>
                <td>
-               	<input id=address name="address" type="text" style=" width:283px; height:30px;" value="${address}"/>
+               	<input id=address name="address" type="text" style=" width:283px; height:30px;" value="${user.address}"/>
                </td>
                <td width="385px" style=" font-size:14px;" >
                </td>
@@ -755,7 +796,8 @@ function  searchSubZoneByIidForHtml(iid,sel,optionIid){
 </div>
   <div id="foot">
     <div> 
-      <script language="javascript" src="http://www.gszwfw.gov.cn/script/0/1512101421288942.js"></script>
+      <script language="javascript" src="${ctx }/ui/js/1512101421288942.js"></script>
+      <script type="text/javascript" src="${ctx }/res/js/region/checkpwd.js"></script>
     </div>
   </div>
 </div>

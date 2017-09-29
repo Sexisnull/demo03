@@ -11,8 +11,23 @@
 <link rel="stylesheet" type="text/css" href="${ctx }/ui/images/grzc.css"/>
 <link rel="stylesheet" type="text/css" href="${ctx }/ui/images/style.css"/>
 <link rel="stylesheet" type="text/css" href="${ctx }/ui/images/syl_fpqd.css"/>
-<script type="text/javascript" src="${ctx}/res/plugin/jquery/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="${ctx}/ui/lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="${ctx}/ui/widgets/hanweb/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="${ctx}/ui/lib/easyui/plugins/jquery.parser.js"></script>
+<link type="text/css" rel="stylesheet" href="${ctx}/ui/lib/easyui/themes/bootstrap/linkbutton.css"/>
+<script type="text/javascript" src="${ctx}/ui/lib/easyui/plugins/jquery.linkbutton.js"></script>
+<script type="text/javascript" src="${ctx}/ui/lib/easyui/plugins/jquery.resizable.js"></script>
+<script type="text/javascript" src="${ctx}/ui/lib/easyui/plugins/jquery.draggable.js"></script>
+<link type="text/css" rel="stylesheet" href="${ctx}/ui/lib/easyui/themes/bootstrap/panel.css"/>
+<script type="text/javascript" src="${ctx}/ui/lib/easyui/plugins/jquery.panel.js"></script>
+<link type="text/css" rel="stylesheet" href="${ctx}/ui/lib/easyui/themes/bootstrap/window.css"/>
+<script type="text/javascript" src="${ctx}/ui/lib/easyui/plugins/jquery.window.js"></script>
+<link type="text/css" rel="stylesheet" href="${ctx}/ui/lib/easyui/themes/bootstrap/messager.css"/>
+<script type="text/javascript" src="${ctx}/ui/lib/easyui/plugins/jquery.messager.js"></script>
+<link type="text/css" rel="stylesheet" href="${ctx}/ui/widgets/hanweb/validity/css/validity.css"/>
 <script type="text/javascript" src="${ctx}/ui/widgets/validity/validity.js"></script>
+<script type="text/javascript" src="${ctx}/ui/widgets/hanweb/validity/validity.js"></script>
+<script type="text/javascript" src="${ctx}/ui/lib/security/jquery.cookie.js"></script>
 <script>
 
 
@@ -27,7 +42,25 @@
 		$.validity.setup({
 			outputMode : "showErr"
 		}); //校验错误弹出
-
+		
+		window.alert = function (msg,type,fu){
+			top.$.messager.alert(' ',msg,type,fu);
+		};
+	
+		window.confirm = function(msg,okCall,cancelCall){
+			top.$.messager.confirm(' ',msg,function(flag){
+				if(flag){
+					if(typeof(okCall) != 'undefined'){
+						okCall();
+					}
+				}else{
+					if(typeof(cancelCall) != 'undefined'){
+						cancelCall();
+					}
+				}
+			});
+		};
+		
 		//获得焦点后提示语消失 
 		$(function(){//一进来即加载。
 			
@@ -64,11 +97,21 @@
 				$('#randCode').require('请填写验证码');
 			//	$('#mobile').require('请填写移动电话').match('mobile','对不起，您输入的移动电话错误');
 				$('#cellphoneShortMessageRandomCodeWritenByGuest').require("请填写短信验证码");
+			},{
+				success:function(result){
+					if(result.success){
+						alert(result.message);
+						window.location.href='resetpwd_show.do';
+					}else {
+						alert(result.message);
+						$('#verifyImg').click();
+					}
+				}
 			});
 			
 		});
 				
-		function toSubmit(){
+		/*function toSubmit(){
 			var inputByGuest = $("#inputByGuest").val();
 			var randCode = $("#randCode").val();
 			var cellphoneShortMessageRandomCodeWritenByGuest = $("#cellphoneShortMessageRandomCodeWritenByGuest").val();
@@ -96,15 +139,9 @@
 				}	
 				
 		   	});	
-		}
+		}*/
 		
 		function waitToGetCellphoneCode(){
-			var inputByGuest = $("#inputByGuest").val();
-			var randCode = $("#randCode").val();
-			if(inputByGuest=='' || randCode==''){
-				alert("登录名或验证码不能为空");
-				return;
-			}
 			$("#waitForCellphoneCode").val("正在发送短信验证码...").attr("disabled", true).addClass("disabled");//点击了“发送”按钮后，点击失效。
 			send(success_function,fail_function);		//该方法在Java中，有1秒延迟的模拟 效果。	
 		   }
@@ -235,7 +272,7 @@ body {
 
 
 
-  <form action="" method="post" id="verifyform">
+  <form action="${url }" method="post" id="verifyform">
     <table width="955" height="477" border="0" cellspacing="0" cellpadding="0" align="center" style="margin-bottom:8px; margin-top:10px;" id="tt">
  
       <tr height="60" align="center">
@@ -293,7 +330,7 @@ body {
 			</tr>
           <tr align="center">
             <td colspan="4"><input type="submit" class="btn btn-primary" value="上一步" style="width:100px" onclick="javascript:history.go(-1)"/>&nbsp;&nbsp;
-            <input type="button" onclick="toSubmit();" class="btn btn-primary" value="下一步" style="width:100px" /></td>
+            <input type="submit"  class="btn btn-primary" value="下一步" style="width:100px" /></td>
           </tr>
           
           
