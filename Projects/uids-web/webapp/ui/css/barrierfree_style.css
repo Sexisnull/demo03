@@ -1,0 +1,32 @@
+body{margin:0 auto;text-align:center; padding:0; letter-spacing:normal;
+font: 16px/1.5 arial,"Microsoft Yahei","Hiragino Sans GB",sans-serif;
+ background:#f7f7f7
+}
+ul,ol,li,dl,dt,dd,form,input,textarea,p,hr,blockquote,fieldset, span, a,h1,h2,h3,h4, iframe,div{margin:0;padding:0;}	
+ul,ol,li{list-style:none;}
+a{font-size:16px;text-decoration:underline; cursor: pointer; color:#333 }
+a:hover {font-size:16px; text-decoration:underline; color:#F30}
+
+#container{width:1000px;margin:0 auto!important;  position:static !important;}
+/*div排版 文本模式下网页内容分割边框*/
+#header,#mainnav,#leftsidebar, #leftbox, #rightsidebar,#footer
+{width:976px; border:#CCC solid 2px; margin:15px auto; padding:10px; overflow:hidden; text-align:left}
+
+/**
+header        头部区
+mainnav       主导航栏
+leftsidebar   左栏区
+leftbox       中间内容
+rightsidebar  右栏区
+footer        页脚区
+
+这些id是作为无障碍文本模式下的边框定义，应加入网页主框架，确保显示效果为1000px宽度的方框，
+**/
+
+
+/*table 布局模式下如分割id不够用可自行增加**/
+
+
+/*20160614*/
+#barrierfree_container{margin:30px auto;width:1000px}
+body #barrierfree_container a{width:480px;margin:10px 20px 10px 0;float:left;display:inline-block;text-align:left;height:22px;overflow:hidden;white-space: nowrap;}

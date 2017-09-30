@@ -52,7 +52,7 @@ public class PerRegisterController {
 	/**
 	 * 个人注册页面
 	 */
-	@RequestMapping({ "perregister" })
+	@RequestMapping({ "perregister.do" })
 	public ModelAndView perRegister_Step1(Model model, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
 		String appmark = request.getParameter("appmark");
@@ -131,27 +131,28 @@ public class PerRegisterController {
 		}
 
 		//TODO 注册验证短信验证码
-		/*
-		 * String cellphoneShortMessageRandomCodeMadeByJava =
-		 * (String)session.getAttribute
-		 * ("cellphoneShortMessageRandomCodeMadeByJava");
-		 * 
-		 * if
-		 * (!StringUtil.isEmpty(cellphoneShortMessageRandomCodeWritenByGuest)) {
-		 * if (cellphoneShortMessageRandomCodeWritenByGuest.equals(
-		 * cellphoneShortMessageRandomCodeMadeByJava)) {
-		 * session.setAttribute("appmark", appmark);
-		 * outsideUserFormBean.setIsCellphoneVerified(Integer.valueOf(1));
-		 * session.setAttribute("outsideUserFormBean", outsideUserFormBean);
-		 * jsonResult.setSuccess(true); return jsonResult; }
-		 * session.setAttribute("cellphoneShortMessageRandomCodeMadeByJava",
-		 * "-1"); jsonResult.setMessage("手机短信验证码错误，请点击重新获得！");
-		 * jsonResult.setSuccess(false); return jsonResult; }
-		 * 
-		 * session.setAttribute("appmark", appmark);
-		 * jsonResult.setSuccess(false); jsonResult.setMessage("请输入手机短信验证码！");
-		 * return jsonResult;
-		 */
+		
+		/*String cellphoneShortMessageRandomCodeMadeByJava = (String)session.getAttribute("cellphoneShortMessageRandomCodeMadeByJava");
+		
+		if (!StringUtil.isEmpty(cellphoneShortMessageRandomCodeWritenByGuest)) {
+			if (cellphoneShortMessageRandomCodeWritenByGuest.equals(cellphoneShortMessageRandomCodeMadeByJava)) {
+				session.setAttribute("appmark", appmark);
+				outsideUserFormBean.setIsCellphoneVerified(Integer.valueOf(1));
+				session.setAttribute("outsideUserFormBean", outsideUserFormBean);
+				jsonResult.setSuccess(true);
+				return jsonResult;
+			}
+			session.setAttribute("cellphoneShortMessageRandomCodeMadeByJava", "-1");
+			jsonResult.setMessage("手机短信验证码错误，请点击重新获得！");
+			jsonResult.setSuccess(false);
+			return jsonResult;
+		}
+
+		session.setAttribute("appmark", appmark);
+		jsonResult.setSuccess(false);
+		jsonResult.setMessage("请输入手机短信验证码！");
+		return jsonResult;*/
+		
 		session.setAttribute("appmark", appmark);
 		outsideUserFormBean.setIsCellphoneVerified(Integer.valueOf(1));
 		session.setAttribute("outsideUserFormBean", outsideUserFormBean);
@@ -277,12 +278,11 @@ public class PerRegisterController {
 
 		ComplatOutsideuser outsideUserFormBean = (ComplatOutsideuser) session.getAttribute("outsideUserFormBean");
 
-		/*
-		 * if
-		 * (!outsideUserFormBean.getMobile().equals(session.getAttribute("telNum"
-		 * ))) { jsonResult.setMessage("手机验证码错误，请重新获取！");
-		 * jsonResult.setSuccess(false); return jsonResult; }
-		 */
+		/*if (!outsideUserFormBean.getMobile().equals(session.getAttribute("telNum"))) {
+			jsonResult.setMessage("手机验证码错误，请重新获取！");
+			jsonResult.setSuccess(false);
+			return jsonResult;
+		}*/
 
 		String appmark = (String) session.getAttribute("appmark");
 
@@ -320,7 +320,7 @@ public class PerRegisterController {
 		return jsonResult;
 	}
 
-	//注册个人用户
+	//插入个人用户表
 	public boolean addOutUserForReg(ComplatOutsideuser outsideUser) throws Exception {
 		if (outsideUser == null) {
 			return false;
@@ -357,6 +357,100 @@ public class PerRegisterController {
 		return modelAndView;
 	}
 
+	@RequestMapping(value = "userresult")
+	public void userResult(HttpServletRequest request,
+			HttpServletResponse response, String webId, String domain,
+			String callback) {
+
+		String html = callback
+				+ "({\"html\":\"<table border='0' cellpadding='0' cellspacing='0' >"
+				+ "<tr><td  id='loginbtn' onmouseout='hidelogin();'  onmouseover='showlogin();'>"
+				+ "<a  style='cursor:pointer; font-size:13px; text-align:center;margin:0px;' >登录</a>"
+				+ "<td style='text-align:center;width:20px;' >|</td></td>"
+				+ "<td  onmouseover='showregedit();' onmouseout='hideregedit();' align='center' id='regeditbtn'>"
+				+ "<a style='cursor:pointer;text-decoration:none; font-size:13px; margin:0; '>注册</a></td></tr></table>"
+				+ "<script>var grloginurl='http://"
+				+ domain
+				+ ":8080/gsjis/front/per/interface.do?action=ticketLogin&appmark=gszw&domain="
+				+ domain
+				+ ":8080&gotoUrl=';"
+				+ "var grregediturl='http://"
+				+ domain
+				+ ":8080/uids-web/front/register/perregister.do';"
+				+ "var frloginurl='http://"
+				+ domain
+				+ ":8080/gsjis/front/cor/interface.do?action=ticketLogin&appmark=gszw&domain="
+				+ domain
+				+ ":8080&gotoUrl=';"
+				+ "var frregediturl='http://"
+				+ domain
+				+ ":8080/uids-web/front/register/corregister.do';"
+				+ "var grinfo='http://"
+				+ domain
+				+ ":8080/gsjis/front/modifyperinfo_show.do';"
+				+ "var frinfo='http://"
+				+ domain
+				+ ":8080/gsjis/front/modifycorinfo_show.do';</script>﻿"
+				+ "<style>.login_li{color:#000;}  .selected{  background:#999999;  color:#FFF;  }    </style>"
+				+ "<script>  function showuserinfo(){   $('#userinfomenu').show();  }    "
+				+ "function hideuserinfo(){   $('#userinfomenu').hide();  }    "
+				+ "function showlogin(){   $('#loginmenu').show();    }    "
+				+ "function hidelogin(){   $('#loginmenu').hide();  }    "
+				+ "function showregedit(){   $('#regeditmenu').show();  }    "
+				+ "function hideregedit(){   $('#regeditmenu').hide();  }  "
+				+ "var domain='"
+				+ domain
+				+ ":8080'; "
+				+ "function showgrzx(){"
+				+ "window.open('http://'+domain+'/gszw/member/main/index.do?webid='+webid+'&domain='+encodeURIComponent(encodeURIComponent(domain)));  }"
+				+ "function showzhsz(){   if(type=='gr' || type=='个人'||type=='1'){   window.open(grinfo);}"
+				+ "else if(type=='fr'||type=='法人'||type=='2'){window.open(frinfo);}}"
+				+ "function exit(){var src=window.location.href;src=encodeURIComponent(src);"
+				+ "var rand=Math.random();   if(type=='gr' || type=='个人'||type=='1'){"
+				+ "location.href='http://'+domain+'/gszw/member/login/logout.do?domain='+encodeURIComponent(encodeURIComponent(domain));}"
+				+ "else if(type=='fr'||type=='法人'||type=='2'){location.href='http://'+domain+'/gszw/member/login/logout.do?domain='+encodeURIComponent(encodeURIComponent(domain));}}"
+				+ "function showgrlogin(){var src=window.location.href;src=encodeURIComponent(src);"
+				+ "grloginurl=encodeURIComponent(grloginurl);   "
+				+ "location.href='http://'+domain+'/gszw/member/login/login.do?url='+grloginurl+'&src='+src+'&domain='+encodeURIComponent(encodeURIComponent(domain));}"
+				+ " function showfrlogin(){var src=window.location.href;src=encodeURIComponent(src);   "
+				+ "frloginurl=encodeURIComponent(frloginurl);   "
+				+ "location.href='http://'+domain+'/gszw/member/login/login.do?url1='+frloginurl+'&src='+src+'&domain='+encodeURIComponent(encodeURIComponent(domain));  }"
+				+ "function showgrregedit(){"
+				+ "window.open(grregediturl);  }function showfrregedit(){window.open(frregediturl);}"
+				+ "$(function(){var $div_li =$('div.userinfomenu ul li');"
+				+ "$div_li.mouseover(function(){$(this).addClass('selected').siblings().removeClass('selected');});"
+				+ "$div_li.mouseout(function(){$(this).removeClass('selected');});var $login_li =$('div.loginmenu ul li');"
+				+ "$login_li.mouseover(function(){$(this).addClass('selected').siblings().removeClass('selected');});    "
+				+ "$login_li.mouseout(function(){$(this).removeClass('selected');});"
+				+ "var $regedit_li =$('div.regeditmenu ul li'); $regedit_li.mouseover(function(){$(this).addClass('selected').siblings().removeClass('selected'); }); "
+				+ "$regedit_li.mouseout(function(){$(this).removeClass('selected');});"
+				+ "$('#userinfomenu').mouseover(function(){$('#userinfomenu').show();});"
+				+ " $('#userinfomenu').bind('mouseleave',function(){$('#userinfomenu').hide();});"
+				+ "$('#loginmenu').mouseover(function(){$('#loginmenu').show();});"
+				+ "$('#loginmenu').bind('mouseleave',function(){$('#loginmenu').hide();}); "
+				+ "$('#regeditmenu').mouseover(function(){ $('#regeditmenu').show(); });"
+				+ "$('#regeditmenu').bind('mouseleave',function(){$('#regeditmenu').hide();});});</script>"
+				+ "<div id='userinfomenu' class='userinfomenu' style='position: absolute;z-index:999;right:-15px;;top:25px;display:none;background:url(http://www.gszwfw.gov.cn/gszw/resources/bscx/member/images/loginmenubg2.png) no-repeat;width:80px;height:65px;text-align:center;'>"
+				+ "<ul style='list-style:none;height:53px;width:100%;padding:0px;margin:0px;margin-top:8px;text-align:center;'>"
+				+ "<li class='login_li' style='width:98%;height:27px;line-height:27px;text-align:center;v-align:middle;cursor: pointer;margin:0 auto;' onclick='showzhsz();'>账户设置</li> "
+				+ " <li class='login_li' style='width:98%;height:26px;line-height:26px;text-align:center;v-align:middle;cursor: pointer;margin:0 auto; '  onclick='exit();'>退出</li>  </ul>  "
+				+ "</div>  <div id='loginmenu' class='loginmenu' style='position: absolute;z-index:999;left:-27px;top:25px;display:none;background:url(http://www.gszwfw.gov.cn/gszw/resources/bscx/member/images/loginmenubg2.png) no-repeat;width:80px;height:65px;text-align:center;'>  "
+				+ "<ul style='list-style:none;height:100%;width:100%;padding:0px;margin:0px;margin-top:8px;text-align:center;'>  "
+				+ "<li class='login_li' style='width:98%;height:27px;line-height:27px;text-align:center;v-align:middle;cursor: pointer;margin:0 auto; '  onclick='showgrlogin();'>个人登录</li> "
+				+ " <li class='login_li' style='width:98%;height:28px;line-height:28px;text-align:center;v-align:middle;cursor: pointer;margin:0 auto; '  onclick='showfrlogin();'>法人登录</li>  </ul> </div> "
+				+ " <div id='regeditmenu' class='regeditmenu' style='position: absolute;z-index:999;left:19px;top:25px;display:none;background:url(http://www.gszwfw.gov.cn/gszw/resources/bscx/member/images/loginmenubg2.png) no-repeat;width:80px;height:65px;text-align:center;'>  "
+				+ "<ul style='list-style:none;height:100%;width:100%;padding:0px;margin:0px;margin-top:8px;text-align:center;'>  "
+				+ "<li class='login_li' style='width:98%;height:27px;line-height:27px;text-align:center;v-align:middle;cursor: pointer;margin:0 auto; '  onclick='showgrregedit();'>个人注册</li> "
+				+ " <li class='login_li' style='width:98%;height:28px;line-height:28px;text-align:center;v-align:middle;cursor: pointer;margin:0 auto; '  onclick='showfrregedit();'>法人注册</li>  </ul>  </div>\"});";
+		try {
+			response.setContentType("text/json");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().write(html);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+
+	}
 	
 	  /*@RequestMapping({"perrealnameauth"})
 	  @ResponseBody
