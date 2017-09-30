@@ -71,8 +71,8 @@
 		if(null != userAcctId && "" != userAcctId){
 			var api = $.dialog({
 				title : '个人用户-用户认证',
-				width : 500,
-				height: 350,
+				width : 470,
+				height: 358,
 				max : false,
 				min : false,
 				lock : true,

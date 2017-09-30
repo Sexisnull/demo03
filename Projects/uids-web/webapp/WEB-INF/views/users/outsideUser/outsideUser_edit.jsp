@@ -283,6 +283,7 @@ color: rgb(119, 119, 119);
 				<td class="td_2" rowspan="7" tyle="max-width:0px;width:100px;ont-weight:bold;" align="center"">详细属性</td>
 				<th><b class="mustbe">*</b>性别：</th>
 				<td style="width:300px;">
+					<%-- <gsww:checkboxTag name="type" defaultValue="1" type="ZFYHXB" inputType="radio" value="${outsideUser.sex}"></gsww:checkboxTag> --%>
 					<input type="radio" name="sex" value = '男' <c:if test="${outsideUser.sex == '男'}">checked="checked" </c:if>>男&nbsp&nbsp&nbsp
     				<input type="radio" name="sex" value = '女' <c:if test="${outsideUser.sex == '女'}">checked="checked" </c:if>>女
 				</td>

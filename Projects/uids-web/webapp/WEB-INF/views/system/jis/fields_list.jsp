@@ -42,8 +42,8 @@
     function openwindow(){
 		var api = $.dialog({
 			title : '设置-修改信息必填',
-			width : 700,
-			height: 350,
+			width : 470,
+			height: 290,
 			max : false,
 			min : false,
 			lock : true,
