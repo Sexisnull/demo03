@@ -107,16 +107,15 @@ public class JisFieldsServiceImpl implements JisFieldsService {
 			}
 			whereFieldsName = whereFieldsName.substring(0,whereFieldsName.length()-1);
 			if(userId==null){
-				querySql="select fieldname from jis_fields  where type = '1'";
+				querySql = "select type,fieldname from jis_fields where type='1'";
+				
+				//querySql = "select type,"+ queryFieldsName +" from jis_fields a ,jis_userdetail b where type='1'";
 				listMap= jdbcTemplate.queryForList(querySql);
-				/*querySql = "select distinct a.fieldname,"+queryFieldsName +" from jis_fields a,jis_userdetail b where "+
-				"type = '1' and a.fieldname in("+whereFieldsName+")";*/
 				System.out.println("新增扩展属性input============"+listMap);
 				
 			}else{
 				querySql = "select distinct b.userid,type,"+ queryFieldsName +" from jis_fields a ,jis_userdetail b where b.userid = '"+userId+"' " +
 				" and type = '1' and a.fieldname in("+whereFieldsName+")";
-				
 			}			
 		}else if(type == 2){
 			querySql = "select a.fieldkeys,a.fieldvalues,type,a.fieldname from jis_fields a where type = '2'";
@@ -151,13 +150,7 @@ public class JisFieldsServiceImpl implements JisFieldsService {
 		}
 		if(StringHelper.isNotBlack(names)){
 			names = names.substring(0, names.length()-1);
-			String querySql="";
-			if(userId==null){
-				querySql = "select distinct "+names+" from jis_fields a ,jis_userdetail b where  a.type='2'";
-			}else{
-				querySql = "select distinct "+names+" from jis_fields a ,jis_userdetail b where  a.type='2' and b.userid ="+userId;
-			}
-			
+			String querySql= "select distinct "+names+" from jis_fields a ,jis_userdetail b where  a.type='2' and b.userid ="+userId;
 			fieldsMap = jdbcTemplate.queryForMap(querySql);
 		}
 		return fieldsMap;

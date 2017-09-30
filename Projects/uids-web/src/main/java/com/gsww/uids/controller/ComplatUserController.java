@@ -50,6 +50,7 @@ import com.gsww.jup.util.PageUtils;
 import com.gsww.jup.util.StringHelper;
 import com.gsww.jup.util.TimeHelper;
 import com.gsww.uids.entity.ComplatGroup;
+import com.gsww.uids.entity.ComplatOutsideuser;
 import com.gsww.uids.entity.ComplatRole;
 import com.gsww.uids.entity.ComplatRolerelation;
 import com.gsww.uids.entity.ComplatUser;
@@ -278,11 +279,12 @@ public class ComplatUserController extends BaseController {
 					pwd=complatUser.getPwd();
 					if(level=="strong"||level.equals("strong")){
 						
-						complatUser.setOpersign(1);						
+						complatUser.setOpersign(1);//1:新增2:修改3:删除	
+						complatUser.setSynState(0);
 						complatUser.setEnable(0); // 是否禁用
 						Date d = new Date();
 						complatUser.setCreatetime(d);// 创建时间
-						
+						complatUser.setAccesstime(d);//访问时间
 						//对密码进行加密										
 						String p = Md5Util.md5encode(pwd);
 						complatUser.setPwd(p);
@@ -300,7 +302,7 @@ public class ComplatUserController extends BaseController {
 						}else{
 							//扩展属性
 							Map<String,String> userMap = this.saveExendsAttr(userId, request);
-							//对身份证号和用户扩展属性update
+							//对身份证号和用户扩展属
 							jisUserdetailService.update(jisUserdetail.getIid(),cardId,userMap);
 						}
 						returnMsg("success", "保存成功", request);	
@@ -776,13 +778,16 @@ public class ComplatUserController extends BaseController {
 		model.addAttribute("fieldsListMap",json);
 		
 		//设置默认值
-		List<JisFields> fieldsTypeList= this.jisFieldsService.findByType(2);
-		Map<String,Object> fieldsMap = jisFieldsService.findByUserIdAndType(fieldsTypeList,userId);
-		JSONArray mapArray = JSONArray.fromObject(fieldsMap);
-		PrintWriter outMap = response.getWriter();
-		String jsonMap = mapArray.toString();
-		outMap.write(jsonMap);
-		model.addAttribute("jsonMap",jsonMap);
+		if(userId != null){
+			List<JisFields> fieldsTypeList= this.jisFieldsService.findByType(2);
+			Map<String,Object> fieldsMap = jisFieldsService.findByUserIdAndType(fieldsTypeList,userId);
+			JSONArray mapArray = JSONArray.fromObject(fieldsMap);
+			PrintWriter outMap = response.getWriter();
+			String jsonMap = mapArray.toString();
+			outMap.write(jsonMap);
+			model.addAttribute("jsonMap",jsonMap);
+		}
+		
 		
 	}
 	
@@ -1003,6 +1008,40 @@ public class ComplatUserController extends BaseController {
 		}
 
 	}
+	
+	
+	
+	
+	/**
+     * @discription    登录名唯一性校验
+     * @param loginName
+     * @param model
+     * @param request
+     * @param response  1：不重复     0：重复
+     * @throws Exception
+	 */
+	@RequestMapping(value="/checkComplatUserLoginName", method = RequestMethod.GET)
+	public void checkComplatUserLoginName(String loginname,Model model,HttpServletRequest request,HttpServletResponse response)throws Exception {
+		try {
+			ComplatUser complatUser = null;
+			String loginNameInput=StringUtils.trim((String)request.getParameter("loginName"));
+			String oldLoginName=StringUtils.trim((String)request.getParameter("oldLoginName"));
+			if(!loginNameInput.equals(oldLoginName)){
+				complatUser = complatUserService.findByLoginnameIsUsed(loginname);
+				if(complatUser!=null){					
+					response.getWriter().write("0");								
+				}else{
+					response.getWriter().write("1");
+				}
+			}else{
+				response.getWriter().write("1");
+			}
+			
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+	}
+	
 	
 	
 	/**
