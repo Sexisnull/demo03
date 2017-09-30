@@ -15,5 +15,7 @@ import com.gsww.uids.entity.JisRoleobject;
 public interface JisRoleobjectDao extends PagingAndSortingRepository<JisRoleobject, Integer>,JpaSpecificationExecutor<JisRoleobject> {
 	
 	public List<JisRoleobject> findByRoleidAndType(Integer roleId,Integer type);
+
+	public List<JisRoleobject> findByObjectidAndType(Integer iid, int type);
 	
 }

@@ -71,8 +71,8 @@
 		if(null != userAcctId && "" != userAcctId){
 			var api = $.dialog({
 				title : '个人用户-用户认证',
-				width : 500,
-				height: 350,
+				width : 470,
+				height: 358,
 				max : false,
 				min : false,
 				lock : true,
@@ -299,7 +299,7 @@
 	                    	<div class="alignL">
 	                    		<div class="list-longtext">
 	                    			<c:if test="${outsideUser.isAuth == '0'}">
-		                    			<input type="button" style="border: none;color: white;background: green;" value="   认   证   " onclick="openwindow(${outsideUser.iid});">
+		                    			<input type="button"  style="border: none;color: white;background: green;cursor:pointer;" value="   认   证   " onclick="openwindow(${outsideUser.iid});">
 		                    		</c:if>
 		                    		<c:if test="${outsideUser.isAuth == '1'}">
 		                    			已认证

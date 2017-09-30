@@ -373,6 +373,9 @@ function intPutComplatUser(){
 	resize : false
 	});
 	
+
+		//window.location.href="${ctx}/complat/complatList";
+
 }
  
 //关闭的单击事件
