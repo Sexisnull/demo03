@@ -169,9 +169,10 @@ public class HttpClientUtil {
     {
       StringBuffer html = new StringBuffer();
       BufferedReader reader = null;
+      InputStreamReader isr = null;
       try {
-        reader = new BufferedReader(new InputStreamReader(httpEntity
-          .getContent(), charset));
+    	isr = new InputStreamReader(httpEntity.getContent(), charset);
+        reader = new BufferedReader(isr);
 
         String inputLine = null;
         while ((inputLine = reader.readLine()) != null) {
@@ -197,6 +198,7 @@ public class HttpClientUtil {
         if (reader != null)
           try {
             reader.close();
+            isr.close();
           }
           catch (IOException localIOException1) {
           }

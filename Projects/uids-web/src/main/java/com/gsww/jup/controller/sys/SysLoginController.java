@@ -5,6 +5,7 @@
 package com.gsww.jup.controller.sys;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Date;
@@ -304,7 +305,9 @@ public class SysLoginController extends BaseController {
 			String roleIds = sysUserSession.getRoleIds();
 			response.setCharacterEncoding("UTF-8");
 			response.setHeader("Content-type", "text/html;charset=UTF-8");
-			response.getWriter().write(sysMenuService.getSysMenuJson(roleIds));
+			PrintWriter pw = response.getWriter();
+			String json = sysMenuService.getSysMenuJson(roleIds);
+			pw.write(json!=null?json:"");
 			response.flushBuffer();
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
