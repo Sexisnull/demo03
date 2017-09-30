@@ -3,8 +3,6 @@ package com.gsww.uids.gateway.rest;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -20,10 +18,6 @@ import com.gsww.uids.gateway.util.JSONUtil;
 import com.gsww.uids.gateway.util.QqUtil;
 import com.gsww.uids.gateway.util.SpringContextHolder;
 import com.gsww.uids.gateway.util.StringHelper;
-import com.gsww.uids.gateway.util.WeChatUtil;
-import com.qq.connect.api.OpenID;
-import com.qq.connect.javabeans.AccessToken;
-import com.qq.connect.oauth.Oauth;
 
 import net.sf.json.JSONArray;
 
