@@ -254,9 +254,13 @@ public class SysLoginController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/login/getSysMain")
-	public String getSysIndexMain(ServletRequest request) {
+	public String getSysIndexMain(HttpServletRequest request) {
 		try {
-
+			SysUserSession sysUserSession = (SysUserSession) request.getSession().getAttribute("sysUserSession");
+			String roleIds = sysUserSession.getRoleIds();
+			if(roleIds==null ||roleIds.trim()==""){
+				return "/main/noRightAccess";
+			}
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
 		}
