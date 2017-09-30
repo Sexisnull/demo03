@@ -322,7 +322,7 @@
 											},
 											error : function(a, b, msg) {
 												submitBtn.attr('disabled', false).removeClass('disabled').addClass('btn-primary');
-												alert('操作失败');
+												alert(msg);
 												op.error();
 											}
 										});

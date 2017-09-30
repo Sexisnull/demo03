@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.gsww.uids.entity.ComplatCorporation;
+import com.gsww.uids.util.exception.OperationException;
 
 
 /**
@@ -49,11 +50,42 @@ public interface ComplatCorporationService {
 
 	boolean updatePwd(String loginName, String md5encode);
 	
+	ComplatCorporation checkUserLogin(String userName, String password, String ip);
+
+	void updateLoginIpAndLoginTime(ComplatCorporation corporation);
+
 	/**
-     * @discription   验证loginName实体是否存在 
-     * @param loginName
-     * @return
+	 * 根据工商注册查询法人用户
+	 * @param regNum
+	 * @return
 	 */
-	public ComplatCorporation findByLoginNameIsUsed(String loginName);
+	public ComplatCorporation findByRegNum(String regNum);
 	
+	/**
+	 * 根据组织机构编码查询法人用户列表
+	 * @param inputByGuest
+	 * @return
+	 */
+	public ComplatCorporation findByOrgName(String inputByGuest);
+	
+	/**
+	 * 多个字段匹配查找用户
+	 * @param inputByGuest
+	 * @return
+	 */
+	public ComplatCorporation findByManyWay(String inputByGuest);
+
+	ComplatCorporation findByLoginNameIsUsed(String loginName);
+
+	boolean updateIsUpload(int intValue, int i);
+
+	boolean modify(ComplatCorporation corporation);
+
+	/**
+	 * 统一注册
+	 * @param corporation
+	 * @return
+	 * @throws OperationException
+	 */
+	boolean add(ComplatCorporation corporation) throws OperationException;
 }

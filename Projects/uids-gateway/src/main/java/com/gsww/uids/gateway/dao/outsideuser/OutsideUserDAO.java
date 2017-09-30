@@ -19,12 +19,30 @@ public class OutsideUserDao extends JdbcTemplateDao {
 	// 通过openId查找个人用户信息
 	private static final String findByWeChatOpenId = "select * FROM complat_outsideuser where weChatOpenId = ?  AND opersign!=3 ";
 	private static final String saveWeChatOpenId = "update complat_outsideuser set weChatOpenId=? where iid=? ";
+	private static final String findByQQOpenId = "select * FROM complat_outsideuser where QQOpenId = ?  AND opersign!=3 ";
+	private static final String saveQQOpenId = "update complat_outsideuser set QQOpenId=? where iid=? ";
 	private static final String findByLoginName = "select *FROM complat_outsideuser where loginname = ?  AND opersign<>3 ";
 	private static final String findByMobile = "select *FROM complat_outsideuser where mobile = ?  AND opersign<>3 ";
 	private static final String findByIdCard = "select *FROM complat_outsideuser where papersnumber = ?  AND opersign<>3 ";
 
 	@SuppressWarnings("unchecked")
-	public OutsideUser findByOpenId(String weChatOpenId) {
+	public OutsideUser findByQQOpenId(String QQOpenId) {
+		List<OutsideUser> list = (List<OutsideUser>) ConvertSqlToDtoList.ExeSQL2List(jdbcTemplate, findByQQOpenId,
+				new Object[] { QQOpenId }, "com.gsww.uids.gateway.entity.OutsideUser");
+		if (list.size() >= 1) {
+			return list.get(0);
+		}
+		return null;
+	}
+
+	public int saveQQOpenId(String QQOpenId, String iid) {
+		int a = 0;
+		a = jdbcTemplate.update(saveQQOpenId, new Object[] { QQOpenId, iid });
+		return a;
+	}
+
+	@SuppressWarnings("unchecked")
+	public OutsideUser findByWeChatOpenId(String weChatOpenId) {
 		List<OutsideUser> list = (List<OutsideUser>) ConvertSqlToDtoList.ExeSQL2List(jdbcTemplate, findByWeChatOpenId,
 				new Object[] { weChatOpenId }, "com.gsww.uids.gateway.entity.OutsideUser");
 		if (list.size() >= 1) {

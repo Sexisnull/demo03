@@ -423,7 +423,7 @@ $().ready(function() {
 	   encryptKey: {
 	    required: true,
 	    chrnum:true,
-	    maxlength: 19,
+	    maxlength: 19
 	   },
 	   appUrl:{
 	   required: true,
@@ -440,7 +440,7 @@ $().ready(function() {
 	   },
 	   groupname:{
 	   required: true
-	   },
+	   }
 	   /* allLoginIid:{
 	   required: true,
 	   maxlength: 50,
@@ -633,20 +633,15 @@ $(function(){
 	        	 <td>
 					<input type="text" id="encryptKey" name="encryptKey"
 						maxlength="16" value="${jisApplication.encryptKey}" />
-					<input type="button" name="button"
-						onclick="generateKey()" value="重新生成"/>
+					<input type="button" name="button" class="btnother blue"
+						   onclick="generateKey()" value="重新生成"/>
 				</td>
 				
 				<th style="text-align: center;"><b class="mustbe">&nbsp;&nbsp;</b> 应用图标：</th>
 					<td>
-					
-						<!-- <div id="uploader-demo"> -->
-						    <!--用来存放item-->
 						    <div id="fileList" class="uploader-list"></div>
 						    <div id="filePicker">选择图片</div>
-						    <input  type="button" class="btn btn-success btn-small" 
-							onclick="selectpic()" value="默认图片">
-						<!-- </div> -->
+						    <input type="button" class="btnother blue" onclick="selectpic()" value="默认图片">
 					</td>
 					<td id="showpic" colspan="2" style="text-align: left;display: none;">
 						<img id="icon2" width="100" height="100" src="${ctx}${jisApplication.icon}">
@@ -657,8 +652,8 @@ $(function(){
 				<th style="text-align:left;"><b class="mustbe">*</b> 接口地址：</th>
 				<td>
 					<input type="text" id="appUrl" name="appUrl" maxlength="100" value="${jisApplication.appUrl }" />
-					<input id="id_fastwrite" type="button" 
-						onclick="fastwrite()" value="便捷录入"/>
+					<input id="id_fastwrite" type="button" class="btnother blue"
+						   onclick="fastwrite()" value="便捷录入"/>
 					<!-- <input id="id_setsso" type="button" class="btn btn-success btn-small" 
 					onclick="setsso()" value="接口配置"/></td> -->
 				</td>
@@ -666,7 +661,7 @@ $(function(){
 				<th id="ssoUrlh" style="text-align:center;"><b class="mustbe">*</b> 登录地址：</th>
 				<td id="ssoUrld"><input type="text" id="ssoUrl" name="ssoUrl" maxlength="100"
 						value="${jisApplication.ssoUrl }" />
-					<input id="id_checknet" type="button"
+					<input id="id_checknet" type="button" class="btnother blue"
 						onclick="checknet()" value="测试网络"></td>
 			</tr>
 			<tr>

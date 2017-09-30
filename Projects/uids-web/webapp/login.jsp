@@ -23,7 +23,10 @@
 		<link type="text/css" rel="stylesheet" href="${ctx}/res/skin/login/css/tree.css" />
 		<script type="text/javascript" src="${ctx}/res/jslib/ztree/js/jquery.ztree.all-3.5.min.js"></script>
 		<script type="text/javascript" src="${ctx}/res/skin/login/js/tree.js"></script>
-
+		<script type="text/javascript" src="${ctx}/ui/lib/security/jquery.cookie.js"></script>
+		<script type="text/javascript" src="${ctx}/res/skin/default/plugin/rsa/BigInt.js"></script>
+		<script type="text/javascript" src="${ctx}/res/skin/default/plugin/rsa/Barrett.js"></script>
+		<script type="text/javascript" src="${ctx}/res/skin/default/plugin/rsa/RSA.js"></script>
 		<script type="text/javascript">
 $(function(){
 	var groupMenu = [{"name":"单位选择","id":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
@@ -304,7 +307,22 @@ function resetform() {
 		}else{
 			$("#authCode").poshytip('hide');
 		}
-		
+		 $.ajax({
+         	type : "post",
+				url : "sys/mybatis/getkey",
+				data : {},
+				dataType : "json",
+				async: false,
+				success : function(data) {
+	                  //data为获取到的公钥数据
+	                  var pubexponent =data.pubexponent;
+	                  var pubmodules =data.pubmodules;
+	                  setMaxDigits(200);  
+	                  var key = new RSAKeyPair(pubexponent, "", pubmodules);
+	                  passWord= encryptedString(key, encodeURIComponent(passWord));
+	                  userName = encryptedString(key, encodeURIComponent(userName));
+				}
+         });
 		$.ajax({
 			type : "POST",
 			url : loginURL,

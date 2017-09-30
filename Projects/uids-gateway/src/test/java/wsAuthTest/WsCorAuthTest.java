@@ -11,6 +11,7 @@ import com.gsww.uids.gateway.ws.WsCorAuth;
 
 /**
  * WsCorAuth-Test(法人用户)
+ * 
  * @author zcc
  *
  */
@@ -71,8 +72,8 @@ public class WsCorAuthTest {
 			String appmark = "gszw";
 			String time = "2015101616354";
 			String sign = "e28MG3NoBwsFEgNgAxp2YnRrdXQANXk1BUZ3RwZFczd4NXc3B0NzPgVEDTlyMg==";
-			String loginname = "hanweb";
-			String password = "BRpyEQMcCgcFFHJm";
+			String loginname = "test";
+			String password = "123123";
 			String userValidate = wsCorAuth.userValidate(appmark, time, sign, loginname, password);
 			System.out.println("法人用户-2.4.4	用户认证:" + userValidate);
 		} catch (Exception e) {

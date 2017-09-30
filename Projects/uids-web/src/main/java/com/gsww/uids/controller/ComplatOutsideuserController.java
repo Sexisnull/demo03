@@ -1,7 +1,6 @@
 package com.gsww.uids.controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,6 +42,7 @@ import com.gsww.jup.util.StringHelper;
 import com.gsww.uids.entity.ComplatOutsideuser;
 import com.gsww.uids.service.ComplatOutsideuserService;
 import com.gsww.uids.service.JisLogService;
+import com.hanweb.common.util.Md5Util;
 
 import net.sf.json.JSONObject;
 
@@ -121,6 +121,9 @@ public class ComplatOutsideuserController extends BaseController {
 				outsideUser = outsideUserService.findByKey(Integer.parseInt(outsideuserId));
 				Date createTime = outsideUser.getCreateTime();
 				String time = sdf.format(createTime);
+				String pwdString = outsideUser.getPwd();
+				String pwd = Md5Util.md5decode(pwdString);//解密
+				outsideUser.setPwd(pwd);
 				model.addAttribute("time", time);
 			} else {
 				outsideUser = new ComplatOutsideuser();
@@ -155,6 +158,9 @@ public class ComplatOutsideuserController extends BaseController {
 					outsideUser.setIsAuth(0); // 是否审核
 					outsideUser.setCreateTime(d);//创建时间
 					outsideUser.setOperSign(1);//更新操作状态
+					String pwdString = outsideUser.getPwd();
+					String pwd = Md5Util.md5encode(pwdString);//加密
+					outsideUser.setPwd(pwd);
 					outsideUserService.save(outsideUser);
 					returnMsg("success", "保存成功", request);
 					String desc = sysUserSession.getUserName() + "新增个人用户:" + outsideUser.getName(); 
@@ -165,6 +171,9 @@ public class ComplatOutsideuserController extends BaseController {
 					Date createTime = sdf.parse(time);
 					outsideUser.setCreateTime(createTime);//转换保存创建时间
 					outsideUser.setOperSign(2);//更新操作状态
+					String pwdString = outsideUser.getPwd();
+					String pwd = Md5Util.md5encode(pwdString);
+					outsideUser.setPwd(pwd);
 					outsideUserService.save(outsideUser);
 					returnMsg("success", "编辑成功", request);
 					String desc = sysUserSession.getUserName() + "修改个人用户:" + outsideUser.getName(); 
@@ -390,20 +399,20 @@ public class ComplatOutsideuserController extends BaseController {
      * @param request
      * @param response
 	 */
-	@RequestMapping(value = { "/getOutsideuserInfo" }, method = {RequestMethod.POST })
-	public void getOutsideuserInfo(HttpServletRequest request, HttpServletResponse response) {
+	@SuppressWarnings("finally")
+	@RequestMapping(value = { "/getOutsideuserInfo" }, method = {RequestMethod.GET })
+	public String getOutsideuserInfo(Model model, HttpServletRequest request, HttpServletResponse response) {
 		try {
 			String pidStr = request.getParameter("iid");
 			Integer pid = Integer.valueOf(Integer.parseInt(pidStr));
 			ComplatOutsideuser complatOutsideuser = outsideUserService.findByKey(pid);
 			if (complatOutsideuser != null) {
-				net.sf.json.JSONObject object = net.sf.json.JSONObject.fromObject(complatOutsideuser);
-				PrintWriter out = response.getWriter();
-				String json = object.toString();
-				out.write(json);
+				model.addAttribute("complatOutsideuser", complatOutsideuser);
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
+		} finally {
+			return "users/outsideUser/outsideUser_auth";
 		}
 	}
 	
@@ -436,6 +445,67 @@ public class ComplatOutsideuserController extends BaseController {
 			logger.error(e.getMessage(), e);
 		}
 	}
+	
+	/**
+     * @discription    手机号重名校验
+     * @param mobile
+     * @param model
+     * @param request
+     * @param response
+     * @throws Exception
+	 */
+	@RequestMapping(value="/checkOutisideUserMobile", method = RequestMethod.GET)
+	public void checkOutisideUserMobile(String mobile,Model model,HttpServletRequest request,HttpServletResponse response)throws Exception {
+		try {
+			ComplatOutsideuser complatOutsideuser = null;
+			String mobileInput=StringUtils.trim((String)request.getParameter("mobile"));
+			String oldMobile=StringUtils.trim((String)request.getParameter("oldMobile"));
+			if(!mobileInput.equals(oldMobile)){
+				complatOutsideuser = outsideUserService.findByMobile(mobile);
+				if(complatOutsideuser!=null){					
+					response.getWriter().write("0");								
+				}else{
+					response.getWriter().write("1");
+				}
+			}else{
+				response.getWriter().write("1");
+			}
+			
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+	}
+	
+	/**
+     * @discription    身份证重复校验
+     * @param papersNumber
+     * @param model
+     * @param request
+     * @param response
+     * @throws Exception
+	 */
+	@RequestMapping(value="/checkOutisideUserPapersNumber", method = RequestMethod.GET)
+	public void checkOutisideUserPapersNumber(String papersNumber,Model model,HttpServletRequest request,HttpServletResponse response)throws Exception {
+		try {
+			ComplatOutsideuser complatOutsideuser = null;
+			String papersNumberInput=StringUtils.trim((String)request.getParameter("papersNumber"));
+			String oldPapersNumber=StringUtils.trim((String)request.getParameter("oldPapersNumber"));
+			if(!papersNumberInput.equals(oldPapersNumber)){
+				complatOutsideuser = outsideUserService.findByIdCard(papersNumber);
+				if(complatOutsideuser!=null){					
+					response.getWriter().write("0");								
+				}else{
+					response.getWriter().write("1");
+				}
+			}else{
+				response.getWriter().write("1");
+			}
+			
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+	}
+	
 	/**
      * @discription    认证调用接口实现
      * @param verifyMode 认证模式

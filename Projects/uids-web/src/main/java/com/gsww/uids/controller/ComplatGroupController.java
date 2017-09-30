@@ -114,6 +114,9 @@ public class ComplatGroupController extends BaseController{
 			for (Map<String, Object> para : areatypeList) {
 				areatypeMap.put(Integer.parseInt((String) para.get("PARA_CODE")), para.get("PARA_NAME"));
 			}
+			//回显下拉菜单上级机构查询
+			String groupName=request.getParameter("groupname");
+			model.addAttribute("groupName", groupName);
 			model.addAttribute("pageInfo", pageInfo);
 			model.addAttribute("nodetypeMap", nodetypeMap);
 			model.addAttribute("areatypeMap", areatypeMap);
@@ -335,11 +338,11 @@ public class ComplatGroupController extends BaseController{
 	    String strRow = "";
 		try {
 			for (ComplatGroup complatGroup : group) {
-				if (StringHelper.isNotBlack(complatGroup.getName())) {
-					if ((StringHelper.isNotBlack(complatGroup.getParentName()))&& (complatGroup.getParentCode().isEmpty())) {
-						flag = false;
-						strRow = strRow + "<" + row + ">";
-					} else {
+				if (StringHelper.isNotBlack(complatGroup.getName()) && StringHelper.isNotBlack(complatGroup.getParentCode())) {
+//					if ((StringHelper.isNotBlack(complatGroup.getParentName()))&& (complatGroup.getParentCode().isEmpty())) {
+//						flag = false;
+//						strRow = strRow + "<" + row + ">";
+//					} else {
 						if (complatGroup.getStrNodeType().equals("区域")) {
 							complatGroup.setNodetype(Integer.valueOf(1));
 						} else if (complatGroup.getStrNodeType().equals("单位")) {
@@ -370,15 +373,17 @@ public class ComplatGroupController extends BaseController{
 						complatGroup.setSynState(Integer.valueOf(2));
 						String parentCode = complatGroup.getParentCode();
 						String name = complatGroup.getName();
-						if (StringHelper.isNotBlack(parentCode)) {
-							Integer pId = this.complatGroupService.findByCodeid(parentCode).getIid();
+//						if (StringHelper.isNotBlack(parentCode)) {
+							Integer pId = complatGroupService.findByCodeid(parentCode).getIid();
+							//进行重名校验
 							if (complatGroupService.queryNameIsUsed(name, pId)) {
 								flag = false;
-								strRow = strRow + "<" + row + ">";
+								strRow = "第<" + row + ">行数据，机构名重复！";
+								break;
 							} else {
-								String codeId = this.complatGroupService.findByIid(pId).getCodeid() + "001";
+								String codeId = complatGroupService.findByIid(pId).getCodeid() + "001";
 								while (codeId.compareTo(codeId + "001") < 0) {
-									if (this.complatGroupService.findByCodeid(codeId) == null) {
+									if (complatGroupService.findByCodeid(codeId) == null) {
 										break;
 									}
 									int num = Integer.valueOf(codeId.substring(codeId.length()-4,codeId.length())).intValue() + 1;
@@ -388,32 +393,33 @@ public class ComplatGroupController extends BaseController{
 								complatGroup.setPid(pId);
 								complatGroup = complatGroupService.save(complatGroup);
 							}
-						} else {
-							String codeId = "001";
-							boolean isExist = false;
-							do {
-								int num = Integer.valueOf("1" + codeId).intValue() + 1;
-								codeId = String.valueOf(num).substring(1, 4);
-							} while ((codeId.compareTo(codeId + "001") < 0) && ((this.complatGroupService.findByCodeid(codeId) == null) || (this.complatGroupService.findByCodeid(codeId).getName().equals(name))));
-							if (isExist) {
-								flag = false;
-								strRow = strRow + "<" + row + ">";
-							} else {
-								complatGroup.setCodeid(codeId);
-								complatGroup = complatGroupService.save(complatGroup);
-							}
-						}
-					}
+//						} else {
+//							String codeId = "001";
+//							boolean isExist = false;
+//							do {
+//								int num = Integer.valueOf("1" + codeId).intValue() + 1;
+//								codeId = String.valueOf(num).substring(1, 4);
+//							} while ((codeId.compareTo(codeId + "001") < 0) && ((complatGroupService.findByCodeid(codeId) == null) || (complatGroupService.findByCodeid(codeId).getName().equals(name))));
+//							if (isExist) {
+//								flag = false;
+//								strRow = strRow + "<" + row + ">";
+//							} else {
+//								complatGroup.setCodeid(codeId);
+//								complatGroup = complatGroupService.save(complatGroup);
+//							}
+//						}
+//					}
 				} else {
 					flag = false;
-					strRow = strRow + "<" + row + ">";
+					strRow ="第<" + row + ">行数据，机构名或上级机构编码不能为空！";
+					break;
 				}
 				row++;
 			}
 			if(flag){
 				returnMsg("success","导入成功",request);
 			}else{
-				returnMsg("error", "导入失败,第" + strRow + "数据不符合规范！",request);
+				returnMsg("error", "导入失败," + strRow ,request);
 			}
 		} catch (Exception e) {
 		e.printStackTrace();

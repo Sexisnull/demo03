@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
+import com.gsww.uids.entity.ComplatOutsideuser;
 import com.gsww.uids.entity.ComplatUser;
 
 /**
@@ -28,14 +29,13 @@ public interface ComplatUserDao extends PagingAndSortingRepository<ComplatUser, 
 	ComplatUser findByIid(Integer iid);
 
 	/**
-	 * 根据登录名称和密码获取用户实体
+	 * 根据登录名称获取用户实体
 	 * @param userName
 	 * @param password
 	 * @author 张磊
 	 * @return
 	 */
-	public List<ComplatUser> findByLoginnameAndPwdAndGroupid(String userName,
-			String password,Integer groupId);
+	public List<ComplatUser> findByLoginnameAndGroupid(String userName,Integer groupId);
 	
 	
 	
@@ -64,7 +64,7 @@ public interface ComplatUserDao extends PagingAndSortingRepository<ComplatUser, 
 	
 	
 
-
+	ComplatUser findByLoginname(String loginname);
 	
 }
 

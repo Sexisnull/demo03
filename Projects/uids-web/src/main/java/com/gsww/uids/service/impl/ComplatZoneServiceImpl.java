@@ -86,4 +86,9 @@ public class ComplatZoneServiceImpl implements ComplatZoneService {
 	public List<ComplatZone> checkUniqueDeptName(String nameInput, String codeId) {
 		return complatZoneDao.findByNameAndLikeCodeId(nameInput, codeId);
 	}
+	
+	@Override
+	public List<ComplatZone> findChildByIid(int int1) {
+		return complatZoneDao.findChildByPid(int1);
+	}
 }

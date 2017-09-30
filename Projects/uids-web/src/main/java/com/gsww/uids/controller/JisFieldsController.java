@@ -27,6 +27,7 @@ import com.gsww.jup.controller.BaseController;
 import com.gsww.jup.entity.sys.SysUserSession;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.jup.util.StringHelper;
+import com.gsww.uids.entity.ComplatOutsideuser;
 import com.gsww.uids.entity.JisFields;
 import com.gsww.uids.service.JisFieldsService;
 import com.gsww.uids.service.JisLogService;
@@ -87,10 +88,6 @@ public class JisFieldsController extends BaseController {
 			Page<JisFields> pageInfo = jisFieldsService.getJisFieldsPage(spec, pageRequest);
 			model.addAttribute("pageInfo", pageInfo);
 			
-			//设置项
-			List<JisFields> jisFieldsList = jisFieldsService.findAllJisFields();
-			model.addAttribute("jisFieldsList", jisFieldsList);
-			
 			// 将搜索条件编码成字符串，用于排序，分页的URL
 			model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
 			model.addAttribute("sParams", searchParams);
@@ -98,7 +95,6 @@ public class JisFieldsController extends BaseController {
 		} catch (Exception ex) {
 			logger.error("列表打开失败：" + ex.getMessage());
 			returnMsg("error", "列表打开失败", (HttpServletRequest) request);
-			//return "redirect:/jis/fieldsList";
 		}
 		return "system/jis/fields_list";
 	}
@@ -286,6 +282,27 @@ public class JisFieldsController extends BaseController {
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
+		}
+	}
+	
+	/**
+     * @discription    用户扩展属性设置弹框
+     * @param model
+     * @param request
+     * @param response
+     * @return
+	 */
+	@SuppressWarnings("finally")
+	@RequestMapping(value = { "/goFieldsSetting" }, method = {RequestMethod.GET })
+	public String goFieldsSetting(Model model, HttpServletRequest request, HttpServletResponse response) {
+		try {
+			// 设置项
+			List<JisFields> jisFieldsList = jisFieldsService.findAllJisFields();
+			model.addAttribute("jisFieldsList", jisFieldsList);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		} finally {
+			return "system/jis/fields_setting";
 		}
 	}
 }
