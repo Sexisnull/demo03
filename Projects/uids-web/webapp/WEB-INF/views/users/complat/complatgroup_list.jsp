@@ -339,7 +339,7 @@ function exportGroup() {
 			<label for="fileupload">
 			<input type="file" id="excelFile" class="required" name="excelFile">
 			</label>
-			<a class="download" href="${ctx}/uploadFile/complat/机构列表.xlsx">下载参考样例</a>
+			<a class="download" href="${ctx}/uploadFile/complat/groupList.xlsx">下载参考样例</a>
 		</div>
 		<div class="btnarea">
 			<span class="confirm-btn" onclick="fileUpload()">确认</span>
@@ -417,7 +417,7 @@ function exportGroup() {
 					<th style="padding-left: 5px"></th>
 					<td class="btn-group" style="text-align:right;">
 				
-					    <a class="btnSearch" id="advanced-search-btn">搜索</a>
+					    <a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a>
 					</td>
 				</tr>
 			</table>

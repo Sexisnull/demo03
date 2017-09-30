@@ -438,7 +438,10 @@ $().ready(function() {
 	   netType:{
 	   required: true
 	   },
-	   allLoginIid:{
+	   groupname:{
+	   required: true
+	   },
+	   /* allLoginIid:{
 	   required: true,
 	   maxlength: 50,
 	   userName:true
@@ -452,7 +455,7 @@ $().ready(function() {
 	   required: true, 
 	   maxlength: 255,
 	   url:true
-	   },
+	   }, */
 	  },submitHandler:function(form){
             var callingType=$("#callingType").val(); 
             var isVerification=$("#isVerification").val();
@@ -521,7 +524,7 @@ $(function(){
 	<div class="position">
 		<ol class="breadcrumb">
 			<li>
-				<a href="${ctx}/index" target="_top">首页</a>
+				<a href="${ctx}/backIndex" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
 			<li>
@@ -565,10 +568,10 @@ $(function(){
 			<tr>
 				<th style="text-align:left;"><b class="mustbe">&nbsp;&nbsp;</b> 所属机构：</th>
 				<td>
-					<input id="groupname" value="${groupName}" name="groupname" type="text" style="cursor: pointer;"/> 
+					<input id="groupname" value="${groupMap[jisApplication.groupId]}" name="groupname" type="text" style="cursor: pointer;"/> 
 				</td>
 				<th style="text-align:center;"><b class="mustbe">&nbsp;&nbsp;</b> 同步用户：</th>
-                <td>
+                <td>   
                 	<select name="synctype" id="synctype" data-value="${jisApplication.loginType}${jisApplication.isSyncGroup}" 
 						onchange="setLoginType();">  
 						<option value="">--请选择--</option>   

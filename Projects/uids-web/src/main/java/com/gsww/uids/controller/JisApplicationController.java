@@ -1,6 +1,7 @@
 package com.gsww.uids.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +28,11 @@ import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
 import com.gsww.jup.util.PageUtils;
+import com.gsww.jup.util.StringHelper;
+import com.gsww.jup.util.TimeHelper;
+import com.gsww.uids.entity.ComplatGroup;
 import com.gsww.uids.entity.JisApplication;
+import com.gsww.uids.entity.JisSysview;
 import com.gsww.uids.service.ComplatGroupService;
 import com.gsww.uids.service.JisApplicationService;
 import com.gsww.uids.util.HttpClientUtil;
@@ -114,7 +119,22 @@ public class JisApplicationController extends BaseController{
 	public String applicationEdit(Integer iid,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		try {
 			JisApplication jisApplication = null;
+			
 			if(iid!=null){
+				
+				List<Map<String, Object>> groupList = new ArrayList<Map<String, Object>>();
+				Map<Integer, Object> groupMap = new HashMap<Integer, Object>();
+				groupList = complatGroupService.getComplatGroupList();
+				for (Map<String, Object> group : groupList) {
+					groupMap.put((Integer) group.get("iid"), group.get("name"));
+				}
+				//分页
+				model.addAttribute("groupMap", groupMap);
+				
+				// 将搜索条件编码成字符串，用于排序，分页的URL
+				String groupName=request.getParameter("groupname");
+				model.addAttribute("groupName", groupName);
+				
 				String orderField="";
 				String orderSort="";
 				if(StringUtils.isNotBlank(request.getParameter("orderField"))){
@@ -165,10 +185,10 @@ public class JisApplicationController extends BaseController{
 		
 		try {
 			if(jisApplication != null){
+				
 				String picName=request.getParameter("picName");
 				String groupid=request.getParameter("groupid");
 				Integer groupId=Integer.parseInt(groupid);
-				System.out.println(groupId+"lllllllllllllllllll");
 				jisApplication.setGroupId(groupId);
 				String uploadFile="/uploads/"+picName;
 				jisApplication.setIcon(uploadFile);
@@ -278,6 +298,37 @@ public class JisApplicationController extends BaseController{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	
+	@RequestMapping(value = "/syngroup", method = RequestMethod.GET)
+	public ModelAndView syngroup(Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {		
+		try {
+			ComplatGroup complatGroup=null;
+			String groupid2=request.getParameter("groupid2");
+			if(StringHelper.isNotBlack(groupid2)){
+				Integer groupId=Integer.parseInt(groupid2);
+				complatGroup=complatGroupService.findByIid(groupId);
+				
+				String syniid=request.getParameter("syniid");
+				Integer appId=Integer.parseInt(syniid);
+				JisSysview jisSysview=new JisSysview();
+				jisSysview.setObjectid(groupid2);
+				jisSysview.setObjectname(complatGroup.getName());
+				jisSysview.setState("C");
+				jisSysview.setResult("TG");
+				jisSysview.setOptresult(1);
+				jisSysview.setSynctime(TimeHelper.getCurrentTime());
+				jisSysview.setAppid(appId);
+				jisSysview.setCodeid(complatGroup.getCodeid());
+			}else{
+				complatGroup =new ComplatGroup();
+			}
+					
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ModelAndView("redirect:/application/applicationList");
 	}
 	
 	

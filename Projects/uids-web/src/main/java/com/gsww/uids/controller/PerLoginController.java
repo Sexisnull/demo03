@@ -459,73 +459,73 @@ public class PerLoginController{
     return jsonResult;
   }
 
-  @RequestMapping(value="/sendCellphoneShortMessageUserPwdRecover")
-  @ResponseBody
-  public String sendCellphoneShortMessageUserPwdRecover(HttpSession session)
-  {
-    Map<String,String> map1 = new HashMap<String,String>();
-    Object mobileSend = session.getAttribute("mobilesend");
-    if (mobileSend == null) {
-      map1.put("msg", "参数为空");
-      map1.put("success", "false");
-      map1.put("code", "0");
-      return JsonUtil.objectToString(map1);
-    }
-
-    Object currentTimes = session.getAttribute("mobiletimes");
-    if (currentTimes != null) {
-      int times = NumberUtil.getInt(currentTimes);
-      if (times > 5) {
-        map1.put("message", "超过最大短信发送次数");
-        map1.put("success", "false");
-        map1.put("code", "0");
-        return JsonUtil.objectToString(map1);
-      }
-    }
-
-    String typeEntity = (String)session.getAttribute("typeEntity");
-    ComplatOutsideuser outsideUser = null;
-    ComplatCorporation corporation = null;
-    String phoneNumber;
-    if ("per".equals(typeEntity)) {
-      outsideUser = (ComplatOutsideuser)session.getAttribute("outsideUser");
-      phoneNumber = outsideUser.getMobile();
-    }
-    else {
-      corporation = (ComplatCorporation)session.getAttribute("corporation");
-      phoneNumber = corporation.getMobile();
-    }
-
-    if ((outsideUser == null) && (corporation == null)) {
-      Map<String,String> mapInfo = new HashMap<String,String>();
-      mapInfo.put("success", "false");
-      mapInfo.put("code", "0");
-      mapInfo.put("msg", "无此用户");
-      return JsonUtil.objectToString(mapInfo);
-    }
-    String cellphoneShortMessageRandomCodeMadeByJava = RandomCodeUtil.getRandomNumber(6);
-    session.setAttribute("cellphoneShortMessageRandomCodeMadeByJava", cellphoneShortMessageRandomCodeMadeByJava);
-    String content = jisSettings.getRecovingPpdContent().trim()
-      .replace("cellphoneShortMessageRandomCodeMadeByJava", cellphoneShortMessageRandomCodeMadeByJava);
-    String appBusinessId = jisSettings.getBusinessIdForRecovingPpd().trim();
-    String appBusinessName = jisSettings.getBusinessNameForRecovingPpd().trim();
-
-    int loseTime = 60;
-    CellphoneShortMessageUtil cellMesUtil = new CellphoneShortMessageUtil();
-    String resultJson = cellMesUtil.sendPhoneShortMessage(phoneNumber, content, appBusinessId, appBusinessName, loseTime);
-    Map map = (Map)JsonUtil.StringToObject(resultJson, Map.class);
-    if ("true".equals(map.get("success")))
-    {
-      if (currentTimes == null) {
-        session.setAttribute("mobiletimes", Integer.valueOf(1));
-      } else {
-        int times = NumberUtil.getInt(currentTimes);
-        session.setAttribute("mobiletimes", Integer.valueOf(times + 1));
-      }
-    }
-
-    return resultJson;
-  }
+//  @RequestMapping(value="/sendCellphoneShortMessageUserPwdRecover")
+//  @ResponseBody
+//  public String sendCellphoneShortMessageUserPwdRecover(HttpSession session)
+//  {
+//    Map<String,String> map1 = new HashMap<String,String>();
+//    Object mobileSend = session.getAttribute("mobilesend");
+//    if (mobileSend == null) {
+//      map1.put("msg", "参数为空");
+//      map1.put("success", "false");
+//      map1.put("code", "0");
+//      return JsonUtil.objectToString(map1);
+//    }
+//
+//    Object currentTimes = session.getAttribute("mobiletimes");
+//    if (currentTimes != null) {
+//      int times = NumberUtil.getInt(currentTimes);
+//      if (times > 5) {
+//        map1.put("message", "超过最大短信发送次数");
+//        map1.put("success", "false");
+//        map1.put("code", "0");
+//        return JsonUtil.objectToString(map1);
+//      }
+//    }
+//
+//    String typeEntity = (String)session.getAttribute("typeEntity");
+//    ComplatOutsideuser outsideUser = null;
+//    ComplatCorporation corporation = null;
+//    String phoneNumber;
+//    if ("per".equals(typeEntity)) {
+//      outsideUser = (ComplatOutsideuser)session.getAttribute("outsideUser");
+//      phoneNumber = outsideUser.getMobile();
+//    }
+//    else {
+//      corporation = (ComplatCorporation)session.getAttribute("corporation");
+//      phoneNumber = corporation.getMobile();
+//    }
+//
+//    if ((outsideUser == null) && (corporation == null)) {
+//      Map<String,String> mapInfo = new HashMap<String,String>();
+//      mapInfo.put("success", "false");
+//      mapInfo.put("code", "0");
+//      mapInfo.put("msg", "无此用户");
+//      return JsonUtil.objectToString(mapInfo);
+//    }
+//    String cellphoneShortMessageRandomCodeMadeByJava = RandomCodeUtil.getRandomNumber(6);
+//    session.setAttribute("cellphoneShortMessageRandomCodeMadeByJava", cellphoneShortMessageRandomCodeMadeByJava);
+//    String content = jisSettings.getRecovingPpdContent().trim()
+//      .replace("cellphoneShortMessageRandomCodeMadeByJava", cellphoneShortMessageRandomCodeMadeByJava);
+//    String appBusinessId = jisSettings.getBusinessIdForRecovingPpd().trim();
+//    String appBusinessName = jisSettings.getBusinessNameForRecovingPpd().trim();
+//
+//    int loseTime = 60;
+//    CellphoneShortMessageUtil cellMesUtil = new CellphoneShortMessageUtil();
+//    String resultJson = cellMesUtil.sendPhoneShortMessage(phoneNumber, content, appBusinessId, appBusinessName, loseTime);
+//    Map map = (Map)JsonUtil.StringToObject(resultJson, Map.class);
+//    if ("true".equals(map.get("success")))
+//    {
+//      if (currentTimes == null) {
+//        session.setAttribute("mobiletimes", Integer.valueOf(1));
+//      } else {
+//        int times = NumberUtil.getInt(currentTimes);
+//        session.setAttribute("mobiletimes", Integer.valueOf(times + 1));
+//      }
+//    }
+//
+//    return resultJson;
+//  }
 
   @RequestMapping(value="/recoverPwdByPhone_submit")
   @ResponseBody
