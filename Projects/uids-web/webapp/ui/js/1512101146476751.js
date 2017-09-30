@@ -21,7 +21,7 @@ document.writeln("                                            <input id=\'p\' na
 document.writeln("               <input id=\'q\' name=\'q\' autocomplete=\'off\' type=\'text\' value=\'请输入关键字\' onfocus=\"if (value ==\'请输入关键字\'){value =\'\'}\" onblur=\"if (value ==\'\'){value=\'请输入关键字\'}\" class=\'searchinput\' />");
 document.writeln("                                        </li>");
 document.writeln("                                        <li style=\'width:40px; float:right;\'>");
-document.writeln("                                        	<input type=\'submit\' style=\'background:url(../ui/images/1512101414175613338.png) center no-repeat; height:40px; width:40px; border:none; cursor:pointer;\' value=\'\' /></form>");
+document.writeln("                                        	<input type=\'submit\' style=\'background:url(../../ui/images/1512101414175613338.png) center no-repeat; height:40px; width:40px; border:none; cursor:pointer;\' value=\'\' /></form>");
 document.writeln("                                        </li></ul>");
 document.writeln("            </td>");
 document.writeln("        </tr>");

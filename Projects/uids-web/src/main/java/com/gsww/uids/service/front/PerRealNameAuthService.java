@@ -15,10 +15,10 @@ import com.gsww.uids.constant.JisSettings;
 import com.gsww.uids.entity.ComplatOutsideuser;
 import com.gsww.uids.service.JisLogService;
 import com.gsww.uids.util.HttpClientUtil;
+import com.gsww.uids.util.JsonResult;
 import com.hanweb.common.util.JsonUtil;
 import com.hanweb.common.util.NumberUtil;
 import com.hanweb.common.util.StringUtil;
-import com.hanweb.common.util.mvc.JsonResult;
 
 @Transactional
 @Service("realNameAuthService")

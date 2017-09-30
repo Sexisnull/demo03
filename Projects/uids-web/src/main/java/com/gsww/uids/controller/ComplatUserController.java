@@ -644,6 +644,9 @@ public class ComplatUserController extends BaseController {
 				// 查询用户信息
 				ComplatUser complatUser = complatUserService.findByKey(Integer
 						.parseInt(userSid));
+				if(StringHelper.isNotBlack(complatUser.getPwd())){
+					complatUser.setPwd(Md5Util.md5decode(complatUser.getPwd()));
+				}
 				model.addAttribute("complatUser", complatUser);
 
 				// 查询用户身份证号
@@ -687,41 +690,48 @@ public class ComplatUserController extends BaseController {
 
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/userSetUpSave", method = RequestMethod.POST)
-	public void userSetUpSave(ComplatUser complatUser,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+	public void userSetUpSave(ComplatUser complatUser,String level,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		
 		Map<String, Object> resMap = new HashMap<String, Object>();
 		try {
-			Integer userId = null;
-			if(complatUser != null){
-				userId = complatUser.getIid();
-				String name = complatUser.getName();
-				String pwd = complatUser.getPwd();
-				String headShip = complatUser.getHeadship();
-				String phone = complatUser.getPhone();//固定电话
-				String mobile = complatUser.getMobile();//移动电话
-				String fax = complatUser.getFax();
-				String email = complatUser.getEmail();
-				String qq = complatUser.getQq();
-				String time = TimeHelper.getCurrentTime();
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				Date modifyTime = sdf.parse(time);
-				complatUserService.updateUser(userId,name,headShip,phone,mobile,fax,email,qq,modifyTime,pwd);
-				
-				//身份证号处理 JisUserdetail
-				String cardId = request.getParameter("cardid");
-				JisUserdetail jisUserdetail = jisUserdetailService.findByUserid(userId);
-				if(jisUserdetail.getIid() == null){
-					jisUserdetailService.save(jisUserdetail);
-				}else{
-					//扩展属性
-					Map<String,String> userMap = this.saveExendsAttr(userId, request);
-					//对身份证号和用户扩展属性update
-					jisUserdetailService.update(jisUserdetail.getIid(),cardId,userMap);
-				}
-			}			
-			resMap.put("ret", "0");
-			resMap.put("msg", "保存成功！");
-			response.getWriter().write(JSONObject.toJSONString(resMap));
+			if(level == "strong" || "strong".equals(level) ){
+				Integer userId = null;
+				if(complatUser != null){
+					userId = complatUser.getIid();
+					String name = complatUser.getName();
+					String pwd = Md5Util.md5encode(complatUser.getPwd());
+					String headShip = complatUser.getHeadship();
+					String phone = complatUser.getPhone();//固定电话
+					String mobile = complatUser.getMobile();//移动电话
+					String fax = complatUser.getFax();
+					String email = complatUser.getEmail();
+					String qq = complatUser.getQq();
+					String time = TimeHelper.getCurrentTime();
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					Date modifyTime = sdf.parse(time);
+					complatUserService.updateUser(userId,name,headShip,phone,mobile,fax,email,qq,modifyTime,pwd);
+					
+					//身份证号处理 JisUserdetail
+					String cardId = request.getParameter("cardid");
+					JisUserdetail jisUserdetail = jisUserdetailService.findByUserid(userId);
+					if(jisUserdetail.getIid() == null){
+						jisUserdetailService.save(jisUserdetail);
+					}else{
+						//扩展属性
+						Map<String,String> userMap = this.saveExendsAttr(userId, request);
+						//对身份证号和用户扩展属性update
+						jisUserdetailService.update(jisUserdetail.getIid(),cardId,userMap);
+					}
+				}			
+				resMap.put("ret", "0");
+				resMap.put("msg", "保存成功！");
+				response.getWriter().write(JSONObject.toJSONString(resMap));
+			}else{
+				resMap.put("ret", "2");
+				resMap.put("msg", "密码强度不够，修改失败！");
+				response.getWriter().write(JSONObject.toJSONString(resMap));
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			resMap.put("ret", "1");
@@ -730,6 +740,7 @@ public class ComplatUserController extends BaseController {
 		} 
 		
 	}
+
 
 	/**
 	 * 获取用户扩展属性

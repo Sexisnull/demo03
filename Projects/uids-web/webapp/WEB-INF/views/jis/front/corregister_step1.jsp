@@ -1217,8 +1217,7 @@
 		</div>
 		<div id="foot">
 			<div>
-				<script language="javascript"
-					src="http://www.gszwfw.gov.cn/script/0/1512101421288942.js"></script>
+				<script language="javascript" src="${ctx}/ui/js/1512101421288943.js"></script>
 			</div>
 		</div>
 	</div>

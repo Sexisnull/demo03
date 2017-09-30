@@ -227,4 +227,9 @@ public class ComplatCorporationServiceImpl implements ComplatCorporationService{
 		if (StringUtil.isNotEmpty(corporation.getOrgNumber()))
 			corporation.setOrgNumber(corporation.getOrgNumber().toUpperCase());
 	}
+
+	@Override
+	public void delete(ComplatCorporation corporation) {
+		complatCorporationDao.delete(corporation);
+	}
 }

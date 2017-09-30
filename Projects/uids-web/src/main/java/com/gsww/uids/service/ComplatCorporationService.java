@@ -88,4 +88,6 @@ public interface ComplatCorporationService {
 	 * @throws OperationException
 	 */
 	boolean add(ComplatCorporation corporation) throws OperationException;
+	
+	void delete(ComplatCorporation corporation);
 }

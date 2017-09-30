@@ -40,7 +40,7 @@
 <script type="text/javascript" src="${ctx}/ui/lib/security/jquery.cookie.js"></script>
 <script type="text/javascript" src="${ctx}/ui/lib/security/base64.js"></script>
 <script type="text/javascript" src="${ctx}/ui/lib/security/jsencrypt.min.js"></script>
-<script type="text/javascript" src="${ctx}/ui/lib/security/rsa_util.js"></script>
+<!--<script type="text/javascript" src="${ctx}/ui/lib/security/rsa_util.js"></script>-->
 <script type="text/javascript" src="${ctx}/ui/lib/security/security.js"></script>
 <script type="text/javascript" src="${ctx}/res/skin/default/plugin/rsa/BigInt.js"></script>
 <script type="text/javascript" src="${ctx}/res/skin/default/plugin/rsa/Barrett.js"></script>
@@ -116,8 +116,6 @@
 			scriptValidity();
 		},{			
 			beforeSubmit:function(result) {
-				//$("#enc_username").val(RSAencode($("#loginId").val()));
-				//$("#enc_password").val(RSAencode($("#password").val()));
                 enpwd();
 			},
 			success:function(result){
@@ -171,7 +169,7 @@
     function register(){		
 		$.ajax({
 			type:"post",
-			url:"doperregister", 			
+			url:"doperregister.do", 			
 			//data: $("registerform").serialize(), 编译不报错
 			//data:	randCode=$('#randCode')& $("registerform").serialize(), 编译不报错的。但带过去是空。			
 			success:function(result){  			
@@ -401,6 +399,7 @@
 			}
     	});
     }
+    
     /**获取短信验证码按钮*/
     function waitToGetCellphoneCode(){	//20160411李德隆写此方法。
 		
@@ -1004,7 +1003,7 @@
   </div>
 <div id="foot">
     <div> 
-      <script language="javascript" src="${ctx}/ui/js/1512101421288942.js"></script>
+      <script language="javascript" src="${ctx}/ui/js/1512101421288943.js"></script>
     </div>
   </div>
   </div>

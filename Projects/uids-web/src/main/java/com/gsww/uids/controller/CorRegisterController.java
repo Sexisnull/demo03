@@ -41,7 +41,7 @@ public class CorRegisterController
   @Autowired
   private ComplatCorporationService corporationService;
 
-  @RequestMapping({"corregister"})
+  @RequestMapping({"corregister.do"})
   public ModelAndView corRegister_Step1(HttpServletRequest request, HttpServletResponse response, HttpSession session, String aa, String bb,Model model)
   {
     ModelAndView modelAndView = new ModelAndView("jis/front/corregister_step1");
