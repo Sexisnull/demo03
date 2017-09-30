@@ -299,7 +299,7 @@
 	                    	<div class="alignL">
 	                    		<div class="list-longtext">
 	                    			<c:if test="${outsideUser.isAuth == '0'}">
-		                    			<input type="button" style="border: none;color: white;background: green;" value="   认   证   " onclick="openwindow(${outsideUser.iid});">
+		                    			<input type="button"  style="border: none;color: white;background: green;cursor:pointer;" value="   认   证   " onclick="openwindow(${outsideUser.iid});">
 		                    		</c:if>
 		                    		<c:if test="${outsideUser.isAuth == '1'}">
 		                    			已认证

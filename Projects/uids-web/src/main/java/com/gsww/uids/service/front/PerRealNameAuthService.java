@@ -21,7 +21,7 @@ import com.hanweb.common.util.StringUtil;
 import com.hanweb.common.util.mvc.JsonResult;
 
 @Transactional
-@Service("perRealNameAuthService")
+@Service("realNameAuthService")
 public class PerRealNameAuthService
 {
   private final Log logger = LogFactory.getLog(getClass());

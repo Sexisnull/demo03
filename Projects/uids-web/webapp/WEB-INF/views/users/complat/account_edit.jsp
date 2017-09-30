@@ -130,7 +130,7 @@ function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
 		},
 		callback : {
 			beforeClick : beforeClick,
-			onClick : onClickFunction,
+			onClick : onClickFunction,     
 			onDblClick : onDblClickFunction
 		}
 	};
@@ -173,14 +173,14 @@ var complatUserNameInput=$("#name").val();
 	   headship:{
 	        cnRangelength: [0,64]
 	   },	   
-	   phone : {//办公电话
-			required: true,
-			isPhone:true,
-	   		maxlength: 16
-		},
+	  // phone : {//办公电话
+			//required: true,
+			//isPhone:true,
+	   		//maxlength: 16
+		//},
 	   mobil:{
 	   		isMobile:true,
-	   		maxlength: 16
+	   		maxlength: 11
 	   	},
 		email : {//email校验
 			required: true,
@@ -198,7 +198,13 @@ var complatUserNameInput=$("#name").val();
 	   	},
 		loginname : {//重命名校验*
 			required: true,
-			cnRangelength: [0,127]
+			cnRangelength: [0,127],
+			isLoginname : true,
+			uniqueLoginname: true
+		},
+		QQ : {
+			isQQ:true,
+		   	 maxlength: 12
 		},
 		cardid :{
 			isIdCardNo:true,
@@ -224,9 +230,9 @@ var complatUserNameInput=$("#name").val();
    });   
 
     // Ajax重命名校验
-	//$.uniqueValidate('uniqueLoginName', '${ctx}/complat/checkOutisideUserLoginName', ['loginName','oldLoginName'], '对不起，这个账号重复了');
+	$.uniqueValidate('uniqueLoginname', '${ctx}/complat/checkComplatUserLoginName', ['uniqueLoginname','uniqueLoginname'], '对不起，这个登录名重复了');
 
-	//个人用户名校验     
+	//政府用户名校验     
    jQuery.validator.addMethod("isName", function(value, element) { 
           var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;   
           return this.optional(element) || (corporName.test(value));     
@@ -241,150 +247,298 @@ var complatUserNameInput=$("#name").val();
           var corporName = /^[1-9][0-9]{5}$/;   
           return this.optional(element) || (corporName.test(value));     
    }, "邮政编码格式不正确（共6位,开头不能为0)");
-   
+   jQuery.validator.addMethod("isPhone", function(value, element) { 
+       var corporName = /^[1-9]{4}-[0-9]{7}$/;   
+       return this.optional(element) || (corporName.test(value));     
+   },"办公电话格式不正确（共12位,开头不能为0)");
    
    
    
 	 //获取用户扩展属性
-    var htmlString=[];
+    var htmlString=[];  
     var count = 1;
+    var croleId=$("#croleId").val();
+    alert("croleId==================="+croleId);
     var table = $(".form-table");
     //htmlString.push("<tr><td  class='td_2' rowspan='"+count+"' align='center'>"+"扩展属性"+"</td>");
     var fieldsListMap = eval('${fieldsListMap}');
     if(fieldsListMap.length==null){
     	htmlString.push("");
-    }
+    }    
     htmlString.push("<tr><td  class='td_2' id='td_7' rowspan='"+count+"' align='center'>"+"扩展属性"+"</td>");
+    
     for(var i=0;i<fieldsListMap.length;i++){
-    	 
+    	//alert(fieldsListMap.length);//2
     	var fieldsList = fieldsListMap[i];
     	for(var j = 0;j<fieldsList.length;j++){
-    		var fields = fieldsList[j];
-    		if(fields.type==1){
-    		   for(var key in fields){   
-    			   
-    			var value = fields[key];
-    			if(value==null){
-    				value="";
-    			}
+    		//alert(fieldsList.length);//5
+    		if(croleId!=null){//编辑
+   			 var fields = fieldsList[j];
+        		
+        		
+        			if(fields.type==1){
+        	    		   for(var key in fields){   
+        	    			   //alert("key===:"+key);         	    			
+        	    			if(value==null){
+        	    				value="";
+        	    			}
 
-    			if(key!='type' && key !='userid'){
-    				 
-    				if(count==1){  
-    					if(count%2==1){
-   	    			       htmlString.push("<th>"+key+"</th><td><input name='"+key+"' type='text' value='"+value+"'></td>");
-   	    			    }
-     					 if(count%2==0){
-     	    			   htmlString.push("<th>"+key+"</th><td><input type='text' name='"+key+"' value='"+value+"'></td></tr>");
-     	    			}   					
-    				}else{
-    					 if(count%2==1){
-    	    			   htmlString.push("<td class='td_7'></td><th>"+key+"</th><td><input name='"+key+"' type='text' value='"+value+"'></td>");
-    	    			 }
-    	    			 if(count%2==0){
-    	    			   htmlString.push("<th>"+key+"</th><td><input type='text' name='"+key+"' value='"+value+"'></td></tr>");
-    	    			 }
-    				}
-    			    count++;
-    			}
-    		   } 
-    		}
+        	    			if(key!='type' && key !='userid'){
+        	    				
+        	    				if(count==1){  
+        	    					if(count%2==1){
+        	   	    			       htmlString.push("<th>"+key+"</th><td><input name='"+key+"' type='text' value='"+value+"'></td>");
+        	   	    			    }
+        	     					 if(count%2==0){
+        	     	    			   htmlString.push("<th>"+key+"</th><td><input type='text' name='"+key+"' value='"+value+"'></td></tr>");
+        	     	    			}   					
+        	    				}else{
+        	    					 if(count%2==1){
+        	    	    			   htmlString.push("<td class='td_7'></td><th>"+key+"</th><td><input name='"+key+"' type='text' value='"+value+"'></td>");
+        	    	    			 }
+        	    	    			 if(count%2==0){
+        	    	    			   htmlString.push("<th>"+key+"</th><td><input type='text' name='"+key+"' value='"+value+"'></td></tr>");
+        	    	    			 }
+        	    				}
+        	    			    count++;
+        	    			}
+        	    		   } 
+        	    		}
+
+        		
+        		
+        		var values;
+        		var keys;
+        		if(fields.type==2){
+        		   for(var key in fields){
+        			var value = fields[key];
+        			if(key == 'fieldkeys'){
+        				keys = value.split(",");
+        			}
+        			
+        			if(key == 'fieldvalues'){
+        				values = value.split(",");
+        			}
+        			if(key!='type' && key !='userid'){
+        			    if(key == 'fieldname'){
+        			    	if(count == 1){
+        			    		if(count%2==1){
+    		    			    	htmlString.push("<th>"+value+"</th><td><select id='"+value+"' name= '"+value+"' style='width:260px;'>");
+    		    			    	//循环key；
+    		    			        for(var i=0;i<keys.length;i++){
+    		    			 			htmlString.push("<option value='"+keys[i]+"'");
+    		    			            //获取下拉列表默认值
+    								    var select = eval('${jsonMap}');
+    								    for(var selectKey in select[0]){
+    								    	var selectValue = select[0][selectKey];
+    								    	if(selectValue == keys[i]){
+    		    			        			htmlString.push("selected = 'selected'");
+    		    			        		}
+    							    	}
+    							    	htmlString.push(">"+values[i]+"</option>");
+    		    				    }
+    		    			       htmlString.push("</select></td>");
+    		    			       
+    		    				   
+    		    			    }
+    		    			    if(count%2==0){
+    		    			    	htmlString.push("<th>"+value+"</th><td><select id='"+value+"' name= '"+value+"' style='width:260px;'>");
+    		    			    	//循环key；
+    		    			        for(var i=0;i<keys.length;i++){
+    		    			        	htmlString.push("<option value='"+keys[i]+"'");
+    		    			          //获取下拉列表默认值
+    								    var select = eval('${jsonMap}');
+    								    for(var selectKey in select[0]){
+    								    	var selectValue = select[0][selectKey];
+    								    	if(selectValue == keys[i]){
+    		    			        			htmlString.push("selected = 'selected'");
+    		    			        		}
+    							    	}
+    							    	htmlString.push(">"+values[i]+"</option>");
+    		    				    }
+    		    			       htmlString.push("</select></td></tr>");
+    		    			    }	
+        			    	}else{
+        			    		if(count%2==1){
+    		    			    	htmlString.push("<td class='td_7'></td><th>"+value+"</th><td><select id='"+value+"' name= '"+value+"' style='width:260px;'>");
+    		    			    	//循环key；
+    		    			        for(var i=0;i<keys.length;i++){
+    		    			 			htmlString.push("<option value='"+keys[i]+"'");
+    		    			          //获取下拉列表默认值
+    								    var select = eval('${jsonMap}');
+    								    for(var selectKey in select[0]){
+    								    	var selectValue = select[0][selectKey];
+    								    	if(selectValue == keys[i]){
+    		    			        			htmlString.push("selected = 'selected'");
+    		    			        		}
+    							    	}
+    							    	htmlString.push(">"+values[i]+"</option>");
+    		    				    }
+    		    			       htmlString.push("</select></td>");
+    		    			       
+    		    				   
+    		    			    }
+    		    			    if(count%2==0){
+    		    			    	htmlString.push("<th>"+value+"</th><td><select id='"+value+"' name= '"+value+"' style='width:260px;'>");
+    		    			    	//循环key；
+    		    			        for(var i=0;i<keys.length;i++){
+    		    			        	htmlString.push("<option value='"+keys[i]+"'");
+    		    			          //获取下拉列表默认值
+    								    var select = eval('${jsonMap}');
+    								    for(var selectKey in select[0]){
+    								    	var selectValue = select[0][selectKey];
+    								    	if(selectValue == keys[i]){
+    		    			        			htmlString.push("selected = 'selected'");
+    		    			        		}
+    							    	}
+    							    	htmlString.push(">"+values[i]+"</option>");
+    		    				    }
+    		    			       htmlString.push("</select></td></tr>");
+    		    			    }
+        			    	}
+        			    
+        			    count++;
+        			   	}
+        			}
+        		  } 
+        		}     		    			   			    			
+   		     }
+      		if(croleId==""){//新增
+      			var fields = fieldsList[j];
+      			var name=fields.fieldname;
+      			
+        		if(fields.type==1){
+        		   for(var key in fields){   
+        			   alert("key:"+key);
+        			var value = fields[key];
+        			//alert("value:"+value);
+        			if(value==null){
+        				value="";
+        			}
+
+        			if(key!='type' && key !='userid'){
+        				alert("name:"+name);
+        				if(count==1){  
+        					if(count%2==1){
+       	    			       htmlString.push("<th>"+key+"</th><td><input name='"+key+"' type='text' value='"+value+"'></td>");
+       	    			    }
+         					 if(count%2==0){
+         	    			   htmlString.push("<th>"+key+"</th><td><input type='text' name='"+key+"' value='"+value+"'></td></tr>");
+         	    			}   					
+        				}else{
+        					 if(count%2==1){
+        	    			   htmlString.push("<td class='td_7'></td><th>"+key+"</th><td><input name='"+key+"' type='text' value='"+value+"'></td>");
+        	    			 }
+        	    			 if(count%2==0){
+        	    			   htmlString.push("<th>"+key+"</th><td><input type='text' name='"+key+"' value='"+value+"'></td></tr>");
+        	    			 }
+        				}
+        			    count++;
+        			}
+        		   } 
+        		}
+        		
+        		var values;
+        		var keys;
+        		if(fields.type==2){
+        		   for(var key in fields){
+        			var value = fields[key];
+        			if(key == 'fieldkeys'){
+        				keys = value.split(",");
+        			}
+        			
+        			if(key == 'fieldvalues'){
+        				values = value.split(",");
+        			}
+        			if(key!='type'){
+        			    if(key == 'fieldname'){
+        			    	if(count == 1){
+        			    		if(count%2==1){
+    		    			    	htmlString.push("<th>"+value+"</th><td><select id='"+value+"' name= '"+value+"' style='width:260px;'>");
+    		    			    	//循环key；
+    		    			        for(var i=0;i<keys.length;i++){
+    		    			 			htmlString.push("<option value='"+keys[i]+"'");
+    		    			            //获取下拉列表默认值
+    								    var select = eval('${jsonMap}');
+    								    for(var selectKey in select[0]){
+    								    	var selectValue = select[0][selectKey];
+    								    	if(selectValue == keys[i]){
+    		    			        			htmlString.push("selected = 'selected'");
+    		    			        		}
+    							    	}
+    							    	htmlString.push(">"+values[i]+"</option>");
+    		    				    }
+    		    			       htmlString.push("</select></td>");
+    		    			       
+    		    				   
+    		    			    }
+    		    			    if(count%2==0){
+    		    			    	htmlString.push("<th>"+value+"</th><td><select id='"+value+"' name= '"+value+"' style='width:260px;'>");
+    		    			    	//循环key；
+    		    			        for(var i=0;i<keys.length;i++){
+    		    			        	htmlString.push("<option value='"+keys[i]+"'");
+    		    			          //获取下拉列表默认值
+    								    var select = eval('${jsonMap}');
+    								    for(var selectKey in select[0]){
+    								    	var selectValue = select[0][selectKey];
+    								    	if(selectValue == keys[i]){
+    		    			        			htmlString.push("selected = 'selected'");
+    		    			        		}
+    							    	}
+    							    	htmlString.push(">"+values[i]+"</option>");
+    		    				    }
+    		    			       htmlString.push("</select></td></tr>");
+    		    			    }	
+        			    	}else{
+        			    		if(count%2==1){
+    		    			    	htmlString.push("<td class='td_7'></td><th>"+value+"</th><td><select id='"+value+"' name= '"+value+"' style='width:260px;'>");
+    		    			    	//循环key；
+    		    			        for(var i=0;i<keys.length;i++){
+    		    			 			htmlString.push("<option value='"+keys[i]+"'");
+    		    			          //获取下拉列表默认值
+    								    var select = eval('${jsonMap}');
+    								    for(var selectKey in select[0]){
+    								    	var selectValue = select[0][selectKey];
+    								    	if(selectValue == keys[i]){
+    		    			        			htmlString.push("selected = 'selected'");
+    		    			        		}
+    							    	}
+    							    	htmlString.push(">"+values[i]+"</option>");
+    		    				    }
+    		    			       htmlString.push("</select></td>");
+    		    			       
+    		    				   
+    		    			    }
+    		    			    if(count%2==0){
+    		    			    	htmlString.push("<th>"+value+"</th><td><select id='"+value+"' name= '"+value+"' style='width:260px;'>");
+    		    			    	//循环key；
+    		    			        for(var i=0;i<keys.length;i++){
+    		    			        	htmlString.push("<option value='"+keys[i]+"'");
+    		    			          //获取下拉列表默认值
+    								    var select = eval('${jsonMap}');
+    								    for(var selectKey in select[0]){
+    								    	var selectValue = select[0][selectKey];
+    								    	if(selectValue == keys[i]){
+    		    			        			htmlString.push("selected = 'selected'");
+    		    			        		}
+    							    	}
+    							    	htmlString.push(">"+values[i]+"</option>");
+    		    				    }
+    		    			       htmlString.push("</select></td></tr>");
+    		    			    }
+        			    	}
+        			    
+        			    count++;
+        			   	}
+        			}
+        		  } 
+        		}
+   		    	 
+   		     }
+  
+               
+
     		
-    		var values;
-    		var keys;
-    		if(fields.type==2){
-    		   for(var key in fields){
-    			var value = fields[key];
-    			if(key == 'fieldkeys'){
-    				keys = value.split(",");
-    			}
-    			
-    			if(key == 'fieldvalues'){
-    				values = value.split(",");
-    			}
-    			if(key!='type' && key !='userid'){
-    			    if(key == 'fieldname'){
-    			    	if(count == 1){
-    			    		if(count%2==1){
-		    			    	htmlString.push("<th>"+value+"</th><td><select id='"+value+"' name= '"+value+"' style='width:260px;'>");
-		    			    	//循环key；
-		    			        for(var i=0;i<keys.length;i++){
-		    			 			htmlString.push("<option value='"+keys[i]+"'");
-		    			            //获取下拉列表默认值
-								    var select = eval('${jsonMap}');
-								    for(var selectKey in select[0]){
-								    	var selectValue = select[0][selectKey];
-								    	if(selectValue == keys[i]){
-		    			        			htmlString.push("selected = 'selected'");
-		    			        		}
-							    	}
-							    	htmlString.push(">"+values[i]+"</option>");
-		    				    }
-		    			       htmlString.push("</select></td>");
-		    			       
-		    				   
-		    			    }
-		    			    if(count%2==0){
-		    			    	htmlString.push("<th>"+value+"</th><td><select id='"+value+"' name= '"+value+"' style='width:260px;'>");
-		    			    	//循环key；
-		    			        for(var i=0;i<keys.length;i++){
-		    			        	htmlString.push("<option value='"+keys[i]+"'");
-		    			          //获取下拉列表默认值
-								    var select = eval('${jsonMap}');
-								    for(var selectKey in select[0]){
-								    	var selectValue = select[0][selectKey];
-								    	if(selectValue == keys[i]){
-		    			        			htmlString.push("selected = 'selected'");
-		    			        		}
-							    	}
-							    	htmlString.push(">"+values[i]+"</option>");
-		    				    }
-		    			       htmlString.push("</select></td></tr>");
-		    			    }	
-    			    	}else{
-    			    		if(count%2==1){
-		    			    	htmlString.push("<td class='td_7'></td><th>"+value+"</th><td><select id='"+value+"' name= '"+value+"' style='width:260px;'>");
-		    			    	//循环key；
-		    			        for(var i=0;i<keys.length;i++){
-		    			 			htmlString.push("<option value='"+keys[i]+"'");
-		    			          //获取下拉列表默认值
-								    var select = eval('${jsonMap}');
-								    for(var selectKey in select[0]){
-								    	var selectValue = select[0][selectKey];
-								    	if(selectValue == keys[i]){
-		    			        			htmlString.push("selected = 'selected'");
-		    			        		}
-							    	}
-							    	htmlString.push(">"+values[i]+"</option>");
-		    				    }
-		    			       htmlString.push("</select></td>");
-		    			       
-		    				   
-		    			    }
-		    			    if(count%2==0){
-		    			    	htmlString.push("<th>"+value+"</th><td><select id='"+value+"' name= '"+value+"' style='width:260px;'>");
-		    			    	//循环key；
-		    			        for(var i=0;i<keys.length;i++){
-		    			        	htmlString.push("<option value='"+keys[i]+"'");
-		    			          //获取下拉列表默认值
-								    var select = eval('${jsonMap}');
-								    for(var selectKey in select[0]){
-								    	var selectValue = select[0][selectKey];
-								    	if(selectValue == keys[i]){
-		    			        			htmlString.push("selected = 'selected'");
-		    			        		}
-							    	}
-							    	htmlString.push(">"+values[i]+"</option>");
-		    				    }
-		    			       htmlString.push("</select></td></tr>");
-		    			    }
-    			    	}
-    			    
-    			    count++;
-    			   	}
-    			}
-    		  } 
-    		}
     	}
     }
     table.append(htmlString.join(""));
@@ -433,11 +587,11 @@ var complatUserNameInput=$("#name").val();
      <div class="form-content">
 		 	<table class="form-table" id="dataTable">
 		 		<tr>
-		 		  <td class="td_1" rowspan="6" style="max-width:0px;width:100px;ont-weight:bold;" align="center">基本属性</td>
+		 		  <td class="td_1" rowspan="7" style="max-width:0px;width:100px;ont-weight:bold;" align="center">基本属性</td>
 				  <th><b class="mustbe">*</b>姓名：</th>
 				  <td style="width:300px;">
 					<input type="text" id="name" name="name" value="${complatUser.name}" />
-	        	    <input type="hidden" id="croleId" class="input" name="iid" value="${complatUser.iid}"  />	  
+	        	    <input type="hidden" id="croleId" class="iid" name="iid" value="${complatUser.iid}"  />	  
 	              </td>
 	        	  <th><b class="mustbe">*</b>性别：</th>
 				  <td style="width:300px;">	
@@ -461,7 +615,7 @@ var complatUserNameInput=$("#name").val();
 				   </td>
 				   <th><b class="mustbe">*</b> 身份证号：</th>
 				   <td style="width:300px;">
-					   <input type="text"  class="input" name="cardid" id="cardid" value="${userDetail.cardid}"  />
+				       <input type="text" <c:if test="${userDetail.cardid != null}">readonly="readonly"</c:if> class="cardid" name="cardid" value="${userDetail.cardid}" />					   
 				   </td>
 			    </tr>		    
 			    <tr>
@@ -483,7 +637,17 @@ var complatUserNameInput=$("#name").val();
 				  <td style="width:300px;">
 					<input type="text"  id="email" name="email" value="${complatUser.email}" />
 				  </td>
-			    </tr>			    
+			    </tr>	
+			     <tr>
+				  <th><b class="mustbe">*</b> 地址：</th>
+				  <td style="width:300px;">
+					<input type="text" id="address" name="address" value="${complatUser.address}" />
+				  </td>
+				  <th><b class="mustbe">*</b> 邮政编码：</th>				
+				  <td style="width:300px;">
+					<input type="text"  id="post" name="post" value="${complatUser.post}" />
+				  </td>
+			    </tr>		    
 			    <tr>
 			      <th class="td_5"><b class="mustbe">*</b> 用户职务：</th>
 				  <td class="td_3" style="width:300px;">
@@ -496,7 +660,7 @@ var complatUserNameInput=$("#name").val();
 					    <input type="hidden" id="groupid" name="groupid">	
 				    </c:if>
 				    <c:if test="${not empty complatUser.iid}">
-				        <input id="groupname" value="${groupMap[complatUser.groupid]}" name="groupname" type="text" style="cursor: pointer;"/> 
+				        <input id="groupname1" value="${groupMap[complatUser.groupid]}" name="groupname" readonly="readonly" type="text" style="cursor: pointer;"/> 
 					    <input type="hidden" id="groupid" name="groupid">	
 				    </c:if>											
 				  </td>

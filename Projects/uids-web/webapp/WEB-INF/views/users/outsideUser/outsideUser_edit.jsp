@@ -32,10 +32,10 @@ $().ready(function() {
 				email:true,
 		   		maxlength: 64
 			},
-			mobile : {//固定电话
+			mobile : {//移动电话
 				required: true,
 				isPhone:true,
-		   		maxlength: 16
+		   		uniqueMobile:true
 			},
 			residenceDetail : {
 				required: true,
@@ -55,7 +55,8 @@ $().ready(function() {
 			},
 			papersNumber : {
 				required: true,
-				isIdCardNo:true
+				isIdCardNo:true,
+				uniquePapersNumber:true
 			},
 			age:{
 		   		cnRangelength: [0,64]
@@ -101,8 +102,9 @@ $().ready(function() {
 		}
 	});
 	// Ajax重命名校验
-	$.uniqueValidate('uniqueLoginName', '${ctx}/complat/checkOutisideUserLoginName', ['loginName','oldLoginName'], '对不起，这个账号重复了');
-
+	$.uniqueValidate('uniqueLoginName', '${ctx}/complat/checkOutisideUserLoginName', ['loginName','oldLoginName'], '对不起，这个登录名重复了');
+	$.uniqueValidate('uniqueMobile', '${ctx}/complat/checkOutisideUserMobile', ['mobile','oldMobile'], '对不起，这个手机号重复了');
+	$.uniqueValidate('uniquePapersNumber', '${ctx}/complat/checkOutisideUserPapersNumber', ['papersNumber','oldPapersNumber'], '对不起，这个身份证号重复了');
 	//个人用户名校验     
     jQuery.validator.addMethod("isName", function(value, element) { 
            var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;   
@@ -232,7 +234,8 @@ color: rgb(119, 119, 119);
 				</td>
 				<th><b class="mustbe">*</b>手机号码：</th>
 				<td style="width:300px;">
-					<input type="text"  class="mobile" name="mobile" value="${outsideUser.mobile}" />
+					<input type="text"  id="mobile" name="mobile" value="${outsideUser.mobile}" />
+					<input type="hidden" id="oldMobile" name="oldMobile" value="${outsideUser.mobile}" />
 				</td>
 			</tr>
 			<tr>
@@ -291,7 +294,8 @@ color: rgb(119, 119, 119);
 			<tr>
 				<th><b class="mustbe">*</b>身份证号：</th>
 				<td style="width:300px;">
-					<input type="text" <c:if test="${outsideUser.papersNumber != null}">readonly="readonly"</c:if> class="papersNumber" name="papersNumber" value="${outsideUser.papersNumber}" />
+					<input type="text" <c:if test="${outsideUser.papersNumber != null}">readonly="readonly"</c:if> id="papersNumber" class="papersNumber" name="papersNumber" value="${outsideUser.papersNumber}" />
+					<input type="hidden" id="oldPapersNumber" class="oldPapersNumber" name="oldPapersNumber" value="${outsideUser.papersNumber}" />
 				</td>
 				<th>学历：</th>
 				<td style="width:300px;">

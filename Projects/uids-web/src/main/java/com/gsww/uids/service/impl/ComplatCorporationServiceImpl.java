@@ -16,11 +16,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hanweb.common.util.Md5Util;
+import com.hanweb.common.util.PinyinUtil;
 import com.hanweb.common.util.StringUtil;
 import com.gsww.jup.util.StringHelper;
 import com.gsww.uids.dao.ComplatCorporationDao;
 import com.gsww.uids.entity.ComplatCorporation;
 import com.gsww.uids.service.ComplatCorporationService;
+import com.gsww.uids.util.exception.OperationException;
 
 
 
@@ -167,4 +169,62 @@ public class ComplatCorporationServiceImpl implements ComplatCorporationService{
 		return complatCorporationDao.save(corporation) != null;
 	}
 
+	@Override
+	public boolean add(ComplatCorporation corporation) throws OperationException {
+		if (corporation == null) {
+			return false;
+		}
+
+		ComplatCorporation cor1 = findByRegNumber(corporation.getRegNumber());
+		if (cor1 != null) {
+			throw new OperationException("工商注册号已存在,请重新设置！");
+		}
+
+		if(!StringUtil.isEmpty(corporation.getOrgNumber())){
+			List cor2 = findByOrgNumber(corporation.getOrgNumber());
+			if ((cor2 != null) && (cor2.size() > 0)) {
+				throw new OperationException("组织机构代码已存在,请重新设置！");
+			}
+		}
+
+		ComplatCorporation complatCorporation = this.complatCorporationDao.findByLoginName(corporation.getLoginName());
+		if(null != complatCorporation){
+			throw new OperationException("用户名已存在,请重新设置！");
+		}
+		
+		/*int num = 0;
+		num = this.complatCorporationDao.findByLoginName(corporation.getLoginName()).getIid();
+		if (num > 0) {
+			throw new OperationException("用户名已存在,请重新设置！");
+		}*/
+
+		convertFormat(corporation);
+		corporation.setPwd(Md5Util.md5encode(corporation.getPwd()));
+		corporation.setCreateTime(new Date());
+		corporation.setPinyin(PinyinUtil.getHeadByString(corporation.getName()));
+		corporation.setOperSign(Integer.valueOf(1));
+		corporation.setSynState(Integer.valueOf(0));
+		int iid = 0;
+
+		//JsonResult jr = this.realNameAuthService.verifyCorRealName(corporation);
+
+		if (true) {
+		//if (jr.isSuccess()) {
+			corporation.setRegNumber(corporation.getRegNumber().toUpperCase());
+			//iid = ((Integer) this.complatCorporationDao.insert(corporation)).intValue();
+			iid = this.complatCorporationDao.save(corporation).getIid();
+		} else {
+			throw new OperationException("实名认证失败");
+		}
+		if (iid > 0) {
+			//com.hanweb.common.util.CacheUtil.setValue(corporation.getLoginName(), corporation, "corusers");
+			return true;
+		}
+		return false;
+	}
+	
+	private void convertFormat(ComplatCorporation corporation) {
+		if (StringUtil.isNotEmpty(corporation.getOrgNumber()))
+			corporation.setOrgNumber(corporation.getOrgNumber().toUpperCase());
+	}
 }

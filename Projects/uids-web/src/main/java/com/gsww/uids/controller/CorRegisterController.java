@@ -1,33 +1,14 @@
 package com.gsww.uids.controller;
 
-import com.gsww.jup.util.RandomCodeUtil;
-import com.gsww.uids.constant.JisSettings;
-import com.gsww.uids.service.ComplatCorporationService;
-import com.hanweb.common.util.CacheUtil;
-import com.hanweb.common.util.JsonUtil;
-import com.hanweb.common.util.NumberUtil;
-import com.hanweb.common.util.SpringUtil;
-import com.hanweb.common.util.StringUtil;
-import com.hanweb.common.util.mvc.JsonResult;
-import com.hanweb.common.util.mvc.ResultState;
-import com.hanweb.common.util.security.SecurityUtil;
-/*import com.hanweb.complat.controller.outsideuser.CorPorationFormBean;
-import com.hanweb.complat.entity.Corporation;
-import com.hanweb.complat.exception.OperationException;
-import com.hanweb.complat.service.CorporationService;
-import com.hanweb.jis.constant.Settings;
-import com.hanweb.jis.listener.CorporationSessionInfo;
-import com.hanweb.jis.service.TemplateService;
-import com.hanweb.jis.util.AccessUtil;
-import com.hanweb.jis.util.CellphoneShortMessageUtil;
-import com.hanweb.jis.util.RandomCodeUtil;*/
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
-import javax.servlet.http.Cookie;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,37 +16,39 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.gsww.jup.util.CellphoneShortMessageUtil;
+import com.gsww.jup.util.RSAUtil;
+import com.gsww.jup.util.RandomCodeUtil;
+import com.gsww.uids.constant.CorporationSessionInfo;
+import com.gsww.uids.constant.JisSettings;
+import com.gsww.uids.entity.ComplatCorporation;
+import com.gsww.uids.service.ComplatCorporationService;
+import com.gsww.uids.util.AccessUtil;
+import com.gsww.uids.util.JsonResult;
+import com.gsww.uids.util.ResultState;
+import com.gsww.uids.util.exception.OperationException;
+import com.hanweb.common.util.JsonUtil;
+import com.hanweb.common.util.NumberUtil;
+import com.hanweb.common.util.SpringUtil;
+import com.hanweb.common.util.StringUtil;
+import com.hanweb.common.util.security.SecurityUtil;
+
 @Controller
 @RequestMapping({"front/register"})
 public class CorRegisterController
 {
-
+  private static Logger logger = LoggerFactory.getLogger(CorRegisterController.class);
   @Autowired
   private ComplatCorporationService corporationService;
 
   @RequestMapping({"corregister"})
   public ModelAndView corRegister_Step1(HttpServletRequest request, HttpServletResponse response, HttpSession session, String aa, String bb,Model model)
   {
-    /*try
-    {
-      String publicKey = SecurityUtil.getPublicKey();
-      if ((publicKey != null) && (!"".equals(publicKey))) {
-        Cookie keyCookie = new Cookie("_pubk", URLEncoder.encode(publicKey, "UTF-8"));
-        keyCookie.setMaxAge(31536000);
-        response.addCookie(keyCookie);
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
-    }*/
     ModelAndView modelAndView = new ModelAndView("jis/front/corregister_step1");
 
     session.setMaxInactiveInterval(1800);
     session.setAttribute("cormobilesend", RandomCodeUtil.getRandomNumber(9));
 
-    modelAndView.addObject("templatehtml", JisSettings.getSettings().getCopyRight());
-    modelAndView.addObject("url", JisSettings.getSettings().getCopyRight());
-    modelAndView.addObject("templatehtml", JisSettings.getSettings().getCopyRight());
-    
     model.addAttribute("copyRight", JisSettings.getSettings().getCopyRight());
     model.addAttribute("url", "docorregister");
     model.addAttribute("verifycodeimg", "<img id='verifyImg' src='../../verifyCode.do?code=4&var=rand&width=162&height=40&random=" + 
@@ -76,9 +59,9 @@ public class CorRegisterController
     return modelAndView;
   }
 
- /* @RequestMapping({"docorregister"})
+  @RequestMapping({"docorregister"})
   @ResponseBody
-  public JsonResult corregister_submit(String randCode, HttpSession session, CorPorationFormBean corPorationFormBean, String smsCode, String corsex, String inssex)
+  public JsonResult corregister_submit(String randCode, HttpSession session, ComplatCorporation corPorationFormBean, String smsCode, String corsex, String inssex,HttpServletRequest request)
   {
     if (!AccessUtil.checkAccess(SpringUtil.getRequest())) {
       return null;
@@ -88,25 +71,25 @@ public class CorRegisterController
 
     String orgNumber = "";
     String rand = (String)session.getAttribute("rand");
-    String cellphoneShortMessageRandomCodeMadeByJava = 
-      StringUtil.getString(session.getAttribute("corRegistSmsCode"));
+    //TODO 注册验证短信验证码
+    //String cellphoneShortMessageRandomCodeMadeByJava = StringUtil.getString(session.getAttribute("corRegistSmsCode"));
     try {
       if ((StringUtil.isEmpty(rand)) || (StringUtil.isEmpty(randCode)) || (!rand.equalsIgnoreCase(randCode))) {
         session.setAttribute("rand", null);
         throw new OperationException("register.randcode.error");
       }
 
-      if (!corPorationFormBean.getMobile().equals(session.getAttribute("telNum"))) {
+      /*if (!corPorationFormBean.getMobile().equals(session.getAttribute("telNum"))) {
         throw new OperationException("register.phonecode.error");
-      }
-      if (StringUtil.isNotEmpty(smsCode)) {
+      }*/
+      /*if (StringUtil.isNotEmpty(smsCode)) {
         if (!StringUtil.equals(smsCode, 
           StringUtil.getString(cellphoneShortMessageRandomCodeMadeByJava)))
           throw new OperationException("register.phonecode.error");
       }
       else {
         throw new OperationException("register.phonecodeempty.error");
-      }
+      }*/
 
       if (corPorationFormBean.getType() == null) {
         throw new OperationException("register.nocortype.error");
@@ -152,8 +135,8 @@ public class CorRegisterController
         jsonResult.setSuccess(false);
         return jsonResult;
       }
-      String loginName = SecurityUtil.RSAdecode(corPorationFormBean.getLoginName());
-      String password = SecurityUtil.RSAdecode(corPorationFormBean.getPwd());
+      String loginName = corPorationFormBean.getLoginName();
+      String password = dePwd(corPorationFormBean.getPwd(),request);
       if ((StringUtil.isEmpty(loginName)) || (StringUtil.isEmpty(password))) {
         jsonResult.setMessage("用户名或密码为空");
         jsonResult.setSuccess(false);
@@ -166,6 +149,7 @@ public class CorRegisterController
       if (isSuccess)
       {
         jsonResult.set(ResultState.ADD_SUCCESS);
+    	jsonResult.setSuccess(true);
         CorporationSessionInfo.setCurrentCorporationInfo(corPorationFormBean);
       } else {
         jsonResult.set(ResultState.ADD_FAIL);
@@ -188,12 +172,56 @@ public class CorRegisterController
     }
     return jsonResult;
   }
+  
+  @SuppressWarnings("unused")
+  private String dePwd(String password,HttpServletRequest request){
+	  String en_password = "";
+	    try{
+	        byte[] en_result = hexStringToBytes(password);  
+	        byte[] de_result = RSAUtil.decrypt(RSAUtil.getKeyPair(request).getPrivate(), en_result);  
+	        StringBuffer sb = new StringBuffer();  
+	        sb.append(new String(de_result));  
+	        en_password= sb.reverse().toString(); 
+	    } catch(Exception ex){
+	  	  logger.error(ex.getMessage());
+	    }
+	    return en_password;
+  }
+  
+  /**
+   * 16进制 To byte[]
+   * @param hexString
+   * @return byte[]
+   */
+  public static byte[] hexStringToBytes(String hexString) {
+      if (hexString == null || hexString.equals("")) {
+          return null;
+      }
+      hexString = hexString.toUpperCase();
+      int length = hexString.length() / 2;
+      char[] hexChars = hexString.toCharArray();
+      byte[] d = new byte[length];
+      for (int i = 0; i < length; i++) {
+          int pos = i * 2;
+          d[i] = (byte) (charToByte(hexChars[pos]) << 4 | charToByte(hexChars[pos + 1]));
+      }
+      return d;
+  }
+  
+  /**
+   * Convert char to byte
+   * @param c char
+   * @return byte
+   */
+   private static byte charToByte(char c) {
+      return (byte) "0123456789ABCDEF".indexOf(c);
+  }
 
   @RequestMapping({"sendCellphoneShortMessageCorRe"})
   @ResponseBody
   public String sendCellphoneShortMessageCorRe(HttpSession session, String telNum)
   {
-    Map<String,String> map1 = new HashMap<>();
+    Map<String,String> map1 = new HashMap<String,String>();
     Object mobileSend = session.getAttribute("cormobilesend");
     if ((StringUtil.isEmpty(telNum)) || (mobileSend == null)) {
       map1.put("message", "请刷新页面，重新注册！");
@@ -215,10 +243,10 @@ public class CorRegisterController
 
     String cellphoneShortMessageRandomCodeMadeByJava = RandomCodeUtil.getRandomNumber(6);
     session.setAttribute("corRegistSmsCode", cellphoneShortMessageRandomCodeMadeByJava);
-    String content = Settings.getSettings().getRegistCorMessageContent().trim()
+    String content = JisSettings.getSettings().getRegistCorMessageContent().trim()
       .replace("cellphoneShortMessageRandomCodeMadeByJava", cellphoneShortMessageRandomCodeMadeByJava);
-    String appBusinessId = Settings.getSettings().getBusinessIdForRegestingCor().trim();
-    String appBusinessName = Settings.getSettings().getBusinessNameForRegestingCor().trim();
+    String appBusinessId = JisSettings.getSettings().getBusinessIdForRegestingCor().trim();
+    String appBusinessName = JisSettings.getSettings().getBusinessNameForRegestingCor().trim();
 
     int lostTime = 60;
     session.setAttribute("telNum", telNum);
@@ -236,7 +264,7 @@ public class CorRegisterController
       }
     }
     return resultJson;
-  }*/
+  }
 
   /*@RequestMapping({"checkcorloginid"})
   @ResponseBody
@@ -268,18 +296,14 @@ public class CorRegisterController
       return "";
     }
     return "存在相同的手机号码";
-  }
+  }*/
 
   @RequestMapping({"corregsuccess"})
-  public ModelAndView perRegSuccess(HttpServletRequest request, HttpSession session)
+  public ModelAndView perRegSuccess(HttpServletRequest request, HttpSession session,Model model)
   {
     ModelAndView modelAndView = new ModelAndView("jis/front/corregsuccess");
     String html = "corregsuccess.html";
-
-    String templateHtml = this.templateService.readFrontTemplate(html);
-
-    templateHtml = templateHtml.replace("${loginurl}", "../corlogin.do?appmark=gszw");
-    modelAndView.addObject("templatehtml", templateHtml);
+    model.addAttribute("loginurl", "../corlogin.do?appmark=gszw");
     return modelAndView;
-  }*/
+  }
 }

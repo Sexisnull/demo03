@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gsww.uids.dao.ComplatUserDao;
+import com.gsww.uids.entity.ComplatOutsideuser;
 import com.gsww.uids.entity.ComplatUser;
 import com.gsww.uids.service.ComplatUserService;
 
@@ -108,5 +109,11 @@ public class ComplatUserServiceImpl implements ComplatUserService{
 		return jdbcTemplate.queryForList(sql);
 	}
 
+	
+	@Override
+	public ComplatUser findByLoginnameIsUsed(String loginname) {
+		ComplatUser complatUser = complatUserDao.findByLoginname(loginname);
+		return complatUser;
+	}
 
 }
