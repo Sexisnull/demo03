@@ -1,7 +1,3 @@
-
-
-
-
 <%@page language="java" pageEncoding="UTF-8"%>
 <!doctype html>
 <%@ include file="/include/meta.jsp"%>
@@ -230,10 +226,9 @@
 			</div>
 			<div class="header_userinfo" style="width: 575px;">
 				<ul class="header_nav">
-
-					<li class="home" onclick="toFront();">
+					<li class="home" onclick="toBack();">
 						<p>
-							返回首页
+							后台管理
 						</p>
 					</li>
 					<li class="speaker modify-msgs"
@@ -242,13 +237,6 @@
 							账户设置
 						</p>
 					</li>
-					<li class="pwd modify-pwd"
-						onclick="javascript:window.location.href='${ctx}/jisLog/countUser'">
-						<p>
-							在线用户
-						</p>
-					</li>
-
 					<li class="logout" onclick="loginOut();">
 						<p>
 							退出系统
@@ -275,7 +263,7 @@
 		<div class="position">
 			<ol class="breadcrumb">
 				<li>
-					<a href="${ctx}/backIndex" target="_top">首页</a>
+					<a href="${ctx}/frontIndex" target="_top">首页</a>
 				</li>
 				<li class="split"></li>
 				<li>
