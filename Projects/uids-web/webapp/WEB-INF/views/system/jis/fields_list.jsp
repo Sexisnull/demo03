@@ -37,83 +37,28 @@
 			return false;
 		}
 	}
-	
-	function openwindow1(){ 
-	    window.showModalDialog("${ctx}/jis/fieldsOperate",window,
-	    "status:no;scroll:yes; dialogWidth:400px;dialogHeight:500px");
-    } 
     
-    //弹出层
-	function openwindow(){
-	    var mybg = document.createElement("div"); 
-		mybg.setAttribute("class","mybg"); 
-		$(".mybg").addClass("mybg");
-	    document.body.appendChild(mybg);
-		document.body.style.overflow = "hidden"; 
-		$("#alerttb").show(); 				
+    //设置弹框
+    function openwindow(){
+		var api = $.dialog({
+			title : '设置-修改信息必填',
+			width : 470,
+			height: 290,
+			max : false,
+			min : false,
+			lock : true,
+			padding : '40px 20px',
+			content : 'url:${ctx}/jis/goFieldsSetting',
+			fixed : false,
+			drag : false,
+			resize : false,
+			fixed : false,
+			drag : false,
+			resize : false
+		});
 	}
-	//关闭
-	$(".close").click(function() {
-        $("#alerttb").hide();
-    });
-    //全选/反选
-    function chooseall(){
-		var check = $('#checkall:checked').val();
-		if(check == 1){
-			$('[name=fieldiid]').attr('checked','checked');
-		}else{
-			$('[name=fieldiid]').removeAttr('checked');
-		}
-	}
-	//获取多个选中框的值
-	$('input:checkbox[name="fieldiid"]').each(function() { 
-	    if ($(this).attr('checked') ==true) { 
-	        alert($(this).val()); 
-	    } 
-	}); 
 </script>
-<style type="text/css">
-/*设置弹出层样式*/
-.alert_tb {	
-	left:180px;
-	top:120px;
-	border:1px solid #F68A8A;
-	width:600px;
-	height:135px;
-	background-color:#e2ecf5;
-	z-index:1000;
-	position:absolute;
-} 
-.mybg{
-	background-color:#000;
-	width:100%;
-	height:100%;
-	position:absolute;
-	top:0; 
-	left:0; 
-	zIndex:500; 
-	opacity:0.3; 
-	filter:Alpha(opacity=30); 
-}
-.input_one i{
-    float: right;
-    font-style: normal;
-    cursor: pointer;
-}
-.input_one {
-  line-height:30px;
-  background-color:#fbedce;
-  height:30px;
-  font-size:13px;
-}
-.input_three {
-  line-height:30px;
-  background-color:#fbedce;
-  height:30px;
-  font-size:13px;
-}
-}
-</style>
+
 </head>
 <body>
 
@@ -236,41 +181,5 @@
 		<!-- 分页 -->
 		<tags:pagination page="${pageInfo}" paginationSize="5" />
 	</div>
-	<!-- 弹出层 -->
-    <div id="alerttb" class="alert_tb" style="display:none;"> 
-      <div class="box">
-      		
-      </div>
-      <div class="input_one">
-		<span id="inputUser">用户扩展属性 - 设置 - 修改必填信息</span>
-		<i class="close"><a  id="close"  href="${ctx}/jis/fieldsList">X&nbsp</a></i>
-      </div>   
-      <div class="input_two">
-	     <form id="oprform" name="oprform" action="${ctx}/jis/fieldsOperate" method="get">
-	    	<!--隐藏变量区-->
-			<div id="dialog-content">
-	        	<!--表单主体-->
-	            <div style="padding:10px;margin-left:10px;">
-					<c:forEach items="${jisFieldsList}" var="field" varStatus="i">
-						<span class="rightspan" title="${field.showname }">
-							<input type="checkbox" name="fieldiid" class="" value="${field.iid }" <c:if test="${field.iswrite == 1 }">checked="checked"</c:if>/>
-							${field.showname}
-						</span>
-					</c:forEach>
-				</div>
-				<div style="color: red;clear: both;padding:10px 10px 10px 40px;">
-					<input type="checkbox" id="checkall" value="1" onclick="chooseall();"/>全选/反选
-				</div>
-			</div>
-	        <!--表单按钮区-->
-			<div class="input_three"> 
-				<p align = "center">
-					<input type="submit" class="btn btn-primary" value="保存" /> 
-					<input type="button" class="btn" value="取消" onclick="javascript:window.location.href='${ctx}/jis/fieldsList'" />
-				</p>
-			</div>
-		</form>
-      </div> 
-    </div>
 </body>
 </html>

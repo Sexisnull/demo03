@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.gsww.uids.entity.ComplatCorporation;
+import com.gsww.uids.util.exception.OperationException;
 
 
 /**
@@ -80,4 +81,11 @@ public interface ComplatCorporationService {
 
 	boolean modify(ComplatCorporation corporation);
 
+	/**
+	 * 统一注册
+	 * @param corporation
+	 * @return
+	 * @throws OperationException
+	 */
+	boolean add(ComplatCorporation corporation) throws OperationException;
 }

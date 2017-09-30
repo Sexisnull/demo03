@@ -423,7 +423,7 @@ $().ready(function() {
 	   encryptKey: {
 	    required: true,
 	    chrnum:true,
-	    maxlength: 19,
+	    maxlength: 19
 	   },
 	   appUrl:{
 	   required: true,
@@ -440,7 +440,7 @@ $().ready(function() {
 	   },
 	   groupname:{
 	   required: true
-	   },
+	   }
 	   /* allLoginIid:{
 	   required: true,
 	   maxlength: 50,
@@ -524,7 +524,7 @@ $(function(){
 	<div class="position">
 		<ol class="breadcrumb">
 			<li>
-				<a href="${ctx}/index" target="_top">首页</a>
+				<a href="${ctx}/backIndex" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
 			<li>
@@ -568,7 +568,7 @@ $(function(){
 			<tr>
 				<th style="text-align:left;"><b class="mustbe">&nbsp;&nbsp;</b> 所属机构：</th>
 				<td>
-					<input id="groupname" value="${groupName}" name="groupname" type="text" style="cursor: pointer;"/> 
+					<input id="groupname" value="${groupMap[jisApplication.groupId]}" name="groupname" type="text" style="cursor: pointer;"/> 
 				</td>
 				<th style="text-align:center;"><b class="mustbe">&nbsp;&nbsp;</b> 同步用户：</th>
                 <td>   

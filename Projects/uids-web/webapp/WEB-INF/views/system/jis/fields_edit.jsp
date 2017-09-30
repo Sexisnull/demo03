@@ -15,7 +15,7 @@ $().ready(function() {
 			//校验内容
 			showname: {
 		     required: true,
-		   	 maxlength: 50,
+		   	 maxlength: 50
 		   	},
 		    fieldname : {
 		     required: true,

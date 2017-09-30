@@ -17,6 +17,8 @@ import com.gsww.jup.service.sys.SysLoginService;
 import com.gsww.uids.dao.ComplatRoleDao;
 import com.gsww.uids.dao.ComplatUserDao;
 import com.gsww.uids.entity.ComplatUser;
+import com.gsww.uids.entity.JisRoleobject;
+import com.gsww.uids.service.JisRoleobjectService;
 import com.hanweb.common.util.Md5Util;
 
 /**
@@ -46,7 +48,7 @@ public class SysLoginServiceImpl implements SysLoginService {
 	@Autowired
 	private ComplatUserDao complatUserDao;
 	@Autowired
-	private SysRoleAcctRelDao sysRoleAcctRelDao;
+	private JisRoleobjectService jidRoleobjectService;
 	@Autowired
 	private ComplatRoleDao complatRoleDao;
 
@@ -72,16 +74,18 @@ public class SysLoginServiceImpl implements SysLoginService {
 				 * sysUserSession
 				 * .setDeptName(user.getSysDepartment().getDeptName());
 				 */
+				
 				sysUserSession.setUserIp(ip);
-				List<SysRoleAcctRel> roleList = sysRoleAcctRelDao
-						.findByUserAcctId(user.getIid() + "");
+				List<JisRoleobject> roleList =jidRoleobjectService.findByObjectIdAndType(user.getIid(),0);
+				if(roleList.isEmpty()){
+					roleList =jidRoleobjectService.findByObjectIdAndType(user.getGroupid(),2);
+				}
 				String roles = "";
 				String roleNames = "";
 				if (roleList != null && roleList.size() > 0) {
-					for (SysRoleAcctRel ra : roleList) {
-						roles += ra.getRoleId().toString() + ",";
-						roleNames += complatRoleDao.findByIid(
-								Integer.parseInt(ra.getRoleId())).getName()
+					for (JisRoleobject ra : roleList) {
+						roles += ra.getRoleid().toString() + ",";
+						roleNames += complatRoleDao.findByIid(ra.getRoleid()).getName()
 								+ ",";
 					}
 					roles = roles.substring(0, roles.length() - 1);

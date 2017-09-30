@@ -22,4 +22,12 @@ public interface JisRoleobjectService {
 	 */
 	boolean add(int parseInt, int parseInt2, int i);
 	public void deleteByRoleId(int id);
+	
+	/**
+	 * 根据对象id以及类型查找角色关系
+	 * @param iid
+	 * @param i
+	 * @return
+	 */
+	List<JisRoleobject> findByObjectIdAndType(Integer iid, int i);
 }

@@ -22,7 +22,7 @@ var userNameInput=$("#userName").val();
     	resName: {
 	    required: true,
 	    userName:true,
-	    cnRangelength: [0,32],
+	    cnRangelength: [0,32]
 	   },
 	   remark: {
 	    required: true,
@@ -31,7 +31,7 @@ var userNameInput=$("#userName").val();
 	    uniqueRemark:true
 	   },
 	   callingType: {
-	    required: true,
+	    required: true
 	   },
 	   resUrl:{
 	   required: true,
@@ -39,7 +39,7 @@ var userNameInput=$("#userName").val();
 	   },
 	   isVerification:{
 	   required: true
-	   },
+	   }
 	  },submitHandler:function(form){
             var callingType=$("#callingType").val(); 
             var isVerification=$("#isVerification").val();
@@ -113,7 +113,7 @@ $(function(){
 	<div class="position">
 		<ol class="breadcrumb">
 			<li>
-				<a href="${ctx}/index" target="_top">首页</a>
+				<a href="${ctx}/backIndex" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
 			<li>

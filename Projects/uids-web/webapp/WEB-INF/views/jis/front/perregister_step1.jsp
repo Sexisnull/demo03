@@ -36,12 +36,12 @@
 <link rel="stylesheet" type="text/css" href="${ctx}/ui/images/style.css"/>
 <link rel="stylesheet" type="text/css" href="${ctx}/ui/images/syl_fpqd.css"/>
 
-<script type="text/javascript" src="../../ui/script/idcardValidity.js"></script>
-<script type="text/javascript" src="../../ui/lib/security/jquery.cookie.js"></script>
-<script type="text/javascript" src="../../ui/lib/security/base64.js"></script>
-<script type="text/javascript" src="../../ui/lib/security/jsencrypt.min.js"></script>
+<script type="text/javascript" src="${ctx}/ui/script/idcardValidity.js"></script>
+<script type="text/javascript" src="${ctx}/ui/lib/security/jquery.cookie.js"></script>
+<script type="text/javascript" src="${ctx}/ui/lib/security/base64.js"></script>
+<script type="text/javascript" src="${ctx}/ui/lib/security/jsencrypt.min.js"></script>
 <script type="text/javascript" src="${ctx}/ui/lib/security/rsa_util.js"></script>
-<script type="text/javascript" src="../../ui/lib/security/security.js"></script>
+<script type="text/javascript" src="${ctx}/ui/lib/security/security.js"></script>
 <script type="text/javascript" src="${ctx}/res/skin/default/plugin/rsa/BigInt.js"></script>
 <script type="text/javascript" src="${ctx}/res/skin/default/plugin/rsa/Barrett.js"></script>
 <script type="text/javascript" src="${ctx}/res/skin/default/plugin/rsa/RSA.js"></script>
@@ -142,6 +142,7 @@
 		
 	});
 	
+	//RSA加密
 	function enpwd() {
         $.ajax({
             type: "post",
@@ -251,7 +252,7 @@
 		return token;
 		}
 	 */
-	/*此方法并未用
+	/*
 	function actEmail(){
 		if($("#email").val() != ""){
 			$("#emailspan").show();
@@ -343,7 +344,7 @@
 	
 	*/
 
-    /*function addCities(iid,selCityStr,selTownStr) {	//此iid，即相对上级的value。要根据上级的value，加载下级列表。
+    function addCities(iid,selCityStr,selTownStr) {	//此iid，即相对上级的value。要根据上级的value，加载下级列表。
     	
     	var selCity = document.getElementById(selCityStr);//
     	var selTown = document.getElementById(selTownStr);//var arr = town['t' + iid];
@@ -370,10 +371,10 @@
 				}
 			}
 		});   	
-    }*/      
+    }      
    
   
-    /*function addTowns(iid,selTownStr){
+    function addTowns(iid,selTownStr){
     	
     	var selTown = document.getElementById(selTownStr);
    
@@ -399,7 +400,7 @@
 				}
 			}
     	});
-    }*/
+    }
     /**获取短信验证码按钮*/
     function waitToGetCellphoneCode(){	//20160411李德隆写此方法。
 		
@@ -693,7 +694,7 @@
   <div class="top">
     <div class="pagecon"> 
       <!--<script language="javascript" src="http://www.gszwfw.gov.cn/script/0/1512101421282896.js"></script>-->
-      <script type="text/javascript" src="${ctx}/ui/js/1512101421282896.js"></script>
+      <script type="text/javascript" src="${ctx}/ui/js/1512101421282897.js"></script>
     </div>
   </div>
   <div class=""> 

@@ -35,6 +35,7 @@ import com.gsww.jup.service.sys.SysMenuService;
 import com.gsww.jup.util.JSONUtil;
 import com.gsww.jup.util.RSAUtil;
 import com.gsww.jup.util.StringHelper;
+import com.gsww.jup.util.TimeHelper;
 import com.gsww.uids.entity.ComplatGroup;
 import com.gsww.uids.entity.ComplatUser;
 import com.gsww.uids.entity.JisLog;
@@ -99,10 +100,19 @@ public class SysLoginController extends BaseController {
 		String inputKaptcha = (String) request.getParameter("kaptcha");
 		String sessionKaptcha = (String) request.getSession().getAttribute(
 				Constants.KAPTCHA_SESSION_KEY);
+		String kaptchaTime = (String)request.getSession().getAttribute("kapcheTime");
 		Map<String, Object> resMap = new HashMap<String, Object>();
 		String loginIp = getIpAddr(request);
 		// 为了自动化测试先屏蔽掉验证码，请大家先别修改回去，手下留情。谢谢。
 		// if (true) {
+		String passTime = TimeHelper.addMinute(kaptchaTime, 1);
+		Date passDate = TimeHelper.parseDateTime(passTime);
+		if(new Date().getTime()>passDate.getTime()){
+			resMap.put("ret", "1");
+			resMap.put("msg", "验证码错误！");
+			response.getWriter().write(JSONObject.toJSONString(resMap));
+			return;
+		}
 		if (sessionKaptcha.equals(inputKaptcha)) {
 			// 验证码正确，检查用户名和密码
 			try {
@@ -244,9 +254,13 @@ public class SysLoginController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/login/getSysMain")
-	public String getSysIndexMain(ServletRequest request) {
+	public String getSysIndexMain(HttpServletRequest request) {
 		try {
-
+			SysUserSession sysUserSession = (SysUserSession) request.getSession().getAttribute("sysUserSession");
+			String roleIds = sysUserSession.getRoleIds();
+			if(roleIds==null ||roleIds.trim()==""){
+				return "/main/noRightAccess";
+			}
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
 		}

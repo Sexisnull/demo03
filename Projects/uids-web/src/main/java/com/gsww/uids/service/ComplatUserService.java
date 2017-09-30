@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 
+import com.gsww.uids.entity.ComplatOutsideuser;
 import com.gsww.uids.entity.ComplatUser;
 
 /**
@@ -73,5 +74,14 @@ public interface ComplatUserService {
 	 * @return
 	 */
 	public List<Map<String, Object>> findByNameOrPinYin(String keyword);
+	
+	
+
+	/**
+     * @discription   验证loginname实体是否存在 
+     * @param loginName
+     * @return
+	 */
+	public ComplatUser findByLoginnameIsUsed(String loginname);
 	
 }
