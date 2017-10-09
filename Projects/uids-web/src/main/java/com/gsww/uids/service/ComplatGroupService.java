@@ -100,8 +100,19 @@ public interface ComplatGroupService {
 	
 	public List<Map<String,Object>> findAllIidsAndName();
 	
-	
+	/**
+	 * 根据机构编码查找对象
+	 * @param codeid
+	 * @return
+	 * @throws Exception
+	 */
 	public ComplatGroup findByCodeid(String codeid) throws Exception;
 	
-
+	/**
+	 * 查询没有pid的机构
+	 * @return
+	 * @throws Exception
+	 */
+	public List<ComplatGroup> findByNoPid() throws Exception;
+	
 }

@@ -33,4 +33,12 @@ JpaSpecificationExecutor<ComplatGroup>{
 	
 
 	public List<ComplatGroup> findByCodeid(String paramString);
+	
+	/**
+	 * 查询没有pid的机构
+	 * @return
+	 */
+	public List<ComplatGroup> findByPidIsNullOrderByCodeidDesc();
+//	@Query(value = "select group from ComplatGroup group where group.pid=? order by group.orderid asc")
+//	public List<ComplatGroup> findByNoPid();
 }
