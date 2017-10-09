@@ -42,6 +42,7 @@ public class QqAuthService {
 			Map<String, String> map = new HashMap<String, String>();
 			if (code != null) {
 				OutsideUser outsideUser = new OutsideUser();
+				logger.info("<QqAuth接口>接收到请求内容:" + code);
 				QqUtil qqUtil = new QqUtil();
 				Map<String, String> result = qqUtil.getUserInfoAccessToken(code);// 通过这个code获取access_token
 				if (result.get("access_token") == null) {
@@ -89,7 +90,7 @@ public class QqAuthService {
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces(MediaType.APPLICATION_JSON)
 	public boolean mergeUserId(@QueryParam("openID") String openID, @QueryParam("userId") String userId) {
-		logger.info("<QQ接口>接收到请求内容:" + openID);
+		logger.info("<QQmerge接口>接收到请求内容:" + openID+userId);
 		if (!openID.isEmpty() && !userId.isEmpty() && outsideUserDAO.findByQQOpenId(openID) == null) {
 			outsideUserDAO.saveQQOpenId(openID, userId);
 			if (outsideUserDAO.saveQQOpenId(openID, userId) > 0) {
