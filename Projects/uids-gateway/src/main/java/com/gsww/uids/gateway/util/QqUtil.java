@@ -30,15 +30,14 @@ public class QqUtil {
 	 * @return
 	 */
 	public String getRequestCodeUrl(String redirectUrl) {
-		String requestUrl = String.format(
-				"https://graph.qq.com/oauth2.0/authorize?response_type=CODE&client_id=CLIENT_ID&redirect_uri=REDIRECT_URI&state=1");
+		String qq_auth_url = ReadProperties.getPropertyByStr("qq_auth_url");
 		String clientId = "";
 		String state = "";
-		requestUrl = requestUrl.replace("CLIENT_ID", clientId);
-		requestUrl = requestUrl.replace("REDIRECT_URI", redirectUrl);
-		requestUrl = requestUrl.replace("STATE", state);
+		qq_auth_url = qq_auth_url.replace("CLIENT_ID", clientId);
+		qq_auth_url = qq_auth_url.replace("REDIRECT_URI", redirectUrl);
+		qq_auth_url = qq_auth_url.replace("STATE", state);
 		// System.out.println(requestUrl);
-		return String.format(requestUrl);
+		return String.format(qq_auth_url);
 	}
 
 	/**
@@ -47,7 +46,7 @@ public class QqUtil {
 	 * @param code
 	 * @return
 	 */
-	@SuppressWarnings("resource")
+	@SuppressWarnings({ "resource", "deprecation" })
 	public Map<String, String> getUserInfoAccessToken(String code) {
 		JsonObject jsonObject = null;
 		Map<String, String> data = new HashMap<String, String>();
@@ -59,16 +58,15 @@ public class QqUtil {
 			String clientSecret = "";
 			// 用于保持请求和回调的状态，授权请求后原样带回给第三方。
 			String redirectUri = "";
-			String url = String.format(
-					"https://graph.qq.com/oauth2.0/token?grant_type=GRANT_TYPE&client_id=CLIENT_ID&client_secret=CLIENT_SECRET&code=CODE&redirect_uri=REDIRECT_URL");
-			url = url.replace("GRANT_TYPE", grantType);
-			url = url.replace("CLIENT_ID", clientId);
-			url = url.replace("CLIENT_SECRET", clientSecret);
-			url = url.replace("CODE", code);
-			url = url.replace("REDIRECT_URL", redirectUri);
+			String get_qq_accesstoken_url = ReadProperties.getPropertyByStr("get_qq_accesstoken_url");
+			get_qq_accesstoken_url = get_qq_accesstoken_url.replace("GRANT_TYPE", grantType);
+			get_qq_accesstoken_url = get_qq_accesstoken_url.replace("CLIENT_ID", clientId);
+			get_qq_accesstoken_url = get_qq_accesstoken_url.replace("CLIENT_SECRET", clientSecret);
+			get_qq_accesstoken_url = get_qq_accesstoken_url.replace("CODE", code);
+			get_qq_accesstoken_url = get_qq_accesstoken_url.replace("REDIRECT_URL", redirectUri);
 
 			DefaultHttpClient httpClient = new DefaultHttpClient();
-			HttpGet httpGet = new HttpGet(url);
+			HttpGet httpGet = new HttpGet(get_qq_accesstoken_url);
 			HttpResponse httpResponse = httpClient.execute(httpGet);
 			HttpEntity httpEntity = httpResponse.getEntity();
 			String tokens = EntityUtils.toString(httpEntity, "utf-8");
@@ -103,11 +101,11 @@ public class QqUtil {
 		Map<String, String> data = new HashMap<String, String>();
 		try {
 			String accessToken = "";
-			String url = String.format("https://graph.qq.com/oauth2.0/me?access_token=ACCESS_TOKEN");
-			url = url.replace("ACCESS_TOKEN", accessToken);
-			System.out.println(url + "url--------------------------");
+			String get_qq_openid_url=ReadProperties.getPropertyByStr("get_qq_openid_url");
+			get_qq_openid_url = get_qq_openid_url.replace("ACCESS_TOKEN", accessToken);
+			//System.out.println(get_qq_openid_url + "url--------------------------");
 			DefaultHttpClient httpClient = new DefaultHttpClient();
-			HttpGet httpGet = new HttpGet(url);
+			HttpGet httpGet = new HttpGet(get_qq_openid_url);
 			HttpResponse httpResponse = httpClient.execute(httpGet);
 			HttpEntity httpEntity = httpResponse.getEntity();
 			String tokens = EntityUtils.toString(httpEntity, "utf-8");

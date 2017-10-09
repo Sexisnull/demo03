@@ -10,12 +10,11 @@ import java.util.*;
  */
 public final class ReadProperties {
 
-	private Properties properties;
-	
-	public ReadProperties(String fileName){
+	private static final Properties properties;
+	static {
 		properties = new Properties();
 		InputStream stream =
-			ReadProperties.class.getResourceAsStream(fileName);
+			ReadProperties.class.getResourceAsStream("/ApplicationResources.properties");
 		try {
 			properties.load(stream);
 		} catch (Exception e) {
@@ -23,42 +22,12 @@ public final class ReadProperties {
 		}
 		properties.putAll(System.getProperties());
 	}
-
-	/**
-	 * @param filename :文件名称
-	 * @return PropertyResourceBundle
-	 * 取得文件
-	 */
-	private PropertyResourceBundle getFile(String filename) {
-
-		return (PropertyResourceBundle) ResourceBundle.getBundle(filename);
+	
+	public static String getPropertyByStr(String propertyName) {
+		return String.valueOf(ReadProperties.properties.get(propertyName));
 	}
-	/**
-	 * @param propertyName :对象名称
-	 * @param filename :文件名称
-	 * @return 对象值
-	 * 取得配置文件的对象值
-	 */
-	private String getProperty(String propertyName, String filename) {
-
-		return getFile(filename).getString(propertyName);
-
-	}
-
-
-	/**
-	 * @param propertyName :对象名称
-	 * @return 对象值
-	 * 取得配置文件的对象值
-	 */
-	public Object getProperty(String propertyName) {
-		Object result= properties.get(propertyName);
-		return result;
-	}
-
-	public static void main(String args[]) {
-		ReadProperties rp = new ReadProperties("/ApplicationResources.properties");
-
-		System.out.println(rp.getProperty("fromPassword").toString());
+	
+	public static int getPropertyByInt(String propertyName) {
+		return Integer.parseInt(ReadProperties.getPropertyByStr(propertyName));
 	}
 }

@@ -5,18 +5,23 @@ https://openauth.alipaydev.com/oauth2/publicAppAuthorize.htm?app_id=201608050017
 127.0.0.1:8088/uids-web/ali/merge?aliUserId=(支付宝UserId)&userId=(系统userId)
 
 
-# 微信WeChatAuth接口（获取access_token的Code的Url）
-https://open.weixin.qq.com/connect/qrconnect?appid=APPID&redirect_uri=REDIRECT_URI&response_type=CODE&scope=SCOPE&state=STATE#wechat_redirect
+# 微信WeChatAuth接口（获取access_token和openid的Url）
+get_wechat_accesstoken_url=https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code
 
-# 微信WeChatAuth接口（用于登陆）
-https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code
+# 微信WeChatAuth接口（获取access_token的Code的Url）
+get_wechat_code_url=https://open.weixin.qq.com/connect/qrconnect?appid=APPID&redirect_uri=REDIRECT_URI&response_type=CODE&scope=SCOPE&state=STATE#wechat_redirect
 
 # 绑定微信openid与系统UserId
 127.0.0.1:8088/uids-web/weChat/merge?openid=(微信 openid)&userId=(系统userId)
 
+# QQ-QQAuth接口（获取code）需要替换 CLIENT_ID和REDIRECT_URL及STATE
+qq_auth_url=https://graph.qq.com/oauth2.0/authorize?response_type=CODE&client_id=CLIENT_ID&redirect_uri=REDIRECT_URI&state=1
 
-# QQ-QQAuth接口（获取access_tokenUrl）
-https://graph.qq.com/oauth2.0/token?grant_type=GRANT_TYPE&client_id=CLIENT_ID&client_secret=CLIENT_SECRET&code=CODE&redirect_uri=REDIRECT_URL
+# QQ-QQAuth接口（获取access_tokenUrl）需要替换GRANT_TYPE、CLIENT_ID、CLIENT_SECRET、CODE、REDIRECT_URL
+get_qq_accesstoken_url=https://graph.qq.com/oauth2.0/token?grant_type=GRANT_TYPE&client_id=CLIENT_ID&client_secret=CLIENT_SECRET&code=CODE&redirect_uri=REDIRECT_URL
+
+# QQ-QQAuth接口（获取openid）需要替换ACCESS_TOKEN
+get_qq_openid_url=https://graph.qq.com/oauth2.0/me?access_token=ACCESS_TOKEN
 
 # 绑定QQopenid与系统UserId
 127.0.0.1:8088/uids-web/qq/merge?openid=(QQ openid)&userId=(系统userId)
