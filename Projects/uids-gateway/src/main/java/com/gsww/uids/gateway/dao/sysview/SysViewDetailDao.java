@@ -10,17 +10,17 @@ public class SysViewDetailDao extends JdbcTemplateDao{
 	protected Logger logger = Logger.getLogger(getClass());	
 	
 	//查询同步明细
-	private static final String FIND_DETAIL_SQL = "SELECT * FROM jis_sysview_detail where iid = ?";
+	private static final String FIND_DETAIL_SQL = "SELECT * FROM jis_sysview_detail where transcation_id = ?";
 	
 	//更新同步明细
-	private static final String UPDATE_DETAIL_SQL = "update jis_sysview_detail t SET t.respmsg = ? where t.iid=?";
+	private static final String UPDATE_DETAIL_SQL = "update jis_sysview_detail t SET t.respmsg = ? where t.transcation_id=?";
 		
-	public Map<String,Object> findDetailById(int iid){
-		Map<String,Object> map = jdbcTemplate.queryForMap(FIND_DETAIL_SQL, new Object[]{iid});
+	public Map<String,Object> findDetailById(String transcationId){
+		Map<String,Object> map = jdbcTemplate.queryForMap(FIND_DETAIL_SQL, new Object[]{transcationId});
 		return map;
 	}
 	
-	public void updateSysViewCurr(int iid,String respmsg){
-		jdbcTemplate.update(UPDATE_DETAIL_SQL, new Object[]{respmsg,iid});
+	public void updateSysViewCurr(String transcationId,String respmsg){
+		jdbcTemplate.update(UPDATE_DETAIL_SQL, new Object[]{respmsg,transcationId});
 	}
 }
