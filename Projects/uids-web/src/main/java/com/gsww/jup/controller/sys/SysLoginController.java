@@ -110,7 +110,7 @@ public class SysLoginController extends BaseController {
 		Date passDate = TimeHelper.parseDateTime(passTime);
 		if(new Date().getTime()>passDate.getTime()){
 			resMap.put("ret", "1");
-			resMap.put("msg", "验证码错误！");
+			resMap.put("msg", "验证码过期！");
 			response.getWriter().write(JSONObject.toJSONString(resMap));
 			return;
 		}
@@ -147,7 +147,7 @@ public class SysLoginController extends BaseController {
 								JSONObject.toJSONString(resMap));
 						try {
 							// 登录日志
-							jisLogService.save(sysUserSession.getUserName(),
+							jisLogService.save(sysUserSession.getAccountId(),
 									sysUserSession.getUserIp(), userName
 											+ "系统登录成功", 8, 9);
 
