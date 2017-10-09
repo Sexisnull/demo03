@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.gsww.uids.gateway.dao.sysview.SysViewDao;
-import com.gsww.uids.gateway.util.Contants;
+import com.gsww.uids.gateway.util.Constants;
 import com.gsww.uids.gateway.util.SpringContextHolder;
 
 public class RecordSyncHisTread extends Thread {
