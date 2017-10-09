@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletRequest;
@@ -80,10 +81,9 @@ public class ComplatCorporationController extends BaseController{
 			//初始化分页数据
 			PageUtils pageUtils=new PageUtils(pageNo,pageSize,orderField,orderSort);
 			PageRequest pageRequest=super.buildPageRequest(hrequest,pageUtils,ComplatCorporation.class,findNowPage);
-			
 			//搜索属性初始化
 			Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
-			//searchParams.put("NE_operSign", 3);
+			searchParams.put("NE_operSign", 3);
 			Specification<ComplatCorporation>  spec=super.toNewSpecification(searchParams, ComplatCorporation.class);
 			
 			//分页
@@ -234,11 +234,20 @@ public class ComplatCorporationController extends BaseController{
 					corporation.setCardNumber(fqyCardNumber);
 				}
 				
-				complatCorporationService.save(corporation);
-				returnMsg("success","保存成功",request);
+				//重复校验
+				if(corporation.getIid() == null){
+					Integer checkData = complatCorporationService.checkUnique(corporation.getLoginName(), corporation.getRegNumber(), corporation.getOrgNumber());
+					System.out.println("checkData;;;-"+checkData);
+					if(checkData == 1){
+						returnMsg("error","法人用户重复，保存失败",request);
+					}else{
+						complatCorporationService.save(corporation);
+						returnMsg("success","保存成功",request);
+						//记录日志
+						this.addJisLog(corporation, request,operType);
+					}
+				}
 				
-				//记录日志
-				this.addJisLog(corporation, request,operType);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -262,9 +271,9 @@ public class ComplatCorporationController extends BaseController{
 				Integer corId = Integer.parseInt(para[i].trim());
 				corporation=complatCorporationService.findByKey(corId);
 				if(corporation != null){
-					/*Integer iid = corporation.getIid();
-					complatCorporationService.updateCorporation(iid);*/
-					complatCorporationService.delete(corporation);
+					Integer iid = corporation.getIid();
+					complatCorporationService.updateCorporation(iid);
+					//complatCorporationService.delete(corporation);
 					returnMsg("success", "删除成功", request);
 					
 					//记录日志
