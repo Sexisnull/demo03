@@ -18,7 +18,7 @@ import com.gsww.uids.gateway.exception.LoginException;
 import com.gsww.uids.gateway.service.AppService;
 import com.gsww.uids.gateway.service.AuthLogService;
 import com.gsww.uids.gateway.service.OutsideUserService;
-import com.gsww.uids.gateway.sso.ldap.util.MD5;
+import com.gsww.uids.gateway.util.MD5;
 import com.gsww.uids.gateway.util.DateTime;
 import com.gsww.uids.gateway.util.DateUtil;
 import com.gsww.uids.gateway.util.JSONUtil;

@@ -13,7 +13,7 @@ import com.gsww.uids.gateway.dao.application.ApplicationDao;
 import com.gsww.uids.gateway.dao.sysview.SysViewDao;
 import com.gsww.uids.gateway.dao.sysview.SysViewDetailDao;
 import com.gsww.uids.gateway.httpClient.MyHttpClient;
-import com.gsww.uids.gateway.util.Contants;
+import com.gsww.uids.gateway.util.Constants;
 import com.gsww.uids.gateway.util.SpringContextHolder;
 
 public class ImmediateSyncThread extends Thread {
@@ -52,14 +52,14 @@ public class ImmediateSyncThread extends Thread {
 			Map<String, Object> returnMap = new HashMap<String, Object>();
 
 			// 推送信息到第三方
-			if (Contants.TRANS_HTTP == transtype) {
+			if (Constants.TRANS_HTTP == transtype) {
 
 				// TODO http方式通信
 				// 获取发送报文 暂时为空
 				// Map<String, String> sendMap = new HashMap<String, String>();
 				// returnMap = MyHttpClient.syncToApplication((String)
 				// appMap.get("appurl"), sendMap.toString());
-			} else if (Contants.TRANS_WEBSERVICE == transtype) {
+			} else if (Constants.TRANS_WEBSERVICE == transtype) {
 
 				// webService方式通信
 				Map<String, Object> sendMap = sysViewDetailDao.findDetailById(iid);
@@ -75,19 +75,19 @@ public class ImmediateSyncThread extends Thread {
 					if (!"".equals(returnMap.get("respMsg")) && null != returnMap.get("respMsg")) {
 						sysViewDetailDao.updateSysViewCurr(iid, (String) returnMap.get("respMsg"));
 						JSONObject returnInfo = JSONObject.fromObject(returnMap.get("respMsg"));
-						if (Contants.SYNC_SUCCESS_TURE.equals(returnInfo.getString("success"))) {
+						if (Constants.SYNC_SUCCESS_TURE.equals(returnInfo.getString("success"))) {
 
-							sysViewDao.updateSysViewCurr(iid, Contants.OPTRESULT_SUCESS);
-							logger.info("数据同步成功，更新状态:" + Contants.OPTRESULT_SUCESS);
-						} else if (Contants.SYNC_SUCCESS_FALSE.equals(returnInfo.getString("success"))) {
+							sysViewDao.updateSysViewCurr(iid, Constants.OPTRESULT_SUCESS);
+							logger.info("数据同步成功，更新状态:" + Constants.OPTRESULT_SUCESS);
+						} else if (Constants.SYNC_SUCCESS_FALSE.equals(returnInfo.getString("success"))) {
 
-							sysViewDao.updateSysViewCurr(iid, Contants.OPTRESULT_FALSE);
-							logger.info("数据同步失败，更新状态:" + Contants.OPTRESULT_FALSE);
+							sysViewDao.updateSysViewCurr(iid, Constants.OPTRESULT_FALSE);
+							logger.info("数据同步失败，更新状态:" + Constants.OPTRESULT_FALSE);
 						}
 					}
 				} else {
-					sysViewDao.updateSysViewCurr(iid, Contants.OPTRESULT_NET_BARRIER);
-					logger.info("网络不通，更新状态:" + Contants.OPTRESULT_NET_BARRIER);
+					sysViewDao.updateSysViewCurr(iid, Constants.OPTRESULT_NET_BARRIER);
+					logger.info("网络不通，更新状态:" + Constants.OPTRESULT_NET_BARRIER);
 				}
 			}
 
