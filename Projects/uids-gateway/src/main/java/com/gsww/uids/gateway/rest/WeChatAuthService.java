@@ -10,6 +10,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import net.sf.json.JSONArray;
+
 import org.apache.log4j.Logger;
 
 import com.gsww.uids.gateway.dao.outsideuser.OutsideUserDao;
@@ -18,8 +20,6 @@ import com.gsww.uids.gateway.util.JSONUtil;
 import com.gsww.uids.gateway.util.SpringContextHolder;
 import com.gsww.uids.gateway.util.StringHelper;
 import com.gsww.uids.gateway.util.WeChatUtil;
-
-import net.sf.json.JSONArray;
 
 @Path("/uids-web")
 public class WeChatAuthService {
