@@ -200,15 +200,17 @@ public class ComplatOutsideuserController extends BaseController {
 	@RequestMapping(value = "/outsideuserDelete", method = RequestMethod.GET)
 	public ModelAndView accountDelete(String corporationId, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
+		ComplatOutsideuser complatOutsideuser = null;
 		try {
 			SysUserSession sysUserSession =  (SysUserSession) ((HttpServletRequest) request).getSession().getAttribute("sysUserSession");
 			String[] para = corporationId.split(",");
-			String desc = sysUserSession.getUserName() + "删除id为：" + para +"的个人用户"; 
-			jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,10,3);
 			for (int i = 0; i < para.length; i++) {
 				Integer corId = Integer.parseInt(para[i].trim());
 				outsideUserService.delete(corId);
 				returnMsg("success", "删除成功", request);
+				complatOutsideuser = outsideUserService.findByKey(corId);
+				String desc = sysUserSession.getUserName() + "删除了姓名为：" + complatOutsideuser.getName() +"的个人用户"; 
+				jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,10,3);
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
