@@ -28,7 +28,7 @@ public class AuthenticateService {
 	@GET
 	@Path("/per/interface.do")
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Consumes({MediaType.APPLICATION_JSON })
 	public String per(@QueryParam("action")String action,
 			@QueryParam("appmark")String appmark,
 			@QueryParam("gotoUrl")String gotoUrl,
@@ -73,7 +73,7 @@ public class AuthenticateService {
 	@GET
 	@Path("/cor/interface.do")
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Consumes({MediaType.APPLICATION_JSON })
 	public String cor(@QueryParam("action")String action,
 			@QueryParam("appmark")String appmark,
 			@QueryParam("gotoUrl")String gotoUrl,

@@ -3,11 +3,8 @@ package com.gsww.uids.gateway.dao.sso;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.gsww.uids.gateway.dao.JdbcTemplateDao;
-import com.gsww.uids.gateway.util.SpringContextHolder;
 
 public class SsoDao extends JdbcTemplateDao{
 	protected Logger logger = Logger.getLogger(getClass());
