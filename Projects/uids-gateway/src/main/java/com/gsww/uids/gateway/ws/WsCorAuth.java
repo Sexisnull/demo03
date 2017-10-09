@@ -46,18 +46,9 @@ import com.gsww.uids.gateway.util.StringUtil;
 @SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use = SOAPBinding.Use.LITERAL, parameterStyle = SOAPBinding.ParameterStyle.WRAPPED)
 @WebService(name = "WsCorAuth", targetNamespace = "http://www.gszwfw.gov.cn/gsjis/services/WsCorAuth")
 public class WsCorAuth {
-	private static AuthLogService authLogService;
-	static {
-		authLogService = SpringContextHolder.getBean("authLogService");
-	}
-	private static AppService appService;
-	static {
-		appService = SpringContextHolder.getBean("appService");
-	}
-	private static CorporationService corporationService;
-	static {
-		corporationService = SpringContextHolder.getBean("corporationService");
-	}
+	private static AuthLogService authLogService= SpringContextHolder.getBean("authLogService");
+	private static AppService appService= SpringContextHolder.getBean("appService");
+	private static CorporationService corporationService= SpringContextHolder.getBean("corporationService");
 
 	protected Logger logger = Logger.getLogger(getClass());
 
@@ -73,7 +64,7 @@ public class WsCorAuth {
 		if ((StringHelper.isNotBlack(appmark)) && (StringHelper.isNotBlack(ticket)) && (StringHelper.isNotBlack(time))
 				&& (StringHelper.isNotBlack(sign))) {
 			// 通过ticket, userType获取jis_authlog中的信息 --2：政府用户
-			JisAuthLog jisAuthLog = this.authLogService.findByTicket(ticket, 2);
+			JisAuthLog jisAuthLog = authLogService.findByTicket(ticket, 2);
 			if (jisAuthLog != null) {
 				Date outTime = jisAuthLog.getOuttickettime();
 				if (DateTime.dayDiff(new Date(), outTime) < 0L) {
@@ -82,7 +73,7 @@ public class WsCorAuth {
 					map.put("errormsg", "票据已过期");
 					return new JSONUtil().writeMapSJSON(map);
 				}
-				Application appLication = this.appService.findByMark(appmark);
+				Application appLication =appService.findByMark(appmark);
 				MD5 md5 = new MD5();
 				String token = "";
 				if (appLication != null) {
@@ -137,7 +128,7 @@ public class WsCorAuth {
 		Map<String, String> map = new HashMap<String, String>();
 		if ((StringHelper.isNotBlack(appmark)) || (StringHelper.isNotBlack(token)) || (StringHelper.isNotBlack(time))
 				|| (StringHelper.isNotBlack(sign))) {// 非空判断
-			JisAuthLog jisAuthLog = this.authLogService.findByToken(token, 2);
+			JisAuthLog jisAuthLog = authLogService.findByToken(token, 2);
 			System.out.println("jisAuthLog:-----" + jisAuthLog);
 			if (jisAuthLog == null) {
 				map.put("errormsg", "没有该令牌");
@@ -145,7 +136,7 @@ public class WsCorAuth {
 			} else {
 				int userType = jisAuthLog.getUsertype().intValue();
 				if (userType == 2) {
-					Corporation corporation = this.corporationService.findByLoginName(jisAuthLog.getLoginname());
+					Corporation corporation = corporationService.findByLoginName(jisAuthLog.getLoginname());
 					if (corporation != null) {
 						map.put("uuid", corporation.getUuid());
 						map.put("type", corporation.getType() + "");
@@ -194,14 +185,14 @@ public class WsCorAuth {
 			return new JSONUtil().writeMapSJSON(map);
 		}
 
-		Application appLication = this.appService.findByMark(proxyapp);
+		Application appLication = appService.findByMark(proxyapp);
 		if (appLication != null) {
 			/*
 			 * if (CacheUtil.getValue(token, "cortoken") == null) {
 			 * map.put("errormsg", "令牌已失效"); return new
 			 * JSONUtil().writeMapSJSON(map); }
 			 */
-			JisAuthLog jisAuthLog = this.authLogService.findByToken(token, 2);
+			JisAuthLog jisAuthLog = authLogService.findByToken(token, 2);
 			if (jisAuthLog != null) {
 				JisAuthLog jisAuthLogNew = new JisAuthLog();
 				jisAuthLogNew.setAppid(appLication.getIid());
@@ -245,7 +236,7 @@ public class WsCorAuth {
 		Map<String, String> map = new HashMap<String, String>();
 		if ((StringHelper.isNotBlack(appmark)) || (StringHelper.isNotBlack(sign)) || (StringHelper.isNotBlack(password))
 				|| (time != null)) {
-			Application appLication = this.appService.findByMark(appmark);
+			Application appLication = appService.findByMark(appmark);
 			if (appLication == null) {
 				System.out.println("appLication==" + appLication);
 				map.put("errormsg", "应用标识不正确");
@@ -256,7 +247,7 @@ public class WsCorAuth {
 			System.out.println("password" + password);
 			JisAuthLog jisAuthLog = new JisAuthLog();
 			try {
-				Corporation corporation = this.corporationService.checkUserLogin(loginname, password, ip);
+				Corporation corporation = corporationService.checkUserLogin(loginname, password, ip);
 				if (corporation != null) {
 					jisAuthLog.setAppmark(appmark);
 					jisAuthLog.setLoginname(corporation.getLoginname());

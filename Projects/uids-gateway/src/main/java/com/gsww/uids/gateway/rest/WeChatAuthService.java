@@ -42,6 +42,7 @@ public class WeChatAuthService {
 			Map<String, String> map = new HashMap<String, String>();
 			if (code != null) {
 				OutsideUser outsideUser = new OutsideUser();
+				logger.info("<WeChatAuth接口>接收到请求内容:" + code);
 				WeChatUtil weChatUtil = new WeChatUtil();
 				Map<String, String> result = weChatUtil.getUserInfoAccessToken(code);// 通过这个code获取access_token
 				String openId = result.get("openid");
@@ -79,7 +80,7 @@ public class WeChatAuthService {
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces(MediaType.APPLICATION_JSON)
 	public boolean mergeUserId(@QueryParam("openid") String openid, @QueryParam("userId") String userId) {
-		logger.info("<WeChat接口>接收到请求内容:" + openid);
+		logger.info("<WeChat merge接口>接收到请求内容:" + openid);
 		if (!openid.isEmpty() && !userId.isEmpty() && outsideUserDAO.findByWeChatOpenId(openid) == null) {
 			outsideUserDAO.saveWeChatOpenId(openid, userId);
 			if (outsideUserDAO.saveWeChatOpenId(openid, userId) > 0) {
@@ -87,7 +88,7 @@ public class WeChatAuthService {
 			}
 			return true;
 		} else {
-			logger.info(userId + "绑定账号失败，openid为：" + openid+"该微信账号已被使用");
+			logger.info(userId + "绑定账号失败，openid为：" + openid+"-该微信账号已被使用");
 			return false;
 		}
 	}

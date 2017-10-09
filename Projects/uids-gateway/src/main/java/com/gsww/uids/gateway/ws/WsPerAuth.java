@@ -49,18 +49,9 @@ import com.gsww.uids.gateway.util.UserUtil;
 @WebService(name = "WsPerAuth", targetNamespace = "http://www.gszwfw.gov.cn/gsjis/services/WsPerAuth")
 public class WsPerAuth {
 
-	private static AuthLogService authLogService;
-	static {
-		authLogService = SpringContextHolder.getBean("authLogService");
-	}
-	private static AppService appService;
-	static {
-		appService = SpringContextHolder.getBean("appService");
-	}
-	private static OutsideUserService outsideUserService;
-	static {
-		outsideUserService = SpringContextHolder.getBean("outsideUserService");
-	}
+	private static AuthLogService authLogService = SpringContextHolder.getBean("authLogService");
+	private static AppService appService = SpringContextHolder.getBean("appService");
+	private static OutsideUserService outsideUserService = SpringContextHolder.getBean("outsideUserService");
 
 	protected Logger logger = Logger.getLogger(getClass());
 
@@ -78,7 +69,7 @@ public class WsPerAuth {
 			return new JSONUtil().writeMapSJSON(map);
 		}
 		// 通过ticket查询JisAuthLog
-		JisAuthLog jisAuthLog = this.authLogService.findByTicket(ticket, 1);
+		JisAuthLog jisAuthLog = authLogService.findByTicket(ticket, 1);
 		if (jisAuthLog != null) {
 			// 设置ticket过期时间
 			Date outTicketTime = jisAuthLog.getOuttickettime();
@@ -89,7 +80,7 @@ public class WsPerAuth {
 				return new JSONUtil().writeMapSJSON(map);
 			}
 			// 通过appmark查询Application
-			Application appLication = this.appService.findByMark(appmark);
+			Application appLication = appService.findByMark(appmark);
 			// MD5加密规则
 			MD5 md5 = new MD5();
 			String token = "";
@@ -142,7 +133,7 @@ public class WsPerAuth {
 			return new JSONUtil().writeMapSJSON(map);
 		}
 
-		JisAuthLog jisAuthLog = this.authLogService.findByToken(token, 1);
+		JisAuthLog jisAuthLog = authLogService.findByToken(token, 1);
 		if (jisAuthLog == null) {
 			map.put("errormsg", "没有该令牌");
 			return new JSONUtil().writeMapSJSON(map);
@@ -150,7 +141,7 @@ public class WsPerAuth {
 
 		int userType = jisAuthLog.getUsertype().intValue();
 		if (userType == 1) {
-			OutsideUser outSideUser = this.outsideUserService.findByLoginName(jisAuthLog.getLoginname());
+			OutsideUser outSideUser = outsideUserService.findByLoginName(jisAuthLog.getLoginname());
 			map.put("uuid", outSideUser.getUuid());
 			map.put("loginname", outSideUser.getLoginname());
 			map.put("mobile", StringUtil.getString(outSideUser.getMobile()));
@@ -183,14 +174,14 @@ public class WsPerAuth {
 		Map<String, String> map = new HashMap<String, String>();
 		if ((StringHelper.isNotBlack(appmark)) || (StringHelper.isNotBlack(token)) || (StringHelper.isNotBlack(sign))
 				|| (StringHelper.isNotBlack(proxyapp)) || (StringHelper.isNotBlack(time))) {
-			Application appLication = this.appService.findByMark(proxyapp);
+			Application appLication = appService.findByMark(proxyapp);
 			if (appLication != null) {
 				/*
 				 * if (CacheUtil.getValue(token, "pertoken") == null) {
 				 * map.put("errormsg", "令牌已失效"); return new
 				 * JSONUtil().writeMapSJSON(map); }
 				 */
-				JisAuthLog jisAuthLog = this.authLogService.findByToken(token, 1);
+				JisAuthLog jisAuthLog = authLogService.findByToken(token, 1);
 				if (jisAuthLog != null) {
 					JisAuthLog jisAuthLogNew = new JisAuthLog();
 					jisAuthLogNew.setAppid(appLication.getIid());
@@ -275,6 +266,7 @@ public class WsPerAuth {
 				String token = md5.encrypt(loginname + appmark, loginname);
 				jisAuthLog.setToken(token);
 
+				@SuppressWarnings("unused")
 				long tokenEffectiveTime = NumberUtil.getLong(300);
 				// CacheUtil.setValue(loginname, token, "pertokenkey");
 				// CacheUtil.setValue(token, jisAuthLog, "pertoken");
