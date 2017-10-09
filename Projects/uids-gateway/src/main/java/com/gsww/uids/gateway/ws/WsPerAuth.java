@@ -11,17 +11,14 @@ import javax.jws.soap.SOAPBinding;
 
 import org.apache.log4j.Logger;
 
-import com.gsww.uids.gateway.constant.Settings;
 import com.gsww.uids.gateway.entity.Application;
 import com.gsww.uids.gateway.entity.JisAuthLog;
 import com.gsww.uids.gateway.entity.OutsideUser;
 import com.gsww.uids.gateway.exception.LoginException;
 import com.gsww.uids.gateway.service.AppService;
 import com.gsww.uids.gateway.service.AuthLogService;
-import com.gsww.uids.gateway.service.CorporationService;
 import com.gsww.uids.gateway.service.OutsideUserService;
 import com.gsww.uids.gateway.sso.ldap.util.MD5;
-import com.gsww.uids.gateway.util.CacheUtil;
 import com.gsww.uids.gateway.util.DateTime;
 import com.gsww.uids.gateway.util.DateUtil;
 import com.gsww.uids.gateway.util.JSONUtil;
