@@ -91,4 +91,17 @@ public class ComplatZoneServiceImpl implements ComplatZoneService {
 	public List<ComplatZone> findChildByIid(int int1) {
 		return complatZoneDao.findChildByPid(int1);
 	}
+	
+	@Override
+	public List<ComplatZone> findByPid(Integer pid) throws Exception {
+		List<ComplatZone> list=new ArrayList<ComplatZone>();
+		list=complatZoneDao.findByPid(pid);
+		return list;	
+	}
+	
+	@Override
+	public ComplatZone findByIid(Integer iid) {
+		ComplatZone complatZone=complatZoneDao.findByIid(iid);
+		return complatZone;
+	}
 }

@@ -156,7 +156,7 @@ function resetform() {
 										</label>
 										<div class="controls">
 											<input type="text" class="input-medium" id="authCode" name="authCode" maxlength="4" placeholder="请输入验证码">
-											<img id="code_" src="kaptcha/image" alt="点击更换验证码" onclick="chimg();" style="width: 53px; height: 25px; cursor: pointer;" />
+											<img id="code_" src="${ctx}/kaptcha/image" alt="点击更换验证码" onclick="chimg();" style="width: 53px; height: 25px; cursor: pointer;" />
 										</div>
 									</div>
 									<div class="control-group">
