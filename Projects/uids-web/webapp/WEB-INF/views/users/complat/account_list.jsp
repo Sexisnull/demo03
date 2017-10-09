@@ -522,6 +522,7 @@ function resetform() {
 						</tr>
 					</table>
 				</form>
+			</div>
 			<!--列表内容区域-->
 			<div class="list">
 				<input type="hidden" id="orderField" name="orderField"
