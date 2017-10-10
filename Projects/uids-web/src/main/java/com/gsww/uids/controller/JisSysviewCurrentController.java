@@ -159,6 +159,7 @@ public class JisSysviewCurrentController extends BaseController{
 			JisSysviewCurrent sysviewCurrent = jisSysviewCurrentService.findByIid(iid);
 			if(null != sysviewCurrent){
 				JisSysview sysview = convertToJisSysview(sysviewCurrent);
+				sysview.setOptresult(1);
 				jisSysviewService.save(sysview);
 				jisSysviewCurrentService.delete(sysviewCurrent);
 				 String desc=session.getUserName()+"同步了"+sysviewCurrent.getObjectname();
