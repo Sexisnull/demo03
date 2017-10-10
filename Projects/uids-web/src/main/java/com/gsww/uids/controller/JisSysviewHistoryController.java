@@ -113,7 +113,6 @@ import com.gsww.uids.service.JisSysviewHistoryService;
 		public String accountEdit(int iid,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 			
 			JisSysviewHistory sysviewHistory = jisSysviewHistoryService.findByIid(iid); 
-			JisSysviewDetail jisSysviewDetail = jisSysviewDetailService.findByIid(iid);
 			
 			//map放入
 			List<Map<String, Object>> applicationList =new ArrayList<Map<String,Object>>() ;
@@ -136,7 +135,10 @@ import com.gsww.uids.service.JisSysviewHistoryService;
 			model.addAttribute("applicationMap", applicationMap);
 			model.addAttribute("paraMap", paraMap);
 			model.addAttribute("jisSysview",sysviewHistory);
-			model.addAttribute("jisSysviewDetail",jisSysviewDetail);
+			if( null != sysviewHistory){
+				JisSysviewDetail jisSysviewDetail = jisSysviewDetailService.findByTranscationId(sysviewHistory.getTranscationId());
+				model.addAttribute("jisSysviewDetail",jisSysviewDetail);
+			}
 			return "users/sysview/jis_sysview_detail";
 		} 
 	}

@@ -251,7 +251,7 @@
 	                    	<div class="alignL">
 	                    		<div class="list-longtext">
 		                    		<c:if test="${complatCorporation.isAuth == '0'}">
-		                    			<input type="button" style="border: none;color: white;background: green;" value="   认   证   " onclick="openwindow(${complatCorporation.iid});">
+		                    			<input type="button" style="border: none;color: white;background: green;cursor: pointer;" value="   认   证   " onclick="openwindow(${complatCorporation.iid});">
 		                    		</c:if>
 		                    		<c:if test="${complatCorporation.isAuth == '1'}">
 		                    			已认证

@@ -69,7 +69,7 @@ public class PerLoginController {
 	@Autowired
 	private JisSettings jisSettings;
 
-	@RequestMapping(value = "/perlogin.do")
+	@RequestMapping(value = "/perlogin")
 	public String personalLogin(HttpServletResponse response, String action,
 			String appmark, String gotoUrl, String domain, Model model) {
 		if (action == null) {
@@ -309,7 +309,7 @@ public class PerLoginController {
 		}
 		String appmark = StringUtil.getString(session.getAttribute("appmark"));
 		ModelAndView modelAndView = new ModelAndView();
-		RedirectView redirectView = new RedirectView("perlogin.do");
+		RedirectView redirectView = new RedirectView("perlogin");
 		modelAndView.addObject("appmark", appmark);
 		modelAndView.setView(redirectView);
 		return modelAndView;
@@ -443,10 +443,10 @@ public class PerLoginController {
 		if (typeEntity == null) {
 			return null;
 		}
-		String varicode = "<img id='verifyImg' src='../verifyCode.do?code=4&var=rand&width=162&height=30&random="
+		String varicode = "<img id='verifyImg' src='../verifyCode?code=4&var=rand&width=162&height=30&random="
 				+ (int) (Math.random() * 100000000.0D)
 				+ "'"
-				+ " onclick=\"this.src='../verifyCode.do?code=4&var=rand&width=140&height=30&random='+ Math.random()"
+				+ " onclick=\"this.src='../verifyCode?code=4&var=rand&width=140&height=30&random='+ Math.random()"
 				+ ";\" style='cursor:pointer'  width='140'  height='30' />";
 		model.addAttribute("url", "recoverPwdByPhone_submit");
 		model.addAttribute("verifycodeimg", varicode);
@@ -948,7 +948,7 @@ public class PerLoginController {
 				+ "location.href='http://'+domain+'/gszw/member/login/login.do?url='+grloginurl+'&src='+src+'&domain='+encodeURIComponent(encodeURIComponent(domain));}"
 				+ " function showfrlogin(){var src=window.location.href;src=encodeURIComponent(src);   "
 				+ "frloginurl=encodeURIComponent(frloginurl);   "
-				+ "location.href='http://'+domain+'/gszw/member/login/login.do?url1='+frloginurl+'&src='+src+'&domain='+encodeURIComponent(encodeURIComponent(domain));  }"
+				+ "location.href='http://'main+'/gszw/member/login/login.do?url1='+frloginurl+'&src='+src+'&domain='+encodeURIComponent(encodeURIComponent(domain));  }"
 				+ "function showgrregedit(){"
 				+ "window.open(grregediturl);  }function showfrregedit(){window.open(frregediturl);}"
 				+ "$(function(){var $div_li =$('div.userinfomenu ul li');"

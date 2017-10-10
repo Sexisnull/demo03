@@ -35,8 +35,8 @@ $().ready(function() {
 		   loginName:{
 		   	required: true,
 		   	cnRangelength: [0,33],
-		   	isCorporName:true,
-		   	uniqueLoginName:true
+		   	isCorporName:true
+		   	//uniqueLoginName:true
 		   },
 		   mobile:{
 		   	isMobile:true,
@@ -60,8 +60,7 @@ $().ready(function() {
 		  }
 	    });
 	    // Ajax重命名校验
-		$.uniqueValidate('uniqueLoginName', '${ctx}/complat/checkCorporationLoginName', ['loginName','oldLoginName'], '对不起，这个账号重复了');
-		$.uniqueValidate('uniqueMobile', '${ctx}/complat/uniqueCorporationMobile', ['mobile','oldMobile'], '对不起，工商注册号/社会信用代码重复了');  
+		//$.uniqueValidate('uniqueLoginName', '${ctx}/complat/checkCorporationLoginName', ['loginName','oldLoginName'], '对不起，这个账号重复了');
 	    //民族及页面初始化
 		var nations = ["汉族","壮族","回族","满族","维吾尔族","苗族","彝族","土家族","藏族","蒙古族",
 		               "侗族","布依族","瑶族","白族","朝鲜族","哈尼族","黎族","哈萨克族","傣族","畲族",
@@ -131,6 +130,8 @@ $().ready(function() {
 		$(".fqyUserInfo").hide();
 		$(".qyBusName").show();
 		$(".qyUserInfo").show();
+		$(".regNum").show();
+		$(".td_regNum").show();
 	}
 	
 	//非企业法人页面初始化  
@@ -264,17 +265,9 @@ color: rgb(119, 119, 119);
 .td_2 {
 	border-right : 1px solid #C6E6FF;
 }
-.td_3 {
+.rules{
 	border-bottom : 1px solid #C6E6FF;
 }
-.td_4 {
-	border-bottom : 1px solid #C6E6FF;
-}
-.td_5 {
-	border-bottom : 1px solid #C6E6FF;
-}
-.td_6 {
-	border-bottom : 1px solid #C6E6FF;
 </style>
 </head>
 <body>
@@ -376,14 +369,13 @@ color: rgb(119, 119, 119);
 				<select id="fqyNation" name="fqyNation" style="width: 86%"></select>
 			</td>
 		</tr>
-		<tr>
-			<th class="td_3"><b class="mustbe">*</b>工商注册号/社会信用代码：</th>
-        	<td style="width:300px;">
+		<tr class="rules">
+			<th class="regNum"><b class="mustbe">*</b>工商注册号/社会信用代码：</th>
+        	<td style="width:300px;" class="td_regNum">
 				<input type="text" <c:if test="${corporation.regNumber != null}">readonly="readonly"</c:if> id="regNumber" name="regNumber" value="${corporation.regNumber}" />
-				<input type="text" id="oldRegNumber" name="oldRegNumber" value="${corporation.regNumber}" />
 			</td>
-			<th> 组织机构代码：</th>
-			<td style="width:300px;">
+			<th class="orgNum"><b class="mustbe">*</b> 组织机构代码：</th>
+			<td style="width:300px;" class="td_orgNum">
 				<input type="text"  id="orgNumber" name="orgNumber" value="${corporation.orgNumber}"/>
 			</td>
 		</tr>
@@ -397,7 +389,6 @@ color: rgb(119, 119, 119);
 		     <th><b class="mustbe">*</b> 手机号码：</th>
 		     <td style="width:300px;">
 		    	<input type="text" id="mobile" name="mobile" value="${corporation.mobile}" />
-		    	<input type="text" id="oldMobile" name="oldMobile" value="${corporation.mobile}" />
 		     </td>
 		</tr>
 		<tr>

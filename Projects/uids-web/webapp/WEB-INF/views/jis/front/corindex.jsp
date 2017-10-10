@@ -25,9 +25,9 @@ body {
 	  	  <span style="padding-left: 5%;">${sysName}</span>
 		  <div class="hyzx">
 		  	<span>您好！${loginname}</span>
-		  	<span title="个人信息"><a href="modifycorinfo_show.do"><img  src="${ctx}/ui/images/vip_head.png" width="23" height="23"></a></span>
-		  <!-- 	<span title="实名认证"><a href="register/corauth_show.do"><img  src="${ctx}/ui/images/vip_head.png" width="23" height="23"></a></span> -->
-		  	<span title="注销"><a href="corlogout.do"><img src="${ctx}/ui/images/logout.png" width="22" height="24"></a></span>
+		  	<span title="个人信息"><a href="modifycorinfo_show"><img  src="${ctx}/ui/images/vip_head.png" width="23" height="23"></a></span>
+		  <!-- 	<span title="实名认证"><a href="register/corauth_show"><img  src="${ctx}/ui/images/vip_head.png" width="23" height="23"></a></span> -->
+		  	<span title="注销"><a href="corlogout"><img src="${ctx}/ui/images/logout.png" width="22" height="24"></a></span>
 		  </div>    	
 	  </div>   
 	</div>

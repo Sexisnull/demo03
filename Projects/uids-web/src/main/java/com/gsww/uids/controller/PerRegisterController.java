@@ -52,7 +52,7 @@ public class PerRegisterController {
 	/**
 	 * 个人注册页面
 	 */
-	@RequestMapping({ "perregister.do" })
+	@RequestMapping({ "perregister" })
 	public ModelAndView perRegister_Step1(Model model, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
 		String appmark = request.getParameter("appmark");
@@ -352,7 +352,7 @@ public class PerRegisterController {
 	@RequestMapping({ "perregsuccess_b" })
 	public ModelAndView perRegSuccess(HttpServletRequest request, HttpSession session, Model model) {
 		ModelAndView modelAndView = new ModelAndView("jis/front/perregsuccess");
-		model.addAttribute("loginurl", "../../front/perlogin.do?appmark=gszw");
+		model.addAttribute("loginurl", "../../front/perlogin?appmark=gszw");
 		model.addAttribute("indexurl", "../../login");
 		return modelAndView;
 	}
@@ -376,7 +376,7 @@ public class PerRegisterController {
 				+ ":8080&gotoUrl=';"
 				+ "var grregediturl='http://"
 				+ domain
-				+ ":8080/uids-web/front/register/perregister.do';"
+				+ ":8080/uids-web/front/register/perregister';"
 				+ "var frloginurl='http://"
 				+ domain
 				+ ":8080/gsjis/front/cor/interface.do?action=ticketLogin&appmark=gszw&domain="
@@ -384,7 +384,7 @@ public class PerRegisterController {
 				+ ":8080&gotoUrl=';"
 				+ "var frregediturl='http://"
 				+ domain
-				+ ":8080/uids-web/front/register/corregister.do';"
+				+ ":8080/uids-web/front/register/corregister';"
 				+ "var grinfo='http://"
 				+ domain
 				+ ":8080/gsjis/front/modifyperinfo_show.do';"
@@ -411,10 +411,10 @@ public class PerRegisterController {
 				+ "else if(type=='fr'||type=='法人'||type=='2'){location.href='http://'+domain+'/gszw/member/login/logout.do?domain='+encodeURIComponent(encodeURIComponent(domain));}}"
 				+ "function showgrlogin(){var src=window.location.href;src=encodeURIComponent(src);"
 				+ "grloginurl=encodeURIComponent(grloginurl);   "
-				+ "location.href='http://'+domain+'/gszw/member/login/login.do?url='+grloginurl+'&src='+src+'&domain='+encodeURIComponent(encodeURIComponent(domain));}"
+				+ "location.href='http://'+domain+'/uids-web/front/perlogin?action=ticketLogin&gotoUrl=&appmark=gszw&domain=www.gszwfw.gov.cn';}"
 				+ " function showfrlogin(){var src=window.location.href;src=encodeURIComponent(src);   "
 				+ "frloginurl=encodeURIComponent(frloginurl);   "
-				+ "location.href='http://'+domain+'/gszw/member/login/login.do?url1='+frloginurl+'&src='+src+'&domain='+encodeURIComponent(encodeURIComponent(domain));  }"
+				+ "location.href='http://'+domain+'/uids-web/front/corlogin?action=ticketLogin&gotoUrl=&appmark=gszw&domain=www.gszwfw.gov.cn';  }"
 				+ "function showgrregedit(){"
 				+ "window.open(grregediturl);  }function showfrregedit(){window.open(frregediturl);}"
 				+ "$(function(){var $div_li =$('div.userinfomenu ul li');"
@@ -517,7 +517,7 @@ public class PerRegisterController {
 	    String templateHtml = this.templateService.readFrontTemplate(html);
 
 	    templateHtml = templateHtml.replace("${url}", 
-	      "../perlogin.do?appmark=gszw");
+	      "../perlogin?appmark=gszw");
 	    modelAndView.addObject("templatehtml", templateHtml);
 	    return modelAndView;
 	  }*/
@@ -530,7 +530,7 @@ public class PerRegisterController {
 	    ComplatOutsideuser outuser = PersonalSessionInfo.getFrontCurrentPersonalInfo();
 	    if (outuser == null)
 	    {
-	      RedirectView redirectView = new RedirectView("../perlogin.do");
+	      RedirectView redirectView = new RedirectView("../perlogin");
 	      modelAndView.setView(redirectView);
 	      return modelAndView;
 	    }

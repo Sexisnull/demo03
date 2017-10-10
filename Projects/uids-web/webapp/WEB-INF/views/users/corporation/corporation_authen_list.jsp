@@ -13,9 +13,13 @@
 
 <script type="text/javascript"> 
 	function regect() {
-		$("#input_four")[0].style.display = 'none';
+		/*$("#input_four")[0].style.display = 'none';
 		$("#input_three")[0].style.display = 'table-row';
 		$("#tr_reject")[0].style.display = 'table-row';
+		$("#corporUserType").attr("value", 0);*/
+		$("#input_four").hide();
+		$("#input_three").show();
+		$("#tr_reject").show();
 		$("#corporUserType").attr("value", 0);
 	}
 	//拒绝取消
@@ -43,13 +47,6 @@
 			}
 		});
 	}
-	
-	$().ready(function(){
-		var rejectReason = $("#rejectReason").val();
-		if(rejectReason != null && rejectReason != ""){
-			$("#tr_reject_done")[0].style.display = 'table-row';
-		}
-	});
 </script>
 </head>
 <body>
@@ -57,21 +54,25 @@
    	  <div class="form-alert;" >
          <tags:message msgMap="${msgMap}"></tags:message>
    	  </div> 
-      <div class="input_two">
+      <div class="form-warper">
 	     <form align = "center" id="oprform" name="oprform">
 	    	<!--隐藏变量区-->
-			<div id="dialog-content">
+	    	<div style="display:none;">
+				<input id="iid" name="iid" value="${complatCorporation.iid}" type="hidden"/>
+	        	<input id="corporUserType" name="corporUserType" value="1" type="hidden"/>
+    		</div>
+			<div id="form-content">
 	        	<table class="form-table">
-	        		<input id="iid" name="iid" value="${complatCorporation.iid}" type="hidden"/>
-	        		<input id="corporUserType" name="corporUserType" value="1" type="hidden"/>
-	        		<tr style="display:none;" id="tr_reject_done">
-						<th>拒绝原因：</th>
-						<td style="width: 100%">
-			            	<textarea readonly="readonly" rows="8" cols="8" id="rejectReason" name="rejectReason" >
-			            		${complatCorporation.rejectReason}
-			            	</textarea>
-			            </td>
-			        </tr>
+	        		<c:if test="${complatCorporation.rejectReason != null && complatCorporation.rejectReason != ''}">
+		        		<tr>
+							<th>拒绝原因：</th>
+							<td style="width: 100%">
+				            	<textarea readonly="readonly" rows="8" cols="8" id="rejectReason" name="rejectReason" >
+				            		${complatCorporation.rejectReason}
+				            	</textarea>
+				            </td>
+				        </tr>
+				     </c:if>
 					<tr>
 						<th>机构负责人姓名：</th>
 						<td style="width: 100%">
@@ -91,34 +92,25 @@
 						</td>
 					</tr>
 					<tr style="display:none;" id="tr_reject">
-						<th></th>
+						<th>拒绝原因：</th>
 						<td style="width: 100%">
 						<textarea placeholder="请填写拒绝原因" rows="8" cols="8" name="rejectReason2"></textarea>
-						</td>
-					</tr>
-					<tr id="input_three" style="display:none;" align = "center">
-						<th></th>
-						<td></td>
-						<td>
-							<p align = "right">
-								<input type="submit" class="btn btn-primary" value="保存" onclick="saveUser();"/> 
-								<input type="button" class="btn" value="取消" onclick="rejectCancel();" />
-							</p>
-						</td>
-					</tr>
-					<tr id="input_four" class="input_four" align = "center">
-						<th></th>
-						<td style="width: 80%">
-						<p align = "right">
-							<input type="button" class="btn btn-primary" value="拒绝" onclick="regect();" /> 
-							<input type="submit" class="btn" value="通过"/>
-						</p>
 						</td>
 					</tr>
 				</table>
 			</div>
 		</form>
-      </div> 
-	
+		<!--表单的按钮组区域-->
+	   <div class="form-btn" id="input_three" style="display:none;">
+	   	<input type="button" tabindex="15" value="保存" onclick="oprOutsideUser();" class="btn bluegreen"/>
+	   	&nbsp;&nbsp;
+	       <input type="button" tabindex="16" value="返回" onclick="rejectCancel();" class="btn gray"/>
+	   </div>
+	   <div class="form-btn"  id="input_four" >
+	   	<input type="button" tabindex="15" value="拒绝" onclick="regect();" class="btn bluegreen"/> 
+	   	&nbsp;&nbsp;
+	   	<input type="button" tabindex="15" value="通过" onclick="oprOutsideUser();" class="btn bluegreen"/>
+	   </div>
+     </div> 
 </body>
 </html>

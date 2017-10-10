@@ -51,15 +51,15 @@ function auth(){
 }
 function login(){
 	
-	//window.location.href="../perlogin.do?appmark=gszw";
-	//window.location.href="../perlogin.do?appmark=gszw";
-	//top.location = "../perlogin.do?domain=118.180.24.32%3A8081&action=ticketLogin&gotoUrl=&appmark=gszw";
+	//window.location.href="../perlogin?appmark=gszw";
+	//window.location.href="../perlogin?appmark=gszw";
+	//top.location = "../perlogin?domain=118.180.24.32%3A8081&action=ticketLogin&gotoUrl=&appmark=gszw";
 	
 	var domain=document.domain;
 	//alert(domain);
-	window.location.href= "../perlogin.do?domain="+domain+"&action=ticketLogin&gotoUrl=&appmark=gszw";
+	window.location.href= "../perlogin?domain="+domain+"&action=ticketLogin&gotoUrl=&appmark=gszw";
 
-	//window.location.href= "../perlogin.do?domain=118.180.24.32%3A8081&action=ticketLogin&gotoUrl=&appmark=gszw";
+	//window.location.href= "../perlogin?domain=118.180.24.32%3A8081&action=ticketLogin&gotoUrl=&appmark=gszw";
 }
 </script>
 <script type="text/javascript">
@@ -68,12 +68,12 @@ function login(){
 	}
 	function timeDesc() {
 		if (all <= 0) {
-			//top.location = "../perlogin.do?appmark=gszw";杨工说此不行。要改。
-			//top.location = "../perlogin.do?domain=118.180.24.32%3A8081&action=ticketLogin&gotoUrl=&appmark=gszw";
-			//http://118.180.24.32:8081/gsjis/front/perlogin.do?domain=118.180.24.32%3A8081&action=ticketLogin&gotoUrl=&appmark=gszw
+			//top.location = "../perlogin?appmark=gszw";杨工说此不行。要改。
+			//top.location = "../perlogin?domain=118.180.24.32%3A8081&action=ticketLogin&gotoUrl=&appmark=gszw";
+			//http://118.180.24.32:8081/gsjis/front/perlogin?domain=118.180.24.32%3A8081&action=ticketLogin&gotoUrl=&appmark=gszw
 			var domain=document.domain;
 		//	alert(domain);
-			window.location.href= "../perlogin.do?domain="+domain+"&action=ticketLogin&gotoUrl=&appmark=gszw";
+			window.location.href= "../perlogin?domain="+domain+"&action=ticketLogin&gotoUrl=&appmark=gszw";
 		}
 		var obj = gid("tS");
 		if (obj)

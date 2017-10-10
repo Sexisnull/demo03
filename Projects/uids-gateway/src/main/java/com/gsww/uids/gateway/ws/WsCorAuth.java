@@ -17,10 +17,10 @@ import com.gsww.uids.gateway.exception.LoginException;
 import com.gsww.uids.gateway.service.AppService;
 import com.gsww.uids.gateway.service.AuthLogService;
 import com.gsww.uids.gateway.service.CorporationService;
-import com.gsww.uids.gateway.util.MD5;
 import com.gsww.uids.gateway.util.DateTime;
 import com.gsww.uids.gateway.util.DateUtil;
 import com.gsww.uids.gateway.util.JSONUtil;
+import com.gsww.uids.gateway.util.MD5;
 import com.gsww.uids.gateway.util.MathUtil;
 import com.gsww.uids.gateway.util.NumberUtil;
 import com.gsww.uids.gateway.util.SpringContextHolder;
@@ -46,22 +46,30 @@ import com.gsww.uids.gateway.util.StringUtil;
 @SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use = SOAPBinding.Use.LITERAL, parameterStyle = SOAPBinding.ParameterStyle.WRAPPED)
 @WebService(name = "WsCorAuth", targetNamespace = "http://www.gszwfw.gov.cn/gsjis/services/WsCorAuth")
 public class WsCorAuth {
-	private static AuthLogService authLogService= SpringContextHolder.getBean("authLogService");
-	private static AppService appService= SpringContextHolder.getBean("appService");
-	private static CorporationService corporationService= SpringContextHolder.getBean("corporationService");
-
+	private static AuthLogService authLogService;
+	private static AppService appService;
+	private static CorporationService corporationService;
+	static {
+		authLogService = SpringContextHolder.getBean("authLogService");
+		appService = SpringContextHolder.getBean("appService");
+		corporationService = SpringContextHolder.getBean("corporationService");
+	}
 	protected Logger logger = Logger.getLogger(getClass());
 
 	@WebMethod
-	public String ticketValidate(String appmark, String ticket, String time, String sign) {
+	public String ticketValidate(String appmark, String ticket, String time,
+			String sign) {
 		// 打印日志
-		this.logger.info("===cor=ticketValidate=start==" + ticket + "====" + time + "==" + sign + "=777=" + appmark);
-		// 输出获取数据
-		System.out.println("appmark=" + appmark + "    ticket=" + ticket + "    time=" + time + "    sign=" + sign);
+		this.logger.debug("<WsCorAuth接口-法人用户-ticketValidate-start>"
+				+ DateUtil.getCurrDateTime());
+		this.logger.info("<WsCorAuth接口-法人用户-ticketValidate>接收到请求内容:" + appmark
+				+ ticket + time + sign);
 		// 声明map用于存储返回信息--最终转换为json格式
 		Map<String, String> map = new HashMap<String, String>();
 		// 判断获取数据是否为空
-		if ((StringHelper.isNotBlack(appmark)) && (StringHelper.isNotBlack(ticket)) && (StringHelper.isNotBlack(time))
+		if ((StringHelper.isNotBlack(appmark))
+				&& (StringHelper.isNotBlack(ticket))
+				&& (StringHelper.isNotBlack(time))
 				&& (StringHelper.isNotBlack(sign))) {
 			// 通过ticket, userType获取jis_authlog中的信息 --2：政府用户
 			JisAuthLog jisAuthLog = authLogService.findByTicket(ticket, 2);
@@ -73,27 +81,30 @@ public class WsCorAuth {
 					map.put("errormsg", "票据已过期");
 					return new JSONUtil().writeMapSJSON(map);
 				}
-				Application appLication =appService.findByMark(appmark);
+				Application appLication = appService.findByMark(appmark);
 				MD5 md5 = new MD5();
 				String token = "";
 				if (appLication != null) {
 					String decodeSign = md5.decrypt(sign, time);
-					if (decodeSign.equals(appmark + appLication.getEncryptkey() + time)) {
+					if (decodeSign.equals(appmark + appLication.getEncryptkey()
+							+ time)) {
 						// if (true) { 放过判断规则
 						String loginName = jisAuthLog.getLoginname();
-						if (!(StringHelper.isNotBlack((StringUtil.getString(jisAuthLog.getLoginname()))))) {
-							token = StringUtil.getString(jisAuthLog.getLoginname());
+						if (!(StringHelper.isNotBlack((StringUtil
+								.getString(jisAuthLog.getLoginname()))))) {
+							token = StringUtil.getString(jisAuthLog
+									.getLoginname());
 							if (jisAuthLog.getToken() == null) {
 								jisAuthLog.setToken(token);
-
 								jisAuthLog.setState(Integer.valueOf(1));
 							}
 						} else {
 							token = md5.encrypt(
-									DateUtil.getCurrDate("MMddHHmmssSSS") + MathUtil.randomNumeric(Integer.valueOf(6)),
+									DateUtil.getCurrDate("MMddHHmmssSSS")
+											+ MathUtil.randomNumeric(Integer
+													.valueOf(6)),
 									MathUtil.randomNumeric(Integer.valueOf(6)));
 							jisAuthLog.setToken(token);
-
 							jisAuthLog.setState(Integer.valueOf(1));
 
 						}
@@ -113,6 +124,8 @@ public class WsCorAuth {
 			} else {
 				map.put("errormsg", "该票据不存在或已过期");
 			}
+			this.logger.info("<WsCorAuth接口-法人用户-ticketValidate>返回结果："
+					+ new JSONUtil().writeMapSJSON(map));
 			return new JSONUtil().writeMapSJSON(map);
 
 		} else {
@@ -122,49 +135,70 @@ public class WsCorAuth {
 	}
 
 	@WebMethod
-	public String findUserByToken(String appmark, String token, String time, String sign) {
-		logger.info("=cor====findUserByToken====start===" + token + "=time==" + sign);// 打印日志
-		System.out.println("appmark=" + appmark + "token=" + token + "time=" + time + "sign=" + sign);// 输出获取数据
+	public String findUserByToken(String appmark, String token, String time,
+			String sign) {
+		this.logger.debug("<WsCorAuth接口-法人用户-findUserByToken-start>"
+				+ DateUtil.getCurrDateTime());
+		this.logger.info("<WsCorAuth接口-法人用户-findUserByToken>接收到请求内容:" + appmark
+				+ token + time + sign);// 打印日志
 		Map<String, String> map = new HashMap<String, String>();
-		if ((StringHelper.isNotBlack(appmark)) || (StringHelper.isNotBlack(token)) || (StringHelper.isNotBlack(time))
+		if ((StringHelper.isNotBlack(appmark))
+				|| (StringHelper.isNotBlack(token))
+				|| (StringHelper.isNotBlack(time))
 				|| (StringHelper.isNotBlack(sign))) {// 非空判断
 			JisAuthLog jisAuthLog = authLogService.findByToken(token, 2);
-			System.out.println("jisAuthLog:-----" + jisAuthLog);
 			if (jisAuthLog == null) {
 				map.put("errormsg", "没有该令牌");
 				return new JSONUtil().writeMapSJSON(map);
 			} else {
 				int userType = jisAuthLog.getUsertype().intValue();
 				if (userType == 2) {
-					Corporation corporation = corporationService.findByLoginName(jisAuthLog.getLoginname());
+					Corporation corporation = corporationService
+							.findByLoginName(jisAuthLog.getLoginname());
 					if (corporation != null) {
 						map.put("uuid", corporation.getUuid());
 						map.put("type", corporation.getType() + "");
 						map.put("name", corporation.getName());
-						map.put("regnumber", StringUtil.getString(corporation.getRegnumber()));
-						map.put("orgnumber", StringUtil.getString(corporation.getOrgnumber()));
-						map.put("scope", StringUtil.getString(corporation.getScope()));
-						map.put("regorgname", StringUtil.getString(corporation.getRegorgname()));
+						map.put("regnumber", StringUtil.getString(corporation
+								.getRegnumber()));
+						map.put("orgnumber", StringUtil.getString(corporation
+								.getOrgnumber()));
+						map.put("scope",
+								StringUtil.getString(corporation.getScope()));
+						map.put("regorgname", StringUtil.getString(corporation
+								.getRegorgname()));
 						map.put("loginname", corporation.getLoginname());
-						map.put("realname", StringUtil.getString(corporation.getRealname()));
-						map.put("mobile", StringUtil.getString(corporation.getMobile()));
-						map.put("phone", StringUtil.getString(corporation.getPhone()));
-						map.put("sex", StringUtil.getString(corporation.getSex()));
-						map.put("address", StringUtil.getString(corporation.getAddress()));
-						map.put("cardid", StringUtil.getString(corporation.getCardnumber()));
-						map.put("email", StringUtil.getString(corporation.getEmail()));
-						map.put("isauth", StringUtil.getString(corporation.getIsauth()));
-						map.put("authstate", StringUtil.getString(corporation.getAuthstate()));
+						map.put("realname",
+								StringUtil.getString(corporation.getRealname()));
+						map.put("mobile",
+								StringUtil.getString(corporation.getMobile()));
+						map.put("phone",
+								StringUtil.getString(corporation.getPhone()));
+						map.put("sex",
+								StringUtil.getString(corporation.getSex()));
+						map.put("address",
+								StringUtil.getString(corporation.getAddress()));
+						map.put("cardid", StringUtil.getString(corporation
+								.getCardnumber()));
+						map.put("email",
+								StringUtil.getString(corporation.getEmail()));
+						map.put("isauth",
+								StringUtil.getString(corporation.getIsauth()));
+						map.put("authstate", StringUtil.getString(corporation
+								.getAuthstate()));
 						map.put("usertype", "2");
 						map.put("declarationiid",
-								Integer.valueOf(NumberUtil.getInt(corporation.getDeclarationIid())) + "");
-						map.put("nation", StringUtil.getString(corporation.getNation()));
+								Integer.valueOf(NumberUtil.getInt(corporation
+										.getDeclarationIid())) + "");
+						map.put("nation",
+								StringUtil.getString(corporation.getNation()));
 					}
 				} else {
 					map.put("errormsg", "登录名不是法人用户");
 				}
 			}
-			this.logger.info("====findUserByToken===返回结果===" + new JSONUtil().writeMapSJSON(map));
+			this.logger.info("<WsCorAuth接口-法人用户-findUserByToken>返回结果："
+					+ new JSONUtil().writeMapSJSON(map));
 			return new JSONUtil().writeMapSJSON(map);
 		} else {
 			map.put("errormsg", "必填参数为空");
@@ -173,25 +207,24 @@ public class WsCorAuth {
 	}
 
 	@WebMethod
-	public String generateTicket(String appmark, String token, String time, String sign, String proxyapp) {
-		this.logger.info("=generateTicket==cor==start===");
-		System.out.println(
-				"appmark=" + appmark + "token=" + token + "time=" + time + "sign=" + sign + "proxyapp=" + proxyapp);
+	public String generateTicket(String appmark, String token, String time,
+			String sign, String proxyapp) {
+		this.logger.debug("<WsCorAuth接口-法人用户-generateTicket-start>"
+				+ DateUtil.getCurrDateTime());
+		this.logger.info("<WsCorAuth接口-法人用户-generateTicket>接收到请求内容:" + appmark
+				+ token + time + sign + proxyapp);// 打印日志
 		Map<String, String> map = new HashMap<String, String>();
-
-		if ((!StringHelper.isNotBlack(appmark)) || (!StringHelper.isNotBlack(token)) || (!StringHelper.isNotBlack(time))
-				|| (!StringHelper.isNotBlack(sign)) || (!StringHelper.isNotBlack(proxyapp))) {
+		if ((!StringHelper.isNotBlack(appmark))
+				|| (!StringHelper.isNotBlack(token))
+				|| (!StringHelper.isNotBlack(time))
+				|| (!StringHelper.isNotBlack(sign))
+				|| (!StringHelper.isNotBlack(proxyapp))) {
 			map.put("errormsg", "必填参数为空");
 			return new JSONUtil().writeMapSJSON(map);
 		}
 
 		Application appLication = appService.findByMark(proxyapp);
 		if (appLication != null) {
-			/*
-			 * if (CacheUtil.getValue(token, "cortoken") == null) {
-			 * map.put("errormsg", "令牌已失效"); return new
-			 * JSONUtil().writeMapSJSON(map); }
-			 */
 			JisAuthLog jisAuthLog = authLogService.findByToken(token, 2);
 			if (jisAuthLog != null) {
 				JisAuthLog jisAuthLogNew = new JisAuthLog();
@@ -200,20 +233,21 @@ public class WsCorAuth {
 				jisAuthLogNew.setAuthtype(Integer.valueOf(1));
 				jisAuthLogNew.setCreatetime(new Date());
 				jisAuthLogNew.setLoginname(jisAuthLog.getLoginname());
-				long times = new Date().getTime() + NumberUtil.getLong(300) * 1000L;
+				// 设置Ticket有效时间
+				long times = new Date().getTime() + NumberUtil.getLong(300)
+						* 1000L;
 				Date outTime = new Date(times);
 				jisAuthLogNew.setOuttickettime(outTime);
 
-				String ticket = MD5
-						.encodeMd5(proxyapp + appLication.getEncryptkey() + jisAuthLog.getLoginname() + new Date());
+				String ticket = MD5.encodeMd5(proxyapp
+						+ appLication.getEncryptkey()
+						+ jisAuthLog.getLoginname() + new Date());
 				jisAuthLogNew.setTicket(ticket);
 				jisAuthLogNew.setUserId(jisAuthLog.getUserId());
 				jisAuthLogNew.setUsername(jisAuthLog.getUsername());
 				jisAuthLogNew.setUsertype(jisAuthLog.getUsertype());
 				jisAuthLogNew.setState(Integer.valueOf(0));
-				// boolean isSuccess = CacheUtil.setValue(ticket, jisAuthLogNew,
-				// "corticket");
-				if (ticket != null)
+				if (ticket != null && jisAuthLogNew != null)
 					map.put("ticket", ticket);
 				else
 					map.put("errormsg", "票据生成失败");
@@ -223,19 +257,23 @@ public class WsCorAuth {
 		} else {
 			map.put("errormsg", "接入应用不存在");
 		}
-		this.logger.info("====generateTicket===返回结果===" + new JSONUtil().writeMapSJSON(map));
+		this.logger.info("<WsCorAuth接口-法人用户-generateTicket>返回结果："
+				+ new JSONUtil().writeMapSJSON(map));
 		return new JSONUtil().writeMapSJSON(map);
 	}
 
 	@WebMethod
-	public String userValidate(String appmark, String time, String sign, String loginname, String password) {
-		System.out.println("appmark=" + appmark + "time=" + time + "sign=" + sign + "loginname=" + loginname
-				+ "password=" + password);
-		this.logger.info("=cor认证====userValidate====appmark===" + appmark + "=time==" + time + "=sign=" + sign
-				+ "=loginname=" + loginname + "=password=" + password);
+	public String userValidate(String appmark, String time, String sign,
+			String loginname, String password) {
+		this.logger.debug("<WsCorAuth接口-法人用户-userValidate-start>"
+				+ DateUtil.getCurrDateTime());
+		this.logger.info("<WsCorAuth接口-法人用户-userValidate>接收到请求内容:" + appmark
+				+ time + sign + loginname + password);// 打印日志
 		Map<String, String> map = new HashMap<String, String>();
-		if ((StringHelper.isNotBlack(appmark)) || (StringHelper.isNotBlack(sign)) || (StringHelper.isNotBlack(password))
-				|| (time != null)) {
+		if ((StringHelper.isNotBlack(appmark))
+				|| (StringHelper.isNotBlack(sign))
+				|| (StringHelper.isNotBlack(loginname))
+				|| (StringHelper.isNotBlack(password)) || (time != null)) {
 			Application appLication = appService.findByMark(appmark);
 			if (appLication == null) {
 				System.out.println("appLication==" + appLication);
@@ -243,11 +281,10 @@ public class WsCorAuth {
 			}
 			String ip = "";
 			MD5 md5 = new MD5();
-			//password = md5.decrypt(sign, time);
-			System.out.println("password" + password);
 			JisAuthLog jisAuthLog = new JisAuthLog();
 			try {
-				Corporation corporation = corporationService.checkUserLogin(loginname, password, ip);
+				Corporation corporation = corporationService.checkUserLogin(
+						loginname, password, ip);
 				if (corporation != null) {
 					jisAuthLog.setAppmark(appmark);
 					jisAuthLog.setLoginname(corporation.getLoginname());
@@ -265,9 +302,9 @@ public class WsCorAuth {
 			} catch (LoginException e) {
 				map.put("errormsg", "登录名未被激活");
 			}
-
+			this.logger.info("<WsCorAuth接口-法人用户-userValidate>返回结果："
+					+ new JSONUtil().writeMapSJSON(map));
 			return new JSONUtil().writeMapSJSON(map);
-
 		} else {
 			map.put("errormsg", "必填参数为空");
 			return new JSONUtil().writeMapSJSON(map);

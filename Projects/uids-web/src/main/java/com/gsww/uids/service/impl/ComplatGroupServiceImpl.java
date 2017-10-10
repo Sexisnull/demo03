@@ -180,4 +180,11 @@ public class ComplatGroupServiceImpl implements ComplatGroupService{
 			return null;
 		}
 	}
+	
+	@Override
+	public List<ComplatGroup> findByNoPid() throws Exception{
+		List<ComplatGroup> list=new ArrayList<ComplatGroup>();
+		list=complatGroupDao.findByPidIsNullOrderByCodeidDesc();
+		return list;
+	}
 }

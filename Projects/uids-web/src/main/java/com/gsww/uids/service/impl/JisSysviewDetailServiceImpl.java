@@ -26,4 +26,8 @@ public class JisSysviewDetailServiceImpl implements JisSysviewDetailService{
 		sysviewDetailDao.delete(jisSysviewDetail);
 	}
 	
+	@Override
+	public JisSysviewDetail findByTranscationId(String transcationId) { 
+		return sysviewDetailDao.findByTranscationId(transcationId);
+	}
 }

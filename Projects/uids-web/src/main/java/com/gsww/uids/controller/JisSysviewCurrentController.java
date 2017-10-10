@@ -123,17 +123,17 @@ public class JisSysviewCurrentController extends BaseController{
 			for(int i=0;i<para.length;i++){
 				Integer Iid = Integer.parseInt(para[i].trim());
 				jisCurrent=jisSysviewCurrentService.findByIid(Iid);
-				if(null != jisCurrent){
+				if (null != jisCurrent) {
 					jisSysviewCurrentService.delete(jisCurrent);
-					 String desc=session.getUserName()+"删除了"+jisCurrent.getObjectname();
-		                jisLogService.save(session.getUserName(),session.getUserIp(), desc, 3, 1);
+					String desc = session.getUserName() + "删除了" + jisCurrent.getObjectname();
+					jisLogService.save(session.getUserName(), session.getUserIp(), desc, 3, 1);
+					// 级联删除明细
+					JisSysviewDetail sysviewDetail = jisSysviewDetailService.findByTranscationId(jisCurrent.getTranscationId());
+					if (null != sysviewDetail) {
+						jisSysviewDetailService.delete(sysviewDetail);
+
+					}
 				}
-				//级联删除明细
-			    JisSysviewDetail sysviewDetail = jisSysviewDetailService.findByIid(Iid);
-			    if(null!=sysviewDetail){
-			    	jisSysviewDetailService.delete(sysviewDetail);
-			    	
-			    }
 			}
 			returnMsg("success","删除成功",request);
 		} catch (Exception e) {
@@ -222,6 +222,7 @@ public class JisSysviewCurrentController extends BaseController{
 			jisSysview.setOperatetype(sysviewCurrent.getOperatetype());
 			jisSysview.setTimes(sysviewCurrent.getTimes());
 			jisSysview.setErrorspec(sysviewCurrent.getErrorspec());
+			jisSysview.setTranscationId(sysviewCurrent.getTranscationId());
 		}
 		return jisSysview;
 	}
@@ -239,7 +240,6 @@ public class JisSysviewCurrentController extends BaseController{
 	public String accountEdit(int iid,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		
 		JisSysviewCurrent sysviewCurrent = jisSysviewCurrentService.findByIid(iid); 
-		JisSysviewDetail jisSysviewDetail = jisSysviewDetailService.findByIid(iid);
 		
 		//map放入
 		List<Map<String, Object>> applicationList =new ArrayList<Map<String,Object>>() ;
@@ -255,14 +255,20 @@ public class JisSysviewCurrentController extends BaseController{
 			paraMap.put(Integer.parseInt((String) para.get("PARA_CODE")),  para.get("PARA_NAME"));
 		}
 		
+		
 		Map<String,String> detailMap = new HashMap<String, String>();
 		detailMap.put("returnUrl", "sysviewCurr/jisCurList");
 		detailMap.put("syncType", "current");
+		
 		model.addAttribute("detailMap",detailMap);
 		model.addAttribute("applicationMap", applicationMap);
 		model.addAttribute("paraMap", paraMap);
 		model.addAttribute("jisSysview",sysviewCurrent);
-		model.addAttribute("jisSysviewDetail",jisSysviewDetail);
+		
+		if( null != sysviewCurrent){
+			JisSysviewDetail jisSysviewDetail = jisSysviewDetailService.findByTranscationId(sysviewCurrent.getTranscationId());
+			model.addAttribute("jisSysviewDetail",jisSysviewDetail);
+		}
 		return "users/sysview/jis_sysview_detail";
 	} 
 	

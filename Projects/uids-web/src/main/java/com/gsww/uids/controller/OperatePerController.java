@@ -40,7 +40,7 @@ public class OperatePerController {
 
 		if (user != null) {
 		} else {
-			RedirectView redirectView = new RedirectView("./perlogin.do");
+			RedirectView redirectView = new RedirectView("./perlogin");
 			modelAndView.setView(redirectView);
 			return modelAndView;
 		}
@@ -83,7 +83,7 @@ public class OperatePerController {
 		user.setGplivingAreaId(user.getGplivingAreaId() == null ? "" : user
 				.getGplivingAreaId());
 
-		modelAndView.addObject("url", "modifyperinfo_submit.do");
+		modelAndView.addObject("url", "modifyperinfo_submit");
 		modelAndView.addObject("user", user);
 		modelAndView.addObject("path", path);
 		return modelAndView;

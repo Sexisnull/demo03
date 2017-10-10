@@ -41,7 +41,7 @@ public class CorRegisterController
   @Autowired
   private ComplatCorporationService corporationService;
 
-  @RequestMapping({"corregister.do"})
+  @RequestMapping({"corregister"})
   public ModelAndView corRegister_Step1(HttpServletRequest request, HttpServletResponse response, HttpSession session, String aa, String bb,Model model)
   {
     ModelAndView modelAndView = new ModelAndView("jis/front/corregister_step1");
@@ -51,7 +51,7 @@ public class CorRegisterController
 
     model.addAttribute("copyRight", JisSettings.getSettings().getCopyRight());
     model.addAttribute("url", "docorregister");
-    model.addAttribute("verifycodeimg", "<img id='verifyImg' src='../../verifyCode.do?code=4&var=rand&width=162&height=40&random=" + 
+    model.addAttribute("verifycodeimg", "<img id='verifyImg' src='../../verifyCode?code=4&var=rand&width=162&height=40&random=" + 
     	      (int)(Math.random() * 100000000.0D) + 
     	      "'" + 
     	      " onclick=\"this.src='../../verifyCode?code=4&var=rand&width=162&height=40&random='+ Math.random()" + 
@@ -303,7 +303,7 @@ public class CorRegisterController
   {
     ModelAndView modelAndView = new ModelAndView("jis/front/corregsuccess");
     String html = "corregsuccess.html";
-    model.addAttribute("loginurl", "../corlogin.do?appmark=gszw");
+    model.addAttribute("loginurl", "../corlogin?appmark=gszw");
     return modelAndView;
   }
 }
