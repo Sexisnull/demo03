@@ -187,7 +187,7 @@
 			success:function(result){
 				if(result.success){
 					alert("修改成功！");
-					//window.location.href='corindex.do';
+					//window.location.href='corindex';
 				}else{
 					alert(result.message);
 					$('#verifyImg').click();
@@ -230,7 +230,7 @@
 		var loginid = $(obj).val();
 		$.ajax({
 			type:"post",
-			url:"checkcorloginid.do",
+			url:"checkcorloginid",
 			data:"loginid="+loginid,
 			success:function(msg){
 				if($.trim(msg) != ""){
@@ -251,7 +251,7 @@
 		var email = $("#email").val();
 		$.ajax({
 			type:"post",
-			url:"activateemail.do", 
+			url:"activateemail", 
 			data : "email=" + email, 
 			success:function(result){  
 				if(result.success){
@@ -270,7 +270,7 @@
 		var mobile = $("#mobile").val();
 		$.ajax({
 			type:"post",
-			url:"activatemobile.do",
+			url:"activatemobile",
 			data : "mobile=" + mobile, 
 			success:function(result){  
 				if(result.success){
@@ -308,7 +308,7 @@ function  searchSubZoneByIidForHtml(iid,sel,optionIid){
 //	alert("1,进入这个方法了吗；");
 	$.ajax({
 		type:"post",    			   
-    	url: '../front/register/searchSubZone.do', //前面的../要加。在“控制器”中的地址。	
+    	url: '../front/register/searchSubZone', //前面的../要加。在“控制器”中的地址。	
 		data:"iid="+iid,			
 		dataType:'json',					
 		success:function(json){		

@@ -271,7 +271,7 @@ body {
 	</head>
 	<body>
 		<div id="dialogframe" style="display:none;width:100%;height:100%;" class="dialog-wrap">
-			<iframe name="dialog_frame"   src="${ctx}/complat/orgselect.do?orgType=${orgType}&roleId=${roleid}" style="width:100%;height:100%;" frameborder="0"> 
+			<iframe name="dialog_frame"   src="${ctx}/complat/orgselect?orgType=${orgType}&roleId=${roleid}" style="width:100%;height:100%;" frameborder="0"> 
 			</iframe>
 		</div>
 	

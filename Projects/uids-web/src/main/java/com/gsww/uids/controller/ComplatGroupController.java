@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.TreeMap;
 
 import javax.servlet.ServletRequest;
@@ -48,10 +49,12 @@ import com.gsww.jup.util.TimeHelper;
 import com.gsww.uids.entity.ComplatGroup;
 import com.gsww.uids.entity.ComplatUser;
 import com.gsww.uids.entity.ComplatZone;
+import com.gsww.uids.entity.JisApplication;
 import com.gsww.uids.entity.JisSysview;
 import com.gsww.uids.entity.JisSysviewDetail;
 import com.gsww.uids.service.ComplatGroupService;
 import com.gsww.uids.service.ComplatZoneService;
+import com.gsww.uids.service.JisApplicationService;
 import com.gsww.uids.service.JisSysviewDetailService;
 import com.gsww.uids.service.JisSysviewService;
 
@@ -66,9 +69,13 @@ public class ComplatGroupController extends BaseController{
 	@Autowired
 	private ComplatZoneService complatZoneService;
 //	@Autowired
-//	private JisSysview jisSysview;
+//	private JisApplication jisApplication;
+	@Autowired
+	private JisApplicationService jisApplicationService;
 //	@Autowired
-//	private JisSysviewService jisSysviewService;
+//	private JisSysview jisSysview;
+	@Autowired
+	private JisSysviewService jisSysviewService;
 //	@Autowired
 //	private JisSysviewDetail jisSysviewDetail;
 //	@Autowired
@@ -264,14 +271,27 @@ public class ComplatGroupController extends BaseController{
 			        }
 			     }
 			}
-//			if(syn){
-//				jisSysview.setObjectid(String.valueOf(complatGroup.getIid()));
-//				jisSysview.setObjectname(complatGroupService.findByIid(Integer.valueOf(iid)).getName());
-//				jisSysview.setState("C");
-//				jisSysview.setResult("TG");
-//				jisSysview.setOptresult(1);
-//				jisSysview.setSynctime(String.valueOf(complatGroup.getCreatetime()));
-//			}
+			if(syn){
+				List<JisApplication> list = jisApplicationService.findByIsSyncGroupNotNullAndLoginType(0); //查询支持同步的应用
+				Random random = new Random(); 
+				String data = TimeHelper.getCurrentCompactTime();
+				for(JisApplication jisApplication : list){
+					JisSysview jisSysview = new JisSysview();
+					jisSysview.setObjectid(String.valueOf(complatGroup.getIid()));
+					jisSysview.setObjectname(complatGroup.getName());
+					jisSysview.setState("C");
+					jisSysview.setResult("TG");
+					jisSysview.setOptresult(1);
+					jisSysview.setSynctime(String.valueOf(complatGroup.getCreatetime()));
+					jisSysview.setAppid(jisApplication.getIid());
+					jisSysview.setCodeid(complatGroup.getCodeid());
+					jisSysview.setTimes(1);
+					jisSysview.setOperatetype("修改机构");
+					int rannum = (int) (random.nextDouble() * (99999 - 10000 + 1)) + 10000;// 获取5位随机数
+					jisSysview.setTranscationId(data + String.valueOf(rannum));
+					jisSysviewService.save(jisSysview);
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			returnMsg("error","保存失败",request);

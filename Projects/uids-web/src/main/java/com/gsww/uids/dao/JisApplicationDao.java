@@ -40,4 +40,10 @@ public interface JisApplicationDao extends PagingAndSortingRepository<JisApplica
 	 * 查询所有对象
 	 */
 	List<JisApplication> findAll();
+	
+	/**
+	 * 通过是否支持同步查找应用
+	 * @author Lincx
+	 */
+	List<JisApplication> findByIsSyncGroupNotNullAndLoginType(Integer loginType);
 }

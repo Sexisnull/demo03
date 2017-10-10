@@ -58,7 +58,7 @@ public class CorLoginController{
   @Autowired
   private JisSettings jisSettings;
 
-  @RequestMapping("/corlogin.do")
+  @RequestMapping("/corlogin")
   public String corporationLogin(Model model,HttpServletResponse response, String action, String appmark, String gotoUrl, String domain)
   {
     if (action == null) {
@@ -247,7 +247,7 @@ public class CorLoginController{
     }
     String appmark = StringUtil.getString(session.getAttribute("appmark"));
     ModelAndView modelAndView = new ModelAndView();
-    RedirectView redirectView = new RedirectView("corlogin.do");
+    RedirectView redirectView = new RedirectView("corlogin");
     modelAndView.addObject("appmark", appmark);
     modelAndView.setView(redirectView);
     return modelAndView;

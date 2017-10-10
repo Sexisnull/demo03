@@ -210,7 +210,7 @@ function checknet(){
 		return false;
     }
 	$.ajax({
-         url: "checknet.do",
+         url: "checknet",
          data: "url=" + url, 
          type: 'POST',
          success: function(msg){

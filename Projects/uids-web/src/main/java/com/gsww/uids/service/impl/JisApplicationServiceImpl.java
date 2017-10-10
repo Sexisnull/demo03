@@ -143,4 +143,10 @@ public class JisApplicationServiceImpl implements JisApplicationService {
 	    }
 	    return url;
 	}
+	
+	@Override
+	public List<JisApplication> findByIsSyncGroupNotNullAndLoginType(Integer loginType) throws Exception{
+		List<JisApplication> list = jisApplicationDao.findByIsSyncGroupNotNullAndLoginType(loginType);
+		return list;
+	}
 }

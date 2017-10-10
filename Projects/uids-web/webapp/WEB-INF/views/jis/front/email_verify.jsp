@@ -54,7 +54,7 @@
 		},{
 			success:function(result){
 				if(result.success){
-					window.location.href='resetpwd_show.do';
+					window.location.href='resetpwd_show';
 				}else{
 					alert(result.message);
 				}
@@ -69,7 +69,7 @@
 		var email = $("#email").val();
 		$.ajax({
 			type:"post",
-			url:"./register/activateemail.do", 
+			url:"./register/activateemail", 
 			data : "email=" + email, 
 			success:function(result){  
 				if(result.success){
@@ -85,7 +85,7 @@
 		var loginname = $(obj).val();
 		$.ajax({
 			type:"post",
-			url:"checkperloginname.do",
+			url:"checkperloginname",
 			data:"loginname="+loginname,
 			success:function(result){
 				if(result.success) {

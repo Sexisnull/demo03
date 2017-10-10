@@ -47,12 +47,12 @@
 <script type="text/javascript" src="${ctx}/res/skin/default/plugin/rsa/RSA.js"></script>
 <script>
 function auth(){
-	window.location.href="./corauth_show.do";
+	window.location.href="./corauth_show";
 }
 function login(){
-//	window.location.href="../corlogin.do?appmark=gszw";最原始的
+//	window.location.href="../corlogin?appmark=gszw";最原始的
 	var domain=document.domain;
-	window.location.href= "../corlogin.do?domain="+domain+"&action=ticketLogin&gotoUrl=&appmark=gszw";
+	window.location.href= "../corlogin?domain="+domain+"&action=ticketLogin&gotoUrl=&appmark=gszw";
 
 }
 </script>
@@ -64,7 +64,7 @@ function login(){
 		if (all <= 0) {
 		//	top.location = "../corlogin.do?appmark=gszw";最最原始的原始的
 			var domain=document.domain;
-			window.location.href= "../corlogin.do?domain="+domain+"&action=ticketLogin&gotoUrl=&appmark=gszw";
+			window.location.href= "../corlogin?domain="+domain+"&action=ticketLogin&gotoUrl=&appmark=gszw";
 
 		}
 		var obj = gid("tS");

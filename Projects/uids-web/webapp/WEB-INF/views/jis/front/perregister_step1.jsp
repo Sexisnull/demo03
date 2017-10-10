@@ -91,7 +91,7 @@
 		var CselProvince = document.getElementById('CselProvince');
 		$.ajax({
     		type:"post",
-	    	url:"searchSubZone.do",
+	    	url:"searchSubZone",
 			data:"iid="+0,
 			dataType:'json',
 			success:function(json){
@@ -169,7 +169,7 @@
     function register(){		
 		$.ajax({
 			type:"post",
-			url:"doperregister.do", 			
+			url:"doperregister", 			
 			//data: $("registerform").serialize(), 编译不报错
 			//data:	randCode=$('#randCode')& $("registerform").serialize(), 编译不报错的。但带过去是空。			
 			success:function(result){  			
@@ -225,7 +225,7 @@
 		var sessionid = $('#random').val();
 		$.ajax({
 			type:"post",
-			url:"checkperloginid.do?token="+sessionid,
+			url:"checkperloginid?token="+sessionid,
 			data:"loginid="+loginid,
 			success:function(msg){
 				if($.trim(msg) != ""){
@@ -258,7 +258,7 @@
 		var email = $("#email").val();
 		$.ajax({
 			type:"post",
-			url:"activateemail.do", 
+			url:"activateemail", 
 			data : "email=" + email, 
 			success:function(result){  
 				if(result.success){
@@ -316,7 +316,7 @@
 		var mobile = $("#mobile").val();
 		$.ajax({
 			type:"post",
-			url:"activatemobile.do",
+			url:"activatemobile",
 			data : "mobile=" + mobile, 
 			success:function(result){  
 				if(result.success){
@@ -355,7 +355,7 @@
     
     	$.ajax({
 			type:"post",
-			url:"searchSubZone.do",
+			url:"searchSubZone",
 			data:"iid="+iid,
 			dataType:'json',
 			success:function(json){//解析json
@@ -382,7 +382,7 @@
         	
     	$.ajax({
     		type:"post",
-	    	url:"searchSubZone.do",
+	    	url:"searchSubZone",
 			data:"iid="+iid,
 			dataType:'json',
 			success:function(json){
@@ -437,7 +437,7 @@
 		$.ajax({
 			async: false, //这个ajax请求则为同步请求，在没有返回值之前，ajax块外是不会执行的。
 			type:"post",
-			url:"checkWhetherTelnumExist.do",
+			url:"checkWhetherTelnumExist",
 			data:"telNum="+telNum,	
 			dataType:'json',
 			success:function(json){

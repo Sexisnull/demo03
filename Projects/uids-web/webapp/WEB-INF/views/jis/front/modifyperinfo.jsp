@@ -203,7 +203,7 @@ var levelNum;
 				if(result.success){
 					var appmark = result.message;
 					alert(appmark);
-					//window.location.href='perindex.do';
+					//window.location.href='perindex';
 				}else{
 					alert(result.message);
 					$('#verifyImg').click();
@@ -243,7 +243,7 @@ var levelNum;
 		var loginid = $(obj).val();
 		$.ajax({
 			type:"post",
-			url:"checkperloginid.do",
+			url:"checkperloginid",
 			data:"loginid="+loginid,
 			success:function(msg){
 				if($.trim(msg) != ""){
@@ -264,7 +264,7 @@ var levelNum;
 		var email = $("#email").val();
 		$.ajax({
 			type:"post",
-			url:"activateemail.do", 
+			url:"activateemail", 
 			data : "email=" + email, 
 			success:function(result){  
 				if(result.success){
@@ -283,7 +283,7 @@ var levelNum;
 		var mobile = $("#mobile").val();
 		$.ajax({
 			type:"post",
-			url:"activatemobile.do",
+			url:"activatemobile",
 			data : "mobile=" + mobile, 
 			success:function(result){  
 				if(result.success){
@@ -317,7 +317,7 @@ function  searchSubZoneByIidForHtml(iid,sel,optionIid){
 
 	$.ajax({
 		type:"post",    			   
-    	url: '../front/register/searchSubZone.do', //前面的../要加。在“控制器”中的地址。	
+    	url: '../front/register/searchSubZone', //前面的../要加。在“控制器”中的地址。	
 		data:"iid="+iid,			
 		dataType:'json',					
 		success:function(json){		

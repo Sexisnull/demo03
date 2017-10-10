@@ -258,7 +258,7 @@
 									var resultMessage = result.message;
 									/*if(resultMessage == 1 || resultMessage == 2 || resultMessage == 3 || resultMessage == 6){
 										alert('注册成功，但是实名认证接口可能存在异常，但是不影响您继续使用！','info',function(){
-											top.location.href = 'corregsuccess.do';
+											top.location.href = 'corregsuccess';
 										});
 									}else{*/
 									top.location.href = 'corregsuccess';
@@ -367,7 +367,7 @@
 		var loginid = $(obj).val();
 		$.ajax({
 			type:"post",
-			url:"checkcorloginid.do",
+			url:"checkcorloginid",
 			data:"loginid="+loginid,
 			success:function(msg){
 				if($.trim(msg)!= ""){
@@ -388,7 +388,7 @@
 		var telNum = $("#mobile").val();
 		$.ajax({
 			type:"post",
-			url:"checkcormobile.do",
+			url:"checkcormobile",
 			async: false,
 			data:"telNum="+telNum,
 			success:function(result){

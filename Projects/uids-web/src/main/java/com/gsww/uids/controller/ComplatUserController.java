@@ -448,9 +448,9 @@ public class ComplatUserController extends BaseController {
 	 * @throws Exception
 	 * @author <a href=" ">shenxh</a>
 	 */
+	@SuppressWarnings("deprecation")
 	@RequestMapping(value = "/complatImport", method = RequestMethod.POST)
-	@ResponseBody
-	public void complatImport(
+	public String complatImport(
 			@RequestParam("files") MultipartFile multipartFile,
 			HttpServletRequest request, Model model,
 			HttpServletResponse response) throws Exception {
@@ -518,21 +518,15 @@ public class ComplatUserController extends BaseController {
 			
 			
 			if(flag){
-				resMap.put("ret", "1");
-				resMap.put("msg", "导入成功！");
-				System.out.println("导入成功"+resMap);
-				response.getWriter().write(JSONObject.toJSONString(resMap));				
+				returnMsg("success","导入成功",request);			
 			}else{
-				resMap.put("ret", "0");
-				resMap.put("msg", "导入失败！");
-				System.out.println("导入失败"+resMap);
-				response.getWriter().write(JSONObject.toJSONString(resMap));
+				returnMsg("error","导入失败",request);
 			}		
 		} catch (Exception e) {
 			e.printStackTrace();
-			//returnMsg("error", "导入失败", request);
+			returnMsg("error", "导入失败", request);
 		}
-		//return new ModelAndView("redirect:/complat/complatList");
+		return "/complat/complatList";
 	}
 
 	/**

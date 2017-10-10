@@ -94,4 +94,12 @@ public interface JisApplicationService {
 	public List<Map<String, Object>> findAppByRoleIds(String roleIds);
 
 	public String findURLBylogoff(int islogoff);
+	
+	/**
+	 * 通过是否支持同步来查找应用
+	 * @param isSyncGroup
+	 * @return JisApplication
+	 * @throws Exception
+	 */
+    public List<JisApplication> findByIsSyncGroupNotNullAndLoginType(Integer loginType) throws Exception;
 }

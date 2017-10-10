@@ -90,7 +90,7 @@ window.confirm = function(msg,okCall,cancelCall){
 					var gotoUrl = $('#gotoUrl').val();
 					var gotoUrlFlag = result.params.gotoUrlFlag;
 					if(gotoUrlFlag == ""){						
-						top.location.href = 'corindex.do';
+						top.location.href = 'corindex';
 					}else {
 						var ticket = result.params.ticket;
 						location.href = gotoUrlFlag + '?ticket='+ticket + "&gotoUrl="+gotoUrl;;
@@ -202,8 +202,8 @@ window.confirm = function(msg,okCall,cancelCall){
                                 <td width="156">
                                 <input type="button" id="submit" class="sub" value="登&nbsp;&nbsp;录"onClick="$('#loginform').submit()" /> 							
                                 </td>
-                                <td align="center" width="140"><a style="color:#37a1ec; font-size:14px;" href="pwdRecover_select.do?typeEntity=cor">忘记密码？</a></td>
-                                <td align="left" width="65"><a style="color:#37a1ec; font-size:14px;" href="register/corregister.do">注册</a></td>
+                                <td align="center" width="140"><a style="color:#37a1ec; font-size:14px;" href="pwdRecover_select?typeEntity=cor">忘记密码？</a></td>
+                                <td align="left" width="65"><a style="color:#37a1ec; font-size:14px;" href="register/corregister">注册</a></td>
                             </tr>
                             <tr><td width="36"></td><td colspan="3"><img src="${ctx}/ui/images/denglutishi.png"/></td></tr>
                         </table>
@@ -260,9 +260,9 @@ $("#bm").click(function(){
 		$("#perlogin").click(function(){
 			var appmark = $('#appmark').val();
 			if(appmark != "") {
-				window.location.href = "perlogin.do?appmark="+appmark;
+				window.location.href = "perlogin?appmark="+appmark;
 			}else {		
-				window.location.href = "perlogin.do";
+				window.location.href = "perlogin";
 			}
 		});
 		

@@ -256,13 +256,12 @@ var complatUserNameInput=$("#name").val();
     				}else{
     					 if(count%2==1){
     	    			       htmlString.push("<tr><td class='td_7'></td><th>"+key+"</th><td><input name='"+key+"' type='text' value='"+value+"'></td>");
-    	    			       alert(" htmlString"+ htmlString);
+//    	    			       alert(" htmlString"+ htmlString);
    
     					 }
     	    			    if(count%2==0){
     	    			       htmlString.push("<th>"+key+"</th><td><input type='text' name='"+key+"' value='"+value+"'></td></tr>");
-    	    			       alert(" htmlString"+ htmlString);
-
+//    	    			       alert(" htmlString"+ htmlString);
     	    			    }
     					
     				}
