@@ -52,5 +52,4 @@ public interface ComplatCorporationDao extends  PagingAndSortingRepository<Compl
 	 * @return
 	 */
 	public ComplatCorporation findByRegNumber(String regNum);
-	
 }

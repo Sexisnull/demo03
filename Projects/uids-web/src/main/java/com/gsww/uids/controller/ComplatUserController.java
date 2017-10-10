@@ -278,6 +278,12 @@ public class ComplatUserController extends BaseController {
 				if (iid == null || iid.length() <= 0) {	
 					pwd=complatUser.getPwd();
 					if(level=="strong"||level.equals("strong")){
+						//对登录全名做处理
+						String groupid=request.getParameter("groupid");
+						ComplatGroup complatGroup = complatGroupService.findByIid(Integer.parseInt(groupid));
+						String suffix = complatGroup.getSuffix();
+						String loginallname=complatUser.getLoginname()+ "." + suffix;	
+						complatUser.setLoginallname(loginallname);
 						
 						complatUser.setOpersign(1);//1:新增2:修改3:删除	
 						complatUser.setSynState(0);
@@ -316,6 +322,12 @@ public class ComplatUserController extends BaseController {
 				}else {
 					pwd=complatUser.getPwd();
 					if(level=="strong"||level.equals("strong")){
+						//对登录全名做处理
+						int groupId=complatUser.getGroupid();
+						ComplatGroup complatGroup = complatGroupService.findByIid(groupId);
+						String suffix = complatGroup.getSuffix();
+						String loginallname=complatUser.getLoginname()+ "." + suffix;	
+						complatUser.setLoginallname(loginallname);
 						//对密码进行加密			
 						String p = Md5Util.md5encode(pwd);
 						complatUser.setPwd(p);
@@ -775,6 +787,7 @@ public class ComplatUserController extends BaseController {
 		PrintWriter out = response.getWriter();
 		String json = array.toString();
 		out.write(json);
+		System.out.println("json--"+json);
 		model.addAttribute("fieldsListMap",json);
 		
 		//设置默认值

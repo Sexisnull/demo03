@@ -1,6 +1,9 @@
 package com.gsww.uids.service;
 
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -88,4 +91,11 @@ public interface ComplatCorporationService {
 	 * @throws OperationException
 	 */
 	boolean add(ComplatCorporation corporation) throws OperationException;
+	
+	void delete(ComplatCorporation corporation);
+	
+	/**
+	 * 根据loginName,regNumber,orgNumber校验数据唯一性
+	 */
+	Integer checkUnique(String loginName,String regNumber,String orgNumber) throws Exception;
 }

@@ -3,11 +3,13 @@ package com.gsww.uids.service.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.apache.commons.collections.CollectionUtils;
@@ -33,7 +35,9 @@ public class ComplatCorporationServiceImpl implements ComplatCorporationService{
 	
 	@Autowired
 	private ComplatCorporationDao complatCorporationDao;
-
+	
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
 	@Override
 	public Page<ComplatCorporation> getCorporationPage(Specification<ComplatCorporation> spec, PageRequest pageRequest) {
 		return complatCorporationDao.findAll(spec, pageRequest);
@@ -226,5 +230,19 @@ public class ComplatCorporationServiceImpl implements ComplatCorporationService{
 	private void convertFormat(ComplatCorporation corporation) {
 		if (StringUtil.isNotEmpty(corporation.getOrgNumber()))
 			corporation.setOrgNumber(corporation.getOrgNumber().toUpperCase());
+	}
+
+	@Override
+	public void delete(ComplatCorporation corporation) {
+		complatCorporationDao.delete(corporation);
+	}
+
+	@Override
+	public Integer checkUnique(String loginName, String regNumber, String orgNumber)
+			throws Exception {
+		String sql = "select count(1) from Complat_Corporation t where t.loginname = '"+loginName+"' and t.regnumber = '"+regNumber+"' and t.orgnumber='"+orgNumber+"'";
+		Integer countData = jdbcTemplate.queryForObject(sql, Integer.class);
+		System.out.println("countData:---"+countData);
+		return countData;
 	}
 }

@@ -20,17 +20,21 @@ $().ready(function() {
 		    fieldname : {
 		     required: true,
 		     maxlength: 50,
-		     uniqueName : true
+		     isFieldname: true,
+		     uniqueName: true
 		     //stringCheck:fieldName
 		    },
 			defvalue : {
-				cnRangelength: [0,25]
+				maxlength: 50,
+				isDefvalue:true
 			},
 			fieldkeys : {
-				cnRangelength: [0,500]
+				cnRangelength: [0,500],
+				isFieldkeys: true
 			},
 			fieldvalues : {
-				cnRangelength: [0,1000]
+				cnRangelength: [0,1000],
+				isFieldvalues: true
 			},
 		   	submitHandler:function(form){
 				form.submit();
@@ -39,6 +43,27 @@ $().ready(function() {
 	});
 	// Ajax重命名校验
 	$.uniqueValidate('uniqueName', '${ctx}/jis/checkFieldname', ['fieldname','oldFieldname'], '对不起，这个字段名称重复了');
+
+	// 字段名称校验
+	jQuery.validator.addMethod("isFieldname", function(value, element) { 
+           var corporName = /ex_[a-zA-Z0-9_]+$/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "字段名称只能由字母、数字、下划线组成且只能以ex_开头");
+    //固定值校验
+	jQuery.validator.addMethod("isDefvalue", function(value, element) { 
+           var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "固定值只能由字母、数字、下划线、中文组成，不能以下划线开头和结尾");
+    //键
+    jQuery.validator.addMethod("isFieldkeys", function(value, element) { 
+           var corporName = /^(?!.*(^|,)([^,]*),(\2|.*,\2)(,|$))[^,]+(,[^,]+)+$/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "插入数据库的值，多个以','隔开");
+    //值
+    jQuery.validator.addMethod("isFieldvalues", function(value, element) { 
+           var corporName = /^(?!.*(^|,)([^,]*),(\2|.*,\2)(,|$))[^,]+(,[^,]+)+$/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "页面显示的值，多个以','隔开，个数与key串一致");
 });
 
 $(document).on("change",'select#fieldsType',function(){

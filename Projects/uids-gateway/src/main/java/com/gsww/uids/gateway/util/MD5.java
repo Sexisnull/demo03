@@ -1,406 +1,579 @@
 package com.gsww.uids.gateway.util;
 
-/************************************************
- MD5 算法的Java/JSP Bean
- JAVA/JSP MD5 Author: www.web745.com
- JAVA/JSP MD5 javabean 为免费发布，但转载请保留原作者信息，谢谢
- Last Modified:10,Mar,2001
- *************************************************/
-import java.lang.reflect.*;
-
-/*******************************************************************************
- * md5 类实现了RSA Data Security, Inc.在提交给IETF 的RFC1321中的MD5 message-digest 算法。
- ******************************************************************************/
-public class MD5 {
-	/*
-	 * 下面这些S11-S44实际上是一个4*4的矩阵，在原始的C实现中是用#define 实现的， 这里把它们实现成为static
-	 * final是表示了只读，切能在同一个进程空间内的多个 Instance间共享
-	 */
-	static final int S11 = 7;
-
-	static final int S12 = 12;
-
-	static final int S13 = 17;
-
-	static final int S14 = 22;
-
-	static final int S21 = 5;
-
-	static final int S22 = 9;
-
-	static final int S23 = 14;
-
-	static final int S24 = 20;
-
-	static final int S31 = 4;
-
-	static final int S32 = 11;
-
-	static final int S33 = 16;
-
-	static final int S34 = 23;
-
-	static final int S41 = 6;
-
-	static final int S42 = 10;
-
-	static final int S43 = 15;
-
-	static final int S44 = 21;
-
-	static final byte[] PADDING = { -128, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-			0, 0, 0, 0, 0, 0, 0 };
-
-	/*
-	 * 下面的三个成员是MD5计算过程中用到的3个核心数据，在原始的C实现中 被定义到MD5_CTX结构中
-	 * 
-	 */
-	private long[] state = new long[4]; // state (ABCD)
-
-	private long[] count = new long[2]; // number of bits, modulo 2^64 (lsb
-										// first)
-
-	private byte[] buffer = new byte[64]; // input buffer
-
-	/*
-	 * digestHexStr是MD5的唯一一个公共成员，是最新一次计算结果的 16进制ASCII表示.
-	 */
-	public String digestHexStr;
-
-	/*
-	 * digest,是最新一次计算结果的2进制内部表示，表示128bit的MD5值.
-	 */
-	private byte[] digest = new byte[16];
-
-	/*
-	 * getMD5ofStr是类MD5最主要的公共方法，入口参数是你想要进行MD5变换的字符串
-	 * 返回的是变换完的结果，这个结果是从公共成员digestHexStr取得的．
-	 */
-	public String getMD5ofStr(String inbuf) {
-		md5Init();
-		md5Update(inbuf.getBytes(), inbuf.length());
-		md5Final();
-		digestHexStr = "";
-		for (int i = 0; i < 16; i++) {
-			digestHexStr += byteHEX(digest[i]);
-		}
-		return digestHexStr.toLowerCase();
-
-	}
-
-	// 这是MD5这个类的标准构造函数，JavaBean要求有一个public的并且没有参数的构造函数
-	public MD5() {
-		md5Init();
-
-		return;
-	}
-
-	/* md5Init是一个初始化函数，初始化核心变量，装入标准的幻数 */
-	private void md5Init() {
-		count[0] = 0L;
-		count[1] = 0L;
-		// /* Load magic initialization constants.
-
-		state[0] = 0x67452301L;
-		state[1] = 0xefcdab89L;
-		state[2] = 0x98badcfeL;
-		state[3] = 0x10325476L;
-
-		return;
-	}
-
-	/*
-	 * F, G, H ,I 是4个基本的MD5函数，在原始的MD5的C实现中，由于它们是
-	 * 简单的位运算，可能出于效率的考虑把它们实现成了宏，在java中，我们把它们 实现成了private方法，名字保持了原来C中的。
-	 */
-
-	private long F(long x, long y, long z) {
-		return (x & y) | ((~x) & z);
-
-	}
-
-	private long G(long x, long y, long z) {
-		return (x & z) | (y & (~z));
-
-	}
-
-	private long H(long x, long y, long z) {
-		return x ^ y ^ z;
-	}
-
-	private long I(long x, long y, long z) {
-		return y ^ (x | (~z));
-	}
-
-	/*
-	 * FF,GG,HH和II将调用F,G,H,I进行近一步变换 FF, GG, HH, and II transformations for
-	 * rounds 1, 2, 3, and 4. Rotation is separate from addition to prevent
-	 * recomputation.
-	 */
-
-	private long FF(long a, long b, long c, long d, long x, long s, long ac) {
-		a += F(b, c, d) + x + ac;
-		a = ((int) a << s) | ((int) a >>> (32 - s));
-		a += b;
-		return a;
-	}
-
-	private long GG(long a, long b, long c, long d, long x, long s, long ac) {
-		a += G(b, c, d) + x + ac;
-		a = ((int) a << s) | ((int) a >>> (32 - s));
-		a += b;
-		return a;
-	}
-
-	private long HH(long a, long b, long c, long d, long x, long s, long ac) {
-		a += H(b, c, d) + x + ac;
-		a = ((int) a << s) | ((int) a >>> (32 - s));
-		a += b;
-		return a;
-	}
-
-	private long II(long a, long b, long c, long d, long x, long s, long ac) {
-		a += I(b, c, d) + x + ac;
-		a = ((int) a << s) | ((int) a >>> (32 - s));
-		a += b;
-		return a;
-	}
-
-	/*
-	 * md5Update是MD5的主计算过程，inbuf是要变换的字节串，inputlen是长度，这个
-	 * 函数由getMD5ofStr调用，调用之前需要调用md5init，因此把它设计成private的
-	 */
-	private void md5Update(byte[] inbuf, int inputLen) {
-
-		int i, index, partLen;
-		byte[] block = new byte[64];
-		index = (int) (count[0] >>> 3) & 0x3F;
-		// /* Update number of bits */
-		if ((count[0] += (inputLen << 3)) < (inputLen << 3))
-			count[1]++;
-		count[1] += (inputLen >>> 29);
-
-		partLen = 64 - index;
-
-		// Transform as many times as possible.
-		if (inputLen >= partLen) {
-			md5Memcpy(buffer, inbuf, index, 0, partLen);
-			md5Transform(buffer);
-
-			for (i = partLen; i + 63 < inputLen; i += 64) {
-
-				md5Memcpy(block, inbuf, 0, i, 64);
-				md5Transform(block);
-			}
-			index = 0;
-
-		} else
-
-			i = 0;
-
-		// /* Buffer remaining input */
-		md5Memcpy(buffer, inbuf, index, i, inputLen - i);
-
-	}
-
-	/*
-	 * md5Final整理和填写输出结果
-	 */
-	private void md5Final() {
-		byte[] bits = new byte[8];
-		int index, padLen;
-
-		// /* Save number of bits */
-		Encode(bits, count, 8);
-
-		// /* Pad out to 56 mod 64.
-		index = (int) (count[0] >>> 3) & 0x3f;
-		padLen = (index < 56) ? (56 - index) : (120 - index);
-		md5Update(PADDING, padLen);
-
-		// /* Append length (before padding) */
-		md5Update(bits, 8);
-
-		// /* Store state in digest */
-		Encode(digest, state, 16);
-
-	}
-
-	/*
-	 * md5Memcpy是一个内部使用的byte数组的块拷贝函数，从input的inpos开始把len长度的
-	 * 字节拷贝到output的outpos位置开始
-	 */
-
-	private void md5Memcpy(byte[] output, byte[] input, int outpos, int inpos,
-			int len) {
-		int i;
-
-		for (i = 0; i < len; i++)
-			output[outpos + i] = input[inpos + i];
-	}
-
-	/*
-	 * md5Transform是MD5核心变换程序，有md5Update调用，block是分块的原始字节
-	 */
-	private void md5Transform(byte block[]) {
-		long a = state[0], b = state[1], c = state[2], d = state[3];
-		long[] x = new long[16];
-
-		Decode(x, block, 64);
-
-		/* Round 1 */
-		a = FF(a, b, c, d, x[0], S11, 0xd76aa478L); /* 1 */
-		d = FF(d, a, b, c, x[1], S12, 0xe8c7b756L); /* 2 */
-		c = FF(c, d, a, b, x[2], S13, 0x242070dbL); /* 3 */
-		b = FF(b, c, d, a, x[3], S14, 0xc1bdceeeL); /* 4 */
-		a = FF(a, b, c, d, x[4], S11, 0xf57c0fafL); /* 5 */
-		d = FF(d, a, b, c, x[5], S12, 0x4787c62aL); /* 6 */
-		c = FF(c, d, a, b, x[6], S13, 0xa8304613L); /* 7 */
-		b = FF(b, c, d, a, x[7], S14, 0xfd469501L); /* 8 */
-		a = FF(a, b, c, d, x[8], S11, 0x698098d8L); /* 9 */
-		d = FF(d, a, b, c, x[9], S12, 0x8b44f7afL); /* 10 */
-		c = FF(c, d, a, b, x[10], S13, 0xffff5bb1L); /* 11 */
-		b = FF(b, c, d, a, x[11], S14, 0x895cd7beL); /* 12 */
-		a = FF(a, b, c, d, x[12], S11, 0x6b901122L); /* 13 */
-		d = FF(d, a, b, c, x[13], S12, 0xfd987193L); /* 14 */
-		c = FF(c, d, a, b, x[14], S13, 0xa679438eL); /* 15 */
-		b = FF(b, c, d, a, x[15], S14, 0x49b40821L); /* 16 */
-
-		/* Round 2 */
-		a = GG(a, b, c, d, x[1], S21, 0xf61e2562L); /* 17 */
-		d = GG(d, a, b, c, x[6], S22, 0xc040b340L); /* 18 */
-		c = GG(c, d, a, b, x[11], S23, 0x265e5a51L); /* 19 */
-		b = GG(b, c, d, a, x[0], S24, 0xe9b6c7aaL); /* 20 */
-		a = GG(a, b, c, d, x[5], S21, 0xd62f105dL); /* 21 */
-		d = GG(d, a, b, c, x[10], S22, 0x2441453L); /* 22 */
-		c = GG(c, d, a, b, x[15], S23, 0xd8a1e681L); /* 23 */
-		b = GG(b, c, d, a, x[4], S24, 0xe7d3fbc8L); /* 24 */
-		a = GG(a, b, c, d, x[9], S21, 0x21e1cde6L); /* 25 */
-		d = GG(d, a, b, c, x[14], S22, 0xc33707d6L); /* 26 */
-		c = GG(c, d, a, b, x[3], S23, 0xf4d50d87L); /* 27 */
-		b = GG(b, c, d, a, x[8], S24, 0x455a14edL); /* 28 */
-		a = GG(a, b, c, d, x[13], S21, 0xa9e3e905L); /* 29 */
-		d = GG(d, a, b, c, x[2], S22, 0xfcefa3f8L); /* 30 */
-		c = GG(c, d, a, b, x[7], S23, 0x676f02d9L); /* 31 */
-		b = GG(b, c, d, a, x[12], S24, 0x8d2a4c8aL); /* 32 */
-
-		/* Round 3 */
-		a = HH(a, b, c, d, x[5], S31, 0xfffa3942L); /* 33 */
-		d = HH(d, a, b, c, x[8], S32, 0x8771f681L); /* 34 */
-		c = HH(c, d, a, b, x[11], S33, 0x6d9d6122L); /* 35 */
-		b = HH(b, c, d, a, x[14], S34, 0xfde5380cL); /* 36 */
-		a = HH(a, b, c, d, x[1], S31, 0xa4beea44L); /* 37 */
-		d = HH(d, a, b, c, x[4], S32, 0x4bdecfa9L); /* 38 */
-		c = HH(c, d, a, b, x[7], S33, 0xf6bb4b60L); /* 39 */
-		b = HH(b, c, d, a, x[10], S34, 0xbebfbc70L); /* 40 */
-		a = HH(a, b, c, d, x[13], S31, 0x289b7ec6L); /* 41 */
-		d = HH(d, a, b, c, x[0], S32, 0xeaa127faL); /* 42 */
-		c = HH(c, d, a, b, x[3], S33, 0xd4ef3085L); /* 43 */
-		b = HH(b, c, d, a, x[6], S34, 0x4881d05L); /* 44 */
-		a = HH(a, b, c, d, x[9], S31, 0xd9d4d039L); /* 45 */
-		d = HH(d, a, b, c, x[12], S32, 0xe6db99e5L); /* 46 */
-		c = HH(c, d, a, b, x[15], S33, 0x1fa27cf8L); /* 47 */
-		b = HH(b, c, d, a, x[2], S34, 0xc4ac5665L); /* 48 */
-
-		/* Round 4 */
-		a = II(a, b, c, d, x[0], S41, 0xf4292244L); /* 49 */
-		d = II(d, a, b, c, x[7], S42, 0x432aff97L); /* 50 */
-		c = II(c, d, a, b, x[14], S43, 0xab9423a7L); /* 51 */
-		b = II(b, c, d, a, x[5], S44, 0xfc93a039L); /* 52 */
-		a = II(a, b, c, d, x[12], S41, 0x655b59c3L); /* 53 */
-		d = II(d, a, b, c, x[3], S42, 0x8f0ccc92L); /* 54 */
-		c = II(c, d, a, b, x[10], S43, 0xffeff47dL); /* 55 */
-		b = II(b, c, d, a, x[1], S44, 0x85845dd1L); /* 56 */
-		a = II(a, b, c, d, x[8], S41, 0x6fa87e4fL); /* 57 */
-		d = II(d, a, b, c, x[15], S42, 0xfe2ce6e0L); /* 58 */
-		c = II(c, d, a, b, x[6], S43, 0xa3014314L); /* 59 */
-		b = II(b, c, d, a, x[13], S44, 0x4e0811a1L); /* 60 */
-		a = II(a, b, c, d, x[4], S41, 0xf7537e82L); /* 61 */
-		d = II(d, a, b, c, x[11], S42, 0xbd3af235L); /* 62 */
-		c = II(c, d, a, b, x[2], S43, 0x2ad7d2bbL); /* 63 */
-		b = II(b, c, d, a, x[9], S44, 0xeb86d391L); /* 64 */
-
-		state[0] += a;
-		state[1] += b;
-		state[2] += c;
-		state[3] += d;
-
-	}
-
-	/*
-	 * Encode把long数组按顺序拆成byte数组，因为java的long类型是64bit的， 只拆低32bit，以适应原始C实现的用途
-	 */
-	private void Encode(byte[] output, long[] input, int len) {
-		int i, j;
-
-		for (i = 0, j = 0; j < len; i++, j += 4) {
-			output[j] = (byte) (input[i] & 0xffL);
-			output[j + 1] = (byte) ((input[i] >>> 8) & 0xffL);
-			output[j + 2] = (byte) ((input[i] >>> 16) & 0xffL);
-			output[j + 3] = (byte) ((input[i] >>> 24) & 0xffL);
-		}
-	}
-
-	/*
-	 * Decode把byte数组按顺序合成成long数组，因为java的long类型是64bit的，
-	 * 只合成低32bit，高32bit清零，以适应原始C实现的用途
-	 */
-	private void Decode(long[] output, byte[] input, int len) {
-		int i, j;
-
-		for (i = 0, j = 0; j < len; i++, j += 4)
-			output[i] = b2iu(input[j]) | (b2iu(input[j + 1]) << 8)
-					| (b2iu(input[j + 2]) << 16) | (b2iu(input[j + 3]) << 24);
-
-		return;
-	}
-
-	/*
-	 * b2iu是我写的一个把byte按照不考虑正负号的原则的＂升位＂程序，因为java没有unsigned运算
-	 */
-	public static long b2iu(byte b) {
-		return b < 0 ? b & 0x7F + 128 : b;
-	}
-
-	/*
-	 * byteHEX()，用来把一个byte类型的数转换成十六进制的ASCII表示，
-	 * 因为java中的byte的toString无法实现这一点，我们又没有C语言中的 sprintf(outbuf,"%02X",ib)
-	 */
-	public static String byteHEX(byte ib) {
-		char[] Digit = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A',
-				'B', 'C', 'D', 'E', 'F' };
-		char[] ob = new char[2];
-		ob[0] = Digit[(ib >>> 4) & 0X0F];
-		ob[1] = Digit[ib & 0X0F];
-		String s = new String(ob);
-		return s;
-	}
-
-	public static void main(String args[]) {
-
-		MD5 m = new MD5();
-/*		if (Array.getLength(args) == 0) { // 如果没有参数，执行标准的Test Suite
-
-			System.out.println("MD5 Test suite:");
-			System.out.println("MD5(\"\"):" + m.getMD5ofStr(""));
-			System.out.println("MD5(\"a\"):" + m.getMD5ofStr("a"));
-			System.out.println("MD5(\"abc\"):" + m.getMD5ofStr("abc"));
-			System.out.println("MD5(\"message digest\"):"
-					+ m.getMD5ofStr("message digest"));
-			System.out.println("MD5(\"abcdefghijklmnopqrstuvwxyz\"):"
-					+ m.getMD5ofStr("abcdefghijklmnopqrstuvwxyz"));
-			System.out
-					.println("MD5(\"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\"):"
-							+ m
-									.getMD5ofStr("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"));
-		} else{
-			System.out.println("MD5(" + args[0] + ")=" + m.getMD5ofStr(args[0]));
-		}*/
-		String password="rrrrrr";
-		System.out.println("MD5 Test suite:"+m.getMD5ofStr(password));
-//		System.out.println("MD5 Test suite:"+m.getMD5ofStr(m.getMD5ofStr(password)));		
-	}
-
+import java.security.MessageDigest;
+import java.util.Random;
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
+
+public class MD5
+{
+  static final int S11 = 7;
+  static final int S12 = 12;
+  static final int S13 = 17;
+  static final int S14 = 22;
+  static final int S21 = 5;
+  static final int S22 = 9;
+  static final int S23 = 14;
+  static final int S24 = 20;
+  static final int S31 = 4;
+  static final int S32 = 11;
+  static final int S33 = 16;
+  static final int S34 = 23;
+  static final int S41 = 6;
+  static final int S42 = 10;
+  static final int S43 = 15;
+  static final int S44 = 21;
+  static final byte[] PADDING = { -128 };
+
+  private long[] state = new long[4];
+  private long[] count = new long[2];
+
+  private byte[] buffer = new byte[64];
+  public String digestHexStr;
+  private byte[] digest = new byte[16];
+
+  public String getMD5ofStr(String inbuf)
+  {
+    md5Init();
+    md5Update(inbuf.getBytes(), inbuf.length());
+    md5Final();
+    this.digestHexStr = "";
+    for (int i = 0; i < 16; i++) {
+      this.digestHexStr += byteHEX(this.digest[i]);
+    }
+    return this.digestHexStr;
+  }
+
+  public MD5()
+  {
+    md5Init();
+  }
+
+  private void md5Init()
+  {
+    this.count[0] = 0L;
+    this.count[1] = 0L;
+
+    this.state[0] = 1732584193L;
+    this.state[1] = 4023233417L;
+    this.state[2] = 2562383102L;
+    this.state[3] = 271733878L;
+  }
+
+  private long F(long x, long y, long z)
+  {
+    return x & y | (x ^ 0xFFFFFFFF) & z;
+  }
+
+  private long G(long x, long y, long z) {
+    return x & z | y & (z ^ 0xFFFFFFFF);
+  }
+
+  private long H(long x, long y, long z)
+  {
+    return x ^ y ^ z;
+  }
+
+  private long I(long x, long y, long z) {
+    return y ^ (x | z ^ 0xFFFFFFFF);
+  }
+
+  private long FF(long a, long b, long c, long d, long x, long s, long ac)
+  {
+    a += F(b, c, d) + x + ac;
+    a = (int)a << (int)s | (int)a >>> (int)(32L - s);
+    a += b;
+    return a;
+  }
+
+  private long GG(long a, long b, long c, long d, long x, long s, long ac) {
+    a += G(b, c, d) + x + ac;
+    a = (int)a << (int)s | (int)a >>> (int)(32L - s);
+    a += b;
+    return a;
+  }
+
+  private long HH(long a, long b, long c, long d, long x, long s, long ac) {
+    a += H(b, c, d) + x + ac;
+    a = (int)a << (int)s | (int)a >>> (int)(32L - s);
+    a += b;
+    return a;
+  }
+
+  private long II(long a, long b, long c, long d, long x, long s, long ac) {
+    a += I(b, c, d) + x + ac;
+    a = (int)a << (int)s | (int)a >>> (int)(32L - s);
+    a += b;
+    return a;
+  }
+
+  private void md5Update(byte[] inbuf, int inputLen)
+  {
+    byte[] block = new byte[64];
+    int index = (int)(this.count[0] >>> 3) & 0x3F;
+
+    if ((this.count[0] += (inputLen << 3)) < inputLen << 3)
+      this.count[1] += 1L;
+    this.count[1] += (inputLen >>> 29);
+    int partLen = 64 - index;
+    int i;
+    if (inputLen >= partLen) {
+      md5Memcpy(this.buffer, inbuf, index, 0, partLen);
+      md5Transform(this.buffer);
+      for ( i = partLen; i + 63 < inputLen; i += 64) {
+        md5Memcpy(block, inbuf, 0, i, 64);
+        md5Transform(block);
+      }
+      index = 0;
+    } else {
+      i = 0;
+    }
+
+    md5Memcpy(this.buffer, inbuf, index, i, inputLen - i);
+  }
+
+  private void md5Final()
+  {
+    byte[] bits = new byte[8];
+
+    Encode(bits, this.count, 8);
+
+    int index = (int)(this.count[0] >>> 3) & 0x3F;
+    int padLen = index < 56 ? 56 - index : 120 - index;
+    md5Update(PADDING, padLen);
+
+    md5Update(bits, 8);
+
+    Encode(this.digest, this.state, 16);
+  }
+
+  private void md5Memcpy(byte[] output, byte[] input, int outpos, int inpos, int len)
+  {
+    for (int i = 0; i < len; i++)
+      output[(outpos + i)] = input[(inpos + i)];
+  }
+
+  private void md5Transform(byte[] block)
+  {
+    long a = this.state[0]; long b = this.state[1]; long c = this.state[2]; long d = this.state[3];
+    long[] x = new long[16];
+
+    Decode(x, block, 64);
+
+    a = FF(a, b, c, d, x[0], 7L, 3614090360L);
+    d = FF(d, a, b, c, x[1], 12L, 3905402710L);
+    c = FF(c, d, a, b, x[2], 17L, 606105819L);
+    b = FF(b, c, d, a, x[3], 22L, 3250441966L);
+    a = FF(a, b, c, d, x[4], 7L, 4118548399L);
+    d = FF(d, a, b, c, x[5], 12L, 1200080426L);
+    c = FF(c, d, a, b, x[6], 17L, 2821735955L);
+    b = FF(b, c, d, a, x[7], 22L, 4249261313L);
+    a = FF(a, b, c, d, x[8], 7L, 1770035416L);
+    d = FF(d, a, b, c, x[9], 12L, 2336552879L);
+    c = FF(c, d, a, b, x[10], 17L, 4294925233L);
+    b = FF(b, c, d, a, x[11], 22L, 2304563134L);
+    a = FF(a, b, c, d, x[12], 7L, 1804603682L);
+    d = FF(d, a, b, c, x[13], 12L, 4254626195L);
+    c = FF(c, d, a, b, x[14], 17L, 2792965006L);
+    b = FF(b, c, d, a, x[15], 22L, 1236535329L);
+
+    a = GG(a, b, c, d, x[1], 5L, 4129170786L);
+    d = GG(d, a, b, c, x[6], 9L, 3225465664L);
+    c = GG(c, d, a, b, x[11], 14L, 643717713L);
+    b = GG(b, c, d, a, x[0], 20L, 3921069994L);
+    a = GG(a, b, c, d, x[5], 5L, 3593408605L);
+    d = GG(d, a, b, c, x[10], 9L, 38016083L);
+    c = GG(c, d, a, b, x[15], 14L, 3634488961L);
+    b = GG(b, c, d, a, x[4], 20L, 3889429448L);
+    a = GG(a, b, c, d, x[9], 5L, 568446438L);
+    d = GG(d, a, b, c, x[14], 9L, 3275163606L);
+    c = GG(c, d, a, b, x[3], 14L, 4107603335L);
+    b = GG(b, c, d, a, x[8], 20L, 1163531501L);
+    a = GG(a, b, c, d, x[13], 5L, 2850285829L);
+    d = GG(d, a, b, c, x[2], 9L, 4243563512L);
+    c = GG(c, d, a, b, x[7], 14L, 1735328473L);
+    b = GG(b, c, d, a, x[12], 20L, 2368359562L);
+
+    a = HH(a, b, c, d, x[5], 4L, 4294588738L);
+    d = HH(d, a, b, c, x[8], 11L, 2272392833L);
+    c = HH(c, d, a, b, x[11], 16L, 1839030562L);
+    b = HH(b, c, d, a, x[14], 23L, 4259657740L);
+    a = HH(a, b, c, d, x[1], 4L, 2763975236L);
+    d = HH(d, a, b, c, x[4], 11L, 1272893353L);
+    c = HH(c, d, a, b, x[7], 16L, 4139469664L);
+    b = HH(b, c, d, a, x[10], 23L, 3200236656L);
+    a = HH(a, b, c, d, x[13], 4L, 681279174L);
+    d = HH(d, a, b, c, x[0], 11L, 3936430074L);
+    c = HH(c, d, a, b, x[3], 16L, 3572445317L);
+    b = HH(b, c, d, a, x[6], 23L, 76029189L);
+    a = HH(a, b, c, d, x[9], 4L, 3654602809L);
+    d = HH(d, a, b, c, x[12], 11L, 3873151461L);
+    c = HH(c, d, a, b, x[15], 16L, 530742520L);
+    b = HH(b, c, d, a, x[2], 23L, 3299628645L);
+
+    a = II(a, b, c, d, x[0], 6L, 4096336452L);
+    d = II(d, a, b, c, x[7], 10L, 1126891415L);
+    c = II(c, d, a, b, x[14], 15L, 2878612391L);
+    b = II(b, c, d, a, x[5], 21L, 4237533241L);
+    a = II(a, b, c, d, x[12], 6L, 1700485571L);
+    d = II(d, a, b, c, x[3], 10L, 2399980690L);
+    c = II(c, d, a, b, x[10], 15L, 4293915773L);
+    b = II(b, c, d, a, x[1], 21L, 2240044497L);
+    a = II(a, b, c, d, x[8], 6L, 1873313359L);
+    d = II(d, a, b, c, x[15], 10L, 4264355552L);
+    c = II(c, d, a, b, x[6], 15L, 2734768916L);
+    b = II(b, c, d, a, x[13], 21L, 1309151649L);
+    a = II(a, b, c, d, x[4], 6L, 4149444226L);
+    d = II(d, a, b, c, x[11], 10L, 3174756917L);
+    c = II(c, d, a, b, x[2], 15L, 718787259L);
+    b = II(b, c, d, a, x[9], 21L, 3951481745L);
+
+    this.state[0] += a;
+    this.state[1] += b;
+    this.state[2] += c;
+    this.state[3] += d;
+  }
+
+  private void Encode(byte[] output, long[] input, int len)
+  {
+    int i = 0; for (int j = 0; j < len; j += 4) {
+      output[j] = ((byte)(int)(input[i] & 0xFF));
+      output[(j + 1)] = ((byte)(int)(input[i] >>> 8 & 0xFF));
+      output[(j + 2)] = ((byte)(int)(input[i] >>> 16 & 0xFF));
+      output[(j + 3)] = ((byte)(int)(input[i] >>> 24 & 0xFF));
+
+      i++;
+    }
+  }
+
+  private void Decode(long[] output, byte[] input, int len)
+  {
+    int i = 0; for (int j = 0; j < len; j += 4) {
+      output[i] = 
+        (b2iu(input[j]) | b2iu(input[(j + 1)]) << 8 | 
+        b2iu(input[(j + 2)]) << 16 | b2iu(input[(j + 3)]) << 24);
+
+      i++;
+    }
+  }
+
+  public static long b2iu(byte b)
+  {
+    return b < 0 ? b & 0xFF : b;
+  }
+
+  public static String byteHEX(byte ib)
+  {
+    char[] Digit = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 
+      'B', 'C', 'D', 'E', 'F' };
+    char[] ob = new char[2];
+    ob[0] = Digit[(ib >>> 4 & 0xF)];
+    ob[1] = Digit[(ib & 0xF)];
+    String s = new String(ob);
+    return s;
+  }
+
+  public String getKeyEd(String Txt, String encrypt_key) {
+    if ((Txt == null) || (Txt.length() == 0)) {
+      Txt = "";
+    }
+    encrypt_key = getMD5ofStr(encrypt_key);
+    int m = 0;
+    int n = encrypt_key.length();
+    StringBuffer temp = new StringBuffer();
+    for (int i = 0; i < Txt.length(); i++) {
+      if (m == n) {
+        m = 0;
+      }
+      char cc1 = encrypt_key.charAt(m);
+      int cc4 = cc1 ^ Txt.charAt(i);
+      char cc2 = (char)cc4;
+      temp.append(cc2);
+      m++;
+    }
+    return String.valueOf(temp.toString());
+  }
+
+  public String encrypt(String Txt, String Key1)
+  {
+    int number = getRandom();
+
+    String encrypt_key = getMD5ofStr(Integer.toString(number));
+    int ctr = 0;
+    int num = Txt.length();
+    int num1 = encrypt_key.length();
+
+    Txt = Txt.trim();
+    StringBuffer temp = new StringBuffer();
+    for (int i = 0; i < num; i++)
+    {
+      if (ctr == num1)
+        ctr = 0;
+      char cc1 = encrypt_key.charAt(ctr);
+      temp.append(cc1);
+      char cc2 = Txt.charAt(i);
+      int cc4 = cc1 ^ cc2;
+      char cc3 = (char)cc4;
+      temp.append(cc3);
+      ctr++;
+    }
+    String er = temp.toString();
+    String retur = getKeyEd(er, Key1);
+    retur = setFromBASE64(retur);
+    retur = retur.replaceAll("\n", "");
+    retur = retur.replaceAll("\r", "");
+    retur = retur.replaceAll("<br>", "");
+    return retur;
+  }
+
+  public String decrypt(String Txt, String Key1)
+  {
+    Txt = getFromBASE64(Txt);
+    Txt = getKeyEd(Txt, Key1);
+    StringBuffer temp = new StringBuffer();
+    char temp1 = '\000';
+    for (int i = 0; i < Txt.length(); i++) {
+      temp1 = Txt.charAt(i);
+      i++;
+      char cc1 = Txt.charAt(i);
+      int cc2 = cc1 ^ temp1;
+      char cc3 = (char)cc2;
+      temp = temp.append(cc3);
+    }
+    Txt = temp.toString();
+    return Txt;
+  }
+
+  public String encryptMB(String Txt, String Key1)
+  {
+    int num = Txt.length();
+    if (num > 0) {
+      Txt = setFromBASE64(Txt);
+    }
+    Txt = encrypt(Txt, Key1);
+    Txt = Txt.replaceAll("\n", "");
+    Txt = Txt.replaceAll("\r", "");
+    Txt = Txt.replaceAll("<br>", "");
+    return Txt;
+  }
+
+  public String decryptMB(String Txt, String Key1)
+  {
+    String s = decrypt(Txt, Key1);
+    s = getFromBASE64(s);
+    return s;
+  }
+
+  public String getFromBASE64(String s)
+  {
+    if ((s == null) || (s.length() <= 0))
+      return "";
+    BASE64Decoder decoder = new BASE64Decoder();
+    try {
+      byte[] b = decoder.decodeBuffer(s);
+      return new String(b, "UTF-8"); } catch (Exception e) {
+    }
+    return "";
+  }
+
+  public String setFromBASE64(String s)
+  {
+    if ((s == null) || (s.length() <= 0))
+      return "";
+    BASE64Encoder encoder = new BASE64Encoder();
+    try {
+      return encoder.encode(s.getBytes("UTF-8"));
+    } catch (Exception e) {
+    }
+    return "";
+  }
+
+  public String getDecTxtChange(String Txt)
+  {
+    int n = Txt.length();
+    int num = 0;
+
+    String tem1 = "";
+    String tem2 = "";
+    if (n % 2 == 0)
+      num = n / 2;
+    else {
+      num = (n + 1) / 2;
+    }
+    tem1 = Txt.substring(0, num);
+    tem2 = Txt.substring(num, n);
+
+    StringBuffer temp1 = new StringBuffer(tem1);
+    StringBuffer temp2 = new StringBuffer(tem2);
+    StringBuffer temp3 = new StringBuffer();
+
+    temp1 = temp1.reverse();
+    temp2 = temp2.reverse();
+
+    for (int i = 0; i < num; i++)
+    {
+      char tem = decAscChange(temp1.charAt(i));
+      temp3.append(tem);
+      if (n % 2 == 0) {
+        char temm = decAscChange(temp2.charAt(i));
+        temp3.append(temm);
+      }
+      else if (i < num - 1) {
+        char temm = decAscChange(temp2.charAt(i));
+        temp3.append(temm);
+      }
+
+    }
+
+    return temp3.toString();
+  }
+
+  public char decAscChange(char ib)
+  {
+    int num = ib;
+    String num1 = Integer.toBinaryString(num);
+    StringBuffer temp1 = new StringBuffer();
+    String ll = "";
+    int n = num1.length();
+    int k = 8 - n;
+    if (k > 0) {
+      for (int i = 0; i < k; i++) {
+        temp1 = temp1.append("0");
+      }
+    }
+
+    ll = temp1.toString();
+    ll = ll + num1;
+    StringBuffer temp7 = new StringBuffer();
+    for (int i = 0; i < 4; i++) {
+      temp7 = temp7.append(ll.charAt(2 * i));
+    }
+    for (int i = 4; i > 0; i--) {
+      temp7 = temp7.append(ll.charAt(2 * i - 1));
+    }
+
+    String lll = temp7.toString();
+    char[] er = lll.toCharArray();
+
+    int sum = 7;
+    int sum1 = 0;
+
+    for (int j = 0; j < 8; j++) {
+      char k1 = er[j];
+      int k7 = k1;
+      if (k7 == 49) {
+        double num12 = Math.pow(2.0D, sum);
+        sum1 += (int)num12;
+      }
+
+      sum--;
+    }
+
+    char k22 = (char)sum1;
+    return k22;
+  }
+
+  public String getTxtChang(String Txt) {
+    StringBuffer temp1 = new StringBuffer();
+    StringBuffer temp2 = new StringBuffer();
+
+    for (int i = 0; i < Txt.length(); i++) {
+      if (i % 2 == 0) {
+        char tem = getByteDEX(Txt.charAt(i));
+        temp1 = temp1.append(tem);
+      } else {
+        char tem1 = getByteDEX(Txt.charAt(i));
+        temp2 = temp2.append(tem1);
+      }
+    }
+
+    temp1 = temp1.reverse();
+    temp2 = temp2.reverse();
+    temp1.append(temp2);
+
+    return String.valueOf(temp1.toString());
+  }
+
+  public char getByteDEX(char ib)
+  {
+    int num = ib;
+    String num1 = Integer.toBinaryString(num);
+    StringBuffer temp1 = new StringBuffer();
+    int n = num1.length();
+    int k = 8 - n;
+    String ll = "";
+    if (k > 0) {
+      for (int i = 0; i < k; i++) {
+        temp1 = temp1.append("0");
+      }
+      ll = temp1.toString();
+      ll = ll + num1;
+    }
+
+    StringBuffer temp7 = new StringBuffer();
+    k = 7;
+    for (int i = 0; i < 4; i++) {
+      temp7 = temp7.append(ll.charAt(i));
+      temp7 = temp7.append(ll.charAt(k--));
+    }
+    String lll = temp7.toString();
+    char[] er = lll.toCharArray();
+    int sum = 7;
+    int sum1 = 0;
+    for (int j = 0; j < 8; j++) {
+      char k1 = er[j];
+      int k7 = k1;
+      if (k7 == 49) {
+        double num12 = Math.pow(2.0D, sum);
+        sum1 += (int)num12;
+      }
+
+      sum--;
+    }
+
+    char k22 = (char)sum1;
+    return k22;
+  }
+
+  public int getRandom() {
+    Random generator = new Random();
+    int limit = 320000;
+    int randomNub = 1;
+    boolean j = true;
+    while (j) {
+      randomNub = (int)(generator.nextDouble() * limit);
+      if (randomNub > 10)
+        j = false;
+    }
+    return randomNub;
+  }
+
+  public static final String encodeMd5(String s)
+  {
+    char[] hexDigits = { '0', '1', '2', '3', '4', 
+      '5', '6', '7', '8', '9', 
+      'a', 'b', 'c', 'd', 'e', 'f' };
+    try {
+      byte[] btInput = s.getBytes();
+
+      MessageDigest mdInst = MessageDigest.getInstance("MD5");
+
+      mdInst.update(btInput);
+
+      byte[] md = mdInst.digest();
+
+      int j = md.length;
+      char[] str = new char[j * 2];
+      int k = 0;
+      for (int i = 0; i < j; i++) {
+        byte byte0 = md[i];
+        str[(k++)] = hexDigits[(byte0 >>> 4 & 0xF)];
+        str[(k++)] = hexDigits[(byte0 & 0xF)];
+      }
+      return new String(str);
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+    }return null;
+  }
 }

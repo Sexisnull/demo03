@@ -27,7 +27,6 @@ import com.gsww.jup.controller.BaseController;
 import com.gsww.jup.entity.sys.SysUserSession;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.jup.util.StringHelper;
-import com.gsww.uids.entity.ComplatOutsideuser;
 import com.gsww.uids.entity.JisFields;
 import com.gsww.uids.service.JisFieldsService;
 import com.gsww.uids.service.JisLogService;
@@ -230,6 +229,15 @@ public class JisFieldsController extends BaseController {
 			throws Exception {
 		try {
 			SysUserSession sysUserSession =  (SysUserSession) ((HttpServletRequest) request).getSession().getAttribute("sysUserSession");
+			Integer iswrite = 0;
+			if (fieldiid == null) {
+				iswrite = 1;
+			}
+			List<JisFields> jList = jisFieldsService.findAllJisFields();
+			for (JisFields jisFields : jList) {
+				jisFields.setIswrite(iswrite);
+				jisFieldsService.save(jisFields);
+			}
 			if(fieldiid != null) {
 				String[] para = fieldiid.split(",");
 				for (int i = 0; i < para.length; i++) {
@@ -241,15 +249,6 @@ public class JisFieldsController extends BaseController {
 					String desc = sysUserSession.getUserName() + "设置了用户扩展属性:" + jisFields.getShowname() + "必填项"; 
 					jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,6,8);
 				}
-			} else {
-				List<JisFields> jisFieldsList = jisFieldsService.findAllJisFields();
-				for (JisFields jisFields : jisFieldsList) {
-					jisFields.setIswrite(0);
-					jisFieldsService.save(jisFields);
-				}
-				String desc = sysUserSession.getUserName() + "设置了所有用户扩展属性必填项"; 
-				jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,6,8);
-				returnMsg("success", "设置成功", request);
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);

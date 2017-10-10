@@ -46,7 +46,7 @@ public class JdbcDAO {
 		}
 	}
 
-	public int queryForInt(String sql, Object[] args) throws Exception {
+/*	public int queryForInt(String sql, Object[] args) throws Exception {
 		try {
 			return jdbcTemplate.queryForInt(sql, args);
 		} catch (DataAccessException e) {
@@ -62,7 +62,7 @@ public class JdbcDAO {
 			logger.warn(e.getMessage());
 			throw new Exception(e.getMessage(), e);
 		}
-	}
+	}*/
 
 	public Object queryForObject(String sql, Object[] args, Class objClass)
 			throws Exception {

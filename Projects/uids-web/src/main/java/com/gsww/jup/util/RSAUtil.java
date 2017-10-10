@@ -59,10 +59,15 @@ public class RSAUtil {
 	}  
 	public static void saveKeyPair(KeyPair kp) throws Exception {  
 		FileOutputStream fos = new FileOutputStream(RSAKeyStore);  
-		ObjectOutputStream oos = new ObjectOutputStream(fos);  
-		oos.writeObject(kp);  
-		oos.close();  
-		fos.close();  
+		ObjectOutputStream oos = new ObjectOutputStream(fos);
+		try { 
+			oos.writeObject(kp); 
+		} catch (Exception e) {
+			throw e;
+		} finally{
+			oos.close();  
+			fos.close();
+		}
 	}  
 	 public static RSAPublicKey generateRSAPublicKey(byte[] modulus,  byte[] publicExponent) throws Exception {  
 	    KeyFactory keyFac = null;  

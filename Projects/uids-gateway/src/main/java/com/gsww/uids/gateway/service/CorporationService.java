@@ -10,10 +10,12 @@ import com.gsww.uids.gateway.entity.Corporation;
 import com.gsww.uids.gateway.exception.LoginException;
 import com.gsww.uids.gateway.util.Md5Util;
 import com.gsww.uids.gateway.util.SpringContextHolder;
+
 /**
  * CorporationService
+ * 
  * @author zcc
- *
+ * 
  */
 public class CorporationService {
 	private static CorporationDao corporationDao;
@@ -38,32 +40,27 @@ public class CorporationService {
 		return corporationDao.findByOrgNumber(orgnumber);
 	}
 
-	public synchronized Corporation checkUserLogin(String loginName, String pwd, String ip) throws LoginException {
+	public synchronized Corporation checkUserLogin(String loginName,
+			String pwd, String ip) throws LoginException {
 		Corporation corporation = null;
 		corporation = corporationDao.findByLoginName(loginName);
-		/*if (corporation != null) {
-			System.out.println("corporation" + corporation);
-			return corporation;
-			// com.gsww.uids.gateway.util.CacheUtil.setValue(loginName,
-			// corporation, "corusers");
-		} else {
-			corporation = findByRegNumber(loginName);
+		if (corporation == null) {
+			corporation = corporationDao.findByLoginName(loginName);
 			if (corporation == null) {
-				List corporationList = findByOrgNumber(loginName);
-				if (CollectionUtils.isNotEmpty(corporationList)) {
-					corporation = (Corporation) corporationList.get(0);
+				corporation = findByRegNumber(loginName);
+				if (corporation == null) {
+					List<Corporation> corporationList = findByOrgNumber(loginName);
+					if (CollectionUtils.isNotEmpty(corporationList)) {
+						corporation = (Corporation) corporationList.get(0);
+					}
 				}
 			}
-
-		}*/
-
+		}
 		if (corporation != null) {
 			if (corporation.getEnable().intValue() == 0) {
 				throw new LoginException("login.isnotallowed");
 			}
-
 			String password = Md5Util.md5decode(corporation.getPwd());
-			System.out.println(password);
 			if (!password.equals(pwd)) {
 				corporation = null;
 			} else {
@@ -73,5 +70,4 @@ public class CorporationService {
 		}
 		return corporation;
 	}
-
 }

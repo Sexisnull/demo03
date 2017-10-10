@@ -78,5 +78,11 @@ public class JisRoleobjectServiceImpl implements JisRoleobjectService{
 		String sql = "delete from jis_roleobject where roleid = " + id;
 		jdbcTemplate.execute(sql);
 	}
+	
+	@Override
+	public List<JisRoleobject> findByObjectIdAndType(Integer iid, int type) {
+		// TODO Auto-generated method stub
+		return jisRoleobjectDao.findByObjectidAndType(iid,type);
+	}
 
 }

@@ -21,7 +21,7 @@ http://www.mulesoft.org/schema/mule/servlet http://www.mulesoft.org/schema/mule/
 	<!-- REST接口发布 -->
 	<flow name="authenticateService" doc:name="authenticateService">
 		<http:inbound-endpoint exchange-pattern="request-response"
-			host="localhost" port="8080" doc:name="HTTP" />
+			host="0.0.0.0" port="8081" doc:name="HTTP" />
 		<jersey:resources doc:name="REST">
 			<component class="com.gsww.uids.gateway.rest.AuthenticateService" />
 		</jersey:resources>
@@ -35,7 +35,7 @@ http://www.mulesoft.org/schema/mule/servlet http://www.mulesoft.org/schema/mule/
 	</flow>
 	<flow name="aliOauthService" doc:name="aliOauthService">
 		<http:inbound-endpoint exchange-pattern="request-response"
-			host="0.0.0.0" port="8088" doc:name="HTTP" />
+			host="0.0.0.0" port="8083" doc:name="HTTP" />
 		<jersey:resources doc:name="REST">
 			<component class="com.gsww.uids.gateway.rest.AliOauthService" />
 		</jersey:resources>
@@ -44,7 +44,7 @@ http://www.mulesoft.org/schema/mule/servlet http://www.mulesoft.org/schema/mule/
 	<!-- 个人获取票据认证接口 -->
 	<flow name="WsPerAuth" doc:name="WsPerAuth">
 		<inbound-endpoint exchange-pattern="request-response"
-			address="http://0.0.0.0:8081/services/WsPerAuth" doc:name="WebService" />
+			address="http://0.0.0.0:8084/services/WsPerAuth" doc:name="WebService" />
 		<cxf:jaxws-service serviceClass="com.gsww.uids.gateway.ws.WsPerAuth"
 			doc:name="SOAP" />
 		<component doc:name="comp">
@@ -54,7 +54,7 @@ http://www.mulesoft.org/schema/mule/servlet http://www.mulesoft.org/schema/mule/
 	<!-- 法人获取票据认证接口 -->
 	<flow name="WsCorAuth" doc:name="WsCorAuth">
 		<inbound-endpoint exchange-pattern="request-response"
-			address="http://0.0.0.0:8081/services/WsCorAuth" doc:name="WebService" />
+			address="http://0.0.0.0:8085/services/WsCorAuth" doc:name="WebService" />
 		<cxf:jaxws-service serviceClass="com.gsww.uids.gateway.ws.WsCorAuth"
 			doc:name="SOAP" />
 		<component doc:name="comp">
@@ -64,7 +64,7 @@ http://www.mulesoft.org/schema/mule/servlet http://www.mulesoft.org/schema/mule/
 	<!-- 获取机构信息接口 -->
 	<flow name="WSGroup" doc:name="WSGroup">
 		<inbound-endpoint exchange-pattern="request-response"
-			address="http://0.0.0.0:8081/services/WSGroup" doc:name="WebService" />
+			address="http://0.0.0.0:8086/services/WSGroup" doc:name="WebService" />
 		<cxf:jaxws-service serviceClass="com.gsww.uids.gateway.ws.WSGroupImpl"
 			doc:name="SOAP" />
 		<component doc:name="comp">
@@ -73,7 +73,7 @@ http://www.mulesoft.org/schema/mule/servlet http://www.mulesoft.org/schema/mule/
 	</flow>
 
 	<!-- 实时同步列表JOB -->
-	<flow name="immediateSyncJob" doc:name="immediateSyncJob">
+<!-- 	<flow name="immediateSyncJob" doc:name="immediateSyncJob">
 		<quartz:inbound-endpoint jobName="ImmediateSyncJob"
 			repeatInterval="0" responseTimeout="10000" doc:name="Quartz"
 			repeatCount="0" startDelay="0">
@@ -82,10 +82,10 @@ http://www.mulesoft.org/schema/mule/servlet http://www.mulesoft.org/schema/mule/
 		</quartz:inbound-endpoint>
 		<component class="com.gsww.uids.gateway.job.ImmediateSyncJob"
 			doc:name="Java" />
-	</flow>
+	</flow> -->
 
 	<!-- 记录同步历史JOB -->
-	<flow name="recordSyncHisJob" doc:name="recordSyncHisJob">
+	<!-- <flow name="recordSyncHisJob" doc:name="recordSyncHisJob">
 		<quartz:inbound-endpoint jobName="RecordSyncHisJob"
 			repeatInterval="0" responseTimeout="10000" doc:name="Quartz"
 			repeatCount="0" startDelay="0">
@@ -94,5 +94,5 @@ http://www.mulesoft.org/schema/mule/servlet http://www.mulesoft.org/schema/mule/
 		</quartz:inbound-endpoint>
 		<component class="com.gsww.uids.gateway.job.RecordSyncHisJob"
 			doc:name="Java" />
-	</flow>
+	</flow> -->
 </mule>

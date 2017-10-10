@@ -7,24 +7,6 @@
 <head>
 <title>甘肃万维JUP课题</title>
 <script type="text/javascript">
-	//关闭
-	$(".close").click(function() {
-        $("#alerttb").hide();
-    });
-    $("#dlg_Close").dialog({  
-	    onClose: function () {  
-	        alert("blablabla");  
-	    }  
-	}); 
-	$("#fieldsSubmit").click(function() {
-        alert("11");
-        form.submit();
-    });
-    function quxiao() {
-    	alert("11");
-    	//window.parent.document.location.reload();
-    	closeDialog();
-    }
     //全选/反选
     function chooseall(){
 		var check = $('#checkall:checked').val();
@@ -56,32 +38,39 @@
 		});
 	};
 </script>
+<style type="text/css">
+.rightspan {
+    width: 80px;
+    height: 30px;
+    float: left;
+    padding: 5px 20px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+</style>
 </head>
 <body>
 <div class="form-warper">
 	<!--表单的标题区域--> 
     <form id="editForm" method="get" action="${ctx}/jis/fieldsOperate">
-    <!--表单的主内容区域-->
-    <div class="form-content">
-    	<table class="form-table">
-			<c:forEach items="${jisFieldsList}" var="field" varStatus="i">
-				<tr>
-					<td>
+	    <!--表单的主内容区域-->
+	    <div style="padding:10px;margin-left:10px;">
+	    	<table class="form-table">
+				<c:forEach items="${jisFieldsList}" var="field" varStatus="i">
+					<span title="${field.showname }" class="rightspan">
 						<input type="checkbox" name="fieldiid" class="" value="${field.iid }" <c:if test="${field.iswrite == 1 }">checked="checked"</c:if>/>
-					</td>
-					<td>
 						${field.showname}
-					</td>
-				</tr>
-			</c:forEach>
-		</table>
-    </div>
-    <div style="clear:both;"></div>
-    <!--表单的按钮组区域-->
-    <div style="color: red;clear: both;padding:10px 10px 10px 40px;">
-		<input type="checkbox" id="checkall" value="1" onclick="chooseall();"/>全选/反选
-	</div>
+					</span>
+				</c:forEach>
+			</table>
+	    </div>
+	    <div style="clear:both;"></div>
+	    <div style="color: red;clear: both;padding:10px 10px 10px 40px;">
+			<input type="checkbox" id="checkall" value="1" onclick="chooseall();"/>全选/反选
+		</div>
     </form>
+    <!--表单的按钮组区域-->
     <div class="form-btn" id="input_three">
     	<input type="button" onclick="oprFields();"  tabindex="15" value="保存" class="btn bluegreen"/>
     </div>

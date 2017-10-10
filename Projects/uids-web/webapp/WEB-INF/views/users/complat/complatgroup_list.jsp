@@ -3,19 +3,20 @@
 <html>
 
 <%@ include file="/include/meta.jsp"%>
-<script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgcore.lhgdialog.min.js"></script>
-<script type="text/javascript" src="${ctx}/res/plugin/ztree/js/jquery.ztree.all-3.5.js"></script>
-<link rel="stylesheet" href="${ctx}/res/plugin/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css"></link>
 <head>
 <meta charset="utf-8"/>
 <title>甘肃万维JUP课题</title>
-<script type="text/javascript" src="${ctx}/res/plugin/uploadify/js/jquery.uploadify-3.1.min.js"></script>
-<link type="text/css" rel="stylesheet" href="${ctx}/res/skin/login/css/menu.css" />
+	<script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgcore.lhgdialog.min.js"></script>
+	<script type="text/javascript" src="${ctx}/res/plugin/ztree/js/jquery.ztree.all-3.5.js"></script>
+    <script type="text/javascript" src="${ctx}/res/plugin/uploadify/js/jquery.uploadify-3.1.js"></script>
 	<script type="text/javascript" src="${ctx}/res/skin/login/js/menu.js"></script>
-	<link type="text/css" rel="stylesheet" href="${ctx}/res/jslib/ztree/css/zTreeStyle/zTreeStyle.css" />
-	<link type="text/css" rel="stylesheet" href="${ctx}/res/skin/login/css/tree.css" />
 	<script type="text/javascript" src="${ctx}/res/jslib/ztree/js/jquery.ztree.all-3.5.min.js"></script>
 	<script type="text/javascript" src="${ctx}/res/skin/login/js/tree.js"></script>
+	<link type="text/css" rel="stylesheet" href="${ctx}/res/plugin/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css"></link>
+	<link type="text/css" rel="stylesheet" href="${ctx}/res/jslib/ztree/css/zTreeStyle/zTreeStyle.css" />
+	<link type="text/css" rel="stylesheet" href="${ctx}/res/skin/login/css/tree.css" />
+	<link type="text/css" rel="stylesheet" href="${ctx}/res/skin/login/css/menu.css" />
+	<link type="text/css" rel="stylesheet" href="${ctx}/res/plugin/uploadify/css/uploadify.css">  
     
 <style>
 .select{
@@ -131,6 +132,38 @@ text-decoration: none;
 
 </style>
 <script type="text/javascript"> 
+//表单校验
+$().ready(function() {
+var outisideUserNameInput=$("#id").val();
+$("#form1").validate({
+	rules: {
+		name : {
+			maxlength: 10
+		},
+	   	groupallname : {
+			maxlength: 64
+		},
+		nodetype : {
+			required: true
+		},
+		areatype : {
+			required: true
+		},
+		areacode : {
+			required: true
+		},
+		suffix : {
+			required: true
+		},
+		spec:{
+	   		maxlength: 255
+	   	},
+	   	submitHandler:function(form){
+			form.submit();
+		}
+	}
+});
+});
 
 	//删除
 	function deleteData() {
@@ -266,6 +299,7 @@ function importGroup(){
 	$("#alerttb").show(); 				
 
 }
+
     	//导入
 	function importFile(){
 	$('#mask').show();
@@ -320,6 +354,21 @@ function exportGroup() {
 			}
 	}
 
+function importGroup(){
+					var api = $.dialog({
+						title : '机构管理-机构导出',
+						width : 600,
+						height: 225,
+						max : false,
+						min : false,
+						lock : true,
+						padding : '40px 20px',
+						content : 'url:${ctx}/uids/showImport',
+						fixed : true,
+						drag : false,
+						resize : false
+					});
+}
 </script>
 
 </head>
@@ -372,19 +421,19 @@ function exportGroup() {
 			    <tr>
 					<th style="padding-left: 5px">机构名称:</th>
 					<td width="15%">
-						<input type="text" class="input" name="search_LIKE_name" value="${sParams['LIKE_name']}"/>
+						<input id="name" type="text" class="input" name="search_LIKE_name" value="${sParams['LIKE_name']}"  placeholder="机构名称"/>
 					</td>
 					<th style="padding-left: 5px">机构编码:</th>
 					<td width="15%">
-              			<input type="text" class="input" name="search_LIKE_codeid" value="${sParams['LIKE_codeid']}"/>
+              			<input type="text" class="input" name="search_LIKE_codeid" value="${sParams['LIKE_codeid']}"  placeholder="机构编码"/>
 					</td>
 					<th style="padding-left: 5px">组织机构代码:</th>
 					<td width="15%">
-              			<input type="text" class="input" name="search_LIKE_orgcode" value="${sParams['LIKE_orgcode']}"/>
+              			<input type="text" class="input" name="search_LIKE_orgcode" value="${sParams['LIKE_orgcode']}"  placeholder="组织机构代码"/>
 					</td>
 					<th style="padding-left: 5px">区域代码:</th>
 					<td width="15%">
-              			<input type="text" class="input" name="search_LIKE_areacode" value="${sParams['LIKE_areacode']}"/>
+              			<input type="text" class="input" name="search_LIKE_areacode" value="${sParams['LIKE_areacode']}" placeholder="区域代码"/>
 					</td>
 				</tr>
 				<tr height="10px"></tr>
@@ -487,7 +536,7 @@ function exportGroup() {
 							onclick="add('uids/complatgroupEdit');">新增</a></li>
 						<li class="del"><a title="删除"
 							onclick="deleteData('uids/complatgroupDelete','iid');">删除</a></li>
-						<li class="query" id="importFile" onclick="importFile()"><a title="导入">导入</a></li>
+						<li class="query" id="importGroup" onclick="importGroup()"><a title="导入">导入</a></li>
 						<li class="exportData"><a title="导出"
 							onclick="exportGroup()">导出</a></li>
 				 </ul>
