@@ -9,11 +9,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-
 import net.sf.json.JSONArray;
-
 import org.apache.log4j.Logger;
-
 import com.gsww.uids.gateway.dao.outsideuser.OutsideUserDao;
 import com.gsww.uids.gateway.entity.OutsideUser;
 import com.gsww.uids.gateway.util.JSONUtil;
@@ -23,7 +20,8 @@ import com.gsww.uids.gateway.util.WeChatUtil;
 
 @Path("/uids-web")
 public class WeChatAuthService {
-	private OutsideUserDao outsideUserDAO = SpringContextHolder.getBean("outsideUserDao");
+	private OutsideUserDao outsideUserDAO = SpringContextHolder
+			.getBean("outsideUserDao");
 	protected Logger logger = Logger.getLogger(WeChatAuthService.class);
 
 	/**
@@ -44,7 +42,8 @@ public class WeChatAuthService {
 				OutsideUser outsideUser = new OutsideUser();
 				logger.info("<WeChatAuth接口>接收到请求内容:" + code);
 				WeChatUtil weChatUtil = new WeChatUtil();
-				Map<String, String> result = weChatUtil.getUserInfoAccessToken(code);// 通过这个code获取access_token
+				Map<String, String> result = weChatUtil
+						.getUserInfoAccessToken(code);// 通过这个code获取access_token
 				String openId = result.get("openid");
 				if (StringHelper.isNotBlack(openId)) {
 					outsideUser = outsideUserDAO.findByWeChatOpenId(openId);
@@ -79,16 +78,18 @@ public class WeChatAuthService {
 	@Path("/weChat/merge")
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces(MediaType.APPLICATION_JSON)
-	public boolean mergeUserId(@QueryParam("openid") String openid, @QueryParam("userId") String userId) {
+	public boolean mergeUserId(@QueryParam("openid") String openid,
+			@QueryParam("userId") String userId) {
 		logger.info("<WeChat merge接口>接收到请求内容:" + openid);
-		if (!openid.isEmpty() && !userId.isEmpty() && outsideUserDAO.findByWeChatOpenId(openid) == null) {
+		if (!openid.isEmpty() && !userId.isEmpty()
+				&& outsideUserDAO.findByWeChatOpenId(openid) == null) {
 			outsideUserDAO.saveWeChatOpenId(openid, userId);
 			if (outsideUserDAO.saveWeChatOpenId(openid, userId) > 0) {
 				logger.info(userId + "成功绑定微信账号，openid为：" + openid);
 			}
 			return true;
 		} else {
-			logger.info(userId + "绑定账号失败，openid为：" + openid+"-该微信账号已被使用");
+			logger.info(userId + "绑定账号失败，openid为：" + openid + "-该微信账号已被使用");
 			return false;
 		}
 	}

@@ -84,7 +84,7 @@
     		<tr>
     		     <th rowspan="1" style="border-right:1px solid #c6e6ff;" width="3%">响应报文</th>
 				<td colspan="4" align="center">
-					<textarea rows="5" cols="50" readonly="readonly" style="width: 87%;">${jisSysviewDetail.sendmsg}</textarea>
+					<textarea rows="5" cols="50" readonly="readonly" style="width: 87%;">${jisSysviewDetail.respmsg}</textarea>
 				</td>
 			</tr>
 		</table>

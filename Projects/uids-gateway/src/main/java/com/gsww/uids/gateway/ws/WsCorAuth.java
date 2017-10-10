@@ -46,13 +46,14 @@ import com.gsww.uids.gateway.util.StringUtil;
 @SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use = SOAPBinding.Use.LITERAL, parameterStyle = SOAPBinding.ParameterStyle.WRAPPED)
 @WebService(name = "WsCorAuth", targetNamespace = "http://www.gszwfw.gov.cn/gsjis/services/WsCorAuth")
 public class WsCorAuth {
-	private static AuthLogService authLogService = SpringContextHolder
-			.getBean("authLogService");
-	private static AppService appService = SpringContextHolder
-			.getBean("appService");
-	private static CorporationService corporationService = SpringContextHolder
-			.getBean("corporationService");
-
+	private static AuthLogService authLogService;
+	private static AppService appService;
+	private static CorporationService corporationService;
+	static {
+		authLogService = SpringContextHolder.getBean("authLogService");
+		appService = SpringContextHolder.getBean("appService");
+		corporationService = SpringContextHolder.getBean("corporationService");
+	}
 	protected Logger logger = Logger.getLogger(getClass());
 
 	@WebMethod
@@ -271,6 +272,7 @@ public class WsCorAuth {
 		Map<String, String> map = new HashMap<String, String>();
 		if ((StringHelper.isNotBlack(appmark))
 				|| (StringHelper.isNotBlack(sign))
+				|| (StringHelper.isNotBlack(loginname))
 				|| (StringHelper.isNotBlack(password)) || (time != null)) {
 			Application appLication = appService.findByMark(appmark);
 			if (appLication == null) {
@@ -279,7 +281,6 @@ public class WsCorAuth {
 			}
 			String ip = "";
 			MD5 md5 = new MD5();
-			password = md5.decrypt(sign, time);
 			JisAuthLog jisAuthLog = new JisAuthLog();
 			try {
 				Corporation corporation = corporationService.checkUserLogin(
