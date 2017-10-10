@@ -253,23 +253,6 @@ public class ComplatUserController extends BaseController {
 	
 	
 	
-	private boolean checkPassword(String str){
-		Pattern p = Pattern.compile(".*\\d+.*");
-	    Matcher m1 = p.matcher(str);
-	    Pattern p2 = Pattern.compile(".*[a-zA-Z]+.*");
-		Matcher m2 = p2.matcher(str);
-		Pattern p3 = Pattern.compile(".*[\\^%&',;_+`\\(\\)\\[\\]\\{\\}~!@#\\*\\|<>\\-/\"\\.=\\?\\$\\x22]+.*");
-		Matcher m3 = p3.matcher(str);
-		Pattern p4 = Pattern.compile(".*[^\\x00-\\xff]+.*");
-		Matcher m4 = p4.matcher(str);
-		Pattern p5 = Pattern.compile(".*\\s+.*");
-	    Matcher m5 = p5.matcher(str);
-		
-		return m1.matches() && m2.matches() && m3.matches() && !m4.matches() && !m5.matches();
-	}
-	
-	
-	
 	
 	/**
 	 * 保存政府用户信息
@@ -328,8 +311,11 @@ public class ComplatUserController extends BaseController {
 							//对身份证号和用户扩展属
 							jisUserdetailService.update(jisUserdetail.getIid(),cardId,userMap);
 						}
-						returnMsg("success", "保存成功", request);	
 						
+						
+						complatUserSyn(complatUser,1,userId,request,response);
+						
+						returnMsg("success", "保存成功", request);	
 						String desc = sysUserSession.getUserName() + "新增政府用户:" + complatUser.getName(); 				
 						jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,2,1);											
 					}else{
@@ -377,6 +363,11 @@ public class ComplatUserController extends BaseController {
 							jisUserdetailService.update(jisUserdetail.getIid(),cardId,userMap);
 						}
 						
+						
+						complatUserSyn(complatUser,2,userId,request,response);
+						
+						
+						
 						returnMsg("success", "编辑成功", request);								
 						String desc = sysUserSession.getUserName() + "修改政府用户:" + complatUser.getName(); 
 						jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,2,2);				
@@ -415,12 +406,21 @@ public class ComplatUserController extends BaseController {
 			String[] para = iid.split(",");
 			ComplatUser complatUser = null;
 			for (int i = 0; i < para.length; i++) {
-				Integer corId = Integer.parseInt(para[i].trim());
-				complatUser = complatUserService.findByKey(corId);
+				//Integer corId = Integer.parseInt(para[i].trim());
+				Integer userId = Integer.parseInt(para[i].trim());
+				complatUser = complatUserService.findByKey(userId);
 				if (complatUser != null) {
 					complatUserService.delete(complatUser);
+					
+					
+					
+					complatUserSyn(complatUser,3,userId,request,response);
+					
+					
+					
 					returnMsg("success", "删除成功", request);
 				}
+
 				String desc=session.getUserName()+"删除了"+complatUser.getName();
 	            jisLogService.save(session.getUserName(),session.getUserIp(), desc, 2, 3);
 			}
@@ -523,6 +523,7 @@ public class ComplatUserController extends BaseController {
 						String p = Md5Util.md5encode(pwd);
 						complatUser.setPwd(p);
 						complatUserService.save(complatUser);
+						//complatUserSyn(complatUser,1,userId,request,response);
 						String desc=session.getUserName()+"导入了"+complatUser.getName();
 			            jisLogService.save(session.getUserName(),session.getUserIp(), desc, 2, 5);
 					} else {
@@ -766,7 +767,7 @@ public class ComplatUserController extends BaseController {
 							sysView.setSynctime(TimeHelper.getCurrentTime());
 							sysView.setState("C");//C-验证
 							sysView.setOptresult(1);//1-已同步
-							sysView.setOperatetype("用户修改");
+							sysView.setOperatetype("修改用户");
 							sysView.setTimes(1);
 							sysView.setTranscationId(TimeHelper.getCurrentCompactTime()+rannum);
 							jisSysviewService.save(sysView);
@@ -942,11 +943,16 @@ public class ComplatUserController extends BaseController {
 			String[] para = iid.split(",");
 			ComplatUser complatUser = null;
 			for (int i = 0; i < para.length; i++) {
-				Integer corId = Integer.parseInt(para[i].trim());
-				complatUser = complatUserService.findByKey(corId);
+				//Integer corId = Integer.parseInt(para[i].trim());
+				Integer userId = Integer.parseInt(para[i].trim());
+				complatUser = complatUserService.findByKey(userId);
 				if (complatUser.getEnable() == 0) {
 					complatUser.setEnable(1);
 					complatUserService.save(complatUser);
+					
+					complatUserSyn(complatUser,4,userId,request,response);
+					
+					
 					returnMsg("success", "启用成功", request);
 				} else if (complatUser.getEnable() == 1) {
 					returnMsg("success", "已启用", request);
@@ -984,11 +990,17 @@ public class ComplatUserController extends BaseController {
 			String[] para = iid.split(",");
 			ComplatUser complatUser = null;
 			for (int i = 0; i < para.length; i++) {
-				Integer corId = Integer.parseInt(para[i].trim());
-				complatUser = complatUserService.findByKey(corId);
+				//Integer corId = Integer.parseInt(para[i].trim());
+				Integer userId = Integer.parseInt(para[i].trim());
+				complatUser = complatUserService.findByKey(userId);
 				if (complatUser.getEnable() == 1) {
 					complatUser.setEnable(0);
 					complatUserService.save(complatUser);
+					
+					
+					complatUserSyn(complatUser,5,userId,request,response);
+					
+					
 					returnMsg("success", "停用成功", request);
 				} else if (complatUser.getEnable() == 0) {
 					returnMsg("success", "已停用", request);
@@ -1157,5 +1169,100 @@ public class ComplatUserController extends BaseController {
 		}finally{
 			return str;		
 		}
+	}
+	
+	
+	/**
+	 * 政府用户信息同步
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	public void complatUserSyn (ComplatUser complatUser,int type,int userId,HttpServletRequest request,HttpServletResponse response) throws Exception{
+		JisUserdetail jisUserdetail = new  JisUserdetail();
+		try{
+			//同步
+			List<Map<String,Object>> syListMap = complatUserService.synchronizeData(userId);
+			if(syListMap.size() > 0){
+				for(int i=0;i<syListMap.size();i++){
+					
+					Random random = new Random();  
+			        int rannum = (int) (random.nextDouble() * (99999 - 10000 + 1)) + 10000;// 获取5位随机数 
+					JisSysview sysView = new JisSysview();
+					Map<String,Object> syMap = syListMap.get(i);
+					for(Map.Entry<String, Object> entry :syMap.entrySet()){
+						String key = entry.getKey().toString();
+						if(key.equals("userId")){
+							sysView.setObjectid(entry.getValue().toString());
+						}else if(key.equals("loginname")){
+							sysView.setObjectname(entry.getValue().toString());
+						}else if(key.equals("codeid")){
+							sysView.setCodeid(entry.getValue().toString());
+						}else{
+							sysView.setAppid(Integer.parseInt(entry.getValue().toString()));
+						}
+					}
+					String Operatetype="";
+					if(type==1){//1.新增2.编辑3.删除4.启用5.停用
+						sysView.setOperatetype("新增用户");
+					}else if(type==2){
+						sysView.setOperatetype("修改用户");
+					}else if(type==3){
+						sysView.setOperatetype("删除用户");
+					}else if(type==4){
+						sysView.setOperatetype("启用用户");
+					}else if(type==5){
+						sysView.setOperatetype("停用用户");
+					}
+					sysView.setResult("T");//T-用户同步
+					sysView.setSynctime(TimeHelper.getCurrentTime());
+					sysView.setState("C");//C-验证
+					sysView.setOptresult(1);//1-已同步
+					
+					sysView.setTimes(1);
+					sysView.setTranscationId(TimeHelper.getCurrentCompactTime()+rannum);
+					jisSysviewService.save(sysView);
+					
+					//同步详情表
+					JisApplication app = jisApplicationService.findByKey(sysView.getAppid());
+					JisSynEntity jisSynEntity = new JisSynEntity();
+					jisSynEntity.setAppid(sysView.getAppid());
+					jisSynEntity.setAppName(app.getName());
+					jisSynEntity.setState("T");
+					jisSynEntity.setGroupCode(sysView.getCodeid());
+					ComplatGroup group = complatGroupService.findByCodeid(sysView.getCodeid());
+					jisSynEntity.setGroupName(group.getName());
+					jisSynEntity.setParCode(group.getParentCode());
+					jisSynEntity.setParName(group.getParentName());
+					jisSynEntity.setAllParCode("");
+					jisSynEntity.setAllParName("");
+					jisSynEntity.setLoginName(complatUser.getLoginname());
+					jisSynEntity.setLoginPass(complatUser.getPwd());
+					jisSynEntity.setUserName(complatUser.getName());
+					jisSynEntity.setCardId(jisUserdetail.getCardid());
+					jisSynEntity.setComptel("");//办公电话
+					jisSynEntity.setCompfax(complatUser.getFax());
+					jisSynEntity.setEmail(complatUser.getEmail());
+					jisSynEntity.setQq(complatUser.getQq());
+					jisSynEntity.setMsn(complatUser.getMsn());
+					jisSynEntity.setMobile(complatUser.getMobile());
+					jisSynEntity.setHometel(complatUser.getPhone());
+					jisSynEntity.setHeadShip(complatUser.getHeadship());
+					jisSynEntity.setNdlogin("");
+					//JSONArray array = JSONArray.fromObject(jisSynEntity);
+					net.sf.json.JSONObject object = net.sf.json.JSONObject.fromObject(jisSynEntity);
+					PrintWriter out = response.getWriter();
+					//String json = array.toString();
+					String json = object.toString();
+					JisSysviewDetail sysViewDetail = new JisSysviewDetail();
+					sysViewDetail.setTranscationId(sysView.getTranscationId());
+					sysViewDetail.setSendmsg(json);
+					jisSysviewDetailService.save(sysViewDetail);
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
 	}
 }

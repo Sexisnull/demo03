@@ -83,5 +83,8 @@ public interface ComplatUserService {
      * @return
 	 */
 	public ComplatUser findByLoginnameIsUsed(String loginname);
+
+
+	List<Map<String, Object>> synchronizeData(Integer userId);
 	
 }
