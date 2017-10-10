@@ -68,28 +68,29 @@ public class ImmediateSyncThread extends Thread {
 				returnMap = MyHttpClient.syncToApplication((String) appMap.get("appurl"), sendmsg);
 			}
 
-			/**更新当前数据表状态*/
-			if (returnMap != null) {
-				String status = (String) returnMap.get("status");
-				if (HttpStatus.OK.equals(status)) {
+			/** 更新当前数据表状态 */
+			String status = (String) returnMap.get("status");
+			if (HttpStatus.OK.equals(status)) {
 
-					if (!"".equals(returnMap.get("respMsg")) && null != returnMap.get("respMsg")) {
-						sysViewDetailDao.updateSysViewCurr(transcationId, (String) returnMap.get("respMsg"));
-						JSONObject returnInfo = JSONObject.fromObject(returnMap.get("respMsg"));
-						if (Constants.SYNC_SUCCESS_TURE.equals(returnInfo.getString("success"))) {
+				if (!"".equals(returnMap.get("respMsg"))&& null != returnMap.get("respMsg")) {
+					sysViewDetailDao.updateSysViewCurr(transcationId,
+							(String) returnMap.get("respMsg"));
+					JSONObject returnInfo = JSONObject.fromObject(returnMap
+							.get("respMsg"));
+					if (Constants.SYNC_SUCCESS_TURE.equals(returnInfo
+							.getString("success"))) {
 
-							sysViewDao.updateSysViewCurr(transcationId, Constants.OPTRESULT_SUCESS);
-							logger.info("数据同步成功，更新状态:" + Constants.OPTRESULT_SUCESS);
-						} else if (Constants.SYNC_SUCCESS_FALSE.equals(returnInfo.getString("success"))) {
-
-							sysViewDao.updateSysViewCurr(transcationId, Constants.OPTRESULT_FALSE);
-							logger.info("数据同步失败，更新状态:" + Constants.OPTRESULT_FALSE);
-						}
+						sysViewDao.updateSysViewCurr(transcationId,
+								Constants.OPTRESULT_SUCESS);
+						logger.info("数据同步成功，更新状态:" + Constants.OPTRESULT_SUCESS);
+					} else if (Constants.SYNC_SUCCESS_FALSE.equals(returnInfo.getString("success"))) {
+						sysViewDao.updateSysViewCurr(transcationId,Constants.OPTRESULT_FALSE);
+						logger.info("数据同步失败，更新状态:" + Constants.OPTRESULT_FALSE);
 					}
-				} else {
-					sysViewDao.updateSysViewCurr(transcationId, Constants.OPTRESULT_NET_BARRIER);
-					logger.info("网络不通，更新状态:" + Constants.OPTRESULT_NET_BARRIER);
 				}
+			} else {
+				sysViewDao.updateSysViewCurr(transcationId,Constants.OPTRESULT_NET_BARRIER);
+				logger.info("网络不通，更新状态:" + Constants.OPTRESULT_NET_BARRIER);
 			}
 
 		} catch (Exception e) {
