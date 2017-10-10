@@ -14,20 +14,34 @@
 $().ready(function() {
 
 	//表单校验
-	var corNameInput=$("#name").val();
 	 $("#editForm").validate({
 	    rules: {
-		   name: {
+		   qyName: {
 		    required: true,
 		    cnRangelength: [0,33],
 		    isCorporName:true  
 		   },
-		   realName:{
+		   qyRealName:{
 		   	required: true,
 		   	cnRangelength: [0,33],
 		   	isCorporName:true	
 		   },
-		   cardNumber:{
+		   qyCardNumber:{
+		   	isIdCardNo:true,
+		   	required:true,
+		   	maxlength: 18
+		   },
+		   fqyName: {
+		    required: true,
+		    cnRangelength: [0,33],
+		    isCorporName:true  
+		   },
+		   fqyRealName:{
+		   	required: true,
+		   	cnRangelength: [0,33],
+		   	isCorporName:true	
+		   },
+		   fqyCardNumber:{
 		   	isIdCardNo:true,
 		   	required:true,
 		   	maxlength: 18

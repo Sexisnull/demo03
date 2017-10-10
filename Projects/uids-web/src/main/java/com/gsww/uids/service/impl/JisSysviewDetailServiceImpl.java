@@ -30,4 +30,9 @@ public class JisSysviewDetailServiceImpl implements JisSysviewDetailService{
 	public JisSysviewDetail findByTranscationId(String transcationId) { 
 		return sysviewDetailDao.findByTranscationId(transcationId);
 	}
+
+	@Override
+	public void save(JisSysviewDetail jisSysviewDetail){
+		sysviewDetailDao.save(jisSysviewDetail);
+	}
 }

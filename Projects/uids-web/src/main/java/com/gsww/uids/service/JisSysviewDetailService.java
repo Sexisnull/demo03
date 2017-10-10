@@ -9,4 +9,6 @@ public interface JisSysviewDetailService {
 	public void delete(JisSysviewDetail jisSysviewDetail);
 
 	JisSysviewDetail findByTranscationId(String transcationId);
+	
+	void save(JisSysviewDetail jisSysviewDetail);
 }

@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -54,13 +55,20 @@ import com.gsww.uids.entity.ComplatOutsideuser;
 import com.gsww.uids.entity.ComplatRole;
 import com.gsww.uids.entity.ComplatRolerelation;
 import com.gsww.uids.entity.ComplatUser;
+import com.gsww.uids.entity.JisApplication;
 import com.gsww.uids.entity.JisFields;
+import com.gsww.uids.entity.JisSynEntity;
+import com.gsww.uids.entity.JisSysview;
+import com.gsww.uids.entity.JisSysviewDetail;
 import com.gsww.uids.entity.JisUserdetail;
 import com.gsww.uids.service.ComplatGroupService;
 import com.gsww.uids.service.ComplatRoleService;
 import com.gsww.uids.service.ComplatUserService;
+import com.gsww.uids.service.JisApplicationService;
 import com.gsww.uids.service.JisFieldsService;
 import com.gsww.uids.service.JisLogService;
+import com.gsww.uids.service.JisSysviewDetailService;
+import com.gsww.uids.service.JisSysviewService;
 import com.gsww.uids.service.JisUserdetailService;
 import com.hanweb.common.util.Md5Util;
 
@@ -111,6 +119,15 @@ public class ComplatUserController extends BaseController {
 
 	@Autowired
 	private JisLogService jisLogService;
+	
+	@Autowired
+	private JisSysviewService jisSysviewService;
+	
+	@Autowired
+	private JisSysviewDetailService jisSysviewDetailService;
+	
+	@Autowired
+	private JisApplicationService jisApplicationService;
 	/**
 	 * 获取政府用户列表
 	 * 
@@ -693,43 +710,116 @@ public class ComplatUserController extends BaseController {
 
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/userSetUpSave", method = RequestMethod.POST)
-	public void userSetUpSave(ComplatUser complatUser,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+	public void userSetUpSave(ComplatUser complatUser,String level,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		
 		Map<String, Object> resMap = new HashMap<String, Object>();
 		try {
-			Integer userId = null;
-			if(complatUser != null){
-				userId = complatUser.getIid();
-				String name = complatUser.getName();
-				String pwd = complatUser.getPwd();
-				String headShip = complatUser.getHeadship();
-				String phone = complatUser.getPhone();//固定电话
-				String mobile = complatUser.getMobile();//移动电话
-				String fax = complatUser.getFax();
-				String email = complatUser.getEmail();
-				String qq = complatUser.getQq();
-				String time = TimeHelper.getCurrentTime();
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				Date modifyTime = sdf.parse(time);
-				complatUserService.updateUser(userId,name,headShip,phone,mobile,fax,email,qq,modifyTime,pwd);
-				
-				//身份证号处理 JisUserdetail
-				String cardId = request.getParameter("cardid");
-				JisUserdetail jisUserdetail = jisUserdetailService.findByUserid(userId);
-				if(jisUserdetail.getIid() == null){
-					jisUserdetailService.save(jisUserdetail);
-				}else{
+			if(level == "strong" || "strong".equals(level) ){
+				Integer userId = null;
+				if(complatUser != null){
+					userId = complatUser.getIid();
+					String name = complatUser.getName();
+					String pwd = Md5Util.md5encode(complatUser.getPwd());
+					String headShip = complatUser.getHeadship();
+					String phone = complatUser.getPhone();//固定电话
+					String mobile = complatUser.getMobile();//移动电话
+					String fax = complatUser.getFax();
+					String email = complatUser.getEmail();
+					String qq = complatUser.getQq();
+					String time = TimeHelper.getCurrentTime();
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					Date modifyTime = sdf.parse(time);
+					complatUserService.updateUser(userId,name,headShip,phone,mobile,fax,email,qq,modifyTime,pwd);
+					
+					//身份证号处理 JisUserdetail
+					String cardId = request.getParameter("cardid");
 					//扩展属性
 					Map<String,String> userMap = this.saveExendsAttr(userId, request);
-					//对身份证号和用户扩展属性update
-					jisUserdetailService.update(jisUserdetail.getIid(),cardId,userMap);
+					JisUserdetail jisUserdetail = jisUserdetailService.findByUserid(userId);
+					if(jisUserdetail.getIid() != null){
+						//对身份证号和用户扩展属性update
+						jisUserdetailService.update(jisUserdetail.getIid(),cardId,userMap);			
+					}
+					
+					//同步
+					List<Map<String,Object>> syListMap = complatUserService.synchronizeData(userId);
+					if(syListMap.size() > 0){
+						for(int i=0;i<syListMap.size();i++){
+							
+							Random random = new Random();  
+					        int rannum = (int) (random.nextDouble() * (99999 - 10000 + 1)) + 10000;// 获取5位随机数 
+							JisSysview sysView = new JisSysview();
+							Map<String,Object> syMap = syListMap.get(i);
+							for(Map.Entry<String, Object> entry :syMap.entrySet()){
+								String key = entry.getKey().toString();
+								if(key.equals("userId")){
+									sysView.setObjectid(entry.getValue().toString());
+								}else if(key.equals("loginname")){
+									sysView.setObjectname(entry.getValue().toString());
+								}else if(key.equals("codeid")){
+									sysView.setCodeid(entry.getValue().toString());
+								}else{
+									sysView.setAppid(Integer.parseInt(entry.getValue().toString()));
+								}
+							}
+							sysView.setResult("T");//T-用户同步
+							sysView.setSynctime(TimeHelper.getCurrentTime());
+							sysView.setState("C");//C-验证
+							sysView.setOptresult(1);//1-已同步
+							sysView.setOperatetype("用户修改");
+							sysView.setTimes(1);
+							sysView.setTranscationId(TimeHelper.getCurrentCompactTime()+rannum);
+							jisSysviewService.save(sysView);
+							
+							//同步详情表
+							JisApplication app = jisApplicationService.findByKey(sysView.getAppid());
+							JisSynEntity jisSynEntity = new JisSynEntity();
+							jisSynEntity.setAppid(sysView.getAppid());
+							jisSynEntity.setAppName(app.getName());
+							jisSynEntity.setState("T");
+							jisSynEntity.setGroupCode(sysView.getCodeid());
+							ComplatGroup group = complatGroupService.findByCodeid(sysView.getCodeid());
+							jisSynEntity.setGroupName(group.getName());
+							jisSynEntity.setParCode(group.getParentCode());
+							jisSynEntity.setParName(group.getParentName());
+							jisSynEntity.setAllParCode("");
+							jisSynEntity.setAllParName("");
+							jisSynEntity.setLoginName(complatUser.getLoginname());
+							jisSynEntity.setLoginPass(complatUser.getPwd());
+							jisSynEntity.setUserName(complatUser.getName());
+							jisSynEntity.setCardId(jisUserdetail.getCardid());
+							jisSynEntity.setComptel("");//办公电话
+							jisSynEntity.setCompfax(complatUser.getFax());
+							jisSynEntity.setEmail(complatUser.getEmail());
+							jisSynEntity.setQq(complatUser.getQq());
+							jisSynEntity.setMsn(complatUser.getMsn());
+							jisSynEntity.setMobile(complatUser.getMobile());
+							jisSynEntity.setHometel(complatUser.getPhone());
+							jisSynEntity.setHeadShip(complatUser.getHeadship());
+							jisSynEntity.setNdlogin("");
+							//yaox
+							//JSONArray array = JSONArray.fromObject(jisSynEntity);
+							net.sf.json.JSONObject object = net.sf.json.JSONObject.fromObject(jisSynEntity);
+							PrintWriter out = response.getWriter();
+							//String json = array.toString();
+							String json = object.toString();
+							JisSysviewDetail sysViewDetail = new JisSysviewDetail();
+							sysViewDetail.setTranscationId(sysView.getTranscationId());
+							sysViewDetail.setSendmsg(json);
+							jisSysviewDetailService.save(sysViewDetail);
+						}
+					}
+					resMap.put("ret", "0");
+					resMap.put("msg", "保存成功！");
+					response.getWriter().write(JSONObject.toJSONString(resMap));
 				}
-			}			
-			resMap.put("ret", "0");
-			resMap.put("msg", "保存成功！");
-			response.getWriter().write(JSONObject.toJSONString(resMap));
+			}else{
+				resMap.put("ret", "2");
+				resMap.put("msg", "密码强度不够，修改失败！");
+				response.getWriter().write(JSONObject.toJSONString(resMap));
+			}
+			
 		} catch (Exception e) {
-			e.printStackTrace();
 			resMap.put("ret", "1");
 			resMap.put("msg", "保存失败！");
 			response.getWriter().write(JSONObject.toJSONString(resMap));
