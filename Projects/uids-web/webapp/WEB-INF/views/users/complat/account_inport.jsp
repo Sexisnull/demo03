@@ -23,7 +23,6 @@
 
 
 <style type="text/css">
-
 .btnImport {
     width:102px;
     height:34px;
@@ -48,10 +47,10 @@
 
 <script type="text/javascript">
 //下载模板
-function downloadTemplate(fileName){
-	var api = frameElement.api, W = api.opener;	    
-	window.location.href="${ctx}/uploadFile/complat/groupList.xlsx";
-	W.location.href = "${ctx}/uids/complatgroupList?msg=success";
+function downloadTemplate(fileName){	
+	var api = frameElement.api, W = api.opener;    
+	window.location.href="${ctx}/uploadFile/complat/userList.xlsx";
+	W.location.href = "${ctx}/complat/complatList?msg=success";
 }	  
 
 //导入
@@ -63,7 +62,7 @@ $(document).ready(function(){
         multi: false,//是否能选择多个文件
         auto:true,//文件选择完成后，是否自动上传
         fileObjName : 'files',
-        'uploader' : '${ctx}/uids/complatgroupImport',//文件上传后台处理类
+        'uploader' : '${ctx}/complat/complatImport',//文件上传后台处理类
         // Your options here
         'langFile':'${ctx}/res/plugin/uploadify/js/uploadifyLang_zh.js',
         'height':28,
@@ -73,7 +72,7 @@ $(document).ready(function(){
         fileTypeExts : '*.xls;*.xlsx',//允许上传的文件类型           
         'removeCompleted':true,
         'onUploadComplete' : function(file) {
-        	W.location.href = "${ctx}/uids/complatgroupList?msg=success";
+        	W.location.href = "${ctx}/complat/complatList?msg=success";
             //上传队列全部完成后执行的回调函数    
          }
     });
@@ -89,10 +88,11 @@ $(document).ready(function(){
 				<!-- 隐藏div -->				
 				<div class="Popup_cen">
 				    <ul class="mainInput">
-				        <li style="float:left;"><input type="button" class="btnImport" value="模板下载" onclick="downloadTemplate()"/></li>
+				    	<li style="float:left;"><input  type="button" class="btnImport" value="模板下载" onclick="downloadTemplate()"/></li>
 				        <li style="float:left;"><input type="file" id="file_upload" name="file_upload" class="uploadify"></li>
+				        
 				    </ul>					
-				</div>
+			   </div>
 
 </body>
 </html>

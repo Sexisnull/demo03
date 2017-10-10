@@ -350,8 +350,9 @@ public class ComplatGroupController extends BaseController{
 	 * @throws Exception
 	 * @RequestParam(value="excelFile")MultipartFile multipartFile,
 	 */
+    @SuppressWarnings("deprecation")
 	@RequestMapping(value = "/complatgroupImport", method = RequestMethod.POST)
-	public ModelAndView complatgroupImport(@RequestParam("files")MultipartFile multipartFile,HttpServletRequest request,Model model,HttpServletResponse response) throws Exception {				      
+	public String complatgroupImport(@RequestParam("files")MultipartFile multipartFile,HttpServletRequest request,Model model,HttpServletResponse response) throws Exception {				      
 		String fileName = multipartFile.getOriginalFilename();	
 		LinkedHashMap<String, String> fieldMap = new LinkedHashMap<String, String>();
 		fieldMap.put("0", "name");
@@ -444,7 +445,7 @@ public class ComplatGroupController extends BaseController{
 		e.printStackTrace();
 		returnMsg("error", "导入失败",request);
 		}
-		return new ModelAndView("redirect:/uids/complatgroupList");
+		return "/uids/complatgroupList";
 	}
 	
     /**

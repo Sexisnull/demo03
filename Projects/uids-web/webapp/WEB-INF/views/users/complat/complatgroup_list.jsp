@@ -355,19 +355,19 @@ function exportGroup() {
 	}
 
 function importGroup(){
-					var api = $.dialog({
-						title : '机构管理-机构导出',
-						width : 600,
-						height: 225,
-						max : false,
-						min : false,
-						lock : true,
-						padding : '40px 20px',
-						content : 'url:${ctx}/uids/showImport',
-						fixed : true,
-						drag : false,
-						resize : false
-					});
+	var api = $.dialog({
+		title : '机构管理-机构导出',
+		width : 450,
+		height: 125,
+		max : false,
+		min : false,
+		lock : true,
+		padding : '40px 20px',
+		content : 'url:${ctx}/uids/showImport',
+		fixed : true,
+		drag : false,
+		resize : false
+	});
 }
 </script>
 

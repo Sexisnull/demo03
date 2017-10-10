@@ -361,11 +361,11 @@ function outPutComplatUser() {
 function intPutComplatUser(){
 	var api = $.dialog({
     title : '政府用户-用户导入',
-	width : 400,
-	height: 120,
+	width : 450,
+	height: 125,
 	max : false,
 	min : false,
-	lock : false,
+	lock : true,
 	padding : '40px 20px',
 	content : 'url:${ctx}/complat/showInport',
 	fixed : true,
