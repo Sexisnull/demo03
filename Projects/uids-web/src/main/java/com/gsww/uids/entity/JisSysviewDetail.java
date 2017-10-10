@@ -1,7 +1,10 @@
 package com.gsww.uids.entity;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -17,6 +20,7 @@ public class JisSysviewDetail implements java.io.Serializable {
 	private Integer iid;
 	private String sendmsg;
 	private String respmsg;
+	private String transcationId;
 
 	// Constructors
 
@@ -30,14 +34,16 @@ public class JisSysviewDetail implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public JisSysviewDetail(Integer iid, String sendmsg, String respmsg) {
+	public JisSysviewDetail(Integer iid, String sendmsg, String respmsg,String transcationId) {
 		this.iid = iid;
 		this.sendmsg = sendmsg;
 		this.respmsg = respmsg;
+		this.transcationId=transcationId;
 	}
 
 	// Property accessors
 	@Id
+	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "iid", unique = true, nullable = false)
 	public Integer getIid() {
 		return this.iid;
@@ -63,6 +69,15 @@ public class JisSysviewDetail implements java.io.Serializable {
 
 	public void setRespmsg(String respmsg) {
 		this.respmsg = respmsg;
+	}
+	
+	@Column(name = "transcation_id")
+	public String getTranscationId() {
+		return transcationId;
+	}
+
+	public void setTranscationId(String transcationId) {
+		this.transcationId = transcationId;
 	}
 
 }

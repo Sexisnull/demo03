@@ -29,6 +29,7 @@ public class JisSysview implements java.io.Serializable {
 	private String operatetype;
 	private Integer times;
 	private String errorspec;
+	private String transcationId;
 
 	// Constructors
 
@@ -40,7 +41,7 @@ public class JisSysview implements java.io.Serializable {
 	public JisSysview(String objectid, String objectname, String state,
 			String result, Integer optresult, String synctime,
 			Integer appid, String codeid, String operatetype, Integer times,
-			String errorspec) {
+			String errorspec,String transcationId) {
 		this.objectid = objectid;
 		this.objectname = objectname;
 		this.state = state;
@@ -52,6 +53,7 @@ public class JisSysview implements java.io.Serializable {
 		this.operatetype = operatetype;
 		this.times = times;
 		this.errorspec = errorspec;
+		this.transcationId=transcationId;
 	}
 
 	// Property accessors
@@ -163,6 +165,15 @@ public class JisSysview implements java.io.Serializable {
 
 	public void setErrorspec(String errorspec) {
 		this.errorspec = errorspec;
+	}
+	
+	@Column(name = "transcation_id")
+	public String getTranscationId() {
+		return transcationId;
+	}
+
+	public void setTranscationId(String transcationId) {
+		this.transcationId = transcationId;
 	}
 
 }

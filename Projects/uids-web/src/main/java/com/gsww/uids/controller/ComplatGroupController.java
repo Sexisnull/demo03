@@ -264,15 +264,14 @@ public class ComplatGroupController extends BaseController{
 			        }
 			     }
 			}
-			if(syn){
+//			if(syn){
 //				jisSysview.setObjectid(String.valueOf(complatGroup.getIid()));
 //				jisSysview.setObjectname(complatGroupService.findByIid(Integer.valueOf(iid)).getName());
 //				jisSysview.setState("C");
 //				jisSysview.setResult("TG");
 //				jisSysview.setOptresult(1);
 //				jisSysview.setSynctime(String.valueOf(complatGroup.getCreatetime()));
-				
-			}
+//			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			returnMsg("error","保存失败",request);

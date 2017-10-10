@@ -73,7 +73,7 @@ public class JisFieldsServiceImpl implements JisFieldsService {
 	public List<Map<String, Object>> findExtendAttr(List<JisFields> FieldsList, Integer userId,Integer type)
 			throws Exception {
 		
-		List<Map<String, Object>> listMap = null;
+		List<Map<String, Object>> listMap = new ArrayList<Map<String,Object>>();
 		
 		String querySql = "";
 		//查出字段
@@ -107,21 +107,28 @@ public class JisFieldsServiceImpl implements JisFieldsService {
 			}
 			whereFieldsName = whereFieldsName.substring(0,whereFieldsName.length()-1);
 			if(userId==null){
-				querySql = "select type,fieldname from jis_fields where type='1'";
+				String addSql = "select type,fieldname from jis_fields where type='1'";
 				
-				//querySql = "select type,"+ queryFieldsName +" from jis_fields a ,jis_userdetail b where type='1'";
-				listMap= jdbcTemplate.queryForList(querySql);
-				System.out.println("新增扩展属性input============"+listMap);
-				
+				/*querySql = "select type,"+ queryFieldsName +" from jis_fields a ,jis_userdetail b where " +
+				" type = '1' and a.fieldname in("+whereFieldsName+")";*/
+				List<Map<String, Object>> addFieldsMap= jdbcTemplate.queryForList(addSql);
+				for(int i=0;i<addFieldsMap.size();i++){
+					Map<String,Object> fieldsMap = addFieldsMap.get(i);
+					String title = fieldsMap.get("fieldname").toString();
+					fieldsMap.remove("fieldname");
+					fieldsMap.put(title, "null");
+					listMap.add(fieldsMap);
+				}
 			}else{
 				querySql = "select distinct b.userid,type,"+ queryFieldsName +" from jis_fields a ,jis_userdetail b where b.userid = '"+userId+"' " +
 				" and type = '1' and a.fieldname in("+whereFieldsName+")";
+				listMap = jdbcTemplate.queryForList(querySql);
 			}			
 		}else if(type == 2){
-			querySql = "select a.fieldkeys,a.fieldvalues,type,a.fieldname from jis_fields a where type = '2'";
-		}
-		listMap = jdbcTemplate.queryForList(querySql);
-		//System.out.println("新增扩展属性============"+listMap);
+			querySql = "select a.fieldkeys,a.fieldvalues,type,a.fieldname from jis_fields a where type = '2'";			
+			//List<Map<String, Object>> addFieldsMap1= jdbcTemplate.queryForList(querySql);
+			listMap = jdbcTemplate.queryForList(querySql);
+		}		
 		return listMap;
 	}
 

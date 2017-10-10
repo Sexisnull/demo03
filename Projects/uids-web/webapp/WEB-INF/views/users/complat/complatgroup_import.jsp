@@ -63,11 +63,10 @@ $(function(){
         fileTypeExts : '*.xls;*.xlsx',//允许上传的文件类型           
         'removeCompleted':true,
         'onQueueComplete' : function(queueData) {
+        console.log(queueData);
             //上传队列全部完成后执行的回调函数    
          }, 
         'onUploadSuccess' : function(file,data,response) {//上传完成时触发（每个文件触发一次）
-        	 
-        	 
         	
              
         }
