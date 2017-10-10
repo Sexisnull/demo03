@@ -143,4 +143,10 @@ public class JisApplicationServiceImpl implements JisApplicationService {
 	    }
 	    return url;
 	}
+	
+	@Override
+	public List<JisApplication> findByIsSyncGroup(Integer isSyncGroup) throws Exception{
+		List<JisApplication> list = jisApplicationDao.findByIsSyncGroup(isSyncGroup);
+		return list;
+	}
 }

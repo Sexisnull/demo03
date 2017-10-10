@@ -48,10 +48,12 @@ import com.gsww.jup.util.TimeHelper;
 import com.gsww.uids.entity.ComplatGroup;
 import com.gsww.uids.entity.ComplatUser;
 import com.gsww.uids.entity.ComplatZone;
+import com.gsww.uids.entity.JisApplication;
 import com.gsww.uids.entity.JisSysview;
 import com.gsww.uids.entity.JisSysviewDetail;
 import com.gsww.uids.service.ComplatGroupService;
 import com.gsww.uids.service.ComplatZoneService;
+import com.gsww.uids.service.JisApplicationService;
 import com.gsww.uids.service.JisSysviewDetailService;
 import com.gsww.uids.service.JisSysviewService;
 
@@ -66,9 +68,13 @@ public class ComplatGroupController extends BaseController{
 	@Autowired
 	private ComplatZoneService complatZoneService;
 //	@Autowired
-//	private JisSysview jisSysview;
+//	private JisApplication jisApplication;
+	@Autowired
+	private JisApplicationService jisApplicationService;
 //	@Autowired
-//	private JisSysviewService jisSysviewService;
+//	private JisSysview jisSysview;
+	@Autowired
+	private JisSysviewService jisSysviewService;
 //	@Autowired
 //	private JisSysviewDetail jisSysviewDetail;
 //	@Autowired
@@ -264,14 +270,23 @@ public class ComplatGroupController extends BaseController{
 			        }
 			     }
 			}
-//			if(syn){
-//				jisSysview.setObjectid(String.valueOf(complatGroup.getIid()));
-//				jisSysview.setObjectname(complatGroupService.findByIid(Integer.valueOf(iid)).getName());
-//				jisSysview.setState("C");
-//				jisSysview.setResult("TG");
-//				jisSysview.setOptresult(1);
-//				jisSysview.setSynctime(String.valueOf(complatGroup.getCreatetime()));
-//			}
+			if(syn){
+				List<JisApplication> list = jisApplicationService.findByIsSyncGroup(1); //查询支持同步的应用
+				for(JisApplication jisApplication : list){
+					JisSysview jisSysview = new JisSysview();
+					jisSysview.setObjectid(String.valueOf(complatGroup.getIid()));
+					jisSysview.setObjectname(complatGroup.getName());
+					jisSysview.setState("C");
+					jisSysview.setResult("TG");
+					jisSysview.setOptresult(1);
+					jisSysview.setSynctime(String.valueOf(complatGroup.getCreatetime()));
+					jisSysview.setAppid(jisApplication.getIid());
+					jisSysview.setCodeid(complatGroup.getCodeid());
+					jisSysview.setTimes(1);
+					jisSysview.setOperatetype("修改机构");
+					jisSysviewService.save(jisSysview);
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			returnMsg("error","保存失败",request);
@@ -350,9 +365,8 @@ public class ComplatGroupController extends BaseController{
 	 * @throws Exception
 	 * @RequestParam(value="excelFile")MultipartFile multipartFile,
 	 */
-    @SuppressWarnings("deprecation")
 	@RequestMapping(value = "/complatgroupImport", method = RequestMethod.POST)
-	public String complatgroupImport(@RequestParam("files")MultipartFile multipartFile,HttpServletRequest request,Model model,HttpServletResponse response) throws Exception {				      
+	public ModelAndView complatgroupImport(@RequestParam("files")MultipartFile multipartFile,HttpServletRequest request,Model model,HttpServletResponse response) throws Exception {				      
 		String fileName = multipartFile.getOriginalFilename();	
 		LinkedHashMap<String, String> fieldMap = new LinkedHashMap<String, String>();
 		fieldMap.put("0", "name");
@@ -445,7 +459,7 @@ public class ComplatGroupController extends BaseController{
 		e.printStackTrace();
 		returnMsg("error", "导入失败",request);
 		}
-		return "/uids/complatgroupList";
+		return new ModelAndView("redirect:/uids/complatgroupList");
 	}
 	
     /**
