@@ -22,7 +22,6 @@ $().ready(function() {
 		     maxlength: 50,
 		     isFieldname: true,
 		     uniqueName: true
-		     //stringCheck:fieldName
 		    },
 			defvalue : {
 				maxlength: 50,
@@ -37,7 +36,6 @@ $().ready(function() {
 				isFieldvalues: true
 			},
 		   	submitHandler:function(form){
-				form.submit();
 			}
 		}
 	});
@@ -66,6 +64,48 @@ $().ready(function() {
     }, "页面显示的值，多个以','隔开，个数与key串一致");
 });
 
+function checkAndSave() {
+	var fieldkeysEdit = $("#fieldkeysEdit").val();
+	var fieldvaluesEdit = $("#fieldvaluesEdit").val();
+	var fieldkeysNew = $("#fieldkeysNew").val();
+	var fieldvaluesNew = $("#fieldvaluesNew").val();
+	//alert(fieldkeysEdit + "==" + fieldvaluesEdit + "===" + fieldkeysNew + "==" + fieldvaluesNew);
+	if((fieldkeysEdit != "" && fieldkeysEdit != undefined) && (fieldvaluesEdit != "" && fieldvaluesEdit != undefined)) {
+		//alert("编辑" + fieldkeysEdit.split(",").length + "==" + fieldvaluesEdit.split(",").length);
+		if(fieldkeysEdit.split(",").length == fieldvaluesEdit.split(",").length) {
+			editForm.submit();
+		} else {
+			//alert("编辑失败");
+			alert("Value串和Key串个数请保持一致!");
+			return false;
+		}
+	} else if ((fieldkeysNew != "" && fieldkeysNew != undefined) && (fieldvaluesNew != "" && fieldvaluesNew != undefined)) {
+		//alert("新增" + fieldkeysNew.split(",").length + "==" + fieldvaluesNew.split(",").length);
+		if(fieldkeysNew.split(",").length == fieldvaluesNew.split(",").length) {
+			editForm.submit();
+		} else {
+			//alert("新增失败");
+			alert("Value串和Key串个数请保持一致!");
+			return false;
+		}
+	} else if((fieldkeysEdit != "" || fieldkeysEdit != undefined) || (fieldvaluesEdit == "" || fieldvaluesEdit == undefined)) {
+		alert("Value串和Key串个数请保持一致!");
+		return false;
+	} else if((fieldkeysEdit == "" || fieldkeysEdit == undefined) || (fieldvaluesEdit != "" || fieldvaluesEdit != undefined)) {
+		alert("Value串和Key串个数请保持一致!");
+		return false;
+	} else if((fieldkeysNew != "" || fieldkeysNew != undefined) || (fieldvaluesNew == "" || fieldvaluesNew == undefined)) {
+		alert("Value串和Key串个数请保持一致!");
+		return false;
+	} else if((fieldkeysNew == "" || fieldkeysNew == undefined) || (fieldvaluesNew != "" || fieldvaluesNew != undefined)) {
+		alert("Value串和Key串个数请保持一致!");
+		return false;
+	} else {
+		//alert("其他");
+		editForm.submit();
+	}
+}
+
 $(document).on("change",'select#fieldsType',function(){
 	var a = $(this).val();
 	if(a == '1') {
@@ -83,7 +123,6 @@ $(document).on("change",'select#fieldsType',function(){
 		$("#tr_2_1")[0].style.display = 'none';
 		$("#tr_2_2")[0].style.display = 'none';
 	}
-	
 });
 </script>
 
@@ -170,7 +209,7 @@ $(document).on("change",'select#fieldsType',function(){
 				<tr id = "tr_2_1" style="display: table-row;">
 					<th><b class="mustbe">*</b>Key串：</th>
 					<td>
-						<input type="text"  class="fieldkeys" name="fieldkeys" value="${jisFields.fieldkeys}" />
+						<input type="text"  class="fieldkeys" id="fieldkeysEdit" name="fieldkeys" value="${jisFields.fieldkeys}" />
 					</td>
 					<th></th>
 					<td></td>
@@ -178,7 +217,7 @@ $(document).on("change",'select#fieldsType',function(){
 				<tr id = "tr_2_2" style="display: table-row;">
 					<th><b class="mustbe">*</b>Value串：</th>
 					<td>
-						<input type="text"  class="fieldvalues" name="fieldvalues" value="${jisFields.fieldvalues}" />
+						<input type="text"  class="fieldvalues" id="fieldvaluesEdit" name="fieldvalues" value="${jisFields.fieldvalues}" />
 					</td>
 					<th></th>
 					<td></td>
@@ -187,7 +226,7 @@ $(document).on("change",'select#fieldsType',function(){
 			<tr id = "tr_2_1" style="display: none;">
 				<th><b class="mustbe">*</b>Key串：</th>
 				<td>
-					<input type="text"  class="fieldkeys" name="fieldkeys" />
+					<input type="text"  class="fieldkeys" id="fieldkeysNew" name="fieldkeys" />
 				</td>
 				<th></th>
 				<td></td>
@@ -195,7 +234,7 @@ $(document).on("change",'select#fieldsType',function(){
 			<tr id = "tr_2_2" style="display: none;">
 				<th><b class="mustbe">*</b>Value串：</th>
 				<td>
-					<input type="text"  class="fieldvalues" name="fieldvalues" />
+					<input type="text"  class="fieldvalues" id="fieldvaluesNew" name="fieldvalues" />
 				</td>
 				<th></th>
 				<td></td>
@@ -205,10 +244,9 @@ $(document).on("change",'select#fieldsType',function(){
     <div style="clear:both;"></div>
     <!--表单的按钮组区域-->
     <div class="form-btn">
-    	<input type="submit" tabindex="15" id="submit-btn" value="保存" class="btn bluegreen"/>
+    	<input type="button" tabindex="15" id="submit-btn" value="保存" class="btn bluegreen" onclick="checkAndSave();"/>
     	&nbsp;&nbsp;
         <input type="button" tabindex="16" value="返回" onclick="javascript:window.location.href='${ctx}/jis/fieldsList?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}'" class="btn gray"/>
-        
     </div>
     </form>
     <!--表单的底部区域-->

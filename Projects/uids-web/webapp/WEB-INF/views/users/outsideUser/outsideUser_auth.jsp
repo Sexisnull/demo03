@@ -17,29 +17,51 @@
 		$("#input_three")[0].style.display = 'table-row';
 		$("#tr_reject")[0].style.display = 'table-row';
 		$("#outsideUserType").attr("value", 0);
-	}
+	};
 	//拒绝取消
 	function rejectCancel() {
 		$("#tr_reject")[0].style.display = 'none';
 		$("#input_four")[0].style.display = 'table-row';
 		$("#input_three")[0].style.display = 'none';
 		$("#outsideUserType").attr("value", 1);
-	}
+	};
 	//提交，关闭
 	var api = frameElement.api, W = api.opener;
 	function oprOutsideUser() {
-		$.ajax({
-			cache:true,
-			type:'get',
-			url:'outsideuserAuth',
-			data:$('#editForm').serialize(),
-			async:false,
-			success:function() {
-				api.reload(api.parent,"");
-				api.close();
+		var outsideUserType = $("#outsideUserType").val();
+		if(outsideUserType == 0) {
+			var rejectReason2 = $("#rejectReason2").val();
+			if(rejectReason2 == null || rejectReason2 == ""){
+				alert("请填写拒绝原因！");
+				return false;
+			} else {
+				$.ajax({
+					cache:true,
+					type:'get',
+					url:'outsideuserAuth',
+					data:$('#editForm').serialize(),
+					async:false,
+					success:function() {
+						api.reload(api.parent,"");
+						api.close();
+					}
+				});
 			}
-		});
-	}
+		}
+		if(outsideUserType == 1) {
+			$.ajax({
+				cache:true,
+				type:'get',
+				url:'outsideuserAuth',
+				data:$('#editForm').serialize(),
+				async:false,
+				success:function() {
+					api.reload(api.parent,"");
+					api.close();
+				}
+			});
+		}
+	};
 </script>
 </head>
 <body>
@@ -79,7 +101,7 @@
 			<tr style="display:none;" id="tr_reject">
 				<th></th>
 				<td style="width: 100%;">
-				<textarea placeholder="请填写拒绝原因" rows="5" cols="5" class="rejectReason" name="rejectReason2"></textarea>
+				<textarea placeholder="请填写拒绝原因" rows="5" cols="5" class="rejectReason" id="rejectReason2" name="rejectReason2"></textarea>
 				</td>
 			</tr>
 		</table>
