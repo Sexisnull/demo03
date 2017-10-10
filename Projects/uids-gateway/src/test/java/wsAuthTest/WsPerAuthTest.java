@@ -73,7 +73,7 @@ public class WsPerAuthTest {
 			String loginname = "ls";
 			String password = "hanweb";
 			String userValidate = wsPerAuth.userValidate(appmark, time, sign, loginname, password);
-			System.out.println("个人用户-2.4.4	用户认证:" + userValidate);
+			System.out.println("个人用户-用户认证:" + userValidate);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

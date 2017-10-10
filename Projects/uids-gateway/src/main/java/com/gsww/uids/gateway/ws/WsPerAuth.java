@@ -49,13 +49,14 @@ import com.gsww.uids.gateway.util.UserUtil;
 @WebService(name = "WsPerAuth", targetNamespace = "http://www.gszwfw.gov.cn/gsjis/services/WsPerAuth")
 public class WsPerAuth {
 
-	private static AuthLogService authLogService = SpringContextHolder
-			.getBean("authLogService");
-	private static AppService appService = SpringContextHolder
-			.getBean("appService");
-	private static OutsideUserService outsideUserService = SpringContextHolder
-			.getBean("outsideUserService");
-
+	private static AuthLogService authLogService;
+	private static AppService appService;
+	private static OutsideUserService outsideUserService;
+	static {
+		authLogService = SpringContextHolder.getBean("authLogService");
+		appService = SpringContextHolder.getBean("appService");
+		outsideUserService = SpringContextHolder.getBean("outsideUserService");
+	}
 	protected Logger logger = Logger.getLogger(getClass());
 
 	@WebMethod
@@ -270,7 +271,6 @@ public class WsPerAuth {
 		}
 		String ip = "";
 		MD5 md5 = new MD5();
-		password = md5.decrypt(password, time);
 		JisAuthLog jisAuthLog = new JisAuthLog();
 		try {
 			if (UserUtil.isMobilelegal(loginname)) {
