@@ -39,7 +39,7 @@ public class RecordSyncHisJob implements Callable{
 			while(true){
 				//检查实时同步列表队列是否为空，若为空则查询并执行任务
 				if(taskQueue.isEmpty()){
-					currMapList = sysViewDao.findCurrSysViewByOptResult(1); //获取所有同步成功的数据
+					currMapList = sysViewDao.findCurrSysViewByOptResult(2); //获取所有同步成功的数据
 					if(currMapList!=null && !currMapList.isEmpty()) {
 						logger.info("共读取当前同步数据:" + currMapList.size() + "条记录！");
 						for (Map<String, Object> currMap : currMapList) {
