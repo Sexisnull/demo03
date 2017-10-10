@@ -101,7 +101,7 @@
 				success:function(result){
 					if(result.success){
 						alert(result.message);
-						window.location.href='resetpwd_show.do';
+						window.location.href='resetpwd_show';
 					}else {
 						alert(result.message);
 						$('#verifyImg').click();
@@ -127,7 +127,7 @@
 				dataType:'json',
 				success:function(json){//如果成功与第三方连接					
 					if(json.success){
-						window.location.href='resetpwd_show.do';
+						window.location.href='resetpwd_show';
 					}else{
 						alert(json.message);
 						$('#verifyImg').click();
@@ -189,15 +189,15 @@
 			var sendResult;	
 			   if("per"==typeEntity){
 			        
-				  var checkUrl = "sendCellphoneShortMessageUserPwdRecover.do";
+				  var checkUrl = "sendCellphoneShortMessageUserPwdRecover";
 			  }else{
-				  var checkUrl = "sendCellphoneShortMessageUserPwdRecover.do";
+				  var checkUrl = "sendCellphoneShortMessageUserPwdRecover";
 			  } 
 			//用Ajax发短信		
 			$.ajax({
 				async: false, //这个ajax请求则为同步请求，在没有返回值之前，ajax块外是不会执行的。
 		   		type:"post",		   	
-		   		url:"sendCellphoneShortMessageUserPwdRecover.do",
+		   		url:"sendCellphoneShortMessageUserPwdRecover",
 		     	data:{"inputByGuest":$("#inputByGuest").val(),"randCode":$("#randCode").val()},	
 				dataType:'json',
 				success:function(json){//如果成功与第三方连接				

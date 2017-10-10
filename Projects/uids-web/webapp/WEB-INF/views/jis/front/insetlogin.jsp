@@ -55,7 +55,7 @@ window.confirm = function(msg,okCall,cancelCall){
 	    </div>
 		<div class="fr_log">
 	    	<li class="fr_name"></li><li class="fr_text"><input type="submit" class="fr_dl" value="">
-	    	<input type="button" class="fr_zc" value="" onclick="location.href='register.do'"></li>
+	    	<input type="button" class="fr_zc" value="" onclick="location.href='register'"></li>
 	    </div>
     </form>
 </div>

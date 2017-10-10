@@ -117,7 +117,7 @@ window.confirm = function(msg,okCall,cancelCall){
 	//获取动态密码  李德隆于20160630 加置灰、以及倒数六十秒。
 	function getDynamicPwd(){//[daɪ'næmɪk]		
 		var telNum = $("#username").val();//			
-		var sendUrl = "${ctx}/front/sendDynamicPwd";//或直接sendDynamicPwd.do
+		var sendUrl = "${ctx}/front/sendDynamicPwd";//或直接sendDynamicPwd
 		
 		$("#dynamicPwd").val("正在发送...").attr("disabled", true).css({"color":"#000000" ,"background":"#ccc"});//点击了“发送”按钮后，点击失效。
 		$.ajax({
@@ -331,9 +331,9 @@ $("#bm").click(function(){
 		$("#corlogin").click(function(){
 			var appmark = $('#appmark').val();
 			if(appmark != "") {
-				window.location.href = "corlogin.do?appmark="+appmark;
+				window.location.href = "corlogin?appmark="+appmark;
 			}else {		
-				window.location.href = "corlogin.do";
+				window.location.href = "corlogin";
 			}
 		});
 	});

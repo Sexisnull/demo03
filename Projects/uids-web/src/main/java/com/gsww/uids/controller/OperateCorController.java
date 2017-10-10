@@ -1,5 +1,6 @@
 package com.gsww.uids.controller;
 
+import com.hanweb.common.util.DateUtil;
 import com.hanweb.common.util.Md5Util;
 import com.hanweb.common.util.StringUtil;
 import com.hanweb.common.util.mvc.ControllerUtil;
@@ -7,7 +8,13 @@ import com.gsww.uids.util.JsonResult;
 import com.gsww.uids.util.ResultState;
 import com.gsww.uids.entity.ComplatCorporation;
 import com.gsww.uids.service.ComplatCorporationService;
+import com.gsww.jup.util.Dbid;
 import com.gsww.uids.constant.CorporationSessionInfo;
+
+import java.util.Calendar;
+import java.util.Date;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +30,13 @@ public class OperateCorController{
   @Autowired
   private ComplatCorporationService corporationService;
 
-  @RequestMapping("/modifycorinfo_show.do")
+  @RequestMapping("/modifycorinfo_show")
   public String modifyCorInfo(String username, String pwd,Model model)
   {
     ComplatCorporation corporation = CorporationSessionInfo.getFrontCurrentCorporationInfo();
     if (corporation == null)
     {
-      return "corlogin.do";
+      return "corlogin";
     }
     int type = corporation.getType().intValue();
     String corname;
@@ -83,7 +90,7 @@ public class OperateCorController{
 
   @RequestMapping("/modifycorinfo_submit")
   @ResponseBody
-  public JsonResult saveCorInfo(String randCode, HttpSession session, HttpServletResponse response, String pwd2, String corsex, String inssex, ComplatCorporation corporation) {
+  public JsonResult saveCorInfo(String randCode, HttpSession session, HttpServletRequest request,HttpServletResponse response, String pwd2, String corsex, String inssex, ComplatCorporation corporation) {
     boolean isSuccess = false;
     JsonResult jsonResult = JsonResult.getInstance();
 
@@ -92,7 +99,7 @@ public class OperateCorController{
 
     ComplatCorporation cor = this.corporationService.findByLoginName(corporation.getLoginName());
     if ((pwd2 == null) || ("".equals(pwd2))) {
-      pwd2 = Md5Util.md5decode(corporation.getPwd());
+      pwd2 = Md5Util.md5decode(cor.getPwd());
     }
     corporation.setPwd(pwd2);
     int id = cor.getIid().intValue();
@@ -106,6 +113,10 @@ public class OperateCorController{
         corporation.setNation(cp.getNation());
         corporation.setSex(cp.getSex());
         corporation.setCardNumber(cp.getCardNumber());
+        corporation.setUuid((cor.getUuid()==null || "".equals(cor.getUuid()))?Dbid.getID():cor.getUuid());
+        corporation.setEnable(1);
+        corporation.setLoginTime(new Date(System.currentTimeMillis()));
+        corporation.setLoginIp(request.getRemoteAddr());
       } else {
         corporation.setName(cp.getName());
         corporation.setRegNumber(cp.getRegNumber());
@@ -114,10 +125,14 @@ public class OperateCorController{
         corporation.setSex(cp.getSex());
         corporation.setNation(cp.getNation());
         corporation.setCardNumber(cp.getCardNumber());
+        corporation.setUuid((cor.getUuid()==null || "".equals(cor.getUuid()))?Dbid.getID():cor.getUuid());
+        corporation.setEnable(1);
+        corporation.setLoginTime(new Date(System.currentTimeMillis()));
+        corporation.setLoginIp(request.getRemoteAddr());
       }
 
       if ((!"".equals(pwd2)) && (pwd2.length() > 0)) {
-        corporation.setPwd(pwd2);
+        corporation.setPwd(Md5Util.md5encode(pwd2));
       }
       isSuccess = this.corporationService.modify(corporation);
       if (isSuccess) {

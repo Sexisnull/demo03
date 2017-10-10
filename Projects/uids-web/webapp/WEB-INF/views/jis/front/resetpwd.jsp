@@ -77,15 +77,15 @@
 						
 						
 						alert("您的新密码设置成功！", "", function(){
-							//location.href='perlogin.do?appmark='+"${appmark}";//李德隆于20160526添加appmark='+"${appmark}"
-							window.location.href= "${ctx}/front/perlogin.do?domain="+domain+"&action=ticketLogin&gotoUrl=&appmark=gszw";
-						//	location.href='perlogin.do?domain='+domain+'&action=ticketLogin&gotoUrl=&appmark=gszw';
+							//location.href='perlogin?appmark='+"${appmark}";//李德隆于20160526添加appmark='+"${appmark}"
+							window.location.href= "${ctx}/front/perlogin?domain="+domain+"&action=ticketLogin&gotoUrl=&appmark=gszw";
+						//	location.href='perlogin?domain='+domain+'&action=ticketLogin&gotoUrl=&appmark=gszw';
 
 						});
 					}else{
 						alert("您的新密码设置成功！", "", function(){
-							//location.href='corlogin.do?appmark='+"${appmark}";//李德隆于20160526添加appmark='+"${appmark}"
-							window.location.href= "${ctx}/front/corlogin.do?domain="+domain+"&action=ticketLogin&gotoUrl=&appmark=gszw";
+							//location.href='corlogin?appmark='+"${appmark}";//李德隆于20160526添加appmark='+"${appmark}"
+							window.location.href= "${ctx}/front/corlogin?domain="+domain+"&action=ticketLogin&gotoUrl=&appmark=gszw";
 						});
 					}
 				}else{
@@ -118,11 +118,11 @@
 				if(json.success){
 					if(typeEntity == "per"){
 						alert("您的新密码设置成功！");
-						window.location.href="${ctx}/front/perlogin.do?domain="+domain+"&action=ticketLogin&gotoUrl=&appmark=gszw"
+						window.location.href="${ctx}/front/perlogin?domain="+domain+"&action=ticketLogin&gotoUrl=&appmark=gszw"
 								
 					}else{
 						alert("您的新密码设置成功！");
-						window.location.href="${ctx}/front/corlogin.do?domain="+domain+"&action=ticketLogin&gotoUrl=&appmark=gszw"
+						window.location.href="${ctx}/front/corlogin?domain="+domain+"&action=ticketLogin&gotoUrl=&appmark=gszw"
 					}
 				}else{
 					alert(json.message);

@@ -147,7 +147,7 @@ function setlogintime(){
 }
 
 function upfrontlogo(){
-	openDialog('configuration/frontlogo_upload.do', 400, 170, {
+	openDialog('configuration/frontlogo_upload', 400, 170, {
 		title : '上传-登录页logo'
 	});
 }
