@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.TreeMap;
 
 import javax.servlet.ServletRequest;
@@ -271,7 +272,9 @@ public class ComplatGroupController extends BaseController{
 			     }
 			}
 			if(syn){
-				List<JisApplication> list = jisApplicationService.findByIsSyncGroup(1); //查询支持同步的应用
+				List<JisApplication> list = jisApplicationService.findByIsSyncGroupNotNullAndLoginType(0); //查询支持同步的应用
+				Random random = new Random(); 
+				String data = TimeHelper.getCurrentCompactTime();
 				for(JisApplication jisApplication : list){
 					JisSysview jisSysview = new JisSysview();
 					jisSysview.setObjectid(String.valueOf(complatGroup.getIid()));
@@ -284,6 +287,8 @@ public class ComplatGroupController extends BaseController{
 					jisSysview.setCodeid(complatGroup.getCodeid());
 					jisSysview.setTimes(1);
 					jisSysview.setOperatetype("修改机构");
+					int rannum = (int) (random.nextDouble() * (99999 - 10000 + 1)) + 10000;// 获取5位随机数
+					jisSysview.setTranscationId(data + String.valueOf(rannum));
 					jisSysviewService.save(jisSysview);
 				}
 			}

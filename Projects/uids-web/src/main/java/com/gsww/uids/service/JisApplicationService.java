@@ -101,5 +101,5 @@ public interface JisApplicationService {
 	 * @return JisApplication
 	 * @throws Exception
 	 */
-    public List<JisApplication> findByIsSyncGroup(Integer isSyncGroup) throws Exception;
+    public List<JisApplication> findByIsSyncGroupNotNullAndLoginType(Integer loginType) throws Exception;
 }

@@ -145,8 +145,8 @@ public class JisApplicationServiceImpl implements JisApplicationService {
 	}
 	
 	@Override
-	public List<JisApplication> findByIsSyncGroup(Integer isSyncGroup) throws Exception{
-		List<JisApplication> list = jisApplicationDao.findByIsSyncGroup(isSyncGroup);
+	public List<JisApplication> findByIsSyncGroupNotNullAndLoginType(Integer loginType) throws Exception{
+		List<JisApplication> list = jisApplicationDao.findByIsSyncGroupNotNullAndLoginType(loginType);
 		return list;
 	}
 }
