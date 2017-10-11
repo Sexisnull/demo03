@@ -234,10 +234,10 @@
 		</div>
 	
 <div id="tabs" style="display:none;width: 68%;margin: auto;position: absolute;left: 165px;top: 50.5px">
- 	<ul style="text-align: center;">
-	    <li style="text-align: center;width: 32.7%;"><a id="yhjg" style="width: 90%;" href="">用户机构管理</a></li>
-	    <li style="text-align: center;width: 32.7%;"><a id="yyqx" style="width: 90%;" href="">应用权限设置</a></li>
-	    <li style="text-align: center;width: 32.7%;"><a id="xtqx" style="width: 90%;" href="" >系统资源授权</a></li>
+ 	<ul style="text-align: center;margin-left: 16px; ">
+	    <li style="text-align: center;"><a id="yhjg"  href="">用户机构管理</a></li>
+	    <li style="text-align: center;"><a id="yyqx"  href="">应用权限设置</a></li>
+	    <li style="text-align: center;"><a id="xtqx"  href="" >系统资源授权</a></li>
   	</ul>
  <!--text-align: center;  -->
 </div>

@@ -124,11 +124,16 @@
 	background-color: #81c5f5;
     box-shadow: none;
 }
+#myDiv{
+	border-top:1px solid #e5e5e5;
+	border-left:1px solid #e5e5e5;
+	border-right:1px solid #e5e5e5;
+}
 
 </style>
 	</head>
 	<body>
-		<div style="height:300px;overflow:auto">
+		<div id="myDiv" style="height:300px;overflow:auto">
 		<form action="modifyApps" method="post" id="appForm" name="appForm">
 		<input type="hidden" name="iid" id="iid" value="${iid}" />
 		<div id="dialog-content">

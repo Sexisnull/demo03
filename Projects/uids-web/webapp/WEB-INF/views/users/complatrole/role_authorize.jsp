@@ -94,6 +94,11 @@
 	background-color: #81c5f5;
     box-shadow: none;
 }
+#accreditDiv{
+	border-top:1px solid #e5e5e5;
+	border-left:1px solid #e5e5e5;
+	border-right:1px solid #e5e5e5;
+}
 </style>
 </head>
 <body>
