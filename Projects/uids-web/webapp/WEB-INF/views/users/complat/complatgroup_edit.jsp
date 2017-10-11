@@ -161,9 +161,6 @@ $("#editForm").validate({
 		groupname2 : {
 			required: true
 		},
-		areacode : {
-			required: true
-		},
 		suffix : {
 			required: true,
 			maxlength: 255,
