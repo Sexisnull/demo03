@@ -511,7 +511,7 @@ function resetform() {
 								</th>
 								<td width="20%">
 									<input name="groupname" id="groupname" value="${groupName }" readonly="true" type="text" style="cursor: pointer;width: 150px;" placeholder="所属机构"/>
-									<input type="hidden" id="groupid" name="search_EQ_groupid">
+									<input type="hidden" id="groupid" name="search_EQ_groupid" value="${groupid}">
 									<input type="hidden" id="orgId" name="orgId" value="${orgId}">
 								</td>
 								<th style="padding-left: 5px">

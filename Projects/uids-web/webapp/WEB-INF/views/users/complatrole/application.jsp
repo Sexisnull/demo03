@@ -271,7 +271,7 @@ body {
 	</head>
 	<body>
 		<div id="dialogframe" style="display:none;width:100%;height:100%;" class="dialog-wrap">
-			<iframe name="dialog_frame"   src="${ctx}/complat/orgselect?orgType=${orgType}&roleId=${roleid}" style="width:100%;height:100%;" frameborder="0"> 
+			<iframe name="dialog_frame"   src="${ctx}/complat/orgselect.do?orgType=${orgType}&roleId=${roleid}" style="width:100%;height:100%;" frameborder="0"> 
 			</iframe>
 		</div>
 	
@@ -301,10 +301,10 @@ body {
 		<div></div>
 		<div class="panel datagrid" style="width: auto;">
 			<div class="datagrid-wrap panel-body panel-body-noheader panel-body-noborder" title="" style=" height: 300px;">
-				<div class="datagrid-view" style=" height: 396px;">
+				<div class="datagrid-view" style=" height: 396px;width: 100%;">
 					
-					<div class="datagrid-view2" style="width: 710px;">
-						<div class="datagrid-header" style="width: 710px; height: 35px;">
+					<div class="datagrid-view2" style="width: 100%;">
+						<div class="datagrid-header" style="width: 100%; height: 35px;">
 							<div class="datagrid-header-inner" style="display: block;">
 								<table class="datagrid-htable" border="0" cellspacing="0" cellpadding="0" style="height: 36px;">
 									<tbody>
@@ -314,13 +314,13 @@ body {
 													<input type="checkbox" id="checkallUser" onclick="choseall();">
 												</div>
 											</td>
-											<td field="name">
-												<div class="datagrid-cell" style="width: 332px; text-align: left;">
+											<td field="name" style="width: 348px;">
+												<div class="datagrid-cell" style="width: 340px; text-align: left;">
 													<span> 成员名称 </span><span class="datagrid-sort-icon">&nbsp;</span>
 												</div>
 											</td>
-											<td field="type" class="">
-												<div class="datagrid-cell" style="width: 350px; text-align: center;">
+											<td field="type" class="" style="width: 349px;">
+												<div class="datagrid-cell" style="width: 341px; text-align: center;">
 													<span> 成员类型 </span><span class="datagrid-sort-icon">&nbsp;</span>
 												</div>
 											</td>
@@ -329,8 +329,8 @@ body {
 								</table>
 							</div>
 						</div>
-						<div class="datagrid-body" style="width: 710px; height: 215px; overflow-x: hidden;">
-							<table id="datatable" class="datagrid-btable" cellspacing="0" cellpadding="0" border="0" style="width:710px;table-layout: auto;">
+						<div class="datagrid-body" style="width: 100%; height: 265px; overflow-x: hidden;">
+							<table id="datatable" class="datagrid-btable" cellspacing="0" cellpadding="0" border="0" style="width:100%;table-layout: auto;">
 								<tbody>
 									
 									<c:forEach items="${userList}" var="u">

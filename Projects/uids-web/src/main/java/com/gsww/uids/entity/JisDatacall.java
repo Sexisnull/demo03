@@ -18,9 +18,9 @@ public class JisDatacall implements java.io.Serializable{
 	private int iid;         	 //主键id
 	private String resName;   	 //名称
 	private String resUrl;   	 //url地址
-	private int callingType; 	 //调用方式,0：iframe调用,1：rss调用
+	private int callingType; 	 //调用方式,1：iframe调用,2：rss调用
 	private int isVerification;  //是否验证
-	private int orderType;   	 //排序方式
+	private int orderType;   	 //排序方式,1:正序,2:倒叙
 	private String content;  	 //rss模板样式
 	private String timeFormat;   //时间格式 
 	private int appId;  		 //应用id

@@ -16,6 +16,10 @@
 	<script type="text/javascript" src="${ctx}/res/jslib/ztree/js/jquery.ztree.all-3.5.min.js"></script>
 	<script type="text/javascript" src="${ctx}/res/skin/login/js/tree.js"></script>
 <style type="text/css">
+
+ .menuContent{border: 0px solid #ddd;overflow-x:auto;overflow-y:auto;float: left;}
+	.menuContent #areaTree{ width:1700px;display: block;height:330px;float: left;overflow-x:auto;overflow-y:auto;}
+
 .mybg{
 	background-color:#000;
 	width:100%;
@@ -32,18 +36,11 @@
 	top:30px;
 	border:1px solid #F68A8A;
 	width:380px;
-	height:480px;
-	background-color:#e2ecf5;
+	height:500px;
+	background-color:white;
 	z-index:1000;
 	position:absolute;
 } 
-.synbtn{
-	border-radius:4px;
-	font-size: 16px;
-	text-align:center;
-	width:60px;
-	heigth:40px;
-}
 </style>
 <script type="text/javascript"> 
 $(function(){
@@ -55,14 +52,7 @@ $(function(){
 			setting('groupmenu', onClickGroup, onDbClickGroup, groupMenu);
 		}
 	});
-	var groupMenu2 = [{"name":"单位选择","id":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
-	$('#groupname2').menu({
-		tree : 'groupmenu2',
-		height : 250,
-		init : function() {
-			setting2('groupmenu2', onClickGroup2, onDbClickGroup, groupMenu2);
-		}
-	});
+	
 });
 function hideGroupMenu(){
 	$('#groupname_menu').css('display','none');
@@ -113,61 +103,7 @@ function beforeClick(treeId, treeNode, clickFlag) {
 function resetform() {
 	$('form').find(':input').not(':button,:hidden,:submit,:reset').val('');
 } 
-//第二个树
-function hideGroupMenu2(){
-	$('#groupname2_menu').css('display','none');
-}
-function onClickGroup2(event, treeId, treeNode) {
-	$('#groupid2').val(treeNode.id);
-	$('#groupname2').val(treeNode.name);
-	hideGroupMenu2();
-}
-function onDbClickGroup2(event, treeId, treeNode) {
-	if(treeNode == null){
-		return;
-	}
-	if (treeNode.isDisabled )//根节点及失效节点双击无效
-		return;
-	$('#groupid2').val(treeNode.id);
-	$('#groupname2').val(treeNode.name);
-	$('#groupname2_menu').fadeOut(50);
-}
-/**
- *	初始化树
- */
-function setting2(treeName2, onClickFunction2, onDblClickFunction2, rootNode) {
-	var setting2 = {
-		async : {
-			enable : true,
-			url : '../login/getGroup',
-			autoParam : [ "id=groupId", "isDisabled" ]
-		},
-		callback : {
-			beforeClick : beforeClick2,
-			onClick : onClickFunction2,
-			onDblClick : onDblClickFunction2
-		},
-		check: {
-			enable: true,
-			chkStyle: "checkbox",
-			chkboxType:{ "Y": "ps", "N": "ps" }
-		} 
-	};
-	console.log("-----"+treeName2);
-	$("#" + treeName2).tree(setting2, rootNode);
-//	$("#" + treeName).tree().refreshNode('');
-}
-/**
- *	机构选择节点点击前回调
- */
-function beforeClick2(treeId, treeNode, clickFlag) {
-	if (treeNode.isDisabled)
-		return false;
-	return (treeNode.id != 0);
-}
-function resetform2() {
-	$('form').find(':input').not(':button,:hidden,:submit,:reset').val('');
-} 
+
 //搜索校验
 function checkSubmitForm(){
 	var nameSearch = $("#nameSearch").val();
@@ -200,16 +136,27 @@ function isNumbOrLett( s ){//判断是否是字母、数字组成
 	}
 }
 	
-function syngroup(iid){
+function syngroup(iid,state){
     var mybg = document.createElement("div"); 
 	mybg.setAttribute("class","mybg"); 
 	$(".mybg").addClass("mybg");
     document.body.appendChild(mybg);
 	document.body.style.overflow = "hidden"; 
-	$("#syngroupdiv").show(); 	
+	$("#syngroupdiv").show();
+	$("#state").val(state);
 	$("#syniid").val(iid);			
 }
-	
+
+function synfuction(){
+   	if($("#state").val()==0){
+   		$("#synaction").attr("action","${ctx}/application/syngroup");
+   	}
+   	if($("#state").val()==1){
+   		$("#synaction").attr("action","${ctx}/application/synuser");
+   	}
+   	$("#synaction").submit();
+}
+
 </script>
 </head>
 <body>
@@ -321,8 +268,9 @@ function syngroup(iid){
 	                    	<div class="word_break">${groupMap[application.groupId]}</div>
 	                    </td>
 	                    <td style="text-align: center;">
-	                    	<c:if test="${application.isSyncGroup==0}">不支持</c:if>
-							<c:if test="${application.isSyncGroup==1}">支持</c:if>
+	                    	<c:if test="${application.loginType=='1' && application.isSyncGroup=='1'}">不支持</c:if>
+							<c:if test="${(application.loginType=='0' && application.isSyncGroup=='1')
+							 || (application.loginType=='0' && application.isSyncGroup=='0')}">支持</c:if>
 	                    </td>
 	                	<td class="position-content" style="text-align: center;" >
 	                		<div class="listOper">
@@ -335,11 +283,11 @@ function syngroup(iid){
 										<!-- <i></i> -->
 										<a>删除</a>
 									</li>
-									<li class="bluegreen" onclick="syngroup(${application.iid});">
+									<li class="bluegreen" onclick="syngroup(${application.iid},0);">
 										<!-- <i></i> -->
 										<a>同步机构</a>
 									</li>
-									<li class="bluegreen" onclick="synuser();">
+									<li class="bluegreen" onclick="syngroup(${application.iid},1);">
 										<!-- <i></i> -->
 										<a>同步用户</a>
 									</li>
@@ -355,25 +303,148 @@ function syngroup(iid){
         <!-- 列表结束 -->
     </div>
     <div id="syngroupdiv" class="alert_tb" style="display:none;">
-    	<form action="${ctx}/application/syngroup">
-    	
-    		<input id="syniid" type="hidden" name ="syniid"/>
-    		<div style="font-size: 20px;padding-top: 10px;">&nbsp;&nbsp;&nbsp;同步机构<br/><hr/><br/></div>
-    		<div style="text-align: left;padding-top:35px;font-size: 16px;height: 300px;padding-left: 25px">
-    			选择机构：<input name="groupname2" id="groupname2" type="text" style="cursor: pointer;width: 230px"/>
-   				<input type="hidden" id="groupid2" name="groupid2" value=""/>
-   			</div>
-		<div id="synsubmit" style="text-align: right;padding-right: 30px;">
-			<div id="dialogpic-toolbar-panel">
-				<input type="submit" class="synbtn" value="同步"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<input type="button" class="synbtn" value="取消" 
-					 onclick="javascript:window.location.href='${ctx}/application/applicationList?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}'" />
+    	<form action="" id="synaction">
+	    	<input type="hidden" id="state" name="state" value=""/>
+	    	
+	    		<input id="syniid" type="hidden" name ="syniid"/>
+	    		<div style="font-size: 20px;padding-top:15px;padding-bottom:10px;cursor: auto;padding-left:5px;">
+	    		&nbsp;&nbsp;&nbsp;同步列表
+	    		<a href="${ctx}/application/applicationList?findNowPage
+						 =true&orderField=${orderField}&orderSort=${orderSort}" title="关闭" 
+					 style="padding-left:240px;line-height:20px;font-size: 23px;color: black;text-decoration:none">x</a>
+	    		<hr/><br/></div>
+	    		<div style="text-align: left;padding-top:5px;font-size: 16px;height: 300px;padding-left: 25px">
+	    			<div style="padding-left: 6px;font-size: 16px;">选择机构：</div>
+	    			<div id="menuContent" class="menuContent">
+						<ul id="areaTree" class="ztree" style="margin-top:0; width:180px;"></ul>
+					</div>
+	   				<input type="hidden" id="groupid2" name="groupid2" value=""/>
+	   			</div>
+			<div id="synsubmit" style="text-align: right;padding-right: 15px;padding-top: 40px;">
+				
+					<input type="button" class="btn bluegreen" value="同步" onclick="synfuction()" 
+					 style="background-color: #36c6d3;color:#ffffff;font-size: 15px;"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<%-- <input type="button" class="synbtn" value="取消" 
+						 onclick="javascript:window.location.href=
+						 '${ctx}/application/applicationList?findNowPage
+						 =true&orderField=${orderField}&orderSort=${orderSort}'" /> --%>
 			</div>
-		</div>
-    	</form>
+		</form>
     </div>
     <!-- 分页 -->
    <tags:pagination page="${pageInfo}" paginationSize="5"/> 
 </div>
 </body>
+
+<script type="text/javascript">
+$(function(){
+var zNodes = [];
+		var setting = {
+			async : {
+				enable : true,
+				type:"post",
+				url:"${ctx}/login/getGroup",
+		        autoParam: ["id=groupId", "isDisabled"],
+		        otherParam: { "type": "1"}
+			},
+			data : {
+				simpleData : {
+					enable : true
+				}
+			},
+			check: {
+			enable: true,
+			chkStyle: "checkbox",
+			chkboxType:{ "Y": "s", "N": "s" }
+		},
+			callback : {
+				onClick : function(event, treeId, treeNode){
+					var zTree = $.fn.zTree.getZTreeObj("areaTree");
+					var nodes = zTree.getSelectedNodes();
+					nodes.sort(function compare(a, b) {
+						return a.id - b.id;
+					});
+					var _name=$.trim(nodes[0].name);
+					var _code=nodes[0].id;
+					alert(_name+"--"+_code);
+					var param="";
+					 $.ajax({
+					       type:"get",
+					       url:  "${ctx}/complat/complatList",
+					       data:{"search_EQ_groupid":_code},
+					       datatype:  "json",
+					       success: function (value) {
+						     /*  alert(value)	;				      
+	                           alert("请求成功"+_code);   */                                                                     
+	                           var   data=JSON.parse(value);                         
+	                           handleResponse(data) ;
+                           }, 
+                           error: function (returnValue) {
+                       /*   alert(_code);*/
+                           }
+					});
+					
+					if(_code!="1"&&_code.length>0 && _name.length>0)
+						param="?search_EQ_groupid="+_code;
+						
+					if(_code.length>0 && _name.length>0){
+						window.location.href="${ctx}/complat/complatList"+param;
+					}
+					$("#areacode").next('.error').hide();
+				}
+		,onCheck:onCheck
+		 
+			}
+		};
+		
+		//初始化组织机构树
+		$.fn.zTree.init($("#areaTree"), setting, zNodes);
+		
+	});
+
+	function beforeClick(treeId, treeNode) {
+		var check = (treeNode && !treeNode.isParent);
+		if (!check) return false;
+		return check;
+	}
+	
+	function showMenu() {
+		var cityObj = $("#areaname");
+		var cityOffset = $("#areaname").offset();
+		$("#menuContent").css({left:cityOffset.left + "px", top:cityOffset.top + cityObj.outerHeight() + "px"}).slideDown("fast");
+
+		$("body").bind("mousedown", onBodyDown);
+	}
+	function hideMenu() {
+		$("#menuContent").fadeOut("fast");
+		$("body").unbind("mousedown", onBodyDown);
+	}
+	function onBodyDown(event) {
+		if (!(event.target.id == "menuBtn" || event.target.id == "menuContent" || $(event.target).parents("#menuContent").length>0)) {
+			hideMenu();
+		}
+	}
+	function checkSubmit(){
+		var powername=$("#qlName").val();
+		var name=$.trim(powername);
+		$("#qlName").val(name);
+		form1.submit();
+	}
+	 function onCheck(e,treeId,treeNode){
+		 debugger;
+		 treeNode.isParent.checked=false;
+         var treeObj=$.fn.zTree.getZTreeObj("areaTree"),
+         nodes=treeObj.getCheckedNodes(true),
+         v="";
+         
+         for(var i=0;i<nodes.length;i++){
+        	 
+        		 v+=nodes[i].id+",";
+                 //获取选中节点的值
+         }
+         $("#groupid2").val(v);
+         
+         }
+
+</script>
 </html>

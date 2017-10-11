@@ -20,7 +20,7 @@
 
 
 $(function(){
-	var groupMenu = [{"name":"单位选择","id":"128","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
+	var groupMenu = [{"name":"单位选择","id":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
 
 	$('#groupname').menu({
 		tree : 'groupmenu',
@@ -85,7 +85,7 @@ function resetform() {
 //-------------------------区域编码树-----------------------------
 
 $(function(){
-	var groupMenu2 = [{"name":"单位选择","id":"0","codeid":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
+	var groupMenu2 = [{"name":"区域选择","id":"0","codeid":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
 
 	$('#groupname2').menu({
 		tree : 'groupmenu2',
@@ -140,16 +140,17 @@ function setting2(treeName, onClickFunction, onDblClickFunction, rootNode) {
 
 //表单校验
 $().ready(function() {
-var outisideUserNameInput=$("#name").val();
 $("#editForm").validate({
 	rules: {
 		name : {
 			required: true,
-			maxlength: 32
+			cnRangelength: [0,100],
+			isName : true
 		},
 	   	groupallname : {
 			required: true,
-			maxlength: 64
+			cnRangelength: [0,255],
+			isName : true
 		},
 		nodetype : {
 			required: true
@@ -161,7 +162,9 @@ $("#editForm").validate({
 			required: true
 		},
 		suffix : {
-			required: true
+			required: true,
+			maxlength: 255,
+			isSuffix: true
 		},
 		spec:{
 	   		maxlength: 255
@@ -171,6 +174,16 @@ $("#editForm").validate({
 		}
 	}
 });
+jQuery.validator.addMethod("isName", function(value, element) { 
+           var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "名称只能由字母、数字、下划线、中文组成，不能以下划线开头和结尾");
+    
+    jQuery.validator.addMethod("isSuffix", function(value, element) { 
+           var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9_]+$/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "名称只能由字母、数字、下划线组成，不能以下划线开头和结尾");
+    
 });
 
 </script>
@@ -241,7 +254,7 @@ $("#editForm").validate({
 				<th><b class="mustbe">*</b> 请输入区域编码：</th>
 				<td>
 				    <c:if test="${empty complatGroup.iid}">
-				          <input name="groupname2" id="groupname2" type="text" style="cursor: pointer;" value="${complatGroup.areacode}"/>
+				          <input name="groupname2" id="groupname2" type="text" placeholder="请选择区域编码" style="cursor: pointer;" value="${complatGroup.areacode}"/>
 				    </c:if>
 				    <c:if test="${not empty complatGroup.iid}">
 				          <input name="groupname2" id="groupname2" type="text" style="cursor: pointer;" value="${complatGroup.areacode}" disabled="true"/>
@@ -265,7 +278,7 @@ $("#editForm").validate({
 	        	<th>请输入上级机构：</th>
 	        	<td>
 	        	    <c:if test="${empty complatGroup.iid}">
-				          <input name="groupname" id="groupname" type="text" style="cursor: pointer;" value="${complatGroup.parentName}" /> 
+				          <input name="groupname" id="groupname" type="text" placeholder="请选择上级机构" style="cursor: pointer;" value="${complatGroup.parentName}" /> 
 	        		      <input type="hidden" id="groupid"  name="groupid">
 				    </c:if>
 				    <c:if test="${not empty complatGroup.iid}">

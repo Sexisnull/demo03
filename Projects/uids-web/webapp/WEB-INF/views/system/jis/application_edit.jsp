@@ -23,7 +23,7 @@
 .mybg{
 	background-color:#000;
 	width:100%;
-	height:100%;
+	height:200%;
 	position:absolute;
 	top:0; 
 	left:0; 
@@ -54,8 +54,8 @@
 	top:120px;
 	border:1px solid #F68A8A;
 	width:600px;
-	height:280px;
-	background-color:#e2ecf5;
+	height:350px;
+	background-color:white;
 	z-index:1000;
 	position:absolute;
 } 
@@ -210,7 +210,7 @@ function checknet(){
 		return false;
     }
 	$.ajax({
-         url: "checknet",
+         url: "checknet.do",
          data: "url=" + url, 
          type: 'POST',
          success: function(msg){
@@ -547,7 +547,7 @@ $(function(){
     	<input type="hidden" name="setId" value="1"  />
     	<input type="hidden" id="orderField" name="orderField" value="${orderField}"/> 
 		<input type="hidden" id="orderSort" name="orderSort" value="${orderSort}"/>
-		<input type="hidden" id="groupid" name="groupid" value=""/>
+		<input type="hidden" id="groupid" name="groupId" value="${jisApplication.groupId}"/>
 		<input type="hidden" id="picName" name="picName" value=""/>
     </div>
     
@@ -789,40 +789,45 @@ $(function(){
     <div id="alerttb" class="alert_tb" style="display:none;"> 
     	<form action="${ctx}/application/applicationSave">
     	<table>
-    	<div style="font-size: 18px;">&nbsp;便捷录入</div>
-    	<hr/>
+    	<div style="font-size: 20px;padding-top: 15px;padding-bottom: 10px;cursor: auto;padding-left: 5px;">&nbsp;便捷录入
+    		<a href="${ctx}/application/applicationEdit?findNowPage=true&orderField=
+					 ${orderField}&orderSort=${orderSort}&iid=${jisApplication.iid}" title="关闭" 
+					 style="padding-left: 466px;font-size: 23px;color: black;text-decoration:none">x</a>
+    	</div>
+    	<hr/><br/>
     		<tr>
-    			<td style="font-size: 20px;" align="left">&nbsp;&nbsp;应用名称：&nbsp;&nbsp;</td>
-    			<td style="font-size: 17px;"><input  type="radio" id="jcms" name="fast" value="jcms" onclick="group(1);"/>&nbsp;JCMS后台用户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-    			<td style="font-size: 17px;"><input type="radio" id="jcms2" name="fast" value="jcms2" onclick="group(2);"/>&nbsp;JCMS个性化定制&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-    			<td style="font-size: 17px;"><input type="radio" id="xxgk" name="fast" value="xxgk" onclick="group(3);"/>&nbsp;XXGK</td>
+    			<td style="font-size: 17px;" align="left">&nbsp;&nbsp;应用名称：&nbsp;&nbsp;</td>
+    			<td style="font-size: 15px;"><input  type="radio" id="jcms" name="fast" value="jcms" onclick="group(1);"/>&nbsp;JCMS后台用户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    			<td style="font-size: 15px;"><input type="radio" id="jcms2" name="fast" value="jcms2" onclick="group(2);"/>&nbsp;JCMS个性化定制&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    			<td style="font-size: 15px;"><input type="radio" id="xxgk" name="fast" value="xxgk" onclick="group(3);"/>&nbsp;XXGK</td>
     		</tr>
     		<tr>
     			<td></td>
-    			<td style="font-size: 17px;"><input type="radio" id="jact" name="fast" value="jact" onclick="group(4);"/>&nbsp;JACT后台&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-    			<td style="font-size: 17px;"><input type="radio" id="jact2" name="fast" value="jact2" onclick="group(5);"/>&nbsp;JACT前台&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-    			<td style="font-size: 17px;"><input type="radio" id="jphoto" name="fast" value="jphoto" onclick="group(6);"/>&nbsp;JPHOTO前台</td>
+    			<td style="font-size: 15px;"><input type="radio" id="jact" name="fast" value="jact" onclick="group(4);"/>&nbsp;JACT后台&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    			<td style="font-size: 15px;"><input type="radio" id="jact2" name="fast" value="jact2" onclick="group(5);"/>&nbsp;JACT前台&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    			<td style="font-size: 15px;"><input type="radio" id="jphoto" name="fast" value="jphoto" onclick="group(6);"/>&nbsp;JPHOTO前台</td>
     		</tr>
     		<tr>
     			<td></td>
-    			<td style="font-size: 17px;"><input type="radio" id="jphoto2" name="fast" value="jphoto2" onclick="group(7);"/>&nbsp;JPHOTO后台</td>
+    			<td style="font-size: 15px;"><input type="radio" id="jphoto2" name="fast" value="jphoto2" onclick="group(7);"/>&nbsp;JPHOTO后台</td>
     		</tr>
-			<tr>
-				<td style="font-size: 20px;" align="left">&nbsp;&nbsp;应用域名：&nbsp;&nbsp;</td>
+			<tr style="line-height: 70px;">
+				<td style="font-size: 17px;" align="left" >&nbsp;&nbsp;应用域名：&nbsp;&nbsp;</td>
 				<td colspan="3"><input size="60" type="text" name="fasturl" id="fasturl" value=""></td>
-				
 			</tr>
 			<tr>
-				<td style="font-size: 20px;" align="left">&nbsp;&nbsp;接口地址：&nbsp;&nbsp;</td>
+				<td style="font-size: 17px;" align="left">&nbsp;&nbsp;接口地址：&nbsp;&nbsp;</td>
 				<td colspan="3"><input size="60" type="text" name="fastinter" id="fastinter" value=""></td>
 			</tr>
 		</table>
-		<div id="dialog-toolbar" style="text-align: center;">
+		<div id="dialog-toolbar" style="text-align: center;padding-top: 40px;">
 			<div id="dialog-toolbar-panel">
 				<input type="button" class="btn bluegreen" value="保存" 
-				 onclick="fastwriteSubmit();"/> 
-				<input type="button" class="btn" value="取消" 
-					 onclick="javascript:window.location.href='${ctx}/application/applicationEdit?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}&iid=${jisApplication.iid}'" />
+				 onclick="fastwriteSubmit();" style="background-color: #36c6d3;color:#ffffff;font-size: 15px;"/>
+				<%-- <input type="button" class="btn" value="取消" 
+					 onclick="javascript:window.location.href=
+					 '${ctx}/application/applicationEdit?findNowPage=true&orderField=
+					 ${orderField}&orderSort=${orderSort}&iid=${jisApplication.iid}'" /> --%>
 			</div>
 		</div>
 		</form>
@@ -831,7 +836,10 @@ $(function(){
     <div id="alertpic" class="alert_tb" style="display:none;"> 
     	<form action="${ctx}/application/applicationSave">
     	<table>
-    	<div style="font-size: 18px;">&nbsp;默认图标</div>
+    	<div style="font-size: 20px;padding-top: 15px;padding-bottom: 10px;cursor: auto;padding-left: 5px;">&nbsp;默认图标
+    		<a href="${ctx}/application/applicationEdit?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}&iid=${jisApplication.iid}" 
+    		title="关闭" style="padding-left: 466px;font-size: 23px;color: black;text-decoration:none">x</a>
+    	</div>
     	<hr/>
     		<tr>
 				<td ><div class="pic"><img id="img1" onclick="changSel(1);"  src="${ctx}/uploads/jcms.jpg"></div></td>
@@ -851,9 +859,7 @@ $(function(){
 		<div id="dialogpic-toolbar" style="text-align: center;">
 			<div id="dialogpic-toolbar-panel">
 				<input type="button" class="btn bluegreen" value="保存" 
-				 onclick="selectpicSubmit();"/> 
-				<input type="button" class="btn" value="取消" 
-					 onclick="javascript:window.location.href='${ctx}/application/applicationEdit?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}&iid=${jisApplication.iid}'" />
+				 onclick="selectpicSubmit();" style="background-color: #36c6d3;color:#ffffff;font-size: 15px;"/> 
 			</div>
 		</div>
 		</form>

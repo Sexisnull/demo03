@@ -1,3 +1,4 @@
+
 package com.gsww.uids.service.impl;
 
 import java.util.Date;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gsww.jup.Constants;
 import com.gsww.jup.ServiceException;
+import com.gsww.jup.util.TimeHelper;
 import com.gsww.uids.dao.JisLogDao;
 import com.gsww.uids.entity.JisLog;
 import com.gsww.uids.service.JisLogService;
@@ -86,9 +88,10 @@ public class JisLogServiceImpl implements JisLogService {
 			StringBuffer querySql = new StringBuffer();
 			querySql.append("select @rownum:=@rownum+1 AS rownum,us.name as username,gr.name as groupname,log.ip,"
 					+ " date_format(log.operatetime,'%Y-%c-%d %H:%i:%s') as operatetime from (select @rownum:=0)r, jis_log log ");
-			querySql.append("left join complat_user us on log.userid = us.iid ");
-			querySql.append("left join complat_group gr on us.groupid = gr.iid ");
-			querySql.append("order by log.operatetime desc ");
+			querySql.append(" left join complat_user us on log.userid = us.iid ");
+			querySql.append(" left join complat_group gr on us.groupid = gr.iid ");
+			querySql.append(" where log.operatetime like '"+TimeHelper.getCurrentDate()+"%'");
+			querySql.append(" order by log.operatetime desc ");
 			return querySql.toString();
 		} catch (Exception exception) {
 			throw new ServiceException("拼装查询sql时出错！"

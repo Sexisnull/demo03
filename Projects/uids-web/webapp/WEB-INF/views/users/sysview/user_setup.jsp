@@ -1,14 +1,9 @@
-
-
-
-
 <%@page language="java" pageEncoding="UTF-8"%>
-<!doctype html>
+<!DOCTYPE html>
 <%@ include file="/include/meta.jsp"%>
 <html>
 
 	<head>
-
 		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 		<meta http-equiv="Cache-Control" content="no-store" />
 		<meta http-equiv="Pragma" content="no-cache" />
@@ -195,6 +190,10 @@
 							}
 						}
 						table.append(htmlString.join(""));
+						
+						
+						//编辑页面密码强度判断
+						$('#pwd').attachEvent('oninput',EvalPwd(this.value));
 					});
 
 
@@ -318,7 +317,7 @@
 							密码：
 						</th>
 						<td>
-							<input type="password" id="pwd" name="pwd" value="${complatUser.pwd}"
+							<input type="password" id="pwd" name="pwd" value="${pwd}"
 								onkeyup="javascript:EvalPwd(this.value);" />
 						</td>
 						<th>
@@ -367,7 +366,7 @@
 							重复密码：
 						</th>
 						<td>
-							<input type="password" name="confPwd" id="confPwd" value="${complatUser.pwd}">
+							<input type="password" name="confPwd" id="confPwd" value="${pwd}">
 						</td>
 						<th>
 							身份证号：

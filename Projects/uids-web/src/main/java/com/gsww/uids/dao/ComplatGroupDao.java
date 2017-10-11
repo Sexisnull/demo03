@@ -31,7 +31,11 @@ JpaSpecificationExecutor<ComplatGroup>{
 	 */
 	public ComplatGroup findByIid(Integer iid);
 	
-
+    /**
+     * 根据机构编码查询对象
+     * @param paramString
+     * @return
+     */
 	public List<ComplatGroup> findByCodeid(String paramString);
 	
 	/**

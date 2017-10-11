@@ -112,510 +112,509 @@ public class ComplatGroupController extends BaseController {
 
             //搜索属性初始化
 //		
-            Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
-            Specification<ComplatGroup> spec = super.toSpecification(searchParams, ComplatGroup.class);
-            //分页
-            Page<ComplatGroup> pageInfo = complatGroupService.getUserPage(spec, pageRequest);
-            //查询上级机构名称
-            for (ComplatGroup complatGroup : pageInfo.getContent()) {
-                if (null != complatGroup.getPid()) {
-                    String parentName = complatGroupService.findByKey(String.valueOf(complatGroup.getPid())).getName();
-                    complatGroup.setParentName(parentName);
-                }
-            }
-            //下拉选择查询
-            //节点类型
-            List<Map<String, Object>> nodetypeList = new ArrayList<Map<String, Object>>();
-            nodetypeList = sysParaService.getParaList("JGJDLX");
-            for (Map<String, Object> para : nodetypeList) {
-                nodetypeMap.put(Integer.parseInt((String) para.get("PARA_CODE")), para.get("PARA_NAME"));
-            }
-            //区域类型
-            List<Map<String, Object>> areatypeList = new ArrayList<Map<String, Object>>();
-            areatypeList = sysParaService.getParaList("JGQYLX");
-            for (Map<String, Object> para : areatypeList) {
-                areatypeMap.put(Integer.parseInt((String) para.get("PARA_CODE")), para.get("PARA_NAME"));
-            }
-            //回显下拉菜单上级机构查询
-            String groupName = request.getParameter("groupname");
-            model.addAttribute("groupName", groupName);
-            model.addAttribute("pageInfo", pageInfo);
-            model.addAttribute("nodetypeMap", nodetypeMap);
-            model.addAttribute("areatypeMap", areatypeMap);
-            model.addAttribute("sortType", orderField);
-            model.addAttribute("orderField", orderField);
-            model.addAttribute("orderSort", orderSort);
-            // 将搜索条件编码成字符串，用于排序，分页的URL
-            model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
-            model.addAttribute("sParams", searchParams);
+			Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
+			Specification<ComplatGroup>  spec=super.toSpecification(searchParams, ComplatGroup.class);
+			//分页
+			Page<ComplatGroup> pageInfo = complatGroupService.getUserPage(spec,pageRequest);
+			//查询上级机构名称
+			for(ComplatGroup complatGroup:pageInfo.getContent()){				
+				if(null != complatGroup.getPid()){
+					String parentName = complatGroupService.findByIid(complatGroup.getPid()).getName();
+					complatGroup.setParentName(parentName);
+				}
+			}
+			//下拉选择查询
+			//节点类型
+			List<Map<String, Object>> nodetypeList = new ArrayList<Map<String, Object>>();
+			nodetypeList = sysParaService.getParaList("JGJDLX");
+			for (Map<String, Object> para : nodetypeList) {
+				nodetypeMap.put(Integer.parseInt((String) para.get("PARA_CODE")), para.get("PARA_NAME"));
+			}
+			//区域类型
+			List<Map<String, Object>> areatypeList = new ArrayList<Map<String, Object>>();
+			areatypeList = sysParaService.getParaList("JGQYLX");
+			for (Map<String, Object> para : areatypeList) {
+				areatypeMap.put(Integer.parseInt((String) para.get("PARA_CODE")), para.get("PARA_NAME"));
+			}
+			//回显下拉菜单上级机构查询
+			String groupName=request.getParameter("groupname");
+			model.addAttribute("groupName", groupName);
+			model.addAttribute("pageInfo", pageInfo);
+			model.addAttribute("nodetypeMap", nodetypeMap);
+			model.addAttribute("areatypeMap", areatypeMap);
+			model.addAttribute("sortType", orderField);
+			model.addAttribute("orderField", orderField);
+			model.addAttribute("orderSort", orderSort);
+			// 将搜索条件编码成字符串，用于排序，分页的URL
+			model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
+			model.addAttribute("sParams", searchParams);			
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		return "users/complat/complatgroup_list";
+	}
+	
+	/**
+	 * 新增，编辑，删除时同步数据到表jis_sysview
+	 * @param complatGroup
+	 * @param type
+	 * @throws Exception
+	 */
+	public void synchronization(ComplatGroup complatGroup, int type) throws Exception{
+		try{
+			List<JisApplication> list = jisApplicationService.findByIsSyncGroupNotNullAndLoginType(0); //查询支持同步的应用
+			Random random = new Random(); //初始化随机数
+			String data = TimeHelper.getCurrentCompactTime(); //获得同步时间
+			String synctime = ""; //记录修改或新增的时间
+			String operatetype = ""; //操作类型
+			//判断同步类型,根据同步类型的不同来获取不同的数据
+			if(type == 1){
+				operatetype = "新增机构";
+				synctime = String.valueOf(complatGroup.getCreatetime());
+			}else if(type == 2){
+				operatetype = "修改机构";
+				synctime = String.valueOf(complatGroup.getModifytime());
+			}else if(type == 3){
+				operatetype = "删除机构";
+				synctime = String.valueOf(complatGroup.getModifytime());
+			}
+			//将所有支持同步的应用进行同步
+			for(JisApplication jisApplication : list){
+				JisSysview jisSysview = new JisSysview();
+				jisSysview.setObjectid(String.valueOf(complatGroup.getIid()));
+				jisSysview.setObjectname(complatGroup.getName());
+				jisSysview.setState("C");
+				jisSysview.setResult("TG");
+				jisSysview.setOptresult(1);
+				jisSysview.setSynctime(synctime);
+				jisSysview.setAppid(jisApplication.getIid());
+				jisSysview.setCodeid(complatGroup.getCodeid());
+				jisSysview.setTimes(1);
+				jisSysview.setOperatetype(operatetype);
+				int rannum = (int) (random.nextDouble() * (99999 - 10000 + 1)) + 10000;// 获取5位随机数
+				jisSysview.setTranscationId(data + String.valueOf(rannum));
+				jisSysviewService.save(jisSysview);
+				syncDetail(complatGroup, jisApplication, jisSysview);
+			}
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 同步数据到表jis_sysview_detail
+	 * @param complatGroup
+	 * @param jisApplication
+	 * @throws Exception
+	 */
+	public void syncDetail(ComplatGroup complatGroup, JisApplication jisApplication, JisSysview jisSysview) throws Exception{
+		try{
+			Map<String,Object> jsonMap = new HashMap<String,Object>();
+			jsonMap.put("allParCode", complatGroup.getSuffix());
+			jsonMap.put("allParName", complatGroup.getGroupallname());
+			jsonMap.put("appName", jisApplication.getName());
+			jsonMap.put("appid", String.valueOf(jisApplication.getIid()));
+			jsonMap.put("cardId","");
+			jsonMap.put("compfax","");
+			jsonMap.put("comptel","");
+			jsonMap.put("email","");
+			jsonMap.put("groupCode",complatGroup.getCodeid());
+			jsonMap.put("groupName",complatGroup.getName());
+			jsonMap.put("headShip","");
+			jsonMap.put("hometel","");
+			jsonMap.put("id", String.valueOf(complatGroup.getIid()));
+			jsonMap.put("loginName","");
+			jsonMap.put("loginPass","");
+			jsonMap.put("mobile","");
+			jsonMap.put("msn","");
+			jsonMap.put("ndlogin","");
+			if(complatGroup.getPid() != null){
+				jsonMap.put("parCode",complatGroupService.findByIid(complatGroup.getPid()).getCodeid());
+				jsonMap.put("parName",complatGroupService.findByIid(complatGroup.getPid()).getName());
+			}else{
+				jsonMap.put("parCode","");
+				jsonMap.put("parName","");
+			}
+			jsonMap.put("qq","");
+			jsonMap.put("state","TG");
+			jsonMap.put("userName","");
+			String detail = JSONUtil.writeMapJSON(jsonMap);
+			JisSysviewDetail jisSysviewDetail = new JisSysviewDetail();
+			jisSysviewDetail.setSendmsg(detail);
+			jisSysviewDetail.setTranscationId(jisSysview.getTranscationId());
+			jisSysviewDetailService.save(jisSysviewDetail);
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+	}
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return "users/complat/complatgroup_list";
-    }
-
-    /**
-     * 新增，编辑，删除时同步数据到表jis_sysview
-     *
-     * @param complatGroup
-     * @param type
-     * @throws Exception
-     */
-    public void synchronization(ComplatGroup complatGroup, int type) throws Exception {
-        try {
-            List<JisApplication> list = jisApplicationService.findByIsSyncGroupNotNullAndLoginType(0); //查询支持同步的应用
-            Random random = new Random(); //初始化随机数
-            String data = TimeHelper.getCurrentCompactTime(); //获得同步时间
-            String synctime = ""; //记录修改或新增的时间
-            String operatetype = ""; //操作类型
-            //判断同步类型,根据同步类型的不同来获取不同的数据
-            if (type == 1) {
-                operatetype = "新增机构";
-                synctime = String.valueOf(complatGroup.getCreatetime());
-            } else if (type == 2) {
-                operatetype = "修改机构";
-                synctime = String.valueOf(complatGroup.getModifytime());
-            } else if (type == 3) {
-                operatetype = "删除机构";
-                synctime = String.valueOf(complatGroup.getModifytime());
-            }
-            //将所有支持同步的应用进行同步
-            for (JisApplication jisApplication : list) {
-                JisSysview jisSysview = new JisSysview();
-                jisSysview.setObjectid(String.valueOf(complatGroup.getIid()));
-                jisSysview.setObjectname(complatGroup.getName());
-                jisSysview.setState("C");
-                jisSysview.setResult("TG");
-                jisSysview.setOptresult(1);
-                jisSysview.setSynctime(synctime);
-                jisSysview.setAppid(jisApplication.getIid());
-                jisSysview.setCodeid(complatGroup.getCodeid());
-                jisSysview.setTimes(1);
-                jisSysview.setOperatetype(operatetype);
-                int rannum = (int) (random.nextDouble() * (99999 - 10000 + 1)) + 10000;// 获取5位随机数
-                jisSysview.setTranscationId(data + String.valueOf(rannum));
-                jisSysviewService.save(jisSysview);
-                syncDetail(complatGroup, jisApplication, jisSysview);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    /**
-     * 同步数据到表jis_sysview_detail
-     *
-     * @param complatGroup
-     * @param jisApplication
-     * @throws Exception
-     */
-    public void syncDetail(ComplatGroup complatGroup, JisApplication jisApplication, JisSysview jisSysview) throws Exception {
-        try {
-            Map<String, Object> jsonMap = new HashMap<String, Object>();
-            jsonMap.put("allParCode", complatGroup.getSuffix());
-            jsonMap.put("allParName", complatGroup.getGroupallname());
-            jsonMap.put("appName", jisApplication.getName());
-            jsonMap.put("appid", String.valueOf(jisApplication.getIid()));
-            jsonMap.put("cardId", "");
-            jsonMap.put("compfax", "");
-            jsonMap.put("comptel", "");
-            jsonMap.put("email", "");
-            jsonMap.put("groupCode", complatGroup.getCodeid());
-            jsonMap.put("groupName", complatGroup.getName());
-            jsonMap.put("headShip", "");
-            jsonMap.put("hometel", "");
-            jsonMap.put("id", String.valueOf(complatGroup.getIid()));
-            jsonMap.put("loginName", "");
-            jsonMap.put("loginPass", "");
-            jsonMap.put("mobile", "");
-            jsonMap.put("msn", "");
-            jsonMap.put("ndlogin", "");
-            jsonMap.put("parCode", complatGroupService.findByIid(complatGroup.getPid()).getCodeid());
-            jsonMap.put("parName", complatGroupService.findByIid(complatGroup.getPid()).getName());
-            jsonMap.put("qq", "");
-            jsonMap.put("state", "TG");
-            jsonMap.put("userName", "");
-            String detail = JSONUtil.writeMapJSON(jsonMap);
-            JisSysviewDetail jisSysviewDetail = new JisSysviewDetail();
-            jisSysviewDetail.setSendmsg(detail);
-            jisSysviewDetail.setTranscationId(jisSysview.getTranscationId());
-            jisSysviewDetailService.save(jisSysviewDetail);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    /**
-     * 编辑用户页面
-     *
-     * @param accountId
-     * @param model
-     * @param request
-     * @param response
-     * @return
-     * @throws Exception
-     */
-    @RequestMapping(value = "/complatgroupEdit", method = RequestMethod.GET)
-    public String complatgroupEdit(String iid, Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        try {
-            ComplatGroup complatGroup = null;
-            if (StringHelper.isNotBlack(iid)) {
-                String orderField = "";
-                String orderSort = "";
-                if (StringUtils.isNotBlank(request.getParameter("orderField"))) {
-                    orderField = (String) request.getParameter("orderField");
-                }
-                if (StringUtils.isNotBlank(request.getParameter("orderSort"))) {
-                    orderSort = (String) request.getParameter("orderSort");
-                }
-                //将pid转换为parentName在编辑框中显示
-                complatGroup = complatGroupService.findByKey(iid);
-                if (complatGroup.getPid() != null) {
-                    String parentName = complatGroupService.findByKey(String.valueOf(complatGroup.getPid())).getName();
-                    complatGroup.setParentName(parentName);
-                }
-                model.addAttribute("orderField", orderField);
-                model.addAttribute("orderSort", orderSort);
-            } else {
-                complatGroup = new ComplatGroup();
-            }
-            model.addAttribute("nodetypeMap", nodetypeMap);
-            model.addAttribute("areatypeMap", areatypeMap);
-            model.addAttribute("complatGroup", complatGroup);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "users/complat/complatgroup_edit";
-    }
-
-    /**
-     * 保存用户信息
-     */
-    @SuppressWarnings("finally")
-    @RequestMapping(value = "/complatgroupSave", method = RequestMethod.POST)
-    public ModelAndView complatgroupSave(String iid, ComplatGroup complatGroup, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        try {
-            String name = request.getParameter("name");
+	/**
+	 * 编辑用户页面
+	 * @param accountId
+	 * @param model
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/complatgroupEdit", method = RequestMethod.GET)
+	public String complatgroupEdit(String iid,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+		try {
+			ComplatGroup complatGroup = null;
+			if(StringHelper.isNotBlack(iid)){
+				String orderField="";
+				String orderSort="";
+				if(StringUtils.isNotBlank(request.getParameter("orderField"))){
+					orderField=(String)request.getParameter("orderField");
+				}
+				if(StringUtils.isNotBlank(request.getParameter("orderSort"))){
+					orderSort=(String)request.getParameter("orderSort");
+				}
+				//将pid转换为parentName在编辑框中显示
+				complatGroup = complatGroupService.findByIid(Integer.valueOf(iid));
+				if(complatGroup.getPid() != null){
+					String parentName = complatGroupService.findByIid(complatGroup.getPid()).getName();
+					complatGroup.setParentName(parentName);
+				}
+				model.addAttribute("orderField", orderField);
+				model.addAttribute("orderSort", orderSort);
+			}else{
+				complatGroup = new ComplatGroup();
+			}
+			model.addAttribute("nodetypeMap", nodetypeMap);
+			model.addAttribute("areatypeMap", areatypeMap);
+			model.addAttribute("complatGroup", complatGroup);		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "users/complat/complatgroup_edit";
+	}
+	
+	/**
+	 * 保存用户信息
+	 */
+	@SuppressWarnings("finally")
+	@RequestMapping(value = "/complatgroupSave", method = RequestMethod.POST)
+	public ModelAndView complatgroupSave(String iid,ComplatGroup complatGroup,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+		try {
+			String name = request.getParameter("name");
 //			boolean syn = false;
-            if (StringHelper.isNotBlack(iid)) {
-                //编辑状态改变操作状态位（opersign）和修改时间（modifytime）
-                complatGroup.setOpersign(2);
-                complatGroup.setModifytime(Timestamp.valueOf(TimeHelper.getCurrentTime()));
-                //判断修改过后的机构名称是否重复
-                if (complatGroupService.queryNameIsUsed(name, complatGroup.getPid()) && !complatGroup.getName().equals(name)) {
-                    returnMsg("error", "保存失败,机构名称重复", request);
-                } else {
-                    complatGroup = complatGroupService.save(complatGroup);
-                    returnMsg("success", "保存成功", request);
-                }
-                synchronization(complatGroup, 2); //编辑同步
-            } else {
-                String pid = request.getParameter("groupid");
-                //新增时将机构名汉字转换成首字母大写保存到pinyin字段中
-                String daPinYin = getPinYinHeadChar(complatGroup.getName());
-                complatGroup.setPinyin(daPinYin);
-                //新增状态改变操作状态位（opersign）和创建时间（modifytime）
-                complatGroup.setOpersign(1);
-                complatGroup.setCreatetime(Timestamp.valueOf(TimeHelper.getCurrentTime()));
-                //判断上级机构是否存在
-                if (StringHelper.isNotBlack(pid)) {//如果上级机构存在的情况，即pid ！= null
-                    Integer pId = Integer.valueOf(pid);
-                    //判断机构是否重复
-                    if (complatGroupService.queryNameIsUsed(name, pId)) {
-                        returnMsg("error", "保存失败,机构名称重复", request);
-                    } else {//如果不重复
-                        //自动生成机构编码
-                        List<ComplatGroup> group = complatGroupService.findByPid(Integer.valueOf(pid));
-                        String codeId = "";
-                        if (null != group && group.size() > 0) {
-                            codeId = group.get(group.size() - 1).getCodeid();
-                        }
-                        int num = Integer.valueOf(codeId.substring(codeId.length() - 4, codeId.length())).intValue() + 1;
-                        codeId = codeId.substring(0, codeId.length() - 4) + String.valueOf(num);
-                        complatGroup.setCodeid(codeId); //存入机构编码
-                        complatGroup.setPid(pId);  //保存pid
-                        complatGroup = complatGroupService.save(complatGroup);
-                        returnMsg("success", "保存成功", request);
-                    }
-                } else {//如果上级机构不存在，即pid=null
-                    boolean isExist = false;
-                    List<ComplatGroup> group = complatGroupService.findByNoPid();
-                    for (ComplatGroup c : group) {
-                        if (c.getName().equals(name)) {
-                            isExist = true;
-                        }
-                    }
-                    if (isExist) {
-                        returnMsg("error", "保存失败,机构名称重复", request);
-                    } else {
-                        String lastCodeId = group.get(0).getCodeid();
-                        Integer num = Integer.valueOf("1" + lastCodeId) + 1;
-                        String codeId = String.valueOf(num).substring(1, lastCodeId.length() + 1);
-                        complatGroup.setCodeid(codeId);
-                        complatGroup = complatGroupService.save(complatGroup);
-                        returnMsg("success", "保存成功", request);
-                    }
-                }
-                synchronization(complatGroup, 1);//新增同步
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            returnMsg("error", "保存失败", request);
-        } finally {
-            return new ModelAndView("redirect:/uids/complatgroupList");
-        }
-
-    }
-
+			if(StringHelper.isNotBlack(iid)){
+				//编辑状态改变操作状态位（opersign）和修改时间（modifytime）
+				complatGroup.setOpersign(2);
+				complatGroup.setModifytime(Timestamp.valueOf(TimeHelper.getCurrentTime()));
+				//判断修改过后的机构名称是否重复
+				if (complatGroupService.queryNameIsUsed(name, complatGroup.getPid()) && !complatGroup.getName().equals(name)){
+					returnMsg("error", "保存失败,机构名称重复", request);
+				}else{
+					complatGroup = complatGroupService.save(complatGroup);
+					returnMsg("success", "保存成功", request);
+				}
+				synchronization(complatGroup, 2); //编辑同步
+			}else{
+				String pid = request.getParameter("groupid");
+				//新增时将机构名汉字转换成首字母大写保存到pinyin字段中
+				String daPinYin = getPinYinHeadChar(complatGroup.getName());
+				complatGroup.setPinyin(daPinYin);
+				//新增状态改变操作状态位（opersign）和创建时间（modifytime）
+				complatGroup.setOpersign(1);
+				complatGroup.setCreatetime(Timestamp.valueOf(TimeHelper.getCurrentTime()));
+				//判断上级机构是否存在
+			    if (StringHelper.isNotBlack(pid)){//如果上级机构存在的情况，即pid ！= null
+			        Integer pId = Integer.valueOf(pid);
+			        //判断机构是否重复
+			        if (complatGroupService.queryNameIsUsed(name, pId)){
+			        	returnMsg("error", "保存失败,机构名称重复", request);
+			        }else{//如果不重复
+			        	//自动生成机构编码
+			        	List<ComplatGroup> group = complatGroupService.findByPid(Integer.valueOf(pid));
+			        	String codeId = "";
+			        	if(null != group && group.size() > 0){
+			        		codeId = group.get(group.size()-1).getCodeid();
+			        	}
+			        	int num = Integer.valueOf(codeId.substring(codeId.length() - 4, codeId.length())).intValue() + 1;
+			            codeId = codeId.substring(0, codeId.length() - 4) + String.valueOf(num);
+			        	complatGroup.setCodeid(codeId); //存入机构编码
+			        	complatGroup.setPid(pId);  //保存pid
+			        	complatGroup = complatGroupService.save(complatGroup);
+			        	returnMsg("success", "保存成功", request);
+			        }
+			    }else{//如果上级机构不存在，即pid=null
+			        boolean isExist = false;
+			        List<ComplatGroup> group = complatGroupService.findByNoPid();
+			        for(ComplatGroup c : group){
+			        	if(c.getName().equals(name)){
+			        		isExist = true;
+			        	}
+			        }
+			        if(isExist){
+			        	returnMsg("error", "保存失败,机构名称重复", request);
+			        }else{
+			        	String lastCodeId = group.get(0).getCodeid();
+			        	Integer num = Integer.valueOf("1" + lastCodeId) + 1;
+			        	String codeId = String.valueOf(num).substring(1, lastCodeId.length()+1);
+			        	complatGroup.setCodeid(codeId);
+			        	complatGroup = complatGroupService.save(complatGroup);
+			        	returnMsg("success", "保存成功", request);
+			        }
+			     }
+			    synchronization(complatGroup, 1);//新增同步
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			returnMsg("error","保存失败",request);
+		} finally{
+			return  new ModelAndView("redirect:/uids/complatgroupList");
+		}
+		
+	}
+	/**
+	 * 删除用户信息
+	 */
+	@SuppressWarnings("finally")
+	@RequestMapping(value = "/complatgroupDelete", method = RequestMethod.GET)
+	public ModelAndView complatgroupDelete(String iid,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+		try {
+			String[] para=iid.split(",");
+			ComplatGroup complatGroup = null;
+			boolean flag=false;
+			for(int i=0;i<para.length;i++){
+				String mId = para[i].trim();
+				complatGroup = complatGroupService.findByIid(Integer.valueOf(mId));
+				complatGroup.setOpersign(3);//将操作状态位改为3
+				complatGroup.setModifytime(Timestamp.valueOf(TimeHelper.getCurrentTime()));//保存删除时间在同步时使用
+				complatGroup = complatGroupService.save(complatGroup);
+				//检测当前要删除的机构是否有下级机构，有则无法删除
+				List<ComplatGroup> list=new ArrayList<ComplatGroup>();
+				list=complatGroupService.findByPid(Integer.valueOf(mId));
+				if(list.size()>0){
+					flag=false;
+					break;
+				}else{
+					synchronization(complatGroup, 3);//删除同步
+					complatGroupService.delete(complatGroup);
+					flag=true;
+				}				
+			}
+			if(flag){
+				returnMsg("success","删除成功",request);
+			}else{
+				returnMsg("error", "删除失败,该菜单下还有下级机构，请先删除下级机构",request);
+			}	
+		} catch (Exception e) {
+			e.printStackTrace();
+			returnMsg("error", "删除失败",request);			
+		} finally{
+			return  new ModelAndView("redirect:/uids/complatgroupList");
+		}
+		
+	}
+	
+	/**
+	 * 将机构名首字母大写返回
+	 * @author LinCX
+	 * @param str
+	 * @return convert
+	 */
+    public static String getPinYinHeadChar(String str) {  
+        String convert = "";  
+        for (int j = 0; j < str.length(); j++) {  
+            char word = str.charAt(j);  
+            String[] pinyinArray = PinyinHelper.toHanyuPinyinStringArray(word);  
+            if (pinyinArray != null) {  
+                convert += pinyinArray[0].charAt(0);  
+            } else {  
+                convert += word;  
+            }  
+        }  
+        return convert.toUpperCase();  
+    }  
+    
     /**
-     * 删除用户信息
-     */
-    @SuppressWarnings("finally")
-    @RequestMapping(value = "/complatgroupDelete", method = RequestMethod.GET)
-    public ModelAndView complatgroupDelete(String iid, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        try {
-            String[] para = iid.split(",");
-            ComplatGroup complatGroup = null;
-            boolean flag = false;
-            for (int i = 0; i < para.length; i++) {
-                String mId = para[i].trim();
-                complatGroup = complatGroupService.findByKey(mId);
-                complatGroup.setOpersign(3);//将操作状态位改为3
-                complatGroup.setModifytime(Timestamp.valueOf(TimeHelper.getCurrentTime()));//保存删除时间在同步时使用
-                complatGroup = complatGroupService.save(complatGroup);
-                //检测当前要删除的机构是否有下级机构，有则无法删除
-                List<ComplatGroup> list = new ArrayList<ComplatGroup>();
-                list = complatGroupService.findByPid(Integer.valueOf(mId));
-                if (list.size() > 0) {
-                    flag = false;
-                    break;
-                } else {
-                    synchronization(complatGroup, 3);//删除同步
-                    complatGroupService.delete(complatGroup);
-                    flag = true;
-                }
-            }
-            if (flag) {
-                returnMsg("success", "删除成功", request);
-            } else {
-                returnMsg("error", "删除失败,该菜单下还有下级机构，请先删除下级机构", request);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            returnMsg("error", "删除失败", request);
-        } finally {
-            return new ModelAndView("redirect:/uids/complatgroupList");
-        }
-
-    }
-
-    /**
-     * 将机构名首字母大写返回
-     *
-     * @param str
-     * @return convert
-     * @author LinCX
-     */
-    public static String getPinYinHeadChar(String str) {
-        String convert = "";
-        for (int j = 0; j < str.length(); j++) {
-            char word = str.charAt(j);
-            String[] pinyinArray = PinyinHelper.toHanyuPinyinStringArray(word);
-            if (pinyinArray != null) {
-                convert += pinyinArray[0].charAt(0);
-            } else {
-                convert += word;
-            }
-        }
-        return convert.toUpperCase();
-    }
-
-    /**
-     * 数据导入
-     *
-     * @param file
-     * @param request
-     * @param response
-     * @return
-     * @throws Exception
-     * @RequestParam(value="excelFile")MultipartFile multipartFile,
-     */
-    @RequestMapping(value = "/complatgroupImport", method = RequestMethod.POST)
-    public ModelAndView complatgroupImport(@RequestParam("files") MultipartFile multipartFile, HttpServletRequest request, Model model, HttpServletResponse response) throws Exception {
-        String fileName = multipartFile.getOriginalFilename();
-        LinkedHashMap<String, String> fieldMap = new LinkedHashMap<String, String>();
-        fieldMap.put("0", "name");
-        fieldMap.put("1", "strNodeType");
-        fieldMap.put("2", "suffix");
-        fieldMap.put("3", "groupallname");
-        fieldMap.put("4", "orgcode");
-        fieldMap.put("5", "orgtype");
-        fieldMap.put("6", "strAreaType");
-        fieldMap.put("7", "areacode");
-        fieldMap.put("8", "strIsCombine");
-        fieldMap.put("9", "parentName");
-        fieldMap.put("10", "parentCode");
-        fieldMap.put("11", "spec");
-        List<ComplatGroup> group = ExcelUtil.readXls(fileName, multipartFile.getInputStream(), ComplatGroup.class, fieldMap);
-
-        int row = 1;
-        boolean flag = true;
-        String strRow = "";
-        try {
-            for (ComplatGroup complatGroup : group) {
-                if (StringHelper.isNotBlack(complatGroup.getName()) && StringHelper.isNotBlack(complatGroup.getParentCode())) {
-                    if (complatGroup.getStrNodeType().equals("区域")) {
-                        complatGroup.setNodetype(Integer.valueOf(1));
-                    } else if (complatGroup.getStrNodeType().equals("单位")) {
-                        complatGroup.setNodetype(Integer.valueOf(2));
-                    } else if (complatGroup.getStrNodeType().equals("部门或处室")) {
-                        complatGroup.setNodetype(Integer.valueOf(3));
-                    }
-                    if (complatGroup.getStrAreaType().equals("省级")) {
-                        complatGroup.setAreatype(Integer.valueOf(1));
-                    } else if ((complatGroup.getStrAreaType().equals("市（州）级")) || (complatGroup.getStrAreaType().equals("市(州)级"))) {
-                        complatGroup.setAreatype(Integer.valueOf(2));
-                    } else if (complatGroup.getStrAreaType().equals("区县")) {
-                        complatGroup.setAreatype(Integer.valueOf(3));
-                    } else if (complatGroup.getStrAreaType().equals("乡镇街道")) {
-                        complatGroup.setAreatype(Integer.valueOf(4));
-                    } else if (complatGroup.getStrAreaType().equals("其他")) {
-                        complatGroup.setAreatype(Integer.valueOf(5));
-                    }
-                    if (complatGroup.getStrIsCombine().equals("否")) {
-                        complatGroup.setIscombine(Integer.valueOf(0));
-                    } else if (complatGroup.getStrIsCombine().equals("是")) {
-                        complatGroup.setIscombine(Integer.valueOf(1));
-                    }
-                    String daPinYin = getPinYinHeadChar(complatGroup.getName());
-                    complatGroup.setPinyin(daPinYin);
-                    complatGroup.setCreatetime(Timestamp.valueOf(TimeHelper.getCurrentTime()));
-                    complatGroup.setOpersign(Integer.valueOf(1));
-                    complatGroup.setSynState(Integer.valueOf(2));
-                    String parentCode = complatGroup.getParentCode();
-                    String name = complatGroup.getName();
-                    Integer pId = complatGroupService.findByCodeid(parentCode).getIid();
-                    //进行重名校验
-                    if (complatGroupService.queryNameIsUsed(name, pId)) {
-                        flag = false;
-                        strRow = "第<" + row + ">行数据，机构名重复！";
-                        break;
-                    } else {
-                        String codeId = complatGroupService.findByIid(pId).getCodeid() + "001";
-                        while (codeId.compareTo(codeId + "001") < 0) {
-                            if (complatGroupService.findByCodeid(codeId) == null) {
-                                break;
-                            }
-                            int num = Integer.valueOf(codeId.substring(codeId.length() - 4, codeId.length())).intValue() + 1;
-                            codeId = codeId.substring(0, codeId.length() - 4) + String.valueOf(num);
-                        }
-                        complatGroup.setCodeid(codeId);
-                        complatGroup.setPid(pId);
-                        complatGroup = complatGroupService.save(complatGroup);
-                    }
-                    synchronization(complatGroup, 1);//新增同步
-                } else {
-                    flag = false;
-                    strRow = "第<" + row + ">行数据，机构名或上级机构编码不能为空！";
-                    break;
-                }
-                row++;
-            }
-            if (flag) {
-                returnMsg("success", "导入成功", request);
-            } else {
-                returnMsg("error", "导入失败," + strRow, request);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            returnMsg("error", "导入失败", request);
-        }
-        return new ModelAndView("redirect:/uids/complatgroupList");
-    }
-
+	 * 数据导入
+	 * 
+	 * @param file
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 * @RequestParam(value="excelFile")MultipartFile multipartFile,
+	 */
+	@RequestMapping(value = "/complatgroupImport", method = RequestMethod.POST)
+	public void complatgroupImport(@RequestParam("files")MultipartFile multipartFile,HttpServletRequest request,Model model,HttpServletResponse response) throws Exception {				      
+		String fileName = multipartFile.getOriginalFilename();	
+		LinkedHashMap<String, String> fieldMap = new LinkedHashMap<String, String>();
+		fieldMap.put("0", "name");
+	    fieldMap.put("1", "strNodeType");
+	    fieldMap.put("2", "suffix");
+	    fieldMap.put("3", "groupallname");
+	    fieldMap.put("4", "orgcode");
+	    fieldMap.put("5", "orgtype");
+	    fieldMap.put("6", "strAreaType");
+	    fieldMap.put("7", "areacode");
+	    fieldMap.put("8", "strIsCombine");
+	    fieldMap.put("9", "parentName");
+	    fieldMap.put("10", "parentCode");
+	    fieldMap.put("11", "spec");
+	    List<ComplatGroup> group = ExcelUtil.readXls(fileName, multipartFile.getInputStream(), ComplatGroup.class, fieldMap);
+	    
+	    int row = 1;
+	    boolean flag = true;
+	    String strRow = "";
+		try {
+			for (ComplatGroup complatGroup : group) {
+				if (StringHelper.isNotBlack(complatGroup.getName()) && StringHelper.isNotBlack(complatGroup.getParentCode())) {
+						if (complatGroup.getStrNodeType().equals("区域")) {
+							complatGroup.setNodetype(Integer.valueOf(1));
+						} else if (complatGroup.getStrNodeType().equals("单位")) {
+							complatGroup.setNodetype(Integer.valueOf(2));
+						} else if (complatGroup.getStrNodeType().equals("部门或处室")) {
+							complatGroup.setNodetype(Integer.valueOf(3));
+						}
+						if (complatGroup.getStrAreaType().equals("省级")) {
+							complatGroup.setAreatype(Integer.valueOf(1));
+						} else if ((complatGroup.getStrAreaType().equals("市（州）级"))|| (complatGroup.getStrAreaType().equals("市(州)级"))) {
+							complatGroup.setAreatype(Integer.valueOf(2));
+						} else if (complatGroup.getStrAreaType().equals("区县")) {
+							complatGroup.setAreatype(Integer.valueOf(3));
+						} else if (complatGroup.getStrAreaType().equals("乡镇街道")) {
+							complatGroup.setAreatype(Integer.valueOf(4));
+						} else if (complatGroup.getStrAreaType().equals("其他")) {
+							complatGroup.setAreatype(Integer.valueOf(5));
+						}
+						if (complatGroup.getStrIsCombine().equals("否")) {
+							complatGroup.setIscombine(Integer.valueOf(0));
+						} else if (complatGroup.getStrIsCombine().equals("是")) {
+							complatGroup.setIscombine(Integer.valueOf(1));
+						}
+						String daPinYin = getPinYinHeadChar(complatGroup.getName());
+						complatGroup.setPinyin(daPinYin);
+						complatGroup.setCreatetime(Timestamp.valueOf(TimeHelper.getCurrentTime()));
+						complatGroup.setOpersign(Integer.valueOf(1));
+						complatGroup.setSynState(Integer.valueOf(2));
+						String parentCode = complatGroup.getParentCode();
+						String name = complatGroup.getName();
+							Integer pId = complatGroupService.findByCodeid(parentCode).getIid();
+							//进行重名校验
+							if (complatGroupService.queryNameIsUsed(name, pId)) {
+								flag = false;
+								strRow = "第<" + row + ">行数据，机构名重复！";
+								break;
+							} else {
+								String codeId = complatGroupService.findByIid(pId).getCodeid() + "001";
+								while (codeId.compareTo(codeId + "001") < 0) {
+									if (complatGroupService.findByCodeid(codeId) == null) {
+										break;
+									}
+									int num = Integer.valueOf(codeId.substring(codeId.length()-4,codeId.length())).intValue() + 1;
+									codeId = codeId.substring(0,codeId.length() - 4) + String.valueOf(num);
+								}
+								complatGroup.setCodeid(codeId);
+								complatGroup.setPid(pId);
+								complatGroup = complatGroupService.save(complatGroup);
+							}
+							synchronization(complatGroup, 1);//新增同步
+				} else {
+					flag = false;
+					strRow ="第<" + row + ">行数据，机构名或上级机构编码不能为空！";
+					break;
+				}
+				row++;
+			}
+			if(flag){
+				returnMsg("success","导入成功",request);
+			}else{
+				returnMsg("error", "导入失败," + strRow ,request);
+			}
+		} catch (Exception e) {
+		e.printStackTrace();
+		returnMsg("error", "导入失败",request);
+		}
+	}
+	
     /**
      * excel文件导出
      */
-    @RequestMapping(value = "/complatgroupExport", method = RequestMethod.GET)
-    public void complatgroupExport(String iid, Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        try {
-            String sId = request.getParameter("sId");
-            String[] para = sId.split(",");
-            String fileName = "机构列表";
-            Map<String, Object> map = new HashMap<String, Object>();
-            List headList = new ArrayList();//表头数据
-            headList.add("机构名称");
-            headList.add("节点类型");
-            headList.add("机构编码");
-            headList.add("机构后缀");
-            headList.add("机构全名");
-            headList.add("组织机构代码");
-            headList.add("区域类型");
-            headList.add("区域编码");
-            headList.add("上级机构名称");
-            headList.add("上级机构编码");
-            headList.add("机构描述");
-            Workbook wb = new XSSFWorkbook();  // 导出 Excel为2007 工作簿对象
-            List dataList = new ArrayList();
-            for (int i = 0; i < para.length; i++) {
-                String mId = para[i].trim();
-                ComplatGroup complatGroup = complatGroupService.findByKey(mId);
-                String nodeType = null;
-                String areaType = null;
-                if (complatGroup.getNodetype() == null) {
-                    nodeType = "";
-                } else if (complatGroup.getNodetype() == 1) {
-                    nodeType = "区域";
-                } else if (complatGroup.getNodetype() == 2) {
-                    nodeType = "单位";
-                } else if (complatGroup.getNodetype() == 3) {
-                    nodeType = "部门或处室";
-                } else {
-                    nodeType = "";
-                }
-                if (complatGroup.getAreatype() == null) {
-                    areaType = "";
-                } else if (complatGroup.getAreatype() == 1) {
-                    areaType = "省级";
-                } else if (complatGroup.getAreatype() == 2) {
-                    areaType = "市（州）级";
-                } else if (complatGroup.getAreatype() == 3) {
-                    areaType = "区县";
-                } else if (complatGroup.getAreatype() == 4) {
-                    areaType = "乡镇街道";
-                } else if (complatGroup.getAreatype() == 5) {
-                    areaType = "其他";
-                } else {
-                    areaType = "";
-                }
-                TreeMap<String, Object> treeMap = new TreeMap<String, Object>();
-                treeMap.put("1", complatGroup.getName());
-                treeMap.put("2", nodeType);
-                treeMap.put("3", complatGroup.getCodeid());
-                treeMap.put("4", complatGroup.getSuffix());
-                treeMap.put("5", complatGroup.getGroupallname());
-                treeMap.put("6", complatGroup.getOrgcode());
-                treeMap.put("7", areaType);
-                treeMap.put("8", complatGroup.getAreacode());
-                if (complatGroup.getPid() != null) {
-                    treeMap.put("9", complatGroupService.findByIid(complatGroup.getPid()).getName());
-                    treeMap.put("91", complatGroupService.findByIid(complatGroup.getPid()).getCodeid());
-                } else {
-                    treeMap.put("9", "");
-                    treeMap.put("91", "");
-                }
-                treeMap.put("92", complatGroup.getSpec());
-                dataList.add(treeMap);
-            }
-            map.put(ExcelUtil.HEADERINFO, headList);
-            map.put(ExcelUtil.DATAINFON, dataList);
-            ExcelUtil.writeExcel(map, wb, response, fileName);
-        } catch (Exception e) {
-            e.printStackTrace();
-            returnMsg("error", "导出失败", request);
-        }
-    }
+	@RequestMapping(value = "/complatgroupExport", method = RequestMethod.GET)
+	public void complatgroupExport(String iid,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+		try{
+			String sId = request.getParameter("sId");
+			String[] para = sId.split(",");		
+			String fileName = "机构列表";
+			Map<String,Object> map = new HashMap<String,Object>(); 
+			List headList = new ArrayList();//表头数据  
+	        headList.add("机构名称");
+	        headList.add("节点类型");
+	        headList.add("机构编码");
+	        headList.add("机构后缀");
+	        headList.add("机构全名");
+	        headList.add("组织机构代码");
+	        headList.add("区域类型");
+	        headList.add("区域编码");
+	        headList.add("上级机构名称");
+	        headList.add("上级机构编码");
+	        headList.add("机构描述");
+			Workbook wb = new XSSFWorkbook();  // 导出 Excel为2007 工作簿对象  
+			List dataList = new ArrayList();
+			for(int i=0;i<para.length;i++){
+				String mId = para[i].trim();
+				ComplatGroup complatGroup = complatGroupService.findByIid(Integer.valueOf(mId));
+				String nodeType = null;
+				String areaType = null;
+				if(complatGroup.getNodetype() == null){
+					nodeType = "";
+				}else if(complatGroup.getNodetype() == 1){
+					nodeType = "区域";
+				}else if(complatGroup.getNodetype() == 2){
+					nodeType = "单位";
+				}else if(complatGroup.getNodetype() == 3){
+					nodeType = "部门或处室";
+				}else{
+					nodeType = "";
+				}
+				if(complatGroup.getAreatype() == null){
+					areaType = "";
+				}else if(complatGroup.getAreatype() == 1){
+					areaType = "省级";
+				}else if(complatGroup.getAreatype() == 2){
+					areaType = "市（州）级";
+				}else if(complatGroup.getAreatype() == 3){
+					areaType = "区县";
+				}else if(complatGroup.getAreatype() == 4){
+					areaType = "乡镇街道";
+				}else if(complatGroup.getAreatype() == 5){
+					areaType = "其他";
+				}else{
+					areaType = "";
+				}
+				TreeMap<String,Object> treeMap = new TreeMap<String, Object>();
+				treeMap.put("1", complatGroup.getName());
+				treeMap.put("2", nodeType);
+				treeMap.put("3", complatGroup.getCodeid());
+				treeMap.put("4", complatGroup.getSuffix());	
+				treeMap.put("5", complatGroup.getGroupallname());
+				treeMap.put("6", complatGroup.getOrgcode());
+				treeMap.put("7", areaType);
+				treeMap.put("8", complatGroup.getAreacode());
+				if(complatGroup.getPid() != null){
+					treeMap.put("9", complatGroupService.findByIid(complatGroup.getPid()).getName());
+					treeMap.put("91", complatGroupService.findByIid(complatGroup.getPid()).getCodeid());
+				}else{
+					treeMap.put("9", "");
+					treeMap.put("91", "");
+				}
+				treeMap.put("92", complatGroup.getSpec());			
+				dataList.add(treeMap);
+			}
+			map.put(ExcelUtil.HEADERINFO, headList);  
+	        map.put(ExcelUtil.DATAINFON, dataList); 
+	        ExcelUtil.writeExcel(map, wb,response,fileName);
+		} catch (Exception e) {
+			e.printStackTrace();
+			returnMsg("error", "导出失败",request);			
+		} 
+	}
 
     /**
      * 加载机构区域编码页面
@@ -740,11 +739,7 @@ public class ComplatGroupController extends BaseController {
                     map.put("tld", String.valueOf(complatGroup.getIid()));
                     map.put("viewtype", "1");
                     map.put("regiontype", "1");
-                    if(complatGroup.getNodetype()==1){
-                        map.put("open", true);
-                    }else {
-                        map.put("open", false);
-                    }
+					map.put("open", true);
 //                    map.put("seq", String.valueOf(complatGroup.getType()));
                     treeList.add(map);
                 }

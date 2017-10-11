@@ -1,6 +1,7 @@
 package com.gsww.uids.controller;
 
 import java.io.PrintWriter;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -47,6 +48,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.gsww.jup.controller.BaseController;
 import com.gsww.jup.entity.sys.SysUserSession;
 import com.gsww.jup.util.ExcelUtil;
+import com.gsww.jup.util.JSONUtil;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.jup.util.StringHelper;
 import com.gsww.jup.util.TimeHelper;
@@ -190,6 +192,7 @@ public class ComplatUserController extends BaseController {
 			String groupName = request.getParameter("groupname");
 			model.addAttribute("groupName", groupName);
 			model.addAttribute("orgId", orgId);
+			model.addAttribute("groupid", orgId);
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -277,7 +280,7 @@ public class ComplatUserController extends BaseController {
             String pwd;			
 			if (complatUser != null) {	
 				String iid = String.valueOf(complatUser.getIid());
-				if (iid == null || iid.length() <= 0) {	
+				if (StringUtils.isNotBlank(iid)) {	
 					pwd=complatUser.getPwd();
 					if(level=="strong"||level.equals("strong")){
 						//对登录全名做处理
@@ -291,11 +294,13 @@ public class ComplatUserController extends BaseController {
 						complatUser.setSynState(0);
 						complatUser.setEnable(0); // 是否禁用
 						Date d = new Date();
-						complatUser.setCreatetime(d);// 创建时间
-						complatUser.setAccesstime(d);//访问时间
+						complatUser.setCreatetime(Timestamp.valueOf(TimeHelper.getCurrentTime()));// 创建时间
+						complatUser.setModifytime(Timestamp.valueOf(TimeHelper.getCurrentTime()));//修改时间
+						//complatUser.setAccesstime(d);//访问时间
 						//对密码进行加密										
 						String p = Md5Util.md5encode(pwd);
 						complatUser.setPwd(p);
+						synchronization(complatUser, 1);//新增同步
 						complatUserService.save(complatUser);	
 						//身份证号处理 JisUserdetail
 						String cardId = request.getParameter("cardid");
@@ -307,15 +312,15 @@ public class ComplatUserController extends BaseController {
 							jisUser.setIid(userId);
 							jisUser.setUserid(userId);
 							jisUserdetailService.save(jisUser);
-						}else{
+						}
+						/*else{
 							//扩展属性
 							Map<String,String> userMap = this.saveExendsAttr(userId, request);
 							//对身份证号和用户扩展属
 							jisUserdetailService.update(jisUserdetail.getIid(),cardId,userMap);
-						}
+						}*/
 						
 						
-						complatUserSyn(complatUser,1,userId,request,response);
 						
 						returnMsg("success", "保存成功", request);	
 						String desc = sysUserSession.getUserName() + "新增政府用户:" + complatUser.getName(); 				
@@ -337,16 +342,13 @@ public class ComplatUserController extends BaseController {
 						String p = Md5Util.md5encode(pwd);
 						complatUser.setPwd(p);
 						//注册时间
-						String time = TimeHelper.getCurrentTime();
-						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-						Date modifyTime = sdf.parse(time);
-						complatUser.setModifytime(modifyTime);
-						Date d = new Date();
-						complatUser.setCreatetime(d);// 创建时间
+						complatUser.setCreatetime(Timestamp.valueOf(TimeHelper.getCurrentTime()));// 创建时间
+						complatUser.setModifytime(Timestamp.valueOf(TimeHelper.getCurrentTime()));//修改时间
 						//转换保存创建时间
 						userId = complatUser.getIid();
 						complatUser.setEnable(1); // 是否禁用	
 						complatUser.setOpersign(2);//更新操作状态
+						synchronization(complatUser, 2);//修改同步
 						complatUserService.save(complatUser);
 						
 						//身份证号处理 JisUserdetail
@@ -358,15 +360,16 @@ public class ComplatUserController extends BaseController {
 							jisUser.setIid(userId);
 							jisUser.setUserid(userId);
 							jisUserdetailService.save(jisUser);
-						}else{
+						}
+						/*else{
 							//扩展属性
 							Map<String,String> userMap = this.saveExendsAttr(userId, request);
 							//对身份证号和用户扩展属性update
 							jisUserdetailService.update(jisUserdetail.getIid(),cardId,userMap);
 						}
+						*/
 						
 						
-						complatUserSyn(complatUser,2,userId,request,response);
 						
 						
 						
@@ -411,15 +414,10 @@ public class ComplatUserController extends BaseController {
 				//Integer corId = Integer.parseInt(para[i].trim());
 				Integer userId = Integer.parseInt(para[i].trim());
 				complatUser = complatUserService.findByKey(userId);
+				complatUser.setModifytime(Timestamp.valueOf(TimeHelper.getCurrentTime()));//修改时间
 				if (complatUser != null) {
-					complatUserService.delete(complatUser);
-					
-					
-					
-					complatUserSyn(complatUser,3,userId,request,response);
-					
-					
-					
+					synchronization(complatUser, 3);//删除同步
+					complatUserService.delete(complatUser);					
 					returnMsg("success", "删除成功", request);
 				}
 
@@ -656,10 +654,8 @@ public class ComplatUserController extends BaseController {
 	 * @author <a href=" ">yaoxi</a>
 	 */
 	@RequestMapping(value = "/userSetUpEdit", method = RequestMethod.GET)
-	public ModelAndView userSetUpEdit(Model model, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
-
-		ModelAndView mav = new ModelAndView("users/sysview/user_setup");
+	public String userSetUpEdit(Model model, HttpServletRequest request,
+			HttpServletResponse response,String isFront) throws Exception {
 		try {
 			// 获取系统当前登录用户
 			SysUserSession sysUserSession = (SysUserSession) request
@@ -668,17 +664,19 @@ public class ComplatUserController extends BaseController {
 			if (StringHelper.isNotBlack(sysUserSession.getAccountId())) {
 
 				// 查询用户信息
-				ComplatUser complatUser = complatUserService.findByKey(Integer
+				ComplatUser complatUserEdit = complatUserService.findByKey(Integer
 						.parseInt(userSid));
-				model.addAttribute("complatUser", complatUser);
-
+				String pwd = Md5Util.md5decode(complatUserEdit.getPwd());
+				model.addAttribute("pwd",pwd);
+				model.addAttribute("complatUser",complatUserEdit);
+				
 				// 查询用户身份证号
 				JisUserdetail userDetail = jisUserdetailService
 						.findByUserid(Integer.parseInt(userSid));
 				model.addAttribute("userDetail", userDetail);
 				// 根据用户ID查询所属机构
 				ComplatGroup complatGroup = complatGroupService
-						.findByIid(complatUser.getGroupid());
+						.findByIid(complatUserEdit.getGroupid());
 				model.addAttribute("complatGroup", complatGroup);
 
 				// 根据用户ID从ComplatRolerelation获取对应的角色ID，再根据角色ID从ComplatRole中获取对应的角色
@@ -697,7 +695,11 @@ public class ComplatUserController extends BaseController {
 		} catch (Exception exception) {
 			exception.printStackTrace();
 		}
-		return mav;
+		if("1".equals(isFront)){
+			return "users/sysview/frontIndex_user_setup";
+		}else{
+			return "users/sysview/user_setup";
+		}
 	}
 
 	/**
@@ -722,7 +724,7 @@ public class ComplatUserController extends BaseController {
 				if(complatUser != null){
 					userId = complatUser.getIid();
 					String name = complatUser.getName();
-					String pwd = Md5Util.md5encode(complatUser.getPwd());
+					String pwd = Md5Util.md5encode(request.getParameter("pwd"));
 					String headShip = complatUser.getHeadship();
 					String phone = complatUser.getPhone();//固定电话
 					String mobile = complatUser.getMobile();//移动电话
@@ -800,11 +802,9 @@ public class ComplatUserController extends BaseController {
 							jisSynEntity.setHometel(complatUser.getPhone());
 							jisSynEntity.setHeadShip(complatUser.getHeadship());
 							jisSynEntity.setNdlogin("");
-							//yaox
-							//JSONArray array = JSONArray.fromObject(jisSynEntity);
+							
+							//转实体为json格式，发送报文
 							net.sf.json.JSONObject object = net.sf.json.JSONObject.fromObject(jisSynEntity);
-							PrintWriter out = response.getWriter();
-							//String json = array.toString();
 							String json = object.toString();
 							JisSysviewDetail sysViewDetail = new JisSysviewDetail();
 							sysViewDetail.setTranscationId(sysView.getTranscationId());
@@ -951,10 +951,6 @@ public class ComplatUserController extends BaseController {
 				if (complatUser.getEnable() == 0) {
 					complatUser.setEnable(1);
 					complatUserService.save(complatUser);
-					
-					complatUserSyn(complatUser,4,userId,request,response);
-					
-					
 					returnMsg("success", "启用成功", request);
 				} else if (complatUser.getEnable() == 1) {
 					returnMsg("success", "已启用", request);
@@ -998,11 +994,6 @@ public class ComplatUserController extends BaseController {
 				if (complatUser.getEnable() == 1) {
 					complatUser.setEnable(0);
 					complatUserService.save(complatUser);
-					
-					
-					complatUserSyn(complatUser,5,userId,request,response);
-					
-					
 					returnMsg("success", "停用成功", request);
 				} else if (complatUser.getEnable() == 0) {
 					returnMsg("success", "已停用", request);
@@ -1180,91 +1171,98 @@ public class ComplatUserController extends BaseController {
 	 * @param response
 	 * @return
 	 */
-	public void complatUserSyn (ComplatUser complatUser,int type,int userId,HttpServletRequest request,HttpServletResponse response) throws Exception{
-		JisUserdetail jisUserdetail = new  JisUserdetail();
+	public void synchronization(ComplatUser complatUser, int type) throws Exception{
 		try{
-			//同步
-			List<Map<String,Object>> syListMap = complatUserService.synchronizeData(userId);
-			if(syListMap.size() > 0){
-				for(int i=0;i<syListMap.size();i++){
-					
-					Random random = new Random();  
-			        int rannum = (int) (random.nextDouble() * (99999 - 10000 + 1)) + 10000;// 获取5位随机数 
-					JisSysview sysView = new JisSysview();
-					Map<String,Object> syMap = syListMap.get(i);
-					for(Map.Entry<String, Object> entry :syMap.entrySet()){
-						String key = entry.getKey().toString();
-						if(key.equals("userId")){
-							sysView.setObjectid(entry.getValue().toString());
-						}else if(key.equals("loginname")){
-							sysView.setObjectname(entry.getValue().toString());
-						}else if(key.equals("codeid")){
-							sysView.setCodeid(entry.getValue().toString());
-						}else{
-							sysView.setAppid(Integer.parseInt(entry.getValue().toString()));
-						}
-					}
-					String Operatetype="";
-					if(type==1){//1.新增2.编辑3.删除4.启用5.停用
-						sysView.setOperatetype("新增用户");
-					}else if(type==2){
-						sysView.setOperatetype("修改用户");
-					}else if(type==3){
-						sysView.setOperatetype("删除用户");
-					}else if(type==4){
-						sysView.setOperatetype("启用用户");
-					}else if(type==5){
-						sysView.setOperatetype("停用用户");
-					}
-					sysView.setResult("T");//T-用户同步
-					sysView.setSynctime(TimeHelper.getCurrentTime());
-					sysView.setState("C");//C-验证
-					sysView.setOptresult(1);//1-已同步
-					
-					sysView.setTimes(1);
-					sysView.setTranscationId(TimeHelper.getCurrentCompactTime()+rannum);
-					jisSysviewService.save(sysView);
-					
-					//同步详情表
-					JisApplication app = jisApplicationService.findByKey(sysView.getAppid());
-					JisSynEntity jisSynEntity = new JisSynEntity();
-					jisSynEntity.setAppid(sysView.getAppid());
-					jisSynEntity.setAppName(app.getName());
-					jisSynEntity.setState("T");
-					jisSynEntity.setGroupCode(sysView.getCodeid());
-					ComplatGroup group = complatGroupService.findByCodeid(sysView.getCodeid());
-					jisSynEntity.setGroupName(group.getName());
-					jisSynEntity.setParCode(group.getParentCode());
-					jisSynEntity.setParName(group.getParentName());
-					jisSynEntity.setAllParCode("");
-					jisSynEntity.setAllParName("");
-					jisSynEntity.setLoginName(complatUser.getLoginname());
-					jisSynEntity.setLoginPass(complatUser.getPwd());
-					jisSynEntity.setUserName(complatUser.getName());
-					jisSynEntity.setCardId(jisUserdetail.getCardid());
-					jisSynEntity.setComptel("");//办公电话
-					jisSynEntity.setCompfax(complatUser.getFax());
-					jisSynEntity.setEmail(complatUser.getEmail());
-					jisSynEntity.setQq(complatUser.getQq());
-					jisSynEntity.setMsn(complatUser.getMsn());
-					jisSynEntity.setMobile(complatUser.getMobile());
-					jisSynEntity.setHometel(complatUser.getPhone());
-					jisSynEntity.setHeadShip(complatUser.getHeadship());
-					jisSynEntity.setNdlogin("");
-					//JSONArray array = JSONArray.fromObject(jisSynEntity);
-					net.sf.json.JSONObject object = net.sf.json.JSONObject.fromObject(jisSynEntity);
-					PrintWriter out = response.getWriter();
-					//String json = array.toString();
-					String json = object.toString();
-					JisSysviewDetail sysViewDetail = new JisSysviewDetail();
-					sysViewDetail.setTranscationId(sysView.getTranscationId());
-					sysViewDetail.setSendmsg(json);
-					jisSysviewDetailService.save(sysViewDetail);
-				}
+			List<JisApplication> list = jisApplicationService.findByIsSyncGroupNotNullAndLoginType(0); //查询支持同步的应用
+			Random random = new Random(); //初始化随机数
+			String data = TimeHelper.getCurrentCompactTime(); //获得同步时间
+			String synctime = ""; //记录修改或新增的时间
+			String operatetype = ""; //操作类型
+			//判断同步类型,根据同步类型的不同来获取不同的数据
+			if(type == 1){
+				operatetype = "新增用户";
+				synctime = String.valueOf(complatUser.getCreatetime());
+			}else if(type == 2){
+				operatetype = "修改用户";
+				synctime = String.valueOf(complatUser.getModifytime());
+			}else if(type == 3){
+				operatetype = "删除用户";
+				synctime = String.valueOf(complatUser.getModifytime());
 			}
-		}catch(Exception e){
-			e.printStackTrace();
+			//将所有支持同步的应用进行同步
+			for(JisApplication jisApplication : list){
+				JisSysview jisSysview = new JisSysview();
+				jisSysview.setObjectid(String.valueOf(complatUser.getIid()));
+				jisSysview.setObjectname(complatUser.getName());
+				jisSysview.setState("C");
+				jisSysview.setResult("T");
+				jisSysview.setOptresult(1);
+				jisSysview.setSynctime(synctime);
+				jisSysview.setAppid(jisApplication.getIid());
+				jisSysview.setCodeid(complatUser.getGroupid().toString());
+				jisSysview.setTimes(1);
+				jisSysview.setOperatetype(operatetype);
+				int rannum = (int) (random.nextDouble() * (99999 - 10000 + 1)) + 10000;// 获取5位随机数
+				jisSysview.setTranscationId(data + String.valueOf(rannum));
+				jisSysviewService.save(jisSysview);
+				syncDetail(complatUser, jisApplication, jisSysview);
+			}
+		}catch(Exception ex){
+			ex.printStackTrace();
 		}
+	}
+	
+	
+	
+	
+	/**
+	 * 同步数据到表jis_sysview_detail
+	 * @param complatGroup
+	 * @param jisApplication
+	 * @throws Exception
+	 */
+	public void syncDetail(ComplatUser complatUser, JisApplication jisApplication, JisSysview sysView) throws Exception{
 		
+		try{
+			Map<String,Object> jsonMap = new HashMap<String,Object>();
+			ComplatGroup group = complatGroupService.findByCodeid(sysView.getCodeid());
+			if(group==null){
+				jsonMap.put("groupName","");
+			}else{
+				jsonMap.put("groupName",group.getName());
+			}			
+			jsonMap.put("allParCode", "");
+			jsonMap.put("allParName", "");
+			
+			jsonMap.put("appName",jisApplication.getName());
+			jsonMap.put("cardId","");
+			jsonMap.put("appid",sysView.getAppid());
+			JisUserdetail jisUserdetail = new  JisUserdetail();
+			jsonMap.put("compfax",complatUser.getFax());
+			jsonMap.put("comptel", "");
+			jsonMap.put("email",complatUser.getEmail());
+			jsonMap.put("groupCode",sysView.getCodeid());
+			jsonMap.put("groupName","");
+			jsonMap.put("headShip",complatUser.getHeadship());
+			jsonMap.put("hometel",complatUser.getPhone());
+			jsonMap.put("id", "");
+			jsonMap.put("loginName",complatUser.getLoginname());
+			jsonMap.put("loginPass",complatUser.getPwd());
+			jsonMap.put("mobile", complatUser.getMobile());
+			jsonMap.put("msn","");
+			jsonMap.put("ndlogin", "");
+			jsonMap.put("parCode", "");
+			jsonMap.put("parName", "");
+			jsonMap.put("qq", complatUser.getQq());
+			jsonMap.put("state","T");
+			jsonMap.put("userName", complatUser.getName());
+			String detail = JSONUtil.writeMapJSON(jsonMap);
+			JisSysviewDetail jisSysviewDetail = new JisSysviewDetail();
+			jisSysviewDetail.setSendmsg(detail);
+			jisSysviewDetail.setTranscationId(sysView.getTranscationId());
+			jisSysviewDetailService.save(jisSysviewDetail);
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
 	}
 }

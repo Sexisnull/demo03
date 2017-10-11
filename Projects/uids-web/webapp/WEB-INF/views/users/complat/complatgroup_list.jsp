@@ -26,144 +26,68 @@ padding: 3px 8px;
 height: 30px;
 width: 167px;
 }
-.search-content table td input[type=text] {
-    border: 1px solid #dddddd;
-    padding: 3px 8px;
-    height: 22px;
-    line-height: 22px;
-    width: 89%;
-}
-.dialog{
-	display:none;
-	position:absolute;
-	left:250px;
-	top:100px;
-	font-size: 18px;
-	width: 600px;
-	height: 225px;
-	background: #f9f9f9;
-	padding: 10px;
-	border-radius: 5px;
-	border: 1px solid #999;
-	z-index:101;
-	
-}
-.dialogtop{
-	height: 30px;
-	position: relative;
-}
-.upload{
-	padding-top: 37px;
-	height: 105px;
-	background: white;
-	border: 1px solid #999;
-	padding-left: 60px;
-}
-.btnarea{
-	text-align: right;
-	height: 37px;
-	border: 1px solid #999;
-	border-top: 0px;
-	padding-top: 7px;
-	padding-right: 37px;
-	cursor: pointer;
-}
-.confirm-btn{
-	display: inline-block;
-	width: 60px;
-	height: 30px;
-	background-color: #42a2f5;
-	color: white;
-	text-align: center;
-	line-height: 30px;
-	border-radius: 2px;
-	cursor: pointer;
-}
-.councel-btn{
-	display: inline-block;
-	width: 60px;
-	height: 30px;
-	background-color: #dfdfdf;
-	text-align: center;
-	line-height: 30px;
-	border-radius: 2px;
-	cursor: pointer;
-}
-.file-btn{
-	display: inline-block;
-	width: 105px;
-	height: 30px;
-	line-height: 30px;
-	background: #5fa60f;
-	border-radius: 2px;
-	color: white;
-	text-align: center;
-	cursor: pointer;
-	padding-left: 4px;
-	padding-right: 4px;
-}
-.download{
-	color: blue;
-	text-decoration: underline;
-	padding-left: 15px;
-}
-.fileinput{
-	width: 1px;
-	height: 0px;
-	outline: none;
-}
-.closeicon{
-text-decoration: none;
-float:right;
-
-}
-a:hover{
-text-decoration: none;
-}
-
-/**遮罩层**/
-
-.mask{
-	display:none;
-   width: 100%; height: 100%; position: fixed; top: 0; 
-	left: 0; right: 0; bottom: 0; background: #000; opacity: 0.3; 
-	filter: alpha(opacity = 30); z-index: 100;
-	}
-
 </style>
 <script type="text/javascript"> 
 //表单校验
-$().ready(function() {
-var outisideUserNameInput=$("#id").val();
-$("#form1").validate({
-	rules: {
-		name : {
-			maxlength: 10
-		},
-	   	groupallname : {
-			maxlength: 64
-		},
-		nodetype : {
-			required: true
-		},
-		areatype : {
-			required: true
-		},
-		areacode : {
-			required: true
-		},
-		suffix : {
-			required: true
-		},
-		spec:{
-	   		maxlength: 255
-	   	},
-	   	submitHandler:function(form){
-			form.submit();
+function checkSubmitForm(){
+		var nameSearch = $("#nameSearch").val();
+		var codeidSearch = $("#codeidSearch").val(); 
+		var orgcodeSearch = $("#orgcodeSearch").val();
+		var areacodeSearch = $("#areacodeSearch").val();
+		if(nameSearch ==  '' || isNumbOrLett1(nameSearch)){
+			if(codeidSearch ==  '' || isNumbOrLett2(codeidSearch)) {
+				if(orgcodeSearch ==  '' || isNumbOrLett3(orgcodeSearch)) {
+				    if(areacodeSearch == '' || isNumbOrLett2(areacodeSearch)) {
+						form1.submit();
+					} else{
+						$.validator.errorShow($("#areacodeSearch"),'只能包括数字');
+					}
+				} else{
+					$.validator.errorShow($("#orgcodeSearch"),'只能包括数字和字母');
+				}
+			} else{
+				$.validator.errorShow($("#codeidSearch"),'只能包括数字');
+			}
+		} else{
+			$.validator.errorShow($("#nameSearch"),'只能包括字母、数字、下划线、中文');
 		}
 	}
-});
-});
+	/*
+	用途：检查输入字符串是否只由汉字、字母、数字组成
+	输入：
+	value：字符串
+	返回：
+	如果通过验证返回true,否则返回false
+	*/
+	function isNumbOrLett1( s ){
+		var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;
+		var re = new RegExp(regu);
+		if (re.test(s)) {
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	function isNumbOrLett2( s ){
+		var regu = /^\d{0,255}$/;
+		var re = new RegExp(regu);
+		if (re.test(s)) {
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	function isNumbOrLett3( s ){
+		var regu = /^([a-zA-Z0-9]+)$/;
+		var re = new RegExp(regu);
+		if (re.test(s)) {
+			return true;
+		}else{
+			return false;
+		}
+	}
 
 	//删除
 	function deleteData() {
@@ -204,15 +128,7 @@ $("#form1").validate({
 		});	
 		
 	});
-	/**搜索表单校验**/
-function checkSubmitForm(){
-	var nameSerach=$("#nameSerach").val();
-	if(nameSerach==''||isChinaOrNumbOrLett(nameSerach)){
-		form1.submit();
-	}else{
-		$.validator.errorShow($("#nameSerach"),'只能包括中英文、数字、@和下划线');
-	}
-}
+	
 $(function(){
 		//阻止按键盘Enter键提交表单
 		var $inp = $('input');
@@ -287,55 +203,6 @@ function beforeClick(treeId, treeNode, clickFlag) {
 function resetform() {
 	$('form').find(':input').not(':button,:hidden,:submit,:reset').val('');
 }
-	
-// 显示文件名在input中
-//弹出层
-function importGroup(){
-    var mybg = document.createElement("div"); 
-	mybg.setAttribute("class","mybg"); 
-	$(".mybg").addClass("mybg");
-    document.body.appendChild(mybg);
-	document.body.style.overflow = "hidden"; 
-	$("#alerttb").show(); 				
-
-}
-
-    	//导入
-	function importFile(){
-	$('#mask').show();
-	$('#importdiv').show();
-	}
-	
-	//关闭弹窗
-	function closeWindow(){
-	$('#mask').hide();
-	$('#importdiv').hide();
-	};
-	//选择文件
-	 var fileBtn = $("#fileupload");
-    fileBtn.on("change", function() {
-        var index = $(this).val().lastIndexOf("\\"); 
-        var sFileName = $(this).val().substr((index + 1));
-
-        $("#filename").val(sFileName);
-    });
-//导入文件验证
-function fileUpload(){
-		var picPath=document.getElementById('excelFile').value;
-		if(picPath==null||picPath==""){
-			alert("请选择要导入的excel文件！");
-			return false ;
-						}
-		var type=picPath.substring(picPath.lastIndexOf(".")+1,picPath.length).toLowerCase();
-		if(type=="xls"||type=="xlsx"){
-			$("#form3").submit();							
-		}else{
-			alert("请上传正确的EXCEL表格文档");
-			document.getElementById("excelFile").value="";
-			return false;
-		}
-			     
-}	
 //机构导出
 function exportGroup() {
 		var paraTypeId=$(".iid").val();
@@ -353,7 +220,7 @@ function exportGroup() {
 				});
 			}
 	}
-
+//机构导入
 function importGroup(){
 	var api = $.dialog({
 		title : '机构管理-机构导出',
@@ -375,29 +242,6 @@ function importGroup(){
 <body>
 <div class="mask" id='mask'></div>
 <div class="list-warper" >
-
-<!-- 导入数据时的弹出层 -->
-   <div  class="dialog" id="importdiv" style="display:none;">
-	<div class="dialogtop">
-	<span>机构导入</span>
-	<i class="closeicon"></i>
-	<a class="ui_close closeicon" href="javascript:void(0);" title="关闭(esc键)" style="display: inline-block;" onclick="closeWindow();">×</a>
-	</div>
-	<form id="form3" name="form3" action="${ctx}/uids/complatgroupImport" method="post" enctype="multipart/form-data">
-		<div class="upload">
-			<label for="fileupload">
-			<input type="file" id="excelFile" class="required" name="excelFile">
-			</label>
-			<a class="download" href="${ctx}/uploadFile/complat/groupList.xlsx">下载参考样例</a>
-		</div>
-		<div class="btnarea">
-			<span class="confirm-btn" onclick="fileUpload()">确认</span>
-			<span class="councel-btn" onclick="closeWindow();">取消</span>
-		</div>
-	</form>
-</div>
-
-
 	<!--列表的面包屑区域-->
 	<div class="position">
 		<ol class="breadcrumb">
@@ -421,19 +265,19 @@ function importGroup(){
 			    <tr>
 					<th style="padding-left: 5px">机构名称:</th>
 					<td width="15%">
-						<input id="name" type="text" class="input" name="search_LIKE_name" value="${sParams['LIKE_name']}"  placeholder="机构名称"/>
+						<input id="nameSearch" type="text" class="input" name="search_LIKE_name" value="${sParams['LIKE_name']}"  placeholder="机构名称"/>
 					</td>
 					<th style="padding-left: 5px">机构编码:</th>
 					<td width="15%">
-              			<input type="text" class="input" name="search_LIKE_codeid" value="${sParams['LIKE_codeid']}"  placeholder="机构编码"/>
+              			<input id="codeidSearch" type="text" class="input" name="search_LIKE_codeid" value="${sParams['LIKE_codeid']}"  placeholder="机构编码"/>
 					</td>
 					<th style="padding-left: 5px">组织机构代码:</th>
 					<td width="15%">
-              			<input type="text" class="input" name="search_LIKE_orgcode" value="${sParams['LIKE_orgcode']}"  placeholder="组织机构代码"/>
+              			<input id="orgcodeSearch" type="text" class="input" name="search_LIKE_orgcode" value="${sParams['LIKE_orgcode']}"  placeholder="组织机构代码"/>
 					</td>
 					<th style="padding-left: 5px">区域代码:</th>
 					<td width="15%">
-              			<input type="text" class="input" name="search_LIKE_areacode" value="${sParams['LIKE_areacode']}" placeholder="区域代码"/>
+              			<input id="areacodeSearch" type="text" class="input" name="search_LIKE_areacode" value="${sParams['LIKE_areacode']}" placeholder="区域代码"/>
 					</td>
 				</tr>
 				<tr height="10px"></tr>
