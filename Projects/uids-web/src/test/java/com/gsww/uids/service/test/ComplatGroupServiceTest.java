@@ -95,8 +95,8 @@ public class ComplatGroupServiceTest {
 	@Test
 	public void findByKey(){
 		try {
-			String key = "128";
-			ComplatGroup complatGroup = complatGroupService.findByKey(key);
+			Integer key = 128;
+			ComplatGroup complatGroup = complatGroupService.findByIid(key);
 			System.out.println("根据主键查找机构信息"+JSONArray.fromObject(complatGroup).toString());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -141,18 +141,18 @@ public class ComplatGroupServiceTest {
 		assertTrue(true);
 	}
 	
-	@Test
-	public void getByName(){
-		try {
-			String name = "林业局";
-			boolean exist = complatGroupService.getByName(name);
-			System.out.println("查找机构是否存在"+exist);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		assertTrue(true);
-	}
-	
+//	@Test
+//	public void getByName(){
+//		try {
+//			String name = "林业局";
+//			boolean exist = complatGroupService.getByName(name);
+//			System.out.println("查找机构是否存在"+exist);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		assertTrue(true);
+//	}
+//	
 
 	@Test
 	public void getComplatGroupList(){

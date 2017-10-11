@@ -115,7 +115,7 @@ public class ComplatGroupController extends BaseController{
 			//查询上级机构名称
 			for(ComplatGroup complatGroup:pageInfo.getContent()){				
 				if(null != complatGroup.getPid()){
-					String parentName = complatGroupService.findByKey(String.valueOf(complatGroup.getPid())).getName();
+					String parentName = complatGroupService.findByIid(complatGroup.getPid()).getName();
 					complatGroup.setParentName(parentName);
 				}
 			}
@@ -263,9 +263,9 @@ public class ComplatGroupController extends BaseController{
 					orderSort=(String)request.getParameter("orderSort");
 				}
 				//将pid转换为parentName在编辑框中显示
-				complatGroup = complatGroupService.findByKey(iid);
+				complatGroup = complatGroupService.findByIid(Integer.valueOf(iid));
 				if(complatGroup.getPid() != null){
-					String parentName = complatGroupService.findByKey(String.valueOf(complatGroup.getPid())).getName();
+					String parentName = complatGroupService.findByIid(complatGroup.getPid()).getName();
 					complatGroup.setParentName(parentName);
 				}
 				model.addAttribute("orderField", orderField);
@@ -372,7 +372,7 @@ public class ComplatGroupController extends BaseController{
 			boolean flag=false;
 			for(int i=0;i<para.length;i++){
 				String mId = para[i].trim();
-				complatGroup = complatGroupService.findByKey(mId);
+				complatGroup = complatGroupService.findByIid(Integer.valueOf(mId));
 				complatGroup.setOpersign(3);//将操作状态位改为3
 				complatGroup.setModifytime(Timestamp.valueOf(TimeHelper.getCurrentTime()));//保存删除时间在同步时使用
 				complatGroup = complatGroupService.save(complatGroup);
@@ -433,7 +433,7 @@ public class ComplatGroupController extends BaseController{
 	 * @RequestParam(value="excelFile")MultipartFile multipartFile,
 	 */
 	@RequestMapping(value = "/complatgroupImport", method = RequestMethod.POST)
-	public ModelAndView complatgroupImport(@RequestParam("files")MultipartFile multipartFile,HttpServletRequest request,Model model,HttpServletResponse response) throws Exception {				      
+	public void complatgroupImport(@RequestParam("files")MultipartFile multipartFile,HttpServletRequest request,Model model,HttpServletResponse response) throws Exception {				      
 		String fileName = multipartFile.getOriginalFilename();	
 		LinkedHashMap<String, String> fieldMap = new LinkedHashMap<String, String>();
 		fieldMap.put("0", "name");
@@ -522,7 +522,6 @@ public class ComplatGroupController extends BaseController{
 		e.printStackTrace();
 		returnMsg("error", "导入失败",request);
 		}
-		return new ModelAndView("redirect:/uids/complatgroupList");
 	}
 	
     /**
@@ -551,7 +550,7 @@ public class ComplatGroupController extends BaseController{
 			List dataList = new ArrayList();
 			for(int i=0;i<para.length;i++){
 				String mId = para[i].trim();
-				ComplatGroup complatGroup = complatGroupService.findByKey(mId);
+				ComplatGroup complatGroup = complatGroupService.findByIid(Integer.valueOf(mId));
 				String nodeType = null;
 				String areaType = null;
 				if(complatGroup.getNodetype() == null){
