@@ -1,7 +1,6 @@
 package com.gsww.uids.controller;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,14 +26,20 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
+import com.gsww.jup.util.JSONUtil;
 import com.gsww.jup.util.PageUtils;
-import com.gsww.jup.util.StringHelper;
 import com.gsww.jup.util.TimeHelper;
 import com.gsww.uids.entity.ComplatGroup;
+import com.gsww.uids.entity.ComplatUser;
 import com.gsww.uids.entity.JisApplication;
 import com.gsww.uids.entity.JisSysview;
+import com.gsww.uids.entity.JisSysviewDetail;
 import com.gsww.uids.service.ComplatGroupService;
+import com.gsww.uids.service.ComplatUserService;
 import com.gsww.uids.service.JisApplicationService;
+import com.gsww.uids.service.JisSysviewDetailService;
+import com.gsww.uids.service.JisSysviewService;
+import com.gsww.uids.service.JisUserdetailService;
 import com.gsww.uids.util.HttpClientUtil;
 /**
  * 应用管理控制器
@@ -50,6 +55,15 @@ public class JisApplicationController extends BaseController{
 	private JisApplicationService jisApplicationService ;
 	@Autowired
 	private ComplatGroupService complatGroupService ;
+	@Autowired
+	private JisSysviewService jisSysviewService;
+	@Autowired
+	private JisSysviewDetailService jisSysviewDetailService;
+	@Autowired
+	private ComplatUserService complatUserService;
+	@Autowired
+	private JisUserdetailService jisUserdetailService;
+	
 	/**
 	 * 获取应用列表
 	 * @param pageNumber
@@ -187,9 +201,9 @@ public class JisApplicationController extends BaseController{
 			if(jisApplication != null){
 				
 				String picName=request.getParameter("picName");
-				String groupid=request.getParameter("groupid");
-				Integer groupId=Integer.parseInt(groupid);
-				jisApplication.setGroupId(groupId);
+				//String groupid=request.getParameter("groupid");
+				//Integer groupId=Integer.parseInt(groupid);
+				//jisApplication.setGroupId(groupId);
 				String uploadFile="/uploads/"+picName;
 				jisApplication.setIcon(uploadFile);
 				jisApplicationService.save(jisApplication);
@@ -300,20 +314,59 @@ public class JisApplicationController extends BaseController{
 		}
 	}
 	
+	/*public static void convertObject() {
+		JisSynEntity jisSynEntity=new JisSynEntity();
+	        
+		jisSynEntity.setName("JSON");
+	        stu.setAge("23");
+	        stu.setAddress("北京市西城区");
 	
+	        //1、使用JSONObject
+	        JSONObject json = JSONObject.fromObject(stu);
+	        //2、使用JSONArray
+	        JSONArray array=JSONArray.fromObject(stu);
+	        
+	        String strJson=json.toString();
+	        String strArray=array.toString();
+	        
+	        System.out.println("strJson:"+strJson);
+	        System.out.println("strArray:"+strArray);
+	}*/
+	
+	
+	/**
+	 * 机构同步
+	 * @param model
+	 * @param groupid2
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/syngroup", method = RequestMethod.GET)
-	public ModelAndView syngroup(Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {		
+	public ModelAndView syngroup(Model model,String groupid2,HttpServletRequest request,HttpServletResponse response)  throws Exception {		
+		ComplatGroup complatGroup=null;
+		String[] ids=null;
+		
 		try {
-			ComplatGroup complatGroup=null;
-			String groupid2=request.getParameter("groupid2");
-			if(StringHelper.isNotBlack(groupid2)){
-				Integer groupId=Integer.parseInt(groupid2);
-				complatGroup=complatGroupService.findByIid(groupId);
+			if(groupid2.lastIndexOf(",")>0){
+				ids=groupid2.substring(0,groupid2.length()-1).split(",");
+			}else{
+				ids=groupid2.split(",");
+			}
+			String syniid=request.getParameter("syniid");
+			Integer appId=Integer.parseInt(syniid);
+			
+			String timeId=TimeHelper.getCurrentCompactTime();
+			String randomId=Integer.toString((int)(Math.random()*100000));
+			
+			for(String id:ids ){
+				complatGroup=complatGroupService.findByIid(Integer.parseInt(id));
+				JisApplication jisApplication=jisApplicationService.findByKey(appId);
+				String transcationId=timeId+randomId;
 				
-				String syniid=request.getParameter("syniid");
-				Integer appId=Integer.parseInt(syniid);
 				JisSysview jisSysview=new JisSysview();
-				jisSysview.setObjectid(groupid2);
+				jisSysview.setObjectid(id);
 				jisSysview.setObjectname(complatGroup.getName());
 				jisSysview.setState("C");
 				jisSysview.setResult("TG");
@@ -321,12 +374,137 @@ public class JisApplicationController extends BaseController{
 				jisSysview.setSynctime(TimeHelper.getCurrentTime());
 				jisSysview.setAppid(appId);
 				jisSysview.setCodeid(complatGroup.getCodeid());
-			}else{
-				complatGroup =new ComplatGroup();
+				jisSysview.setOperatetype("修改机构");
+				jisSysview.setTimes(1);
+				jisSysview.setErrorspec("");
+				jisSysview.setTranscationId(transcationId);
+				jisSysviewService.save(jisSysview);
+				
+				Map<String, String> jsonMap=new HashMap<String, String>();
+				jsonMap.put("allParCode", complatGroup.getSuffix());
+				jsonMap.put("allParName", complatGroup.getGroupallname());
+				jsonMap.put("appName", jisApplication.getName());
+				jsonMap.put("appid",syniid);
+				jsonMap.put("cardId","");
+				jsonMap.put("compfax","");
+				jsonMap.put("comptel","");
+				jsonMap.put("email","");
+				jsonMap.put("groupCode",complatGroup.getCodeid());
+				jsonMap.put("groupName",complatGroup.getName());
+				jsonMap.put("headShip","");
+				jsonMap.put("hometel","");
+				jsonMap.put("id","");
+				jsonMap.put("loginName","");
+				jsonMap.put("loginPass","");
+				jsonMap.put("mobile","");
+				jsonMap.put("msn","");
+				jsonMap.put("ndlogin","");
+				jsonMap.put("parCode",complatGroupService.findByIid(complatGroup.getPid()).getCodeid());
+				jsonMap.put("parName",complatGroupService.findByIid(complatGroup.getPid()).getName());
+				jsonMap.put("qq","");
+				jsonMap.put("state","TG");
+				jsonMap.put("userName","");
+				
+				JisSysviewDetail jisSysviewDetail=new JisSysviewDetail();
+				JSONUtil jsonUtil=new JSONUtil();
+				String synJson=jsonUtil.writeMapSJSON(jsonMap);
+				jisSysviewDetail.setSendmsg(synJson);
+				jisSysviewDetail.setTranscationId(transcationId);
+				jisSysviewDetailService.save(jisSysviewDetail);
+				
 			}
-					
+			returnMsg("success","同步成功",request);
 		} catch (Exception e) {
 			e.printStackTrace();
+			returnMsg("error","同步失败",request);
+		}
+		return new ModelAndView("redirect:/application/applicationList");
+	}
+	
+	/**
+	 * 用户同步
+	 * @param model
+	 * @param groupid2
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/synuser", method = RequestMethod.GET)
+	public ModelAndView synuser(Model model,String groupid2,HttpServletRequest request,HttpServletResponse response)  throws Exception {		
+		ComplatGroup complatGroup=null;
+		String[] ids=null;
+		
+		try {
+			if(groupid2.lastIndexOf(",")>0){
+				ids=groupid2.substring(0,groupid2.length()-1).split(",");
+			}else{
+				ids=groupid2.split(",");
+			}
+			String syniid=request.getParameter("syniid");
+			Integer appId=Integer.parseInt(syniid);
+			
+			String timeId=TimeHelper.getCurrentCompactTime();
+			String randomId=Integer.toString((int)(Math.random()*100000));
+			System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+			for(String id:ids ){
+				complatGroup=complatGroupService.findByIid(Integer.parseInt(id));
+				ComplatUser complatUser=complatUserService.findByGroupid(Integer.parseInt(id));
+				JisApplication jisApplication=jisApplicationService.findByKey(appId);
+				String transcationId=timeId+randomId;
+				
+				JisSysview jisSysview=new JisSysview();
+				jisSysview.setObjectid(Integer.toString(complatUser.getIid()));
+				jisSysview.setObjectname(complatUser.getName());
+				jisSysview.setState("C");
+				jisSysview.setResult("T");
+				jisSysview.setOptresult(1);
+				jisSysview.setSynctime(TimeHelper.getCurrentTime());
+				jisSysview.setAppid(appId);
+				jisSysview.setCodeid(complatGroup.getCodeid());
+				jisSysview.setOperatetype("修改用户");
+				jisSysview.setTimes(1);
+				jisSysview.setErrorspec("");
+				jisSysview.setTranscationId(transcationId);
+				jisSysviewService.save(jisSysview);
+				
+				Map<String, String> jsonMap=new HashMap<String, String>();
+				jsonMap.put("allParCode", complatGroup.getSuffix());
+				jsonMap.put("allParName", complatGroup.getGroupallname());
+				jsonMap.put("appName", jisApplication.getName());
+				jsonMap.put("appid",syniid);
+				jsonMap.put("cardId",(jisUserdetailService.findByUserid(complatUser.getIid())).getCardid());
+				jsonMap.put("compfax",complatUser.getFax());
+				jsonMap.put("comptel",(jisUserdetailService.findByUserid(complatUser.getIid())).getComptel());
+				jsonMap.put("email",complatUser.getEmail());
+				jsonMap.put("groupCode",complatGroup.getCodeid());
+				jsonMap.put("groupName",complatGroup.getName());
+				jsonMap.put("headShip",complatUser.getHeadship());
+				jsonMap.put("hometel",complatUser.getPhone());
+				jsonMap.put("id","");
+				jsonMap.put("loginName",complatUser.getLoginname());
+				jsonMap.put("loginPass",complatUser.getPwd());
+				jsonMap.put("mobile",complatUser.getMobile());
+				jsonMap.put("msn",complatUser.getMsn());
+				jsonMap.put("ndlogin","");
+				jsonMap.put("parCode",complatGroupService.findByIid(complatGroup.getPid()).getCodeid());
+				jsonMap.put("parName",complatGroupService.findByIid(complatGroup.getPid()).getName());
+				jsonMap.put("qq",complatUser.getQq());
+				jsonMap.put("state","T");
+				jsonMap.put("userName",complatUser.getName());
+				
+				JisSysviewDetail jisSysviewDetail=new JisSysviewDetail();
+				JSONUtil jsonUtil=new JSONUtil();
+				String synJson=jsonUtil.writeMapSJSON(jsonMap);
+				jisSysviewDetail.setSendmsg(synJson);
+				jisSysviewDetail.setTranscationId(transcationId);
+				jisSysviewDetailService.save(jisSysviewDetail);
+				
+			}
+			returnMsg("success","同步成功",request);
+		} catch (Exception e) {
+			e.printStackTrace();
+			returnMsg("error","同步失败",request);
 		}
 		return new ModelAndView("redirect:/application/applicationList");
 	}

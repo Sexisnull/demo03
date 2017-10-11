@@ -1,4 +1,4 @@
-package com.gsww.uids.service.impl;
+﻿package com.gsww.uids.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gsww.uids.dao.ComplatUserDao;
-import com.gsww.uids.entity.ComplatOutsideuser;
 import com.gsww.uids.entity.ComplatUser;
 import com.gsww.uids.service.ComplatUserService;
 
@@ -116,13 +115,15 @@ public class ComplatUserServiceImpl implements ComplatUserService{
 		return complatUser;
 	}
 
-
-
+	
+	@Override
+	public ComplatUser findByGroupid(Integer groupid) {
+		return complatUserDao.findByGroupid(groupid);
+	}
 
 	@Override
 	public List<Map<String,Object>> synchronizeData(Integer userId) {
 		String sql = "select a.iid userId,a.loginname,b.codeid,c.iid appId from complat_user a,complat_group b,jis_application c where a.groupid = b.iid and a.iid = '"+userId+"' and c.issyncgroup in ('0','1') and c.logintype = '0'";
 		return jdbcTemplate.queryForList(sql);
 	}
-
 }

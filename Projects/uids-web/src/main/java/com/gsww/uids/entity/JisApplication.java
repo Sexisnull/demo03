@@ -26,17 +26,17 @@ public class JisApplication implements java.io.Serializable {
 	private String icon;                   //应用图标地址
 	private Integer synUser;               //同步用户，1：同步后台、前台用户，2：只同步后台，3：不同步
 	private Integer loginType;             //登录方式，0：统一用户且单点登录，1：仅单点登录
-	private Integer userDefined;           //是否支持自定义登录帐号/密码，1：自定义帐号，2：固定帐号
+	private Integer userDefined;           //是否支持自定义登录帐号/密码，0：自定义帐号，1：固定帐号
 	private String allLoginIid;            //统一帐号用户名
 	private String allPwd;                 //统一帐号密码(加密)
-	private Integer encryptType;           //加密方式，1：不加密，2：MD5加密，3：MD5+base64加密
+	private Integer encryptType;           //加密方式，0：不加密，1：MD5加密，2：MD5+base64加密
 	private Integer isSyncGroup;           //是否同步外网用户，0：不支持，1：支持
 	private Integer orderId;               //应用排序号
 	private String appUrl;                 //应用地址
 	private String ssoUrl;                 //登录地址
 	private Integer isShow;                //是否在前台显示，0：否，1：是
 	private Integer groupId;               //所属机构
-	private Integer transType;             //数据传送方式，1：HTTP，2：WebService
+	private Integer transType;             //数据传送方式，0：HTTP，1：WebService
 	private Integer isLogOff;              //是否统一注销，0：否，1：是
 	private Integer isUnifyRegister;       //是否统一注册，0：否，1：是
 	private String logOffUrl;              //注销地址
