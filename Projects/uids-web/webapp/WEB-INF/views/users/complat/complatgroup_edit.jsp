@@ -155,16 +155,19 @@ $("#editForm").validate({
 		nodetype : {
 			required: true
 		},
-		groupname2 : {
+		areatype : {
 			required: true
 		},
-		areacode : {
+		groupname2 : {
 			required: true
 		},
 		suffix : {
 			required: true,
 			maxlength: 255,
 			isSuffix: true
+		},
+		orgcode : {
+		    isOrgcode: true
 		},
 		spec:{
 	   		maxlength: 255
@@ -177,12 +180,17 @@ $("#editForm").validate({
 jQuery.validator.addMethod("isName", function(value, element) { 
            var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;   
            return this.optional(element) || (corporName.test(value));     
-    }, "名称只能由字母、数字、下划线、中文组成，不能以下划线开头和结尾");
+    }, "只能由字母、数字、下划线、中文组成，不能以下划线开头和结尾");
     
     jQuery.validator.addMethod("isSuffix", function(value, element) { 
            var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9_]+$/;   
            return this.optional(element) || (corporName.test(value));     
-    }, "名称只能由字母、数字、下划线组成，不能以下划线开头和结尾");
+    }, "只能由字母、数字、下划线组成，不能以下划线开头和结尾");
+    
+     jQuery.validator.addMethod("isOrgcode", function(value, element) { 
+           var corporName = /^[a-zA-Z0-9]{9}$/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "只能由字母、数字组成，只能为9位");
     
 });
 
