@@ -140,16 +140,17 @@ function setting2(treeName, onClickFunction, onDblClickFunction, rootNode) {
 
 //表单校验
 $().ready(function() {
-var outisideUserNameInput=$("#name").val();
 $("#editForm").validate({
 	rules: {
 		name : {
 			required: true,
-			maxlength: 32
+			cnRangelength: [0,100],
+			isName : true
 		},
 	   	groupallname : {
 			required: true,
-			maxlength: 64
+			cnRangelength: [0,255],
+			isName : true
 		},
 		nodetype : {
 			required: true
@@ -161,7 +162,9 @@ $("#editForm").validate({
 			required: true
 		},
 		suffix : {
-			required: true
+			required: true,
+			maxlength: 255,
+			isSuffix: true
 		},
 		spec:{
 	   		maxlength: 255
@@ -171,6 +174,16 @@ $("#editForm").validate({
 		}
 	}
 });
+jQuery.validator.addMethod("isName", function(value, element) { 
+           var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "名称只能由字母、数字、下划线、中文组成，不能以下划线开头和结尾");
+    
+    jQuery.validator.addMethod("isSuffix", function(value, element) { 
+           var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9_]+$/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "名称只能由字母、数字、下划线组成，不能以下划线开头和结尾");
+    
 });
 
 </script>

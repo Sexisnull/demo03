@@ -133,37 +133,65 @@ text-decoration: none;
 </style>
 <script type="text/javascript"> 
 //表单校验
-$().ready(function() {
-var outisideUserNameInput=$("#id").val();
-$("#form1").validate({
-	rules: {
-		name : {
-			maxlength: 10
-		},
-	   	groupallname : {
-			maxlength: 64
-		},
-		nodetype : {
-			required: true
-		},
-		areatype : {
-			required: true
-		},
-		areacode : {
-			required: true
-		},
-		suffix : {
-			required: true
-		},
-		spec:{
-	   		maxlength: 255
-	   	},
-	   	submitHandler:function(form){
-			form.submit();
+function checkSubmitForm(){
+		var nameSearch = $("#nameSearch").val();
+		var codeidSearch = $("#codeidSearch").val(); 
+		var orgcodeSearch = $("#orgcodeSearch").val();
+		var areacodeSearch = $("#areacodeSearch").val();
+		if(nameSearch ==  '' || isNumbOrLett1(nameSearch)){
+			if(codeidSearch ==  '' || isNumbOrLett2(codeidSearch)) {
+				if(orgcodeSearch ==  '' || isNumbOrLett3(orgcodeSearch)) {
+				    if(areacodeSearch == '' || isNumbOrLett2(areacodeSearch)) {
+						form1.submit();
+					} else{
+						$.validator.errorShow($("#areacodeSearch"),'只能包括数字');
+					}
+				} else{
+					$.validator.errorShow($("#orgcodeSearch"),'只能包括数字和字母');
+				}
+			} else{
+				$.validator.errorShow($("#codeidSearch"),'只能包括数字');
+			}
+		} else{
+			$.validator.errorShow($("#nameSearch"),'只能包括字母、数字、下划线、中文');
 		}
 	}
-});
-});
+	/*
+	用途：检查输入字符串是否只由汉字、字母、数字组成
+	输入：
+	value：字符串
+	返回：
+	如果通过验证返回true,否则返回false
+	*/
+	function isNumbOrLett1( s ){
+		var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;
+		var re = new RegExp(regu);
+		if (re.test(s)) {
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	function isNumbOrLett2( s ){
+		var regu = /^\d{0,255}$/;
+		var re = new RegExp(regu);
+		if (re.test(s)) {
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	function isNumbOrLett3( s ){
+		var regu = /^([a-zA-Z0-9]+)$/;
+		var re = new RegExp(regu);
+		if (re.test(s)) {
+			return true;
+		}else{
+			return false;
+		}
+	}
 
 	//删除
 	function deleteData() {
@@ -204,15 +232,7 @@ $("#form1").validate({
 		});	
 		
 	});
-	/**搜索表单校验**/
-function checkSubmitForm(){
-	var nameSerach=$("#nameSerach").val();
-	if(nameSerach==''||isChinaOrNumbOrLett(nameSerach)){
-		form1.submit();
-	}else{
-		$.validator.errorShow($("#nameSerach"),'只能包括中英文、数字、@和下划线');
-	}
-}
+	
 $(function(){
 		//阻止按键盘Enter键提交表单
 		var $inp = $('input');
@@ -421,19 +441,19 @@ function importGroup(){
 			    <tr>
 					<th style="padding-left: 5px">机构名称:</th>
 					<td width="15%">
-						<input id="name" type="text" class="input" name="search_LIKE_name" value="${sParams['LIKE_name']}"  placeholder="机构名称"/>
+						<input id="nameSearch" type="text" class="input" name="search_LIKE_name" value="${sParams['LIKE_name']}"  placeholder="机构名称"/>
 					</td>
 					<th style="padding-left: 5px">机构编码:</th>
 					<td width="15%">
-              			<input type="text" class="input" name="search_LIKE_codeid" value="${sParams['LIKE_codeid']}"  placeholder="机构编码"/>
+              			<input id="codeidSearch" type="text" class="input" name="search_LIKE_codeid" value="${sParams['LIKE_codeid']}"  placeholder="机构编码"/>
 					</td>
 					<th style="padding-left: 5px">组织机构代码:</th>
 					<td width="15%">
-              			<input type="text" class="input" name="search_LIKE_orgcode" value="${sParams['LIKE_orgcode']}"  placeholder="组织机构代码"/>
+              			<input id="orgcodeSearch" type="text" class="input" name="search_LIKE_orgcode" value="${sParams['LIKE_orgcode']}"  placeholder="组织机构代码"/>
 					</td>
 					<th style="padding-left: 5px">区域代码:</th>
 					<td width="15%">
-              			<input type="text" class="input" name="search_LIKE_areacode" value="${sParams['LIKE_areacode']}" placeholder="区域代码"/>
+              			<input id="areacodeSearch" type="text" class="input" name="search_LIKE_areacode" value="${sParams['LIKE_areacode']}" placeholder="区域代码"/>
 					</td>
 				</tr>
 				<tr height="10px"></tr>
