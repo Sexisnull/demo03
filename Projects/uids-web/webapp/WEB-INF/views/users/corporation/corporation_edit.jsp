@@ -134,6 +134,7 @@ $().ready(function() {
 	            return this.optional(element) || (corporName.test(value));     
 	     }, "名称只能由字母、数字、下划线、中文组成，不能以下划线开头和结尾"); 
 	    
+	    $('#pwd').attachEvent('oninput',EvalPwd(this));
 	});
 
 	
@@ -175,6 +176,9 @@ $().ready(function() {
 			$(".userScope").hide();
 			$(".regNum").hide();
 			$(".td_regNum").hide();
+			$(".orgNum").show();
+			$(".td_orgNum").show();
+			$("#orgNumber").show();
 			
 	}
 	

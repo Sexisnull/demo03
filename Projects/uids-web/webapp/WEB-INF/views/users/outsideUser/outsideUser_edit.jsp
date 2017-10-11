@@ -120,6 +120,8 @@ $().ready(function() {
            var corporName = /^[1-9][0-9]{5}$/;   
            return this.optional(element) || (corporName.test(value));     
     }, "邮政编码格式不正确（共6位,开头不能为0)");
+    
+    $('#pwd').attachEvent('oninput',EvalPwd(this));
 });
 </script>
 
@@ -197,7 +199,7 @@ color: rgb(119, 119, 119);
     <div class="form-content">
     	<table class="form-table">
 			<tr>
-				<td class="td_1" rowspan="5" style="max-width:0px;width:100px;ont-weight:bold;" align="center">基本属性</td>
+				<td class="td_1" rowspan="4" style="max-width:0px;width:100px;ont-weight:bold;" align="center">基本属性</td>
 				<th><b class="mustbe">*</b>登录名：</th>
 				<td style="width:300px;">
 					<input type="text" id="loginName" name="loginName" value="${outsideUser.loginName}" />
@@ -239,41 +241,11 @@ color: rgb(119, 119, 119);
 				</td>
 			</tr>
 			<tr>
-				<th><!-- <b class="mustbe">*</b> -->户籍省市区：</th>
-				<td style="width:300px;">
-					<%-- <select name="degree" value="${outsideUser.gpresidenceId}">
-						<option value="">请选择</option>
-						<option value="">甘肃省</option>
-					</select>
-					<select name="degree" value="${outsideUser.presidenceId}">
-						<option value="">请选择</option>
-					</select>
-					<select name="degree" value="${outsideUser.residenceId}">
-						<option value="">请选择</option>
-					</select> --%>
-					<input type="text"  class="" name="null" value="" />
-				</td>
-				<th><b class="mustbe">*</b>户籍详细地址：</th>
-				<td style="width:300px;">
+				<th class="td_5"><b class="mustbe">*</b>户籍详细地址：</th>
+				<td class="td_3" style="width:300px;">
 					<input type="text"  class="residenceDetail" name="residenceDetail" value="${outsideUser.residenceDetail}" />
 	            </td>
-			</tr>
-			<tr>
-				<th class="td_5"><!-- <b class="mustbe">*</b> -->居住地省市区：</th>
-				<td class="td_3" style="width:300px;">
-					<%-- <select name="degree" value="${outsideUser.gplivingAreaId}">
-						<option value="">请选择</option>
-						<option value="">甘肃省</option>
-					</select>
-					<select name="degree" value="${outsideUser.plivingAreaId}">
-						<option value="">请选择</option>
-					</select>
-					<select name="degree" value="${outsideUser.livingAreaId}">
-						<option value="">请选择</option>
-					</select> --%>
-					<input type="text"  class="" name="null" value="" />
-				</td>
-				<th class="td_6"><b class="mustbe">*</b>居住地详细地址：</th>
+	            <th class="td_6"><b class="mustbe">*</b>居住地详细地址：</th>
 				<td class="td_4" style="width:300px;">
 					<input type="text"  class="livingAreaDetail" name="livingAreaDetail" value="${outsideUser.livingAreaDetail}" />
 				</td>

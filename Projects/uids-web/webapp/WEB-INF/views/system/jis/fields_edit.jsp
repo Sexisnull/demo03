@@ -15,7 +15,8 @@ $().ready(function() {
 			//校验内容
 			showname: {
 		     required: true,
-		   	 maxlength: 50
+		   	 maxlength: 50,
+		   	 isDefvalue:true
 		   	},
 		    fieldname : {
 		     required: true,
@@ -29,11 +30,11 @@ $().ready(function() {
 			},
 			fieldkeys : {
 				cnRangelength: [0,500],
-				isFieldkeys: true
+				isFieldkeyAndvalues: true
 			},
 			fieldvalues : {
 				cnRangelength: [0,1000],
-				isFieldvalues: true
+				isFieldkeyAndvalues: true
 			},
 		   	submitHandler:function(form){
 			}
@@ -52,16 +53,11 @@ $().ready(function() {
            var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;   
            return this.optional(element) || (corporName.test(value));     
     }, "固定值只能由字母、数字、下划线、中文组成，不能以下划线开头和结尾");
-    //键
-    jQuery.validator.addMethod("isFieldkeys", function(value, element) { 
+    //建，值
+    jQuery.validator.addMethod("isFieldkeyAndvalues", function(value, element) { 
            var corporName = /^(?!.*(^|,)([^,]*),(\2|.*,\2)(,|$))[^,]+(,[^,]+)+$/;   
            return this.optional(element) || (corporName.test(value));     
-    }, "插入数据库的值，多个以','隔开");
-    //值
-    jQuery.validator.addMethod("isFieldvalues", function(value, element) { 
-           var corporName = /^(?!.*(^|,)([^,]*),(\2|.*,\2)(,|$))[^,]+(,[^,]+)+$/;   
-           return this.optional(element) || (corporName.test(value));     
-    }, "页面显示的值，多个以','隔开，个数与key串一致");
+    }, "此名称只能由字母、数字、下划线、中文、逗号组成，且至少为两个");
 });
 
 function checkAndSave() {
@@ -69,37 +65,40 @@ function checkAndSave() {
 	var fieldvaluesEdit = $("#fieldvaluesEdit").val();
 	var fieldkeysNew = $("#fieldkeysNew").val();
 	var fieldvaluesNew = $("#fieldvaluesNew").val();
-	//alert(fieldkeysEdit + "==" + fieldvaluesEdit + "===" + fieldkeysNew + "==" + fieldvaluesNew);
-	if((fieldkeysEdit != "" && fieldkeysEdit != undefined) && (fieldvaluesEdit != "" && fieldvaluesEdit != undefined)) {
-		//alert("编辑" + fieldkeysEdit.split(",").length + "==" + fieldvaluesEdit.split(",").length);
-		if(fieldkeysEdit.split(",").length == fieldvaluesEdit.split(",").length) {
-			editForm.submit();
-		} else {
-			//alert("编辑失败");
-			alert("Value串和Key串个数请保持一致!");
+	var type = $("#fieldsType").val();
+	//alert("type" + type + "--" + fieldkeysEdit + "-" + fieldvaluesEdit + "-" + fieldkeysNew + "-" + fieldvaluesNew);
+	if(type==2) {
+		if((fieldkeysEdit != "" && fieldkeysEdit != undefined) && (fieldvaluesEdit != "" && fieldvaluesEdit != undefined)) {
+			//alert("编辑" + fieldkeysEdit.split(",").length + "==" + fieldvaluesEdit.split(",").length);
+			if(fieldkeysEdit.split(",").length == fieldvaluesEdit.split(",").length) {
+				editForm.submit();
+			} else {
+				//alert("编辑失败");
+				alert("Value串和Key串个数请保持一致!");
+				return false;
+			}
+		} else if ((fieldkeysNew != "" && fieldkeysNew != undefined) && (fieldvaluesNew != "" && fieldvaluesNew != undefined)) {
+			//alert("新增" + fieldkeysNew.split(",").length + "==" + fieldvaluesNew.split(",").length);
+			if(fieldkeysNew.split(",").length == fieldvaluesNew.split(",").length) {
+				editForm.submit();
+			} else {
+				//alert("新增失败");
+				alert("Value串和Key串个数请保持一致!");
+				return false;
+			}
+		} else if((fieldkeysEdit != "" || fieldkeysEdit != undefined) && (fieldvaluesEdit == "" || fieldvaluesEdit == undefined)) {
+			alert("请正确填写Value串和Key串!");
+			return false;
+		} else if((fieldkeysEdit == "" || fieldkeysEdit == undefined) && (fieldvaluesEdit != "" || fieldvaluesEdit != undefined)) {
+			alert("请正确填写Value串和Key串!");
+			return false;
+		} else if((fieldkeysNew != "" || fieldkeysNew != undefined) && (fieldvaluesNew == "" || fieldvaluesNew == undefined)) {
+			alert("请正确填写Value串和Key串!");
+			return false;
+		} else if((fieldkeysNew == "" || fieldkeysNew == undefined) && (fieldvaluesNew != "" || fieldvaluesNew != undefined)) {
+			alert("请正确填写Value串和Key串!");
 			return false;
 		}
-	} else if ((fieldkeysNew != "" && fieldkeysNew != undefined) && (fieldvaluesNew != "" && fieldvaluesNew != undefined)) {
-		//alert("新增" + fieldkeysNew.split(",").length + "==" + fieldvaluesNew.split(",").length);
-		if(fieldkeysNew.split(",").length == fieldvaluesNew.split(",").length) {
-			editForm.submit();
-		} else {
-			//alert("新增失败");
-			alert("Value串和Key串个数请保持一致!");
-			return false;
-		}
-	} else if((fieldkeysEdit != "" || fieldkeysEdit != undefined) || (fieldvaluesEdit == "" || fieldvaluesEdit == undefined)) {
-		alert("Value串和Key串个数请保持一致!");
-		return false;
-	} else if((fieldkeysEdit == "" || fieldkeysEdit == undefined) || (fieldvaluesEdit != "" || fieldvaluesEdit != undefined)) {
-		alert("Value串和Key串个数请保持一致!");
-		return false;
-	} else if((fieldkeysNew != "" || fieldkeysNew != undefined) || (fieldvaluesNew == "" || fieldvaluesNew == undefined)) {
-		alert("Value串和Key串个数请保持一致!");
-		return false;
-	} else if((fieldkeysNew == "" || fieldkeysNew == undefined) || (fieldvaluesNew != "" || fieldvaluesNew != undefined)) {
-		alert("Value串和Key串个数请保持一致!");
-		return false;
 	} else {
 		//alert("其他");
 		editForm.submit();
@@ -178,10 +177,10 @@ $(document).on("change",'select#fieldsType',function(){
 			<tr>
 				<th>字段类型：</th>
 				<td>
-					<select id="fieldsType" name="type" value="${jisFields.type}">
-						<option value='1' <c:if test="${jisFields.type == '1'}">selected</c:if>>字符串</option>
-						<option value='2' <c:if test="${jisFields.type == '2'}">selected</c:if>>枚举型</option>
-						<option value='3' <c:if test="${jisFields.type == '3'}">selected</c:if>>固定值</option>
+					<select id="fieldsType" id="type" name="type" value="${jisFields.type}">
+						<option value="1" <c:if test="${jisFields.type == '1'}">selected</c:if>>字符串</option>
+						<option value="2" <c:if test="${jisFields.type == '2'}">selected</c:if>>枚举型</option>
+						<option value="3" <c:if test="${jisFields.type == '3'}">selected</c:if>>固定值</option>
 					</select>
 				</td>
 				<th></th>
