@@ -67,6 +67,7 @@ public class SysLoginServiceImpl implements SysLoginService {
 				SysUserSession sysUserSession = new SysUserSession();
 				sysUserSession.setAccountId(user.getIid() + "");
 				sysUserSession.setUserName(user.getName());
+				sysUserSession.setDeptId(user.getGroupid()+"");
 				/*
 				 * sysUserSession.setDeptId(user.getSysDepartment().getDeptId());
 				 * sysUserSession
@@ -81,17 +82,21 @@ public class SysLoginServiceImpl implements SysLoginService {
 					roleList =jidRoleobjectService.findByObjectIdAndType(user.getGroupid(),2);
 				}
 				String roles = "";
+				String roleTypes="";
 				String roleNames = "";
 				if (roleList != null && roleList.size() > 0) {
 					for (JisRoleobject ra : roleList) {
 						roles += ra.getRoleid().toString() + ",";
+						roleTypes +=ra.getType().toString() + ",";
 						roleNames += complatRoleDao.findByIid(ra.getRoleid()).getName()
 								+ ",";
 					}
 					roles = roles.substring(0, roles.length() - 1);
+					roleTypes = roleTypes.substring(0, roleTypes.length() - 1);
 					roleNames = roleNames.substring(0, roleNames.length() - 1);
 				}
 				sysUserSession.setRoleIds(roles);
+				sysUserSession.setRoleTypes(roleTypes);
 				sysUserSession.setUserSex(user.getSex() + "");
 				sysUserSession.setRoleNames(roleNames);
 				sysUserSession.setUserState(user.getEnable() + "");
