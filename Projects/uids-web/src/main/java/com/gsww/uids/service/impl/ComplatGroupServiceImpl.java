@@ -187,4 +187,11 @@ public class ComplatGroupServiceImpl implements ComplatGroupService{
 		list=complatGroupDao.findByPidIsNullOrderByCodeidDesc();
 		return list;
 	}
+
+	@Override
+	public List<ComplatGroup> findAllOrg() throws Exception {
+		List<ComplatGroup> list=new ArrayList<ComplatGroup>();
+		list=complatGroupDao.findAllOrg();
+		return list;
+	}
 }

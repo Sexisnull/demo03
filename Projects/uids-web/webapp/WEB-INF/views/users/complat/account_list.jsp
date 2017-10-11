@@ -167,7 +167,8 @@
 	filter: Alpha(opacity =   30);
 }
 </style>
-<script type="text/javascript"> 
+<script type="text/javascript">
+
 function checkSubmitForm(){
 		var nameSearch = $("#nameSearch").val();
 		//alert(nameSearch);
@@ -460,14 +461,12 @@ function resetform() {
 }
 /*********************机构树结束************************/
 </script>
-
+		<script type="text/javascript" src="${ctx}/res/js/region/orgTree.js"></script>
 	</head>
 	<body>
 
 		<div class="list-warper">
 			
-
-
 
 			<!--列表的面包屑区域-->
 			<div class="position">
@@ -486,176 +485,188 @@ function resetform() {
 				</ol>
 			</div>
 
-			<div class="search-content">
-				<form id="form1" name="form2" action="${ctx}/complat/complatList"
-					method="get">
-					<table class="advanced-content">
-						<tr>
-							<th style="padding-left: 5px">
-								所属机构：
-							</th>
-							<td width="20%">
-							    <input name="groupname" id="groupname" value="${groupName }" readonly="true" type="text" style="cursor: pointer;width: 150px;" placeholder="所属机构"/>
-							    <input type="hidden" id="groupid" name="search_EQ_groupid">
-							</td>
-							<th style="padding-left: 5px">
-								姓名：
-							</th>
-							<td width="20%">
-								<input type="text" style="width: 150px;" placeholder="姓名" value="${sParams['LIKE_name']}" id="nameSearch" name="search_LIKE_name" />
-							</td>
-							<th style="padding-left: 5px">
-								登录名：
-							</th>
-							<td width="20%">
-								<input type="text" style="width: 150px;" placeholder="登录名" value="${sParams['LIKE_loginname']}" id="loginnameSearch" name="search_LIKE_loginname" />
-							</td>
-							<th style="padding-left: 5px">
-								登录名全称：
-							</th>
-							<td width="20%">
-								<input type="text" style="width: 150px;" placeholder="登录名全称" value="${sParams['LIKE_loginallname']}" id="loginallnameSearch" name="search_LIKE_loginallname" />
-							</td>
-							<td class="btn-group">
-								<a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a>
-							</td>
-						</tr>
-					</table>
-				</form>
+			<!--左侧树形结构-->
+			<div id="tablelist" style="width:20%;float:left;min-width:0px;">
+				<table class="tablelist" >
+					<tbody>
+					<tr>
+						<td>
+							<div class="zTreeDemoBackground left" style="overflow:scroll;">
+								<ul id="treeDemo" class="ztree" style=" display: block;"></ul>
+							</div>
+						</td>
+					</tr>
+					</tbody>
+				</table>
 			</div>
-			<!--列表内容区域-->
-			<div class="list">
-				<input type="hidden" id="orderField" name="orderField"
-					value="${orderField}" />
-				<input type="hidden" id="orderSort" name="orderSort"
-					value="${orderSort}" />
-				<div class="list-topBar  advanced-search">
-					<div class="list-toolbar">
-						<!--  操作按钮开始 	    -->
-						<ul class="list-Topbtn">
-							<li class="add"><a title="新增" onclick="addComplatUser()">新增</a></li>
-							<li class="del"><a title="删除" onclick="deleteData('complat/complatUserDelete','iid');">删除</a></li>
-							<li class="query"><a title="导入" onclick="intPutComplatUser( ${ complatUser.iid});">导入</a></li>
-							<li class="exportData"><a title="导出" onclick="outPutComplatUser()">导出</a></li>
-							<li class="startData"><a title="启用" onclick="startData('complat/startUserEnable','iid');">启用</a></li>
-							<li class="edit"><a title="停用" onclick="stopData('complat/stopUserEnable','complatUserId');">停用</a></li>
-						</ul>
-						<!--   操作按钮结束  -->
-					</div>
-
-
-
-
-
-					<!-- 提示信息开始 -->
-					<div class="form-alert;">
-						<tags:message msgMap="${msgMap}"></tags:message>
-					</div>
-					<!-- 提示信息结束 -->
-					<!-- 列表开始 -->
-						<table cellpadding="0" cellspacing="0" border="0" width="100%"
-							id="list-table" class="list-table">
+			<!--左侧树形结构-->
+			<div style="width:78%;float:left;">
+				<div class="search-content">
+					<form id="form1" name="form2" action="${ctx}/complat/complatList"
+						  method="get">
+						<table class="advanced-content">
+							<tr>
+								<th style="padding-left: 5px">
+									所属机构：
+								</th>
+								<td width="20%">
+									<input name="groupname" id="groupname" value="${groupName }" readonly="true" type="text" style="cursor: pointer;width: 150px;" placeholder="所属机构"/>
+									<input type="hidden" id="groupid" name="search_EQ_groupid">
+									<input type="hidden" id="orgId" name="orgId" value="${orgId}">
+								</td>
+								<th style="padding-left: 5px">
+									姓名：
+								</th>
+								<td width="20%">
+									<input type="text" style="width: 150px;" placeholder="姓名" value="${sParams['LIKE_name']}" id="nameSearch" name="search_LIKE_name" />
+								</td>
+							</tr>
+							<tr>
+								<th style="padding-left: 5px">
+									登录名：
+								</th>
+								<td width="20%">
+									<input type="text" style="width: 150px;" placeholder="登录名" value="${sParams['LIKE_loginname']}" id="loginnameSearch" name="search_LIKE_loginname" />
+								</td>
+								<th style="padding-left: 5px">
+									登录名全称：
+								</th>
+								<td width="20%">
+									<input type="text" style="width: 150px;" placeholder="登录名全称" value="${sParams['LIKE_loginallname']}" id="loginallnameSearch" name="search_LIKE_loginallname" />
+								</td>
+								<td class="btn-group">
+									<a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<!--列表内容区域-->
+				<div >
+					<input type="hidden" id="orderField" name="orderField"
+						   value="${orderField}" />
+					<input type="hidden" id="orderSort" name="orderSort"
+						   value="${orderSort}" />
+					<div class="list-topBar  advanced-search">
+						<div class="list-toolbar">
+							<!--  操作按钮开始 	    -->
+							<ul class="list-Topbtn">
+								<li class="add"><a title="新增" onclick="addComplatUser()">新增</a></li>
+								<li class="del"><a title="删除" onclick="deleteData('complat/complatUserDelete','iid');">删除</a></li>
+								<li class="query"><a title="导入" onclick="intPutComplatUser( ${ complatUser.iid});">导入</a></li>
+								<li class="exportData"><a title="导出" onclick="outPutComplatUser()">导出</a></li>
+								<li class="startData"><a title="启用" onclick="startData('complat/startUserEnable','iid');">启用</a></li>
+								<li class="edit"><a title="停用" onclick="stopData('complat/stopUserEnable','complatUserId');">停用</a></li>
+							</ul>
+							<!--   操作按钮结束  -->
+						</div>
+						<!-- 提示信息开始 -->
+						<div class="form-alert;">
+							<tags:message msgMap="${msgMap}"></tags:message>
+						</div>
+						<!-- 提示信息结束 -->
+						<!-- 列表开始 -->
+						<table cellpadding="0" cellspacing="0" border="0" width="80%"
+							   id="list-table" class="list-table">
 							<thead>
-								<tr>
-									<th width="1000x">
-										<div class="label">
-											<i class="check_btn check_all"></i>
-											<input id="${ComplatUser.iid}" value="${ComplatUser.iid}"
-												type="checkbox" class="check_btn" style="display: none;" />
-										</div>
-									</th>
-
-
-									<th width="15%" style="text-align: center;">
-										姓名
-									</th>
-									<th width="15%" style="text-align: center;">
-										登录名
-									</th>
-									<th width="15%" style="text-align: center;">
-										登录全名
-									</th>
-									<th width="15%" style="text-align: center;">
-										所属机构
-									</th>
-									<th width="15%" class="alignL" style="text-align: center;">
-										用户职务
-									</th>
-									<th width="10%" style="text-align: center;">
-										办公电话
-									</th>
-									<th width="5%" style="text-align: center;">
-										账号开启
-									</th>
-									<!--                                                     
-                    <th width="18%" class="alignL" style="text-align: center;">注册时间</th>-->
-									<th width="10%" style="text-align: center;">
-										操作
-									</th>
-								</tr>
+							<tr>
+								<th width="1%">
+									<div class="label">
+										<i class="check_btn check_all"></i>
+										<input id="${ComplatUser.iid}" value="${ComplatUser.iid}"
+											   type="checkbox" class="check_btn" style="display: none;" />
+									</div>
+								</th>
+								<th width="10%" style="text-align: center;">
+									姓名
+								</th>
+								<th width="10%" style="text-align: center;">
+									登录名
+								</th>
+								<th width="15%" style="text-align: center;">
+									登录全名
+								</th>
+								<th width="10%" style="text-align: center;">
+									所属机构
+								</th>
+								<th width="10%" class="alignL" style="text-align: center;">
+									用户职务
+								</th>
+								<th width="10%" style="text-align: center;">
+									办公电话
+								</th>
+								<th width="5%" style="text-align: center;">
+									账号开启
+								</th>
+								<!--
+                <th width="18%" class="alignL" style="text-align: center;">注册时间</th>-->
+								<th width="10%" style="text-align: center;">
+									操作
+								</th>
+							</tr>
 							</thead>
 							<tbody>
-								<c:forEach items="${pageInfo.content}" var="complatUser"
-									varStatus="state">
-									<tr class="myclass">
-										<td>
-											<div class="label">
-												<i class="check_btn"></i>
-												<input id="${complatUser.iid}" value="${complatUser.iid}"
-													type="checkbox" class="check_btn" style="display: none;" />
-											</div>
-										</td>
-										<td style="text-align: center;">
-											<div title="${complatUser.name}" class="word_break">
+							<c:forEach items="${pageInfo.content}" var="complatUser"
+									   varStatus="state">
+								<tr class="myclass">
+									<td>
+										<div class="label">
+											<i class="check_btn"></i>
+											<input id="${complatUser.iid}" value="${complatUser.iid}"
+												   type="checkbox" class="check_btn" style="display: none;" />
+										</div>
+									</td>
+									<td style="text-align: center;">
+										<div title="${complatUser.name}" class="word_break">
 												${complatUser.name}
-											</div>
-										</td>
-										<td style="text-align: center;">
-											<div title="${complatUser.loginname}" class="word_break">
+										</div>
+									</td>
+									<td style="text-align: center;">
+										<div title="${complatUser.loginname}" class="word_break">
 												${complatUser.loginname}
-											</div>
-										</td>
-										<td style="text-align: center;">
-											<div title="${complatUser.loginallname}" class="word_break">
+										</div>
+									</td>
+									<td style="text-align: center;">
+										<div title="${complatUser.loginallname}" class="word_break">
 												${complatUser.loginallname}
-											</div>
-										</td>
-										<td style="text-align: center;">
-											<div class="word_break">
+										</div>
+									</td>
+									<td style="text-align: center;">
+										<div class="word_break">
 												${groupMap[complatUser.groupid]}
-											</div>
-										</td>
-										<td style="text-align: center;">
-											<div class="word_break">
+										</div>
+									</td>
+									<td style="text-align: center;">
+										<div class="word_break">
 												${complatUser.headship}
-											</div>
-										</td>
-										<td style="text-align: center;">
-											<div title="${complatUser.phone}" class="word_break">
+										</div>
+									</td>
+									<td style="text-align: center;">
+										<div title="${complatUser.phone}" class="word_break">
 												${complatUser.phone}
+										</div>
+									</td>
+									<td style="text-align: center;">
+										<div class="alignL">
+											<div class="list-longtext">
+												<c:if test="${complatUser.enable == '0'}">
+													<font color="red">未启用</font>
+												</c:if>
+												<c:if test="${complatUser.enable == '1'}">
+													<font color="#32CD32">启用</font>
+												</c:if>
 											</div>
-										</td>
-										<td style="text-align: center;">
-											<div class="alignL">
-												<div class="list-longtext">
-													<c:if test="${complatUser.enable == '0'}">
-														<font color="red">未启用</font>
-													</c:if>
-													<c:if test="${complatUser.enable == '1'}">
-														<font color="#32CD32">启用</font>
-													</c:if>
-												</div>
-											</div>
+										</div>
 
-											<!-- <td style="text-align: center;">
+										<!-- <td style="text-align: center;">
 	                        <div title="${complatUser.createtime}" class="word_break">${complatUser.createtime}</div>
 	                    </td> -->
-										<td class="position-content" style="text-align: center;">
-											<gsww:opTag menuId="8a929c9e5e5fbde5015e5fdb125c0002"
-												tabIndex="1" operatorType="2"></gsww:opTag>
-										</td>
-									</tr>
-								</c:forEach>
+									<td class="position-content" style="text-align: center;">
+										<gsww:opTag menuId="8a929c9e5e5fbde5015e5fdb125c0002"
+													tabIndex="1" operatorType="2"></gsww:opTag>
+									</td>
+								</tr>
+							</c:forEach>
 
 							</tbody>
 						</table>
@@ -664,6 +675,8 @@ function resetform() {
 				</div>
 				<!-- 分页 -->
 				<tags:pagination page="${pageInfo}" paginationSize="5" />
+			</div>
+
 			</div>
 		</div>
 	</body>

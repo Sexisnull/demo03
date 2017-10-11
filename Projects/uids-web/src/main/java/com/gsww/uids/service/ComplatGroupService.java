@@ -114,5 +114,12 @@ public interface ComplatGroupService {
 	 * @throws Exception
 	 */
 	public List<ComplatGroup> findByNoPid() throws Exception;
-	
+
+	/**
+	 * 部门树专用
+	 * @return
+	 * @throws Exception
+	 */
+	public List<ComplatGroup> findAllOrg() throws Exception;
+
 }

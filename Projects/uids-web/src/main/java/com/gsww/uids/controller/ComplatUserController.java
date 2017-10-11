@@ -145,6 +145,7 @@ public class ComplatUserController extends BaseController {
 			@RequestParam(value = "order.field", defaultValue = "createtime") String orderField,
 			@RequestParam(value = "order.sort", defaultValue = "DESC") String orderSort,
 			@RequestParam(value = "findNowPage", defaultValue = "false") String findNowPage,
+			String orgId,
 			Model model, ServletRequest request, HttpServletRequest hrequest) {
 		try {
 			if (StringUtils.isNotBlank(request.getParameter("orderField"))) {
@@ -188,7 +189,8 @@ public class ComplatUserController extends BaseController {
 			//点击完查询时组织机构名称回显
 			String groupName = request.getParameter("groupname");
 			model.addAttribute("groupName", groupName);
-			
+			model.addAttribute("orgId", orgId);
+
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			logger.error("列表打开失败：" + ex.getMessage());

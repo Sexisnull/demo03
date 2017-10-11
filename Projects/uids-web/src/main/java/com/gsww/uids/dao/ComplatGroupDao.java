@@ -39,6 +39,13 @@ JpaSpecificationExecutor<ComplatGroup>{
 	 * @return
 	 */
 	public List<ComplatGroup> findByPidIsNullOrderByCodeidDesc();
+
+	/**
+	 * 查询所有对象
+	 * @return
+	 */
+	@Query(value = "select group from ComplatGroup group where group.opersign!=3 order by group.orderid asc")
+	public List<ComplatGroup> findAllOrg();
 //	@Query(value = "select group from ComplatGroup group where group.pid=? order by group.orderid asc")
 //	public List<ComplatGroup> findByNoPid();
 }
