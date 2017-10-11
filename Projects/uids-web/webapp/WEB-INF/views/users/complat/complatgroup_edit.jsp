@@ -20,7 +20,7 @@
 
 
 $(function(){
-	var groupMenu = [{"name":"单位选择","id":"128","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
+	var groupMenu = [{"name":"单位选择","id":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
 
 	$('#groupname').menu({
 		tree : 'groupmenu',
@@ -85,7 +85,7 @@ function resetform() {
 //-------------------------区域编码树-----------------------------
 
 $(function(){
-	var groupMenu2 = [{"name":"单位选择","id":"0","codeid":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
+	var groupMenu2 = [{"name":"区域选择","id":"0","codeid":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
 
 	$('#groupname2').menu({
 		tree : 'groupmenu2',
@@ -254,7 +254,7 @@ jQuery.validator.addMethod("isName", function(value, element) {
 				<th><b class="mustbe">*</b> 请输入区域编码：</th>
 				<td>
 				    <c:if test="${empty complatGroup.iid}">
-				          <input name="groupname2" id="groupname2" type="text" style="cursor: pointer;" value="${complatGroup.areacode}"/>
+				          <input name="groupname2" id="groupname2" type="text" placeholder="请选择区域编码" style="cursor: pointer;" value="${complatGroup.areacode}"/>
 				    </c:if>
 				    <c:if test="${not empty complatGroup.iid}">
 				          <input name="groupname2" id="groupname2" type="text" style="cursor: pointer;" value="${complatGroup.areacode}" disabled="true"/>
@@ -278,7 +278,7 @@ jQuery.validator.addMethod("isName", function(value, element) {
 	        	<th>请输入上级机构：</th>
 	        	<td>
 	        	    <c:if test="${empty complatGroup.iid}">
-				          <input name="groupname" id="groupname" type="text" style="cursor: pointer;" value="${complatGroup.parentName}" /> 
+				          <input name="groupname" id="groupname" type="text" placeholder="请选择上级机构" style="cursor: pointer;" value="${complatGroup.parentName}" /> 
 	        		      <input type="hidden" id="groupid"  name="groupid">
 				    </c:if>
 				    <c:if test="${not empty complatGroup.iid}">

@@ -225,8 +225,13 @@ public class ComplatGroupController extends BaseController{
 			jsonMap.put("mobile","");
 			jsonMap.put("msn","");
 			jsonMap.put("ndlogin","");
-			jsonMap.put("parCode",complatGroupService.findByIid(complatGroup.getPid()).getCodeid());
-			jsonMap.put("parName",complatGroupService.findByIid(complatGroup.getPid()).getName());
+			if(complatGroup.getPid() != null){
+				jsonMap.put("parCode",complatGroupService.findByIid(complatGroup.getPid()).getCodeid());
+				jsonMap.put("parName",complatGroupService.findByIid(complatGroup.getPid()).getName());
+			}else{
+				jsonMap.put("parCode","");
+				jsonMap.put("parName","");
+			}
 			jsonMap.put("qq","");
 			jsonMap.put("state","TG");
 			jsonMap.put("userName","");
