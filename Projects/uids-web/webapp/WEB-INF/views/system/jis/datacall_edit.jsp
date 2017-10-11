@@ -54,9 +54,62 @@ var userNameInput=$("#userName").val();
 			}
         } 
     });
-    
-
 });
+
+
+$(function(){
+	$("#appChoose").hide();
+});
+
+    
+function selectIsVerification(value){
+	if(value == '2'){
+		$("#appChoose").css("display",'none');
+	}
+	if(value == '1'){
+		$("#appChoose").css("display",'');
+	}
+	if(value == '0'){
+		$("#appChoose").css("display",'none');
+	}
+	if(value = null){
+		$("#appChoose").css("display",'none');
+	}
+}
+
+//光标位置插入
+function insertAtCursor(fieldName, myValue) { 
+	var myField=document.getElementById(fieldName);
+	//IE support
+	if (document.selection) {
+		myField.focus();
+		sel = document.selection.createRange();
+		sel.text = myValue;
+		sel.select();
+	}
+	//MOZILLA/NETSCAPE support
+	else if (myField.selectionStart || myField.selectionStart == '0') {
+		var startPos = myField.selectionStart;
+		var endPos = myField.selectionEnd;
+		// save scrollTop before insert
+		var restoreTop = myField.scrollTop;
+		myField.value = myField.value.substring(0, startPos) + myValue + myField.value.substring(endPos, myField.value.length);
+		if (restoreTop > 0) {
+		myField.scrollTop = restoreTop;
+		}
+		myField.focus();
+		myField.selectionStart = startPos + myValue.length;
+		myField.selectionEnd = startPos + myValue.length;
+	} else {
+	    myField.value += myValue;
+	    myField.focus();
+  	}
+}
+
+
+
+
+
 
 $(function(){
 //点击页面其它部分收缩选择角色下拉框
@@ -142,8 +195,8 @@ $(function(){
     <div class="form-content">
     	<table class="form-table">
     		<tr>
-	        	 <th><b class="mustbe">*</b> 请输入数据调用名称：</th>
-	        	 <td>
+        		<th><b class="mustbe">*</b> 请输入数据调用名称：</th>
+	        	<td>
 					<input type="text" placeholder="字母、数字、下划线或中文" id="resName" name="resName" value="${jisDatacall.resName}" />
 				</td>
 				<th><b class="mustbe">*</b> 请输入标识：</th>
@@ -155,7 +208,7 @@ $(function(){
 			<tr>
 				<th><b class="mustbe">*</b> 请选择调用方式：</th>
                 <td>
-                	<select name="callingType"  >   
+                	<select name="callingType" onChange="calltype(this.value)" >   
 						<option value="">--请选择--</option>   
 						<option value="1"<c:if test="${jisDatacall.callingType==1}">selected</c:if>>IFRAME调用</option>   
 						<option value="2"<c:if test="${jisDatacall.callingType==2}">selected</c:if>>RSS调用</option>
@@ -165,27 +218,99 @@ $(function(){
 				<td>
 					<textarea class="textarea" name="resUrl"  >${jisDatacall.resUrl}</textarea>
 				</td>
-				<th><b class="mustbe">*</b> 是否验证：</th>
-				
+			</tr>
+			<tr>
+				<th>排序方式：</th>
 				<td>
-				
+				<select name="orderType" id="orderType" data-value="${jisDatacall.orderType}" >  
+					<option value="">--请选择--</option>   
+					<option value="1"<c:if test="${jisDatacall.orderType==1}">selected</c:if>>按时间正序</option>   
+					<option value="2"<c:if test="${jisDatacall.orderType==2}">selected</c:if>>按时间倒序</option>
+				</select>
+				</td>
+				<th>信息数量：</th>
+				<td>
+					<input type="text" id="infoNum" name="infoNum" maxlength="33"
+                    class="input-text" value="${jisDatacall.infoNum}" placeholder="信息数量范围为1~30"/>
+                </td>
+			</tr>
+			<tr>
+				<th>时间格式：</th>
+				<td>
+				<select name="timeFormat" data-value="${jisDatacall.timeFormat}">
+					<option value="MM-dd"<c:if test="${jisDatacall.timeFormat=='MM-dd'}">selected</c:if>>MM-dd</option>
+					<option value="yyyy-MM-dd"<c:if test="${jisDatacall.timeFormat=='yyyy-MM-dd'}">selected</c:if>>yyyy-MM-dd</option>
+					<option value="yyyy/MM/dd"<c:if test="${jisDatacall.timeFormat=='yyyy/MM/dd'}">selected</c:if>>yyyy/MM/dd</option>
+					<option value="yyyy/MM/dd HH:mm"<c:if test="${jisDatacall.timeFormat=='yyyy/MM/dd HH:mm'}">selected</c:if>>yyyy/MM/dd HH:mm</option>
+					<option value="yyyy-MM-dd HH:mm"<c:if test="${jisDatacall.timeFormat=='yyyy-MM-dd HH:mm'}">selected</c:if>>yyyy-MM-dd HH:mm</option>
+					<option value="yyyy/MM/dd HH:mm:ss"<c:if test="${jisDatacall.timeFormat=='yyyy/MM/dd HH:mm:ss'}">selected</c:if>>yyyy/MM/dd HH:mm:ss</option>
+					<option value="yyyy-MM-dd HH:mm:ss"<c:if test="${jisDatacall.timeFormat=='yyyy-MM-dd HH:mm:ss'}">selected</c:if>>yyyy-MM-dd HH:mm:ss</option>
+                </select>
+                </td>
+			</tr>
+			<tr>
+				<th><b class="mustbe">*</b> 是否验证：</th>
+				<td colspan="2">
 					<c:if test="${jisDatacall.isVerification=='2'}">
-						<input type="radio" name="isVerification" value="1"/>是
-						<input type="radio" name="isVerification" checked="checked" value="2"/>否
+						<input type="radio" name="isVerification" value="1" onclick="selectIsVerification(this.value);"/>是
+						<input type="radio" name="isVerification" checked="checked" value="2" onclick="selectIsVerification(this.value);"/>否
 					</c:if>
 					
 					<c:if test="${jisDatacall.isVerification=='1'}">
-						<input type="radio" name="isVerification" checked="checked" value="1"/>是
-						<input type="radio" name="isVerification" value="2"/>否
+						<input type="radio" name="isVerification" checked="checked" value="1" onclick="selectIsVerification(this.value);"/>是
+						<input type="radio" name="isVerification" value="2" onclick="selectIsVerification(this.value);"/>否
 					</c:if>
 					
 					<c:if test="${jisDatacall.isVerification=='0'}">
-						<input type="radio" name="isVerification" value="1"/>是
-						<input type="radio" name="isVerification" value="2"/>否
+						<input type="radio" name="isVerification" value="1" onclick="selectIsVerification(this.value);"/>是
+						<input type="radio" name="isVerification" value="2" onclick="selectIsVerification(this.value);"/>否
 					</c:if>
 				</td>
+				<td id="appChoose" colspan="2">
+					<select id="appid" name="appid" style="width:120px" class="" data-value="${datacall.appid }" onChange="" >
+                          <option value="0">－选择应用－</option>
+                     	<c:forEach items="${app}" var="app" varStatus="i">
+                     		<option value="${app.iid}" <c:if test="${app.iid==datacall.appid }">selected="selected"</c:if> >${app.name }</option>
+                     	</c:forEach>
+                     </select>
+				</td>
 			</tr>
-			</table>
+			
+			<tr id="rsshtmltr"> 
+				<th><b class="mustbe">*</b>Rss信息模板</th>  
+	            <td colspan="5" class="opr_open_tdright">
+	                <fieldset style="border: 1px red solid;">
+	                <legend style="margin-left:15px"><b><font color="blue">HTML标签</font></b></legend>
+	                    <table style="margin-left: 15px;"> 
+	                        <tr class="opr_tr"> 
+	                        	<td class="label" width="70" align='left'>更多链接</td> 
+	                        	<td colspan="2" class=""  width="160"><a href="###" onClick="insertAtCursor('content','{tpl_morelink}')">{tpl_morelink}</a></td>
+	                        	<td class="label" width="70" align='left'>资源名称</td>
+	                        	<td colspan="2" class=""  width="160"><a href="###" onClick="insertAtCursor('content','{tpl_resname}')">{tpl_resname}</a></td>
+	                        	<td class="label" width="70" align='left'>文章标题</td>
+	                        	<td colspan="2" class=""  width="160"><a href="###" onClick="insertAtCursor('content','{tpl_title}')">{tpl_title}</a></td>
+	                        </tr> 
+	                        <tr class="opr_tr">   
+	                            <td class="label" width="70" align='left'>文章日期</td>
+	                            <td colspan="2" class="" ><a href="###" onClick="insertAtCursor('content','{tpl_pubdate}')">{tpl_pubdate}</a></td>
+	                            <td class="label" width="70" align='left'>文章连接</td>
+	                            <td colspan="2" class="" ><a href="###" onClick="insertAtCursor('content','{tpl_link}')">{tpl_link}</a></td>
+	                            <td class="label" width="70" align='left'>文章作者</td>
+	                            <td colspan="2" class="" ><a href="###" onClick="insertAtCursor('content','{tpl_author}')">{tpl_author}</a></td>
+	                        </tr> 
+	                        <tr class="opr_tr"> 
+	                           </tr> 
+	                    </table>
+	                </fieldset>
+	
+	                <fieldset style="border: 1px red solid;">
+	                <legend style="margin-left:15px"><b><font color="blue">HTML模板编辑</font></b></legend>
+	                <textarea style="margin-left:15px ;width:850px;height:300px" id="content" name="content" rows="20">${rsshtml}</textarea>
+	                </fieldset> 
+	        	</td> 
+	        </tr>
+			
+		</table>
 	        <!-- </ul> -->
     </div>
     <div style="clear:both;"></div>

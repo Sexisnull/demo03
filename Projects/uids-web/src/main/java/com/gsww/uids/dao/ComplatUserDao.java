@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import com.gsww.uids.entity.ComplatOutsideuser;
 import com.gsww.uids.entity.ComplatUser;
 
 /**
@@ -66,6 +65,13 @@ public interface ComplatUserDao extends PagingAndSortingRepository<ComplatUser, 
 
 	ComplatUser findByLoginname(String loginname);
 	
+	/**
+	 * 根据机构id获取用户
+	 * @param groupid
+	 * @author 姜文鹏
+	 * @return
+	 */
+	ComplatUser findByGroupid(Integer groupid);
 }
 
 

@@ -1,4 +1,4 @@
-package com.gsww.uids.service;
+﻿package com.gsww.uids.service;
 
 import java.util.Date;
 import java.util.List;
@@ -75,16 +75,15 @@ public interface ComplatUserService {
 	 */
 	public List<Map<String, Object>> findByNameOrPinYin(String keyword);
 	
-	
-
 	/**
      * @discription   验证loginname实体是否存在 
      * @param loginName
      * @return
 	 */
 	public ComplatUser findByLoginnameIsUsed(String loginname);
-
-
-	List<Map<String, Object>> synchronizeData(Integer userId);
+	
+	List<Map<String,Object>> synchronizeData(Integer userId);
+	
+	public ComplatUser findByGroupid(Integer groupid);
 	
 }
