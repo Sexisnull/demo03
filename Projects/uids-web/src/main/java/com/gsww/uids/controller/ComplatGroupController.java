@@ -68,18 +68,12 @@ public class ComplatGroupController extends BaseController{
 	private SysParaService sysParaService;
 	@Autowired
 	private ComplatZoneService complatZoneService;
-//	@Autowired
-//	private JisApplication jisApplication;
 	@Autowired
 	private JisApplicationService jisApplicationService;
-//	@Autowired
-//	private JisSysview jisSysview;
 	@Autowired
 	private JisSysviewService jisSysviewService;
-//	@Autowired
-//	private JisSysviewDetail jisSysviewDetail;
-//	@Autowired
-//	private JisSysviewDetailService jisSysviewDetailService;
+	@Autowired
+	private JisSysviewDetailService jisSysviewDetailService;
     //节点类型下拉选择集合
 	private Map<Integer, Object> nodetypeMap = new HashMap<Integer, Object>();
 	//区域类型下拉选择集合
@@ -157,6 +151,94 @@ public class ComplatGroupController extends BaseController{
 		return "users/complat/complatgroup_list";
 	}
 	
+	/**
+	 * 新增，编辑，删除时同步数据到表jis_sysview
+	 * @param complatGroup
+	 * @param type
+	 * @throws Exception
+	 */
+	public void synchronization(ComplatGroup complatGroup, int type) throws Exception{
+		try{
+			List<JisApplication> list = jisApplicationService.findByIsSyncGroupNotNullAndLoginType(0); //查询支持同步的应用
+			Random random = new Random(); //初始化随机数
+			String data = TimeHelper.getCurrentCompactTime(); //获得同步时间
+			String synctime = ""; //记录修改或新增的时间
+			String operatetype = ""; //操作类型
+			//判断同步类型,根据同步类型的不同来获取不同的数据
+			if(type == 1){
+				operatetype = "新增机构";
+				synctime = String.valueOf(complatGroup.getCreatetime());
+			}else if(type == 2){
+				operatetype = "修改机构";
+				synctime = String.valueOf(complatGroup.getModifytime());
+			}else if(type == 3){
+				operatetype = "删除机构";
+				synctime = String.valueOf(complatGroup.getModifytime());
+			}
+			//将所有支持同步的应用进行同步
+			for(JisApplication jisApplication : list){
+				JisSysview jisSysview = new JisSysview();
+				jisSysview.setObjectid(String.valueOf(complatGroup.getIid()));
+				jisSysview.setObjectname(complatGroup.getName());
+				jisSysview.setState("C");
+				jisSysview.setResult("TG");
+				jisSysview.setOptresult(1);
+				jisSysview.setSynctime(synctime);
+				jisSysview.setAppid(jisApplication.getIid());
+				jisSysview.setCodeid(complatGroup.getCodeid());
+				jisSysview.setTimes(1);
+				jisSysview.setOperatetype(operatetype);
+				int rannum = (int) (random.nextDouble() * (99999 - 10000 + 1)) + 10000;// 获取5位随机数
+				jisSysview.setTranscationId(data + String.valueOf(rannum));
+				jisSysviewService.save(jisSysview);
+				syncDetail(complatGroup, jisApplication, jisSysview);
+			}
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 同步数据到表jis_sysview_detail
+	 * @param complatGroup
+	 * @param jisApplication
+	 * @throws Exception
+	 */
+	public void syncDetail(ComplatGroup complatGroup, JisApplication jisApplication, JisSysview jisSysview) throws Exception{
+		try{
+			Map<String,Object> jsonMap = new HashMap<String,Object>();
+			jsonMap.put("allParCode", complatGroup.getSuffix());
+			jsonMap.put("allParName", complatGroup.getGroupallname());
+			jsonMap.put("appName", jisApplication.getName());
+			jsonMap.put("appid", String.valueOf(jisApplication.getIid()));
+			jsonMap.put("cardId","");
+			jsonMap.put("compfax","");
+			jsonMap.put("comptel","");
+			jsonMap.put("email","");
+			jsonMap.put("groupCode",complatGroup.getCodeid());
+			jsonMap.put("groupName",complatGroup.getName());
+			jsonMap.put("headShip","");
+			jsonMap.put("hometel","");
+			jsonMap.put("id", String.valueOf(complatGroup.getIid()));
+			jsonMap.put("loginName","");
+			jsonMap.put("loginPass","");
+			jsonMap.put("mobile","");
+			jsonMap.put("msn","");
+			jsonMap.put("ndlogin","");
+			jsonMap.put("parCode",complatGroupService.findByIid(complatGroup.getPid()).getCodeid());
+			jsonMap.put("parName",complatGroupService.findByIid(complatGroup.getPid()).getName());
+			jsonMap.put("qq","");
+			jsonMap.put("state","TG");
+			jsonMap.put("userName","");
+			String detail = JSONUtil.writeMapJSON(jsonMap);
+			JisSysviewDetail jisSysviewDetail = new JisSysviewDetail();
+			jisSysviewDetail.setSendmsg(detail);
+			jisSysviewDetail.setTranscationId(jisSysview.getTranscationId());
+			jisSysviewDetailService.save(jisSysviewDetail);
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+	}
 
 	/**
 	 * 编辑用户页面
@@ -208,7 +290,7 @@ public class ComplatGroupController extends BaseController{
 	public ModelAndView complatgroupSave(String iid,ComplatGroup complatGroup,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		try {
 			String name = request.getParameter("name");
-			boolean syn = false;
+//			boolean syn = false;
 			if(StringHelper.isNotBlack(iid)){
 				//编辑状态改变操作状态位（opersign）和修改时间（modifytime）
 				complatGroup.setOpersign(2);
@@ -218,9 +300,9 @@ public class ComplatGroupController extends BaseController{
 					returnMsg("error", "保存失败,机构名称重复", request);
 				}else{
 					complatGroup = complatGroupService.save(complatGroup);
-					syn = true;
 					returnMsg("success", "保存成功", request);
 				}
+				synchronization(complatGroup, 2); //编辑同步
 			}else{
 				String pid = request.getParameter("groupid");
 				//新增时将机构名汉字转换成首字母大写保存到pinyin字段中
@@ -230,12 +312,13 @@ public class ComplatGroupController extends BaseController{
 				complatGroup.setOpersign(1);
 				complatGroup.setCreatetime(Timestamp.valueOf(TimeHelper.getCurrentTime()));
 				//判断上级机构是否存在
-			    if (StringHelper.isNotBlack(pid)){
+			    if (StringHelper.isNotBlack(pid)){//如果上级机构存在的情况，即pid ！= null
 			        Integer pId = Integer.valueOf(pid);
+			        //判断机构是否重复
 			        if (complatGroupService.queryNameIsUsed(name, pId)){
-			        	System.out.println("test1");
 			        	returnMsg("error", "保存失败,机构名称重复", request);
-			        }else{
+			        }else{//如果不重复
+			        	//自动生成机构编码
 			        	List<ComplatGroup> group = complatGroupService.findByPid(Integer.valueOf(pid));
 			        	String codeId = "";
 			        	if(null != group && group.size() > 0){
@@ -243,13 +326,12 @@ public class ComplatGroupController extends BaseController{
 			        	}
 			        	int num = Integer.valueOf(codeId.substring(codeId.length() - 4, codeId.length())).intValue() + 1;
 			            codeId = codeId.substring(0, codeId.length() - 4) + String.valueOf(num);
-			        	complatGroup.setCodeid(codeId);
-			        	complatGroup.setPid(pId);
+			        	complatGroup.setCodeid(codeId); //存入机构编码
+			        	complatGroup.setPid(pId);  //保存pid
 			        	complatGroup = complatGroupService.save(complatGroup);
-			        	syn = true;
 			        	returnMsg("success", "保存成功", request);
 			        }
-			    }else{
+			    }else{//如果上级机构不存在，即pid=null
 			        boolean isExist = false;
 			        List<ComplatGroup> group = complatGroupService.findByNoPid();
 			        for(ComplatGroup c : group){
@@ -259,38 +341,16 @@ public class ComplatGroupController extends BaseController{
 			        }
 			        if(isExist){
 			        	returnMsg("error", "保存失败,机构名称重复", request);
-			        	System.out.println("test2");
 			        }else{
 			        	String lastCodeId = group.get(0).getCodeid();
 			        	Integer num = Integer.valueOf("1" + lastCodeId) + 1;
 			        	String codeId = String.valueOf(num).substring(1, lastCodeId.length()+1);
 			        	complatGroup.setCodeid(codeId);
 			        	complatGroup = complatGroupService.save(complatGroup);
-			        	syn = true;
 			        	returnMsg("success", "保存成功", request);
 			        }
 			     }
-			}
-			if(syn){
-				List<JisApplication> list = jisApplicationService.findByIsSyncGroupNotNullAndLoginType(0); //查询支持同步的应用
-				Random random = new Random(); 
-				String data = TimeHelper.getCurrentCompactTime();
-				for(JisApplication jisApplication : list){
-					JisSysview jisSysview = new JisSysview();
-					jisSysview.setObjectid(String.valueOf(complatGroup.getIid()));
-					jisSysview.setObjectname(complatGroup.getName());
-					jisSysview.setState("C");
-					jisSysview.setResult("TG");
-					jisSysview.setOptresult(1);
-					jisSysview.setSynctime(String.valueOf(complatGroup.getCreatetime()));
-					jisSysview.setAppid(jisApplication.getIid());
-					jisSysview.setCodeid(complatGroup.getCodeid());
-					jisSysview.setTimes(1);
-					jisSysview.setOperatetype("修改机构");
-					int rannum = (int) (random.nextDouble() * (99999 - 10000 + 1)) + 10000;// 获取5位随机数
-					jisSysview.setTranscationId(data + String.valueOf(rannum));
-					jisSysviewService.save(jisSysview);
-				}
+			    synchronization(complatGroup, 1);//新增同步
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -312,9 +372,10 @@ public class ComplatGroupController extends BaseController{
 			boolean flag=false;
 			for(int i=0;i<para.length;i++){
 				String mId = para[i].trim();
-				complatGroup=complatGroupService.findByKey(mId);
-				//将操作状态位改为3
-				complatGroup.setOpersign(3);
+				complatGroup = complatGroupService.findByKey(mId);
+				complatGroup.setOpersign(3);//将操作状态位改为3
+				complatGroup.setModifytime(Timestamp.valueOf(TimeHelper.getCurrentTime()));//保存删除时间在同步时使用
+				complatGroup = complatGroupService.save(complatGroup);
 				//检测当前要删除的机构是否有下级机构，有则无法删除
 				List<ComplatGroup> list=new ArrayList<ComplatGroup>();
 				list=complatGroupService.findByPid(Integer.valueOf(mId));
@@ -322,6 +383,7 @@ public class ComplatGroupController extends BaseController{
 					flag=false;
 					break;
 				}else{
+					synchronization(complatGroup, 3);//删除同步
 					complatGroupService.delete(complatGroup);
 					flag=true;
 				}				
@@ -394,10 +456,6 @@ public class ComplatGroupController extends BaseController{
 		try {
 			for (ComplatGroup complatGroup : group) {
 				if (StringHelper.isNotBlack(complatGroup.getName()) && StringHelper.isNotBlack(complatGroup.getParentCode())) {
-//					if ((StringHelper.isNotBlack(complatGroup.getParentName()))&& (complatGroup.getParentCode().isEmpty())) {
-//						flag = false;
-//						strRow = strRow + "<" + row + ">";
-//					} else {
 						if (complatGroup.getStrNodeType().equals("区域")) {
 							complatGroup.setNodetype(Integer.valueOf(1));
 						} else if (complatGroup.getStrNodeType().equals("单位")) {
@@ -428,7 +486,6 @@ public class ComplatGroupController extends BaseController{
 						complatGroup.setSynState(Integer.valueOf(2));
 						String parentCode = complatGroup.getParentCode();
 						String name = complatGroup.getName();
-//						if (StringHelper.isNotBlack(parentCode)) {
 							Integer pId = complatGroupService.findByCodeid(parentCode).getIid();
 							//进行重名校验
 							if (complatGroupService.queryNameIsUsed(name, pId)) {
@@ -448,6 +505,7 @@ public class ComplatGroupController extends BaseController{
 								complatGroup.setPid(pId);
 								complatGroup = complatGroupService.save(complatGroup);
 							}
+							synchronization(complatGroup, 1);//新增同步
 				} else {
 					flag = false;
 					strRow ="第<" + row + ">行数据，机构名或上级机构编码不能为空！";
