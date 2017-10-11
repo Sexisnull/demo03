@@ -60,7 +60,7 @@
 				<div class="header_userinfo" <c:if test="${topmenueValue eq '1' and nodeType != '1'}"> style="width: 575px;" </c:if>>
 					<ul class="header_nav">
 
-						<li class="home" onclick="toBack();">
+						<li class="home" onclick="toBack();" style="${managerIcon}">
 							<p>
 								后台管理
 							</p>

@@ -7,6 +7,7 @@ package com.gsww.jup.controller.sys;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -37,9 +38,12 @@ import com.gsww.jup.util.JSONUtil;
 import com.gsww.jup.util.RSAUtil;
 import com.gsww.jup.util.StringHelper;
 import com.gsww.jup.util.TimeHelper;
+import com.gsww.uids.constant.JisSettings;
+import com.gsww.uids.entity.ComplatBanlist;
 import com.gsww.uids.entity.ComplatGroup;
 import com.gsww.uids.entity.ComplatUser;
 import com.gsww.uids.entity.JisLog;
+import com.gsww.uids.service.ComplatBanListService;
 import com.gsww.uids.service.ComplatGroupService;
 import com.gsww.uids.service.ComplatUserService;
 import com.gsww.uids.service.JisLogService;
@@ -72,14 +76,16 @@ public class SysLoginController extends BaseController {
 	private ComplatUserService complatUserService;
 	@Autowired
 	private SysLoginService sysLoginService;
-	// @Autowired
-	// private SysLogService sysLogService;
+	@Autowired
+	private ComplatBanListService complatBanListService;
 	@Autowired
 	private SysMenuService sysMenuService;
 	@Autowired
 	private ComplatGroupService complatGroupService;
 	@Autowired
 	private JisLogService jisLogService;
+	@Autowired
+	private JisSettings jisSettings;
 
 	private static Logger logger = LoggerFactory
 			.getLogger(SysLoginController.class);
@@ -129,12 +135,20 @@ public class SysLoginController extends BaseController {
 						.getPrivate(), pwd_result);
 				StringBuffer name = new StringBuffer();
 				StringBuffer pwd = new StringBuffer();
+				
 				name.append(new String(de1_result));
 				pwd.append(new String(de2_result));
 				userName = name.reverse().toString();
 				passWord = pwd.reverse().toString();
 				userName = URLDecoder.decode(userName,"utf-8"); 
 				passWord = URLDecoder.decode(passWord,"utf-8"); 
+				ComplatBanlist banList = complatBanListService.checkLoginTimes(userName, loginIp, 0,group);
+				if (banList == null || !banList.isCanLogin()) {
+					resMap.put("ret", "2");
+					resMap.put("msg", "登录次数过多，请"+jisSettings.getBanTimes()+"分钟后重试");
+					response.getWriter().write(JSONObject.toJSONString(resMap));
+					return;
+				}
 				SysUserSession sysUserSession = sysLoginService.login(userName,
 						passWord, group, loginIp);
 				if (sysUserSession != null) {
@@ -150,7 +164,9 @@ public class SysLoginController extends BaseController {
 							jisLogService.save(sysUserSession.getAccountId(),
 									sysUserSession.getUserIp(), userName
 											+ "系统登录成功", 8, 9);
-
+							if ((banList != null) && (banList.getIid() != null)) {
+						          this.complatBanListService.removeById(banList.getIid());
+						    }
 						} catch (Exception e) {
 							logger.error(e.getMessage(), e);
 						}
@@ -174,8 +190,8 @@ public class SysLoginController extends BaseController {
 					}
 				} else {
 					resMap.put("ret", "2");
-					resMap.put("msg", "用户名或密码错误！");
-					response.getWriter().write(JSONObject.toJSONString(resMap));
+					
+					
 					try {
 						JisLog log = new JisLog();
 						log.setUserId(userName);
@@ -185,9 +201,24 @@ public class SysLoginController extends BaseController {
 						log.setModuleName(8);
 						log.setOperateType(9);
 						jisLogService.save(log);
+						if(banList!=null){
+							int last = jisSettings.getLoginError() - 
+					          banList.getLogintimes().intValue() - 1;
+							if(last>0){
+								resMap.put("msg", "用户名或密码错误！您还可以尝试登录"+last+"次！");
+							}else{
+								resMap.put("msg", "用户名或密码错误！登录次数过多，请"+jisSettings.getBanTimes()+"分钟后重试");
+							}
+							banList.setLogintimes(Integer.valueOf(banList.getLogintimes().intValue() + 1));
+							banList.setLogindate(new Timestamp(new Date().getTime()));
+							this.complatBanListService.save(banList);
+							
+						}
+						
 					} catch (Exception e) {
 						logger.error(e.getMessage(), e);
 					}
+					response.getWriter().write(JSONObject.toJSONString(resMap));
 				}
 			} catch (Exception e) {
 				logger.error(e.getMessage(), e);

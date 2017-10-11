@@ -4,6 +4,8 @@ import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.Transient;
+
 import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -23,8 +25,18 @@ public class ComplatBanlist implements java.io.Serializable {
 	private Integer logintimes;
 	private String loginname;
 	private Integer usertype;
-
+	
+	@Transient
+	private boolean canLogin;
 	// Constructors
+	@Transient
+	public boolean isCanLogin() {
+		return canLogin;
+	}
+	@Transient
+	public void setCanLogin(boolean canLogin) {
+		this.canLogin = canLogin;
+	}
 
 	/** default constructor */
 	public ComplatBanlist() {

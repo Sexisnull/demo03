@@ -1,6 +1,7 @@
 package com.gsww.uids.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,8 +22,10 @@ import com.gsww.jup.controller.BaseController;
 import com.gsww.jup.entity.sys.SysUserSession;
 import com.gsww.jup.util.JSONUtil;
 import com.gsww.jup.util.StringHelper;
+import com.gsww.uids.entity.ComplatRole;
 import com.gsww.uids.entity.ComplatUser;
 import com.gsww.uids.entity.JisUserdefined;
+import com.gsww.uids.service.ComplatRoleService;
 import com.gsww.uids.service.ComplatUserService;
 import com.gsww.uids.service.JisApplicationService;
 import com.gsww.uids.service.JisUserdefinedService;
@@ -36,6 +39,8 @@ public class FrontAppController extends BaseController {
 	private JisUserdefinedService jisUserdefinedService;
 	@Autowired
 	private ComplatUserService complatUserService;
+	@Autowired
+	private ComplatRoleService complatRoleService;
 
 	private static Logger logger = LoggerFactory
 			.getLogger(FrontAppController.class);
@@ -59,7 +64,12 @@ public class FrontAppController extends BaseController {
 			String roleIds = session.getRoleIds();
 			List<Map<String, Object>> apps = jisApplicationService
 					.findAppByRoleIds(roleIds);
+			String managerIcon = "display:none";
+			if(checkHaveRight(session.getAccountId(),roleIds)){
+				managerIcon="";
+			}
 			model.addAttribute("application", apps);
+			model.addAttribute("managerIcon", managerIcon);
 			request.getSession().setAttribute("theme", theme);
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
@@ -67,10 +77,45 @@ public class FrontAppController extends BaseController {
 		return "main/frontIndex";
 	}
 
+	private boolean checkHaveRight(String iid,String roleIds) {
+		if(iid==null || iid=="" || roleIds==null || roleIds.split(",").length==0){
+			return false;
+		}
+		List<ComplatRole> roles = new ArrayList<ComplatRole>();
+		String[] roleId = roleIds.split(",");
+		if(Integer.parseInt(iid)==1){
+			return true;
+		}
+		for(int i=0;i<roleIds.length();i++){
+			try {
+				roles.add(complatRoleService.findByKey(Integer.parseInt(roleId[i])));
+			}catch (Exception e) {
+				logger.error(e.getMessage(), e);
+			}
+		}
+		for(ComplatRole role : roles){
+			if ((role != null) && (role.getType() != null) && (role.getType().intValue() == 0)) {
+		        return true;
+		    }
+			if ((role != null) && (role.getType() != null) && (role.getType().intValue() == 1)) {
+		        return true;
+		    }
+			if ((role != null) && (role.getType() != null) && (role.getType().intValue() == 2)) {
+		        return true;
+		    }
+		}
+		return false;
+	}
+
 	@RequestMapping(value = "/backIndex")
 	public String toBackIndex(HttpServletRequest request) {
 		try {
-
+			SysUserSession session = (SysUserSession) request.getSession().getAttribute("sysUserSession");
+			String roleIds = session.getRoleIds();
+			if(!checkHaveRight(session.getAccountId(),roleIds)){
+				return "main/noRightAccess";
+			}
+			
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
 		}

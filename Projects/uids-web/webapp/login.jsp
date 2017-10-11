@@ -68,7 +68,7 @@ function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
 	var setting = {
 		async : {
 			enable : true,
-			url : 'login/getGroup',
+			url : '${ctx}/login/getGroup',
 			autoParam : [ "id=groupId", "isDisabled" ]
 		},
 		callback : {
@@ -309,7 +309,7 @@ function resetform() {
 		}
 		 $.ajax({
          	type : "post",
-				url : "sys/mybatis/getkey",
+				url : "${ctx}/sys/mybatis/getkey",
 				data : {},
 				dataType : "json",
 				async: false,
@@ -425,7 +425,7 @@ function resetform() {
 	function chimg() {
 		$("#code_").attr(
     				'src',
-    				'kaptcha/image?'	+ Math.floor(Math.random() * 100)).fadeIn();
+    				'${ctx}/kaptcha/image?'	+ Math.floor(Math.random() * 100)).fadeIn();
 		$("#authCode").val("");
 	}
 </script>
