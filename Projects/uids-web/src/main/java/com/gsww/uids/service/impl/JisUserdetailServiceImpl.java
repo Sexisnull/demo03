@@ -2,6 +2,7 @@ package com.gsww.uids.service.impl;
 
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -98,4 +99,5 @@ public class JisUserdetailServiceImpl implements JisUserdetailService {
         jdbcDAO.execute(sql);
         jdbcDAO.execute(sqlOut);
     }
+
 }

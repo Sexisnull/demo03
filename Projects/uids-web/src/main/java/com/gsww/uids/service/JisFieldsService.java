@@ -84,4 +84,11 @@ public interface JisFieldsService {
      * @return
 	 */
 	List<JisFields> findByFieldname(String fieldname);
+	
+	
+	/**
+	 * 查询依据Iid查询fieldname字段的所有值
+	 */
+	List<Map<String,Object>> findFieldName();
+	
 }

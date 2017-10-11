@@ -167,4 +167,12 @@ public class JisFieldsServiceImpl implements JisFieldsService {
 	public List<JisFields> findByFieldname(String fieldname) {
 		return jisFieldsDao.findByFieldname(fieldname);
 	}
+
+	@Override
+	public List<Map<String,Object>> findFieldName() {
+		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();		
+		String querySql= "select fieldname from jis_fields where type='1' or type='2' ";
+		list=jdbcTemplate.queryForList(querySql);
+		return list;
+	}
 }
