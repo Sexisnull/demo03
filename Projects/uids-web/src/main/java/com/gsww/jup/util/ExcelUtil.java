@@ -235,6 +235,9 @@ public class ExcelUtil {
 				int j = 0;
 				while (it.hasNext()) {
 					String strdata = String.valueOf(mapdata.get(it.next()));
+					if(strdata == null || strdata.length() <= 0 || strdata.equals("null")){
+						strdata = "";
+					}
 					Cell celldata = rowdata.createCell(j);
 					celldata.setCellType(Cell.CELL_TYPE_STRING);
 					celldata.setCellValue(strdata);
