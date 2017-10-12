@@ -564,7 +564,6 @@ public class ComplatUserController extends BaseController {
 			HttpServletResponse response) throws Exception {
 		SysUserSession session = (SysUserSession) request.getSession().getAttribute("sysUserSession");
 		Map resMap = new HashMap();
-		Integer userId = null;
 		String fileName = multipartFile.getOriginalFilename();
 		LinkedHashMap<String, String> fieldMap = new LinkedHashMap<String, String>();
 		fieldMap.put("0", "name");
@@ -587,7 +586,7 @@ public class ComplatUserController extends BaseController {
 		fieldMap.put("17", "pwdanswer");
 		fieldMap.put("18", "pinyin");
 		fieldMap.put("19", "idCode");
-		fieldMap.put("20", "Kzsx");	
+		//fieldMap.put("20", "Kzsx");	
 		List<ComplatUser> users = ExcelUtil.readXls(fileName,multipartFile.getInputStream(), ComplatUser.class, fieldMap);		
 		// 判断是哪行导入失败
 		int row = 1;
@@ -612,47 +611,47 @@ public class ComplatUserController extends BaseController {
 						//对密码进行加密
 						String pwd = complatUser.getPwd();
 						String p = Md5Util.md5encode(pwd);
-						complatUser.setPwd(p);
+						complatUser.setPwd(p);						
 						complatUserService.save(complatUser);
 						//身份证号
 						String cardId = complatUser.getIdCode();
-						userId = complatUser.getIid();
+						Integer userId = complatUser.getIid();
+						complatUser.setIid(userId);
 						JisUserdetail jisUser = new JisUserdetail();
 						jisUser.setCardid(cardId);
 						jisUser.setIid(userId);
 						jisUser.setUserid(userId);
 						jisUserdetailService.save(jisUser);											
-						//扩展属性
-						
-  						String Kzsx=complatUser.getKzsx();
-  					    String kzsx="";
-						String [] fields=Kzsx.split(",");
-						//List<Map<String,String>> listFields = new ArrayList<Map<String,String>>();
-						//List<String> listFields = new ArrayList<String>();
-						Map<String,String> map = new HashMap<String,String>();
-						for (int i = 0; i < fields.length; i++) {
-							kzsx=fields[i].trim();
-							String kzsx1=kzsx.substring(1);
-							
-							int length=kzsx1.length();
-							String kzsx2=kzsx1.substring(0,length-1);
-						    String [] arr = kzsx2.split(":");
-						    
-						    for(int j=0;j<arr.length;j++){	
-						    	String str1 = arr[0].trim();
-						    	String str2 = arr[1].trim();
-						    	if(j==0){
-						    		map.put(str1, "");
-						    	}else{
-						    		map.put(str1, str2);
-						    	}
-						    }									 			
-						}
-						JisUserdetail jisUserdetail = jisUserdetailService.findByUserid(userId);
-						if(jisUserdetail.getIid() != null){
-							//对身份证号和用户扩展属性update
-							jisUserdetailService.update(jisUserdetail.getIid(),cardId,map);			
-						}											
+//						//扩展属性
+//  						String Kzsx=complatUser.getKzsx();
+//  					    String kzsx="";
+//						String [] fields=Kzsx.split(",");
+//						//List<Map<String,String>> listFields = new ArrayList<Map<String,String>>();
+//						//List<String> listFields = new ArrayList<String>();
+//						Map<String,String> map = new HashMap<String,String>();
+//						for (int i = 0; i < fields.length; i++) {
+//							kzsx=fields[i].trim();
+//							String kzsx1=kzsx.substring(1);
+//							
+//							int length=kzsx1.length();
+//							String kzsx2=kzsx1.substring(0,length-1);
+//						    String [] arr = kzsx2.split(":");
+//						    
+//						    for(int j=0;j<arr.length;j++){	
+//						    	String str1 = arr[0].trim();
+//						    	String str2 = arr[1].trim();
+//						    	if(j==0){
+//						    		map.put(str1, "");
+//						    	}else{
+//						    		map.put(str1, str2);
+//						    	}
+//						    }									 			
+//						}
+//						JisUserdetail jisUserdetail = jisUserdetailService.findByUserid(userId);
+//						if(jisUserdetail.getIid() != null){
+//							//对身份证号和用户扩展属性update
+//							jisUserdetailService.update(jisUserdetail.getIid(),cardId,map);			
+//						}											
 						synchronization(complatUser, 1);//新增同步					
 						String desc=session.getUserName()+"导入了"+complatUser.getName();
 			            jisLogService.save(session.getUserName(),session.getUserIp(), desc, 2, 5);
@@ -718,24 +717,25 @@ public class ComplatUserController extends BaseController {
 		headList.add("身份证号");
 		headList.add("是否启用");
 		headList.add("创建日期");
-        //获取fieldname
-		List<Map<String,Object>> list=jisFieldsService.findFieldName();
-		int num=33;
-		for(int i=0;i<list.size();i++){
-			Map<String,Object> fieldsMap = list.get(i);
-			String field=null;
-			for(int j=0;j<fieldsMap.size();j++){
-				field = fieldsMap.get("fieldname").toString();			
-			}
-			for(int n=0;n<fieldsMap.size();n++){
-				headList.add(field);
-			}
-		}	
+//        //获取fieldname
+//		List<Map<String,Object>> list=jisFieldsService.findFieldName();
+//		int num=33;
+//		for(int i=0;i<list.size();i++){
+//			Map<String,Object> fieldsMap = list.get(i);
+//			String field=null;
+//			for(int j=0;j<fieldsMap.size();j++){
+//				field = fieldsMap.get("fieldname").toString();			
+//			}
+//			for(int n=0;n<fieldsMap.size();n++){
+//				headList.add(field);
+//			}
+//		}	
 		Workbook wb = new XSSFWorkbook(); // 导出 Excel为2007 工作簿对象
 		ComplatUser complatUser = null;
 		List dataList = new ArrayList();
 		for(int i=0;i<complatUserIds.length;i++){
-			complatUser = complatUserService.findByKey(Integer.parseInt(iid));
+			Integer userId = Integer.parseInt(complatUserIds[i].trim());
+			complatUser = complatUserService.findByKey(userId);
 			TreeMap<String, Object> treeMap = new TreeMap<String, Object>();
 			treeMap.put("10", complatUser.getName());// 用户姓名
 			treeMap.put("11", complatUser.getAge());// 年龄
@@ -747,7 +747,11 @@ public class ComplatUserController extends BaseController {
 			}
 			int groupId = complatUser.getGroupid();
 			ComplatGroup complatGroup = complatGroupService.findByIid(groupId);
-			treeMap.put("13", complatGroup.getName());// 机构名称
+			if(complatGroup==null){
+				treeMap.put("13", "");// 机构名称
+			}else{
+				treeMap.put("13", complatGroup.getName());// 机构名称
+			}
 			treeMap.put("14", complatUser.getGroupid());// 机构ID
 			treeMap.put("15", complatUser.getHeadship());// 用户职务
 			treeMap.put("16", complatUser.getPhone());// 办公电话
@@ -764,10 +768,13 @@ public class ComplatUserController extends BaseController {
 			treeMap.put("27", complatUser.getPwdquestion());// 密码找回问题
 			treeMap.put("28", complatUser.getPwdanswer());// 密码找回问题答案
 			treeMap.put("29", complatUser.getPinyin());// 姓名首字母全拼
-			JisUserdetail userDetail = new JisUserdetail();		//获取当前用户的身份证号
-			Integer id=Integer.parseInt(iid);
-			userDetail=jisUserdetailService.findByUserid(id);
-			String idCode=userDetail.getCardid();			
+			JisUserdetail userDetail = jisUserdetailService.findByUserid(userId);	//获取当前用户的身份证号
+			String idCode;
+			if(userDetail==null){
+				idCode="";
+			}else{
+				idCode=userDetail.getCardid();
+			}
 			treeMap.put("30", idCode);// 
 			int enable = complatUser.getEnable();
 			if (enable == 0) {

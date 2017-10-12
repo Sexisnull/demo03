@@ -43,8 +43,9 @@ public class ComplatUserServiceImpl implements ComplatUserService{
 
 
     @Override
-    public ComplatUser findByKey(Integer iid) throws Exception {
-        return complatUserDao.findByIid(iid);
+    public ComplatUser findByKey(Integer iid){
+    	ComplatUser complatUser = complatUserDao.findByIid(iid);
+        return complatUser;
     }
 
 
