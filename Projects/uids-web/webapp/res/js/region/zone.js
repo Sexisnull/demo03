@@ -174,7 +174,7 @@ function beforeRename(treeId, treeNode, newName) {       //重命名前---获取
 						return true;
 
 					} else {
-						confirm("确认要将节点重命名为 " + newName + " 吗？");
+						confirm("修改成功！");
 						treeNode.viewtype = '2';
 						zTree.updateNode(treeNode);
 
