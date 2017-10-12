@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.gsww.jup.util.StringHelper;
 import com.gsww.uids.dao.JisFieldsDao;
 import com.gsww.uids.entity.JisFields;
-import com.gsww.uids.entity.JisUserdetail;
 import com.gsww.uids.service.JisFieldsService;
 
 /**
@@ -174,5 +173,10 @@ public class JisFieldsServiceImpl implements JisFieldsService {
 		String querySql= "select fieldname from jis_fields where type='1' or type='2' ";
 		list=jdbcTemplate.queryForList(querySql);
 		return list;
+	}
+
+	@Override
+	public List<JisFields> findByShowname(String showname) {
+		return jisFieldsDao.findByShowname(showname);
 	}
 }
