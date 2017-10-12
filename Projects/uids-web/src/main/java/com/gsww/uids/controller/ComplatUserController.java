@@ -329,7 +329,7 @@ public class ComplatUserController extends BaseController {
 						
 						returnMsg("success", "保存成功", request);	
 						String desc = sysUserSession.getUserName() + "新增政府用户:" + complatUser.getName(); 				
-						jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,2,1);											
+						jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(),desc,2,1);											
 					}else{
 						returnMsg("error", "密码强度不够，新增失败", request);	
 						return new ModelAndView("redirect:/complat/complatList");
@@ -380,7 +380,7 @@ public class ComplatUserController extends BaseController {
 						
 						returnMsg("success", "编辑成功", request);								
 						String desc = sysUserSession.getUserName() + "修改政府用户:" + complatUser.getName(); 
-						jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,2,2);				
+						jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(),desc,2,2);				
 					}else{
 						returnMsg("error", "密码强度不够，修改失败", request);	
 						return new ModelAndView("redirect:/complat/complatList");
@@ -427,7 +427,7 @@ public class ComplatUserController extends BaseController {
 				}
 
 				String desc=session.getUserName()+"删除了"+complatUser.getName();
-	            jisLogService.save(session.getUserName(),session.getUserIp(), desc, 2, 3);
+	            jisLogService.save(session.getLoginAccount(),session.getUserIp(), desc, 2, 3);
 			}
 			 
 		} catch (Exception e) {
@@ -627,7 +627,7 @@ public class ComplatUserController extends BaseController {
 						complatUserService.save(complatUser);
 						//complatUserSyn(complatUser,1,userId,request,response);
 						String desc=session.getUserName()+"导入了"+complatUser.getName();
-			            jisLogService.save(session.getUserName(),session.getUserIp(), desc, 2, 5);
+			            jisLogService.save(session.getLoginAccount(),session.getUserIp(), desc, 2, 5);
 					} else {
 						flag = false;
 						strRow = strRow + row + "、"; // 记录第几行数据导入失败
@@ -779,7 +779,7 @@ public class ComplatUserController extends BaseController {
 			dataList.add(treeMap);
 		}
 		String desc=session.getUserName()+"导出了"+complatUser.getName();
-        jisLogService.save(session.getUserName(),session.getUserIp(), desc, 2, 4);
+        jisLogService.save(session.getLoginAccount(),session.getUserIp(), desc, 2, 4);
 		map.put(ExcelUtil.HEADERINFO, headList);
 		map.put(ExcelUtil.DATAINFON, dataList);
 		ExcelUtil.writeExcel(map, wb, response, fileName);

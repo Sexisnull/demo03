@@ -481,7 +481,7 @@ public class ComplatCorporationController extends BaseController{
 		//日志记录JisLog
 		//获取当前登录用户,即操作用户
 		SysUserSession sysUserSession = (SysUserSession) request.getSession().getAttribute("sysUserSession");
-		String userName = sysUserSession.getUserName();
+		String userName = sysUserSession.getLoginAccount();
 		JisLog jisLog = new JisLog();
 		jisLog.setUserId(userName);
 		jisLog.setIp(sysUserSession.getUserIp());

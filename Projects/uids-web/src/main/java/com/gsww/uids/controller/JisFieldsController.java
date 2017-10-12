@@ -147,7 +147,7 @@ public class JisFieldsController extends BaseController {
 					jisUserdetailService.addUserField(jisFields.getFieldname());
 					returnMsg("success", "保存成功", request);
 					String desc = sysUserSession.getUserName() + "新增用户扩展属性:" + jisFields.getShowname(); 
-					jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,6,1);
+					jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(),desc,6,1);
 				} else { // 编辑
 					int type = jisFields.getType();
 					if (type == 1) {//字符串
@@ -171,7 +171,7 @@ public class JisFieldsController extends BaseController {
 					jisFieldsService.save(jisFields);
 					returnMsg("success", "编辑成功", request);
 					String desc = sysUserSession.getUserName() + "修改了用户扩展属性:" + jisFields.getShowname(); 
-					jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,6,2);
+					jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(),desc,6,2);
 				}
 			}
 		} catch (Exception e) {
@@ -203,7 +203,7 @@ public class JisFieldsController extends BaseController {
 				jisFields = jisFieldsService.findByKey(iid);
 				if (jisFields != null) {
 					String desc = sysUserSession.getUserName() + "删除了用户扩展属性:" + jisFields.getShowname(); 
-					jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,6,3);
+					jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(),desc,6,3);
 					jisFieldsService.delete(jisFields);
 					jisUserdetailService.delUserField(jisFields.getFieldname());
 					returnMsg("success", "删除成功", request);
@@ -247,7 +247,7 @@ public class JisFieldsController extends BaseController {
 					jisFieldsService.save(jisFields);
 					returnMsg("success", "设置成功", request);
 					String desc = sysUserSession.getUserName() + "设置了用户扩展属性:" + jisFields.getShowname() + "必填项"; 
-					jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,6,8);
+					jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(),desc,6,8);
 				}
 			}
 		} catch (Exception e) {
