@@ -121,7 +121,7 @@ function setting2(treeName, onClickFunction, onDblClickFunction, rootNode) {
 	var setting = {
 		async : {
 			enable : true,
-			url : "${ctx}/uids/getGroup",
+			url : "${ctx}/uids/uids/getGroup",
 			autoParam : [ "id=groupId", "isDisabled" ]
 		},
 		callback : {
