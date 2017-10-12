@@ -35,8 +35,6 @@ $().ready(function() {
 			fieldvalues : {
 				cnRangelength: [0,1000],
 				isFieldkeyAndvalues: true
-			},
-		   	submitHandler:function(form){
 			}
 		}
 	});
@@ -71,7 +69,7 @@ function checkAndSave() {
 		if((fieldkeysEdit != "" && fieldkeysEdit != undefined) && (fieldvaluesEdit != "" && fieldvaluesEdit != undefined)) {
 			//alert("编辑" + fieldkeysEdit.split(",").length + "==" + fieldvaluesEdit.split(",").length);
 			if(fieldkeysEdit.split(",").length == fieldvaluesEdit.split(",").length) {
-				editForm.submit();
+				$("#editForm").submit();
 			} else {
 				//alert("编辑失败");
 				alert("Value串和Key串个数请保持一致!");
@@ -101,7 +99,7 @@ function checkAndSave() {
 		}
 	} else {
 		//alert("其他");
-		editForm.submit();
+		$("#editForm").submit();
 	}
 }
 
