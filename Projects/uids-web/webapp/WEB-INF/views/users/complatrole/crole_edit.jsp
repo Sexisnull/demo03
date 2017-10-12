@@ -14,17 +14,26 @@ $().ready(function() {
 		    required: true,
 		    cnRangelength: [0,50],
 		    uniqueRoleName:true,
-		    stringCheck:roleNameInput
+		    isName : true,
 		   },
 		   spec: {
 			   required: true,
-			   cnRangelength: [0,255]
+			   cnRangelength: [0,255],
+			   isSpec:true,
 		   }
 		  }
 	    });
 	  // Ajax重命名校验
 		$.uniqueValidate('uniqueRoleName', '${ctx}/complat/ccheckcRole', ['name','oldRoleName'], '对不起，这个角色重复了');
 	});
+	jQuery.validator.addMethod("isName", function(value, element) { 
+	    var corporName = /^[\u4E00-\u9FA5A-Za-z0-9]+$/;   
+	    return this.optional(element) || (corporName.test(value));     
+	}, "名称只能由字母、数字、数字组成");
+	jQuery.validator.addMethod("isSpec", function(value, element) { 
+	    var corporName = /^[\u4E00-\u9FA5A-Za-z0-9]+$/;   
+	    return this.optional(element) || (corporName.test(value));     
+	}, "描述只能由字母、数字、数字组成");
 </script>
 <style type="text/css">
 .form-content textarea {

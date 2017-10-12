@@ -58,10 +58,19 @@
 	/**搜索表单校验**/
 	function checkSubmitForm() {
 		var nameSearch = $("#nameSearch").val();
-		if (nameSearch == '' || isChinaOrNumbOrLett(nameSearch)) {
+		if (nameSearch == '' || isNumbOrLett1(nameSearch)) {
 			form1.submit();
 		} else {
-			$.validator.errorShow($("#nameSearch"), '只能包括中英文、数字、@和下划线');
+			$.validator.errorShow($("#nameSearch"), '只能包括中英文、数字和下划线，且不能超过255个字符');
+		}
+	}
+	function isNumbOrLett1( s ){
+		var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]{1,50}$/;
+		var re = new RegExp(regu);
+		if (re.test(s)) {
+			return true;
+		}else{
+			return false;
 		}
 	}
 	function deleteRole() {
@@ -133,7 +142,7 @@
 										角色名称：
 									</th>
 									<td width="20%">
-										<input type="text" placeholder="角色名称" value="${sParams['LIKE_name']}" id="nameSearch" name="search_LIKE_name" />
+										 <input type="text" placeholder="角色名称" value="${sParams['LIKE_name']}" id="nameSearch" name="search_LIKE_name" />
 									</td>
 									<td class="btn-group">
 										<a class="btnSearch" onclick="javascript:checkSubmitForm();">搜索</a>
