@@ -121,7 +121,9 @@ $().ready(function() {
            return this.optional(element) || (corporName.test(value));     
     }, "邮政编码格式不正确（共6位,开头不能为0)");
     
-    $('#pwd').attachEvent('oninput',EvalPwd(this));
+    
+    var pwding = $("#pwd").val();
+    $('#pwd').attachEvent('oninput',EvalPwd(pwding));
 });
 </script>
 

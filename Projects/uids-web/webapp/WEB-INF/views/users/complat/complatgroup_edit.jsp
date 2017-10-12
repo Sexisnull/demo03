@@ -121,7 +121,7 @@ function setting2(treeName, onClickFunction, onDblClickFunction, rootNode) {
 	var setting = {
 		async : {
 			enable : true,
-			url : "${ctx}/uids/uids/getGroup",
+			url : "${ctx}/uids/getGroup",
 			autoParam : [ "id=groupId", "isDisabled" ]
 		},
 		callback : {
@@ -261,12 +261,7 @@ jQuery.validator.addMethod("isName", function(value, element) {
 			<tr>
 				<th><b class="mustbe">*</b> 请输入区域编码：</th>
 				<td>
-				    <c:if test="${empty complatGroup.iid}">
-				          <input name="groupname2" id="groupname2" type="text" placeholder="请选择区域编码" style="cursor: pointer;" value="${complatGroup.areacode}"/>
-				    </c:if>
-				    <c:if test="${not empty complatGroup.iid}">
-				          <input name="groupname2" id="groupname2" type="text" style="cursor: pointer;" value="${complatGroup.areacode}" disabled="true"/>
-				    </c:if>
+				    <input name="groupname2" id="groupname2" type="text" placeholder="请选择区域编码" style="cursor: pointer;" value="${complatGroup.areacode}"/>
 				</td>
 	        	<th><b class="mustbe">*</b> 请输入机构后缀：</th>
 	        	<td>

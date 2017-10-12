@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.gsww.jup.entity.sys.SysUserSession;
 import net.sf.json.JSONArray;
 import net.sourceforge.pinyin4j.PinyinHelper;
 
@@ -42,7 +41,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
-import com.gsww.jup.entity.sys.SysMenu;
 import com.gsww.jup.service.sys.SysParaService;
 import com.gsww.jup.util.ExcelUtil;
 import com.gsww.jup.util.JSONUtil;
@@ -50,7 +48,6 @@ import com.gsww.jup.util.PageUtils;
 import com.gsww.jup.util.StringHelper;
 import com.gsww.jup.util.TimeHelper;
 import com.gsww.uids.entity.ComplatGroup;
-import com.gsww.uids.entity.ComplatUser;
 import com.gsww.uids.entity.ComplatZone;
 import com.gsww.uids.entity.JisApplication;
 import com.gsww.uids.entity.JisSysview;
@@ -299,6 +296,8 @@ public class ComplatGroupController extends BaseController {
 	public ModelAndView complatgroupSave(String iid,ComplatGroup complatGroup,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		try {
 			String name = request.getParameter("name");
+			String areacode = request.getParameter("groupname2");
+			complatGroup.setAreacode(areacode); //设置区域编码
 //			boolean syn = false;
 			if(StringHelper.isNotBlack(iid)){
 				//编辑状态改变操作状态位（opersign）和修改时间（modifytime）
@@ -615,6 +614,37 @@ public class ComplatGroupController extends BaseController {
 			returnMsg("error", "导出失败",request);			
 		} 
 	}
+	
+	/**
+     * 导入弹出框
+     */
+    @SuppressWarnings("finally")
+    @RequestMapping(value = "/showImport", method = RequestMethod.GET)
+    public String showInport(HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        String str = "";
+        try {
+            str = "users/complat/complatgroup_import";
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        } finally {
+            return str;
+        }
+    }
+
+    /**
+     * 关闭弹出框
+     */
+    @SuppressWarnings("finally")
+    @RequestMapping(value = "/closeImport", method = RequestMethod.GET)
+    public ModelAndView closeImport(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        try {
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            return new ModelAndView("redirect:/uids/complatgroupList");
+        }
+    }
 
     /**
      * 加载机构区域编码页面
@@ -622,7 +652,7 @@ public class ComplatGroupController extends BaseController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "/uids/getGroup", method = RequestMethod.POST)
+    @RequestMapping(value = "/getGroup", method = RequestMethod.POST)
     public void getGroup(HttpServletRequest request,
                          HttpServletResponse response) {
         try {
@@ -682,37 +712,6 @@ public class ComplatGroupController extends BaseController {
     }
 
     /**
-     * 导入弹出框
-     */
-    @SuppressWarnings("finally")
-    @RequestMapping(value = "/showImport", method = RequestMethod.GET)
-    public String showInport(HttpServletRequest request, HttpServletResponse response)
-            throws Exception {
-        String str = "";
-        try {
-            str = "users/complat/complatgroup_import";
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-        } finally {
-            return str;
-        }
-    }
-
-    /**
-     * 关闭弹出框
-     */
-    @SuppressWarnings("finally")
-    @RequestMapping(value = "/closeImport", method = RequestMethod.GET)
-    public ModelAndView closeImport(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        try {
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            return new ModelAndView("redirect:/uids/complatgroupList");
-        }
-    }
-
-    /**
      * @discription 获取区域树信息
      * @param request
      * @param response
@@ -720,10 +719,6 @@ public class ComplatGroupController extends BaseController {
     @RequestMapping(value = "/orgTree", method = RequestMethod.POST)
     public void zoneTree(HttpServletRequest request, HttpServletResponse response, String orgId) {
         try {
-            SysUserSession sysUserSession = (SysUserSession) ((HttpServletRequest) request).getSession()
-                    .getAttribute("sysUserSession");
-            // 获取部门id
-            String deptId = sysUserSession.getDeptId();
             List<ComplatGroup> list = complatGroupService.findAllOrg();
             List<Map<String, Object>> treeList = new ArrayList<Map<String, Object>>();
             if (list != null && !list.isEmpty()) {

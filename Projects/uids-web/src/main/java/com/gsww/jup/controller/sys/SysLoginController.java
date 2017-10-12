@@ -161,7 +161,7 @@ public class SysLoginController extends BaseController {
 								JSONObject.toJSONString(resMap));
 						try {
 							// 登录日志
-							jisLogService.save(sysUserSession.getAccountId(),
+							jisLogService.save(sysUserSession.getLoginAccount(),
 									sysUserSession.getUserIp(), userName
 											+ "系统登录成功", 8, 9);
 							if ((banList != null) && (banList.getIid() != null)) {

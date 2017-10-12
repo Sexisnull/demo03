@@ -126,7 +126,7 @@ public class JisSysviewCurrentController extends BaseController{
 				if (null != jisCurrent) {
 					jisSysviewCurrentService.delete(jisCurrent);
 					String desc = session.getUserName() + "删除了" + jisCurrent.getObjectname();
-					jisLogService.save(session.getUserName(), session.getUserIp(), desc, 3, 1);
+					jisLogService.save(session.getLoginAccount(), session.getUserIp(), desc, 3, 1);
 					// 级联删除明细
 					JisSysviewDetail sysviewDetail = jisSysviewDetailService.findByTranscationId(jisCurrent.getTranscationId());
 					if (null != sysviewDetail) {
@@ -163,7 +163,7 @@ public class JisSysviewCurrentController extends BaseController{
 				jisSysviewService.save(sysview);
 				jisSysviewCurrentService.delete(sysviewCurrent);
 				 String desc=session.getUserName()+"同步了"+sysviewCurrent.getObjectname();
-	                jisLogService.save(session.getUserName(),session.getUserIp(), desc, 3, 1);
+	                jisLogService.save(session.getLoginAccount(),session.getUserIp(), desc, 3, 1);
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -191,7 +191,7 @@ public class JisSysviewCurrentController extends BaseController{
 					jisSysviewService.save(sysview);
 					jisSysviewCurrentService.delete(sysviewCurrent);
 					 String desc=session.getUserName()+"批量同步了"+sysviewCurrent.getObjectname();
-		                jisLogService.save(session.getUserName(),session.getUserIp(), desc, 3, 1);
+		                jisLogService.save(session.getLoginAccount(),session.getUserIp(), desc, 3, 1);
 				}
 			}
 		}catch (Exception e) {

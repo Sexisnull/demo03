@@ -16,13 +16,14 @@ $().ready(function() {
 			showname: {
 		     required: true,
 		   	 maxlength: 50,
-		   	 isDefvalue:true
+		   	 isDefvalue:true,
+		   	 uniqueShowname: true
 		   	},
 		    fieldname : {
 		     required: true,
 		     maxlength: 50,
 		     isFieldname: true,
-		     uniqueName: true
+		     uniqueFieldname: true
 		    },
 			defvalue : {
 				maxlength: 50,
@@ -35,13 +36,13 @@ $().ready(function() {
 			fieldvalues : {
 				cnRangelength: [0,1000],
 				isFieldkeyAndvalues: true
-			},
-		   	submitHandler:function(form){
 			}
 		}
 	});
 	// Ajax重命名校验
-	$.uniqueValidate('uniqueName', '${ctx}/jis/checkFieldname', ['fieldname','oldFieldname'], '对不起，这个字段名称重复了');
+	$.uniqueValidate('uniqueFieldname', '${ctx}/jis/checkFieldname', ['fieldname','oldFieldname'], '对不起，这个字段名称重复了');
+	
+	$.uniqueValidate('uniqueShowname', '${ctx}/jis/checkShowname', ['showname','oldShowname'], '对不起，这个显示名称重复了');
 
 	// 字段名称校验
 	jQuery.validator.addMethod("isFieldname", function(value, element) { 
@@ -71,7 +72,7 @@ function checkAndSave() {
 		if((fieldkeysEdit != "" && fieldkeysEdit != undefined) && (fieldvaluesEdit != "" && fieldvaluesEdit != undefined)) {
 			//alert("编辑" + fieldkeysEdit.split(",").length + "==" + fieldvaluesEdit.split(",").length);
 			if(fieldkeysEdit.split(",").length == fieldvaluesEdit.split(",").length) {
-				editForm.submit();
+				$("#editForm").submit();
 			} else {
 				//alert("编辑失败");
 				alert("Value串和Key串个数请保持一致!");
@@ -101,7 +102,7 @@ function checkAndSave() {
 		}
 	} else {
 		//alert("其他");
-		editForm.submit();
+		$("#editForm").submit();
 	}
 }
 
@@ -160,7 +161,8 @@ $(document).on("change",'select#fieldsType',function(){
     		<tr>
 				<th><b class="mustbe">*</b>显示名：</th>
 				<td>
-					<input type="text"  class="showname" name="showname" value="${jisFields.showname}" />
+					<input type="text"  class="showname" id="showname" name="showname" value="${jisFields.showname}" />
+					<input type="hidden"  class="oldShowname" id="oldShowname" name="oldShowname" value="${jisFields.showname}"/>
 	            </td>
 	        	<th></th>
 				<td></td>
