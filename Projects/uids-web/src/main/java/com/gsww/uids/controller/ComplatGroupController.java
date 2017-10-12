@@ -299,6 +299,8 @@ public class ComplatGroupController extends BaseController {
 	public ModelAndView complatgroupSave(String iid,ComplatGroup complatGroup,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		try {
 			String name = request.getParameter("name");
+			String areacode = request.getParameter("groupname2");
+			complatGroup.setAreacode(areacode); //设置区域编码
 //			boolean syn = false;
 			if(StringHelper.isNotBlack(iid)){
 				//编辑状态改变操作状态位（opersign）和修改时间（modifytime）
@@ -615,6 +617,37 @@ public class ComplatGroupController extends BaseController {
 			returnMsg("error", "导出失败",request);			
 		} 
 	}
+	
+	/**
+     * 导入弹出框
+     */
+    @SuppressWarnings("finally")
+    @RequestMapping(value = "/showImport", method = RequestMethod.GET)
+    public String showInport(HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        String str = "";
+        try {
+            str = "users/complat/complatgroup_import";
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        } finally {
+            return str;
+        }
+    }
+
+    /**
+     * 关闭弹出框
+     */
+    @SuppressWarnings("finally")
+    @RequestMapping(value = "/closeImport", method = RequestMethod.GET)
+    public ModelAndView closeImport(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        try {
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            return new ModelAndView("redirect:/uids/complatgroupList");
+        }
+    }
 
     /**
      * 加载机构区域编码页面
@@ -622,7 +655,7 @@ public class ComplatGroupController extends BaseController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "/uids/getGroup", method = RequestMethod.POST)
+    @RequestMapping(value = "/getGroup", method = RequestMethod.POST)
     public void getGroup(HttpServletRequest request,
                          HttpServletResponse response) {
         try {
@@ -678,37 +711,6 @@ public class ComplatGroupController extends BaseController {
 
         } catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
-        }
-    }
-
-    /**
-     * 导入弹出框
-     */
-    @SuppressWarnings("finally")
-    @RequestMapping(value = "/showImport", method = RequestMethod.GET)
-    public String showInport(HttpServletRequest request, HttpServletResponse response)
-            throws Exception {
-        String str = "";
-        try {
-            str = "users/complat/complatgroup_import";
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-        } finally {
-            return str;
-        }
-    }
-
-    /**
-     * 关闭弹出框
-     */
-    @SuppressWarnings("finally")
-    @RequestMapping(value = "/closeImport", method = RequestMethod.GET)
-    public ModelAndView closeImport(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        try {
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            return new ModelAndView("redirect:/uids/complatgroupList");
         }
     }
 
