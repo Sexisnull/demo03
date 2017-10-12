@@ -37,19 +37,19 @@ function checkSubmitForm(){
 		if(nameSearch ==  '' || isNumbOrLett1(nameSearch)){
 			if(codeidSearch ==  '' || isNumbOrLett2(codeidSearch)) {
 				if(orgcodeSearch ==  '' || isNumbOrLett3(orgcodeSearch)) {
-				    if(areacodeSearch == '' || isNumbOrLett2(areacodeSearch)) {
+				    if(areacodeSearch == '' || isNumbOrLett4(areacodeSearch)) {
 						form1.submit();
 					} else{
-						$.validator.errorShow($("#areacodeSearch"),'只能包括数字');
+						$.validator.errorShow($("#areacodeSearch"),'只能输入不超过12位的数字');
 					}
 				} else{
-					$.validator.errorShow($("#orgcodeSearch"),'只能包括数字和字母');
+					$.validator.errorShow($("#orgcodeSearch"),'只能输入不超过9位的数字和字母');
 				}
 			} else{
-				$.validator.errorShow($("#codeidSearch"),'只能包括数字');
+				$.validator.errorShow($("#codeidSearch"),'只能输入不超过255位的数字');
 			}
 		} else{
-			$.validator.errorShow($("#nameSearch"),'只能包括字母、数字、下划线、中文');
+			$.validator.errorShow($("#nameSearch"),'只能输入字母、数字、下划线、中文，并且不能超过100位');
 		}
 	}
 	/*
@@ -60,7 +60,7 @@ function checkSubmitForm(){
 	如果通过验证返回true,否则返回false
 	*/
 	function isNumbOrLett1( s ){
-		var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;
+		var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]{100}$/;
 		var re = new RegExp(regu);
 		if (re.test(s)) {
 			return true;
@@ -80,7 +80,17 @@ function checkSubmitForm(){
 	}
 	
 	function isNumbOrLett3( s ){
-		var regu = /^([a-zA-Z0-9]+)$/;
+		var regu = /^([a-zA-Z0-9]{0,9})$/;
+		var re = new RegExp(regu);
+		if (re.test(s)) {
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	function isNumbOrLett4( s ){
+		var regu = /^\d{0,12}$/;
 		var re = new RegExp(regu);
 		if (re.test(s)) {
 			return true;
@@ -143,7 +153,7 @@ $(function(){
 //搜索树的设置
 $(function(){
 	var groupMenu = [{"name":"单位选择","id":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
-
+    var root = "";
 	$('#groupname').menu({
 		tree : 'groupmenu',
 		height : 200,
