@@ -358,8 +358,11 @@ body {
 													<c:if test="${u.type==0 }">
 													${u.username }
 													</c:if>
-													<c:if test="${u.type==2 }">
+													<c:if test="${u.type==2 && u.objectid!=-1}">
 													${u.groupname }
+													</c:if>
+													<c:if test="${u.type==2 && u.objectid==-1}">
+													前台用户
 													</c:if>
 													</span>
 												</div>

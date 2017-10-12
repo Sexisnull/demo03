@@ -16,6 +16,7 @@ import com.gsww.jup.entity.sys.SysUserSession;
 import com.gsww.jup.service.sys.SysLoginService;
 import com.gsww.uids.dao.ComplatRoleDao;
 import com.gsww.uids.dao.ComplatUserDao;
+import com.gsww.uids.entity.ComplatRole;
 import com.gsww.uids.entity.ComplatUser;
 import com.gsww.uids.entity.JisRoleobject;
 import com.gsww.uids.service.JisRoleobjectService;
@@ -86,10 +87,10 @@ public class SysLoginServiceImpl implements SysLoginService {
 				String roleNames = "";
 				if (roleList != null && roleList.size() > 0) {
 					for (JisRoleobject ra : roleList) {
+						ComplatRole role = complatRoleDao.findByIid(ra.getRoleid());
 						roles += ra.getRoleid().toString() + ",";
-						roleTypes +=ra.getType().toString() + ",";
-						roleNames += complatRoleDao.findByIid(ra.getRoleid()).getName()
-								+ ",";
+						roleTypes +=role.getType().toString() + ",";
+						roleNames += role.getName()+ ",";
 					}
 					roles = roles.substring(0, roles.length() - 1);
 					roleTypes = roleTypes.substring(0, roleTypes.length() - 1);

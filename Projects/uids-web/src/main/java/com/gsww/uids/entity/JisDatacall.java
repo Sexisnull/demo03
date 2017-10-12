@@ -15,25 +15,25 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "JIS_DATACALL")
 public class JisDatacall implements java.io.Serializable{
-	private int iid;         	 //主键id
+	private Integer iid;         //主键id
 	private String resName;   	 //名称
 	private String resUrl;   	 //url地址
-	private int callingType; 	 //调用方式,1：iframe调用,2：rss调用
-	private int isVerification;  //是否验证
-	private int orderType;   	 //排序方式,1:正序,2:倒叙
+	private Integer callingType; //调用方式,1：iframe调用,2：rss调用
+	private Integer isVerification;  //是否验证
+	private Integer orderType;   	 //排序方式,1:正序,2:倒叙
 	private String content;  	 //rss模板样式
 	private String timeFormat;   //时间格式 
-	private int appId;  		 //应用id
+	private Integer appId;  		 //应用id
 	private String remark; 		 //标识
-	private int infoNum;   		 //信息数量
+	private Integer infoNum;   		 //信息数量
 	
 	public JisDatacall() {
 		super();
 	}
 
-	public JisDatacall(int iid, String resName, String resUrl, int callingType,
-			int isVerification, int orderType, String content,
-			String timeFormat, int appId, String remark, int infoNum) {
+	public JisDatacall(Integer iid, String resName, String resUrl, Integer callingType,
+			Integer isVerification, Integer orderType, String content,
+			String timeFormat, Integer appId, String remark, Integer infoNum) {
 		super();
 		this.iid = iid;
 		this.resName = resName;
@@ -51,11 +51,11 @@ public class JisDatacall implements java.io.Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "IID", unique = true, nullable = false)
-	public int getIid() {
+	public Integer getIid() {
 		return iid;
 	}
 
-	public void setIid(int iid) {
+	public void setIid(Integer iid) {
 		this.iid = iid;
 	}
 
@@ -78,29 +78,29 @@ public class JisDatacall implements java.io.Serializable{
 	}
 
 	@Column(name = "CALLINGTYPE")
-	public int getCallingType() {
+	public Integer getCallingType() {
 		return callingType;
 	}
 
-	public void setCallingType(int callingType) {
+	public void setCallingType(Integer callingType) {
 		this.callingType = callingType;
 	}
 
 	@Column(name = "ISVERIFICATION")
-	public int getIsVerification() {
+	public Integer getIsVerification() {
 		return isVerification;
 	}
 
-	public void setIsVerification(int isVerification) {
+	public void setIsVerification(Integer isVerification) {
 		this.isVerification = isVerification;
 	}
 
 	@Column(name = "ORDERTYPE")
-	public int getOrderType() {
+	public Integer getOrderType() {
 		return orderType;
 	}
 
-	public void setOrderType(int orderType) {
+	public void setOrderType(Integer orderType) {
 		this.orderType = orderType;
 	}
 
@@ -123,11 +123,11 @@ public class JisDatacall implements java.io.Serializable{
 	}
 
 	@Column(name = "APPID")
-	public int getAppId() {
+	public Integer getAppId() {
 		return appId;
 	}
 
-	public void setAppId(int appId) {
+	public void setAppId(Integer appId) {
 		this.appId = appId;
 	}
 
@@ -141,11 +141,11 @@ public class JisDatacall implements java.io.Serializable{
 	}
 
 	@Column(name = "INFONUM")
-	public int getInfoNum() {
+	public Integer getInfoNum() {
 		return infoNum;
 	}
 
-	public void setInfoNum(int infoNum) {
+	public void setInfoNum(Integer infoNum) {
 		this.infoNum = infoNum;
 	}
 }

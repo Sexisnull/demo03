@@ -4,7 +4,6 @@ $.fn.menu = function(options) {
 	var menu;
 	var menuId = inputJqId + '_menu';
 	var exist = $('#' + menuId).size() > 0;
-	console.log("exist"+exist);
 
 	var settings = {
 		width : inputJq.outerWidth() - 2,
