@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.gsww.jup.entity.sys.SysUserSession;
 import net.sf.json.JSONArray;
 import net.sourceforge.pinyin4j.PinyinHelper;
 
@@ -42,7 +41,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
-import com.gsww.jup.entity.sys.SysMenu;
 import com.gsww.jup.service.sys.SysParaService;
 import com.gsww.jup.util.ExcelUtil;
 import com.gsww.jup.util.JSONUtil;
@@ -50,7 +48,6 @@ import com.gsww.jup.util.PageUtils;
 import com.gsww.jup.util.StringHelper;
 import com.gsww.jup.util.TimeHelper;
 import com.gsww.uids.entity.ComplatGroup;
-import com.gsww.uids.entity.ComplatUser;
 import com.gsww.uids.entity.ComplatZone;
 import com.gsww.uids.entity.JisApplication;
 import com.gsww.uids.entity.JisSysview;
@@ -722,10 +719,6 @@ public class ComplatGroupController extends BaseController {
     @RequestMapping(value = "/orgTree", method = RequestMethod.POST)
     public void zoneTree(HttpServletRequest request, HttpServletResponse response, String orgId) {
         try {
-            SysUserSession sysUserSession = (SysUserSession) ((HttpServletRequest) request).getSession()
-                    .getAttribute("sysUserSession");
-            // 获取部门id
-            String deptId = sysUserSession.getDeptId();
             List<ComplatGroup> list = complatGroupService.findAllOrg();
             List<Map<String, Object>> treeList = new ArrayList<Map<String, Object>>();
             if (list != null && !list.isEmpty()) {
