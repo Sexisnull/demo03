@@ -27,6 +27,7 @@ import org.springside.modules.web.Servlets;
 import com.gsww.jup.controller.BaseController;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.uids.entity.JisDatacall;
+import com.gsww.uids.service.JisApplicationService;
 import com.gsww.uids.service.JisDatacallService;
 /**
  * 数据调用控制器
@@ -40,6 +41,8 @@ public class JisDatacallController extends BaseController{
 	private static Logger logger = LoggerFactory.getLogger(JisDatacallController.class);
 	@Autowired
 	private JisDatacallService jisDatacallService ;
+	@Autowired
+	private JisApplicationService jisApplicationService ;
 	
 	/**
 	 * 获取数据调用列表
@@ -126,6 +129,7 @@ public class JisDatacallController extends BaseController{
 				}else{
 					userMap.put("0", "");
 				}*/
+				
 				model.addAttribute("list", list);
 				model.addAttribute("map", map);
 				/*model.addAttribute("userId", userId);*/
@@ -134,6 +138,8 @@ public class JisDatacallController extends BaseController{
 			}else{
 				jisDatacall = new JisDatacall();
 			}
+			List<Map<String, Object>> applications = jisApplicationService.getJisApplicationList();
+			model.addAttribute("applications", applications);
 			model.addAttribute("jisDatacall", jisDatacall);
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -136,10 +136,17 @@ function resetform() {
 }
 
 $(function(){
-	$("#tr_logoffUrl").hide();
+	if("${jisApplication.isLogOff}" == '1'){
+		$("#tr_logoffUrl").show();
+	}
+	 if("${jisApplication.userDefined}" == '1'){
+		$("#tr_ssoLogin_1").show();
+		$("#tr_ssoLogin_2").show();
+	} 
+	
 	/* $("#tr_ssoLogin").hide(); */
 	setLoginType();
-	setSsoLogin(); 
+	setSsoLogin();
 	 // 初始化Web Uploader
     var uploader = WebUploader.create({
     	// 自动上传。
@@ -193,10 +200,17 @@ function setSsoLogin(value){
 	/* var ssoLogin = $('[name=userDefined]:checked').val(); */
 	if(value == '1'){
 		$('[id^=tr_ssoLogin_]').show();
-	}else{
+	}
+	if(value == '0'){
 		$('[id^=tr_ssoLogin_]').hide();
 	}
-}
+	if(value == '2'){
+		$('[id^=tr_ssoLogin_]').hide();
+	}
+	if(value == null){
+		$('[id^=tr_ssoLogin_]').hide();
+	}
+} 
 
 function checknet(){
 	var url = $('#appUrl').val();
@@ -603,28 +617,28 @@ $(function(){
 				<th style="text-align:center;"><b class="mustbe">&nbsp;&nbsp;</b>加密设置：</th>
 				<td>
 				
-					<c:if test="${jisApplication.encryptType=='2'}">
-						<input type="radio" name="encryptType" value="2" checked="checked"/>MD5&nbsp;&nbsp;
-						<input type="radio" name="encryptType" value="3"/>MD5+base64&nbsp;&nbsp;
-						<input type="radio" name="encryptType" value="1"/>不加密
-					</c:if>
-					
-					<c:if test="${jisApplication.encryptType=='3'}">
-						<input type="radio" name="encryptType" value="2"/>MD5&nbsp;&nbsp;
-						<input type="radio" name="encryptType" value="3" checked="checked"/>MD5+base64&nbsp;&nbsp;
-						<input type="radio" name="encryptType" value="1"/>不加密
-					</c:if>
-					
 					<c:if test="${jisApplication.encryptType=='1'}">
-						<input type="radio" name="encryptType" value="2"/>MD5&nbsp;&nbsp;
-						<input type="radio" name="encryptType" value="3"/>MD5+base64&nbsp;&nbsp;
-						<input type="radio" name="encryptType" value="1" checked="checked"/>不加密
+						<input type="radio" name="encryptType" value="1" checked="checked"/>MD5&nbsp;&nbsp;
+						<input type="radio" name="encryptType" value="2"/>MD5+base64&nbsp;&nbsp;
+						<input type="radio" name="encryptType" value="0"/>不加密
+					</c:if>
+					
+					<c:if test="${jisApplication.encryptType=='2'}">
+						<input type="radio" name="encryptType" value="1"/>MD5&nbsp;&nbsp;
+						<input type="radio" name="encryptType" value="2" checked="checked"/>MD5+base64&nbsp;&nbsp;
+						<input type="radio" name="encryptType" value="0"/>不加密
+					</c:if>
+					
+					<c:if test="${jisApplication.encryptType=='0'}">
+						<input type="radio" name="encryptType" value="1"/>MD5&nbsp;&nbsp;
+						<input type="radio" name="encryptType" value="2"/>MD5+base64&nbsp;&nbsp;
+						<input type="radio" name="encryptType" value="0" checked="checked"/>不加密
 					</c:if>
 					
 					<c:if test="${jisApplication.encryptType==null}">
-						<input type="radio" name="encryptType" value="2"/>MD5
-						<input type="radio" name="encryptType" value="3"/>MD5+base64
-						<input type="radio" name="encryptType" value="1"/>不加密
+						<input type="radio" name="encryptType" value="1"/>MD5
+						<input type="radio" name="encryptType" value="2"/>MD5+base64
+						<input type="radio" name="encryptType" value="0"/>不加密
 					</c:if>
 				</td>
 			</tr>
@@ -685,25 +699,52 @@ $(function(){
 				
 				<tr id="tr_ssoLogin">
 					<th style="text-align:left;"><b class="mustbe">&nbsp;&nbsp;</b>账号设置：</th>
-					<td><input type="radio" name="userDefined" value="0"
-						data-value="${jisApplication.userDefined }" onclick="setSsoLogin(this.value);">用户预设账号&nbsp;
-						<input type="radio" name="userDefined" value="2"
-						data-value="${jisApplication.userDefined }" onclick="setSsoLogin(this.value);">统一用户账号&nbsp;
-						<input type="radio" name="userDefined" value="1"
-						data-value="${jisApplication.userDefined }" onclick="setSsoLogin(this.value);">固定账号
+					<td>
+						<c:if test="${jisApplication.userDefined=='0'}">
+							<input type="radio" name="userDefined" value="0"
+							checked="checked" onclick="setSsoLogin(this.value);">用户预设账号&nbsp;
+							<input type="radio" name="userDefined" value="2"
+							 onclick="setSsoLogin(this.value);">统一用户账号&nbsp;
+							<input type="radio" name="userDefined" value="1"
+							 onclick="setSsoLogin(this.value);">固定账号
+						</c:if>
+						<c:if test="${jisApplication.userDefined=='2'}">
+							<input type="radio" name="userDefined" value="0"
+							 onclick="setSsoLogin(this.value);">用户预设账号&nbsp;
+							<input type="radio" name="userDefined" value="2"
+							checked="checked" onclick="setSsoLogin(this.value);">统一用户账号&nbsp;
+							<input type="radio" name="userDefined" value="1"
+							 onclick="setSsoLogin(this.value);">固定账号
+						</c:if>
+						<c:if test="${jisApplication.userDefined=='1'}">
+							<input type="radio" name="userDefined" value="0"
+							 onclick="setSsoLogin(this.value);">用户预设账号&nbsp;
+							<input type="radio" name="userDefined" value="2"
+							 onclick="setSsoLogin(this.value);">统一用户账号&nbsp;
+							<input type="radio" name="userDefined" value="1"
+							checked="checked" onclick="setSsoLogin(this.value);">固定账号
+						</c:if>
+						<c:if test="${jisApplication.userDefined==null}">
+							<input type="radio" name="userDefined" value="0"
+							 onclick="setSsoLogin(this.value);">用户预设账号&nbsp;
+							<input type="radio" name="userDefined" value="2"
+							 onclick="setSsoLogin(this.value);">统一用户账号&nbsp;
+							<input type="radio" name="userDefined" value="1"
+							 onclick="setSsoLogin(this.value);">固定账号
+						</c:if>
 					</td>
 				</tr>
-				<tr id="tr_ssoLogin_1">
+				<tr id="tr_ssoLogin_1" style="display:none">
 					<th style="text-align:left;"><b class="mustbe">*</b>固定用户名：</th>
 					<td><input type="text" id="allLoginIid" name="allLoginIid" maxlength="20"
 						class="input-text" value="${jisApplication.allLoginIid }" /></td>
 					<td></td>
 				</tr>
-				<tr id="tr_ssoLogin_2">
+				<tr id="tr_ssoLogin_2" style="display:none">
 					<th style="text-align:left;"><b class="mustbe">*</b>固定密码：</th>
 					<td><input type="password" id="allPwd" name="allPwd" maxlength="20"
 						class="input-text" value="${jisApplication.allPwd }" /></td>
-					<td></td>
+					<!-- <td></td> -->
 				</tr>
 				
 				
@@ -762,7 +803,7 @@ $(function(){
 					</c:if>
 				</td>
 			</tr>
-				<tr id="tr_logoffUrl">
+				<tr id="tr_logoffUrl" style="display:none">
 					<th style="text-align: left;"><b class="mustbe">*</b> 注销地址：</th>
 		        	 <td>
 						<input type="text" id="logOffUrl" name="logOffUrl" value="${jisApplication.logOffUrl}" />

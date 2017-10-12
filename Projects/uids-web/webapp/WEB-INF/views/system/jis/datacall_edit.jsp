@@ -14,7 +14,6 @@
 </style>
 <script type="text/javascript">
 $().ready(function() {
-
 //表单校验
 var userNameInput=$("#userName").val();
  $("#editForm").validate({
@@ -58,7 +57,14 @@ var userNameInput=$("#userName").val();
 
 
 $(function(){
-	$("#appChoose").hide();
+	if("${jisDatacall.isVerification}" == '1'){
+		$("#appChoose").show();
+	}
+	if("${jisDatacall.callingType}" == '2'){
+		$("#hiddenTr1").show();
+		$("#hiddenTr2").show();
+		$("#hiddenTr3").show();
+	}
 });
 
     
@@ -76,6 +82,25 @@ function selectIsVerification(value){
 		$("#appChoose").css("display",'none');
 	}
 }
+
+function calltype(value){
+	if(value == '1'){
+		$("#hiddenTr1").css("display",'none');
+		$("#hiddenTr2").css("display",'none');
+		$("#hiddenTr3").css("display",'none');
+	}
+	if(value == '2'){
+		$("#hiddenTr1").css("display",'');
+		$("#hiddenTr2").css("display",'');
+		$("#hiddenTr3").css("display",'');
+	}
+	if(value = null){
+		$("#hiddenTr1").css("display",'none');
+		$("#hiddenTr2").css("display",'none');
+		$("#hiddenTr3").css("display",'none');
+	}
+}
+
 
 //光标位置插入
 function insertAtCursor(fieldName, myValue) { 
@@ -216,10 +241,10 @@ $(function(){
                 </td>
                 <th><b class="mustbe">*</b>请输入地址：</th>
 				<td>
-					<textarea class="textarea" name="resUrl"  >${jisDatacall.resUrl}</textarea>
+					<textarea class="textarea" name="resUrl">${jisDatacall.resUrl}</textarea>
 				</td>
 			</tr>
-			<tr>
+			<tr id="hiddenTr1" style="display:none">
 				<th>排序方式：</th>
 				<td>
 				<select name="orderType" id="orderType" data-value="${jisDatacall.orderType}" >  
@@ -234,7 +259,7 @@ $(function(){
                     class="input-text" value="${jisDatacall.infoNum}" placeholder="信息数量范围为1~30"/>
                 </td>
 			</tr>
-			<tr>
+			<tr id="hiddenTr2" style="display:none">
 				<th>时间格式：</th>
 				<td>
 				<select name="timeFormat" data-value="${jisDatacall.timeFormat}">
@@ -250,7 +275,7 @@ $(function(){
 			</tr>
 			<tr>
 				<th><b class="mustbe">*</b> 是否验证：</th>
-				<td colspan="2">
+				<td colspan="2" id="judge">
 					<c:if test="${jisDatacall.isVerification=='2'}">
 						<input type="radio" name="isVerification" value="1" onclick="selectIsVerification(this.value);"/>是
 						<input type="radio" name="isVerification" checked="checked" value="2" onclick="selectIsVerification(this.value);"/>否
@@ -261,25 +286,26 @@ $(function(){
 						<input type="radio" name="isVerification" value="2" onclick="selectIsVerification(this.value);"/>否
 					</c:if>
 					
-					<c:if test="${jisDatacall.isVerification=='0'}">
+					<c:if test="${jisDatacall.isVerification==null}">
 						<input type="radio" name="isVerification" value="1" onclick="selectIsVerification(this.value);"/>是
 						<input type="radio" name="isVerification" value="2" onclick="selectIsVerification(this.value);"/>否
 					</c:if>
 				</td>
-				<td id="appChoose" colspan="2">
-					<select id="appid" name="appid" style="width:120px" class="" data-value="${datacall.appid }" onChange="" >
-                          <option value="0">－选择应用－</option>
-                     	<c:forEach items="${app}" var="app" varStatus="i">
-                     		<option value="${app.iid}" <c:if test="${app.iid==datacall.appid }">selected="selected"</c:if> >${app.name }</option>
-                     	</c:forEach>
-                     </select>
+				
+				<td id="appChoose" colspan="2" style="display:none">
+					<select name="appId" id="appId">
+	                 <option value="">-选择应用-</option>
+		                 <c:forEach items="${applications}" var="application">
+		            	 	<option value="${application.iid}"<c:if test="${jisDatacall.appId==application.iid}">selected</c:if>>${application.name}</option>
+		                 </c:forEach>
+	                </select>
 				</td>
 			</tr>
 			
-			<tr id="rsshtmltr"> 
+			<tr id="hiddenTr3" style="display:none"> 
 				<th><b class="mustbe">*</b>Rss信息模板</th>  
-	            <td colspan="5" class="opr_open_tdright">
-	                <fieldset style="border: 1px red solid;">
+	            <td colspan="5" name="RssInfo" id="RssInfo">
+	                <fieldset style="border: 2px gray solid;">
 	                <legend style="margin-left:15px"><b><font color="blue">HTML标签</font></b></legend>
 	                    <table style="margin-left: 15px;"> 
 	                        <tr class="opr_tr"> 
@@ -303,9 +329,38 @@ $(function(){
 	                    </table>
 	                </fieldset>
 	
-	                <fieldset style="border: 1px red solid;">
+	                <fieldset style="border: 2px gray solid;">
 	                <legend style="margin-left:15px"><b><font color="blue">HTML模板编辑</font></b></legend>
-	                <textarea style="margin-left:15px ;width:850px;height:300px" id="content" name="content" rows="20">${rsshtml}</textarea>
+                	<textarea style="margin-left:15px ;width:850px;height:300px" id="content" name="content" rows="20"><c:if test="${empty jisDatacall.iid}"><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>Insert title here</title>
+		<style type="text/css">
+			ul{width:440px;}
+			ul li{ list-style-type:none;line-height:30px;}
+			*{ padding:0px; margin:0px;font-weight:normal;list-style-type:none;}
+			a:link {text-decoration:none;color:black;}
+			a:visited{text-decoration:none;}
+			a:hover{text-decoration:none;color:red;}
+		</style>
+	</head>
+ <body>
+		<div style="width:440px;margin:15px 0 0 10px;float:left;">
+			<div style="float:left;padding:0;font:20px '微软雅黑';color:#288de9;width:30%;border-bottom:2px solid #288de9;">{tpl_resname}</div>
+			<div style="float:right;padding:3px 13px 0 0;"><a href="{tpl_morelink}" style="color:#cccccc;font: 14px '微软雅黑';" target='_blank'>更多&gt;&gt;</a></div>
+			<div style="clear:both;padding:7px 0 0 0;font:16px '微软雅黑';border-top: 1px soldi #e3e3e3">
+			<!--datacall start-->
+				<ul>
+					<li style="float:left;width:200px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;"><a href="{tpl_link}"  target='_blank'>{tpl_title}</a></li>
+					<li style="float:left;width:100px;padding-left:50px;">{tpl_author}</li>
+					<li style="float:left;padding-left:20px;">{tpl_pubdate}</li>
+				</ul>
+			<!--datacall end-->
+			</div>
+		</div>
+ </body>
+</html></c:if><c:if test="${not empty jisDatacall.iid}">${jisDatacall.content}</c:if></textarea>
 	                </fieldset> 
 	        	</td> 
 	        </tr>
