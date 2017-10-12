@@ -285,7 +285,7 @@ function importGroup(){
 				    <th style="padding-left: 5px">上级机构:</th>
 					<td width="15%">
               			<input name="groupname" id="groupname" value="${groupName}" type="text" style="cursor: pointer;" placeholder="上级机构"/>
-					    <input type="hidden" id="groupid" name="search_EQ_pid">
+					    <input type="hidden" id="groupid" value="${sParams['EQ_pid']}" name="search_EQ_pid">
 					</td>
 				    <th style="padding-left: 5px">节点类型:</th>
 					<td width="15%">
