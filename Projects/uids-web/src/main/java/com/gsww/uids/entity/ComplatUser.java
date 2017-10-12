@@ -1,3 +1,4 @@
+
 package com.gsww.uids.entity;
 
 import java.util.Date;
