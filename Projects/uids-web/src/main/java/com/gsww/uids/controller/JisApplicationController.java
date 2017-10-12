@@ -26,17 +26,21 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
+import com.gsww.jup.entity.sys.SysUserSession;
 import com.gsww.jup.util.JSONUtil;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.jup.util.TimeHelper;
 import com.gsww.uids.entity.ComplatGroup;
 import com.gsww.uids.entity.ComplatUser;
 import com.gsww.uids.entity.JisApplication;
+import com.gsww.uids.entity.JisRoleobject;
 import com.gsww.uids.entity.JisSysview;
 import com.gsww.uids.entity.JisSysviewDetail;
 import com.gsww.uids.service.ComplatGroupService;
 import com.gsww.uids.service.ComplatUserService;
 import com.gsww.uids.service.JisApplicationService;
+import com.gsww.uids.service.JisLogService;
+import com.gsww.uids.service.JisRoleobjectService;
 import com.gsww.uids.service.JisSysviewDetailService;
 import com.gsww.uids.service.JisSysviewService;
 import com.gsww.uids.service.JisUserdetailService;
@@ -63,6 +67,11 @@ public class JisApplicationController extends BaseController{
 	private ComplatUserService complatUserService;
 	@Autowired
 	private JisUserdetailService jisUserdetailService;
+	@Autowired
+	private JisRoleobjectService jisRoleobjectService;
+	@Autowired
+	private JisLogService jisLogService;
+
 	
 	/**
 	 * 获取应用列表
@@ -93,18 +102,38 @@ public class JisApplicationController extends BaseController{
 			
 			//搜索属性初始化
 			Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
-			Specification<JisApplication>  spec=super.toNewSpecification(searchParams, JisApplication.class);
-			
-			// map放入
-			List<Map<String, Object>> groupList = new ArrayList<Map<String, Object>>();
-			Map<Integer, Object> groupMap = new HashMap<Integer, Object>();
-			groupList = complatGroupService.getComplatGroupList();
-			for (Map<String, Object> group : groupList) {
-				groupMap.put((Integer) group.get("iid"), group.get("name"));
-			}
 			
 			//分页
+			SysUserSession sysUserSession = (SysUserSession) hrequest.getSession().getAttribute("sysUserSession");
+			String[] roleIds = sysUserSession.getRoleIds().split(",");
+			List<JisRoleobject> jisRoleobjects = new ArrayList<JisRoleobject>();
+			for(String s :roleIds){
+				List<JisRoleobject> jisRoleobject=jisRoleobjectService.findByRoleIdAndType(Integer.parseInt(s),3);
+				jisRoleobjects.addAll(jisRoleobject);
+			}
+			List<Integer> appids= new ArrayList<Integer>();
+			for(JisRoleobject roleobj : jisRoleobjects){
+				appids.add(roleobj.getObjectid());
+			}
+			
+//			JisApplication jisApplication=new JisApplication();
+//			for(Integer appid:appids){
+//				jisApplication = jisApplicationService.findByKey(appid);
+//			}
+			searchParams.put("IN_iid",appids);
+			
+			Specification<JisApplication>  spec=super.toNewSpecification(searchParams, JisApplication.class);
 			Page<JisApplication> pageInfo = jisApplicationService.getApplicationPage(spec,pageRequest);
+
+			
+			List<JisApplication> apps = pageInfo.getContent();
+			Map<Integer, Object> groupMap = new HashMap<Integer, Object>();
+
+			for(JisApplication app:apps){
+				ComplatGroup group = complatGroupService.findByIid(app.getGroupId());
+				groupMap.put(group.getIid(), group.getName());
+			}
+
 			model.addAttribute("pageInfo", pageInfo);
 			model.addAttribute("groupMap", groupMap);
 			
@@ -197,17 +226,20 @@ public class JisApplicationController extends BaseController{
 	@RequestMapping(value = "/applicationSave", method = RequestMethod.POST)
 	public ModelAndView applicationSave(JisApplication jisApplication,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		
+		SysUserSession sysUserSession =(SysUserSession)request.getSession().getAttribute("sysUserSession");
+		
 		try {
 			if(jisApplication != null){
-				
-				String picName=request.getParameter("picName");
-				//String groupid=request.getParameter("groupid");
-				//Integer groupId=Integer.parseInt(groupid);
-				//jisApplication.setGroupId(groupId);
-				String uploadFile="/uploads/"+picName;
-				jisApplication.setIcon(uploadFile);
+				Integer iid = jisApplication.getIid();
 				jisApplicationService.save(jisApplication);
 				returnMsg("success","保存成功",request);
+				
+				String desc = sysUserSession.getUserName() + "保存了:" + jisApplication.getName();
+				if(iid==null){
+					jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,4,1);
+				}else{
+					jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,4,2);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -215,17 +247,6 @@ public class JisApplicationController extends BaseController{
 		} finally{
 			return new ModelAndView("redirect:/application/applicationList");
 		}
-		
-		/*try {
-			jisDatacall = jisDatacallService.save(jisDatacall);
-			returnMsg("success","保存成功",request);
-		} catch (Exception e) {
-			e.printStackTrace();
-			returnMsg("error","保存失败",request);
-		} finally{
-			return  new ModelAndView("redirect:/datacall/datacallList");
-		}*/
-		
 	}
 	
 	/**
@@ -234,6 +255,7 @@ public class JisApplicationController extends BaseController{
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/applicationDelete", method = RequestMethod.GET)
 	public ModelAndView applicationDelete(String iid,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+		SysUserSession session = (SysUserSession) request.getSession().getAttribute("sysUserSession");
 		try {
 			String[] para=iid.split(",");
 			JisApplication jisApplication = null;
@@ -243,6 +265,10 @@ public class JisApplicationController extends BaseController{
 				jisApplicationService.delete(jisApplication);
 							}
 			returnMsg("success","删除成功",request);
+			
+			String desc=session.getUserName()+"删除了"+jisApplication.getName();
+            jisLogService.save(session.getUserName(),session.getUserIp(), desc, 4, 3);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			returnMsg("error", "删除失败",request);

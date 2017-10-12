@@ -384,7 +384,7 @@ function showRealNameAuthUrl(){
 						</td> 
 					</tr>
 					<tr id="n">
-						<td colspan="3"><hr style="height:1px;border-top:1px dashed #CCCCCC;"/></td> 
+						<!-- <td colspan="3"><hr style="height:1px;border-top:1px dashed #CCCCCC;"/></td>  -->
 					</tr>
 						<tr>
 						<td align="right" class="label" width="100">找回密码标题</td>
@@ -531,7 +531,7 @@ function showRealNameAuthUrl(){
 						<td align="right" class="label" width="100">个人注册时的短信内容</td>
 						<!-- <td class="required">&nbsp;</td> -->
 						<td colspan="2">
-							<textarea  style="resize:none" id="registPerMessageContent" 
+							<textarea style="resize:none;height: 100px;" id="registPerMessageContent" 
 							 name="registPerMessageContent" class="input-textarea">${jisParameter.registPerMessageContent}
 						 	</textarea>
 						</td>
@@ -557,7 +557,7 @@ function showRealNameAuthUrl(){
 						<td align="right" class="label" width="100">法人注册时的短信内容</td>
 						<!-- <td class="required">&nbsp;</td> -->
 						<td colspan="2">
-							<textarea style="resize:none" id="registCorMessageContent" 
+							<textarea style="resize:none;height: 100px;" id="registCorMessageContent" 
 							 name="registCorMessageContent" class="input-textarea">${jisParameter.registCorMessageContent}
 							</textarea>
 						</td>
@@ -583,7 +583,7 @@ function showRealNameAuthUrl(){
 						<td align="right" class="label" width="100">找回密码时的短信内容</td>
 						<!-- <td class="required">&nbsp;</td> -->
 						<td colspan="2">
-							<textarea style="resize:none" id="recovingPwdContent" name="recovingPwdContent" 
+							<textarea style="resize:none;height: 100px;" id="recovingPwdContent" name="recovingPwdContent" 
 							 class="input-textarea">${jisParameter.recovingPwdContent}
 							</textarea>
 						</td>
@@ -622,7 +622,7 @@ function showRealNameAuthUrl(){
 						<td align="right" class="label" width="100">获取动态登录密码时的短信内容</td>
 						<!-- <td class="required">&nbsp;</td> -->
 						<td colspan="2">
-							<textarea  style="resize:none" id="dynamicPwdMessageContent" 
+							<textarea  style="resize:none;height: 100px;" id="dynamicPwdMessageContent" 
 							 name="dynamicPwdMessageContent" class="input-textarea">${jisParameter.dynamicPwdMessageContent}
 							</textarea>
 						</td>
@@ -716,8 +716,8 @@ function showRealNameAuthUrl(){
 					<tr>
 						<td align="right" class="label"  width="250" >请选择认证模式</td>
 						<!-- <td class="required">&nbsp;</td> -->
-						<td colspan="2">
-							<select name="verify_mode" data-value="${jisParameter.verify_mode}" >
+						<td colspan="2" style="width: 299px;">
+							<select name="verify_mode" data-value="${jisParameter.verify_mode}">
 								<option value="0">0:身份证号码+姓名</option>
 								<option value="1">1:身份证号码+姓名+机构编码+机构名称+区域编码</option>
 								<option value="2">2:身份证号码+姓名+机构编码</option>

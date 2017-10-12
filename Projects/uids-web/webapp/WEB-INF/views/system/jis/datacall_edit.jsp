@@ -220,18 +220,18 @@ $(function(){
     <div class="form-content">
     	<table class="form-table">
     		<tr>
-        		<th><b class="mustbe">*</b> 请输入数据调用名称：</th>
+        		<th style="text-align:center;"><b class="mustbe">*</b> 请输入数据调用名称：</th>
 	        	<td>
 					<input type="text" placeholder="字母、数字、下划线或中文" id="resName" name="resName" value="${jisDatacall.resName}" />
 				</td>
-				<th><b class="mustbe">*</b> 请输入标识：</th>
+				<th style="text-align:center;"><b class="mustbe">*</b> 请输入标识：</th>
 				<td>
 					<input type="text" placeholder="英文名或数字且唯一" id="remark" name="remark" value="${jisDatacall.remark}" />
 					<input type="hidden" id="oldRemark" name="oldRemark" value="${jisDatacall.remark}"/>
 				</td>
 			</tr>
 			<tr>
-				<th><b class="mustbe">*</b> 请选择调用方式：</th>
+				<th style="text-align:center;"><b class="mustbe">*</b> 请选择调用方式：</th>
                 <td>
                 	<select name="callingType" onChange="calltype(this.value)" >   
 						<option value="">--请选择--</option>   
@@ -239,13 +239,13 @@ $(function(){
 						<option value="2"<c:if test="${jisDatacall.callingType==2}">selected</c:if>>RSS调用</option>
 					</select>
                 </td>
-                <th><b class="mustbe">*</b>请输入地址：</th>
+                <th style="text-align:center;"><b class="mustbe">*</b>请输入地址：</th>
 				<td>
 					<textarea class="textarea" name="resUrl">${jisDatacall.resUrl}</textarea>
 				</td>
 			</tr>
 			<tr id="hiddenTr1" style="display:none">
-				<th>排序方式：</th>
+				<th style="text-align:center;">排序方式：</th>
 				<td>
 				<select name="orderType" id="orderType" data-value="${jisDatacall.orderType}" >  
 					<option value="">--请选择--</option>   
@@ -253,14 +253,14 @@ $(function(){
 					<option value="2"<c:if test="${jisDatacall.orderType==2}">selected</c:if>>按时间倒序</option>
 				</select>
 				</td>
-				<th>信息数量：</th>
+				<th style="text-align:center;">信息数量：</th>
 				<td>
 					<input type="text" id="infoNum" name="infoNum" maxlength="33"
                     class="input-text" value="${jisDatacall.infoNum}" placeholder="信息数量范围为1~30"/>
                 </td>
 			</tr>
 			<tr id="hiddenTr2" style="display:none">
-				<th>时间格式：</th>
+				<th style="text-align:center;">时间格式：</th>
 				<td>
 				<select name="timeFormat" data-value="${jisDatacall.timeFormat}">
 					<option value="MM-dd"<c:if test="${jisDatacall.timeFormat=='MM-dd'}">selected</c:if>>MM-dd</option>
@@ -274,7 +274,7 @@ $(function(){
                 </td>
 			</tr>
 			<tr>
-				<th><b class="mustbe">*</b> 是否验证：</th>
+				<th style="text-align:center;"><b class="mustbe">*</b> 是否验证：</th>
 				<td colspan="2" id="judge">
 					<c:if test="${jisDatacall.isVerification=='2'}">
 						<input type="radio" name="isVerification" value="1" onclick="selectIsVerification(this.value);"/>是
@@ -303,7 +303,7 @@ $(function(){
 			</tr>
 			
 			<tr id="hiddenTr3" style="display:none"> 
-				<th><b class="mustbe">*</b>Rss信息模板</th>  
+				<th style="text-align:center;"><b class="mustbe">*</b>Rss信息模板</th>  
 	            <td colspan="5" name="RssInfo" id="RssInfo">
 	                <fieldset style="border: 2px gray solid;">
 	                <legend style="margin-left:15px"><b><font color="blue">HTML标签</font></b></legend>
@@ -331,7 +331,7 @@ $(function(){
 	
 	                <fieldset style="border: 2px gray solid;">
 	                <legend style="margin-left:15px"><b><font color="blue">HTML模板编辑</font></b></legend>
-                	<textarea style="margin-left:15px ;width:850px;height:300px" id="content" name="content" rows="20"><c:if test="${empty jisDatacall.iid}"><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+                	<textarea style="margin-left:10px ;width:880px;height:300px" id="content" name="content" rows="20"><c:if test="${empty jisDatacall.iid}"><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />

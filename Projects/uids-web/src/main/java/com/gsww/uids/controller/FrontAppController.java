@@ -86,7 +86,7 @@ public class FrontAppController extends BaseController {
 		if(Integer.parseInt(iid)==1){
 			return true;
 		}
-		for(int i=0;i<roleIds.length();i++){
+		for(int i=0;i<roleId.length;i++){
 			try {
 				roles.add(complatRoleService.findByKey(Integer.parseInt(roleId[i])));
 			}catch (Exception e) {

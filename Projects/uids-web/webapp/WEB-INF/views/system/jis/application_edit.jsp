@@ -119,7 +119,6 @@ function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
 			onDblClick : onDblClickFunction
 		}
 	};
-	console.log("-----"+treeName);
 	$("#" + treeName).tree(setting, rootNode);
 //	$("#" + treeName).tree().refreshNode('');
 }
@@ -167,8 +166,8 @@ $(function(){
     });
 	 
     uploader.on( 'uploadSuccess', function( file, a ) {
-    	$("#picName").val(file.name);
-    	$("#icon2").attr("src","${ctx}/uploads/"+file.name);
+    	$("#icon").val("/resources/jis/front/app/"+file.name);
+    	$("#icon2").attr("src","${ctx}/resources/jis/front/app/"+file.name);
         $( '#'+file.id ).find('p.state').text('已上传');
         $("#showpic").show();
     });
@@ -267,8 +266,8 @@ function changSel(num){
 	}
 	var obj=document.getElementsByName("selectpicname");
 	obj[num-1].checked = true;
-	$("#picName").val(picName);
-	$("#icon2").attr("src","${ctx}/uploads/"+picName);
+	$("#icon").val(picName);
+	$("#icon2").attr("src","${ctx}/resources/jis/front/app/"+picName);
 	$("#showpic").show();
 }
 
@@ -381,7 +380,6 @@ function setLoginType(){
 		$('#id_setsso').hide();
 		$('#id_checknet').show();
 		$('#id_fastwrite').show();
-		$('#loginType').val(0);
 		$('#loginType').val(0);
 		$('#isSyncGroup').val(1);
 	}else if(loginType == '00'){  //只同步后台
@@ -562,7 +560,10 @@ $(function(){
     	<input type="hidden" id="orderField" name="orderField" value="${orderField}"/> 
 		<input type="hidden" id="orderSort" name="orderSort" value="${orderSort}"/>
 		<input type="hidden" id="groupid" name="groupId" value="${jisApplication.groupId}"/>
-		<input type="hidden" id="picName" name="picName" value=""/>
+		<input type="hidden" id="icon" name="icon" value="${jisApplication.icon}"/>
+		<input type="hidden" id="loginType" name="loginType" value="${jisApplication.loginType}"/>
+		<input type="hidden" id="isSyncGroup" name="isSyncGroup" value="${jisApplication.isSyncGroup}"/>
+		<input type="hidden" id="orderId" name="orderId" value="${jisApplication.orderId}"/>
     </div>
     
     <!--表单的主内容区域-->

@@ -15,17 +15,17 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "JIS_DATACALL")
 public class JisDatacall implements java.io.Serializable{
-	private Integer iid;         //主键id
-	private String resName;   	 //名称
-	private String resUrl;   	 //url地址
-	private Integer callingType; //调用方式,1：iframe调用,2：rss调用
-	private Integer isVerification;  //是否验证
-	private Integer orderType;   	 //排序方式,1:正序,2:倒叙
-	private String content;  	 //rss模板样式
-	private String timeFormat;   //时间格式 
-	private Integer appId;  		 //应用id
-	private String remark; 		 //标识
-	private Integer infoNum;   		 //信息数量
+	private Integer iid;         	//主键id
+	private String resName;   	 	//名称
+	private String resUrl;   	 	//url地址
+	private Integer callingType; 	//调用方式,1：iframe调用,2：rss调用
+	private Integer isVerification; //是否验证
+	private Integer orderType;   	//排序方式,1:正序,2:倒叙
+	private String content;  	 	//rss模板样式
+	private String timeFormat;  	//时间格式 
+	private Integer appId;  		//应用id
+	private String remark; 		 	//标识
+	private Integer infoNum;   		//信息数量
 	
 	public JisDatacall() {
 		super();

@@ -63,7 +63,7 @@ public class JisApplicationServiceImpl implements JisApplicationService {
 			PageRequest pageRequest) {
 		return jisApplicationDao.findAll(spec, pageRequest);
 	}
-
+	
 	@Override
 	public JisApplication findByMark(String mark) throws Exception {
 		JisApplication jisApplication=jisApplicationDao.findByMark(mark).get(0);
