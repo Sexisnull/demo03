@@ -425,7 +425,7 @@ var complatUserNameInput=$("#name").val();
 	              </td>
 	        	  <th><b class="mustbe">*</b>性别：</th>
 				  <td style="width:300px;">	
-				 	<gsww:checkboxTag name="type" defaultValue="1" type="ZFYHXB" inputType="radio" value="${complatUser.sex}"></gsww:checkboxTag>
+				 	<gsww:checkboxTag name="sex" defaultValue="1" type="ZFYHXB" inputType="radio" value="${complatUser.sex}"></gsww:checkboxTag>
 				  </td>
 		 		</tr> 
 		 		<tr>  
