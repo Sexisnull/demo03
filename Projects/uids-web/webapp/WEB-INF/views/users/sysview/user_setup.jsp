@@ -4,6 +4,7 @@
 <html>
 
 	<head>
+		<meta name=”renderer” content=”webkit|ie-comp|ie-stand” />  
 		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 		<meta http-equiv="Cache-Control" content="no-store" />
 		<meta http-equiv="Pragma" content="no-cache" />
@@ -193,8 +194,10 @@
 						
 						
 						//编辑页面密码强度判断
-						$('#pwd').attachEvent('oninput',EvalPwd(this.value));
-					});
+						var pwding = $("#pwd").val();
+  					    $('#pwd').attachEvent('oninput',EvalPwd(pwding));					
+  					    
+  					 });
 
 
 </script>
