@@ -461,7 +461,7 @@ function resetform() {
 }
 /*********************机构树结束************************/
 </script>
-		<script type="text/javascript" src="${ctx}/res/js/region/orgTree.js"></script>
+		<%--<script type="text/javascript" src="${ctx}/res/js/region/orgTree.js"></script>--%>
 	</head>
 	<body>
 
@@ -485,22 +485,22 @@ function resetform() {
 				</ol>
 			</div>
 
+			<%--<!--左侧树形结构-->--%>
+			<%--<div id="tablelist" style="width:20%;float:left;min-width:0px;">--%>
+				<%--<table class="tablelist" >--%>
+					<%--<tbody>--%>
+					<%--<tr>--%>
+						<%--<td>--%>
+							<%--<div class="zTreeDemoBackground left" style="overflow:scroll;">--%>
+								<%--<ul id="treeDemo" class="ztree" style=" display: block;"></ul>--%>
+							<%--</div>--%>
+						<%--</td>--%>
+					<%--</tr>--%>
+					<%--</tbody>--%>
+				<%--</table>--%>
+			<%--</div>--%>
 			<!--左侧树形结构-->
-			<div id="tablelist" style="width:20%;float:left;min-width:0px;">
-				<table class="tablelist" >
-					<tbody>
-					<tr>
-						<td>
-							<div class="zTreeDemoBackground left" style="overflow:scroll;">
-								<ul id="treeDemo" class="ztree" style=" display: block;"></ul>
-							</div>
-						</td>
-					</tr>
-					</tbody>
-				</table>
-			</div>
-			<!--左侧树形结构-->
-			<div style="width:78%;float:left;">
+			<div style="width:100%;float:left;">
 				<div class="search-content">
 					<form id="form1" name="form2" action="${ctx}/complat/complatList"
 						  method="get">
@@ -520,8 +520,6 @@ function resetform() {
 								<td width="20%">
 									<input type="text" style="width: 150px;" placeholder="姓名" value="${sParams['LIKE_name']}" id="nameSearch" name="search_LIKE_name" />
 								</td>
-							</tr>
-							<tr>
 								<th style="padding-left: 5px">
 									登录名：
 								</th>
