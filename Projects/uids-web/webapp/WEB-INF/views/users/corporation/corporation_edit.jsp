@@ -73,6 +73,9 @@ $().ready(function() {
 		   
 		  }
 	    });
+	    //编辑页面密码强度显示
+		var pwding = $("#pwd").val();
+    	$('#pwd').attachEvent('oninput',EvalPwd(pwding));
 	    // Ajax重命名校验
 		//$.uniqueValidate('uniqueLoginName', '${ctx}/complat/checkCorporationLoginName', ['loginName','oldLoginName'], '对不起，这个账号重复了');
 	    //民族及页面初始化
