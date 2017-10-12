@@ -14,18 +14,19 @@
 		var nameSearch = $("#nameSearch").val();
 		var loginNameSearch = $("#loginNameSearch").val(); 
 		var papersNumberSearch = $("#papersNumberSearch").val();
+		var papersNumberLength = papersNumberSearch.length;
 		if(nameSearch ==  '' || isNumbOrLett1(nameSearch)){
 			if(loginNameSearch ==  '' || isNumbOrLett2(loginNameSearch)) {
-				if(papersNumberSearch ==  '' || isNumbOrLett3(papersNumberSearch)) {
+				if(papersNumberSearch ==  '' || (isNumbOrLett3(papersNumberSearch) && papersNumberLength <= 18)) {
 					form1.submit();
 				} else{
-					$.validator.errorShow($("#papersNumberSearch"),'只能包括数字和字母');
+					$.validator.errorShow($("#papersNumberSearch"),'只能包括数字和字母,且不能超过18个字符');
 				}
 			} else{
-				$.validator.errorShow($("#loginNameSearch"),'只能包括字母、数字、下划线');
+				$.validator.errorShow($("#loginNameSearch"),'只能包括字母、数字、下划线,且不能超过255个字符');
 			}
 		} else{
-			$.validator.errorShow($("#nameSearch"),'只能包括字母、数字、下划线、中文');
+			$.validator.errorShow($("#nameSearch"),'只能包括字母、数字、下划线、中文,且不能超过255个字符');
 		}
 	}
 	
@@ -37,7 +38,7 @@
 	如果通过验证返回true,否则返回false
 	*/
 	function isNumbOrLett1( s ){
-		var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;
+		var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]{1,255}$/;
 		var re = new RegExp(regu);
 		if (re.test(s)) {
 			return true;
@@ -47,7 +48,7 @@
 	}
 	
 	function isNumbOrLett2( s ){
-		var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_]+$/;
+		var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_]{1,255}$/;
 		var re = new RegExp(regu);
 		if (re.test(s)) {
 			return true;
