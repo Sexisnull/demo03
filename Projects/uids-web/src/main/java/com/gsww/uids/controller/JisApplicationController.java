@@ -236,9 +236,9 @@ public class JisApplicationController extends BaseController{
 				
 				String desc = sysUserSession.getUserName() + "保存了:" + jisApplication.getName();
 				if(iid==null){
-					jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,4,1);
+					jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(),desc,4,1);
 				}else{
-					jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,4,2);
+					jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(),desc,4,2);
 				}
 			}
 		} catch (Exception e) {
@@ -267,7 +267,7 @@ public class JisApplicationController extends BaseController{
 			returnMsg("success","删除成功",request);
 			
 			String desc=session.getUserName()+"删除了"+jisApplication.getName();
-            jisLogService.save(session.getUserName(),session.getUserIp(), desc, 4, 3);
+            jisLogService.save(session.getLoginAccount(),session.getUserIp(), desc, 4, 3);
 			
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -143,7 +143,13 @@ public class SysLoginController extends BaseController {
 				userName = URLDecoder.decode(userName,"utf-8"); 
 				passWord = URLDecoder.decode(passWord,"utf-8"); 
 				ComplatBanlist banList = complatBanListService.checkLoginTimes(userName, loginIp, 0,group);
-				if (banList == null || !banList.isCanLogin()) {
+				if(banList == null ){
+					resMap.put("ret", "2");
+					resMap.put("msg", "用户名或密码错误！");
+					response.getWriter().write(JSONObject.toJSONString(resMap));
+					return;
+				}
+				if (!banList.isCanLogin()) {
 					resMap.put("ret", "2");
 					resMap.put("msg", "登录次数过多，请"+jisSettings.getBanTimes()+"分钟后重试");
 					response.getWriter().write(JSONObject.toJSONString(resMap));
@@ -177,7 +183,7 @@ public class SysLoginController extends BaseController {
 								JSONObject.toJSONString(resMap));
 						try {
 							JisLog log = new JisLog();
-							log.setUserId(sysUserSession.getAccountId());
+							log.setUserId(userName);
 							log.setIp(sysUserSession.getUserIp());
 							log.setOperateTime(new Date());
 							log.setSpec(userName + "系统登录失败[停用]");
@@ -190,8 +196,6 @@ public class SysLoginController extends BaseController {
 					}
 				} else {
 					resMap.put("ret", "2");
-					
-					
 					try {
 						JisLog log = new JisLog();
 						log.setUserId(userName);

@@ -177,6 +177,7 @@ body {
 				<span class="instruction">建议使用1024*768，IE8浏览器以上为最佳浏览模式</span>
 			</div>
 		</div>
+		<script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgcore.lhgdialog.min.js"></script>
 		<script type="text/javascript" src="${ctx}/res/skin/login/js/login.js"></script>
 	</body>
 </html>

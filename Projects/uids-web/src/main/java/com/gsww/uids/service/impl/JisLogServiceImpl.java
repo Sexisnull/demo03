@@ -88,7 +88,7 @@ public class JisLogServiceImpl implements JisLogService {
 			StringBuffer querySql = new StringBuffer();
 			querySql.append("select @rownum:=@rownum+1 AS rownum,us.name as username,gr.name as groupname,log.ip,"
 					+ " date_format(log.operatetime,'%Y-%c-%d %H:%i:%s') as operatetime from (select @rownum:=0)r, jis_log log ");
-			querySql.append(" left join complat_user us on log.userid = us.iid ");
+			querySql.append(" left join complat_user us on log.userid = us.loginname ");
 			querySql.append(" left join complat_group gr on us.groupid = gr.iid ");
 			querySql.append(" where log.operatetime like '"+TimeHelper.getCurrentDate()+"%'");
 			querySql.append(" order by log.operatetime desc ");
