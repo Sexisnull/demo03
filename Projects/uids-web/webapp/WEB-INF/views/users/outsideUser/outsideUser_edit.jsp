@@ -97,6 +97,7 @@ $().ready(function() {
 		   		cnRangelength: [0,127]
 		   	},
 		   	submitHandler:function(form){
+		   		//alert("提交");
 				form.submit();
 			}
 		}
@@ -121,10 +122,27 @@ $().ready(function() {
            return this.optional(element) || (corporName.test(value));     
     }, "邮政编码格式不正确（共6位,开头不能为0)");
     
-    
+    /* var pwding = $("#pwd").val();
+	$("#pwd").change(function(){
+		EvalPwd(pwding);
+	}); */
     var pwding = $("#pwd").val();
     $('#pwd').attachEvent('oninput',EvalPwd(pwding));
 });
+
+function checkAndSave() { 
+    var level = $("#level").val(); 
+    var pwd = $("#pwd").val();
+    if(level == "strong") {
+		$("#editForm").submit();
+	} else if(level == "weak" && pwd == "") {
+		alert("请填写必填信息！");
+		return false;
+	} else {
+		alert("密码强度必须为强！");
+		return false;
+	}
+}
 </script>
 
 <style>
@@ -195,6 +213,7 @@ color: rgb(119, 119, 119);
     	<input type="hidden" id="authState" name="authState" value="${outsideUser.authState}"/>
     	<input type="hidden" id="isAuth" name="isAuth" value="${outsideUser.isAuth}"/>
     	<input type="hidden" id="time" name="time" value="${time}"/>
+    	<input type="hidden" id="level"/>
     </div>
     
     <!--表单的主内容区域-->
@@ -340,7 +359,7 @@ color: rgb(119, 119, 119);
     <div style="clear:both;"></div>
     <!--表单的按钮组区域-->
     <div class="form-btn">
-    	<input type="submit" tabindex="15" id="submit-btn" value="保存" class="btn bluegreen"/>
+    	<input type="button" tabindex="15" id="submit-btn" value="保存" class="btn bluegreen" onclick="checkAndSave();"/>
     	&nbsp;&nbsp;
         <input type="button" tabindex="16" value="返回" onclick="javascript:window.location.href='${ctx}/complat/outsideuserList?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}'" class="btn gray"/>
         
