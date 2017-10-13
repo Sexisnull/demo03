@@ -830,10 +830,8 @@ public class ComplatUserController extends BaseController {
 	 * @author <a href=" ">yaoxi</a>
 	 */
 	@RequestMapping(value = "/userSetUpEdit", method = RequestMethod.GET)
-	public ModelAndView userSetUpEdit(Model model, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
-
-		ModelAndView mav = new ModelAndView("users/sysview/user_setup");
+	public String userSetUpEdit(Model model, HttpServletRequest request,
+			HttpServletResponse response,String isFront) throws Exception {
 		try {
 			// 获取系统当前登录用户
 			SysUserSession sysUserSession = (SysUserSession) request
@@ -842,17 +840,19 @@ public class ComplatUserController extends BaseController {
 			if (StringHelper.isNotBlack(sysUserSession.getAccountId())) {
 
 				// 查询用户信息
-				ComplatUser complatUser = complatUserService.findByKey(Integer
+				ComplatUser complatUserEdit = complatUserService.findByKey(Integer
 						.parseInt(userSid));
-				model.addAttribute("complatUser", complatUser);
-
+				String pwd = Md5Util.md5decode(complatUserEdit.getPwd());
+				model.addAttribute("pwd",pwd);
+				model.addAttribute("complatUser",complatUserEdit);
+				
 				// 查询用户身份证号
 				JisUserdetail userDetail = jisUserdetailService
 						.findByUserid(Integer.parseInt(userSid));
 				model.addAttribute("userDetail", userDetail);
 				// 根据用户ID查询所属机构
 				ComplatGroup complatGroup = complatGroupService
-						.findByIid(complatUser.getGroupid());
+						.findByIid(complatUserEdit.getGroupid());
 				model.addAttribute("complatGroup", complatGroup);
 
 				// 根据用户ID从ComplatRolerelation获取对应的角色ID，再根据角色ID从ComplatRole中获取对应的角色
@@ -871,7 +871,11 @@ public class ComplatUserController extends BaseController {
 		} catch (Exception exception) {
 			exception.printStackTrace();
 		}
-		return mav;
+		if("1".equals(isFront)){
+			return "users/sysview/frontIndex_user_setup";
+		}else{
+			return "users/sysview/user_setup";
+		}
 	}
 
 	/**
@@ -884,7 +888,6 @@ public class ComplatUserController extends BaseController {
 	 * @throws Exception
 	 * @author <a href=" ">yaoxi</a>
 	 */
-
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/userSetUpSave", method = RequestMethod.POST)
 	public void userSetUpSave(ComplatUser complatUser,String level,HttpServletRequest request,HttpServletResponse response)  throws Exception {
@@ -896,7 +899,7 @@ public class ComplatUserController extends BaseController {
 				if(complatUser != null){
 					userId = complatUser.getIid();
 					String name = complatUser.getName();
-					String pwd = Md5Util.md5encode(complatUser.getPwd());
+					String pwd = Md5Util.md5encode(request.getParameter("pwd"));
 					String headShip = complatUser.getHeadship();
 					String phone = complatUser.getPhone();//固定电话
 					String mobile = complatUser.getMobile();//移动电话
@@ -974,11 +977,9 @@ public class ComplatUserController extends BaseController {
 							jisSynEntity.setHometel(complatUser.getPhone());
 							jisSynEntity.setHeadShip(complatUser.getHeadship());
 							jisSynEntity.setNdlogin("");
-							//yaox
-							//JSONArray array = JSONArray.fromObject(jisSynEntity);
+							
+							//转实体为json格式，发送报文
 							net.sf.json.JSONObject object = net.sf.json.JSONObject.fromObject(jisSynEntity);
-							PrintWriter out = response.getWriter();
-							//String json = array.toString();
 							String json = object.toString();
 							JisSysviewDetail sysViewDetail = new JisSysviewDetail();
 							sysViewDetail.setTranscationId(sysView.getTranscationId());
@@ -1003,6 +1004,7 @@ public class ComplatUserController extends BaseController {
 		} 
 		
 	}
+
 
 	/**
 	 * 获取用户扩展属性
