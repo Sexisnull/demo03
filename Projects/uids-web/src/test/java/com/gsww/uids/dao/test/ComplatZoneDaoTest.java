@@ -19,15 +19,15 @@ public class ComplatZoneDaoTest {
 	private ComplatZoneDao complatZoneDao;
 	@Test
 	public void findByIid(){
-		int iid=1;
+		int iid=128;
 		ComplatZone zone=complatZoneDao.findByIid(iid);
 		System.out.println(zone.getName());
 		assertTrue(true);
 	}
 	@Test
 	public void findByNameAndLikeCodeId(){
-		String nameInput="甘肃省1";
-		String codeId="1001";
+		String nameInput="兰州市";
+		String codeId="620100000000";
 		List<ComplatZone> list=complatZoneDao.findByNameAndLikeCodeId(nameInput, codeId);
 		System.out.println(list.get(0));
 		assertTrue(true);

@@ -20,7 +20,7 @@ public class JisSysviewHistoryDaoTest {
 	private JisSysviewHistoryDao jisSysviewHistoryDao;
 	@Test
 	public void findByIid(){
-		int iid=1;
+		int iid=5;
 		JisSysviewHistory history=jisSysviewHistoryDao.findByIid(iid);
 		System.out.println(history.getObjectname());
 		assertTrue(true);

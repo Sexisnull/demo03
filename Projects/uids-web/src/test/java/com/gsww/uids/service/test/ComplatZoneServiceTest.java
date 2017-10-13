@@ -25,7 +25,7 @@ public class ComplatZoneServiceTest {
 	}
 	@Test
 	public void fingByKey(){
-		int iid=1;
+		int iid=222;
 		ComplatZone zone=complatZoneService.fingByKey(iid);
 		System.out.println(zone.getName());
 		assertTrue(true);

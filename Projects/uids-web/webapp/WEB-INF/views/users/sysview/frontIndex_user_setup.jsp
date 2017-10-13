@@ -21,8 +21,7 @@
 
 		<title>统一身份认证系统</title>
 		<script>
-	$(document)
-			.ready(
+	$(document).ready(
 					function() {
 						//表单校验
 						var userNameInput = $("#name").val();
@@ -195,7 +194,7 @@
 						
 						//编辑页面密码强度显示
 						var pwding = $("#pwd").val();
-    					$('#pwd').attachEvent('oninput',EvalPwd(pwding));
+    					EvalPwd(pwding);
 					});
 
 
@@ -414,7 +413,7 @@
 							角色：
 						</th>
 						<td>
-							<textarea rows="3" cols="3" id="roles" name="roles"
+							<textarea rows="3" cols="10" id="roles" name="roles"
 								readonly="readonly">
 								<c:forEach items="${roleList}" var="complatRole">
 									${complatRole.name}&nbsp;&nbsp;

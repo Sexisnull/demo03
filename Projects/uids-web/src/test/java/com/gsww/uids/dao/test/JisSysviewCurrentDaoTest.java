@@ -20,7 +20,7 @@ public class JisSysviewCurrentDaoTest {
 	private JisSysviewCurrentDao jisSysviewCurrentDao;
 	@Test
 	public void findByIid(){
-		int iid=4059;
+		int iid=12;
 		JisSysviewCurrent jis=jisSysviewCurrentDao.findByIid(iid);
 		System.out.println(jis.getObjectname());
 		assertTrue(true);

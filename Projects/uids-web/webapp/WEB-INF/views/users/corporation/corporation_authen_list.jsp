@@ -102,7 +102,7 @@
 		</form>
 		<!--表单的按钮组区域-->
 	   <div class="form-btn" id="input_three" style="display:none;">
-	   	<input type="button" tabindex="15" value="保存" onclick="oprOutsideUser();" class="btn bluegreen"/>
+	   	<input type="button" tabindex="15" value="保存" onclick="saveUser();" class="btn bluegreen"/>
 	   	&nbsp;&nbsp;
 	       <input type="button" tabindex="16" value="返回" onclick="rejectCancel();" class="btn gray"/>
 	   </div>
