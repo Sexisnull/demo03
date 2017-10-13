@@ -66,6 +66,7 @@ public class SysLoginServiceImpl implements SysLoginService {
 				return null;
 			} else {
 				SysUserSession sysUserSession = new SysUserSession();
+				sysUserSession.setLoginAccount(user.getLoginname());
 				sysUserSession.setAccountId(user.getIid() + "");
 				sysUserSession.setUserName(user.getName());
 				sysUserSession.setDeptId(user.getGroupid()+"");
