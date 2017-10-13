@@ -73,7 +73,7 @@ public interface ComplatUserService {
      * @param keyword
      * @return
      */
-    public List<Map<String, Object>> findByNameOrPinYin(String keyword);
+    public List<Map<String, Object>> findByNameOrPinYin(String keyword)throws Exception;
 
     /**
      * @param loginName
@@ -85,5 +85,8 @@ public interface ComplatUserService {
     List<Map<String, Object>> synchronizeData(Integer userId);
 
     public ComplatUser findByGroupid(Integer groupid);
+    
+    
+
 
 }

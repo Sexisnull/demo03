@@ -155,14 +155,16 @@ public class ComplatUserController extends BaseController {
 			@RequestParam(value = "order.sort", defaultValue = "DESC") String orderSort,
 			@RequestParam(value = "findNowPage", defaultValue = "false") String findNowPage,
 			Model model, ServletRequest request, HttpServletRequest hrequest) {
-		try {
+		try {									
 			if (StringUtils.isNotBlank(request.getParameter("orderField"))) {
 				orderField = (String) request.getParameter("orderField");
 			}
 			if (StringUtils.isNotBlank(request.getParameter("orderSort"))) {
 				orderSort = (String) request.getParameter("orderSort");
 			}
-
+			// 获取系统当前登录用户
+			SysUserSession sysUserSession = (SysUserSession) hrequest.getSession().getAttribute("sysUserSession");
+			String deptId = sysUserSession.getDeptId();
 			// 初始化分页数据
 			PageUtils pageUtils = new PageUtils(pageNo, pageSize, orderField,
 					orderSort);
@@ -170,8 +172,8 @@ public class ComplatUserController extends BaseController {
 					pageUtils, ComplatUser.class, findNowPage);
 
 			// 搜索属性初始化
-			Map<String, Object> searchParams = Servlets
-					.getParametersStartingWith(request, "search_");
+			Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
+			searchParams.put("EQ_groupid", deptId);
 			Specification<ComplatUser> spec = super.toNewSpecification(
 					searchParams, ComplatUser.class);
 
@@ -183,6 +185,7 @@ public class ComplatUserController extends BaseController {
 				groupMap.put((Integer) group.get("iid"), group.get("name"));
 			}
 
+			
 			// 分页
 			Page<ComplatUser> pageInfo = complatUserService.getComplatUserPage(
 					spec, pageRequest);

@@ -72,8 +72,9 @@ public interface ComplatUserDao extends PagingAndSortingRepository<ComplatUser, 
 	 * @return
 	 */
 	ComplatUser findByGroupid(Integer groupid);
+	
+	
 }
-
 
 
 

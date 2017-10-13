@@ -372,6 +372,10 @@ var complatUserNameInput=$("#name").val();
     	}
     }
     table.append(htmlString.join(""));
+  //编辑页面密码强度判断
+    var pwding = $("#pwd").val();
+    $("#pwd").change(function(){EvalPwd(pwding)});
+
 });
 
 
