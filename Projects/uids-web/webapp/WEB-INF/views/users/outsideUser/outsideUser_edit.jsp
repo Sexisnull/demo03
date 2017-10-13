@@ -122,12 +122,8 @@ $().ready(function() {
            return this.optional(element) || (corporName.test(value));     
     }, "邮政编码格式不正确（共6位,开头不能为0)");
     
-    /* var pwding = $("#pwd").val();
-	$("#pwd").change(function(){
-		EvalPwd(pwding);
-	}); */
     var pwding = $("#pwd").val();
-    $('#pwd').attachEvent('oninput',EvalPwd(pwding));
+    EvalPwd(pwding);
 });
 
 function checkAndSave() { 
