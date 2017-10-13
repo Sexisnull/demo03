@@ -153,7 +153,7 @@ $(function(){
 //搜索树的设置
 $(function(){
 	var groupMenu = [{"name":"单位选择","id":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
-    var root = "";
+    
 	$('#groupname').menu({
 		tree : 'groupmenu',
 		height : 200,
