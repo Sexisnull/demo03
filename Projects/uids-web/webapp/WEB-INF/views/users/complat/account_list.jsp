@@ -466,26 +466,7 @@ function resetform() {
 	<body>
 
 		<div class="list-warper">
-			
-
-			<!--列表的面包屑区域-->
-			<div class="position">
-				<ol class="breadcrumb">
-					<li>
-						<a href="${ctx}/backIndex" target="_top">首页</a>
-					</li>
-					<li class="split"></li>
-					<li>
-						<a>政府用户</a>
-					</li>
-					<li class="split"></li>
-					<li class="active">
-						<a>用户列表</a>
-					</li>
-				</ol>
-			</div>
-
-			<%--<!--左侧树形结构-->--%>
+			<!--左侧树形结构-->
 			<%--<div id="tablelist" style="width:20%;float:left;min-width:0px;">--%>
 				<%--<table class="tablelist" >--%>
 					<%--<tbody>--%>

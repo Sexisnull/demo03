@@ -137,6 +137,39 @@ public class ComplatUserController extends BaseController {
 	
 	@Autowired
 	private JisApplicationService jisApplicationService;
+
+
+	/**
+	 * 获取政府用户列表
+	 *
+	 * @param pageNumber
+	 * @param pageSize
+	 * @param sortType
+	 * @param model
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/groupOrgTree", method = RequestMethod.GET)
+	public String complatList(
+			Model model, ServletRequest request, HttpServletRequest hrequest) {
+		try {
+			// 获取系统当前登录用户
+			SysUserSession sysUserSession = (SysUserSession) hrequest.getSession().getAttribute("sysUserSession");
+			String deptId = sysUserSession.getDeptId();
+
+			//点击完查询时组织机构名称回显
+			String groupName = request.getParameter("groupname");
+			model.addAttribute("groupName", groupName);
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			logger.error("机构树打开失败：" + ex.getMessage());
+			returnMsg("error", "机构树打开失败", (HttpServletRequest) request);
+			return "redirect:/complat/complatList";
+		}
+		return "users/complat/org_tree";
+	}
+
 	/**
 	 * 获取政府用户列表
 	 * 
@@ -154,6 +187,7 @@ public class ComplatUserController extends BaseController {
 			@RequestParam(value = "order.field", defaultValue = "createtime") String orderField,
 			@RequestParam(value = "order.sort", defaultValue = "DESC") String orderSort,
 			@RequestParam(value = "findNowPage", defaultValue = "false") String findNowPage,
+			String orgId,
 			Model model, ServletRequest request, HttpServletRequest hrequest) {
 		try {									
 			if (StringUtils.isNotBlank(request.getParameter("orderField"))) {
@@ -173,7 +207,11 @@ public class ComplatUserController extends BaseController {
 
 			// 搜索属性初始化
 			Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
-			searchParams.put("EQ_groupid", deptId);
+			if (StringUtils.isEmpty(orgId)){
+				searchParams.put("EQ_groupid", deptId);
+			}else {
+				searchParams.put("EQ_groupid", orgId);
+			}
 			Specification<ComplatUser> spec = super.toNewSpecification(
 					searchParams, ComplatUser.class);
 

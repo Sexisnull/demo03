@@ -7,11 +7,13 @@ function dblClickExpand(treeId, treeNode) {
 }
 
 function onClick(e, treeId, treeNode, clickFlag) {			//点击区域将数据填充到表单
+    url = pageUrl + "?orgId="+treeNode.id
+    $("#main1").attr("src", url);
     $('#groupid').val(treeNode.id);
     $('#orgId').val(treeNode.id);
-    checkSubmitForm();
 }
-//treeId是treeDemo 
+
+//treeId是treeDemo
 function filter(treeId, parentNode, childNodes) {
 	if (!childNodes) return null;
 	for (var i = 0, l = childNodes.length; i < l; i++) {
@@ -19,6 +21,7 @@ function filter(treeId, parentNode, childNodes) {
 	}
 	return childNodes;
 }
+
 $(document).ready(function() {
 	$("#treeDemo").height(500); //-20
 	$("#treeDemo").width(200); //-20
@@ -33,11 +36,11 @@ $(document).ready(function() {
             },
             dataFilter : filter
         },
-        check: {
-            enable: true,
-            chkStyle: "radio",
-            radioType: "all"
-        },
+        // check: {
+        //     enable: true,
+        //     chkStyle: "radio",
+        //     radioType: "all"
+        // },
         view : {
             dblClickExpand : dblClickExpand,
             selectedMulti : false

@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.gsww.jup.entity.sys.SysUserSession;
 import net.sf.json.JSONArray;
 import net.sourceforge.pinyin4j.PinyinHelper;
 
@@ -718,8 +719,17 @@ public class ComplatGroupController extends BaseController {
      */
     @RequestMapping(value = "/orgTree", method = RequestMethod.POST)
     public void zoneTree(HttpServletRequest request, HttpServletResponse response, String orgId) {
+		List<ComplatGroup> list = new ArrayList<>();
         try {
-            List<ComplatGroup> list = complatGroupService.findAllOrg();
+            SysUserSession sysUserSession = (SysUserSession) ((HttpServletRequest) request).getSession()
+                    .getAttribute("sysUserSession");
+            // 获取部门id
+            String deptId = sysUserSession.getDeptId();
+			if (StringUtils.isEmpty(deptId)){
+				list = complatGroupService.findAllOrg();
+			} else {
+				list = complatGroupService.findAllDept(deptId);
+			}
             List<Map<String, Object>> treeList = new ArrayList<Map<String, Object>>();
             if (list != null && !list.isEmpty()) {
                 for (ComplatGroup complatGroup : list) {

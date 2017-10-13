@@ -50,6 +50,15 @@ JpaSpecificationExecutor<ComplatGroup>{
 	 */
 	@Query(value = "select group from ComplatGroup group where group.opersign!=3 order by group.orderid asc")
 	public List<ComplatGroup> findAllOrg();
+
+	/**
+	 * 查询所有对象
+	 * @return
+	 */
+	@Query(value = "(SELECT * FROM complat_group where iid =?1) " +
+			" UNION (SELECT * FROM complat_group where pid =?1)" +
+			" UNION (SELECT * FROM complat_group where pid in ((SELECT iid FROM complat_group where pid =?1)))",nativeQuery=true)
+	public List<ComplatGroup> findAllDepId(String detId);
 //	@Query(value = "select group from ComplatGroup group where group.pid=? order by group.orderid asc")
 //	public List<ComplatGroup> findByNoPid();
 }

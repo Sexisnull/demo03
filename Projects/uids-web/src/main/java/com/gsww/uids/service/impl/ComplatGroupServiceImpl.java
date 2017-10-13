@@ -167,4 +167,10 @@ public class ComplatGroupServiceImpl implements ComplatGroupService{
 		list=complatGroupDao.findAllOrg();
 		return list;
 	}
+
+	public List<ComplatGroup> findAllDept(String deptId) throws Exception {
+		List<ComplatGroup> list=new ArrayList<ComplatGroup>();
+		list=complatGroupDao.findAllDepId(deptId);
+		return list;
+	}
 }
