@@ -163,6 +163,7 @@ public class ComplatRoleController extends BaseController {
 				String desc=sysUserSession.getUserName()+"修改了"+cRole.getName();
 				jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(), desc, 3, 2);
 			}
+			cRole.setType(6);
 			complatRoleService.save(cRole);
 			returnMsg("success", "保存成功", request);
 		} catch (Exception e) {
