@@ -494,34 +494,7 @@ var complatUserNameInput=$("#name").val();
 					    <input type="hidden" id="groupid" name="groupid" value="${complatUser.groupid }">	
 				    </c:if>											
 				  </td>
-			    </tr>
-			    <%--
-			    <tr>
-			       <th><b class="mustbe">*</b> 角色信息：</th>
-			       <td>			          
-					  <ul id="role1" class="role1">
-					      <li id="p1">系统管理员</li>
-					      <li id="p2">机构管理员</li>
-					      <li id="p3">实名认证审核员</li>
-					      <li id="p4">网站群管理系统角色</li>
-					      <li id="p5">统一申报管理系统</li>
-					      <li id="p6">综合管理查询系统</li>
-					      <li id="p7">行政权力事项管理系统</li>					      
-					  </ul>
-				   </td>
-				   <td>			          
-					  <ul id="role1" class="role1">
-					      <li id="b1"></li>
-					      <li id="b2"></li>
-					      <li id="b3"></li>
-					      <li id="b4"></li>
-					      <li id="b5"></li>
-					      <li id="b6"></li>
-					      <li id="b7"></li>					      
-					  </ul>
-				   </td>
-			    </tr>
-			    --%>			   		
+			    </tr>			   		
 		        <tr>
 		           <td class="td_1" rowspan="3" style="max-width:0px;width:100px;ont-weight:bold;" align="center"">账号信息</td>
                    <th><b class="mustbe">*</b>登录名：</th>

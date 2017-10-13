@@ -675,6 +675,9 @@ public class ComplatUserController extends BaseController {
 		}
 	}
 
+	
+
+	
 	/**
 	 * 数据导出
 	 * 
@@ -686,7 +689,7 @@ public class ComplatUserController extends BaseController {
 	 * @author <a href=" ">shenxh</a>
 	 */
 	@RequestMapping(value = "/complatExport", method = RequestMethod.GET)
-	public ModelAndView complatExport(String iid,Model model, HttpServletRequest request,
+	public void complatExport(String iid,Model model, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		SysUserSession session = (SysUserSession) request.getSession().getAttribute("sysUserSession");
 		String userIid = request.getParameter("iid");
@@ -811,11 +814,9 @@ public class ComplatUserController extends BaseController {
         jisLogService.save(session.getUserName(),session.getUserIp(), desc, 2, 4);
 		map.put(ExcelUtil.HEADERINFO, headList);
 		map.put(ExcelUtil.DATAINFON, dataList);
-		ExcelUtil.writeExcel(map, wb, response, fileName);
-		return  new ModelAndView("redirect:/complat/complatList");
-
+		ExcelUtil.writeExcel(map, wb, response, fileName);				
 	}
-
+	
 	
 	
 	
