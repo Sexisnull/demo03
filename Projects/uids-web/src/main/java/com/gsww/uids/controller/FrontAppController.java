@@ -88,7 +88,11 @@ public class FrontAppController extends BaseController {
 		}
 		for(int i=0;i<roleId.length;i++){
 			try {
-				roles.add(complatRoleService.findByKey(Integer.parseInt(roleId[i])));
+				String roleod = roleId[i];
+				if(roleod!=null && roleod.trim()!=""){
+					roles.add(complatRoleService.findByKey(Integer.parseInt(roleod)));
+				}
+				
 			}catch (Exception e) {
 				logger.error(e.getMessage(), e);
 			}
