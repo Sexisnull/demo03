@@ -51,11 +51,7 @@ $().ready(function() {
 		   },
 		   phone:{
 		   	isPhone:true
-		   },
-		   qyNation:{
-		   	required: true
 		   }
-		   
 		  }
 	    });
 	    //编辑页面密码强度显示
@@ -115,6 +111,7 @@ $().ready(function() {
 			$(".userType").hide();
 		}
 		
+		
 		 //企业名称和法人名称校验     
 	     jQuery.validator.addMethod("isCorporName", function(value, element) { 
 	            var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;   
@@ -144,18 +141,15 @@ $().ready(function() {
 		$("#fqyRealName").rules("remove","required");
 		$("#fqyRealName").rules("remove","isIdCardNo");
 		$("#fqyRealName").rules("remove","maxlength");
-		$("#fqyNation").rules("remove","required");
 		$("#qyName").rules("add",{required:true});
 		$("#qyName").rules("add",{cnRangelength:[0,33]});
 		$("#qyName").rules("add",{isCorporName:true});
 		$("#qyRealName").rules("add",{required:true});
 		$("#qyRealName").rules("add",{cnRangelength:[0,33]});
 		$("#qyRealName").rules("add",{isCorporName:true});
-		$("#qyRealName").rules("add",{required:true});
+		$("#qyCardNumber").rules("add",{required:true});
 		$("#qyCardNumber").rules("add",{isIdCardNo:true});
 		$("#qyCardNumber").rules("add",{maxlength:18});
-		$("#qyNation").rules("add",{required:true});
-		
 	}
 	
 	//非企业法人页面初始化  
@@ -199,7 +193,6 @@ $().ready(function() {
 			$("#qyCardNumber").rules("remove","required");
 			$("#qyCardNumber").rules("remove","isIdCardNo");
 			$("#qyCardNumber").rules("remove","maxlength");
-			$("#qyNation").rules("remove","required");
 			$("#fqyName").rules("add",{required:true});
 			$("#fqyName").rules("add",{cnRangelength:[0,33]});
 			$("#fqyName").rules("add",{isCorporName:true});
@@ -209,7 +202,7 @@ $().ready(function() {
 			$("#fqyCardNumber").rules("add",{required:true});
 			$("#fqyCardNumber").rules("add",{isIdCardNo:true});
 			$("#fqyCardNumber").rules("add",{maxlength:18});
-			$("#fqyNation").rules("add",{required:true});
+			
 			
 	}
 	
