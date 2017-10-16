@@ -300,7 +300,7 @@ public class SysLoginController extends BaseController {
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
 		}
-		return "redirect:/complat/complatList";
+		return "redirect:/complat/groupOrgTree";
 	}
 
 	/**
