@@ -846,13 +846,13 @@
 		    <artifactId>jackson-jaxrs</artifactId>
 		    <version>1.9.11</version>
 		</dependency>
-		<!--支付宝支付-->
+		<!--jar引入-->
 		<dependency>
 			<groupId>com.gsww</groupId>
-			<artifactId>alipay-sdk-java20170615110434</artifactId>
-			<version>1.0</version>
+			<artifactId>patchca</artifactId>
+			<version>0.5.0</version>
 			<scope>system</scope>
-			<systemPath>${basedir}/webapp/WEB-INF/lib/alipay-sdk-java20170615110434.jar</systemPath>
+			<systemPath>${basedir}/webapp/WEB-INF/lib/patchca-0.5.0.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>com.gsww</groupId>
