@@ -449,6 +449,7 @@
 		<script type="text/javascript" src="${ctx}/res/skin/login/js/login.js"></script>
 		<!-- 密码强度校验 -->
 		<script type="text/javascript" src="${ctx}/res/js/region/checkpwd.js"></script>
+		<script type="text/javascript">
 	function loginOut() {
 		$.dialog.confirm('您确认要退出系统吗?', function() {
 			$.get("${ctx}/login/loginOut");
