@@ -57,9 +57,8 @@ $().ready(function() {
 	    //编辑页面密码强度显示
 		var pwding = $("#pwd").val();
 		EvalPwd(pwding);
-   	    // Ajax重命名校验
-		//$.uniqueValidate('uniqueLoginName', '${ctx}/complat/checkCorporationLoginName', ['loginName','oldLoginName'], '对不起，这个账号重复了');
-	    //民族及页面初始化
+		
+   	     //民族及页面初始化
 		var nations = ["汉族","壮族","回族","满族","维吾尔族","苗族","彝族","土家族","藏族","蒙古族",
 		               "侗族","布依族","瑶族","白族","朝鲜族","哈尼族","黎族","哈萨克族","傣族","畲族",
 		               "傈僳族","东乡族","仡佬族","拉祜族","佤族","水族","纳西族","羌族","土族","仫佬族",
@@ -138,9 +137,9 @@ $().ready(function() {
 		$("#fqyRealName").rules("remove","required");
 		$("#fqyRealName").rules("remove","cnRangelength");
 		$("#fqyRealName").rules("remove","isCorporName");
-		$("#fqyRealName").rules("remove","required");
-		$("#fqyRealName").rules("remove","isIdCardNo");
-		$("#fqyRealName").rules("remove","maxlength");
+		$("#fqyCardNumber").rules("remove","required");
+		$("#fqyCardNumber").rules("remove","isIdCardNo");
+		$("#fqyCardNumber").rules("remove","maxlength");
 		$("#qyName").rules("add",{required:true});
 		$("#qyName").rules("add",{cnRangelength:[0,33]});
 		$("#qyName").rules("add",{isCorporName:true});
@@ -346,6 +345,7 @@ color: rgb(119, 119, 119);
     	<input type="hidden" id="time" name="time" value="${time}">
     	<input type="hidden" name="corNation" id="corNation" value="${corNation}">
     	<input type="hidden" name="operSign" id="operSign" value="${corporation.operSign}">
+    	<input type="hidden" id="level">
     </div>
     
     <!--表单的主内容区域-->
