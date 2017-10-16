@@ -138,6 +138,11 @@ $().ready(function() {
            var corporName = /^(\d{3,4}-)?\d{7,8}$/;   
            return this.optional(element) || (corporName.test(value));     
     }, "传真格式错误");
+    //qq
+    jQuery.validator.addMethod("isQq", function(value, element) { 
+           var corporName = /[1-9][0-9]{4,}/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "QQ格式错误");
     //Msn
     jQuery.validator.addMethod("isMsn", function(value, element) { 
            var corporName = /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;   
