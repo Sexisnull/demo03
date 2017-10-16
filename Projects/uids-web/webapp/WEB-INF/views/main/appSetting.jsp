@@ -173,7 +173,7 @@ body {
 		</div>
 		<div class="bottom">
 			<div class="foot" style="height: 36px">
-				<span class="copyright">甘肃省人民政府办公厅版权所有</span>
+				<span class="copyright">${rightMsg }</span>
 				<span class="instruction">建议使用1024*768，IE8浏览器以上为最佳浏览模式</span>
 			</div>
 		</div>

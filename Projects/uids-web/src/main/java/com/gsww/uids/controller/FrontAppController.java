@@ -22,6 +22,7 @@ import com.gsww.jup.controller.BaseController;
 import com.gsww.jup.entity.sys.SysUserSession;
 import com.gsww.jup.util.JSONUtil;
 import com.gsww.jup.util.StringHelper;
+import com.gsww.uids.constant.JisSettings;
 import com.gsww.uids.entity.ComplatRole;
 import com.gsww.uids.entity.ComplatUser;
 import com.gsww.uids.entity.JisUserdefined;
@@ -37,6 +38,8 @@ public class FrontAppController extends BaseController {
 	private JisApplicationService jisApplicationService;
 	@Autowired
 	private JisUserdefinedService jisUserdefinedService;
+	@Autowired
+	private JisSettings jisSetting;
 	@Autowired
 	private ComplatUserService complatUserService;
 	@Autowired
@@ -68,7 +71,9 @@ public class FrontAppController extends BaseController {
 			if(checkHaveRight(session.getAccountId(),roleIds)){
 				managerIcon="";
 			}
+			String copyRight = jisSetting.getCopyRight();
 			model.addAttribute("application", apps);
+			model.addAttribute("rightMsg", copyRight);
 			model.addAttribute("managerIcon", managerIcon);
 			request.getSession().setAttribute("theme", theme);
 		} catch (Exception ex) {
@@ -139,6 +144,8 @@ public class FrontAppController extends BaseController {
 			String roleIds = session.getRoleIds();
 			List<Map<String, Object>> apps = jisApplicationService
 					.findAppByRoleIds(roleIds);
+			String copyRight = jisSetting.getCopyRight();
+			model.addAttribute("rightMsg", copyRight);
 			model.addAttribute("application", apps);
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
