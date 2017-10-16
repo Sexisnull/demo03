@@ -87,6 +87,15 @@ public class JisParameter implements java.io.Serializable{
 	private String govExchangeTokenUrl;       //政府用户认证换取token地址
 	private String govCompareRealNameUrl;     //政府用户认证实名比对地址
 	
+	private String isRegister;
+	private String registerType;
+	private String isFindPwd;
+	private String perGotoUrl;
+	private String corGotoUrl;
+	private String enableBackupsTask;
+	private String realNameAuth;
+	private String realNameAuthUrl;
+	
 	public JisParameter() {
 		super();
 	}
@@ -117,7 +126,10 @@ public class JisParameter implements java.io.Serializable{
 			String corDetailRealNameUrl, String enableGovRealNameAuth,
 			Integer verify_mode, String govRequestCod, String govRealUsername,
 			String govRealPassword, String govExchangeTokenUrl,
-			String govCompareRealNameUrl) {
+			String govCompareRealNameUrl, String isRegister,
+			String registerType, String isFindPwd, String perGotoUrl,
+			String corGotoUrl, String enableBackupsTask, String realNameAuth,
+			String realNameAuthUrl) {
 		super();
 		this.iid = iid;
 		this.sysName = sysName;
@@ -182,6 +194,14 @@ public class JisParameter implements java.io.Serializable{
 		this.govRealPassword = govRealPassword;
 		this.govExchangeTokenUrl = govExchangeTokenUrl;
 		this.govCompareRealNameUrl = govCompareRealNameUrl;
+		this.isRegister = isRegister;
+		this.registerType = registerType;
+		this.isFindPwd = isFindPwd;
+		this.perGotoUrl = perGotoUrl;
+		this.corGotoUrl = corGotoUrl;
+		this.enableBackupsTask = enableBackupsTask;
+		this.realNameAuth = realNameAuth;
+		this.realNameAuthUrl = realNameAuthUrl;
 	}
 
 	@Id
@@ -754,4 +774,78 @@ public class JisParameter implements java.io.Serializable{
 	public void setGovCompareRealNameUrl(String govCompareRealNameUrl) {
 		this.govCompareRealNameUrl = govCompareRealNameUrl;
 	}
+
+	@Column(name = "ISREGISTER")
+	public String getIsRegister() {
+		return isRegister;
+	}
+
+	public void setIsRegister(String isRegister) {
+		this.isRegister = isRegister;
+	}
+
+	@Column(name = "REGISTERTYPE")
+	public String getRegisterType() {
+		return registerType;
+	}
+
+	public void setRegisterType(String registerType) {
+		this.registerType = registerType;
+	}
+
+	@Column(name = "ISFINDPWD")
+	public String getIsFindPwd() {
+		return isFindPwd;
+	}
+
+	public void setIsFindPwd(String isFindPwd) {
+		this.isFindPwd = isFindPwd;
+	}
+
+	@Column(name = "PERGOTOURL")
+	public String getPerGotoUrl() {
+		return perGotoUrl;
+	}
+
+	public void setPerGotoUrl(String perGotoUrl) {
+		this.perGotoUrl = perGotoUrl;
+	}
+
+	@Column(name = "CORGOTOURL")
+	public String getCorGotoUrl() {
+		return corGotoUrl;
+	}
+
+	public void setCorGotoUrl(String corGotoUrl) {
+		this.corGotoUrl = corGotoUrl;
+	}
+
+	@Column(name = "ENABLEBACKUPSTASK")
+	public String getEnableBackupsTask() {
+		return enableBackupsTask;
+	}
+
+	public void setEnableBackupsTask(String enableBackupsTask) {
+		this.enableBackupsTask = enableBackupsTask;
+	}
+
+	@Column(name = "REALNAMEAUTH")
+	public String getRealNameAuth() {
+		return realNameAuth;
+	}
+
+	public void setRealNameAuth(String realNameAuth) {
+		this.realNameAuth = realNameAuth;
+	}
+
+	@Column(name = "REALNAMEAUTHURL")
+	public String getRealNameAuthUrl() {
+		return realNameAuthUrl;
+	}
+
+	public void setRealNameAuthUrl(String realNameAuthUrl) {
+		this.realNameAuthUrl = realNameAuthUrl;
+	}
+	
+	
 }
