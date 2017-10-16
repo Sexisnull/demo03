@@ -59,6 +59,7 @@ import com.gsww.uids.entity.ComplatRolerelation;
 import com.gsww.uids.entity.ComplatUser;
 import com.gsww.uids.entity.JisApplication;
 import com.gsww.uids.entity.JisFields;
+import com.gsww.uids.entity.JisRoleobject;
 import com.gsww.uids.entity.JisSynEntity;
 import com.gsww.uids.entity.JisSysview;
 import com.gsww.uids.entity.JisSysviewDetail;
@@ -710,11 +711,11 @@ public class ComplatUserController extends BaseController {
 				model.addAttribute("complatGroup", complatGroup);
 
 				// 根据用户ID从ComplatRolerelation获取对应的角色ID，再根据角色ID从ComplatRole中获取对应的角色
-				List<ComplatRolerelation> roleRelationList = complatRoleService
-						.findByUserId(Integer.parseInt(userSid));
+				List<JisRoleobject> roleRelationList = complatRoleService
+						.findByUserId(Integer.parseInt(userSid),complatUserEdit.getGroupid());
 				List<ComplatRole> roleList = new ArrayList<ComplatRole>();
 				for (int i = 0; i < roleRelationList.size(); i++) {
-					Integer roleId = roleRelationList.get(i).getRoleId();
+					Integer roleId = roleRelationList.get(i).getRoleid();
 					ComplatRole complatRole = complatRoleService
 							.findByKey(roleId);
 					roleList.add(complatRole);

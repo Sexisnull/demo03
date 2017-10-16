@@ -23,9 +23,9 @@ import com.gsww.jup.entity.sys.SysRoleOperRel;
 import com.gsww.jup.util.NullHelper;
 import com.gsww.jup.util.StringHelper;
 import com.gsww.uids.dao.ComplatRoleDao;
-import com.gsww.uids.dao.ComplatRoleRelationDao;
+import com.gsww.uids.dao.JisRoleobjectDao;
 import com.gsww.uids.entity.ComplatRole;
-import com.gsww.uids.entity.ComplatRolerelation;
+import com.gsww.uids.entity.JisRoleobject;
 import com.gsww.uids.service.ComplatRoleService;
 
 @Transactional
@@ -33,9 +33,8 @@ import com.gsww.uids.service.ComplatRoleService;
 public class ComplatRoleServiceImpl implements ComplatRoleService {
 	@Autowired
 	private ComplatRoleDao roleDao;
-	// 角色用户关系
 	@Autowired
-	private ComplatRoleRelationDao comrelationDao;
+	private JisRoleobjectDao jisRoleobjectDao;
 	// 操作
 	@Autowired
 	private SysOperatorDao sysOperatorDao;
@@ -74,8 +73,8 @@ public class ComplatRoleServiceImpl implements ComplatRoleService {
 	}
 
 	@Override
-	public List<ComplatRolerelation> findAcctByroleId(Integer roleId) {
-		return comrelationDao.findByRoleId(roleId);
+	public List<JisRoleobject> findAcctByroleId(Integer roleId) {
+		return jisRoleobjectDao.findByRoleidAndType(roleId, 0);
 	}
 
 	@Override
@@ -235,17 +234,22 @@ public class ComplatRoleServiceImpl implements ComplatRoleService {
 	 * 根据用户ID查询对应角色ID
 	 */
 	@Override
-	public List<ComplatRolerelation> findByUserId(Integer userId)
+	public List<JisRoleobject> findByUserId(Integer userId,Integer groupId)
 			throws Exception {
-		String getRoleSql = "select t.roleId from complat_rolerelation t where userId = ?";
+		String getRoleSql = "select t.roleid from jis_roleobject t where objectid = ? and type='0'";
 		List<Map<String, Object>> roleRelationMap = jdbcTemplate.queryForList(
 				getRoleSql, new Integer[] { userId });
-		List<ComplatRolerelation> roleRelationList = new ArrayList<ComplatRolerelation>();
+		if(roleRelationMap ==null || roleRelationMap.size()==0){
+			getRoleSql = "select t.roleid from jis_roleobject t where objectid = ? and type='2'";
+			roleRelationMap = jdbcTemplate.queryForList(
+					getRoleSql, new Integer[] { groupId });
+		}
+		List<JisRoleobject> roleRelationList = new ArrayList<JisRoleobject>();
 		for (Map<String, Object> map : roleRelationMap) {
-			ComplatRolerelation roleRelation = new ComplatRolerelation();
+			JisRoleobject roleRelation = new JisRoleobject();
 			String roleId = map.get("ROLEID").toString();
 			if (StringHelper.isNotBlack(roleId)) {
-				roleRelation.setRoleId(Integer.parseInt(roleId));
+				roleRelation.setRoleid(Integer.parseInt(roleId));
 				roleRelationList.add(roleRelation);
 			}
 		}

@@ -9,7 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.gsww.uids.entity.ComplatRole;
-import com.gsww.uids.entity.ComplatRolerelation;
+import com.gsww.uids.entity.JisRoleobject;
 
 public interface ComplatRoleService {
 	//角色分页查询
@@ -23,7 +23,7 @@ public interface ComplatRoleService {
 	//根据主键删除
 	public void delete(int id) throws Exception;
 	//根据角色查询用户关系
-	public List<ComplatRolerelation> findAcctByroleId(Integer roleId)throws Exception;
+	public List<JisRoleobject> findAcctByroleId(Integer roleId)throws Exception;
 	//根据角色名查询
 	List<ComplatRole> findByName(String name);
 	//获取授权
@@ -34,7 +34,7 @@ public interface ComplatRoleService {
 	/**
 	 * 根据用户ID查询对应的角色信息
 	 */
-	public List<ComplatRolerelation> findByUserId(Integer userId) throws Exception;
+	public List<JisRoleobject> findByUserId(Integer userId,Integer groupId) throws Exception;
 	
 	/**
 	 * 查询角色所属用户
