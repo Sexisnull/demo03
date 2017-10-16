@@ -17,7 +17,8 @@
 	<link type="text/css" rel="stylesheet" href="${ctx}/res/jslib/ztree/css/zTreeStyle/zTreeStyle.css" />
 	<link type="text/css" rel="stylesheet" href="${ctx}/res/skin/login/css/tree.css" />
 	<script type="text/javascript" src="${ctx}/res/jslib/ztree/js/jquery.ztree.all-3.5.min.js"></script>
-
+    <!-- Handlebars模板组件 -->
+	<script type="text/javascript" src="${ctx}/res/plugin/handlebars/handlebars.js"></script>
 
 <style type="text/css">
 .form-table td{
@@ -212,13 +213,38 @@ var complatUserNameInput=$("#name").val();
 	   pwdanswer : {
 			required: true,
 			cnRangelength: [0,127]
-	   },
-	   submitHandler:function(form){        
-				 form.submit();		
-        } 
-     }
+	   },	    
+    },
+    submitHandler : function() {
+				$.ajax({
+						type : "POST",
+						async : false,
+						url : '${ctx}/complat/complatSave',
+						data : $("#editForm").serialize(),
+						dataType : "json",
+						success : function(data) {
+							if(data.ret == 0){
+								   window.location.href="${ctx}/complat/complatList";
+						   }else if (data.ret == 1) {
+						   	  $.dialog.confirm(data.msg ,function(){
+					            return null;
+				          });
+						   }else if(data.ret == 2){
+								   window.location.href="${ctx}/complat/complatList";
+						   }else if(data.ret == 3){
+								   $.dialog.confirm(data.msg ,function(){
+					            return null;
+				          });
+						   }
+						}
+				});
+		}
    });   
 
+ 
+   //编辑时密码强度回显
+    var pwding = $("#pwd").val();
+	EvalPwd(pwding);
 
    
    
@@ -373,13 +399,32 @@ var complatUserNameInput=$("#name").val();
     }
     table.append(htmlString.join(""));
   //编辑页面密码强度判断
-    var pwding = $("#pwd").val();
-    $("#pwd").change(function(){EvalPwd(pwding)});
+  //编辑页面密码强度判断
+	var pwding = $("#pwd").val();
+	$('#pwd').attachEvent('oninput',EvalPwd(pwding));	
 
 });
 
 
-
+function callSkip(state) {
+	$(".call").removeClass("selected");
+	$(".callMenu").slideUp("fast");
+	$(".call").css("background-color", "#2d74af");
+	$.ajax({
+		cache : true,
+		type : "POST",
+		url : "${ctx}/adCase/callSkip",
+		dataType : "json",
+		data : {
+			handleState : state
+		},
+		async : false,
+		success : function(msg) {
+			$(".callDisp").show();
+			$("#fontss").html(msg.result);
+		}
+	});
+}
 
 
 
@@ -406,6 +451,16 @@ var complatUserNameInput=$("#name").val();
 			</li>
    		</ol>
     </div>
+    <!-- 消息提示 -->
+    <div class="callDisp nav_wrap">
+		<ul>
+			<li class="display">
+				<font class="fonts" id="fontss"></font>
+			</li>
+		</ul>
+	</div>
+			
+			
 	<!--表单的标题区域--> 
     <form id="editForm" method="post" action="${ctx}/complat/complatSave">
     
@@ -511,29 +566,28 @@ var complatUserNameInput=$("#name").val();
 				   </td>
 			    </tr>	
 				<tr style="width:300px;">		
-				   <th><b class="mustbe">*</b> 密码：</th>
-	        	   <td style="width:300px;">
-	        		  <input type="password" id="pwd" name="pwd" value="${complatUser.pwd}" onkeyup="javascript:EvalPwd(this.value);"/>	            	
-	        	   </td>
-	        	    <th><b class="mustbe">*</b> 请设置密码找回问题答案：</th>
+				   <th> 密码：</th>
+        	       <td style="width:300px;">
+        		      <input type="password" id="pwd" name="pwd"  value="${complatUser.pwd}" onkeyup="javascript:EvalPwd(this.value);"/>
+        	       </td>
+	        	   <th><b class="mustbe">*</b> 请设置密码找回问题答案：</th>
 				   <td style="width:300px;">
 					  <input type="text"  class="input" id="pwdanswer" name="pwdanswer" value="${complatUser.pwdanswer}"  />
 				   </td>
 				   
 			    </tr>
 			    <tr>				
-		           <th class="td_5"> 密码强度：</th>
-			       <td class="td_3" style="width:300px;">
-				      <table id="pwdpower" style="width: 86%" cellspacing="0"
-							cellpadding="0" border="0">
-						<tbody>
-							<tr>
-								<td id="pweak" style="text-align: center;width: 100px;border: 1px solid  grey">弱</td>
-								<td id="pmedium" style="text-align: center;width: 100px;border: 1px solid  grey">中</td>
-								<td id="pstrong" style="text-align: center;width: 100px;border: 1px solid  grey">强</td>
-							</tr>
-						</tbody>
-				</table>
+		           <th>密码强度：</th>
+			       <td style="width:300px;">
+				      <table id="pwdpower" style="width: 86%" cellspacing="0"  cellpadding="0" border="0">
+					     <tbody>
+						    <tr>
+							   <td id="pweak" style="text-align: center;width: 100px;border: 1px solid  grey">弱</td>
+							   <td id="pmedium" style="text-align: center;width: 100px;border: 1px solid  grey">中</td>
+							   <td id="pstrong" style="text-align: center;width: 100px;border: 1px solid  grey">强</td>
+						    </tr>
+					     </tbody>
+				      </table>
 			       </td>
 			       <th class="td_6"></th>
 			       <td class="td_4"></td>

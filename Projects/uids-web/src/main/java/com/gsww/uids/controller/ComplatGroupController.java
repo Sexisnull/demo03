@@ -719,7 +719,7 @@ public class ComplatGroupController extends BaseController {
      */
     @RequestMapping(value = "/orgTree", method = RequestMethod.POST)
     public void zoneTree(HttpServletRequest request, HttpServletResponse response, String orgId) {
-		List<ComplatGroup> list = new ArrayList<>();
+		List<ComplatGroup> list = new ArrayList<ComplatGroup>();
         try {
             SysUserSession sysUserSession = (SysUserSession) ((HttpServletRequest) request).getSession()
                     .getAttribute("sysUserSession");

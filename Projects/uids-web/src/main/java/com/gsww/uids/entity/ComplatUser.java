@@ -64,6 +64,7 @@ public class ComplatUser implements java.io.Serializable{
 	private Integer synState;        // 0-未备份      1-备份失败         4-备份成功
 	private Integer Opersign;        // 1-新增      2-修改       3-假删	
     private Date modifyPassTime;
+    private String groupName;             //机构名称
     private String idCode;           //身份证号
     //扩展属性，导入的时候只能传一个实体，将扩展属性放入complatUser实体传过去
 	private String Kzsx;             //扩展属性
@@ -401,6 +402,15 @@ public class ComplatUser implements java.io.Serializable{
       }
 
     @Transient
+    public String getGroupName() {
+		return groupName;
+	}
+
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
+	}
+
+	@Transient
 	public String getIdCode() {
 		return idCode;
 	}

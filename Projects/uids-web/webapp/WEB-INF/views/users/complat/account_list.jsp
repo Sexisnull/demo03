@@ -464,7 +464,11 @@ function resetform() {
 		<%--<script type="text/javascript" src="${ctx}/res/js/region/orgTree.js"></script>--%>
 	</head>
 	<body>
-
+        <!-- 提示信息开始 -->
+		<div class="form-alert;">
+			<tags:message msgMap="${msgMap}"></tags:message>
+		</div>
+		<!-- 提示信息结束 -->
 		<div class="list-warper">
 			<!--左侧树形结构-->
 			<%--<div id="tablelist" style="width:20%;float:left;min-width:0px;">--%>
@@ -490,7 +494,7 @@ function resetform() {
 								<th style="padding-left: 5px">
 									所属机构：
 								</th>
-								<td width="20%">
+								<td>
 									<input name="groupname" id="groupname" value="${groupName }" readonly="true" type="text" style="cursor: pointer;width: 150px;" placeholder="所属机构"/>
 									<input type="hidden" id="groupid" name="search_EQ_groupid" value="${groupid}">
 									<input type="hidden" id="orgId" name="orgId" value="${orgId}">
@@ -498,20 +502,20 @@ function resetform() {
 								<th style="padding-left: 5px">
 									姓名：
 								</th>
-								<td width="20%">
-									<input type="text" style="width: 150px;" placeholder="姓名" value="${sParams['LIKE_name']}" id="nameSearch" name="search_LIKE_name" />
+								<td>
+									<input type="text" placeholder="姓名" value="${sParams['LIKE_name']}" id="nameSearch" name="search_LIKE_name" />
 								</td>
 								<th style="padding-left: 5px">
 									登录名：
 								</th>
-								<td width="20%">
-									<input type="text" style="width: 150px;" placeholder="登录名" value="${sParams['LIKE_loginname']}" id="loginnameSearch" name="search_LIKE_loginname" />
+								<td>
+									<input type="text" placeholder="登录名" value="${sParams['LIKE_loginname']}" id="loginnameSearch" name="search_LIKE_loginname" />
 								</td>
 								<th style="padding-left: 5px">
 									登录名全称：
 								</th>
-								<td width="20%">
-									<input type="text" style="width: 150px;" placeholder="登录名全称" value="${sParams['LIKE_loginallname']}" id="loginallnameSearch" name="search_LIKE_loginallname" />
+								<td>
+									<input type="text" placeholder="登录名全称" value="${sParams['LIKE_loginallname']}" id="loginallnameSearch" name="search_LIKE_loginallname" />
 								</td>
 								<td class="btn-group">
 									<a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a>
@@ -520,6 +524,10 @@ function resetform() {
 						</table>
 					</form>
 				</div>
+				
+				
+				
+				
 				<!--列表内容区域-->
 				<div >
 					<input type="hidden" id="orderField" name="orderField"
@@ -539,11 +547,7 @@ function resetform() {
 							</ul>
 							<!--   操作按钮结束  -->
 						</div>
-						<!-- 提示信息开始 -->
-						<div class="form-alert;">
-							<tags:message msgMap="${msgMap}"></tags:message>
-						</div>
-						<!-- 提示信息结束 -->
+						
 						<!-- 列表开始 -->
 						<table cellpadding="0" cellspacing="0" border="0" width="80%"
 							   id="list-table" class="list-table">
