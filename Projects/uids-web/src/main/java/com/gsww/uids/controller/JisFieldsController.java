@@ -229,14 +229,15 @@ public class JisFieldsController extends BaseController {
 			throws Exception {
 		try {
 			SysUserSession sysUserSession =  (SysUserSession) ((HttpServletRequest) request).getSession().getAttribute("sysUserSession");
-			Integer iswrite = 0;
-			if (fieldiid == null) {
-				iswrite = 1;
-			}
+			Integer iswrite = 0;//0：非必填；1：必填
 			List<JisFields> jList = jisFieldsService.findAllJisFields();
 			for (JisFields jisFields : jList) {
 				jisFields.setIswrite(iswrite);
 				jisFieldsService.save(jisFields);
+				if (fieldiid == null) {
+					String desc = sysUserSession.getUserName() + "设置了用户扩展属性:" + jisFields.getShowname() + "非必填项"; 
+					jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(),desc,6,8);
+				}
 			}
 			if(fieldiid != null) {
 				String[] para = fieldiid.split(",");
