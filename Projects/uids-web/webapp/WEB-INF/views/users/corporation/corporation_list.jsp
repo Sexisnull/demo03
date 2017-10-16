@@ -16,22 +16,23 @@
 		var realNameSearch = $("#realNameSearch").val();
 		var nameSearch = $("#nameSearch").val();
 		var cardNumberSearch = $("#cardNumberSearch").val();
-		if(loginNameSearch == '' || isNumbOrLett1(loginNameSearch)){
+		var cardNumberLength = cardNumberSearch.length;
+		if(loginNameSearch == '' || isNumbOrLett2(loginNameSearch)){
 			if(realNameSearch == '' || isNumbOrLett1(realNameSearch)){
 				if(nameSearch == '' || isNumbOrLett1(nameSearch)){
-					if(cardNumberSearch == '' || isCardNumber(cardNumberSearch)){
+					if(cardNumberSearch == '' || (isNumbOrLett3(cardNumberSearch) && cardNumberSearch <= 18) ){
 						form1.submit();
 					}else{
-						$.validator.errorShow($("#cardNumberSearch"),'只能包括数字和字母');
+						$.validator.errorShow($("#cardNumberSearch"),'只能包括数字和字母,且不能超过18个字符');
 					}	
 				}else{
-					$.validator.errorShow($("#nameSearch"),'名称只能由字母、数字、下划线、中文组成，不能以下划线开头和结尾');
+					$.validator.errorShow($("#nameSearch"),'只能包括字母、数字、下划线,且不能超过255个字符');
 				}
 			}else{
-				$.validator.errorShow($("#realNameSearch"),'名称只能由字母、数字、下划线、中文组成，不能以下划线开头和结尾');
+				$.validator.errorShow($("#realNameSearch"),'只能包括字母、数字、下划线,且不能超过255个字符');
 			}
  		}else{
- 			$.validator.errorShow($("#loginNameSearch"),'名称只能由字母、数字、下划线、中文组成，不能以下划线开头和结尾');
+ 			$.validator.errorShow($("#loginNameSearch"),'只能包括字母、数字、下划线,且不能超过255个字符');
  		}
 	}
 	/*
@@ -42,7 +43,7 @@
 	如果通过验证返回true,否则返回false
 	*/
 	function isNumbOrLett1( s ){
-		var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;
+		var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]{1,255}$/;
 		var re = new RegExp(regu);
 		if (re.test(s)) {
 			return true;
@@ -50,10 +51,18 @@
 			return false;
 		}
 	}
-	/**
-	检查身份证
-	*/
-	function isCardNumber( s ){
+	
+	function isNumbOrLett2( s ){
+		var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_]{1,255}$/;
+		var re = new RegExp(regu);
+		if (re.test(s)) {
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	function isNumbOrLett3( s ){
 		var regu = /^([a-zA-Z0-9]+)$/;
 		var re = new RegExp(regu);
 		if (re.test(s)) {

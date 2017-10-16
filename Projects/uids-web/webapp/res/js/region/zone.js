@@ -263,7 +263,7 @@ function addHoverDom(treeId, treeNode) {    				//用于当鼠标移动到节点
 			$.ajax({
 				type : "POST",
 				url : "saveZone",
-				data : "seq=" + seq + "&name=" + name + "&parId=" + treeNode.tld + "&dcode=" + dcode + "&type=" + treeNode.level,
+				data : "seq=" + seq + "&name=" + name + "&parId=" + treeNode.tld + "&dcode=" + dcode + "&type=" + level,
 				dataType : "json",
 				success : function(data) {
 					if (data.ret == 1) {
@@ -367,8 +367,6 @@ function onClick(e, treeId, treeNode, clickFlag) {			//点击区域将数据填�
 						$("#typeName").html("市");
 					} else if(jsonStr.type == 3) {
 						$("#typeName").html("区县");
-					} else if(jsonStr.type == 4) {
-						$("#typeName").html("乡镇");
 					} else {
 						$("#typeName").html("");
 					}

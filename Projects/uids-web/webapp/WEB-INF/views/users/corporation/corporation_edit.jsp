@@ -31,21 +31,6 @@ $().ready(function() {
 		   	required:true,
 		   	maxlength: 18
 		   },
-		   fqyName: {
-		    required: true,
-		    cnRangelength: [0,33],
-		    isCorporName:true  
-		   },
-		   fqyRealName:{
-		   	required: true,
-		   	cnRangelength: [0,33],
-		   	isCorporName:true	
-		   },
-		   fqyCardNumber:{
-		   	isIdCardNo:true,
-		   	required:true,
-		   	maxlength: 18
-		   },
 		   loginName:{
 		   	required: true,
 		   	cnRangelength: [0,33],
@@ -66,17 +51,13 @@ $().ready(function() {
 		   },
 		   phone:{
 		   	isPhone:true
-		   },
-		   nation:{
-		   	required: true
 		   }
-		   
 		  }
 	    });
 	    //编辑页面密码强度显示
 		var pwding = $("#pwd").val();
-    	$('#pwd').attachEvent('oninput',EvalPwd(pwding));
-	    // Ajax重命名校验
+		EvalPwd(pwding);
+   	    // Ajax重命名校验
 		//$.uniqueValidate('uniqueLoginName', '${ctx}/complat/checkCorporationLoginName', ['loginName','oldLoginName'], '对不起，这个账号重复了');
 	    //民族及页面初始化
 		var nations = ["汉族","壮族","回族","满族","维吾尔族","苗族","彝族","土家族","藏族","蒙古族",
@@ -137,7 +118,6 @@ $().ready(function() {
 	            return this.optional(element) || (corporName.test(value));     
 	     }, "名称只能由字母、数字、下划线、中文组成，不能以下划线开头和结尾"); 
 	    
-	    $('#pwd').attachEvent('oninput',EvalPwd(this));
 	});
 
 	
@@ -150,6 +130,26 @@ $().ready(function() {
 		$(".qyUserInfo").show();
 		$(".regNum").show();
 		$(".td_regNum").show();
+		
+		//输入字段校验
+		$("#fqyName").rules("remove","required");
+		$("#fqyName").rules("remove","cnRangelength");
+		$("#fqyName").rules("remove","isCorporName");
+		$("#fqyRealName").rules("remove","required");
+		$("#fqyRealName").rules("remove","cnRangelength");
+		$("#fqyRealName").rules("remove","isCorporName");
+		$("#fqyRealName").rules("remove","required");
+		$("#fqyRealName").rules("remove","isIdCardNo");
+		$("#fqyRealName").rules("remove","maxlength");
+		$("#qyName").rules("add",{required:true});
+		$("#qyName").rules("add",{cnRangelength:[0,33]});
+		$("#qyName").rules("add",{isCorporName:true});
+		$("#qyRealName").rules("add",{required:true});
+		$("#qyRealName").rules("add",{cnRangelength:[0,33]});
+		$("#qyRealName").rules("add",{isCorporName:true});
+		$("#qyCardNumber").rules("add",{required:true});
+		$("#qyCardNumber").rules("add",{isIdCardNo:true});
+		$("#qyCardNumber").rules("add",{maxlength:18});
 	}
 	
 	//非企业法人页面初始化  
@@ -182,6 +182,27 @@ $().ready(function() {
 			$(".orgNum").show();
 			$(".td_orgNum").show();
 			$("#orgNumber").show();
+			
+			//输入字段校验
+			$("#qyName").rules("remove","required");
+			$("#qyName").rules("remove","cnRangelength");
+			$("#qyName").rules("remove","isCorporName");
+			$("#qyRealName").rules("remove","required");
+			$("#qyRealName").rules("remove","cnRangelength");
+			$("#qyRealName").rules("remove","isCorporName");
+			$("#qyCardNumber").rules("remove","required");
+			$("#qyCardNumber").rules("remove","isIdCardNo");
+			$("#qyCardNumber").rules("remove","maxlength");
+			$("#fqyName").rules("add",{required:true});
+			$("#fqyName").rules("add",{cnRangelength:[0,33]});
+			$("#fqyName").rules("add",{isCorporName:true});
+			$("#fqyRealName").rules("add",{required:true});
+			$("#fqyRealName").rules("add",{cnRangelength:[0,33]});
+			$("#fqyRealName").rules("add",{isCorporName:true});
+			$("#fqyCardNumber").rules("add",{required:true});
+			$("#fqyCardNumber").rules("add",{isIdCardNo:true});
+			$("#fqyCardNumber").rules("add",{maxlength:18});
+			
 			
 	}
 	

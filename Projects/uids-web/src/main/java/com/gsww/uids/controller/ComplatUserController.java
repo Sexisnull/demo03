@@ -711,13 +711,11 @@ public class ComplatUserController extends BaseController {
 				model.addAttribute("complatGroup", complatGroup);
 
 				// 根据用户ID从ComplatRolerelation获取对应的角色ID，再根据角色ID从ComplatRole中获取对应的角色
-				List<JisRoleobject> roleRelationList = complatRoleService
-						.findByUserId(Integer.parseInt(userSid),complatUserEdit.getGroupid());
+				List<JisRoleobject> roleObjectList = complatRoleService.findByUserId(Integer.parseInt(userSid),complatUserEdit.getGroupid());
 				List<ComplatRole> roleList = new ArrayList<ComplatRole>();
-				for (int i = 0; i < roleRelationList.size(); i++) {
-					Integer roleId = roleRelationList.get(i).getRoleid();
-					ComplatRole complatRole = complatRoleService
-							.findByKey(roleId);
+				for (int i = 0; i < roleObjectList.size(); i++) {
+					Integer roleId = roleObjectList.get(i).getRoleid();
+					ComplatRole complatRole = complatRoleService.findByKey(roleId);
 					roleList.add(complatRole);
 					model.addAttribute("roleList", roleList);
 				}
@@ -750,11 +748,12 @@ public class ComplatUserController extends BaseController {
 		
 		Map<String, Object> resMap = new HashMap<String, Object>();
 		try {
+			if(level == "strong" || "strong".equals(level) ){
 				Integer userId = null;
 				if(complatUser != null){
 					userId = complatUser.getIid();
 					String name = complatUser.getName();
-					String pwd = Md5Util.md5encode(request.getParameter("pwd"));
+					String pwd = Md5Util.md5encode(complatUser.getPwd());
 					String headShip = complatUser.getHeadship();
 					String phone = complatUser.getPhone();//固定电话
 					String mobile = complatUser.getMobile();//移动电话
@@ -832,9 +831,9 @@ public class ComplatUserController extends BaseController {
 							jisSynEntity.setHometel(complatUser.getPhone());
 							jisSynEntity.setHeadShip(complatUser.getHeadship());
 							jisSynEntity.setNdlogin("");
-							
-							//转实体为json格式，发送报文
+							//实体转json，实现同步
 							net.sf.json.JSONObject object = net.sf.json.JSONObject.fromObject(jisSynEntity);
+							PrintWriter out = response.getWriter();
 							String json = object.toString();
 							JisSysviewDetail sysViewDetail = new JisSysviewDetail();
 							sysViewDetail.setTranscationId(sysView.getTranscationId());
@@ -845,14 +844,21 @@ public class ComplatUserController extends BaseController {
 					resMap.put("ret", "0");
 					resMap.put("msg", "保存成功！");
 					response.getWriter().write(JSONObject.toJSONString(resMap));
-				}	
-				} catch (Exception e) {
-					resMap.put("ret", "1");
-					resMap.put("msg", "保存失败！");
-					response.getWriter().write(JSONObject.toJSONString(resMap));
-				} 
+				}
+			}else{
+				resMap.put("ret", "2");
+				resMap.put("msg", "密码强度不够，修改失败！");
+				response.getWriter().write(JSONObject.toJSONString(resMap));
+			}
+			
+		} catch (Exception e) {
+			resMap.put("ret", "1");
+			resMap.put("msg", "保存失败！");
+			response.getWriter().write(JSONObject.toJSONString(resMap));
+		} 
 		
 	}
+
 	/**
 	 * 获取用户扩展属性
 	 * 
@@ -897,7 +903,6 @@ public class ComplatUserController extends BaseController {
 		PrintWriter out = response.getWriter();
 		String json = array.toString();
 		out.write(json);
-		System.out.println("json--"+json);
 		model.addAttribute("fieldsListMap",json);
 		
 		//设置默认值
