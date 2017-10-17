@@ -65,9 +65,7 @@ public class ComplatUser implements java.io.Serializable{
 	private Integer Opersign;        // 1-新增      2-修改       3-假删	
     private Date modifyPassTime;
     private String groupName;             //机构名称
-    private String idCode;           //身份证号
-    //扩展属性，导入的时候只能传一个实体，将扩展属性放入complatUser实体传过去
-	private String Kzsx;             //扩展属性
+    private String cardid;           //身份证号
 	/** default constructor */
 	public ComplatUser() {
 		super();
@@ -411,21 +409,13 @@ public class ComplatUser implements java.io.Serializable{
 	}
 
 	@Transient
-	public String getIdCode() {
-		return idCode;
+	public String getCardid() {
+		return cardid;
 	}
 
-	public void setIdCode(String idCode) {
-		this.idCode = idCode;
-	}
-    
-	@Transient
-	public String getKzsx() {
-		return Kzsx;
+	public void setCardid(String cardid) {
+		this.cardid = cardid;
 	}
 
-	public void setKzsx(String kzsx) {
-		Kzsx = kzsx;
-	}
 
 }

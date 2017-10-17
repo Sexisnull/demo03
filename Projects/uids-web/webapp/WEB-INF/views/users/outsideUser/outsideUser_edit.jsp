@@ -58,20 +58,24 @@ $().ready(function() {
 				isIdCardNo:true,
 				uniquePapersNumber:true
 			},
-			age:{
-		   		cnRangelength: [0,64]
+			age:{//年龄
+		   		cnRangelength: [0,64],
+		   		isAge: true
 		   	},
 			degree:{//学历
 		   		//cnRangelength: [0,64]
 		   	},
-			workUnit:{
-		   		cnRangelength: [0,64]
+			workUnit:{//工作单位
+		   		cnRangelength: [0,64],
+		   		isName : true
 		   	},
-			headShip:{
-		   		cnRangelength: [0,64]
+			headShip:{//职务
+		   		cnRangelength: [0,64],
+		   		isName : true
 		   	},
 			fax:{
-		   		cnRangelength: [0,64]
+		   		cnRangelength: [0,64],
+		   		isFax: true
 		   	},
 			phone:{
 		   		isMobile:true,
@@ -82,10 +86,12 @@ $().ready(function() {
 		   		maxlength: 16
 		   	},
 			qq:{
-		   		maxlength: 11
+		   		maxlength: 11,
+		   		isQq: true
 		   	},
 			msn:{
-		   		cnRangelength: [0,64]
+		   		cnRangelength: [0,64],
+		   		isMsn: true
 		   	},
 			post:{
 				/* isEmail：true, */
@@ -94,7 +100,8 @@ $().ready(function() {
 		   	},
 			address:{
 				/* isAddressInfo:true, */
-		   		cnRangelength: [0,127]
+		   		cnRangelength: [0,127],
+		   		isName:true
 		   	},
 		   	submitHandler:function(form){
 		   		//alert("提交");
@@ -120,7 +127,27 @@ $().ready(function() {
     jQuery.validator.addMethod("isPost", function(value, element) { 
            var corporName = /^[1-9][0-9]{5}$/;   
            return this.optional(element) || (corporName.test(value));     
-    }, "邮政编码格式不正确（共6位,开头不能为0)");
+    }, "邮政编码格式错误（共6位,开头不能为0)");
+    //年龄
+    jQuery.validator.addMethod("isAge", function(value, element) { 
+           var corporName = /^([1-9]\d|\d)$/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "年龄格式错误");
+    //传真
+    jQuery.validator.addMethod("isFax", function(value, element) { 
+           var corporName = /^(\d{3,4}-)?\d{7,8}$/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "传真格式错误");
+    //qq
+    jQuery.validator.addMethod("isQq", function(value, element) { 
+           var corporName = /[1-9][0-9]{4,}/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "QQ格式错误");
+    //Msn
+    jQuery.validator.addMethod("isMsn", function(value, element) { 
+           var corporName = /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "MSN格式错误");
     
     var pwding = $("#pwd").val();
     EvalPwd(pwding);

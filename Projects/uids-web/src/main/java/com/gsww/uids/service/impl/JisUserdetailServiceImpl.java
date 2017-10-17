@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import com.gsww.uids.dao.JisUserdetailDao;
+import com.gsww.uids.entity.ComplatUser;
 import com.gsww.uids.entity.JisUserdetail;
 
 
@@ -100,4 +101,9 @@ public class JisUserdetailServiceImpl implements JisUserdetailService {
         jdbcDAO.execute(sqlOut);
     }
 
+    
+    @Override
+	public JisUserdetail findByCardid(String idCode) {
+		return this.jisUserdetailDao.findByCardid(idCode);
+	}
 }

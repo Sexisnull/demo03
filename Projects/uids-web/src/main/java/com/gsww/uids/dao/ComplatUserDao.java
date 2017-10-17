@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
+import com.gsww.uids.entity.ComplatOutsideuser;
 import com.gsww.uids.entity.ComplatUser;
 
 /**
@@ -74,6 +75,7 @@ public interface ComplatUserDao extends PagingAndSortingRepository<ComplatUser, 
 	ComplatUser findByGroupid(Integer groupid);
 	
 	
+	ComplatUser findByMobile(String mobile);
 }
 
 

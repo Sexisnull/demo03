@@ -181,13 +181,13 @@ function checkSubmitForm(){
 				if(loginallnameSearch ==  '' || isNumbOrLett3(loginallnameSearch)){
 			       form1.submit();
 		        }else{
-			       $.validator.errorShow($("#loginallnameSearch"),'只能包括字母、数字、下划线、英文句号');
+			       $.validator.errorShow($("#loginallnameSearch"),'只能包括字母、数字、下划线、英文句号、中文，且不能超过255个字符');
 		        }  
 		    }else{
-		    	$.validator.errorShow($("#loginnameSearch"),'只能包括字母、数字、下划线');
+		    	$.validator.errorShow($("#loginnameSearch"),'只能包括字母、数字、下划线、中文，且不能超过255个字符');
 		    }
 		}else{
-			$.validator.errorShow($("#nameSearch"),'只能包括字母、数字、下划线、中文');
+			$.validator.errorShow($("#nameSearch"),'只能包括字母、数字、中文，且不能超过255个字符');
 		}
 }
 	
@@ -199,7 +199,7 @@ function checkSubmitForm(){
 	如果通过验证返回true,否则返回false
 	*/
 			function isNumbOrLett1( s ){
-				var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;
+				var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9]{1,255}$/;
 				var re = new RegExp(regu);
 				if (re.test(s)) {
 					return true;
@@ -219,7 +219,7 @@ function checkSubmitForm(){
 			}
 			
 			function isNumbOrLett3( s ){
-				var regu = /^[a-zA-Z0-9_.]+$/;
+				var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_.\u4e00-\u9fa5]+$/;
 				var re = new RegExp(regu);
 				if (re.test(s)) {
 					return true;
@@ -491,14 +491,14 @@ function resetform() {
 						  method="get">
 						<table class="advanced-content">
 							<tr>
-								<th style="padding-left: 5px">
+								<!--  <th style="padding-left: 5px">
 									所属机构：
 								</th>
 								<td>
 									<input name="groupname" id="groupname" value="${groupName }" readonly="true" type="text" style="cursor: pointer;width: 150px;" placeholder="所属机构"/>
 									<input type="hidden" id="groupid" name="search_EQ_groupid" value="${groupid}">
 									<input type="hidden" id="orgId" name="orgId" value="${orgId}">
-								</td>
+								</td>-->
 								<th style="padding-left: 5px">
 									姓名：
 								</th>

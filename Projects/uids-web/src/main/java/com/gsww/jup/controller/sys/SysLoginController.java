@@ -114,6 +114,7 @@ public class SysLoginController extends BaseController {
 		// if (true) {
 		String passTime = TimeHelper.addMinute(kaptchaTime, 1);
 		Date passDate = TimeHelper.parseDateTime(passTime);
+		String isLoginFail = jisSettings.getIsLoginfail();
 		if(new Date().getTime()>passDate.getTime()){
 			resMap.put("ret", "1");
 			resMap.put("msg", "验证码过期！");
@@ -142,18 +143,21 @@ public class SysLoginController extends BaseController {
 				passWord = pwd.reverse().toString();
 				userName = URLDecoder.decode(userName,"utf-8"); 
 				passWord = URLDecoder.decode(passWord,"utf-8"); 
-				ComplatBanlist banList = complatBanListService.checkLoginTimes(userName, loginIp, 0,group);
-				if(banList == null ){
-					resMap.put("ret", "2");
-					resMap.put("msg", "用户名或密码错误！");
-					response.getWriter().write(JSONObject.toJSONString(resMap));
-					return;
-				}
-				if (!banList.isCanLogin()) {
-					resMap.put("ret", "2");
-					resMap.put("msg", "登录次数过多，请"+jisSettings.getBanTimes()+"分钟后重试");
-					response.getWriter().write(JSONObject.toJSONString(resMap));
-					return;
+				ComplatBanlist banList = new ComplatBanlist();
+				if("1".equals(isLoginFail)){
+					banList = complatBanListService.checkLoginTimes(userName, loginIp, 0,group);
+					if(banList == null ){
+						resMap.put("ret", "2");
+						resMap.put("msg", "用户名或密码错误！");
+						response.getWriter().write(JSONObject.toJSONString(resMap));
+						return;
+					}
+					if (!banList.isCanLogin()) {
+						resMap.put("ret", "2");
+						resMap.put("msg", "登录次数过多，请"+jisSettings.getBanTimes()+"分钟后重试");
+						response.getWriter().write(JSONObject.toJSONString(resMap));
+						return;
+					}
 				}
 				SysUserSession sysUserSession = sysLoginService.login(userName,
 						passWord, group, loginIp);
@@ -170,7 +174,7 @@ public class SysLoginController extends BaseController {
 							jisLogService.save(sysUserSession.getLoginAccount(),
 									sysUserSession.getUserIp(), userName
 											+ "系统登录成功", 8, 9);
-							if ((banList != null) && (banList.getIid() != null)) {
+							if ("1".equals(isLoginFail) && (banList != null) && (banList.getIid() != null)) {
 						          this.complatBanListService.removeById(banList.getIid());
 						    }
 						} catch (Exception e) {
@@ -205,7 +209,7 @@ public class SysLoginController extends BaseController {
 						log.setModuleName(8);
 						log.setOperateType(9);
 						jisLogService.save(log);
-						if(banList!=null){
+						if("1".equals(isLoginFail) && banList!=null){
 							int last = jisSettings.getLoginError() - 
 					          banList.getLogintimes().intValue() - 1;
 							if(last>0){
@@ -217,6 +221,8 @@ public class SysLoginController extends BaseController {
 							banList.setLogindate(new Timestamp(new Date().getTime()));
 							this.complatBanListService.save(banList);
 							
+						}else{
+							resMap.put("msg", "用户名或密码错误！");
 						}
 						
 					} catch (Exception e) {

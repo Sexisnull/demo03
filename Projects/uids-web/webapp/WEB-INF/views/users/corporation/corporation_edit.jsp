@@ -69,11 +69,14 @@ $().ready(function() {
 		if(type == 1){
 			var qyNation = $("#qyNation");
 			for(var i=0;i<nations.length;i++){
-				qyNation.append("<option value='"+nations[i]+"'>"+nations[i]+"</option>");
+				
 				
 				var corNation = document.getElementById("corNation").value;
 				if(corNation == nations[i]){
+					qyNation.append("<option value='"+nations[i]+"' selected=selected>"+nations[i]+"</option>");
 					qyNation.attr("disabled","disabled");
+				}else{
+					qyNation.append("<option value='"+nations[i]+"'>"+nations[i]+"</option>");
 				}
 			}
 			
@@ -86,11 +89,14 @@ $().ready(function() {
 		}else{
 			var fqyNation = $("#fqyNation");
 			for(var i=0;i<nations.length;i++){
-				fqyNation.append("<option value='"+nations[i]+"'>"+nations[i]+"</option>");
+				
 				
 				var corNation = document.getElementById("corNation").value;
 				if(corNation == nations[i]){
+					fqyNation.append("<option value='"+nations[i]+"' selected=selected>"+nations[i]+"</option>");
 					fqyNation.attr("disabled","disabled");
+				}else{
+					fqyNation.append("<option value='"+nations[i]+"'>"+nations[i]+"</option>");
 				}
 			}
 			
@@ -163,11 +169,12 @@ $().ready(function() {
 	
 			var fqyNation = $("#fqyNation");
 			for(var i=0;i<nations.length;i++){
-				fqyNation.append("<option value='"+nations[i]+"'>"+nations[i]+"</option>");
-				
 				var corNation = document.getElementById("corNation").value;
 				if(corNation == nations[i]){
+					fqyNation.append("<option value='"+nations[i]+"' selected=selected>"+nations[i]+"</option>");
 					fqyNation.attr("disabled","disabled");
+				}else{
+					fqyNation.append("<option value='"+nations[i]+"'>"+nations[i]+"</option>");
 				}
 			}
 			

@@ -169,7 +169,6 @@ public class ComplatCorporationController extends BaseController{
 					corporation.setOperSign(2);
 					operType = 2;
 				}
-				String name = corporation.getName();
 				
 				//对注册时间进行转换
 				Date createTime = null;
@@ -190,62 +189,68 @@ public class ComplatCorporationController extends BaseController{
 				//最后一次登录时间
 				corporation.setLoginTime(sdf.parse(TimeHelper.getCurrentTime()));
 				
-				//对民族处理  企业法人
-				String qyNation = request.getParameter("qyNation");
-				if(StringHelper.isNotBlack(qyNation)){
-					corporation.setNation(qyNation);
-				}
-				//对民族处理 非 企业法人
-				String fqyNation = request.getParameter("fqyNation");
-				if(StringHelper.isNotBlack(fqyNation)){
-					corporation.setNation(fqyNation);
-				}
+				if(corporation.getType() == 1){
+					
+					//对民族处理  企业法人
+					String qyNation = request.getParameter("qyNation");
+					if(StringHelper.isNotBlack(qyNation)){
+						corporation.setNation(qyNation);
+					}
+					//对企业名称处理，企业法人
+					String qyName = request.getParameter("qyName");
+					if(StringHelper.isNotBlack(qyName)){
+						corporation.setName(qyName);
+					}
+					
+					//对企业负责人处理，企业法人
+					String qyRealName = request.getParameter("qyRealName");
+					if(StringHelper.isNotBlack(qyRealName)){
+						corporation.setRealName(qyRealName);
+					}
+					
+					//对企业负责人身份证号处理，企业法人
+					String qyCardNumber = request.getParameter("qyCardNumber");
+					if(StringHelper.isNotBlack(qyCardNumber)){
+						corporation.setCardNumber(qyCardNumber);
+					}
+					
+				}else{
 				
-				//对企业名称处理，企业法人
-				String qyName = request.getParameter("qyName");
-				if(StringHelper.isNotBlack(qyName)){
-					corporation.setName(qyName);
+					//对民族处理 非 企业法人
+					String fqyNation = request.getParameter("fqyNation");
+					if(StringHelper.isNotBlack(fqyNation)){
+						corporation.setNation(fqyNation);
+					}
+					
+					//对企业名称处理，非企业法人
+					String fqyName = request.getParameter("fqyName");
+					if(StringHelper.isNotBlack(fqyName)){
+						corporation.setName(fqyName);
+					}
+					
+					//对企业名称处理，非企业法人
+					String fqyRealName = request.getParameter("fqyRealName");
+					if(StringHelper.isNotBlack(fqyRealName)){
+						corporation.setRealName(fqyRealName);
+					}
+					
+					//对企业负责人身份证号处理，非企业法人
+					String fqyCardNumber = request.getParameter("fqyCardNumber");
+					if(StringHelper.isNotBlack(fqyCardNumber)){
+						corporation.setCardNumber(fqyCardNumber);
+					}
 				}
-				//对企业名称处理，非企业法人
-				String fqyName = request.getParameter("fqyName");
-				if(StringHelper.isNotBlack(fqyName)){
-					corporation.setName(fqyName);
-				}
-				
-				//对企业负责人处理，企业法人
-				String qyRealName = request.getParameter("qyRealName");
-				if(StringHelper.isNotBlack(qyRealName)){
-					corporation.setRealName(qyRealName);
-				}
-				//对企业名称处理，非企业法人
-				String fqyRealName = request.getParameter("fqyRealName");
-				if(StringHelper.isNotBlack(fqyRealName)){
-					corporation.setRealName(fqyRealName);
-				}
-				
-				//对企业负责人身份证号处理，企业法人
-				String qyCardNumber = request.getParameter("qyCardNumber");
-				if(StringHelper.isNotBlack(qyCardNumber)){
-					corporation.setCardNumber(qyCardNumber);
-				}
-				//对企业负责人身份证号处理，非企业法人
-				String fqyCardNumber = request.getParameter("fqyCardNumber");
-				if(StringHelper.isNotBlack(fqyCardNumber)){
-					corporation.setCardNumber(fqyCardNumber);
-				}
-				
 				//重复校验
 				if(corporation.getIid() == null){
 					Integer checkData = complatCorporationService.checkUnique(corporation.getLoginName(), corporation.getRegNumber(), corporation.getOrgNumber());
-					System.out.println("checkData;;;-"+checkData);
 					if(checkData == 1){
 						returnMsg("error","法人用户重复，保存失败",request);
-					}else{
-						complatCorporationService.save(corporation);
-						returnMsg("success","保存成功",request);
-						//记录日志
-						this.addJisLog(corporation, request,operType);
 					}
+				}else{
+					complatCorporationService.save(corporation);
+					returnMsg("success","保存成功",request);
+					//记录日志
+					this.addJisLog(corporation, request,operType);
 				}
 				
 			}
@@ -500,5 +505,11 @@ public class ComplatCorporationController extends BaseController{
 		}
 		jisLog.setSpec(spec);
 		jisLogService.save(jisLog);
+	}
+	
+	
+	public static void main(String[] args) {
+		String pwd = Md5Util.md5decode("BEJ1RgZHDkQAHnZrA2oALA==");
+		System.out.println(pwd);
 	}
 }

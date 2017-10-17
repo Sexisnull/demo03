@@ -65,7 +65,9 @@
    align:center;
     vertical-align: middle;
 }
-
+.kzsx{
+   width:300px;
+}
 
 
 /*角色信息分区样式*/
@@ -158,64 +160,83 @@ $().ready(function() {
 
 //表单校验
 var complatUserNameInput=$("#name").val();
- $("#editForm").validate({
+ $("#editForm").validate({ 	
     rules: {
-	   name: {
-	        required: true,
-	        cnRangelength: [0,32],
-	        stringCheck:complatUserNameInput
-	   },
-	   sex: {
-	        required: true
-	   },
-	   age: {
-	        cnRangelength: [0,64]
-	   },	  	   
-	   headship:{
-	        cnRangelength: [0,64]
-	   },	   
-	   phone : {//办公电话
-			required: true,
-			isPhone:true,
-	   		maxlength: 16
-		},
-	   mobil:{
-	   		isMobile:true,
-	   		maxlength: 16
-	   	},
-		email : {//email校验
-			required: true,
-			email:true,
-	   		maxlength: 64
-		},
-	    msn:{
-	   		cnRangelength: [0,64]
-	   	},
-	   	address:{
-	   		cnRangelength: [0,127]
-	   	},
-		post:{
-	   		maxlength: 6
-	   	},
-		loginname : {//重命名校验*
-			required: true,
-			cnRangelength: [0,127]
-		}, 
-	    pwd : {
-			required: true,
-			cnRangelength: [6,18]
-		},
+	     name : {
+				   required: true,
+				   cnRangelength: [0,32],
+		    	 isName: true
+			 },
+	     sex: {
+	         required: true
+	     },
+	     age: {
+	         cnRangelength: [0,64]
+	     },	
+	     //cardid：{
+	     	 //  required: true,
+				  // isIdCardNo:true,
+				  // uniqueCardid:true
+	    // },  	   
+	     headship:{
+	         cnRangelength: [0,64]
+	     },	   
+	     phone:{//办公电话
+		   		 isMobile:true,
+		   		 maxlength: 16
+		   },
+	     mobile : {//移动电话
+				   required: true,
+				   isPhone:true,
+		   		 uniqueMobile:true
+			 },
+		   email : {//email校验
+				   required: true,
+				   email:true,
+		   		 maxlength: 64
+		   },
+		   qq:{
+		   		 maxlength: 11
+		   },
+	     msn:{
+	   		   cnRangelength: [0,64]
+	   	 },
+	   	 fax:{
+		   		 cnRangelength: [0,64]
+		   },
+	   	 address:{
+				   /* isAddressInfo:true, */
+		   		 cnRangelength: [0,127]
+		   	},
+		   post:{
+				  /* isEmail：true, */
+		   		maxlength: 6,
+		   		isPost:true
+		   	},
+		   loginname : {//重命名校验*
+				  required: true,
+				  cnRangelength: [0,127],
+				  isLoginname : true,
+				  uniqueLoginname: true 
+			 }, 
+	     pwd : {
+				  required: true,
+				  cnRangelength: [6,18]
+			 },
 	   
-	   pwdquestion : {
-			required: true,
-			cnRangelength: [0,127]
-		},
-	   pwdanswer : {
-			required: true,
-			cnRangelength: [0,127]
-	   },	    
-    },
-    submitHandler : function() {
+	     pwdquestion : {
+			    cnRangelength: [0,127]
+		   },
+	     pwdanswer : {
+			    cnRangelength: [0,127]
+	     },
+	    	submitHandler:function(form){
+		   		//alert("提交");
+				form.submit();
+			}
+    } 
+    
+    /*submitHandler : function() {
 				$.ajax({
 						type : "POST",
 						async : false,
@@ -238,13 +259,33 @@ var complatUserNameInput=$("#name").val();
 						   }
 						}
 				});
-		}
+		}*/
    });   
 
+   
+   // Ajax重命名校验
+	$.uniqueValidate('uniqueLoginname', '${ctx}/complat/checkLoginName', ['loginname','oldLoginname'], '对不起，这个登录名重复了');
+	$.uniqueValidate('uniqueMobile', '${ctx}/complat/checkUserMobile', ['mobile','oldMobile'], '对不起，这个手机号重复了');	
+  $.uniqueValidate('uniqueCardid', '${ctx}/complat/checkUserCardid', ['cardid','oldCardid'], '对不起，这个身份证号重复了');
  
+    //政府用户名校验     
+    jQuery.validator.addMethod("isName", function(value, element) { 
+           var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9\u4e00-\u9fa5]+$/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "名称只能由字母、数字、中文组成，不能以下划线开头和结尾");
+    
+    jQuery.validator.addMethod("isLoginname", function(value, element) { 
+           var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "名称只能由字母、数字、下划线、中文组成，不能以下划线开头和结尾");
+    
+    jQuery.validator.addMethod("isPost", function(value, element) { 
+           var corporName = /^[1-9][0-9]{5}$/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "邮政编码格式不正确（共6位,开头不能为0)");
    //编辑时密码强度回显
     var pwding = $("#pwd").val();
-	EvalPwd(pwding);
+	  EvalPwd(pwding);
 
    
    
@@ -273,20 +314,20 @@ var complatUserNameInput=$("#name").val();
     				if(count==1){  
     					if(count%2==1){
     					
-   	    			       htmlString.push("<th>"+key+"</th><td><input name='"+key+"' type='text' value='"+value+"'></td>");
+   	    			       htmlString.push("<th>"+key+"：</th><td><input name='"+key+"' type='text' value='"+value+"'></td>");
    	    			       
    	    			    }
      					 if(count%2==0){
-     	    			       htmlString.push("<th>"+key+"</th><td><input type='text' name='"+key+"' value='"+value+"'></td></tr>");
+     	    			       htmlString.push("<th>"+key+"：</th><td><input type='text' name='"+key+"' value='"+value+"'></td></tr>");
      	    			}   					
     				}else{
     					 if(count%2==1){
-    	    			       htmlString.push("<tr><td class='td_7'></td><th>"+key+"</th><td><input name='"+key+"' type='text' value='"+value+"'></td>");
+    	    			       htmlString.push("<tr><td class='td_7'></td><th>"+key+"：</th><td><input name='"+key+"' type='text' value='"+value+"'></td>");
 //    	    			       alert(" htmlString"+ htmlString);
    
     					 }
     	    			    if(count%2==0){
-    	    			       htmlString.push("<th>"+key+"</th><td><input type='text' name='"+key+"' value='"+value+"'></td></tr>");
+    	    			       htmlString.push("<th>"+key+"：</th><td><input type='text' name='"+key+"' value='"+value+"'></td></tr>");
 //    	    			       alert(" htmlString"+ htmlString);
     	    			    }
     					
@@ -316,7 +357,7 @@ var complatUserNameInput=$("#name").val();
     			    if(key == 'fieldname'){
     			    	if(count == 1){
     			    		if(count%2==1){
-		    			    	htmlString.push("<th>"+value+"</th><td><select id='"+value+"' name= '"+value+"' style='width:260px;'>");
+		    			    	htmlString.push("<th>"+value+"</th><td><select  class='kzsx' id='"+value+"' name= '"+value+"' style='width=:88%;'>");
 		    			    	//循环key；
 		    			        for(var i=0;i<keys.length;i++){
 		    			 			htmlString.push("<option value='"+keys[i]+"'");
@@ -335,7 +376,7 @@ var complatUserNameInput=$("#name").val();
 		    				   
 		    			    }
 		    			    if(count%2==0){
-		    			    	htmlString.push("<th>"+value+"</th><td><select id='"+value+"' name= '"+value+"' style='width:260px;'>");
+		    			    	htmlString.push("<th>"+value+"：</th><td><select class='kzsx' id='"+value+"' name= '"+value+"' style='width=:88%;'>");
 		    			    	//循环key；
 		    			        for(var i=0;i<keys.length;i++){
 		    			        	htmlString.push("<option value='"+keys[i]+"'");
@@ -353,7 +394,7 @@ var complatUserNameInput=$("#name").val();
 		    			    }	
     			    	}else{
     			    		if(count%2==1){
-		    			    	htmlString.push("<tr><td class='td_7'></td><th>"+value+"</th><td><select id='"+value+"' name= '"+value+"' style='width:260px;'>");
+		    			    	htmlString.push("<tr><td class='td_7'></td><th>"+ value+"：</th><td><select id='"+value+"' name= '"+value+"'>");
 		    			    	//循环key；
 		    			        for(var i=0;i<keys.length;i++){
 		    			 			htmlString.push("<option value='"+keys[i]+"'");
@@ -372,7 +413,7 @@ var complatUserNameInput=$("#name").val();
 		    				   
 		    			    }
 		    			    if(count%2==0){
-		    			    	htmlString.push("<th>"+value+"</th><td><select id='"+value+"' name= '"+value+"' style='width:260px;'>");
+		    			    	htmlString.push("<th>"+value+"：</th><td><select  class='kzsx' id='"+value+"' name= '"+value+"' style='width=:88%;'>");
 		    			    	//循环key；
 		    			        for(var i=0;i<keys.length;i++){
 		    			        	htmlString.push("<option value='"+keys[i]+"'");
@@ -406,26 +447,23 @@ var complatUserNameInput=$("#name").val();
 });
 
 
-function callSkip(state) {
-	$(".call").removeClass("selected");
-	$(".callMenu").slideUp("fast");
-	$(".call").css("background-color", "#2d74af");
-	$.ajax({
-		cache : true,
-		type : "POST",
-		url : "${ctx}/adCase/callSkip",
-		dataType : "json",
-		data : {
-			handleState : state
-		},
-		async : false,
-		success : function(msg) {
-			$(".callDisp").show();
-			$("#fontss").html(msg.result);
-		}
-	});
+function checkAndSave() { 
+    var level = $("#level").val(); 
+    var pwd = $("#pwd").val();
+    if(level == "strong") {
+		$("#editForm").submit();
+	} else if(level == "weak" && pwd == "") {
+		$.dialog.confirm("请填写必填信息！",function(){
+				return null;
+		});
+		return false;
+	} else {
+		$.dialog.confirm("密码强度必须为强！",function(){
+				return null;	            
+		});
+		return false;
+	}
 }
-
 
 
 
@@ -504,8 +542,9 @@ function callSkip(state) {
 				   </td>
 				   <th><b class="mustbe">*</b> 身份证号：</th>
 				   <td style="width:300px;">
-				       <input type="text" <c:if test="${userDetail.cardid != null}"></c:if> class="cardid" name="cardid" value="${userDetail.cardid}" />					   
-				   </td>
+					<input type="text" <c:if test="${userDetail.cardid != null}">readonly="readonly"</c:if> id="cardid" class="cardid" name="cardid" value="${userDetail.cardid}" />
+					<input type="hidden" id="oldCardid" class="oldCardid" name="oldCardid" value="${userDetail.cardid}" />
+				</td>
 			    </tr>		    
 			    <tr>
 			      <th><b class="mustbe">*</b> 固定电话：</th>
@@ -515,6 +554,7 @@ function callSkip(state) {
 				  <th><b class="mustbe">*</b> 移动电话：</th>
                   <td style="width:300px;">
                 	<input type="text"  id="mobile" name="mobile" value="${complatUser.mobile}" />
+					        <input type="hidden" id="oldMobile" name="oldMobile" value="${complatUser.mobile}" />
                   </td>				
 			    </tr>
 			    <tr>
@@ -550,7 +590,7 @@ function callSkip(state) {
 				    </c:if>
 				    <c:if test="${not empty complatUser.iid}">
 				        <input id="groupname" value="${groupMap[complatUser.groupid]}" name="groupname" type="text" style="cursor: pointer;"/> 
-					    <input type="hidden" id="groupid" name="groupid" value="${complatUser.groupid }">	
+					      <input type="hidden" id="groupid" name="groupid" value="${complatUser.groupid }">	
 				    </c:if>											
 				  </td>
 			    </tr>			   		
@@ -558,7 +598,8 @@ function callSkip(state) {
 		           <td class="td_1" rowspan="3" style="max-width:0px;width:100px;ont-weight:bold;" align="center"">账号信息</td>
                    <th><b class="mustbe">*</b>登录名：</th>
                    <td style="width:300px;">
-					  <input type="text"  class="loginname" name="loginname" value="${complatUser.loginname}" />
+                   	   <input type="text" id="loginname" name="loginname" value="${complatUser.loginname}" />
+					             <input type="hidden" id="oldLoginname" name=oldLoginname" value="${complatUser.loginname}" />					           
 	               </td>
 	        	   <th><b class="mustbe">*</b> 请设置密码找回问题：</th>
 				   <td style="width:300px;">
@@ -577,8 +618,8 @@ function callSkip(state) {
 				   
 			    </tr>
 			    <tr>				
-		           <th>密码强度：</th>
-			       <td style="width:300px;">
+		           <th class="td_6">密码强度：</th>
+			       <td class="td_6" style="width:300px;">
 				      <table id="pwdpower" style="width: 86%" cellspacing="0"  cellpadding="0" border="0">
 					     <tbody>
 						    <tr>
@@ -599,7 +640,7 @@ function callSkip(state) {
     <div style="clear:both;"></div>
     <!--表单的按钮组区域-->
     <div class="form-btn">
-    	<input type="submit" tabindex="15" id="submit-btn" value="保存" class="btn bluegreen"/>
+    	<input type="button" tabindex="15" id="submit-btn" value="保存" class="btn bluegreen" onclick="checkAndSave();"/>
     	&nbsp;&nbsp;
         <input type="button" tabindex="16" value="返回" onclick="javascript:window.location.href='${ctx}/complat/complatList?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}'" class="btn gray"/>
         
