@@ -8,6 +8,110 @@
 <script type="text/javascript" src="${ctx}/res/plugin/uploadify/js/jquery.uploadify-3.1.min.js"></script>
 
 <script type="text/javascript">
+$().ready(function() {
+ $("#oprform").validate({
+    rules: {
+    	sysName: {
+	    required:true
+	   },
+	   sysUrl: {
+	    required: true
+	   },
+	   emailSmtp: {
+	    required: true
+	   },
+	   emailBox:{
+	    required: true,
+	    email:true
+	   },
+	   emailSender:{
+	   required: true
+	   },
+	   emailFindPassTitle:{
+	   required: true
+	   },
+	   emailFindPassContent:{
+	   required: true
+	   },
+	   modifyPassTime:{
+	   required: true,
+	   digits:true
+	   },
+	   appId:{
+	   required: true
+	   },
+	   appName:{
+	   required: true
+	   },
+	   appAcc:{
+	   required: true
+	   },
+	   appPwd:{
+	   required: true
+	   },
+	   importantLevel:{
+	   required: true
+	   },
+	   isSendAgain:{
+	   required: true
+	   },
+	   isLose:{
+	   required: true
+	   },
+	   isUpstream:{
+	   required: true
+	   },
+	   urlRoot:{
+	   required: true
+	   },
+	   businessIdForRegestingPer:{
+	   required: true
+	   },
+	   businessNameForRegestingPer:{
+	   required: true
+	   },
+	   registPerMessageContent:{
+	   required: true
+	   },
+	   businessIdForRegestingCor:{
+	   required: true
+	   },
+	   businessNameForRegestingCor:{
+	   required: true
+	   },
+	   registCorMessageContent:{
+	   required: true
+	   },
+	   businessIdForRecovingPwd:{
+	   required: true
+	   },
+	   businessNameForRecovingPwd:{
+	   required: true
+	   },
+	   businessIdForGettingDynamicPwd:{
+	   required: true
+	   },
+	   businessNameForGettingDynamicPwd:{
+	   required: true
+	   },
+	   dynamicPwdMessageContent:{
+	   required: true
+	   }
+	  },submitHandler:function(form){
+            var callingTypeVal=$("").val(); 
+            if(callingTypeVal=='2'){
+            	$.validator.errorShow($("#infoNum"),'请选择角色');
+            	return false;
+            }else if(isVerification=='0'){
+            	$.validator.errorShow($("#isVerification"),'请选择机构');
+            	return false;
+            }else{
+				 form.submit();
+			}
+        } 
+    });
+});
+
 function loadTab(){
 		//读取cardBar下面所有li标签
 		var getId=document.getElementById("cardBar").getElementsByTagName("li");
@@ -52,68 +156,6 @@ function loadTab(){
 			}
 		}
 	}
-//--><!]]>
-/**
-* 表单验证
-*/
-$(function(){
-	$('#oprform').validate(function() {
-		$('#sysname').require('系统名称必须填写');
-		$('#sysurl').require('系统地址必须填写');
-		$('#email_smtp').require('邮件服务器必须填写');
-		$('#email_email').require('邮箱必须填写').match('email','邮箱格式不正确');
-		$('#email_sender').require('寄件方名称必须填写');
-		$('#email_title').require('注册邮件标题必须填写');
-		$('#email_content').require('注册邮件内容必须填写');
-		$('#email_passtitle').require('找回密码标题必须填写');
-		$('#email_passContent').require('找回密码内容必须填写');
-		$('#modifyPassTime').require('定时修改密码时间必须填写').match('num1','密码定时修改,只能为正数包括零,请重新输入!');
-		
-		
-		$('#appId').require('appId内容必须填写');
-		$('#appName').require('appName内容必须填写');
-		$('#appAcc').require('appAcc内容必须填写');
-		$('#appPwd').require('appPwd内容必须填写');
-		$('#importantLevel').require('importantLevel内容必须填写');
-		$('#isSendAgain').require('isSendAgain内容必须填写');
-		$('#isLose').require('isLose内容必须填写');
-		$('#isUpstream').require('isUpstream内容必须填写');
-		$('#urlRoot').require('urlRoot内容必须填写');
-		$('#businessIdForRegestingPer').require('个人注册短信业务Id必须填写');
-		$('#businessNameForRegestingPer').require('个人注册短信业务名称必须填写');
-		$('#registPerMessageContent').require('个人注册时的短信内容必须填写');
-		$('#businessIdForRegestingCor').require('法人注册短信业务Id必须填写');
-		$('#businessNameForRegestingCor').require('法人注册短信业务名称必须填写');
-		$('#registCorMessageContent').require('法人注册时的短信内容必须填写');
-		$('#businessIdForRecovingPwd').require('找回密码业务Id必须填写');
-		$('#businessNameForRecovingPwd').require('找回密码业务名称必须填写');
-		$('#businessIdForGettingDynamicPwd').require('获取动态登录密码业务Id必须填写');
-		$('#businessNameForGettingDynamicPwd').require('获取动态登录密码业务名称必须填写');
-		$('#dynamicPwdMessageContent').require('获取动态登录密码时的短信内容必须填写');
-		
-		
-		
-		var isrealnameauth = $('[name=realNameAuth]:checked').val();
-		if(isrealnameauth == '1'){
-			$('#realNameAuthUrl').require('开启实名认证后接口地址必须填写');
-		}
-		
-		setCookie();
-	},{
-		success:function(result){
-			if(result.success){
-				location.reload();
-			}
-		}
-	}); 
-
-	setregister();
-	setlogintime();
-	
-	initTabs();
-	showRealNameAuthUrl();
-});
-
 function setCookie(){
 	var tab = $('#tabs').tabs('getSelected');
 	var index = $('#tabs').tabs('getTabIndex',tab);

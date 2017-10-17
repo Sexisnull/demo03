@@ -100,7 +100,7 @@ function calltype(value){
 		$("#infoNum").rules("add",{range:[1,30]});
 		$("#RssInfo").rules("add",{required:true});
 	}
-	if(value = null){
+	if(value == null || value == ""){
 		$("#hiddenTr1").css("display",'none');
 		$("#hiddenTr2").css("display",'none');
 		$("#hiddenTr3").css("display",'none');
@@ -290,7 +290,7 @@ $(function(){
 					
 					<c:if test="${jisDatacall.isVerification==null}">
 						<input type="radio" name="isVerification" value="1" onclick="selectIsVerification(this.value);"/>是
-						<input type="radio" name="isVerification" value="2" onclick="selectIsVerification(this.value);"/>否
+						<input type="radio" name="isVerification" value="2" checked="checked" onclick="selectIsVerification(this.value);"/>否
 					</c:if>
 				</td>
 				

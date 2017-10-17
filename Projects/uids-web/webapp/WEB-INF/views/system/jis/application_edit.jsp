@@ -31,7 +31,6 @@
 	opacity:0.3; 
 	filter:Alpha(opacity=30); 
 }
-
 .pic {
     width: 115px;
     height: 75px;
@@ -39,7 +38,6 @@
     line-height: 180px;
     cursor: pointer;
 }
-
 .title {
     width: 120px;
     height: 120px;
@@ -48,7 +46,6 @@
     font-size: 12pt;
     cursor: pointer;
 }
-
 .alert_tb {	
 	left:180px;
 	top:120px;
@@ -102,7 +99,6 @@ function onDbClickGroup(event, treeId, treeNode) {
 	$('#groupname').val(treeNode.name);
 	$('#groupname_menu').fadeOut(50);
 }
-
 /**
  *	初始化树
  */
@@ -133,7 +129,6 @@ function beforeClick(treeId, treeNode, clickFlag) {
 function resetform() {
 	$('form').find(':input').not(':button,:hidden,:submit,:reset').val('');
 }
-
 $(function(){
 	if("${jisApplication.isLogOff}" == '1'){
 		$("#tr_logoffUrl").show();
@@ -142,8 +137,20 @@ $(function(){
 		$("#tr_ssoLogin_1").show();
 		$("#tr_ssoLogin_2").show();
 	} 
-	
-	/* $("#tr_ssoLogin").hide(); */
+	 if("${jisApplication.transType}" == '0'){
+		$("#ssoUrlh").hide();
+		$("#ssoUrld").hide();
+		$("#tr_isUniRgh").hide();
+		$("#tr_isUniRgd").hide();
+		$("#id_checknet").hide();
+	 }
+	 if("${jisApplication.transType}" == '1'){
+			$("#ssoUrlh").show();
+			$("#ssoUrld").show();
+			$("#tr_isUniRgh").show();
+			$("#tr_isUniRgd").show();
+			$("#id_checknet").show();
+		 }
 	setLoginType();
 	setSsoLogin();
 	 // 初始化Web Uploader
@@ -164,7 +171,6 @@ $(function(){
             mimeTypes: 'image/*'
         }
     });
-	 
     uploader.on( 'uploadSuccess', function( file, a ) {
     	$("#icon").val("/resources/jis/front/app/"+file.name);
     	$("#icon2").attr("src","${ctx}/resources/jis/front/app/"+file.name);
@@ -183,12 +189,14 @@ $(function(){
 
 //统一注销
 function selectlogoff(value){
-	/* var islogoff=$('input[name="isLogoff"]:checked'); */
 	if(value == '0'){
 		$("#tr_logoffUrl").css("display",'none');
 	}
 	if(value== '1'){
 		$("#tr_logoffUrl").css("display",'');
+		$("#logOffUrl").rules("add",{required:true});
+		$("#logOffUrl").rules("add",{url:true});
+		$("#logOffUrl").rules("add",{maxlength: 255});
 	}
 	if(value=null){
 		$("#tr_logoffUrl").css("display",'none');
@@ -198,7 +206,9 @@ function selectlogoff(value){
 function setSsoLogin(value){
 	/* var ssoLogin = $('[name=userDefined]:checked').val(); */
 	if(value == '1'){
-		$('[id^=tr_ssoLogin_]').show();
+		$('[id^=tr_ssoLogin_]').show();   
+		$("#allLoginIid").rules("add",{required:true});
+		$("#allPwd").rules("add",{required:true});
 	}
 	if(value == '0'){
 		$('[id^=tr_ssoLogin_]').hide();
@@ -353,18 +363,23 @@ function randomChar(num)
 }
 
 function selecttranstype(value){
-	/* var transtype=$('input[name="transtype"]:checked').val(); */
+	/* var transtype=$('input[name="transtype"]:checked').val(); 0:H  1:W*/
 	if(value == '0'){
 		$("#ssoUrlh").css("display",'none');
 		$("#ssoUrld").css("display",'none');
 		$("#tr_isUniRgh").css("display",'none');
 		$("#tr_isUniRgd").css("display",'none');
+		$("#ssoUrl").rules("remove","required");
 	}
 	if(value == '1'){
 		$("#ssoUrlh").css("display",'');
 		$("#ssoUrld").css("display",'');
 		$("#tr_isUniRgh").css("display",'');
 		$("#tr_isUniRgd").css("display",'');
+		$("#ssoUrl").rules("add",{required:true});
+	}
+	if(value == null || value == ""){
+		$("#ssoUrl").rules("remove","required");
 	}
 }
 
@@ -409,8 +424,10 @@ function setLoginType(){
 	}else{   //
 		$('#tr_ssoLogin').hide();
 		$('#id_fastwrite').show();
-		$('#ssoUrlh').show();
-		$('#ssoUrld').show();
+		$('#ssoUrlh').hide();
+		$('#ssoUrld').hide();
+		$('#tr_isUniRgh').hide();
+		$('#tr_isUniRgd').hide();
 	}
 	
 	setSsoLogin();
@@ -418,7 +435,6 @@ function setLoginType(){
 
 $().ready(function() { 
 //表单校验
-/* var userNameInput=$("#userName").val(); */
  $("#editForm").validate({
     rules: {
     	name: {
@@ -442,32 +458,17 @@ $().ready(function() {
 	   url:true,
 	   maxlength: 255
 	   },
-	   ssoUrl:{
+	  /*  ssoUrl:{
 	   required: true,
 	   url:true,
 	   maxlength: 255
-	   },
+	   }, */
 	   netType:{
 	   required: true
 	   },
 	   groupname:{
 	   required: true
 	   }
-	   /* allLoginIid:{
-	   required: true,
-	   maxlength: 50,
-	   userName:true
-	   },
-	   allPwd:{
-	   required: true,
-	   maxlength: 50,
-	   chrnum:true
-	   },
-	   logOffUrl:{
-	   required: true, 
-	   maxlength: 255,
-	   url:true
-	   }, */
 	  },submitHandler:function(form){
             var callingType=$("#callingType").val(); 
             var isVerification=$("#isVerification").val();
@@ -581,7 +582,7 @@ $(function(){
 				</td>
 			</tr>
 			<tr>
-				<th style="text-align:left;"><b class="mustbe">&nbsp;&nbsp;</b> 所属机构：</th>
+				<th style="text-align:left;"><b class="mustbe">*</b> 所属机构：</th>
 				<td>
 					<input id="groupname" value="${groupMap[jisApplication.groupId]}" name="groupname" type="text" style="cursor: pointer;"/> 
 				</td>
@@ -597,7 +598,7 @@ $(function(){
                 </td>
             </tr>
             <tr>
-				<th style="text-align:center;"><b class="mustbe">&nbsp;&nbsp;</b>数据传送方式：</th>
+				<th style="text-align:left;"><b class="mustbe">&nbsp;&nbsp;</b>数据传送方式：</th>
 				<td>
 					<c:if test="${jisApplication.transType=='1'}">
 						<input type="radio" name="transType" value="0" onclick="selecttranstype(this.value);"/>HTTP&nbsp;&nbsp;
@@ -610,7 +611,7 @@ $(function(){
 					</c:if>
 					
 					<c:if test="${jisApplication.transType==null}">
-						<input type="radio" name="transType" value="0" onclick="selecttranstype(this.value);"/>HTTP&nbsp;&nbsp;
+						<input type="radio" name="transType" value="0" onclick="selecttranstype(this.value);" checked="checked"/>HTTP&nbsp;&nbsp;
 						<input type="radio" name="transType" value="1" onclick="selecttranstype(this.value);"/>WebService
 					</c:if>
 				</td>
@@ -637,7 +638,7 @@ $(function(){
 					</c:if>
 					
 					<c:if test="${jisApplication.encryptType==null}">
-						<input type="radio" name="encryptType" value="1"/>MD5
+						<input type="radio" name="encryptType" value="1" checked="checked"/>MD5
 						<input type="radio" name="encryptType" value="2"/>MD5+base64
 						<input type="radio" name="encryptType" value="0"/>不加密
 					</c:if>
@@ -693,7 +694,7 @@ $(function(){
 					</c:if>
 					
 					<c:if test="${jisApplication.netType==null}">
-						<input type="radio" name="netType" value="0"/>外网&nbsp;&nbsp;
+						<input type="radio" name="netType" value="0" checked="checked"/>外网&nbsp;&nbsp;
 						<input type="radio" name="netType" value="1"/>专网
 					</c:if>
 				</td>
@@ -726,8 +727,8 @@ $(function(){
 							checked="checked" onclick="setSsoLogin(this.value);">固定账号
 						</c:if>
 						<c:if test="${jisApplication.userDefined==null}">
-							<input type="radio" name="userDefined" value="0"
-							 onclick="setSsoLogin(this.value);">用户预设账号&nbsp;
+							<input type="radio" name="userDefined" value="0" 
+							 checked="checked" onclick="setSsoLogin(this.value);">用户预设账号&nbsp;
 							<input type="radio" name="userDefined" value="2"
 							 onclick="setSsoLogin(this.value);">统一用户账号&nbsp;
 							<input type="radio" name="userDefined" value="1"
@@ -749,7 +750,7 @@ $(function(){
 				</tr>
 				
 				
-				<th style="text-align:center;"><b class="mustbe">&nbsp;&nbsp;</b>前台是否显示：</th>
+				<th style="text-align:left;"><b class="mustbe">&nbsp;&nbsp;</b>前台是否显示：</th>
 				<td>
 					<c:if test="${jisApplication.isShow=='0'}">
 						<input type="radio" name="isShow" value="1"/>是&nbsp;&nbsp;
@@ -763,7 +764,7 @@ $(function(){
 					
 					<c:if test="${jisApplication.isShow==null}">
 						<input type="radio" name="isShow" value="1"/>是&nbsp;&nbsp;
-						<input type="radio" name="isShow" value="0"/>否
+						<input type="radio" name="isShow" value="0" checked="checked"/>否
 					</c:if>
 				</td>
 			</tr>
@@ -782,7 +783,7 @@ $(function(){
 					
 					<c:if test="${jisApplication.isLogOff==null}">
 						<input type="radio" name="isLogOff" value="1" onclick="selectlogoff(this.value);"/>是&nbsp;&nbsp;
-						<input type="radio" name="isLogOff" value="0" onclick="selectlogoff(this.value);"/>否
+						<input type="radio" name="isLogOff" value="0" checked="checked" onclick="selectlogoff(this.value);"/>否
 					</c:if>
 				</td>
 				
@@ -800,7 +801,7 @@ $(function(){
 					
 					<c:if test="${jisApplication.isUnifyRegister==null}">
 						<input type="radio" name="isUnifyRegister" value="1"/>是&nbsp;&nbsp;
-						<input type="radio" name="isUnifyRegister" value="0"/>否
+						<input type="radio" name="isUnifyRegister" value="0" checked="checked"/>否
 					</c:if>
 				</td>
 			</tr>
