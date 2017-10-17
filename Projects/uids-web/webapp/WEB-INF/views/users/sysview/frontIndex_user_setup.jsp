@@ -85,39 +85,51 @@
 						var count = 1;
 						var table = $(".form-table");
 						var fieldsListMap = eval('${fieldsListMap}');
+						var textName;
+						var textValue;
 						for ( var i = 0; i < fieldsListMap.length; i++) {
 							var fieldsList = fieldsListMap[i];
 							for ( var j = 0; j < fieldsList.length; j++) {
 								var fields = fieldsList[j];
 								if (fields.type == 1) {
 									for ( var key in fields) {
-										var value = fields[key];
-										if (value == null) {
-											value = "";
+										if(key == "fieldname"){
+											textName = fields[key];//类似ex_test
+											textValue = fields[textName];
+											if(textValue == null){
+												textValue = "";
+											}
 										}
-										if (key != 'type' && key != 'userid') {
+										if(key == "showname"){
+											var textTitle = fields[key];
 											if (count % 2 == 1) {
-												htmlString
-														.push("<tr><th>"
-																+ key
-																+ "</th><td><input name='"+key+"' type='text' value='"+value+"'></td>");
-											}
-											if (count % 2 == 0) {
-												htmlString
-														.push("<th>"
-																+ key
-																+ "</th><td><input type='text' name='"+key+"' value='"+value+"'></td></tr>");
-											}
-											count++;
+													htmlString
+															.push("<tr><th>"
+																	+ textTitle
+																	+ "</th><td><input name='"+textName+"' type='text' value='"+textValue+"'></td>");
+												}
+												if (count % 2 == 0) {
+													htmlString
+															.push("<th>"
+																	+ textTitle
+																	+ "</th><td><input type='text' name='"+textName+"' value='"+textValue+"'></td></tr>");
+												}
+												count++;
 										}
+										
 									}
 								}
 
+
 								var values;
 								var keys;
+								var selectTitle;
 								if (fields.type == 2) {
 									for ( var key in fields) {
 										var value = fields[key];
+										if(key == "showname"){
+											selectTitle = fields[key];
+										}
 										if (key == 'fieldkeys') {
 											keys = value.split(",");
 										}
@@ -125,13 +137,14 @@
 										if (key == 'fieldvalues') {
 											values = value.split(",");
 										}
-										if (key != 'type' && key != 'userid') {
+										
+										if (key != 'type' && key != 'userid') {										
 											if (key == 'fieldname') {
 												if (count % 2 == 1) {
 
 													htmlString
 															.push("<tr><th>"
-																	+ value
+																	+ selectTitle
 																	+ "</th><td><select id='"+value+"' name= '"+value+"'>");
 													//循环key；
 													for ( var i = 0; i < keys.length; i++) {
@@ -159,7 +172,7 @@
 												if (count % 2 == 0) {
 													htmlString
 															.push("<th>"
-																	+ value
+																	+ selectTitle
 																	+ "</th><td><select id='"+value+"' name= '"+value+"'>");
 													//循环key；
 													for ( var i = 0; i < keys.length; i++) {
@@ -230,13 +243,12 @@
 			</div>
 			<div class="header_userinfo" style="width: 575px;">
 				<ul class="header_nav">
-					<li class="home" onclick="toBack();">
+					<li class="home" onclick="toBack();" style="${managerIcon}">
 						<p>
 							后台管理
 						</p>
 					</li>
-					<li class="speaker modify-msgs"
-						onclick="javascript:window.location.href='${ctx}/complat/userSetUpEdit?userMenu=2'">
+					<li class="speaker modify-msgs"   onclick="javascript:window.location.href='${ctx}/complat/userSetUpEdit?userMenu=2'">
 						<p>
 							账户设置
 						</p>

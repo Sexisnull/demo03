@@ -237,12 +237,10 @@ public class ComplatRoleServiceImpl implements ComplatRoleService {
 	public List<JisRoleobject> findByUserId(Integer userId,Integer groupId)
 			throws Exception {
 		String getRoleSql = "select t.roleid from jis_roleobject t where objectid = ? and type='0'";
-		List<Map<String, Object>> roleRelationMap = jdbcTemplate.queryForList(
-				getRoleSql, new Integer[] { userId });
+		List<Map<String, Object>> roleRelationMap = jdbcTemplate.queryForList(getRoleSql, new Integer[] { userId });
 		if(roleRelationMap ==null || roleRelationMap.size()==0){
 			getRoleSql = "select t.roleid from jis_roleobject t where objectid = ? and type='2'";
-			roleRelationMap = jdbcTemplate.queryForList(
-					getRoleSql, new Integer[] { groupId });
+			roleRelationMap = jdbcTemplate.queryForList(getRoleSql, new Integer[] { groupId });
 		}
 		List<JisRoleobject> roleRelationList = new ArrayList<JisRoleobject>();
 		for (Map<String, Object> map : roleRelationMap) {

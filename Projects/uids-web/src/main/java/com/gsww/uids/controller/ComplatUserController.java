@@ -798,18 +798,23 @@ public class ComplatUserController extends BaseController {
 				model.addAttribute("complatGroup", complatGroup);
 
 				// 根据用户ID从ComplatRolerelation获取对应的角色ID，再根据角色ID从ComplatRole中获取对应的角色
-				List<JisRoleobject> roleRelationList = complatRoleService
-						.findByUserId(Integer.parseInt(userSid),complatUserEdit.getGroupid());
+				List<JisRoleobject> roleObjectList = complatRoleService.findByUserId(Integer.parseInt(userSid),complatUserEdit.getGroupid());
 				List<ComplatRole> roleList = new ArrayList<ComplatRole>();
-				for (int i = 0; i < roleRelationList.size(); i++) {
-					Integer roleId = roleRelationList.get(i).getRoleid();
-					ComplatRole complatRole = complatRoleService
-							.findByKey(roleId);
+				for (int i = 0; i < roleObjectList.size(); i++) {
+					Integer roleId = roleObjectList.get(i).getRoleid();
+					ComplatRole complatRole = complatRoleService.findByKey(roleId);
 					roleList.add(complatRole);
 					model.addAttribute("roleList", roleList);
 				}
 			}
 			this.extendsAttr(model, request, response);
+			
+			//跳转到前台页面
+			String managerIcon = "display:none";
+			if(checkHaveRight(sysUserSession.getAccountId(),sysUserSession.getRoleIds())){
+				managerIcon="";
+			}
+			model.addAttribute("managerIcon", managerIcon);
 		} catch (Exception exception) {
 			exception.printStackTrace();
 		}
@@ -819,6 +824,47 @@ public class ComplatUserController extends BaseController {
 			return "users/sysview/user_setup";
 		}
 	}
+		
+		/**
+		 * 判断权限
+		 * @param iid
+		 * @param roleIds
+		 * @return
+		 */
+		private boolean checkHaveRight(String iid,String roleIds) {
+			if(iid==null || iid=="" || roleIds==null || roleIds.split(",").length==0){
+				return false;
+			}
+			List<ComplatRole> roles = new ArrayList<ComplatRole>();
+			String[] roleId = roleIds.split(",");
+			if(Integer.parseInt(iid)==1){
+				return true;
+			}
+			for(int i=0;i<roleId.length;i++){
+				try {
+					String roleod = roleId[i];
+					if(roleod!=null && roleod.trim()!=""){
+						roles.add(complatRoleService.findByKey(Integer.parseInt(roleod)));
+					}
+					
+				}catch (Exception e) {
+					logger.error(e.getMessage(), e);
+				}
+			}
+			for(ComplatRole role : roles){
+				if ((role != null) && (role.getType() != null) && (role.getType().intValue() == 0)) {
+			        return true;
+			    }
+				if ((role != null) && (role.getType() != null) && (role.getType().intValue() == 1)) {
+			        return true;
+			    }
+				if ((role != null) && (role.getType() != null) && (role.getType().intValue() == 2)) {
+			        return true;
+			    }
+			}
+			return false;
+		}
+
 	
 	
 	
@@ -991,7 +1037,6 @@ public class ComplatUserController extends BaseController {
 		PrintWriter out = response.getWriter();
 		String json = array.toString();
 		out.write(json);
-		System.out.println("json--"+json);
 		model.addAttribute("fieldsListMap",json);
 		
 		//设置默认值

@@ -119,7 +119,7 @@ public class JisFieldsServiceImpl implements JisFieldsService {
 					listMap.add(fieldsMap);
 				}
 			}else{
-				querySql = "select distinct a.showname,b.userid,type,"+ queryFieldsName +" from jis_fields a ,jis_userdetail b where b.userid = '"+userId+"' " +
+				querySql = "select distinct b.userid,type,fieldname,a.showname,"+ queryFieldsName +" from jis_fields a ,jis_userdetail b where b.userid = '"+userId+"' " +
 				" and type = '1' and a.fieldname in("+whereFieldsName+")";
 				listMap = jdbcTemplate.queryForList(querySql);
 			}			
