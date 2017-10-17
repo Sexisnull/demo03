@@ -41,12 +41,9 @@ $().ready(function() {
 				required: true,
 				cnRangelength: [0,127],
 				isName:true
-				/* isResidenceDetail：true */
-				
 			},
 			livingAreaDetail : {
 				required: true,
-				/* isAddressInfo：true, */
 				cnRangelength: [0,127],
 				isName:true
 			},
@@ -62,9 +59,6 @@ $().ready(function() {
 		   		cnRangelength: [0,64],
 		   		isAge: true
 		   	},
-			degree:{//学历
-		   		//cnRangelength: [0,64]
-		   	},
 			workUnit:{//工作单位
 		   		cnRangelength: [0,64],
 		   		isName : true
@@ -77,13 +71,12 @@ $().ready(function() {
 		   		cnRangelength: [0,64],
 		   		isFax: true
 		   	},
-			phone:{
-		   		isMobile:true,
-		   		maxlength: 16
+			phone:{//什么都不加就能校验，奇怪
+		   		//isMobile:true
+		   		//isFixphone：true
 		   	},
 			compTel:{
-		   		isPhone:true,
-		   		maxlength: 16
+		   		isPhone:true
 		   	},
 			qq:{
 		   		maxlength: 11,
@@ -94,17 +87,13 @@ $().ready(function() {
 		   		isMsn: true
 		   	},
 			post:{
-				/* isEmail：true, */
-		   		maxlength: 6,
 		   		isPost:true
 		   	},
 			address:{
-				/* isAddressInfo:true, */
 		   		cnRangelength: [0,127],
 		   		isName:true
 		   	},
 		   	submitHandler:function(form){
-		   		//alert("提交");
 				form.submit();
 			}
 		}
@@ -148,7 +137,6 @@ $().ready(function() {
            var corporName = /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;   
            return this.optional(element) || (corporName.test(value));     
     }, "MSN格式错误");
-    
     var pwding = $("#pwd").val();
     EvalPwd(pwding);
 });
