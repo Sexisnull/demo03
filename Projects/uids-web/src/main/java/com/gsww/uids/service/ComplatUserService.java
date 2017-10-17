@@ -80,13 +80,16 @@ public interface ComplatUserService {
      * @return
      * @discription 验证loginname实体是否存在
      */
-    public ComplatUser findByLoginnameIsUsed(String loginname);
+    ComplatUser findByLoginname(String loginname);
 
     List<Map<String, Object>> synchronizeData(Integer userId);
 
     public ComplatUser findByGroupid(Integer groupid);
     
     
-
+    public ComplatUser findByMobile(String mobile);
+    
+    //登录名和机构名的唯一性校验
+    public List<Map<String,Object>> findByLoginnameAndgroupid(String loginname,int groupId);
 
 }

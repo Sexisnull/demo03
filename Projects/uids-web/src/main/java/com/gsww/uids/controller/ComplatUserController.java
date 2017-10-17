@@ -184,6 +184,7 @@ public class ComplatUserController extends BaseController {
 			@RequestParam(value = "order.field", defaultValue = "createtime") String orderField,
 			@RequestParam(value = "order.sort", defaultValue = "DESC") String orderSort,
 			@RequestParam(value = "findNowPage", defaultValue = "false") String findNowPage,
+			String orgId,
 			Model model, ServletRequest request, HttpServletRequest hrequest) {
 		try {
 			if (StringUtils.isNotBlank(request.getParameter("orderField"))) {
@@ -193,6 +194,9 @@ public class ComplatUserController extends BaseController {
 				orderSort = (String) request.getParameter("orderSort");
 			}
 
+			// 获取系统当前登录用户
+			SysUserSession sysUserSession = (SysUserSession) hrequest.getSession().getAttribute("sysUserSession");
+			String deptId = sysUserSession.getDeptId();
 			// 初始化分页数据
 			PageUtils pageUtils = new PageUtils(pageNo, pageSize, orderField,
 					orderSort);
@@ -202,6 +206,12 @@ public class ComplatUserController extends BaseController {
 			// 搜索属性初始化
 			Map<String, Object> searchParams = Servlets
 					.getParametersStartingWith(request, "search_");
+			if(StringUtils.isEmpty(orgId)){
+				searchParams.put("EQ_groupid", deptId);
+			}else{
+				searchParams.put("EQ_groupid", orgId);
+			}
+			
 			Specification<ComplatUser> spec = super.toNewSpecification(
 					searchParams, ComplatUser.class);
 
@@ -305,7 +315,7 @@ public class ComplatUserController extends BaseController {
 	 */
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/complatSave", method = RequestMethod.POST)
-	public void complatSave(ComplatUser complatUser, String level,
+	public ModelAndView complatSave(ComplatUser complatUser, String level,
 			HttpServletRequest request, HttpServletResponse response)throws Exception {
 		SysUserSession sysUserSession =(SysUserSession)request.getSession().getAttribute("sysUserSession");
 		Map<String, Object> resMap = new HashMap<String, Object>();
@@ -316,53 +326,40 @@ public class ComplatUserController extends BaseController {
 				String iid = String.valueOf(complatUser.getIid());
 				//if (StringUtils.isNotBlank(iid)) {//不为空	
 				if (StringHelper.isNotBlack(iid)) {	
-					
-					
 					pwd=complatUser.getPwd();
-					if(level=="strong"||level.equals("strong")){
-						//对登录全名做处理
-						int groupId=complatUser.getGroupid();
-						ComplatGroup complatGroup = complatGroupService.findByIid(groupId);
-						String suffix = complatGroup.getSuffix();
-						String loginallname=complatUser.getLoginname()+ "." + suffix;	
-						complatUser.setLoginallname(loginallname);
-						//对密码进行加密			
-						String p = Md5Util.md5encode(pwd);
-						complatUser.setPwd(p);
-						//注册时间
-						complatUser.setCreatetime(Timestamp.valueOf(TimeHelper.getCurrentTime()));// 创建时间
-						complatUser.setModifytime(Timestamp.valueOf(TimeHelper.getCurrentTime()));//修改时间
-						//转换保存创建时间
-						userId = complatUser.getIid();
-						Integer power = complatUser.getEnable();
-						complatUser.setEnable(power); // 是否禁用	
-						complatUser.setOpersign(2);//更新操作状态
-						synchronization(complatUser, 2);//修改同步
-						complatUserService.save(complatUser);
-						
-						//身份证号处理 JisUserdetail
-						String cardId = request.getParameter("cardid");	
-						//扩展属性
-						Map<String,String> userMap = this.saveExendsAttr(userId, request);
-						JisUserdetail jisUserdetail = jisUserdetailService.findByUserid(userId);
-						if(jisUserdetail.getIid() != null){
-							//对身份证号和用户扩展属性update
-							jisUserdetailService.update(jisUserdetail.getIid(),cardId,userMap);			
-						}						
-						returnMsg("success", "编辑用户成功", request);
-						resMap.put("ret", "0");
-						//resMap.put("msg", "保存成功！");
-						response.getWriter().write(JSONObject.toJSONString(resMap));
-						String desc = sysUserSession.getUserName() + "修改政府用户:" + complatUser.getName(); 
-						jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(),desc,2,2);
-					}else{
-						resMap.put("ret", "1");
-						resMap.put("msg", "密码强度不够，密码强度为强时才可保存！");
-						response.getWriter().write(JSONObject.toJSONString(resMap));
-					}																				
+					//对登录全名做处理
+					int groupId=complatUser.getGroupid();
+					ComplatGroup complatGroup = complatGroupService.findByIid(groupId);
+					String suffix = complatGroup.getSuffix();
+					String loginallname=complatUser.getLoginname()+ "." + suffix;	
+					complatUser.setLoginallname(loginallname);
+					//对密码进行加密			
+					String p = Md5Util.md5encode(pwd);
+					complatUser.setPwd(p);
+					//注册时间
+					complatUser.setCreatetime(Timestamp.valueOf(TimeHelper.getCurrentTime()));// 创建时间
+					complatUser.setModifytime(Timestamp.valueOf(TimeHelper.getCurrentTime()));//修改时间
+					//转换保存创建时间
+					userId = complatUser.getIid();
+					Integer power = complatUser.getEnable();
+					complatUser.setEnable(power); // 是否禁用	
+					complatUser.setOpersign(2);//更新操作状态
+					synchronization(complatUser, 2);//修改同步
+					complatUserService.save(complatUser);						
+					//身份证号处理 JisUserdetail
+					String cardId = request.getParameter("cardid");	
+					//扩展属性
+					Map<String,String> userMap = this.saveExendsAttr(userId, request);
+					JisUserdetail jisUserdetail = jisUserdetailService.findByUserid(userId);
+					if(jisUserdetail.getIid() != null){
+						//对身份证号和用户扩展属性update
+						jisUserdetailService.update(jisUserdetail.getIid(),cardId,userMap);			
+					}						
+					returnMsg("success", "编辑用户成功", request);
+					String desc = sysUserSession.getUserName() + "修改政府用户:" + complatUser.getName(); 
+					jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(),desc,2,2);																				
 				}else {
 					pwd=complatUser.getPwd();
-					if(level=="strong"||level.equals("strong")){
 						//对登录全名做处理
 						String groupid=request.getParameter("groupid");
 						ComplatGroup complatGroup = complatGroupService.findByIid(Integer.parseInt(groupid));
@@ -397,26 +394,15 @@ public class ComplatUserController extends BaseController {
 							jisUserdetailService.update(jisUserdetail.getIid(),cardId,userMap);			
 						}						
 						returnMsg("success", "新增用户成功", request);	
-						resMap.put("ret", "2");
-						//resMap.put("msg", "保存成功！");
-						response.getWriter().write(JSONObject.toJSONString(resMap));
 						String desc = sysUserSession.getUserName() + "新增政府用户:" + complatUser.getName(); 				
 						jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(),desc,2,1);
-					}else{
-						resMap.put("ret", "3");
-						resMap.put("msg", "密码强度不够，密码强度为强时才可保存！");
-						response.getWriter().write(JSONObject.toJSONString(resMap));
-					}
 				}	
 			} 
 		} catch (Exception e) {
-			resMap.put("ret", "1");
-			resMap.put("msg", "保存失败！");
-			response.getWriter().write(JSONObject.toJSONString(resMap));
+			returnMsg("error", "保存用户失败", request);	
+		}finally {
+			return new ModelAndView("redirect:/complat/complatList");
 		}
-//		finally {
-//			return new ModelAndView("redirect:/complat/complatList");
-//		}
 
 	}
 	
@@ -486,6 +472,8 @@ public class ComplatUserController extends BaseController {
 		return convert.toUpperCase();
 	}
 
+
+
 	/**
 	 * 数据导入
 	 * 
@@ -498,7 +486,7 @@ public class ComplatUserController extends BaseController {
 	 */
 	@SuppressWarnings("deprecation")
 	@RequestMapping(value = "/complatImport", method = RequestMethod.POST)
-	public String complatImport(
+	public void complatImport(
 			@RequestParam("files") MultipartFile multipartFile,
 			HttpServletRequest request, Model model,
 			HttpServletResponse response) throws Exception {
@@ -509,57 +497,106 @@ public class ComplatUserController extends BaseController {
 		fieldMap.put("0", "name");
 		fieldMap.put("1", "age");
 		fieldMap.put("2", "sex");
-		fieldMap.put("3", "groupid");
-		fieldMap.put("4", "headship");
-		fieldMap.put("5", "phone");
-		fieldMap.put("6", "mobile");
-		fieldMap.put("7", "address");
-		fieldMap.put("8", "post");
-		fieldMap.put("9", "ip");
-		fieldMap.put("10", "fax");
-		fieldMap.put("11", "email");
-		fieldMap.put("12", "qq");
-		fieldMap.put("13", "loginname");
-		fieldMap.put("14", "loginallname");
+		fieldMap.put("3", "groupName");
+		fieldMap.put("4", "groupid");
+		fieldMap.put("5", "headship");
+		fieldMap.put("6", "phone");
+		fieldMap.put("7", "mobile");
+		fieldMap.put("8", "address");
+		fieldMap.put("9", "post");
+		fieldMap.put("10", "ip");
+		fieldMap.put("11", "fax");
+		fieldMap.put("12", "email");
+		fieldMap.put("13", "qq");
+		fieldMap.put("14", "loginname");
 		fieldMap.put("15", "pwd");
 		fieldMap.put("16", "pwdquestion");
 		fieldMap.put("17", "pwdanswer");
 		fieldMap.put("18", "pinyin");
+		fieldMap.put("19", "cardid");		
 		List<ComplatUser> users = ExcelUtil.readXls(fileName,multipartFile.getInputStream(), ComplatUser.class, fieldMap);		
 		// 判断是哪行导入失败
 		int row = 1;
-		boolean flag = true;
-		String strRow = "";
+	    boolean flag = true;
+	    String strRow = "";
 		try {
 			for (ComplatUser complatUser : users) {			   
-				List<ComplatUser> list = complatUserService.findByUserAllName(complatUser.getLoginallname());
-				if (list.size() == 0) {
-					if (StringHelper.isNotBlack(complatUser.getName())) { // 判断excel表格导入的数据是否规范
+				//List<ComplatUser> list = complatUserService.findByUserAllName(complatUser.getLoginallname());
+				List<Map<String,Object>> userList=complatUserService.findByLoginnameAndgroupid(complatUser.getLoginname(),complatUser.getGroupid());
+				if (userList.size() == 0) {					
+					if (StringHelper.isNotBlack(complatUser.getGroupName())) { // 判断excel表格导入的数据是否规范
 						// 新增时将机构名汉字转换成首字母大写保存到pinyin字段中
 						String daPinYin = getPinYinHeadChar(complatUser.getName());
 						complatUser.setPinyin(daPinYin);
 						// 设置创建时间
-						Date date = new Date();
-						DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-						String time = format.format(date);
-						Date createTime = sdf.parse(time);
-						complatUser.setCreatetime(createTime);
+						complatUser.setCreatetime(Timestamp.valueOf(TimeHelper.getCurrentTime()));// 创建时间
+						complatUser.setModifytime(Timestamp.valueOf(TimeHelper.getCurrentTime()));//修改时间
 						// 设置状态值
 	                    complatUser.setEnable(0);
 						complatUser.setOpersign(1);
 						complatUser.setSynState(2);
-						
+						//对登录全名进行唯一性判断
+						String loginname = complatUser.getLoginname();
+						int groupId=complatUser.getGroupid();
+						ComplatGroup complatGroup = complatGroupService.findByIid(groupId);
+						String suffix = complatGroup.getSuffix();
+						String loginallname=loginname+ "." + suffix;	
+						complatUser.setLoginallname(loginallname);						
+//						//对机构名称做判断
+//						if(complatGroup.equals(complatUser.getGroupName())){
+//							flag = false;
+//							strRow = "第<" + row + ">行数据，机构名称不正确！";
+//							break;
+//						}
 						//对密码进行加密
 						String pwd = complatUser.getPwd();
 						String p = Md5Util.md5encode(pwd);
-						complatUser.setPwd(p);
+						complatUser.setPwd(p);						
 						complatUserService.save(complatUser);
-						//complatUserSyn(complatUser,1,userId,request,response);
+						//身份证号
+						String cardId = complatUser.getCardid();
+						Integer userId = complatUser.getIid();
+						complatUser.setIid(userId);
+						JisUserdetail jisUser = new JisUserdetail();
+						jisUser.setCardid(cardId);
+						jisUser.setIid(userId);
+						jisUser.setUserid(userId);
+						jisUserdetailService.save(jisUser);											
+//						//扩展属性
+//  						String Kzsx=complatUser.getKzsx();
+//  					    String kzsx="";
+//						String [] fields=Kzsx.split(",");
+//						//List<Map<String,String>> listFields = new ArrayList<Map<String,String>>();
+//						//List<String> listFields = new ArrayList<String>();
+//						Map<String,String> map = new HashMap<String,String>();
+//						for (int i = 0; i < fields.length; i++) {
+//							kzsx=fields[i].trim();
+//							String kzsx1=kzsx.substring(1);
+//							
+//							int length=kzsx1.length();
+//							String kzsx2=kzsx1.substring(0,length-1);
+//						    String [] arr = kzsx2.split(":");
+//						    
+//						    for(int j=0;j<arr.length;j++){	
+//						    	String str1 = arr[0].trim();
+//						    	String str2 = arr[1].trim();
+//						    	if(j==0){
+//						    		map.put(str1, "");
+//						    	}else{
+//						    		map.put(str1, str2);
+//						    	}
+//						    }									 			
+//						}
+//						JisUserdetail jisUserdetail = jisUserdetailService.findByUserid(userId);
+//						if(jisUserdetail.getIid() != null){
+//							//对身份证号和用户扩展属性update
+//							jisUserdetailService.update(jisUserdetail.getIid(),cardId,map);			
+//						}											
+						synchronization(complatUser, 1);//新增同步					
 						String desc=session.getUserName()+"导入了"+complatUser.getName();
 			            jisLogService.save(session.getUserName(),session.getUserIp(), desc, 2, 5);
 					} else {
-						flag = false;
-						strRow = strRow + row + "、"; // 记录第几行数据导入失败
+						returnMsg("error","机构名称为空导入失败",request);
 					}// else
 					row++;// 导入行数加一
 				}// if(list
@@ -575,8 +612,10 @@ public class ComplatUserController extends BaseController {
 			e.printStackTrace();
 			returnMsg("error", "导入失败", request);
 		}
-		return "/complat/complatList";
 	}
+	
+	
+	
 
 	/**
 	 * 数据导出
@@ -589,14 +628,14 @@ public class ComplatUserController extends BaseController {
 	 * @author <a href=" ">shenxh</a>
 	 */
 	@RequestMapping(value = "/complatExport", method = RequestMethod.GET)
-	public ModelAndView complatExport(Model model, HttpServletRequest request,
+	public ModelAndView complatExport(String iid,Model model, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		SysUserSession session = (SysUserSession) request.getSession().getAttribute("sysUserSession");
 		String userIid = request.getParameter("iid");
 		String[] complatUserIds = userIid.split(",");
 		String fileName = "政府用户信息统计列表";
 		Map<String, Object> map = new HashMap<String, Object>();
-		List headList = new ArrayList();// 表头数据
+		List<String> headList = new ArrayList<String>();// 表头数据
 		headList.add("用户姓名");
 		headList.add("年龄");
 		headList.add("性别");
@@ -617,14 +656,28 @@ public class ComplatUserController extends BaseController {
 		headList.add("密码找回问题");
 		headList.add("密码找回问题答案");
 		headList.add("姓名首字母全拼");
+		headList.add("身份证号");
 		headList.add("是否启用");
 		headList.add("创建日期");
-
+//        //获取fieldname
+//		List<Map<String,Object>> list=jisFieldsService.findFieldName();
+//		int num=33;
+//		for(int i=0;i<list.size();i++){
+//			Map<String,Object> fieldsMap = list.get(i);
+//			String field=null;
+//			for(int j=0;j<fieldsMap.size();j++){
+//				field = fieldsMap.get("fieldname").toString();			
+//			}
+//			for(int n=0;n<fieldsMap.size();n++){
+//				headList.add(field);
+//			}
+//		}	
 		Workbook wb = new XSSFWorkbook(); // 导出 Excel为2007 工作簿对象
 		ComplatUser complatUser = null;
 		List dataList = new ArrayList();
-		for (String iid : complatUserIds) {
-			complatUser = complatUserService.findByKey(Integer.parseInt(iid));
+		for(int i=0;i<complatUserIds.length;i++){
+			Integer userId = Integer.parseInt(complatUserIds[i].trim());
+			complatUser = complatUserService.findByKey(userId);
 			TreeMap<String, Object> treeMap = new TreeMap<String, Object>();
 			treeMap.put("10", complatUser.getName());// 用户姓名
 			treeMap.put("11", complatUser.getAge());// 年龄
@@ -636,7 +689,11 @@ public class ComplatUserController extends BaseController {
 			}
 			int groupId = complatUser.getGroupid();
 			ComplatGroup complatGroup = complatGroupService.findByIid(groupId);
-			treeMap.put("13", complatGroup.getName());// 机构名称
+			if(complatGroup==null){
+				treeMap.put("13", "");// 机构名称
+			}else{
+				treeMap.put("13", complatGroup.getName());// 机构名称
+			}
 			treeMap.put("14", complatUser.getGroupid());// 机构ID
 			treeMap.put("15", complatUser.getHeadship());// 用户职务
 			treeMap.put("16", complatUser.getPhone());// 办公电话
@@ -653,13 +710,43 @@ public class ComplatUserController extends BaseController {
 			treeMap.put("27", complatUser.getPwdquestion());// 密码找回问题
 			treeMap.put("28", complatUser.getPwdanswer());// 密码找回问题答案
 			treeMap.put("29", complatUser.getPinyin());// 姓名首字母全拼
+			JisUserdetail userDetail = jisUserdetailService.findByUserid(userId);	//获取当前用户的身份证号
+			String idCode;
+			if(userDetail==null){
+				idCode="";
+			}else{
+				idCode=userDetail.getCardid();
+			}
+			treeMap.put("30", idCode);// 
 			int enable = complatUser.getEnable();
 			if (enable == 0) {
-				treeMap.put("30", "未启用");
+				treeMap.put("31", "未启用");
 			} else {
-				treeMap.put("30", "已启用");
+				treeMap.put("31", "已启用");
 			} // 是否启用
-			treeMap.put("31", complatUser.getCreatetime());// 创建日期
+			treeMap.put("32", complatUser.getCreatetime());// 创建日期
+			//获取扩展属性的值		
+			/*Integer id=Integer.parseInt(iid);
+			List<Map<String,Object>> list=jisFieldsService.findFieldName();
+			int num=33;
+			for(int i=0;i<list.size();i++){
+				Map<String,Object> fieldsMap = list.get(i);
+				String title = fieldsMap.get("fieldname").toString();
+				fieldsMap.put(title, "null");
+				fieldsMap.remove("fieldname");		
+				String field=null;
+				for(int j=0;j<fieldsMap.size();j++){
+					field = fieldsMap.get("fieldname").toString();			
+				}
+				System.out.println("field======="+field);
+				
+				for(int n=0;n<fieldsMap.size();n++){
+					String number=num+"";
+					treeMap.put(number, field);//扩展属性
+					num++;
+				}
+				
+			}*/			
 			dataList.add(treeMap);
 		}
 		String desc=session.getUserName()+"导出了"+complatUser.getName();
@@ -711,11 +798,13 @@ public class ComplatUserController extends BaseController {
 				model.addAttribute("complatGroup", complatGroup);
 
 				// 根据用户ID从ComplatRolerelation获取对应的角色ID，再根据角色ID从ComplatRole中获取对应的角色
-				List<JisRoleobject> roleObjectList = complatRoleService.findByUserId(Integer.parseInt(userSid),complatUserEdit.getGroupid());
+				List<JisRoleobject> roleRelationList = complatRoleService
+						.findByUserId(Integer.parseInt(userSid),complatUserEdit.getGroupid());
 				List<ComplatRole> roleList = new ArrayList<ComplatRole>();
-				for (int i = 0; i < roleObjectList.size(); i++) {
-					Integer roleId = roleObjectList.get(i).getRoleid();
-					ComplatRole complatRole = complatRoleService.findByKey(roleId);
+				for (int i = 0; i < roleRelationList.size(); i++) {
+					Integer roleId = roleRelationList.get(i).getRoleid();
+					ComplatRole complatRole = complatRoleService
+							.findByKey(roleId);
 					roleList.add(complatRole);
 					model.addAttribute("roleList", roleList);
 				}
@@ -730,7 +819,9 @@ public class ComplatUserController extends BaseController {
 			return "users/sysview/user_setup";
 		}
 	}
-
+	
+	
+	
 	/**
 	 * 保存用户设置
 	 * 
@@ -748,12 +839,11 @@ public class ComplatUserController extends BaseController {
 		
 		Map<String, Object> resMap = new HashMap<String, Object>();
 		try {
-			if(level == "strong" || "strong".equals(level) ){
 				Integer userId = null;
 				if(complatUser != null){
 					userId = complatUser.getIid();
 					String name = complatUser.getName();
-					String pwd = Md5Util.md5encode(complatUser.getPwd());
+					String pwd = Md5Util.md5encode(request.getParameter("pwd"));
 					String headShip = complatUser.getHeadship();
 					String phone = complatUser.getPhone();//固定电话
 					String mobile = complatUser.getMobile();//移动电话
@@ -831,9 +921,9 @@ public class ComplatUserController extends BaseController {
 							jisSynEntity.setHometel(complatUser.getPhone());
 							jisSynEntity.setHeadShip(complatUser.getHeadship());
 							jisSynEntity.setNdlogin("");
-							//实体转json，实现同步
+							
+							//转实体为json格式，发送报文
 							net.sf.json.JSONObject object = net.sf.json.JSONObject.fromObject(jisSynEntity);
-							PrintWriter out = response.getWriter();
 							String json = object.toString();
 							JisSysviewDetail sysViewDetail = new JisSysviewDetail();
 							sysViewDetail.setTranscationId(sysView.getTranscationId());
@@ -844,21 +934,19 @@ public class ComplatUserController extends BaseController {
 					resMap.put("ret", "0");
 					resMap.put("msg", "保存成功！");
 					response.getWriter().write(JSONObject.toJSONString(resMap));
-				}
-			}else{
-				resMap.put("ret", "2");
-				resMap.put("msg", "密码强度不够，修改失败！");
-				response.getWriter().write(JSONObject.toJSONString(resMap));
-			}
-			
-		} catch (Exception e) {
-			resMap.put("ret", "1");
-			resMap.put("msg", "保存失败！");
-			response.getWriter().write(JSONObject.toJSONString(resMap));
-		} 
+				}	
+				} catch (Exception e) {
+					resMap.put("ret", "1");
+					resMap.put("msg", "保存失败！");
+					response.getWriter().write(JSONObject.toJSONString(resMap));
+				} 
 		
 	}
-
+	
+	
+	
+	
+	
 	/**
 	 * 获取用户扩展属性
 	 * 
@@ -903,6 +991,7 @@ public class ComplatUserController extends BaseController {
 		PrintWriter out = response.getWriter();
 		String json = array.toString();
 		out.write(json);
+		System.out.println("json--"+json);
 		model.addAttribute("fieldsListMap",json);
 		
 		//设置默认值
@@ -1150,14 +1239,47 @@ public class ComplatUserController extends BaseController {
      * @param response  1：不重复     0：重复
      * @throws Exception
 	 */
-	@RequestMapping(value="/checkComplatUserLoginName", method = RequestMethod.GET)
-	public void checkComplatUserLoginName(String loginname,Model model,HttpServletRequest request,HttpServletResponse response)throws Exception {
+	@RequestMapping(value="/checkLoginName", method = RequestMethod.GET)
+	public void checkLoginName(String loginName,Model model,HttpServletRequest request,HttpServletResponse response)throws Exception {
 		try {
 			ComplatUser complatUser = null;
-			String loginNameInput=StringUtils.trim((String)request.getParameter("loginName"));
-			String oldLoginName=StringUtils.trim((String)request.getParameter("oldLoginName"));
-			if(!loginNameInput.equals(oldLoginName)){
-				complatUser = complatUserService.findByLoginnameIsUsed(loginname);
+			String loginname=StringUtils.trim((String)request.getParameter("loginname"));
+			String oldLoginName=StringUtils.trim((String)request.getParameter("oldLoginname"));
+			if(!loginname.equals(oldLoginName)){
+				complatUser= complatUserService.findByLoginname(loginname);
+				if(complatUser==null){					
+					response.getWriter().write("1");								
+				}else{
+					response.getWriter().write("0");
+				}
+			}else{
+				response.getWriter().write("1");
+			}
+			
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+	}
+	
+	
+	
+	
+	/**
+     * @discription    手机号重名校验
+     * @param mobile
+     * @param model
+     * @param request
+     * @param response
+     * @throws Exception
+	 */
+	@RequestMapping(value="/checkUserMobile", method = RequestMethod.GET)
+	public void checkUserMobile(String mobile,Model model,HttpServletRequest request,HttpServletResponse response)throws Exception {
+		try {
+			ComplatUser complatUser = null;
+			String mobileInput=StringUtils.trim((String)request.getParameter("mobile"));
+			String oldMobile=StringUtils.trim((String)request.getParameter("oldMobile"));
+			if(!mobileInput.equals(oldMobile)){
+				complatUser = complatUserService.findByMobile(mobile);
 				if(complatUser!=null){					
 					response.getWriter().write("0");								
 				}else{
@@ -1171,6 +1293,40 @@ public class ComplatUserController extends BaseController {
 			logger.error(e.getMessage(), e);
 		}
 	}
+	
+	
+	
+	
+	/**
+     * @discription    身份证重复校验
+     * @param papersNumber
+     * @param model
+     * @param request
+     * @param response
+     * @throws Exception
+	 */
+	@RequestMapping(value="/checkUserCardid", method = RequestMethod.GET)
+	public void checkUserCardid(String papersNumber,Model model,HttpServletRequest request,HttpServletResponse response)throws Exception {
+		try {
+			JisUserdetail jisUserdetail = null;
+			String cardid=StringUtils.trim((String)request.getParameter("cardid"));
+			String oldCardid=StringUtils.trim((String)request.getParameter("oldCardid"));
+			if(!cardid.equals(oldCardid)){
+				jisUserdetail = jisUserdetailService.findByCardid(cardid);
+				if(jisUserdetail!=null){					
+					response.getWriter().write("0");								
+				}else{
+					response.getWriter().write("1");
+				}
+			}else{
+				response.getWriter().write("1");
+			}
+			
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+	}
+	
 	
 	
 	
@@ -1327,5 +1483,13 @@ public class ComplatUserController extends BaseController {
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
+	}
+	
+	
+	
+	public static void main(String[] args) {
+		String pwd = "BEJ1RgZHDkQAHnZrA2oALA==";//
+		String p = Md5Util.md5decode(pwd);
+		System.out.println("解密后的密码是:"+p);
 	}
 }

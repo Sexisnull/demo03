@@ -14,7 +14,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gsww.jup.dao.JdbcDAO;
 import com.gsww.uids.dao.ComplatUserDao;
+import com.gsww.uids.entity.ComplatOutsideuser;
 import com.gsww.uids.entity.ComplatUser;
 import com.gsww.uids.service.ComplatUserService;
 
@@ -27,6 +29,9 @@ public class ComplatUserServiceImpl implements ComplatUserService{
     private ComplatUserDao complatUserDao;
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    
+    @Autowired
+    private JdbcDAO jdbcDAO;
 
     /**
      * 查询用户列表
@@ -111,8 +116,8 @@ public class ComplatUserServiceImpl implements ComplatUserService{
 
 
     @Override
-    public ComplatUser findByLoginnameIsUsed(String loginname) {
-        ComplatUser complatUser = complatUserDao.findByLoginname(loginname);
+    public ComplatUser findByLoginname(String loginname) {
+    	ComplatUser complatUser = complatUserDao.findByLoginname(loginname);
         return complatUser;
     }
 
@@ -130,5 +135,17 @@ public class ComplatUserServiceImpl implements ComplatUserService{
 
 
 
+    //手机号
+    @Override
+	public ComplatUser findByMobile(String mobile) {
+	    return this.complatUserDao.findByMobile(mobile);
+	}
 
+
+    //登录名和机构名的唯一性校验
+    public List<Map<String,Object>> findByLoginnameAndgroupid(String loginname,int groupId){
+    	String findSql = "select loginname from complat_user where loginname='"+loginname+"' and groupid= '"+groupId+"'";
+    	List<Map<String,Object>> list=jdbcTemplate.queryForList(findSql);
+		return list;
+    }
 }
