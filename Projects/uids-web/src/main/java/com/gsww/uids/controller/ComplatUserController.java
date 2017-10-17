@@ -57,6 +57,7 @@ import com.gsww.uids.entity.ComplatOutsideuser;
 import com.gsww.uids.entity.ComplatRole;
 import com.gsww.uids.entity.ComplatRolerelation;
 import com.gsww.uids.entity.ComplatUser;
+import com.gsww.uids.entity.ComplatZone;
 import com.gsww.uids.entity.JisApplication;
 import com.gsww.uids.entity.JisFields;
 import com.gsww.uids.entity.JisRoleobject;
@@ -67,6 +68,7 @@ import com.gsww.uids.entity.JisUserdetail;
 import com.gsww.uids.service.ComplatGroupService;
 import com.gsww.uids.service.ComplatRoleService;
 import com.gsww.uids.service.ComplatUserService;
+import com.gsww.uids.service.ComplatZoneService;
 import com.gsww.uids.service.JisApplicationService;
 import com.gsww.uids.service.JisFieldsService;
 import com.gsww.uids.service.JisLogService;
@@ -132,6 +134,8 @@ public class ComplatUserController extends BaseController {
 	@Autowired
 	private JisApplicationService jisApplicationService;
 	
+	@Autowired
+	private ComplatZoneService complatZoneService;
 	
 	
 	/**
@@ -211,7 +215,7 @@ public class ComplatUserController extends BaseController {
 			}else{
 				searchParams.put("EQ_groupid", orgId);
 			}
-			
+			 
 			Specification<ComplatUser> spec = super.toNewSpecification(
 					searchParams, ComplatUser.class);
 
@@ -257,10 +261,10 @@ public class ComplatUserController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/complatUserEdit", method = RequestMethod.GET)
-	public String complatUserEdit(String iid, Model model,
+	public String complatUserEdit(String iid, Model model,String orgId,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		try {
+		try {			
 			ComplatUser complatUser = null;
 			if (StringHelper.isNotBlack(iid)) {
 				complatUser = complatUserService.findByKey(Integer.parseInt(iid));
@@ -274,14 +278,7 @@ public class ComplatUserController extends BaseController {
 				if (createTime != null) {
 					String time = sdf.format(createTime);
 					model.addAttribute("time", time);
-					// map放入
-					List<Map<String, Object>> groupList = new ArrayList<Map<String, Object>>();
-					Map<Integer, Object> groupMap = new HashMap<Integer, Object>();
-					groupList = complatGroupService.getComplatGroupList();
-					for (Map<String, Object> group : groupList) {
-						groupMap.put((Integer) group.get("iid"), group.get("name"));
-					}
-					model.addAttribute("groupMap", groupMap);
+					
 				}
 				//查询扩展属性和身份证号		
 				JisUserdetail userDetail = new JisUserdetail();
@@ -290,6 +287,7 @@ public class ComplatUserController extends BaseController {
 				model.addAttribute("userDetail", userDetail);
 			} else {
 				complatUser = new ComplatUser();
+				
 			}
 			model.addAttribute("complatUser", complatUser);
 			this.extendsAttr(model, request, response);			
@@ -1037,6 +1035,7 @@ public class ComplatUserController extends BaseController {
 		PrintWriter out = response.getWriter();
 		String json = array.toString();
 		out.write(json);
+		System.out.println("json--"+json);
 		model.addAttribute("fieldsListMap",json);
 		
 		//设置默认值
@@ -1113,9 +1112,9 @@ public class ComplatUserController extends BaseController {
 				if (complatUser.getEnable() == 0) {
 					complatUser.setEnable(1);
 					complatUserService.save(complatUser);
-					returnMsg("success", "启用成功", request);
+					returnMsg("success", "开启成功！", request);
 				} else if (complatUser.getEnable() == 1) {
-					returnMsg("success", "已启用", request);
+					returnMsg("success", "账号已开启！", request);
 				}
 			}
 		} catch (Exception e) {
@@ -1156,9 +1155,9 @@ public class ComplatUserController extends BaseController {
 				if (complatUser.getEnable() == 1) {
 					complatUser.setEnable(0);
 					complatUserService.save(complatUser);
-					returnMsg("success", "停用成功", request);
+					returnMsg("success", "关闭成功！", request);
 				} else if (complatUser.getEnable() == 0) {
-					returnMsg("success", "已停用", request);
+					returnMsg("success", "账号已关闭", request);
 				}
 			}
 		} catch (Exception e) {
@@ -1532,8 +1531,72 @@ public class ComplatUserController extends BaseController {
 	
 	
 	
+	/**
+	 * 查询新增或编辑页面的机构树
+	 * @param args
+	 */
+	
+	@RequestMapping(value = "/getGroup", method = RequestMethod.POST)
+	public void getGroup(HttpServletRequest request,
+			HttpServletResponse response) {
+		try {
+			// 获取系统当前登录用户
+			SysUserSession sysUserSession = (SysUserSession) request.getSession().getAttribute("sysUserSession");
+			String groupId = sysUserSession.getDeptId();
+			String isDisabled = request.getParameter("isDisabled");
+			List<ComplatGroup> list = new ArrayList<ComplatGroup>();
+			if (!"0".equals(groupId) && StringUtils.isNotBlank(groupId)) {
+				list = complatGroupService.findByPid(Integer.parseInt(groupId));
+				list.add(complatGroupService.findByIid(Integer.parseInt(groupId)));
+			} else {
+				list.add(complatGroupService.findByIid(128));
+			}
+			
+
+			List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+			if(list.size()>0){
+				for (ComplatGroup c : list) {
+					Map<String, Object> map = new HashMap<String, Object>();
+					map.put("id", c.getIid() + "");
+					map.put("name", c.getName());
+					map.put("icon", null);
+					map.put("target", "page");
+					map.put("url", null);
+					map.put("isParent", true);
+					map.put("isDisabled", false);
+					map.put("open", true);
+					map.put("nocheck", false);
+					map.put("click", null);
+					map.put("checked", false);
+					map.put("iconClose", null);
+					map.put("iconOpen", null);
+					map.put("iconSkin", null);
+					map.put("pId", c.getPid());
+					map.put("chkDisabled", false);
+					map.put("halfCheck", false);
+					map.put("dynamic", null);
+					map.put("moduleId", null);
+					map.put("functionId", null);
+					map.put("allowedAdmin", null);
+					map.put("allowedGroup", null);
+					result.add(map);
+				}
+				String groups = JSONUtil.writeListMapJSONMap(result);
+				response.setContentType("text/json");
+				response.setCharacterEncoding("UTF-8");
+				response.getWriter().write(groups);
+
+			}
+			
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
+		}
+	}
+
+
+	
 	public static void main(String[] args) {
-		String pwd = "BEJ1RgZHDkQAHnZrA2oALA==";//
+		String pwd = "f28FdHN4fHEGMgRKBTgFPwI7AE0COQ==";//
 		String p = Md5Util.md5decode(pwd);
 		System.out.println("解密后的密码是:"+p);
 	}
