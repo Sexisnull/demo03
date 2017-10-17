@@ -79,7 +79,6 @@
 				$.dialog.confirm('您确认要删除吗？',function(){
 					var ids = "";
 					$('.list-table tbody .check_btn').each(function(i, o) {
-						console.log($(o));
 						if($(o).attr('checked')) {
 							ids += $(o).val() + ",";
 						}
