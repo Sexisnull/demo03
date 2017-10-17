@@ -101,6 +101,7 @@ function onClickGroup(event, treeId, treeNode) {
 	$('#groupid').val(treeNode.id);
 	$('#groupname').val(treeNode.name);
 	
+	
 	$('#groupid').val(treeNode.id);
 	$('#groupname1').val(treeNode.name);
 	hideGroupMenu();
@@ -128,7 +129,7 @@ function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
 	var setting = {
 		async : {
 			enable : true,
-			url : '../login/getGroup',
+			url : '../uids/orgTree',
 			autoParam : [ "id=groupId", "isDisabled" ]
 		},
 		callback : {
@@ -171,19 +172,15 @@ var complatUserNameInput=$("#name").val();
 	         required: true
 	     },
 	     age: {
-	         cnRangelength: [0,64]
-	     },	
-	     //cardid：{
-	     	 //  required: true,
-				  // isIdCardNo:true,
-				  // uniqueCardid:true
-	    // },  	   
+	         cnRangelength: [0,64],
+	         isAge: true
+	     },		       	   
 	     headship:{
 	         cnRangelength: [0,64]
 	     },	   
 	     phone:{//办公电话
-		   		 isMobile:true,
-		   		 maxlength: 16
+		   		 isCompTel:true,
+		   		 //maxlength: 16
 		   },
 	     mobile : {//移动电话
 				   required: true,
@@ -196,17 +193,21 @@ var complatUserNameInput=$("#name").val();
 		   		 maxlength: 64
 		   },
 		   qq:{
-		   		 maxlength: 11
+		   		 maxlength: 11,
+		   		 isQq: true
 		   },
 	     msn:{
-	   		   cnRangelength: [0,64]
+	   		   cnRangelength: [0,64],
+	   		   isMsn: true
 	   	 },
 	   	 fax:{
-		   		 cnRangelength: [0,64]
+		   		 cnRangelength: [0,64],
+		   		 isFax: true
 		   },
 	   	 address:{
 				   /* isAddressInfo:true, */
-		   		 cnRangelength: [0,127]
+		   		 cnRangelength: [0,127],
+		   		 isName : true
 		   	},
 		   post:{
 				  /* isEmail：true, */
@@ -225,12 +226,19 @@ var complatUserNameInput=$("#name").val();
 			 },
 	   
 	     pwdquestion : {
-			    cnRangelength: [0,127]
+			    cnRangelength: [0,127],
+			    //isName : true
 		   },
 	     pwdanswer : {
-			    cnRangelength: [0,127]
+			    cnRangelength: [0,127],
+			    //isName : true
 	     },
-	    	submitHandler:function(form){
+	     cardid : {
+	     	required: true,
+				isIdCardNo:true,
+				uniqueCardid:true
+	    },
+	    submitHandler:function(form){
 		   		//alert("提交");
 				form.submit();
 			}
@@ -283,6 +291,36 @@ var complatUserNameInput=$("#name").val();
            var corporName = /^[1-9][0-9]{5}$/;   
            return this.optional(element) || (corporName.test(value));     
     }, "邮政编码格式不正确（共6位,开头不能为0)");
+    //年龄
+    jQuery.validator.addMethod("isAge", function(value, element) { 
+           var corporName = /^([1-9]\d|\d)$/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "年龄格式错误");
+    //传真
+    jQuery.validator.addMethod("isFax", function(value, element) { 
+           var corporName = /^(\d{3,4}-)?\d{7,8}$/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "传真格式错误");
+    //qq
+    jQuery.validator.addMethod("isQq", function(value, element) { 
+           var corporName = /[1-9][0-9]{4,}/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "QQ格式错误");
+    //Msn
+    jQuery.validator.addMethod("isMsn", function(value, element) { 
+           var corporName = /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "MSN格式错误");
+    //办公电话
+    jQuery.validator.addMethod("isCompTel", function(value, element) { 
+           var corporName = /^(((0\d{3}[\-])?\d{7}|(0\d{2}[\-])?\d{8}))([\-]\d{2,4})?$/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "电话号码格式错误");  
+    //身份证号
+     jQuery.validator.addMethod("isIdCard", function(value, element) { 
+           var corporName = /([1-6]\d{5}(19|20)\d\d(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])\d{3}[0-9xX])|([1-6]\d{5}\d\d(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])\d{3})/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "身份证号格式错误"); 
    //编辑时密码强度回显
     var pwding = $("#pwd").val();
 	  EvalPwd(pwding);
@@ -542,7 +580,7 @@ function checkAndSave() {
 				   </td>
 				   <th><b class="mustbe">*</b> 身份证号：</th>
 				   <td style="width:300px;">
-					<input type="text" <c:if test="${userDetail.cardid != null}">readonly="readonly"</c:if> id="cardid" class="cardid" name="cardid" value="${userDetail.cardid}" />
+					<input type="text" <c:if test="${userDetail.cardid != null}"></c:if> id="cardid" class="cardid" name="cardid" value="${userDetail.cardid}" />
 					<input type="hidden" id="oldCardid" class="oldCardid" name="oldCardid" value="${userDetail.cardid}" />
 				</td>
 			    </tr>		    
@@ -607,7 +645,7 @@ function checkAndSave() {
 				   </td>
 			    </tr>	
 				<tr style="width:300px;">		
-				   <th> 密码：</th>
+				   <th><b class="mustbe">*</b> 密码：</th>
         	       <td style="width:300px;">
         		      <input type="password" id="pwd" name="pwd"  value="${complatUser.pwd}" onkeyup="javascript:EvalPwd(this.value);"/>
         	       </td>

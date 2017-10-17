@@ -199,7 +199,7 @@ function checkSubmitForm(){
 	如果通过验证返回true,否则返回false
 	*/
 			function isNumbOrLett1( s ){
-				var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9]{1,255}$/;
+				var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9\u4e00-\u9fa5]{1,255}$/;
 				var re = new RegExp(regu);
 				if (re.test(s)) {
 					return true;
@@ -300,7 +300,7 @@ function outPutComplatUser() {
 	function startData() {
 		var paraTypeId=$(".iid").val();
 		if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checked').length!=0){
-				$.dialog.confirm('您确认要启用吗？',function(){
+				$.dialog.confirm('您确认要开启吗？',function(){
 					var ids = "";
 					$('.list-table tbody input[type=checkbox]').each(function(i, o) {
 						if($(o).attr('checked')) {
@@ -323,7 +323,7 @@ function outPutComplatUser() {
    /**批量停用操作**/	
 	function stopData(url,parm){
 		if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checked').length!=0){
-			$.dialog.confirm('您确认要停用吗？',function(){
+			$.dialog.confirm('您确认要关闭吗？',function(){
 				var ids = "";
 				$('.list-table tbody input[type=checkbox]').each(function(i, o) {
 					if($(o).attr('checked')) {
