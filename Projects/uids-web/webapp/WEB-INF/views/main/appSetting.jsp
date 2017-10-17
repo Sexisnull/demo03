@@ -17,9 +17,8 @@
 		<link href="${ctx}/res/skin/${theme }/css/reset.css" rel="stylesheet" type="text/css" />
 		<link href="${ctx}/res/skin/${theme }/css/index.css" rel="stylesheet" type="text/css" />
 		<link rel="stylesheet" type="text/css" href="${ctx}/res/plugin/scroll/jquery.mCustomScrollbar.css" />
-		<link rel="stylesheet" href="${ctx}/res/skin/default/css/jquery-ui.css">
-		<script type="text/javascript" src="${ctx}/res/skin/default/js/jquery-ui.js"></script>
 		<link rel="stylesheet" type="text/css" href="${ctx}/res/skin/login/css/login.css" />
+		<script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgcore.lhgdialog.min.js"></script>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<title>统一身份认证系统</title>
@@ -28,17 +27,20 @@
 		$('#calltest').removeClass();
 	});
 		function openSetting(appid, appname){
-			$("#dialog_frame").attr("src","${ctx}/setUserDefined?appid="+appid+"&appname="+appname);
-			$("#dialogframe").dialog({
-				width : 500,
-				height : 260,
-				closed : false,
-				cache : false,
-				parentWindow : window,
-				modal:true,
+			var url = "${ctx}/setUserDefined?appid="+appid+"&appname="+appname;
+			$.dialog({
 				title:'参数设置',
-				moveToTop:true,
-				bgiframe: true
+				width: '500px',
+			    height: 260,
+				max: false,
+			    min: false,
+			    drag: false,
+			    resize: false,
+			    content:'url:'+url,
+			    fixed:true,
+			    lock:true,
+			    cache:false
+				
 			});
 		}
 
@@ -75,10 +77,6 @@ body {
 
 	</head>
 	<body>
-		<div id="dialogframe" style="display:none;width:100%;height:100%;" class="dialog-wrap">
-			<iframe name="dialog_frame" id="dialog_frame"  src="" style="width:100%;height:100%;" frameborder="0"> 
-			</iframe>
-		</div>
 		<div style="min-height: 95%" id="source">
 			<div id="header" class="ui-layout-north">
 				<div class="logo">
@@ -177,7 +175,6 @@ body {
 				<span class="instruction">建议使用1024*768，IE8浏览器以上为最佳浏览模式</span>
 			</div>
 		</div>
-		<script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgcore.lhgdialog.min.js"></script>
 		<script type="text/javascript" src="${ctx}/res/skin/login/js/login.js"></script>
 	</body>
 </html>

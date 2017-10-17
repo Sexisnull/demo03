@@ -25,6 +25,9 @@
 	$(document).ready(function() {
 		$('#calltest').removeClass();
 	});
+	function singleLogin(appid){
+		window.location.href = "${ctx}/RedirectSingleLogin?appid="+appid;
+	}
 </script>
 		<style type="text/css">
 .logo-font {
@@ -110,9 +113,9 @@
 										<li>
 											<input type="hidden" name="iid" value="${app.iid }"/>
 											<div style='width: 450px; height: 110px; padding-left: 30px;'>
-												<img style='cursor: pointer; float: left;' id="img1" name="img1" src='${ctx}${app.icon}' onclick='' title='${app.name}' width='92' height='92' />
+												<img style='cursor: pointer; float: left;' id="img1" name="img1" src='${ctx}${app.icon}' onclick='singleLogin(${app.iid})' title='${app.name}' width='92' height='92' />
 												<ul>
-													<h4 title='${app.name }' style='cursor: pointer' onclick=''>
+													<h4 title='${app.name }' style='cursor: pointer' onclick='singleLogin(${app.iid})'>
 														${app.name }
 													</h4>
 													<p style='padding-right: 20px' title=''></p>
