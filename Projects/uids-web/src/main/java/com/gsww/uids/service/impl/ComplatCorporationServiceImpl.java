@@ -242,7 +242,6 @@ public class ComplatCorporationServiceImpl implements ComplatCorporationService{
 			throws Exception {
 		String sql = "select count(1) from Complat_Corporation t where t.loginname = '"+loginName+"' and t.regnumber = '"+regNumber+"' and t.orgnumber='"+orgNumber+"'";
 		Integer countData = jdbcTemplate.queryForObject(sql, Integer.class);
-		System.out.println("countData:---"+countData);
 		return countData;
 	}
 }

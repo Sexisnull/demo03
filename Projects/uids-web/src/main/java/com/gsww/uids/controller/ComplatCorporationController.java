@@ -245,7 +245,13 @@ public class ComplatCorporationController extends BaseController{
 					Integer checkData = complatCorporationService.checkUnique(corporation.getLoginName(), corporation.getRegNumber(), corporation.getOrgNumber());
 					if(checkData == 1){
 						returnMsg("error","法人用户重复，保存失败",request);
+					}else{
+						complatCorporationService.save(corporation);
+						returnMsg("success","保存成功",request);
+						//记录日志
+						this.addJisLog(corporation, request,operType);
 					}
+					
 				}else{
 					complatCorporationService.save(corporation);
 					returnMsg("success","保存成功",request);
@@ -505,11 +511,5 @@ public class ComplatCorporationController extends BaseController{
 		}
 		jisLog.setSpec(spec);
 		jisLogService.save(jisLog);
-	}
-	
-	
-	public static void main(String[] args) {
-		String pwd = Md5Util.md5decode("BEJ1RgZHDkQAHnZrA2oALA==");
-		System.out.println(pwd);
 	}
 }

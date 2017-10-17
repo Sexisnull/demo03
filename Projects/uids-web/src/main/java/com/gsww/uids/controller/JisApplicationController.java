@@ -539,6 +539,59 @@ public class JisApplicationController extends BaseController{
 			}else{
 				returnMsg("success","同步失败，同步用户选择的机构数不能超过200个",request);
 			}
+			for(String id:ids ){
+				complatGroup=complatGroupService.findByIid(Integer.parseInt(id));
+				ComplatUser complatUser=complatUserService.findByGroupid(Integer.parseInt(id)).get(0);
+				JisApplication jisApplication=jisApplicationService.findByKey(appId);
+				String transcationId=timeId+randomId;
+				
+				JisSysview jisSysview=new JisSysview();
+				jisSysview.setObjectid(Integer.toString(complatUser.getIid()));
+				jisSysview.setObjectname(complatUser.getName());
+				jisSysview.setState("C");
+				jisSysview.setResult("T");
+				jisSysview.setOptresult(1);
+				jisSysview.setSynctime(TimeHelper.getCurrentTime());
+				jisSysview.setAppid(appId);
+				jisSysview.setCodeid(complatGroup.getCodeid());
+				jisSysview.setOperatetype("修改用户");
+				jisSysview.setTimes(1);
+				jisSysview.setErrorspec("");
+				jisSysview.setTranscationId(transcationId);
+				jisSysviewService.save(jisSysview);
+				
+				Map<String, String> jsonMap=new HashMap<String, String>();
+				jsonMap.put("allParCode", complatGroup.getSuffix());
+				jsonMap.put("allParName", complatGroup.getGroupallname());
+				jsonMap.put("appName", jisApplication.getName());
+				jsonMap.put("appid",syniid);
+				jsonMap.put("cardId",(jisUserdetailService.findByUserid(complatUser.getIid())).getCardid());
+				jsonMap.put("compfax",complatUser.getFax());
+				jsonMap.put("comptel",(jisUserdetailService.findByUserid(complatUser.getIid())).getComptel());
+				jsonMap.put("email",complatUser.getEmail());
+				jsonMap.put("groupCode",complatGroup.getCodeid());
+				jsonMap.put("groupName",complatGroup.getName());
+				jsonMap.put("headShip",complatUser.getHeadship());
+				jsonMap.put("hometel",complatUser.getPhone());
+				jsonMap.put("id","");
+				jsonMap.put("loginName",complatUser.getLoginname());
+				jsonMap.put("loginPass",complatUser.getPwd());
+				jsonMap.put("mobile",complatUser.getMobile());
+				jsonMap.put("msn",complatUser.getMsn());
+				jsonMap.put("ndlogin","");
+				jsonMap.put("parCode",complatGroupService.findByIid(complatGroup.getPid()).getCodeid());
+				jsonMap.put("parName",complatGroupService.findByIid(complatGroup.getPid()).getName());
+				jsonMap.put("qq",complatUser.getQq());
+				jsonMap.put("state","T");
+				jsonMap.put("userName",complatUser.getName());
+				
+				JisSysviewDetail jisSysviewDetail=new JisSysviewDetail();
+				JSONUtil jsonUtil=new JSONUtil();
+				String synJson=jsonUtil.writeMapSJSON(jsonMap);
+				jisSysviewDetail.setSendmsg(synJson);
+				jisSysviewDetail.setTranscationId(transcationId);
+				jisSysviewDetailService.save(jisSysviewDetail);
+			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();

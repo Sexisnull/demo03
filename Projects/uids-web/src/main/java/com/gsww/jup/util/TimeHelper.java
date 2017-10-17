@@ -82,7 +82,6 @@ public class TimeHelper {
 	public static String getYesterdayCompactTime() {
 		Calendar cal = Calendar.getInstance(); 
 		cal.add(cal.DATE, -1); 
-		System.out.print(cal.getTime()); 
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
 		CurrentTime = formatter.format(cal.getTime());
 		return CurrentTime;
@@ -90,7 +89,6 @@ public class TimeHelper {
 	public static String getYesterdayCompactTimeForFileName() {
 		Calendar cal = Calendar.getInstance(); 
 		cal.add(cal.DATE, -1); 
-		System.out.print(cal.getTime()); 
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		CurrentTime = formatter.format(cal.getTime());
 		return CurrentTime;
@@ -401,9 +399,4 @@ public class TimeHelper {
 		}
 		return theday;
 	}
-	
-   public static void main(String[] args){ 
-		//long d = 0;
-		System.out.println(TimeHelper.addSecond(TimeHelper.getCurrentTime(), -2) );
-   }
 }

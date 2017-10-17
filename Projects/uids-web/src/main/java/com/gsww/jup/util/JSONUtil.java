@@ -257,32 +257,6 @@ public class JSONUtil {
 		return jsonString;
 	}
 	
-
-	@SuppressWarnings("rawtypes")
-	public static void main(String args[])throws Exception{
-		String jsonString  = "{\"app_code\":\"mrgs\",\"fucn_code\":\"NEWS\",\"page_size\":\"6\",\"page_num\":\"14\",\"param_list\":[{\"param_code\":\"lyxl\",\"param_value\":\"兰州到北京\"},{\"param_code\":\"lyxl\",\"param_value\":\"兰州到北京\"}]}";
-		//String ss = "{\"931\":[\"TOURISM\",\"MEDICAL\",\"NEWS_INFO\"],\"934\":[\"TOURISM\",\"MEDICAL\",\"NEWS_INFO\"]}";
-		Map<String,Object> maplist = JSONUtil.readJsonMapObject(jsonString);
-		System.out.println(maplist);
-		System.out.println(maplist.get("param_list"));
-		for(int i=0;i<((List)maplist.get("param_list")).size();i++){
-			System.out.println(((List)maplist.get("param_list")).get(i));
-			System.out.println(((Map)((List)maplist.get("param_list")).get(i)).get("param_code"));
-			System.out.println(((Map)((List)maplist.get("param_list")).get(i)).get("param_value"));
-			//List<Map<String,String>> ssList  = (List)JSONUtil.readJsonListMap(maplist.get("param_list"));
-		}
-		//List maplist1 = (List)maplist.get("param_list").;
-		//List<Map<String,String>> ssList  = JSONUtil.readJsonListMap(maplist.get("param_list"));
-		//System.out.println(ssList);
-		/*for(String coder:maplist.keySet()){
-			List appList = (List)maplist.get(coder);
-			for(int i=0; i<appList.size(); i++){
-				System.out.println(appList.get(i));
-			}
-		}*/
-		
-	}
-	
 	public String writeListMapSJSON(List<Map<String, Object>> firstList) {
 		String jsonString ="";
 		ObjectMapper objectMapper = new ObjectMapper();

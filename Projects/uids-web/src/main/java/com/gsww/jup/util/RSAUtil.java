@@ -37,9 +37,6 @@ public class RSAUtil {
 		             final int KEY_SIZE = 1024;// 没什么好说的了，这个值关系到块加密的大小，可以更改，但是不要太大，否则效率会低  
 		             keyPairGen.initialize(KEY_SIZE, new SecureRandom());  
 		             KeyPair keyPair = keyPairGen.generateKeyPair();  
-		               
-		             System.out.println(keyPair.getPrivate());  
-		             System.out.println(keyPair.getPublic()); 
 //		             saveKeyPair(keyPair); 
 		             request.getSession().setAttribute("keyPair", keyPair);
 		             return keyPair;  

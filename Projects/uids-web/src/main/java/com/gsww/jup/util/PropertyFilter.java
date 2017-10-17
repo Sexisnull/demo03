@@ -130,9 +130,5 @@ public class PropertyFilter {
 	public MatchType getMatchType() {
 		return matchType;
 	}
-	public static void main(String args[]){
-		String ss="rssOp";
-		String s[]=StringUtils.split(ss, "_OR_");
-		System.out.println(s.length);
-	}
+
 }

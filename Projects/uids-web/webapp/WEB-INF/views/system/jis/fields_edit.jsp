@@ -54,11 +54,12 @@ $().ready(function() {
            var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;   
            return this.optional(element) || (corporName.test(value));     
     }, "固定值只能由字母、数字、下划线、中文组成，不能以下划线开头和结尾");
-    //建，值
+    //建，值     
     jQuery.validator.addMethod("isFieldkeyAndvalues", function(value, element) { 
-           var corporName = /^(?!.*(^|,)([^,]*),(\2|.*,\2)(,|$))[^,]+(,[^,]+)+$/;   
+           //var corporName = /^(?!.*(^|,)([^,]*),(\2|.*,\2)(,|$))[^,]+(,[^,]+)+$/;
+           var corporName = /^[a-zA-Z0-9_\u4e00-\u9fa5]+(,[a-zA-Z0-9_\u4e00-\u9fa5]+)*$/;   
            return this.optional(element) || (corporName.test(value));     
-    }, "此名称只能由字母、数字、下划线、中文、逗号组成，且至少为两个");
+    }, "此名称只能由字母、数字、下划线、中文、英文逗号组成，且不能以英文逗号开头或结尾");
 });
 
 function checkAndSave() {
@@ -66,6 +67,8 @@ function checkAndSave() {
 	var fieldvaluesEdit = $("#fieldvaluesEdit").val();
 	var fieldkeysNew = $("#fieldkeysNew").val();
 	var fieldvaluesNew = $("#fieldvaluesNew").val();
+	var Jshowname = $("#showname").val();
+	var Jfieldname = $("#fieldname").val();
 	var type = $("#fieldsType").val();
 	//alert("type" + type + "--" + fieldkeysEdit + "-" + fieldvaluesEdit + "-" + fieldkeysNew + "-" + fieldvaluesNew);
 	if(type==2) {
@@ -81,7 +84,12 @@ function checkAndSave() {
 		} else if ((fieldkeysNew != "" && fieldkeysNew != undefined) && (fieldvaluesNew != "" && fieldvaluesNew != undefined)) {
 			//alert("新增" + fieldkeysNew.split(",").length + "==" + fieldvaluesNew.split(",").length);
 			if(fieldkeysNew.split(",").length == fieldvaluesNew.split(",").length) {
-				editForm.submit();
+				if(Jshowname != "" && Jfieldname != "ex_") {
+					editForm.submit();
+				} else {
+					alert("请填写必填项信息");
+					return false;				
+				}
 			} else {
 				//alert("新增失败");
 				alert("Value串和Key串个数请保持一致!");

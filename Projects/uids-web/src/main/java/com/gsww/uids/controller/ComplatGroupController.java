@@ -730,6 +730,9 @@ public class ComplatGroupController extends BaseController {
 			} else {
 				list = complatGroupService.findAllDept(deptId);
 			}
+			if(orgId==null){
+				orgId="";
+			}
             List<Map<String, Object>> treeList = new ArrayList<Map<String, Object>>();
             if (list != null && !list.isEmpty()) {
                 for (ComplatGroup complatGroup : list) {

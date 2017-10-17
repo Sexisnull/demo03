@@ -29,8 +29,4 @@ public class DateTime {
 		return format1.format(c.getTime());
 	}
 	
-	public static void main(String args[]){
-		System.out.println(DateTime.addNowTime(1));
-		System.out.println(DateTime.addSecond(1));		
-	}
 }

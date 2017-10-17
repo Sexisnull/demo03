@@ -61,7 +61,6 @@ public class AuthLogServiceImpl implements AuthLogService{
 
 	try {
 		JisApplication appLication = this.appService.findByMark(appmark);
-		System.out.println("application ====" + appLication);
 		if (appLication != null) {
 			jisAuthLog.setAppid(appLication.getIid());
 			jisAuthLog.setAppmark(appmark);
