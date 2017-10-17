@@ -105,7 +105,7 @@ body {
 								后台管理
 							</p>
 						</li>
-						<li class="speaker modify-msgs">
+						<li class="speaker modify-msgs"  onclick="javascript:window.location.href='${ctx}/complat/userSetUpEdit?userMenu=2&isFront=1'">
 							<p>
 								账户设置
 							</p>

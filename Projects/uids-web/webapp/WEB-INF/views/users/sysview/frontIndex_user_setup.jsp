@@ -243,9 +243,9 @@
 			</div>
 			<div class="header_userinfo" style="width: 575px;">
 				<ul class="header_nav">
-					<li class="home" onclick="toBack();" style="${managerIcon}">
+					<li class="home" onclick="toFront();" style="${managerIcon}">
 						<p>
-							后台管理
+							返回首页
 						</p>
 					</li>
 					<li class="speaker modify-msgs"   onclick="javascript:window.location.href='${ctx}/complat/userSetUpEdit?userMenu=2'">

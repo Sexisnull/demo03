@@ -247,7 +247,7 @@
 
 					<li class="home" onclick="toBack();">
 						<p>
-							返回首页
+							后台管理
 						</p>
 					</li>
 					<li class="speaker modify-msgs"
