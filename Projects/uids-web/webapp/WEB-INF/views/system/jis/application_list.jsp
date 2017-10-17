@@ -184,7 +184,7 @@ function synfuction(){
 				<tr>
 					<th style="padding-left: 300px">应用名称：</th>
 						<td width="20%">
-							<input type="text"  style="width: 170px;" placeholder="应用名称" value="${sParams['LIKE_name']}" id="nameSearch" name="search_LIKE_name" />
+							<input type="text" maxlength="30" style="width: 170px;" placeholder="应用名称" value="${sParams['LIKE_name']}" id="nameSearch" name="search_LIKE_name" />
 						</td>
 					<th>所属机构：</th>
 						 <td>

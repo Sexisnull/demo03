@@ -84,7 +84,7 @@ public interface ComplatUserService {
 
     List<Map<String, Object>> synchronizeData(Integer userId);
 
-    public ComplatUser findByGroupid(Integer groupid);
+    public List<ComplatUser> findByGroupid(Integer groupid);
     
     
     public ComplatUser findByMobile(String mobile);

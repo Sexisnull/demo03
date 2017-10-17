@@ -123,7 +123,7 @@ public class ComplatUserServiceImpl implements ComplatUserService{
 
 
     @Override
-    public ComplatUser findByGroupid(Integer groupid) {
+    public List<ComplatUser> findByGroupid(Integer groupid) {
         return complatUserDao.findByGroupid(groupid);
     }
 

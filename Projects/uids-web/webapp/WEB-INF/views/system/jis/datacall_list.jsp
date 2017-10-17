@@ -68,11 +68,11 @@
 				<tr>
 					<th style="padding-left: 300px">数据名称：</th>
 						<td width="20%">
-							<input type="text"  style="width: 170px;" placeholder="数据名称" value="${sParams['LIKE_resName']}" id="resNameSearch" name="search_LIKE_resName" />
+							<input type="text" maxlength="30" style="width: 170px;" placeholder="数据名称" value="${sParams['LIKE_resName']}" id="resNameSearch" name="search_LIKE_resName" />
 						</td>
 					<th>数据标识：</th>
 						 <td>
-							<input type="text" style="width: 170px;" placeholder="数据标识" value="${sParams['LIKE_remark']}" id="remarkSearch" name="search_LIKE_remark" />
+							<input type="text" maxlength="30" style="width: 170px;" placeholder="数据标识" value="${sParams['LIKE_remark']}" id="remarkSearch" name="search_LIKE_remark" />
 						</td> 
 					<td class="btn-group"> <a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a></td>
 				</tr>
@@ -118,7 +118,7 @@
         <table cellpadding="0" cellspacing="0" border="0" width="100%" class="list-table">
         	<thead>
             	<tr>
-                	<th width="10px">   
+                	<th width="10px">
                 		<div class="label">
 									<i class="check_btn check_all"></i>
 									<input type="checkbox" class="check_btn" style="display: none;" />

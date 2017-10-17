@@ -72,7 +72,7 @@ public interface ComplatUserDao extends PagingAndSortingRepository<ComplatUser, 
 	 * @author 姜文鹏
 	 * @return
 	 */
-	ComplatUser findByGroupid(Integer groupid);
+	List<ComplatUser> findByGroupid(Integer groupid);
 	
 	
 	ComplatUser findByMobile(String mobile);

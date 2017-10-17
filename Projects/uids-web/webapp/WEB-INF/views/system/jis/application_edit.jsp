@@ -465,9 +465,6 @@ $().ready(function() {
 	   }, */
 	   netType:{
 	   required: true
-	   },
-	   groupname:{
-	   required: true
 	   }
 	  },submitHandler:function(form){
             var callingType=$("#callingType").val(); 
@@ -582,7 +579,7 @@ $(function(){
 				</td>
 			</tr>
 			<tr>
-				<th style="text-align:left;"><b class="mustbe">*</b> 所属机构：</th>
+				<th style="text-align:left;"><b class="mustbe">&nbsp;&nbsp;</b>所属机构：</th>
 				<td>
 					<input id="groupname" value="${groupMap[jisApplication.groupId]}" name="groupname" type="text" style="cursor: pointer;"/> 
 				</td>
