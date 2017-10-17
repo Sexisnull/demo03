@@ -13,10 +13,6 @@
 
 <script type="text/javascript"> 
 	function regect() {
-		/*$("#input_four")[0].style.display = 'none';
-		$("#input_three")[0].style.display = 'table-row';
-		$("#tr_reject")[0].style.display = 'table-row';
-		$("#corporUserType").attr("value", 0);*/
 		$("#input_four").hide();
 		$("#input_three").show();
 		$("#tr_reject").show();
@@ -28,6 +24,11 @@
 		$("#input_four")[0].style.display = 'table-row';
 		$("#input_three")[0].style.display = 'none';
 		$("#corporUserType").attr("value", 1);
+	}
+	
+	//通过
+	function oprOutsideUser(){
+		alert("通过接口没调通!!");
 	}
 	
 	//保存认证信息
