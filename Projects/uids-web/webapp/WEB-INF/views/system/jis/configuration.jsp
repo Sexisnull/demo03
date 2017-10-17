@@ -189,7 +189,16 @@ function showRealNameAuthUrl(){
 <div class="tab">
 <br/><div style="text-align: left;font-size:22px;">系统参数</div><br/><hr/><br/>
 	<form action="${ctx}/parameter/parameterSave" method="post" id="oprform" name="oprform">
-		<input type="hidden" id="iid" name="iid" value="${jisParameter.iid}"/> 
+		<input type="hidden" id="iid" name="iid" value="${jisParameter.iid}"/>
+		<input type="hidden" id="isRegister" name="isRegister" value="${jisParameter.isRegister}"/>
+		<input type="hidden" id="registerType" name="registerType" value="${jisParameter.registerType}"/>
+		<input type="hidden" id="isFindPwd" name="isFindPwd" value="${jisParameter.isFindPwd}"/>
+		<input type="hidden" id="perGotoUrl" name="perGotoUrl" value="${jisParameter.perGotoUrl}"/>
+		<input type="hidden" id="corGotoUrl" name="corGotoUrl" value="${jisParameter.corGotoUrl}"/>
+		<input type="hidden" id="enableBackupsTask" name="enableBackupsTask" value="${jisParameter.enableBackupsTask}"/>
+		<input type="hidden" id="realNameAuth" name="realNameAuth" value="${jisParameter.realNameAuth}"/>
+		<input type="hidden" id="realNameAuthUrl" name="realNameAuthUrl" value="${jisParameter.realNameAuthUrl}"/> 
+		
 		<ul class="nav clearfix" id="cardBar">
 			<li id="card1"><a href="#" title="" onclick="javascript:switchTab('cardBar','card1');">基本参数</a></li>
 			<li id="card2"><a href="#" title="" onclick="javascript:switchTab('cardBar','card2');">前台参数</a></li>

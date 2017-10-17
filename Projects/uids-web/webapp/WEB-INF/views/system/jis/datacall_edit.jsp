@@ -32,18 +32,17 @@ var userNameInput=$("#userName").val();
 	   callingType: {
 	    required: true
 	   },
+	   isVerification:{
+	    required: true
+	   },
 	   resUrl:{
 	   required: true,
 	   maxlength: 32
-	   },
-	   isVerification:{
-	   required: true
 	   }
 	  },submitHandler:function(form){
-            var callingType=$("#callingType").val(); 
-            var isVerification=$("#isVerification").val();
-            if(callingType==''){
-            	$.validator.errorShow($("#callingType"),'请选择角色');
+            var callingTypeVal=$("").val(); 
+            if(callingTypeVal=='2'){
+            	$.validator.errorShow($("#infoNum"),'请选择角色');
             	return false;
             }else if(isVerification=='0'){
             	$.validator.errorShow($("#isVerification"),'请选择机构');
@@ -54,11 +53,11 @@ var userNameInput=$("#userName").val();
         } 
     });
 });
-
-
+	
 $(function(){
 	if("${jisDatacall.isVerification}" == '1'){
 		$("#appChoose").show();
+		$("#appChooseTh").show();
 	}
 	if("${jisDatacall.callingType}" == '2'){
 		$("#hiddenTr1").show();
@@ -66,20 +65,23 @@ $(function(){
 		$("#hiddenTr3").show();
 	}
 });
-
     
 function selectIsVerification(value){
 	if(value == '2'){
 		$("#appChoose").css("display",'none');
+		$("#appChooseTh").css("display",'none');
 	}
 	if(value == '1'){
 		$("#appChoose").css("display",'');
+		$("#appChooseTh").css("display",'');
 	}
 	if(value == '0'){
 		$("#appChoose").css("display",'none');
+		$("#appChooseTh").css("display",'none');
 	}
 	if(value = null){
 		$("#appChoose").css("display",'none');
+		$("#appChooseTh").css("display",'none');
 	}
 }
 
@@ -93,6 +95,10 @@ function calltype(value){
 		$("#hiddenTr1").css("display",'');
 		$("#hiddenTr2").css("display",'');
 		$("#hiddenTr3").css("display",'');
+		
+		$("#infoNum").rules("add",{required:true});
+		$("#infoNum").rules("add",{range:[1,30]});
+		$("#RssInfo").rules("add",{required:true});
 	}
 	if(value = null){
 		$("#hiddenTr1").css("display",'none');
@@ -130,10 +136,6 @@ function insertAtCursor(fieldName, myValue) {
 	    myField.focus();
   	}
 }
-
-
-
-
 
 
 $(function(){
@@ -233,7 +235,7 @@ $(function(){
 			<tr>
 				<th style="text-align:center;"><b class="mustbe">*</b> 请选择调用方式：</th>
                 <td>
-                	<select name="callingType" onChange="calltype(this.value)" >   
+                	<select id="callingType" name="callingType" onChange="calltype(this.value)" >   
 						<option value="">--请选择--</option>   
 						<option value="1"<c:if test="${jisDatacall.callingType==1}">selected</c:if>>IFRAME调用</option>   
 						<option value="2"<c:if test="${jisDatacall.callingType==2}">selected</c:if>>RSS调用</option>
@@ -253,7 +255,7 @@ $(function(){
 					<option value="2"<c:if test="${jisDatacall.orderType==2}">selected</c:if>>按时间倒序</option>
 				</select>
 				</td>
-				<th style="text-align:center;">信息数量：</th>
+				<th style="text-align:center;"><b class="mustbe">*</b>信息数量：</th>
 				<td>
 					<input type="text" id="infoNum" name="infoNum" maxlength="33"
                     class="input-text" value="${jisDatacall.infoNum}" placeholder="信息数量范围为1~30"/>
@@ -275,7 +277,7 @@ $(function(){
 			</tr>
 			<tr>
 				<th style="text-align:center;"><b class="mustbe">*</b> 是否验证：</th>
-				<td colspan="2" id="judge">
+				<td id="judge">
 					<c:if test="${jisDatacall.isVerification=='2'}">
 						<input type="radio" name="isVerification" value="1" onclick="selectIsVerification(this.value);"/>是
 						<input type="radio" name="isVerification" checked="checked" value="2" onclick="selectIsVerification(this.value);"/>否
@@ -292,7 +294,8 @@ $(function(){
 					</c:if>
 				</td>
 				
-				<td id="appChoose" colspan="2" style="display:none">
+				<th id="appChooseTh" style="text-align:center; display: none;">应用：</th>
+				<td id="appChoose" style="display:none">
 					<select name="appId" id="appId">
 	                 <option value="">-选择应用-</option>
 		                 <c:forEach items="${applications}" var="application">

@@ -358,7 +358,7 @@ var zNodes = [];
 			chkboxType:{ "Y": "s", "N": "s" }
 		},
 			callback : {
-				onClick : function(event, treeId, treeNode){
+				 onClick : function(event, treeId, treeNode){
 					var zTree = $.fn.zTree.getZTreeObj("areaTree");
 					var nodes = zTree.getSelectedNodes();
 					nodes.sort(function compare(a, b) {
@@ -366,30 +366,26 @@ var zNodes = [];
 					});
 					var _name=$.trim(nodes[0].name);
 					var _code=nodes[0].id;
-					alert(_name+"--"+_code);
 					var param="";
 					 $.ajax({
 					       type:"get",
 					       url:  "${ctx}/complat/complatList",
 					       data:{"search_EQ_groupid":_code},
 					       datatype:  "json",
-					       success: function (value) {
-						     /*  alert(value)	;				      
-	                           alert("请求成功"+_code);   */                                                                     
+					       success: function (value) {                                                                   
 	                           var   data=JSON.parse(value);                         
 	                           handleResponse(data) ;
                            }, 
                            error: function (returnValue) {
-                       /*   alert(_code);*/
                            }
 					});
 					
-					if(_code!="1"&&_code.length>0 && _name.length>0)
+					/* if(_code!="1"&&_code.length>0 && _name.length>0)
 						param="?search_EQ_groupid="+_code;
 						
 					if(_code.length>0 && _name.length>0){
 						window.location.href="${ctx}/complat/complatList"+param;
-					}
+					} */
 					$("#areacode").next('.error').hide();
 				}
 		,onCheck:onCheck
