@@ -245,7 +245,13 @@ public class ComplatCorporationController extends BaseController{
 					Integer checkData = complatCorporationService.checkUnique(corporation.getLoginName(), corporation.getRegNumber(), corporation.getOrgNumber());
 					if(checkData == 1){
 						returnMsg("error","法人用户重复，保存失败",request);
+					}else{
+						complatCorporationService.save(corporation);
+						returnMsg("success","保存成功",request);
+						//记录日志
+						this.addJisLog(corporation, request,operType);
 					}
+					
 				}else{
 					complatCorporationService.save(corporation);
 					returnMsg("success","保存成功",request);
