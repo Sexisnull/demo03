@@ -472,7 +472,6 @@ public class JisApplicationController extends BaseController{
 			
 			String timeId=TimeHelper.getCurrentCompactTime();
 			String randomId=Integer.toString((int)(Math.random()*100000));
-			System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 			for(String id:ids ){
 				complatGroup=complatGroupService.findByIid(Integer.parseInt(id));
 				ComplatUser complatUser=complatUserService.findByGroupid(Integer.parseInt(id));

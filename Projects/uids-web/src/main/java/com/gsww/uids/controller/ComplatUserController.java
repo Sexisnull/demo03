@@ -1035,7 +1035,6 @@ public class ComplatUserController extends BaseController {
 		PrintWriter out = response.getWriter();
 		String json = array.toString();
 		out.write(json);
-		System.out.println("json--"+json);
 		model.addAttribute("fieldsListMap",json);
 		
 		//设置默认值
@@ -1591,13 +1590,5 @@ public class ComplatUserController extends BaseController {
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
 		}
-	}
-
-
-	
-	public static void main(String[] args) {
-		String pwd = "f28FdHN4fHEGMgRKBTgFPwI7AE0COQ==";//
-		String p = Md5Util.md5decode(pwd);
-		System.out.println("解密后的密码是:"+p);
 	}
 }

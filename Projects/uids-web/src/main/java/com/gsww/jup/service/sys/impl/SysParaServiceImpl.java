@@ -114,7 +114,7 @@ public class SysParaServiceImpl implements SysParaService {
 
 	@Override
 	public void delete(String paraState, String paraId) {
-		System.out.println("tombstoneDelete!");
+		//System.out.println("tombstoneDelete!");
 		sysParaDao.tombstoneDelete(paraState, paraId);
 	}
 	/**

@@ -216,10 +216,8 @@ public class PerLoginController {
 
 				String gotoUrlFlag = "";
 				if (StringUtil.isNotEmpty(appmark)) {
-					System.out.println("====user" + user);
 
 					String ticket = this.authLogService.add(user, appmark, 1);
-					System.out.println("====tickt" + ticket);
 					if (StringUtil.isEmpty(ticket)) {
 						logger.error("票据生成失败");
 						throw new LoginException("票据生成失败");
@@ -268,7 +266,6 @@ public class PerLoginController {
 				jsonResult.setMessage("您正在进行个人用户登录，用户名或密码不正确!");
 			}
 		}
-		System.out.println(jsonResult.toString());
 		return jsonResult;
 	}
 
@@ -985,10 +982,5 @@ public class PerLoginController {
 		}
 
 	}
-	
-	public static void main(String[] args) {
-		String pwd =Md5Util.md5decode("dXZ8G3Z0AA4EQwdDBzM=");
-		System.out.println(pwd);
-	
-	}
+
 }

@@ -512,10 +512,4 @@ public class ComplatCorporationController extends BaseController{
 		jisLog.setSpec(spec);
 		jisLogService.save(jisLog);
 	}
-	
-	
-	public static void main(String[] args) {
-		String pwd = Md5Util.md5decode("BEJ1RgZHDkQAHnZrA2oALA==");
-		System.out.println(pwd);
-	}
 }

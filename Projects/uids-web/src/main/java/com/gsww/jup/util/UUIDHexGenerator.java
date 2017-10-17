@@ -55,11 +55,4 @@ public class UUIDHexGenerator extends UUIDGenerator {
 		.toString();
 	}
 
-	public static void main(String[] args) {
-		UUIDHexGenerator uuid=new UUIDHexGenerator();
-		for(int i=0;i<100;i++){
-			System.out.println(uuid.generate());
-		}
-	}
-
 }
