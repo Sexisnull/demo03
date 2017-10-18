@@ -32,7 +32,9 @@
 		if(outsideUserType == 0) {
 			var rejectReason2 = $("#rejectReason2").val();
 			if(rejectReason2 == null || rejectReason2 == ""){
-				alert("请填写拒绝原因！");
+				$.dialog.alert('请填写拒绝原因',function(){
+					return null;
+				});
 				return false;
 			} else {
 				$.ajax({
