@@ -36,6 +36,7 @@ import com.gsww.uids.entity.JisApplication;
 import com.gsww.uids.entity.JisRoleobject;
 import com.gsww.uids.entity.JisSysview;
 import com.gsww.uids.entity.JisSysviewDetail;
+import com.gsww.uids.entity.JisUserdetail;
 import com.gsww.uids.service.ComplatGroupService;
 import com.gsww.uids.service.ComplatUserService;
 import com.gsww.uids.service.JisApplicationService;
@@ -425,8 +426,14 @@ public class JisApplicationController extends BaseController{
 					jsonMap.put("mobile","");
 					jsonMap.put("msn","");
 					jsonMap.put("ndlogin","");
-					jsonMap.put("parCode",complatGroupService.findByIid(complatGroup.getPid()).getCodeid());
-					jsonMap.put("parName",complatGroupService.findByIid(complatGroup.getPid()).getName());
+					if(complatGroup.getPid() != null){
+						jsonMap.put("parCode",complatGroupService.findByIid(complatGroup.getPid()).getCodeid());
+						jsonMap.put("parName",complatGroupService.findByIid(complatGroup.getPid()).getName());
+					}else{
+						jsonMap.put("parCode","");
+						jsonMap.put("parName","");
+					}
+					
 					jsonMap.put("qq","");
 					jsonMap.put("state","TG");
 					jsonMap.put("userName","");
@@ -502,13 +509,20 @@ public class JisApplicationController extends BaseController{
 							jisSysviewService.save(jisSysview);
 							
 							Map<String, String> jsonMap=new HashMap<String, String>();
+							JisUserdetail jisUserdetail=jisUserdetailService.findByUserid(complatUser.getIid());
 							jsonMap.put("allParCode", complatGroup.getSuffix());
 							jsonMap.put("allParName", complatGroup.getGroupallname());
 							jsonMap.put("appName", jisApplication.getName());
 							jsonMap.put("appid",syniid);
-							jsonMap.put("cardId",(jisUserdetailService.findByUserid(complatUser.getIid())).getCardid());
+							if(jisUserdetail!=null){
+								jsonMap.put("cardId",jisUserdetail.getCardid());
+								jsonMap.put("comptel",jisUserdetail.getComptel());
+							}else{
+								jsonMap.put("cardId","");
+								jsonMap.put("comptel","");
+							}
+							
 							jsonMap.put("compfax",complatUser.getFax());
-							jsonMap.put("comptel",(jisUserdetailService.findByUserid(complatUser.getIid())).getComptel());
 							jsonMap.put("email",complatUser.getEmail());
 							jsonMap.put("groupCode",complatGroup.getCodeid());
 							jsonMap.put("groupName",complatGroup.getName());
@@ -520,8 +534,13 @@ public class JisApplicationController extends BaseController{
 							jsonMap.put("mobile",complatUser.getMobile());
 							jsonMap.put("msn",complatUser.getMsn());
 							jsonMap.put("ndlogin","");
-							jsonMap.put("parCode",complatGroupService.findByIid(complatGroup.getPid()).getCodeid());
-							jsonMap.put("parName",complatGroupService.findByIid(complatGroup.getPid()).getName());
+							if(complatGroup.getPid() != null){
+								jsonMap.put("parCode",complatGroupService.findByIid(complatGroup.getPid()).getCodeid());
+								jsonMap.put("parName",complatGroupService.findByIid(complatGroup.getPid()).getName());
+							}else{
+								jsonMap.put("parCode","");
+								jsonMap.put("parName","");
+							}
 							jsonMap.put("qq",complatUser.getQq());
 							jsonMap.put("state","T");
 							jsonMap.put("userName",complatUser.getName());
@@ -537,7 +556,7 @@ public class JisApplicationController extends BaseController{
 				}
 				returnMsg("success","同步成功",request);
 			}else{
-				returnMsg("success","同步失败，同步用户选择的机构数不能超过200个",request);
+				returnMsg("error","同步失败，同步用户选择的机构数不能超过200个",request);
 			}
 			
 		} catch (Exception e) {
