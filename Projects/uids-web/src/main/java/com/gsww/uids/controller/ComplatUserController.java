@@ -270,11 +270,8 @@ public class ComplatUserController extends BaseController {
 				complatUser = complatUserService.findByKey(Integer.parseInt(iid));
 				Date createTime = complatUser.getCreatetime();
 				//对密码进行解密
-				String pwd = complatUser.getPwd();
-				if(StringHelper.isNotBlack(pwd)){
-					String p = Md5Util.md5decode(pwd);
-					complatUser.setPwd(p);
-				}
+				String pwd = Md5Util.md5decode(complatUser.getPwd());
+				model.addAttribute("pwd",pwd);
 				if (createTime != null) {
 					String time = sdf.format(createTime);
 					model.addAttribute("time", time);
@@ -626,7 +623,7 @@ public class ComplatUserController extends BaseController {
 	 * @author <a href=" ">shenxh</a>
 	 */
 	@RequestMapping(value = "/complatExport", method = RequestMethod.GET)
-	public ModelAndView complatExport(String iid,Model model, HttpServletRequest request,
+	public void complatExport(String iid,Model model, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		SysUserSession session = (SysUserSession) request.getSession().getAttribute("sysUserSession");
 		String userIid = request.getParameter("iid");
@@ -752,7 +749,7 @@ public class ComplatUserController extends BaseController {
 		map.put(ExcelUtil.HEADERINFO, headList);
 		map.put(ExcelUtil.DATAINFON, dataList);
 		ExcelUtil.writeExcel(map, wb, response, fileName);
-		return  new ModelAndView("redirect:/complat/complatList");
+		//return  new ModelAndView("redirect:/complat/complatList");
 
 	}
 
@@ -1035,6 +1032,7 @@ public class ComplatUserController extends BaseController {
 		PrintWriter out = response.getWriter();
 		String json = array.toString();
 		out.write(json);
+		System.out.println("json--"+json);
 		model.addAttribute("fieldsListMap",json);
 		
 		//设置默认值
@@ -1590,5 +1588,13 @@ public class ComplatUserController extends BaseController {
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
 		}
+	}
+
+
+	
+	public static void main(String[] args) {
+		String pwd = "f28FdHN4fHEGMgRKBTgFPwI7AE0COQ==";//
+		String p = Md5Util.md5decode(pwd);
+		System.out.println("解密后的密码是:"+p);
 	}
 }

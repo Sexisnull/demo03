@@ -1,4 +1,5 @@
 
+
 <%@page language="java" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%@ include file="/include/meta.jsp"%>
@@ -57,7 +58,13 @@
 									email : true
 								},
 								phone : {
-									isPhone : true
+									isCompTel : true
+								},
+								fax : {
+									isFax : true
+								},
+								qq : {
+									isQQ : true
 								}
 							},
 							submitHandler : function() {								
@@ -105,13 +112,13 @@
 											if (count % 2 == 1) {
 													htmlString
 															.push("<tr><th>"
-																	+ textTitle
+																	+ textTitle+"："
 																	+ "</th><td><input name='"+textName+"' type='text' value='"+textValue+"'></td>");
 												}
 												if (count % 2 == 0) {
 													htmlString
 															.push("<th>"
-																	+ textTitle
+																	+ textTitle+"："
 																	+ "</th><td><input type='text' name='"+textName+"' value='"+textValue+"'></td></tr>");
 												}
 												count++;
@@ -144,7 +151,7 @@
 
 													htmlString
 															.push("<tr><th>"
-																	+ selectTitle
+																	+ selectTitle+"："
 																	+ "</th><td><select id='"+value+"' name= '"+value+"'>");
 													//循环key；
 													for ( var i = 0; i < keys.length; i++) {
@@ -172,7 +179,7 @@
 												if (count % 2 == 0) {
 													htmlString
 															.push("<th>"
-																	+ selectTitle
+																	+ selectTitle+"："
 																	+ "</th><td><select id='"+value+"' name= '"+value+"'>");
 													//循环key；
 													for ( var i = 0; i < keys.length; i++) {
@@ -209,6 +216,22 @@
 						//编辑页面密码强度判断
 						var pwding = $("#pwd").val();
   					    EvalPwd(pwding);
+  					    
+  					    //传真
+					    jQuery.validator.addMethod("isFax", function(value, element) { 
+					           var corporName = /^(\d{3,4}-)?\d{7,8}$/;   
+					           return this.optional(element) || (corporName.test(value));     
+					    }, "传真格式错误");
+					    //qq
+					    jQuery.validator.addMethod("isQQ", function(value, element) { 
+					           var corporName = /[1-9][0-9]{4,}/;   
+					           return this.optional(element) || (corporName.test(value));     
+					    }, "QQ格式错误");
+					    //办公电话
+					    jQuery.validator.addMethod("isCompTel", function(value, element) { 
+					           var corporName = /^(((0\d{3}[\-])?\d{7}|(0\d{2}[\-])?\d{8}))([\-]\d{2,4})?$/;   
+					           return this.optional(element) || (corporName.test(value));     
+					    }, "电话号码格式错误");
   					 });
 
 

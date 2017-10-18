@@ -209,7 +209,7 @@ function checkSubmitForm(){
 			}
 			
 			function isNumbOrLett2( s ){
-				var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_]+$/;
+				var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_]{1,255}$/;
 				var re = new RegExp(regu);
 				if (re.test(s)) {
 					return true;
@@ -219,7 +219,7 @@ function checkSubmitForm(){
 			}
 			
 			function isNumbOrLett3( s ){
-				var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_.\u4e00-\u9fa5]+$/;
+				var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_.\u4e00-\u9fa5]{1,255}$/;
 				var re = new RegExp(regu);
 				if (re.test(s)) {
 					return true;
