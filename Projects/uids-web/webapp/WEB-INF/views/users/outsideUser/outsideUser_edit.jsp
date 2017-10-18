@@ -5,6 +5,7 @@
 
 <%@ include file="/include/meta.jsp"%> 
 <script type="text/javascript" src="${ctx}/res/js/region/checkpwd.js"></script>
+<script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgcore.lhgdialog.min.js"></script>
 <head>
 <title>甘肃万维JUP课题</title>
 <script type="text/javascript">
@@ -141,18 +142,23 @@ $().ready(function() {
     EvalPwd(pwding);
 });
 
-function checkAndSave() { 
+function checkAndSave1() { 
     var level = $("#level").val(); 
     var pwd = $("#pwd").val();
     if(level == "strong") {
 		$("#editForm").submit();
 	} else if(level == "weak" && pwd == "") {
-		alert("请填写必填信息！");
-		return false;
+		$.dialog.alert('请填写必填信息',function(){
+			return null;
+		});
 	} else {
-		alert("密码强度必须为强！");
-		return false;
+		$.dialog.alert('密码强度必须为强',function(){
+			return null;
+		});
 	}
+}
+function checkAndSave() { 
+    $("#editForm").submit();
 }
 </script>
 

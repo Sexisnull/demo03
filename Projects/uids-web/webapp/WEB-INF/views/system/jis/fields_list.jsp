@@ -16,7 +16,7 @@
 		if (shownameSearch == '' || isNumbOrLett(shownameSearch)) {
 			form1.submit();
 		} else {
-			$.validator.errorShow($("#shownameSearch"), '只能包括字母、数字、下划线、中文,且不能超过100个字符');
+			$.validator.errorShow($("#shownameSearch"), '只能包括字母、数字、下划线、中文,且不能超过50个字符');
 		}
 	}
 
@@ -28,7 +28,7 @@
 	如果通过验证返回true,否则返回false
 	*/
 	function isNumbOrLett(s) { //判断是否是字母、数字组成
-		var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]{1,100}$/;
+		var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]{1,50}$/;
 		//var regu = /^([a-zA-Z0-9]+)$/;
 		var re = new RegExp(regu);
 		if (re.test(s)) {

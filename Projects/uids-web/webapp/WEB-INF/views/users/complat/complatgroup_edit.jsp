@@ -210,7 +210,7 @@ jQuery.validator.addMethod("isName", function(value, element) {
 			</li>
 			<li class="split"></li>
 			<li class="active">
-				<a class="last-position"><c:if test="${empty complatGroup.iid}">用户新增</c:if><c:if test="${not empty complatGroup.iid}">用户编辑</c:if></a>
+				<a class="last-position"><c:if test="${empty complatGroup.iid}">机构新增</c:if><c:if test="${not empty complatGroup.iid}">机构编辑</c:if></a>
 			</li>
    		</ol>
     </div>
@@ -266,10 +266,10 @@ jQuery.validator.addMethod("isName", function(value, element) {
 	        	<th><b class="mustbe">*</b> 请输入机构后缀：</th>
 	        	<td>
 	        	    <c:if test="${empty complatGroup.iid}">
-				          <input type="text" placeholder="请填写最简洁的机构缩写，例如：fwg（发改委）" class="input" name="suffix" value="${complatGroup.suffix}"/>
+				          <input type="text" placeholder="请填写最简洁的机构缩写，例如：fgw（发改委）" class="input" name="suffix" value="${complatGroup.suffix}"/>
 				    </c:if>
 				    <c:if test="${not empty complatGroup.iid}">
-				          <input type="text" placeholder="请填写最简洁的机构缩写，例如：fwg（发改委）" class="input" name="suffix" value="${complatGroup.suffix}" disabled="true"/>
+				          <input type="text" placeholder="请填写最简洁的机构缩写，例如：fgw（发改委）" class="input" name="suffix" value="${complatGroup.suffix}" disabled="true"/>
 				    </c:if>
 				</td>
 			</tr>

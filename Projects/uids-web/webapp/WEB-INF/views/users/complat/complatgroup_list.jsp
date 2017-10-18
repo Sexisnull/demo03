@@ -60,10 +60,12 @@ function checkSubmitForm(){
 	如果通过验证返回true,否则返回false
 	*/
 	function isNumbOrLett1( s ){
-		var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]{100}$/;
+		var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;
 		var re = new RegExp(regu);
 		if (re.test(s)) {
-			return true;
+		    if(s.length<100){
+				return true;
+			}
 		}else{
 			return false;
 		}
@@ -189,7 +191,7 @@ function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
 	var setting = {
 		async : {
 			enable : true,
-			url : '../login/getGroup',
+			url : "${ctx}/uids/getGroup",
 			autoParam : [ "id=groupId", "isDisabled" ]
 		},
 		callback : {
@@ -252,11 +254,11 @@ function importGroup(){
 <body>
 <div class="mask" id='mask'></div>
 <div class="list-warper" >
-	<!--列表的面包屑区域-->
+	<!--列表的面包屑区域
 	<div class="position">
 		<ol class="breadcrumb">
 			<li>
-				<a href="${ctx}/backIndex" target="_top">首页</a>
+				<a href="${ctx}/index" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
 			<li>
@@ -267,7 +269,7 @@ function importGroup(){
 				机构管理
 			</li>
     	</ol>
-    </div>
+    </div>-->
     
     <div class="search-content">
 		<form id="form1" name="pageForm" action="${ctx}/uids/complatgroupList" method="get">
@@ -285,17 +287,12 @@ function importGroup(){
 					<td width="15%">
               			<input id="orgcodeSearch" type="text" class="input" name="search_LIKE_orgcode" value="${sParams['LIKE_orgcode']}"  placeholder="组织机构代码"/>
 					</td>
-					<th style="padding-left: 5px">区域代码:</th>
-					<td width="15%">
-              			<input id="areacodeSearch" type="text" class="input" name="search_LIKE_areacode" value="${sParams['LIKE_areacode']}" placeholder="区域代码"/>
-					</td>
 				</tr>
 				<tr height="10px"></tr>
 				<tr>
-				    <th style="padding-left: 5px">上级机构:</th>
+				    <th style="padding-left: 5px">区域代码:</th>
 					<td width="15%">
-              			<input name="groupname" id="groupname" value="${groupName}" type="text" style="cursor: pointer;" placeholder="上级机构"/>
-					    <input type="hidden" id="groupid" value="${sParams['EQ_pid']}" name="search_EQ_pid">
+              			<input id="areacodeSearch" type="text" class="input" name="search_LIKE_areacode" value="${sParams['LIKE_areacode']}" placeholder="区域代码"/>
 					</td>
 				    <th style="padding-left: 5px">节点类型:</th>
 					<td width="15%">
