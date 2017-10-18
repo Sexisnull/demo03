@@ -54,7 +54,7 @@ function beforeEditName(treeId, treeNode) {
 	className = (className === "dark" ? "" : "dark");
 	var zTree = $.fn.zTree.getZTreeObj("treeDemo");
 	zTree.selectNode(treeNode);
-	return confirm("确定 -- " + treeNode.name + " 的编辑状态吗？");
+	return $.dialog.confirm("确定 -- " + treeNode.name + " 的编辑状态吗？");
 }
 function beforeRemove(treeId, treeNode) {                   //删除前
 	className = (className === "dark" ? "" : "dark");
@@ -68,7 +68,7 @@ function beforeRemove(treeId, treeNode) {                   //删除前
 		async : false,
 		success : function(data) {
 			if (data == "exist") {
-				alert("该区域下有子区域，请先删除子区域");
+				$.dialog.alert("该区域下有子区域，请先删除子区域");
 				flag = false;
 			} else {
 				flag = true;
@@ -76,7 +76,9 @@ function beforeRemove(treeId, treeNode) {                   //删除前
 		}
 	});
 	if (flag == true) {
-		return confirm("确定要删除 " + treeNode.name + " 吗？");
+		$.dialog.alert("已删除区域 " + treeNode.name + " ！",function(){
+			return true;
+		});
 	} else {
 		return false;
 	}
@@ -104,11 +106,11 @@ function zTreeOnRemove(event, treeId, treeNode) {                //删除
 					$("#type").attr("value", "");
 					return true;
 				} else if (data == "exist") {
-					alert("该区域下有子区域，请先删除子区域");
+					$.dialog.alert("该区域下有子区域，请先删除子区域");
 					zTree.cancelSelectedNode();
 					return false;
 				} else {
-					alert(data);
+					$.dialog.alert(data);
 					zTree.cancelSelectedNode();
 					return false;
 				}
@@ -124,14 +126,14 @@ function beforeRename(treeId, treeNode, newName) {       //重命名前---获取
 	var oldName = treeNode.name;
 	className = (className === "dark" ? "" : "dark");
 	if (newName.length == 0) {
-		alert("节点名称不能为空.");
+		$.dialog.alert("节点名称不能为空.");
 		setTimeout(function() {
 			zTree.editName(treeNode)
 		}, 10);
 		return false;
 	}
 	if (newName.length > 32) {
-		alert("节点名称过长，请检查！");
+		$.dialog.alert("节点名称过长，请检查！");
 		return false;
 	}
 	if (newName != treeNode.name) {
@@ -144,7 +146,7 @@ function beforeRename(treeId, treeNode, newName) {       //重命名前---获取
 				success : function(data) {
 					if (data == "repeat") {
 						treeNode.name = oldName;
-						alert("区域名称重复，请重新输入！");
+						$.dialog.alert("区域名称重复，请重新输入！");
 
 						treeNode.viewtype = '2';
 						zTree.updateNode(treeNode);
@@ -174,7 +176,7 @@ function beforeRename(treeId, treeNode, newName) {       //重命名前---获取
 						return true;
 
 					} else {
-						confirm("修改成功！");
+						$.dialog.alert("修改成功！");
 						treeNode.viewtype = '2';
 						zTree.updateNode(treeNode);
 
@@ -276,16 +278,16 @@ function addHoverDom(treeId, treeNode) {    				//用于当鼠标移动到节点
 							seq : seq
 						});
 						$("#" + treeNode.tId + "_remove").remove();
-						alert("区域添加成功！");
+						$.dialog.alert("区域添加成功！");
 						return true;
 					} else if (data.ret == 2) {
-						alert("区域名称或编码重复！");
+						$.dialog.alert("区域名称或编码重复！");
 						return false;
 					} else if(data.ret == 4) {
-						alert("不能再添加子区域了！");
+						$.dialog.alert("不能再添加子区域了！");
 						return false;
 					} else {
-						alert("区域添加失败！");
+						$.dialog.alert("区域添加失败！");
 						return false;
 					}
 				}
@@ -353,7 +355,11 @@ function onClick(e, treeId, treeNode, clickFlag) {			//点击区域将数据填�
 						data : "pid=" + jsonStr.pid,
 						dataType : "json",
 						success : function(data) {
-							$("#pName").attr("value", data.name);
+							if(data != null) {
+								$("#pName").attr("value", data.name);
+							} else {
+								$("#pName").attr("value", "");
+							}
 						}
 					});
 					$("#regionCode").attr("value", jsonStr.codeId);
