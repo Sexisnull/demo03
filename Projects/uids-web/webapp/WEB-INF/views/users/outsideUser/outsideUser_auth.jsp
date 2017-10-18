@@ -27,7 +27,7 @@
 	};
 	//提交，关闭
 	var api = frameElement.api, W = api.opener;
-	function oprOutsideUser() {
+	function oprOutsideUser1() {//暂时未用
 		var outsideUserType = $("#outsideUserType").val();
 		if(outsideUserType == 0) {
 			var rejectReason2 = $("#rejectReason2").val();
@@ -64,6 +64,20 @@
 			});
 		}
 	};
+	
+	function oprOutsideUser() {
+		$.ajax({
+			cache:true,
+			type:'get',
+			url:'outsideuserAuth',
+			data:$('#editForm').serialize(),
+			async:false,
+			success:function() {
+				api.reload(api.parent,"");
+				api.close();
+			}
+		});
+	};
 </script>
 </head>
 <body>
@@ -80,7 +94,7 @@
     </div>
     <!--表单的主内容区域-->
     	<table class="form-table">
-			<c:if test="${complatOutsideuser.rejectReason != '' && complatOutsideuser.rejectReason != null}">
+			<c:if test="${complatOutsideuser.rejectReason != '' && complatOutsideuser.rejectReason != null || complatOutsideuser.authState == 2}">
 				<tr>
 					<th>拒绝原因：</th>
 					<td style="width: 100%;">
