@@ -58,6 +58,12 @@
 								},
 								phone : {
 									isPhone : true
+								},
+								fax : {
+									isFax : true
+								},
+								qq : {
+									isQQ : true
 								}
 							},
 							submitHandler : function() {
@@ -208,6 +214,17 @@
 						//编辑页面密码强度显示
 						var pwding = $("#pwd").val();
     					EvalPwd(pwding);
+    					
+    					//传真
+					    jQuery.validator.addMethod("isFax", function(value, element) { 
+					           var corporName = /^(\d{3,4}-)?\d{7,8}$/;   
+					           return this.optional(element) || (corporName.test(value));     
+					    }, "传真格式错误");
+					    //qq
+					    jQuery.validator.addMethod("isQQ", function(value, element) { 
+					           var corporName = /[1-9][0-9]{4,}/;   
+					           return this.optional(element) || (corporName.test(value));     
+					    }, "QQ格式错误");
 					});
 
 
