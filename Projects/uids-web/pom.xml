@@ -880,6 +880,20 @@
 			<scope>system</scope>
 			<systemPath>${basedir}/webapp/WEB-INF/lib/hanwebcore.jar</systemPath>
 		</dependency>
+		<dependency>
+			<groupId>com.gsww</groupId>
+			<artifactId>ldapmd5</artifactId>
+			<version>1.3</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/webapp/WEB-INF/lib/ldapmd51.3.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>com.gsww</groupId>
+			<artifactId>chardet</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/webapp/WEB-INF/lib/chardet.jar</systemPath>
+		</dependency>
 	</dependencies>
 
 	<build>
