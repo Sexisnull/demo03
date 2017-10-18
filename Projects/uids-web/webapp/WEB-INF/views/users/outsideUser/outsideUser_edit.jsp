@@ -142,7 +142,7 @@ $().ready(function() {
     EvalPwd(pwding);
 });
 
-function checkAndSave() { 
+function checkAndSave1() { 
     var level = $("#level").val(); 
     var pwd = $("#pwd").val();
     if(level == "strong") {
@@ -156,6 +156,9 @@ function checkAndSave() {
 			return null;
 		});
 	}
+}
+function checkAndSave() { 
+    $("#editForm").submit();
 }
 </script>
 
