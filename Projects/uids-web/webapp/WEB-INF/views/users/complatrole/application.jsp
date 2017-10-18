@@ -60,7 +60,7 @@
 		case 'remove':
 			var ids = getCheckedIds();
 			if (ids == "") {
-				$.dialog.alert("未选中任何记录");
+				$.dialog.alert("请至少选择一条数据");
 				return;
 			}
 			removeMembers(ids);
@@ -71,7 +71,7 @@
 			
 			break;
 		case 'clean':
-			$.dialog.confirm('您将清空当前角色下的所有成员\n是否继续？',function(){
+			$.dialog.alert('您将清空当前角色下的所有成员\n是否继续？',function(){
 				cleanMembers();
 			})
 			break;

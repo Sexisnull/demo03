@@ -87,7 +87,7 @@
 				});
 				
 			}else{
-				$.dialog.confirm('请您至少选择一条数据',function(){
+				$.dialog.alert('请您至少选择一条数据',function(){
 					return null;
 				});
 			}
