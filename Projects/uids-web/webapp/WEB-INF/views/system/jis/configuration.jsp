@@ -581,8 +581,8 @@ function showRealNameAuthUrl(){
 					<tr>
 						<td align="right" class="label" width="100">个人注册时的短信内容</td>
 						<!-- <td class="required">&nbsp;</td> -->
-						<td colspan="2">
-							<textarea style="resize:none;height: 100px;" id="registPerMessageContent" 
+						<td style="width: 190px;">
+							<textarea style="resize:none;height:80px;" id="registPerMessageContent" 
 							 name="registPerMessageContent" class="input-textarea">${jisParameter.registPerMessageContent}
 						 	</textarea>
 						</td>
@@ -608,7 +608,7 @@ function showRealNameAuthUrl(){
 						<td align="right" class="label" width="100">法人注册时的短信内容</td>
 						<!-- <td class="required">&nbsp;</td> -->
 						<td colspan="2">
-							<textarea style="resize:none;height: 100px;" id="registCorMessageContent" 
+							<textarea style="resize:none;height: 80px;" id="registCorMessageContent" 
 							 name="registCorMessageContent" class="input-textarea">${jisParameter.registCorMessageContent}
 							</textarea>
 						</td>
@@ -634,7 +634,7 @@ function showRealNameAuthUrl(){
 						<td align="right" class="label" width="100">找回密码时的短信内容</td>
 						<!-- <td class="required">&nbsp;</td> -->
 						<td colspan="2">
-							<textarea style="resize:none;height: 100px;" id="recovingPwdContent" name="recovingPwdContent" 
+							<textarea style="resize:none;height: 80px;" id="recovingPwdContent" name="recovingPwdContent" 
 							 class="input-textarea">${jisParameter.recovingPwdContent}
 							</textarea>
 						</td>
@@ -673,7 +673,7 @@ function showRealNameAuthUrl(){
 						<td align="right" class="label" width="100">获取动态登录密码时的短信内容</td>
 						<!-- <td class="required">&nbsp;</td> -->
 						<td colspan="2">
-							<textarea  style="resize:none;height: 100px;" id="dynamicPwdMessageContent" 
+							<textarea  style="resize:none;height: 80px;" id="dynamicPwdMessageContent" 
 							 name="dynamicPwdMessageContent" class="input-textarea">${jisParameter.dynamicPwdMessageContent}
 							</textarea>
 						</td>
