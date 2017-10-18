@@ -106,7 +106,7 @@ public class JisFieldsServiceImpl implements JisFieldsService {
 			}
 			whereFieldsName = whereFieldsName.substring(0,whereFieldsName.length()-1);
 			if(userId==null){
-				String addSql = "select type,fieldname from jis_fields where type='1'";
+				String addSql = "select type,fieldname,showname from jis_fields where type='1'";
 				
 				/*querySql = "select type,"+ queryFieldsName +" from jis_fields a ,jis_userdetail b where " +
 				" type = '1' and a.fieldname in("+whereFieldsName+")";*/
@@ -114,7 +114,7 @@ public class JisFieldsServiceImpl implements JisFieldsService {
 				for(int i=0;i<addFieldsMap.size();i++){
 					Map<String,Object> fieldsMap = addFieldsMap.get(i);
 					String title = fieldsMap.get("fieldname").toString();
-					fieldsMap.remove("fieldname");
+					//fieldsMap.remove("fieldname");
 					fieldsMap.put(title, "null");
 					listMap.add(fieldsMap);
 				}
