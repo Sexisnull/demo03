@@ -20,7 +20,7 @@
 		if(loginNameSearch == '' || isNumbOrLett2(loginNameSearch)){
 			if(realNameSearch == '' || isNumbOrLett1(realNameSearch)){
 				if(nameSearch == '' || isNumbOrLett1(nameSearch)){
-					if(cardNumberSearch == '' || (isNumbOrLett3(cardNumberSearch) && cardNumberSearch <= 18) ){
+					if(cardNumberSearch == '' || (isNumbOrLett3(cardNumberSearch) && cardNumberLength <= 18) ){
 						form1.submit();
 					}else{
 						$.validator.errorShow($("#cardNumberSearch"),'只能包括数字和字母,且不能超过18个字符');
