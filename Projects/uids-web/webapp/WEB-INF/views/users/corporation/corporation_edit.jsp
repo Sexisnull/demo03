@@ -50,7 +50,7 @@ $().ready(function() {
 		   	email:true
 		   },
 		   phone:{
-		   	isPhone:true
+		   	isCompTel:true
 		   }
 		  }
 	    });
@@ -122,6 +122,11 @@ $().ready(function() {
 	            var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;   
 	            return this.optional(element) || (corporName.test(value));     
 	     }, "名称只能由字母、数字、下划线、中文组成，不能以下划线开头和结尾"); 
+	      //办公电话
+	     jQuery.validator.addMethod("isCompTel", function(value, element) { 
+	           var corporName = /^(((0\d{3}[\-])?\d{7}|(0\d{2}[\-])?\d{8}))([\-]\d{2,4})?$/;   
+	           return this.optional(element) || (corporName.test(value));     
+	     }, "电话号码格式错误");
 	    
 	});
 
