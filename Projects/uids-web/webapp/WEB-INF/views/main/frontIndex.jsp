@@ -27,6 +27,7 @@
 	});
 	function singleLogin(appid){
 		window.location.href = "${ctx}/RedirectSingleLogin?appid="+appid;
+		window.location.back;
 	}
 </script>
 		<style type="text/css">

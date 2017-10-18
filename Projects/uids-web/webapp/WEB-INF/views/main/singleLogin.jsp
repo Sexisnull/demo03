@@ -18,14 +18,17 @@
 		<script>
 	$(function(){
 		$("#editForm").submit();
-		
+		window.history.back();
 	})
+	function getBack(){
+		
+	}
 </script>
 
 
 	</head>
 	<body>
-		<form id="editForm" action="${url }" method="post" name="frm">
+		<form id="editForm" action="${url }" target="_blank" method="post" name="frm" >
 			<input type="hidden" name="loginuser" value="${name }"/>
 			<input type="hidden" name="loginpass" value="${pwd}"/>
 			<input type="hidden" name="appname" value="${appMark }"/>
