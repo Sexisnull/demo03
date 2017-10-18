@@ -79,6 +79,29 @@ public class ComplatGroupController extends BaseController {
     private Map<Integer, Object> nodetypeMap = new HashMap<Integer, Object>();
     //区域类型下拉选择集合
     private Map<Integer, Object> areatypeMap = new HashMap<Integer, Object>();
+    
+    private String orgIdSave = "";//保存点击树的节点id
+    
+    @RequestMapping(value = "/groupOrgTree", method = RequestMethod.GET)
+	public String complatList(
+			Model model, ServletRequest request, HttpServletRequest hrequest) {
+		try {
+			// 获取系统当前登录用户
+			SysUserSession sysUserSession = (SysUserSession) hrequest.getSession().getAttribute("sysUserSession");
+			String deptId = sysUserSession.getDeptId();
+
+			//点击完查询时组织机构名称回显
+			String groupName = request.getParameter("groupname");
+			model.addAttribute("groupName", groupName);
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			logger.error("机构树打开失败：" + ex.getMessage());
+			returnMsg("error", "机构树打开失败", (HttpServletRequest) request);
+			return "redirect:/uids/complatList";
+		}
+		return "users/complat/complatgroup_tree";
+	}
 
     /**
      * 获取用户列表
@@ -96,7 +119,7 @@ public class ComplatGroupController extends BaseController {
                                    @RequestParam(value = "order.field", defaultValue = "createtime") String orderField,
                                    @RequestParam(value = "order.sort", defaultValue = "DESC") String orderSort,
                                    @RequestParam(value = "findNowPage", defaultValue = "false") String findNowPage,
-                                   Model model, ServletRequest request, HttpServletRequest hrequest) {
+                                   String orgId,Model model, ServletRequest request, HttpServletRequest hrequest) {
         try {
             if (StringUtils.isNotBlank(request.getParameter("orderField"))) {
                 orderField = (String) request.getParameter("orderField");
@@ -104,13 +127,24 @@ public class ComplatGroupController extends BaseController {
             if (StringUtils.isNotBlank(request.getParameter("orderSort"))) {
                 orderSort = (String) request.getParameter("orderSort");
             }
+            if (StringUtils.isNotBlank(orgId)){
+            	orgIdSave = orgId;
+            }
             //初始化分页数据
             PageUtils pageUtils = new PageUtils(pageNo, pageSize, orderField, orderSort);
             PageRequest pageRequest = super.buildPageRequest(hrequest, pageUtils, ComplatGroup.class, findNowPage);
+            
+         // 获取系统当前登录用户
+			SysUserSession sysUserSession = (SysUserSession) hrequest.getSession().getAttribute("sysUserSession");
+			String deptId = sysUserSession.getDeptId();
 
             //搜索属性初始化
-//		
 			Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
+			if(StringUtils.isEmpty(orgIdSave)){
+				searchParams.put("EQ_pid", deptId);
+			}else{
+				searchParams.put("EQ_pid", orgIdSave);
+			}
 			Specification<ComplatGroup>  spec=super.toSpecification(searchParams, ComplatGroup.class);
 			//分页
 			Page<ComplatGroup> pageInfo = complatGroupService.getUserPage(spec,pageRequest);
@@ -135,8 +169,6 @@ public class ComplatGroupController extends BaseController {
 				areatypeMap.put(Integer.parseInt((String) para.get("PARA_CODE")), para.get("PARA_NAME"));
 			}
 			//回显下拉菜单上级机构查询
-			String groupName=request.getParameter("groupname");
-			model.addAttribute("groupName", groupName);
 			model.addAttribute("pageInfo", pageInfo);
 			model.addAttribute("nodetypeMap", nodetypeMap);
 			model.addAttribute("areatypeMap", areatypeMap);
