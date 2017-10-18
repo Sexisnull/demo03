@@ -3,6 +3,7 @@
 <html>
 
 <%@ include file="/include/meta.jsp"%> 
+<script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgcore.lhgdialog.min.js"></script>
 
 <head>
 <title>甘肃万维JUP课题</title>
@@ -67,6 +68,8 @@ function checkAndSave() {
 	var fieldvaluesEdit = $("#fieldvaluesEdit").val();
 	var fieldkeysNew = $("#fieldkeysNew").val();
 	var fieldvaluesNew = $("#fieldvaluesNew").val();
+	var defvalueNew = $("#defvalueNew").val();
+	var defvalueEdit = $("#defvalueEdit").val();
 	var Jshowname = $("#showname").val();
 	var Jfieldname = $("#fieldname").val();
 	var type = $("#fieldsType").val();
@@ -77,39 +80,66 @@ function checkAndSave() {
 			if(fieldkeysEdit.split(",").length == fieldvaluesEdit.split(",").length) {
 				$("#editForm").submit();
 			} else {
-				//alert("编辑失败");
-				alert("Value串和Key串个数请保持一致!");
+				$.dialog.alert('Value串和Key串个数请保持一致',function(){
+					return null;
+				});
 				return false;
 			}
 		} else if ((fieldkeysNew != "" && fieldkeysNew != undefined) && (fieldvaluesNew != "" && fieldvaluesNew != undefined)) {
 			//alert("新增" + fieldkeysNew.split(",").length + "==" + fieldvaluesNew.split(",").length);
 			if(fieldkeysNew.split(",").length == fieldvaluesNew.split(",").length) {
 				if(Jshowname != "" && Jfieldname != "ex_") {
-					editForm.submit();
+					$("#editForm").submit();
 				} else {
-					alert("请填写必填项信息");
+					$.dialog.alert('请填写必填信息',function(){
+						return null;
+					});
 					return false;				
 				}
 			} else {
-				//alert("新增失败");
-				alert("Value串和Key串个数请保持一致!");
+				$.dialog.alert('Value串和Key串个数请保持一致',function(){
+					return null;
+				});
 				return false;
 			}
 		} else if((fieldkeysEdit != "" || fieldkeysEdit != undefined) && (fieldvaluesEdit == "" || fieldvaluesEdit == undefined)) {
-			alert("请正确填写Value串和Key串!");
+			$.dialog.alert('请正确填写Value串和Key串',function(){
+				return null;
+			});
 			return false;
 		} else if((fieldkeysEdit == "" || fieldkeysEdit == undefined) && (fieldvaluesEdit != "" || fieldvaluesEdit != undefined)) {
-			alert("请正确填写Value串和Key串!");
+			$.dialog.alert('请正确填写Value串和Key串',function(){
+				return null;
+			});
 			return false;
 		} else if((fieldkeysNew != "" || fieldkeysNew != undefined) && (fieldvaluesNew == "" || fieldvaluesNew == undefined)) {
-			alert("请正确填写Value串和Key串!");
+			$.dialog.alert('请正确填写Value串和Key串',function(){
+				return null;
+			});
 			return false;
 		} else if((fieldkeysNew == "" || fieldkeysNew == undefined) && (fieldvaluesNew != "" || fieldvaluesNew != undefined)) {
-			alert("请正确填写Value串和Key串!");
+			$.dialog.alert('请正确填写Value串和Key串',function(){
+				return null;
+			});
 			return false;
 		}
+	} else if(type==3) {
+		if((defvalueNew != "" && defvalueNew != undefined) || (defvalueEdit != "" && defvalueEdit != undefined)) {
+			if(Jshowname != "" && Jfieldname != "ex_") {
+				$("#editForm").submit();
+			} else {
+				$.dialog.alert('请填写必填信息',function(){
+					return null;
+				});
+				return false;
+			}
+		} else {
+			$.dialog.alert('请填写必填信息',function(){
+				return null;
+			});
+			return false;				
+		}
 	} else {
-		//alert("其他");
 		$("#editForm").submit();
 	}
 }
@@ -200,7 +230,7 @@ $(document).on("change",'select#fieldsType',function(){
 				<tr id = "tr_3" style="display: table-row;">
 					<th><b class="mustbe">*</b>固定值：</th>
 					<td>
-						<input type="text"  class="defvalue" name="defvalue" value="${jisFields.defvalue}" />
+						<input type="text" id="defvalueEdit" class="defvalue" name="defvalue" value="${jisFields.defvalue}" />
 					</td>
 					<th></th>
 					<td></td>
@@ -209,7 +239,7 @@ $(document).on("change",'select#fieldsType',function(){
 			<tr id = "tr_3" style="display: none;">
 				<th><b class="mustbe">*</b>固定值：</th>
 				<td>
-					<input type="text"  class="defvalue" name="defvalue" />
+					<input type="text" id="defvalueNew" class="defvalue" name="defvalue" />
 				</td>
 				<th></th>
 				<td></td>
