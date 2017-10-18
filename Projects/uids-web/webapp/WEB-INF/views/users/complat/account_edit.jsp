@@ -328,74 +328,80 @@ var complatUserNameInput=$("#name").val();
    
    
 	 //获取用户扩展属性
-    var htmlString=[];
-    var count = 1;
-    var table = $(".form-table");
-    //htmlString.push("<tr><td  class='td_2' rowspan='"+count+"' align='center'>"+"扩展属性"+"</td>");
-    var fieldsListMap = eval('${fieldsListMap}');
-
-    htmlString.push("<tr><td  class='td_2' id='td_7' rowspan='"+count+"' align='center'>"+"扩展属性"+"</td>");
-    for(var i=0;i<fieldsListMap.length;i++){
-    	 
-    	var fieldsList = fieldsListMap[i];
-    	for(var j = 0;j<fieldsList.length;j++){
-    		var fields = fieldsList[j];
-    		if(fields.type==1){
-    		   for(var key in fields){   
-    			   
-    			var value = fields[key];
-    			if(value==null){
-    				value="";
-    			}
-    			if(key!='type' && key !='userid'){
-    		
-    				if(count==1){  
+						var htmlString = [];
+						var count = 1;
+						var table = $(".form-table");
+						var fieldsListMap = eval('${fieldsListMap}');
+						htmlString.push("<tr><td  class='td_2' id='td_7' rowspan='"+count+"' align='center'>"+"扩展属性"+"</td>");
+						var textName;
+						var textValue;
+						var userid = $("#iid").val().trim();
+						for ( var i = 0; i < fieldsListMap.length; i++) {
+							var fieldsList = fieldsListMap[i];
+							for ( var j = 0; j < fieldsList.length; j++) {
+								var fields = fieldsList[j];
+								//alert("fields======"+fields.type);
+								if (fields.type == 1) {
+									for ( var key in fields) {
+										if(key == "fieldname"){
+											textName = fields[key];//类似ex_test
+											textValue = fields[textName];
+											if(textValue == null){
+												textValue = "";
+											}
+										}
+										if(key == "showname"){
+											var textTitle = fields[key];
+											if(count==1){  
     					if(count%2==1){
-    					
-   	    			       htmlString.push("<th>"+key+"：</th><td><input name='"+key+"' type='text' value='"+value+"'></td>");
-   	    			       
+    					       htmlString.push("<th>"+ textTitle+ "：</th><td><input name='"+textName+"' type='text' value='"+textValue+"'></td>");   	    			       
    	    			    }
      					 if(count%2==0){
-     	    			       htmlString.push("<th>"+key+"：</th><td><input type='text' name='"+key+"' value='"+value+"'></td></tr>");
+											 htmlString.push("<th>"+ textTitle+ "：</th><td><input type='text' name='"+textName+"' value='"+textValue+"'></td></tr>");
      	    			}   					
     				}else{
-    					 if(count%2==1){
-    	    			       htmlString.push("<tr><td class='td_7'></td><th>"+key+"：</th><td><input name='"+key+"' type='text' value='"+value+"'></td>");
-//    	    			       alert(" htmlString"+ htmlString);
-   
+    				    if(count%2==1){
+    					 	       htmlString.push("<tr><td class='td_7'></td><th>"+ textTitle+ "：</th><td><input type='text' name='"+textName+"' value='"+textValue+"'></td>");
     					 }
     	    			    if(count%2==0){
-    	    			       htmlString.push("<th>"+key+"：</th><td><input type='text' name='"+key+"' value='"+value+"'></td></tr>");
-//    	    			       alert(" htmlString"+ htmlString);
+    	    			    	htmlString.push("<th>"+ textTitle+ "：</th><td><input type='text' name='"+textName+"' value='"+textValue+"'></td></tr>");
     	    			    }
-    					
     				}
-    			   
-    			    count++;
-    			}
-    		   } 
-    		}
-    		
-    		var values;
-    		var keys;
-    		if(fields.type==2){
-    		   for(var key in fields){
-    			var value = fields[key];
-    			if(key == 'fieldkeys'){
-    				keys = value.split(",");
-    			}
-    			
-    			if(key == 'fieldvalues'){
-    				values = value.split(",");
-    			}
-    			if(key!='type' && key !='userid'){
-    				
-    				
-    				
-    			    if(key == 'fieldname'){
-    			    	if(count == 1){
+												count++;
+										}
+										
+									}
+								}
+
+
+								var values;
+								var keys;
+								var selectTitle;
+								//alert("fields======"+fields.type);
+								if (fields.type == 2) {
+									for ( var key in fields) {
+										var value = fields[key];
+										//alert("key======"+key);
+										//alert("value======"+value);
+										if(key == "showname"){
+										   
+											selectTitle = fields[key];
+										}
+										//alert("selectTitle======"+selectTitle);
+										if (key == 'fieldkeys') {
+											keys = value.split(",");
+										}
+                                          /// alert("keys======"+keys);
+										if (key == 'fieldvalues') {
+											values = value.split(",");
+										}
+										//alert("values======"+values);
+										if (key != 'type' && key != 'userid') {										
+											if (key == 'fieldname') {
+												if(count == 1){
     			    		if(count%2==1){
-		    			    	htmlString.push("<th>"+value+"</th><td><select  class='kzsx' id='"+value+"' name= '"+value+"' style='width=:88%;'>");
+    			    			htmlString.push("<tr><td class='td_7'></td><th>"+ selectTitle+ "：</th><td><select id='"+value+"' name= '"+value+"'>");
+		    			    	//htmlString.push("<th>"+value+"</th><td><select  class='kzsx' id='"+value+"' name= '"+value+"' style='width=:88%;'>");
 		    			    	//循环key；
 		    			        for(var i=0;i<keys.length;i++){
 		    			 			htmlString.push("<option value='"+keys[i]+"'");
@@ -414,36 +420,40 @@ var complatUserNameInput=$("#name").val();
 		    				   
 		    			    }
 		    			    if(count%2==0){
-		    			    	htmlString.push("<th>"+value+"：</th><td><select class='kzsx' id='"+value+"' name= '"+value+"' style='width=:88%;'>");
+		    			    	htmlString.push("<th>"+ selectTitle+ "：</th><td><select id='"+value+"' name= '"+value+"'>");
 		    			    	//循环key；
 		    			        for(var i=0;i<keys.length;i++){
 		    			        	htmlString.push("<option value='"+keys[i]+"'");
 		    			          //获取下拉列表默认值
-								    var select = eval('${jsonMap}');
+		    			          if(userid!=""){
+		    			          	 var select = eval('${jsonMap}');
 								    for(var selectKey in select[0]){
 								    	var selectValue = select[0][selectKey];
 								    	if(selectValue == keys[i]){
 		    			        			htmlString.push("selected = 'selected'");
 		    			        		}
 							    	}
+		    			          }
 							    	htmlString.push(">"+values[i]+"</option>");
 		    				    }
 		    			       htmlString.push("</select></td></tr>");
 		    			    }	
     			    	}else{
     			    		if(count%2==1){
-		    			    	htmlString.push("<tr><td class='td_7'></td><th>"+ value+"：</th><td><select id='"+value+"' name= '"+value+"'>");
+		    			    	htmlString.push("<tr><td class='td_7'></td><th>"+ selectTitle+ "：</th><td><select id='"+value+"' name= '"+value+"'>");
 		    			    	//循环key；
 		    			        for(var i=0;i<keys.length;i++){
 		    			 			htmlString.push("<option value='"+keys[i]+"'");
 		    			          //获取下拉列表默认值
-								    var select = eval('${jsonMap}');
+								     if(userid!=""){
+		    			          	 var select = eval('${jsonMap}');
 								    for(var selectKey in select[0]){
 								    	var selectValue = select[0][selectKey];
 								    	if(selectValue == keys[i]){
 		    			        			htmlString.push("selected = 'selected'");
 		    			        		}
 							    	}
+		    			          }
 							    	htmlString.push(">"+values[i]+"</option>");
 		    				    }
 		    			       htmlString.push("</select></td>");
@@ -451,32 +461,34 @@ var complatUserNameInput=$("#name").val();
 		    				   
 		    			    }
 		    			    if(count%2==0){
-		    			    	htmlString.push("<th>"+value+"：</th><td><select  class='kzsx' id='"+value+"' name= '"+value+"' style='width=:88%;'>");
+		    			    	htmlString.push("<th>"+ selectTitle+ "：</th><td><select id='"+value+"' name= '"+value+"'>");
 		    			    	//循环key；
 		    			        for(var i=0;i<keys.length;i++){
 		    			        	htmlString.push("<option value='"+keys[i]+"'");
 		    			          //获取下拉列表默认值
-								    var select = eval('${jsonMap}');
+								      if(userid!=""){
+		    			          	 var select = eval('${jsonMap}');
 								    for(var selectKey in select[0]){
 								    	var selectValue = select[0][selectKey];
 								    	if(selectValue == keys[i]){
 		    			        			htmlString.push("selected = 'selected'");
 		    			        		}
 							    	}
+		    			          }
 							    	htmlString.push(">"+values[i]+"</option>");
 		    				    }
 		    			       htmlString.push("</select></td></tr>");
 		    			    }
     			    	}
-    			    
-    			    count++;
-    			   	}
-    			}
-    		  } 
-    		}
-    	}
-    }
-    table.append(htmlString.join(""));
+												
+												count++;
+											}
+										}
+									}
+								}
+							}
+						}
+						table.append(htmlString.join(""));
   //编辑页面密码强度判断
   //编辑页面密码强度判断
 	var pwding = $("#pwd").val();
