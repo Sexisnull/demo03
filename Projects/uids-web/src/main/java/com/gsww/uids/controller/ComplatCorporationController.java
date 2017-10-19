@@ -145,11 +145,12 @@ public class ComplatCorporationController extends BaseController{
 	
 	/**
 	 * 保存用户信息
+	 * @return 
 	 */
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/corporationSave", method = RequestMethod.POST)
 	public ModelAndView corporationSave(ComplatCorporation corporation,HttpServletRequest request,HttpServletResponse response)  throws Exception {
-		 
+		Map<String, Object> resMap = new HashMap<String, Object>();
 		try {
 			Integer operType = null;
 			if(corporation != null){
@@ -244,17 +245,26 @@ public class ComplatCorporationController extends BaseController{
 				if(corporation.getIid() == null){
 					Integer checkData = complatCorporationService.checkUnique(corporation.getLoginName(), corporation.getRegNumber(), corporation.getOrgNumber());
 					if(checkData == 1){
-						returnMsg("error","法人用户重复，保存失败",request);
+						resMap.put("ret", "0");
+						resMap.put("msg", "法人用户重复，保存失败！");
+						response.getWriter().write(JSONObject.toJSONString(resMap));
+						//returnMsg("error","法人用户重复，保存失败",request);
 					}else{
 						complatCorporationService.save(corporation);
-						returnMsg("success","保存成功",request);
+						resMap.put("ret", "1");
+						resMap.put("msg", "保存成功！");
+						response.getWriter().write(JSONObject.toJSONString(resMap));
+						//returnMsg("success","保存成功",request);
 						//记录日志
 						this.addJisLog(corporation, request,operType);
 					}
 					
 				}else{
 					complatCorporationService.save(corporation);
-					returnMsg("success","保存成功",request);
+					resMap.put("ret", "1");
+					resMap.put("msg", "保存成功！");
+					response.getWriter().write(JSONObject.toJSONString(resMap));
+					//returnMsg("success","保存成功",request);
 					//记录日志
 					this.addJisLog(corporation, request,operType);
 				}
@@ -262,6 +272,9 @@ public class ComplatCorporationController extends BaseController{
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			/*resMap.put("ret", "2");
+			resMap.put("msg", "保存失败！");
+			response.getWriter().write(JSONObject.toJSONString(resMap));*/
 			returnMsg("error","保存失败",request);
 		} finally{
 			return  new ModelAndView("redirect:/complat/corporationList");

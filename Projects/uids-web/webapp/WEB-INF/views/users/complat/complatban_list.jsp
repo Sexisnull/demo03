@@ -107,7 +107,7 @@
 								</div>
 							</th>
 							<th width="35%">
-						     	登陆全名
+						     	登录全名
 							</th >
 							<th width="25%" class="alignL" style="text-align: center">
 								最后登录时间
