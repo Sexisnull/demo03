@@ -779,7 +779,7 @@ public class ComplatGroupController extends BaseController {
                     map.put("tld", String.valueOf(complatGroup.getIid()));
                     map.put("viewtype", "1");
                     map.put("regiontype", "1");
-                    if(complatGroup.getNodetype()==1){
+                    if(complatGroup.getIid().equals(Integer.valueOf(deptId))||complatGroup.getPid().equals(Integer.valueOf(deptId))){
                         map.put("open", true);
                     }else {
                         map.put("open", false);
