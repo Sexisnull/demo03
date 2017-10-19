@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gsww.jup.util.StringHelper;
+import com.gsww.uids.constant.JisSettings;
 //import com.gsww.uids.controller.ComplatRoleController;
 import com.gsww.uids.dao.JisApplicationDao;
 import com.gsww.uids.entity.JisApplication;
@@ -35,6 +36,8 @@ public class JisApplicationServiceImpl implements JisApplicationService {
 
 	@Autowired
 	private JisApplicationDao jisApplicationDao;
+	@Autowired
+	private JisSettings jisSetting;
 	
 	@Autowired
 	private JdbcTemplate jdbcTemplate ;
@@ -114,7 +117,8 @@ public class JisApplicationServiceImpl implements JisApplicationService {
 			ids+=i+"','";
 		}
 		ids = ids.substring(0,ids.length()-2);
-		String selApp = "select iid,name,icon,userdefined,logintype from jis_application where isshow=1 and iid in ("+ids+")";
+		String netType= jisSetting.getNetType();
+		String selApp = "select iid,name,icon,userdefined,logintype from jis_application where isshow=1 and nettype="+netType+" and iid in ("+ids+")";
 		
 		return jdbcTemplate.queryForList(selApp);
 	}
