@@ -112,6 +112,20 @@ $().ready(function() {
     });
 });
 
+$(function(){
+	if("${jisParameter.isLoginfail}" == '1'){//1是0否
+		$("#logintimes_tr1").show();
+		$("#logintimes_tr2").show();
+	}
+	if("${jisParameter.isLoginfail}" == '0'){
+		$("#logintimes_tr1").hide();
+		$("#logintimes_tr2").hide();
+		$("#Dcard2Table").hide();
+	}
+	 
+});
+
+
 function loadTab(){
 		//读取cardBar下面所有li标签
 		var getId=document.getElementById("cardBar").getElementsByTagName("li");
@@ -182,6 +196,7 @@ function setlogintime(){
 	var islogintime = $('[name=isLoginfail]:checked').val();
 	if(islogintime == '1'){
 	    $('[id^=logintimes_tr]').show();
+	    $("#Dcard2Table").show();
 	}
 	else{
 		$('[id^=logintimes_tr]').hide();
@@ -291,13 +306,13 @@ function showRealNameAuthUrl(){
 							</c:if>
 						</td>
 					</tr>
-					<tr id="logintimes_tr1">
+					<tr id="logintimes_tr1" style="display: none;">
 						<td align="right" class="label" width="100">连续错误次数</td>
 						<td colspan="2">
 							<input type="text" id="loginError" name="loginError" placeholder="0表示不限制" maxlength="33" value="${jisParameter.loginError}" />
 						</td>
 					</tr>
-					<tr id="logintimes_tr2">
+					<tr id="logintimes_tr2" style="display: none;">
 						<td align="right" class="label" width="100">错误限制时长</td>
 						<td colspan="2">
 							<input type="text" id="banTimes" placeholder="单位：分钟" name="banTimes" maxlength="33" class="input-text" value="${jisParameter.banTimes}" />
@@ -333,7 +348,7 @@ function showRealNameAuthUrl(){
 			</div>
 			
 			<div id="Dcard2" class="hackBox">
-				<table class="form-table">
+				<table class="form-table" id="Dcard2Table">
 					<tr id="logintimes_tr2">
 						<td align="right" class="label">票据有效时间</td>
 						<!-- <td class="required">

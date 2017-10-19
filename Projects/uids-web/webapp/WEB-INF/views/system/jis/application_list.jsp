@@ -18,7 +18,7 @@
 <style type="text/css">
 
  .menuContent{border: 0px solid #ddd;overflow-x:auto;overflow-y:auto;float: left;}
-	.menuContent #areaTree{ width:1700px;display: block;height:330px;float: left;overflow-x:auto;overflow-y:auto;}
+	.menuContent #areaTree{ width:1500px;display: block;height:330px;float: left;overflow-x:auto;overflow-y:auto;}
 
 .mybg{
 	background-color:#000;
@@ -33,10 +33,11 @@
 }
 .alert_tb {	
 	left:300px;
-	top:30px;
+	top:18px;
+	border-radius:15px;
 	border:1px solid #F68A8A;
-	width:380px;
-	height:500px;
+	width:400px;
+	height:520px;
 	background-color:white;
 	z-index:1000;
 	position:absolute;
@@ -311,16 +312,16 @@ function synfuction(){
 	    		&nbsp;&nbsp;&nbsp;同步列表
 	    		<a href="${ctx}/application/applicationList?findNowPage
 						 =true&orderField=${orderField}&orderSort=${orderSort}" title="关闭" 
-					 style="padding-left:240px;line-height:20px;font-size: 23px;color: black;text-decoration:none">x</a>
+					 style="padding-left:260px;line-height:25px;font-size:24px;color: black;text-decoration:none">x</a>
 	    		<hr/><br/></div>
-	    		<div style="text-align: left;padding-top:5px;font-size: 16px;height: 300px;padding-left: 25px">
-	    			<div style="padding-left: 6px;font-size: 16px;">选择机构：</div>
+	    		<div style="text-align: left;padding-top:5px;font-size: 16px;height: 300px;padding-left:42px">
+	    			<div style="padding-left: 6px;padding-bottom:10px; font-size: 16px;">选择机构：</div>
 	    			<div id="menuContent" class="menuContent">
-						<ul id="areaTree" class="ztree" style="margin-top:0; width:180px;"></ul>
+						<ul id="areaTree" class="ztree" style="margin-top:0; width:300px;"></ul>
 					</div>
 	   				<input type="hidden" id="groupid2" name="groupid2" value=""/>
 	   			</div>
-			<div id="synsubmit" style="text-align: right;padding-right: 15px;padding-top: 40px;">
+			<div id="synsubmit" style="text-align: right;padding-right: 10px;padding-top: 30px;">
 				
 					<input type="button" class="btn bluegreen" value="同步" onclick="synfuction()" 
 					 style="background-color: #36c6d3;color:#ffffff;font-size: 15px;"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
