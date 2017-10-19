@@ -881,9 +881,17 @@ public class ComplatUserController extends BaseController {
 		public void userSetUpSave(ComplatUser complatUser,String level,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 			
 			Map<String, Object> resMap = new HashMap<String, Object>();
-			String pwdLevel = jisSetting.getPpdLevel();
+			Integer intLevel = 0;
+			if(StringHelper.isNotBlack(level)){
+				intLevel = Integer.parseInt(level);
+			}
+			
+			Integer intPwdLevel = 0;
+			if(StringHelper.isNotBlack(jisSetting.getPpdLevel())){
+				intPwdLevel = Integer.parseInt(jisSetting.getPpdLevel());
+			}
 			try {
-				if(pwdLevel.equals(level) ){
+				if(intLevel >= intPwdLevel){
 					Integer userId = null;
 					if(complatUser != null){
 						userId = complatUser.getIid();
@@ -981,8 +989,14 @@ public class ComplatUserController extends BaseController {
 						response.getWriter().write(JSONObject.toJSONString(resMap));
 					}
 				}else{
+					if(intPwdLevel==0){
+						resMap.put("msg", "密码强度至少为弱！");
+					}else if(intPwdLevel==1){
+						resMap.put("msg", "密码强度至少为中！");
+					}else if(intPwdLevel==2){
+						resMap.put("msg", "密码强度至少为强！");
+					}
 					resMap.put("ret", "2");
-					resMap.put("msg", "密码强度必须为强！");
 					response.getWriter().write(JSONObject.toJSONString(resMap));
 				}
 				
