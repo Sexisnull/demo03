@@ -249,11 +249,24 @@ function checkSubmitForm(){
 
 
 /***新增***/
-function addComplatUser(){
-     window.location.href="${ctx}/complat/complatUserEdit";
+//function addComplatUser(){
+     //window.location.href="${ctx}/complat/complatUserEdit";
+//}
+function toAdd(){
+ var main = $('#main');
+	console.log(main);
+	parent.location = "${ctx}/complat/complatUserEdit";
 }
 
 
+function toEdit(iids){
+	if(iids==null || iids==""){
+		parent.location = "${ctx}/complat/complatUserEdit";
+	}else{
+		parent.location = "${ctx}/complat/complatUserEdit?iid="+iids;
+	}
+	
+}
 
 //删除
 	function deleteData() {
@@ -270,7 +283,7 @@ function addComplatUser(){
 				});
 				
 			}else{
-				$.dialog.confirm('请您至少选择一条数据',function(){
+				$.dialog.alert('请您至少选择一条数据',function(){
 					return null;
 				});
 			}
@@ -288,7 +301,7 @@ function outPutComplatUser() {
 				});
 				window.location.href="${ctx}/complat/complatExport?iid="+ids.substring(0,ids.length-1);
 			}else{
-				$.dialog.confirm('请您至少选择一条数据',function(){
+				$.dialog.alert('请您至少选择一条数据',function(){
 					return null;
 				});
 			}
@@ -311,7 +324,7 @@ function outPutComplatUser() {
 				});
 				
 			}else{
-				$.dialog.confirm('请您至少选择一条数据',function(){
+				$.dialog.alert('请您至少选择一条数据',function(){
 					return null;
 				});
 			}
@@ -334,8 +347,8 @@ function outPutComplatUser() {
 			});
 		}else{
 			$.dialog.alert('请您至少选择一条数据',function(){
-				return null;
-			});
+					return null;
+				});
 		}
 	}
 
@@ -504,6 +517,7 @@ function resetform() {
 								</th>
 								<td>
 									<input type="text" placeholder="姓名" value="${sParams['LIKE_name']}" id="nameSearch" name="search_LIKE_name" />
+									<input type="hidden" id="orgId" name="orgId" value="${orgId}">
 								</td>
 								<th style="padding-left: 5px">
 									登录名：
@@ -538,7 +552,7 @@ function resetform() {
 						<div class="list-toolbar">
 							<!--  操作按钮开始 	    -->
 							<ul class="list-Topbtn">
-								<li class="add"><a title="新增" onclick="addComplatUser()">新增</a></li>
+								<li class="add"><a title="新增" onclick="toAdd()">新增</a></li>
 								<li class="del"><a title="删除" onclick="deleteData('complat/complatUserDelete','iid');">删除</a></li>
 								<li class="query"><a title="导入" onclick="intPutComplatUser( ${ complatUser.iid});">导入</a></li>
 								<li class="exportData"><a title="导出" onclick="outPutComplatUser()">导出</a></li>
@@ -644,9 +658,11 @@ function resetform() {
 										<!-- <td style="text-align: center;">
 	                        <div title="${complatUser.createtime}" class="word_break">${complatUser.createtime}</div>
 	                    </td> -->
-									<td class="position-content" style="text-align: center;">
-										<gsww:opTag menuId="8a929c9e5e5fbde5015e5fdb125c0002"
-													tabIndex="1" operatorType="2"></gsww:opTag>
+									<td  class="listOper">
+										<!--<gsww:opTag menuId="8a929c9e5e5fbde5015e5fdb125c0002" tabIndex="1" operatorType="2"></gsww:opTag>-->									   
+									     	   <ul>
+									     	       <li class="blue"><a title="编辑" onclick="toEdit(${complatUser.iid});">编辑</a></li>											     	
+									         </ul>									     										     									    
 									</td>
 								</tr>
 							</c:forEach>

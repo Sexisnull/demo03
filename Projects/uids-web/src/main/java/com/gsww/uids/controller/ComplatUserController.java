@@ -137,8 +137,9 @@ public class ComplatUserController extends BaseController {
 	
 	@Autowired
 	private ComplatZoneService complatZoneService;
+	
 	@Autowired
-	private JisSettings jisSetting;
+	private  JisSettings jisSetting;
 	
 	/**
 	 * 获取政府用户左侧机构树
@@ -212,10 +213,12 @@ public class ComplatUserController extends BaseController {
 			// 搜索属性初始化
 			Map<String, Object> searchParams = Servlets
 					.getParametersStartingWith(request, "search_");
-			if(StringUtils.isEmpty(orgId)){
-				searchParams.put("EQ_groupid", deptId);
-			}else{
+			if(StringUtils.isNotBlank(orgId)){
 				searchParams.put("EQ_groupid", orgId);
+				model.addAttribute("orgId", orgId);
+			}else{
+				searchParams.put("EQ_groupid", deptId);
+				model.addAttribute("orgId", deptId);
 			}
 			 
 			Specification<ComplatUser> spec = super.toNewSpecification(
@@ -279,6 +282,14 @@ public class ComplatUserController extends BaseController {
 					model.addAttribute("time", time);
 					
 				}
+				// map放入
+				List<Map<String, Object>> groupList = new ArrayList<Map<String, Object>>();
+				Map<Integer, Object> groupMap = new HashMap<Integer, Object>();
+				groupList = complatGroupService.getComplatGroupList();
+				for (Map<String, Object> group : groupList) {
+					groupMap.put((Integer) group.get("iid"), group.get("name"));
+				}
+				model.addAttribute("groupMap", groupMap);
 				//查询扩展属性和身份证号		
 				JisUserdetail userDetail = new JisUserdetail();
 				Integer userId = complatUser.getIid();			
@@ -288,7 +299,9 @@ public class ComplatUserController extends BaseController {
 				complatUser = new ComplatUser();
 				
 			}
+			String pwdLevel = jisSetting.getPpdLevel();
 			model.addAttribute("complatUser", complatUser);
+			model.addAttribute("pwdLevel", pwdLevel);
 			this.extendsAttr(model, request, response);			
 		} catch (Exception e) {
 			e.printStackTrace();

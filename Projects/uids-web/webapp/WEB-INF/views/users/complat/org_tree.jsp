@@ -33,7 +33,7 @@
 					</li>
 					<li class="split"></li>
 					<li class="active">
-						<a>用户列表</a>
+						<a>政府用户</a>
 					</li>
 				</ol>
 			</div>
