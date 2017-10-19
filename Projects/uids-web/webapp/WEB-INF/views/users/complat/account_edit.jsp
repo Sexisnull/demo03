@@ -137,7 +137,6 @@ function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
 			onDblClick : onDblClickFunction
 		}
 	};
-	console.log("-----"+treeName);
 	$("#" + treeName).tree(setting, rootNode);
 //	$("#" + treeName).tree().refreshNode('');
 }
@@ -493,7 +492,7 @@ var complatUserNameInput=$("#name").val();
   //编辑页面密码强度判断
   //编辑页面密码强度判断
 	var pwding = $("#pwd").val();
-	$('#pwd').attachEvent('oninput',EvalPwd(pwding));	
+	EvalPwd(pwding);	
 
 });
 
@@ -509,9 +508,6 @@ function checkAndSave() {
 		});
 		return;
     }
-    console.log(level>=pwdLevel);
-    console.log(level);
-    console.log(pwdLevel);
     if(level>=pwdLevel){
     	$("#editForm").submit();
     	return;

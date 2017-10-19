@@ -24,6 +24,11 @@
 		<script>
 	$(document).ready(function() {
 		$('#calltest').removeClass();
+		var warnPwdChg = ${warnChgPwd};
+		if(warnPwdChg!='' && warnPwdChg!=null && warnPwdChg==1){
+			$.dialog.alert("您的密码存在安全风险，请尽快修改！");
+		}
+		
 	});
 	function singleLogin(appid){
 		window.location.href = "${ctx}/RedirectSingleLogin?appid="+appid;
