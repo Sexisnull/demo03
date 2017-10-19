@@ -90,7 +90,7 @@ public class FileUploadServlet extends HttpServlet {
 		String name="";
         String extName = "";
 		try {
-			   String filePath = this.getServletConfig().getServletContext().getRealPath("") + "/uploads/";
+			   String filePath = this.getServletConfig().getServletContext().getRealPath("") + "/resources/jis/front/app/";
 			   java.util.Enumeration<Object> e = request.getHeaderNames();
 			   for (Object object = null;e.hasMoreElements();){
 				   object = e.nextElement();
