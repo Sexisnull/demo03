@@ -147,7 +147,7 @@
 							</td>
 							<td align="center" title="${jisFields.showname}" class="box_main_td" nowrap="nowrap">
 								<c:if test="${fn:length(jisFields.showname)>=20}">
-								  ${fn:substring(jisFields.showname,0,20)}
+								  ${fn:substring(jisFields.showname,0,20)}...
 								</c:if>
 								<c:if test="${fn:length(jisFields.showname)<20}">
 								   ${jisFields.showname}&nbsp;
@@ -155,7 +155,7 @@
 							</td>
 							<td align="center" title="${jisFields.fieldname}" class="box_main_td" nowrap="nowrap">
 								<c:if test="${fn:length(jisFields.fieldname)>=20}">
-								  ${fn:substring(jisFields.fieldname,0,20)}
+								  ${fn:substring(jisFields.fieldname,0,20)}...
 								</c:if>
 								<c:if test="${fn:length(jisFields.fieldname)<20}">
 								   ${jisFields.fieldname}&nbsp;
