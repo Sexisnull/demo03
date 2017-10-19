@@ -71,7 +71,7 @@
 			
 			break;
 		case 'clean':
-			$.dialog.alert('您将清空当前角色下的所有成员\n是否继续？',function(){
+			$.dialog.confirm('您将清空当前角色下的所有成员\n是否继续？',function(){
 				cleanMembers();
 			})
 			break;
@@ -184,7 +184,7 @@
 						var tr = "<tr id='datagrid-row-r1-2-0' datagrid-row-index='0' class='datagrid-row'>"+
 						"<td field='iid' style='width: 5px;'>"+
 						"<div class='datagrid-cell-check'>"+
-						"<input type='checkbox' value='"+object+"'>"+
+						"<input type='checkbox' name='iids' value='"+object+"'>"+
 						"</div>"+
 						"</td>"+
 						"<td field='name'>"+

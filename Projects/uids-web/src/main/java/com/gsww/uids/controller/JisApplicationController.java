@@ -235,10 +235,12 @@ public class JisApplicationController extends BaseController{
 				jisApplicationService.save(jisApplication);
 				returnMsg("success","保存成功",request);
 				
-				String desc = sysUserSession.getUserName() + "保存了:" + jisApplication.getName();
+				
 				if(iid==null){
+					String desc = sysUserSession.getLoginAccount() + "新增了:" + jisApplication.getName();
 					jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(),desc,4,1);
 				}else{
+					String desc = sysUserSession.getLoginAccount() + "修改了:" + jisApplication.getName();
 					jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(),desc,4,2);
 				}
 			}
@@ -267,7 +269,7 @@ public class JisApplicationController extends BaseController{
 							}
 			returnMsg("success","删除成功",request);
 			
-			String desc=session.getUserName()+"删除了"+jisApplication.getName();
+			String desc=session.getLoginAccount()+"删除了"+jisApplication.getName();
             jisLogService.save(session.getLoginAccount(),session.getUserIp(), desc, 4, 3);
 			
 		} catch (Exception e) {

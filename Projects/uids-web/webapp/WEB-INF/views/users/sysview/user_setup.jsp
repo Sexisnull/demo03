@@ -76,11 +76,11 @@
 									dataType : "json",
 									success : function(data) {
 										if (data.ret == 0) {
-											alert(data.msg);
+											$.dialog.alertSuccess(data.msg);
 										} else if (data.ret == 1) {
-											alert(data.msg);
+											$.dialog.alert(data.msg);
 										}else if(data.ret == 2){
-											alert(data.msg);
+											$.dialog.alert(data.msg);
 										}
 									}
 								});
@@ -323,9 +323,12 @@
 				<input type="hidden" id="userDetailIid" name="userDetailIid" value="${userDetail.iid}">
 				<input type = "hidden" id="level"  name="level">
 			</div>
-
+			
 			<!--表单的主内容区域-->
 			<div class="form-content">
+				<!-- 提示信息开始 -->
+        
+    	<!-- 提示信息结束 -->
 				<table class="form-table">
 					<tr>
 						<th>
@@ -472,10 +475,6 @@
 					onclick="javascript:window.history.back();" class="btn gray" />
 			</div>
 		</form>
-
-
-		<script type="text/javascript"
-			src="${ctx}/res/plugin/lhgdialog/lhgcore.lhgdialog.min.js"></script>
 		<!-- Handlebars模板组件 -->
 		<script type="text/javascript"
 			src="${ctx}/res/plugin/handlebars/handlebars.js"></script>
@@ -488,6 +487,8 @@
 		<script type="text/javascript" src="${ctx}/res/skin/login/js/login.js"></script>
 		<!-- 密码强度校验 -->
 		<script type="text/javascript" src="${ctx}/res/js/region/checkpwd.js"></script>
+		<script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgdialog.js"></script>
+		
 		<script type="text/javascript">
 	function loginOut() {
 		$.dialog.confirm('您确认要退出系统吗?', function() {

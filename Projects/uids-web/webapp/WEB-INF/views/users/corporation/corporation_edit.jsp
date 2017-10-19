@@ -8,6 +8,7 @@
 
 <%@ include file="/include/meta.jsp"%> 
 <script type="text/javascript" src="${ctx}/res/js/region/checkpwd.js"></script>
+<script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgdialog.js"></script>
 <head>
 <title>甘肃万维JUP课题</title>
 <script type="text/javascript">
@@ -52,8 +53,27 @@ $().ready(function() {
 		   phone:{
 		   	isCompTel:true
 		   }
-		  }
-	    });
+		  },submitHandler : function() {								
+				$.ajax({
+					type : "POST",
+					async : false,
+					url : '${ctx}/complat/corporationSave',
+					data : $("#editForm").serialize(),
+					dataType : "json",
+					success : function(data) {
+						if (data.ret == 0) {
+							$.dialog.alert(data.msg);
+						} else if (data.ret == 1) {
+							 $.dialog.alertSuccess(data.msg,function(){
+								 window.location.href="${ctx}/complat/corporationList";
+							 });
+						}else if(data.ret == 2){
+							$.dialog.alert(data.msg);
+						}
+					}
+	   			});
+	   		}
+	   	});
 	    //编辑页面密码强度显示
 		var pwding = $("#pwd").val();
 		EvalPwd(pwding);
@@ -224,18 +244,20 @@ $().ready(function() {
 			var regNumber = $("#regNumber").val(); //企业工商注册号或统一社会信用代码	  
 			var orgNumber = $("#orgNumber").val(); //组织机构代码  
 			if(regNumber == null || regNumber == ""){
-					alert("请填写企业工商注册号或统一社会信用代码！");
-					return false;
+				$.dialog.alert("请填写企业工商注册号或统一社会信用代码！");
+				return false;
 			}
 			if(regNumber.substring(0, 1) == '9' && regNumber.length == 18){
 				$("#editForm").submit();
 			}else{
 				if(orgNumber == null || orgNumber == ""){
-					alert("请填写组织机构代码！");
+					$.dialog.alert("请填写组织机构代码！");
 					return false;
 				}
 				if(orgNumber.length != 10 || orgNumber.substring(8, 9) != '-'){
-					alert("组织机构代码或统一社会信用代码填写错误，请重新填写！（组织机构代码需包含短横杠“-”）");
+					$.dialog.alert("组织机构代码或统一社会信用代码填写错误，请重新填写！（组织机构代码需包含短横杠“-”）",function(){
+						return null;
+					});
 					return false;
 				}else{
 					$("#editForm").submit();
@@ -244,19 +266,19 @@ $().ready(function() {
 		}else{
 			var orgNumber = $("#orgNumber").val(); //组织机构代码
 			if(orgNumber == null || orgNumber == ""){
-					alert("请填写组织机构代码！");
+					$.dialog.alert("请填写组织机构代码！");
 					return false;
 			}
 			if (orgNumber.indexOf("-") != -1) {
 				$("#orgNumber").attr("name", "orgNumber");
 				if (orgNumber.length != 10 || orgNumber.substring(8, 9) != '-') {
-					alert("组织机构代码或统一社会信用代码填写错误，请重新填写！（组织机构代码需包含短横杠“-”）");
+					$.dialog.alert("组织机构代码或统一社会信用代码填写错误，请重新填写！（组织机构代码需包含短横杠“-”）");
 					return false;
 				}
 			}else{
 				$("#orgNumber").attr("name", "regNumber");
 				if ( orgNumber.length != 18) {
-					alert("组织机构代码或统一社会信用代码填写错误，请重新填写！（组织机构代码需包含短横杠“-”）");
+					$.dialog.alert("组织机构代码或统一社会信用代码填写错误，请重新填写！（组织机构代码需包含短横杠“-”）");
 					return false;
 				}else{
 					$("#editForm").submit();
@@ -347,7 +369,7 @@ color: rgb(119, 119, 119);
    		</ol>
     </div>
 	<!--表单的标题区域--> 
-    <form id="editForm" method="post" action="${ctx}/complat/corporationSave">
+    <form id="editForm">
     
     <div style="display: none;">
     	<input type="hidden" id="iid" name="iid" value="${corporation.iid}"/>

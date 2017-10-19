@@ -76,7 +76,7 @@ function beforeRemove(treeId, treeNode) {                   //删除前
 		}
 	});
 	if (flag == true) {
-		$.dialog.alert("已删除区域 " + treeNode.name + " ！",function(){
+		$.dialog.alertSuccess("已删除区域 " + treeNode.name + " ！",function(){
 			return true;
 		});
 	} else {
@@ -176,7 +176,7 @@ function beforeRename(treeId, treeNode, newName) {       //重命名前---获取
 						return true;
 
 					} else {
-						$.dialog.alert("修改成功！");
+						$.dialog.alertSuccess("修改成功！");
 						treeNode.viewtype = '2';
 						zTree.updateNode(treeNode);
 
@@ -278,7 +278,7 @@ function addHoverDom(treeId, treeNode) {    				//用于当鼠标移动到节点
 							seq : seq
 						});
 						$("#" + treeNode.tId + "_remove").remove();
-						$.dialog.alert("区域添加成功！");
+						$.dialog.alertSuccess("区域添加成功！");
 						return true;
 					} else if (data.ret == 2) {
 						$.dialog.alert("区域名称或编码重复！");

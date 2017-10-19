@@ -75,11 +75,11 @@
 									dataType : "json",
 									success : function(data) {
 										if (data.ret == 0) {
-											alert(data.msg);
+											$.dialog.alertSuccess(data.msg);
 										} else if (data.ret == 1) {
-											alert(data.msg);
+											$.dialog.alert(data.msg);
 										}else if(data.ret == 2){
-											alert(data.msg);
+											$.dialog.alert(data.msg);
 										}
 									}
 								});
@@ -469,8 +469,8 @@
 		</form>
 
 
-		<script type="text/javascript"
-			src="${ctx}/res/plugin/lhgdialog/lhgcore.lhgdialog.min.js"></script>
+		<script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgdialog.js"></script>
+
 		<!-- Handlebars模板组件 -->
 		<script type="text/javascript"
 			src="${ctx}/res/plugin/handlebars/handlebars.js"></script>

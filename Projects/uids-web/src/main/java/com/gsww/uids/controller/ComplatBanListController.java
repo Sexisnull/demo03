@@ -83,7 +83,7 @@ public class ComplatBanListController extends BaseController {
 				Integer Iid = Integer.parseInt(para[i].trim());
 				complatBanlist=complatBanListService.findByIid(Iid);
 				complatBanListService.delete(complatBanlist);
-				 String desc=session.getUserName()+"删除了"+complatBanlist.getLoginname();
+				 String desc=session.getLoginAccount()+"删除了"+complatBanlist.getLoginname();
 	                jisLogService.save(session.getLoginAccount(),session.getUserIp(), desc, 3, 1);
 							}
 			returnMsg("success","删除成功",request);

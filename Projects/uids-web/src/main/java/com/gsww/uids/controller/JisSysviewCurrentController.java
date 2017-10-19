@@ -125,7 +125,7 @@ public class JisSysviewCurrentController extends BaseController{
 				jisCurrent=jisSysviewCurrentService.findByIid(Iid);
 				if (null != jisCurrent) {
 					jisSysviewCurrentService.delete(jisCurrent);
-					String desc = session.getUserName() + "删除了" + jisCurrent.getObjectname();
+					String desc = session.getLoginAccount() + "删除了" + jisCurrent.getObjectname();
 					jisLogService.save(session.getLoginAccount(), session.getUserIp(), desc, 3, 1);
 					// 级联删除明细
 					JisSysviewDetail sysviewDetail = jisSysviewDetailService.findByTranscationId(jisCurrent.getTranscationId());
@@ -162,7 +162,7 @@ public class JisSysviewCurrentController extends BaseController{
 				sysview.setOptresult(1);
 				jisSysviewService.save(sysview);
 				jisSysviewCurrentService.delete(sysviewCurrent);
-				 String desc=session.getUserName()+"同步了"+sysviewCurrent.getObjectname();
+				 String desc=session.getLoginAccount()+"同步了"+sysviewCurrent.getObjectname();
 	                jisLogService.save(session.getLoginAccount(),session.getUserIp(), desc, 3, 1);
 			}
 		}catch (Exception e) {
@@ -190,7 +190,7 @@ public class JisSysviewCurrentController extends BaseController{
 					JisSysview sysview = convertToJisSysview(sysviewCurrent);
 					jisSysviewService.save(sysview);
 					jisSysviewCurrentService.delete(sysviewCurrent);
-					 String desc=session.getUserName()+"批量同步了"+sysviewCurrent.getObjectname();
+					 String desc=session.getLoginAccount()+"批量同步了"+sysviewCurrent.getObjectname();
 		                jisLogService.save(session.getLoginAccount(),session.getUserIp(), desc, 3, 1);
 				}
 			}

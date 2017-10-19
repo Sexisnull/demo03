@@ -297,7 +297,7 @@ function fastwrite(){
 	$(".mybg").addClass("mybg");
     document.body.appendChild(mybg);
 	document.body.style.overflow = "hidden"; 
-	$("#alerttb").show(); 				
+	$("#alerttb").show();			
 }
 
 function group(num){

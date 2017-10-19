@@ -3,6 +3,7 @@
 <html>
 
 <%@ include file="/include/meta.jsp"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgcore.lhgdialog.min.js"></script>
 
 <head>
@@ -309,7 +310,9 @@
 	                        </div>
 	                    </td>
 	                    <td style="text-align: center;">
-	                    	<div title="${outsideUser.createTime}" class="word_break">${outsideUser.createTime}</div>
+	                    	<div title="${outsideUser.createTime}" class="word_break">
+								<fmt:formatDate value="${outsideUser.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/>
+							</div>
 	                    </td>
 	                    
 	                	<td class="position-content" style="text-align: center;" >

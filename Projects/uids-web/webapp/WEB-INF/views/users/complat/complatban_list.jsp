@@ -2,6 +2,7 @@
 <!doctype html>
 <html>
 	<%@ include file="/include/meta.jsp"%>
+	<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 	<head>
 		<meta charset="utf-8" />
 		<title></title>
@@ -107,7 +108,7 @@
 								</div>
 							</th>
 							<th width="35%">
-						     	登陆全名
+						     	登录全名
 							</th >
 							<th width="25%" class="alignL" style="text-align: center">
 								最后登录时间
@@ -136,7 +137,8 @@
 								</td>
 								<td class="alignL" style="text-align: center">
 									<div class="list-longtext">
-									${complatBanlist.logindate}
+									<fmt:formatDate value="${complatBanlist.logindate}" pattern="yyyy-MM-dd HH:mm:ss"/>
+									</div>
 								</td>
 								<td class="alignL" style="text-align: center">
 									<div class="list-longtext">
