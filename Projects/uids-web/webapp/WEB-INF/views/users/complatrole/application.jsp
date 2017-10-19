@@ -71,7 +71,7 @@
 			
 			break;
 		case 'clean':
-			$.dialog.alert('您将清空当前角色下的所有成员\n是否继续？',function(){
+			$.dialog.confirm('您将清空当前角色下的所有成员\n是否继续？',function(){
 				cleanMembers();
 			})
 			break;
