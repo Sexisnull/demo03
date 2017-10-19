@@ -52,6 +52,7 @@ import com.gsww.jup.util.JSONUtil;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.jup.util.StringHelper;
 import com.gsww.jup.util.TimeHelper;
+import com.gsww.uids.constant.JisSettings;
 import com.gsww.uids.entity.ComplatGroup;
 import com.gsww.uids.entity.ComplatOutsideuser;
 import com.gsww.uids.entity.ComplatRole;
@@ -136,7 +137,8 @@ public class ComplatUserController extends BaseController {
 	
 	@Autowired
 	private ComplatZoneService complatZoneService;
-	
+	@Autowired
+	private JisSettings jisSetting;
 	
 	/**
 	 * 获取政府用户左侧机构树
@@ -879,8 +881,9 @@ public class ComplatUserController extends BaseController {
 		public void userSetUpSave(ComplatUser complatUser,String level,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 			
 			Map<String, Object> resMap = new HashMap<String, Object>();
+			String pwdLevel = jisSetting.getPpdLevel();
 			try {
-				if(level == "strong" || "strong".equals(level) ){
+				if(pwdLevel.equals(level) ){
 					Integer userId = null;
 					if(complatUser != null){
 						userId = complatUser.getIid();

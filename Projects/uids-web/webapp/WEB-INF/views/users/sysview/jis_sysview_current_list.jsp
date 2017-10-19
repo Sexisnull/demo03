@@ -3,6 +3,7 @@
 <html>
 <%@ include file="/include/meta.jsp"%>
 <script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgcore.lhgdialog.min.js"></script>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <head>
 <meta charset="utf-8"/>
 <title>甘肃万维JUP课题</title>
@@ -16,11 +17,11 @@ $(document).ready(function(){
 		$('.advanced-content').toggle('fast');
 	});
 	$("#advanced-search-btn").click(function(){
-	    var objectnameSearch = $("#objectnameSearchHigh").val();
-	    if (objectnameSearch == '' || isChinaOrNumbOrLett(objectnameSearch)) {
+	    var objectnameSearchHigh = $("#objectnameSearchHigh").val();
+	    if (objectnameSearchHigh == '' || isNumbOrLett(objectnameSearchHigh)) {
 		    $("#form2").submit();
 	    } else {
-		    $.validator.errorShow($("#objectnameSearchHigh"), '只能包括中英文、数字、@和下划线');
+		    $.validator.errorShow($("#objectnameSearchHigh"), '只能包括汉字、字母和数字');
 	    }
 	});
 	//阻止按键盘Enter键提交表单
@@ -62,6 +63,24 @@ function checkSubmitForm() {
 		form1.submit();
 	} else {
 		$.validator.errorShow($("#objectNameSearch"), '只能包括中英文、数字、@和下划线');
+	}
+}
+
+/*
+用途：检查输入字符串是否只由汉字、字母、数字组成
+输入：
+value：字符串
+返回：
+如果通过验证返回true,否则返回false
+*/
+function isNumbOrLett( s ){//判断是否是字母、数字组成
+	//var regu = "^[0-9a-zA-Z\u4e00-\u9fa5]+$";
+	var regu = /^([a-zA-Z0-9]+)$/;
+	var re = new RegExp(regu);
+	if (re.test(s)) {
+		return true;
+	}else{
+		return false;
 	}
 }
 
@@ -317,10 +336,10 @@ width: 65px !important;
 	                    	 <i class="check_btn"></i><input id="${jisCurrent.iid}" value="${jisCurrent.iid}" type="checkbox" class="check_btn" style="display:none;"/>
 	                        </div>
 	                    </td>
-						<td>
+						<td class="alignL" style="text-align: center">
 							${jisCurrent.objectname}
 						</td>
-						<td style="word-break: break-all; word-wrap: break-word;">
+						<td class="alignL" style="text-align: center">
 							${jisCurrent.codeid}
 						</td>
 						<td class="alignL" style="text-align: center">
@@ -335,9 +354,8 @@ width: 65px !important;
 						</td>
 						<td class="alignL" style="text-align: center">
 							<div class="list-longtext">
-								${jisCurrent.synctime}
+								 ${fn:substring(jisCurrent.synctime, 0, 19)}
 							</div>
-						</td>
 						</td>
 						<td class="alignL" style="text-align: center">
 							<div class="list-longtext">

@@ -3,10 +3,12 @@
 <html>
 
 <%@ include file="/include/meta.jsp"%> 
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 <head>
 <title>甘肃万维JUP课题</title>
 <script type="text/javascript" src="${ctx}/res/plugin/uploadify/js/jquery.uploadify-3.1.min.js"></script>
+
 <style type="text/css">
 </style>
 <script type="text/javascript">
@@ -67,7 +69,7 @@
 			<tr style="border-bottom:1px solid #c6e6ff">
 				<th> 创建时间：</th>
 				<td>
-					<input type="text" class="input" id="synctime" value="${jisSysview.synctime}" readonly="readonly"/>
+					<input type="text" class="input" id="synctime" value="${fn:substring(jisSysview.synctime, 0, 19)}" readonly="readonly"/>
 	            </td>
 	        	<th>同步结果：</th>
 	        	<td>
