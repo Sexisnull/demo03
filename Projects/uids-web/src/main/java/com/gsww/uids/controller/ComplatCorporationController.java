@@ -149,7 +149,7 @@ public class ComplatCorporationController extends BaseController{
 	 */
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/corporationSave", method = RequestMethod.POST)
-	public ModelAndView corporationSave(ComplatCorporation corporation,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+	public void corporationSave(ComplatCorporation corporation,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		Map<String, Object> resMap = new HashMap<String, Object>();
 		try {
 			Integer operType = null;
@@ -272,12 +272,10 @@ public class ComplatCorporationController extends BaseController{
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			/*resMap.put("ret", "2");
+			resMap.put("ret", "2");
 			resMap.put("msg", "保存失败！");
-			response.getWriter().write(JSONObject.toJSONString(resMap));*/
-			returnMsg("error","保存失败",request);
-		} finally{
-			return  new ModelAndView("redirect:/complat/corporationList");
+			response.getWriter().write(JSONObject.toJSONString(resMap));
+			//returnMsg("error","保存失败",request);
 		}
 		
 	}
