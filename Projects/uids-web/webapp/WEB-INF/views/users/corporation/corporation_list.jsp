@@ -5,7 +5,9 @@
 <%@ include file="/include/meta.jsp"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <head>
-<meta charset="utf-8"/>
+		<meta charset="utf-8"/>
+		<script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgcore.lhgdialog.min.js"></script>
+
 <title>甘肃万维JUP课题</title>
 
 <script type="text/javascript"> 
