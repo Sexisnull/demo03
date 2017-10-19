@@ -429,10 +429,10 @@ function toEdit(iids){
                     <th width="18%" style="text-align: center;">机构名称</th>
                     <th width="18%" style="text-align: center;">机构编码</th>
                     <th width="18%" style="text-align: center;">机构后缀</th>
-                    <th width="5%" style="text-align: center;">节点类型</th>
+                    <th width="5%"  style="text-align: center;">节点类型</th>
                     <th width="26%" style="text-align: center;">机构全名</th>
                     <th width="10%" style="text-align: center;">上级机构</th>
-                    <th width="5%" style="text-align: center;">操作</th>
+                    <th width="5%"  style="text-align: center;">操作</th>
                 </tr>
             </thead> 
             <tbody>

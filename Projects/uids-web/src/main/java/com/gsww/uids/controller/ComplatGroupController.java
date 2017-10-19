@@ -544,9 +544,9 @@ public class ComplatGroupController extends BaseController {
 	
 	/**
 	 * 导入时数据校验
-	 * @param complatGroup
-	 * @param request
+	 * @param group
 	 * @param model
+	 * @param request
 	 * @param response
 	 * @return boolean
 	 * @throws Exception
