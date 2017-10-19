@@ -146,14 +146,29 @@
 	                    <td style="text-align: center;">
 	                    	<div title="${datacall.iid}" class="word_break">${datacall.iid}</div>
 	                    </td>
-	                	<td style="text-align: center;">
-	                    	<div title="${datacall.resName}" class="word_break">${datacall.resName}</div>
+	                	<td style="text-align:center;" title="${datacall.resName}" class="word_break">
+	                		<c:if test="${fn:length(datacall.resName)>=20}">
+						    	${fn:substring(datacall.resName,0,20)}...
+						    </c:if>
+					    	<c:if test="${fn:length(datacall.resName)<20}">
+						    	${datacall.resName}
+						    </c:if>
 	                    </td>
-	                	<td style="text-align: center;">
-	                    	<div title="${datacall.remark}" class="word_break">${datacall.remark}</div>
+	                	<td style="text-align:center;" title="${datacall.remark}" class="word_break">
+	                		<c:if test="${fn:length(datacall.remark)>=20}">
+						    	${fn:substring(datacall.remark,0,20)}...
+						    </c:if>
+					    	<c:if test="${fn:length(datacall.remark)<20}">
+						    	${datacall.remark}
+						    </c:if>
 	                    </td>
-	                    <td style="text-align: center;">
-	                    	<div title="${datacall.resUrl}" class="word_break">${datacall.resUrl}</div>
+	                    <td style="text-align:center;" title="${datacall.resUrl}" class="word_break">
+	                    	<c:if test="${fn:length(datacall.resUrl)>=20}">
+						    	${fn:substring(datacall.resUrl,0,20)}...
+						    </c:if>
+					    	<c:if test="${fn:length(datacall.resUrl)<20}">
+						    	${datacall.resUrl}
+						    </c:if>
 	                    </td>
 	                    <td style="text-align: center;">
 	                    	<c:if test="${datacall.callingType==1}">IFRAME调用</c:if>

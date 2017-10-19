@@ -239,12 +239,12 @@ function synfuction(){
 									<input type="checkbox" class="check_btn" style="display: none;" />
 								</div>             		
                 	</th>
-                    <th width="25%" style="text-align: center;">
+                    <th width="30%" style="text-align: center;">
                                                              应用名称        
                     </th>
-                    <th width="20%" style="text-align: center;">应用标识</th>
-                    <th width="20%" style="text-align: center;">所属机构</th>
-                    <th width="15%" style="text-align: center;">同步用户</th>
+                    <th width="15%" style="text-align: center;">应用标识</th>
+                    <th width="25%" style="text-align: center;">所属机构</th>
+                    <th width="10%" style="text-align: center;">同步用户</th>
                     <th width="30%" style="text-align: center;">操作</th>
                 </tr>
             </thead> 
@@ -259,14 +259,29 @@ function synfuction(){
 	                    <%-- <td style="text-align: center;">
 	                    	<div title="${application.name}" class="word_break">${application.name}</div>
 	                    </td> --%>
-	                	<td style="text-align: center;">
-	                    	<div title="${application.name}" class="word_break">${application.name}</div>
+	                	<td title="${application.name}" style="text-align: center;" class="word_break">
+	                		<c:if test="${fn:length(application.name)>=20}">
+						    	${fn:substring(application.name,0,20)}...
+						    </c:if>
+					    	<c:if test="${fn:length(application.name)<20}">
+						    	${application.name}
+						    </c:if> 
 	                    </td>
-	                	<td style="text-align: center;">
-	                    	<div title="${application.mark}" class="word_break">${application.mark}</div>
+	                	<td style="text-align:center;" title="${application.mark}" class="word_break">
+	                		<c:if test="${fn:length(application.mark)>=20}">
+						    	${fn:substring(application.mark,0,20)}...
+						    </c:if>
+					    	<c:if test="${fn:length(application.mark)<20}">
+						    	${application.mark}
+						    </c:if> 
 	                    </td>
-	                    <td style="text-align: center;">
-	                    	<div class="word_break">${groupMap[application.groupId]}</div>
+	                    <td style="text-align: center;" title="${groupMap[application.groupId]}" class="word_break">
+	                    	<c:if test="${fn:length(groupMap[application.groupId])>=20}">
+						    	${fn:substring(groupMap[application.groupId],0,20)}...
+						    </c:if>
+					    	<c:if test="${fn:length(groupMap[application.groupId])<20}">
+						    	${groupMap[application.groupId]}
+						    </c:if> 
 	                    </td>
 	                    <td style="text-align: center;">
 	                    	<c:if test="${application.loginType=='1' && application.isSyncGroup=='1'}">不支持</c:if>

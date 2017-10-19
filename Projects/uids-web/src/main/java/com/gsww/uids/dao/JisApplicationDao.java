@@ -2,11 +2,7 @@ package com.gsww.uids.dao;
 
 import java.util.List;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.gsww.uids.entity.JisApplication;
@@ -49,4 +45,11 @@ public interface JisApplicationDao extends PagingAndSortingRepository<JisApplica
 	 * @author Lincx
 	 */
 	List<JisApplication> findByIsSyncGroupNotNullAndLoginType(Integer loginType);
+	
+	/**
+	 * 通过网络类型查询
+	 * @param netType
+	 * @return
+	 */
+	List<JisApplication> findByNetType(Integer netType);
 }

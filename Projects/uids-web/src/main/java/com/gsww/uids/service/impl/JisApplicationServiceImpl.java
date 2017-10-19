@@ -149,4 +149,10 @@ public class JisApplicationServiceImpl implements JisApplicationService {
 		List<JisApplication> list = jisApplicationDao.findByIsSyncGroupNotNullAndLoginType(loginType);
 		return list;
 	}
+
+	@Override
+	public List<JisApplication> findByNetType(Integer netType) {
+		List<JisApplication> list=jisApplicationDao.findByNetType(netType);
+		return list;
+	}
 }

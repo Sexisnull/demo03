@@ -3,9 +3,6 @@ package com.gsww.uids.service;
 import java.util.List;
 import java.util.Map;
 
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -85,6 +82,8 @@ public interface JisApplicationService {
 	 * @throws Exception
 	 */
 	public List<JisApplication> findAll();
+	
+	public List<JisApplication> findByNetType(Integer netType);
 	
 	/**
 	 * 根据用户角色获取有权访问的子系统
