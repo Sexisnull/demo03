@@ -101,7 +101,6 @@ function onClickGroup(event, treeId, treeNode) {
 	$('#groupid').val(treeNode.id);
 	$('#groupname').val(treeNode.name);
 	
-	
 	$('#groupid').val(treeNode.id);
 	$('#groupname1').val(treeNode.name);
 	hideGroupMenu();
@@ -153,6 +152,8 @@ function beforeClick(treeId, treeNode, clickFlag) {
 function resetform() {
 	$('form').find(':input').not(':button,:hidden,:submit,:reset').val('');
 }
+			
+
 /*********************机构树结束************************/
 
 
@@ -173,14 +174,16 @@ var complatUserNameInput=$("#name").val();
 	     },
 	     age: {
 	         cnRangelength: [0,64],
+	         maxlength: 3,
 	         isAge: true
+	         
 	     },		       	   
 	     headship:{
 	         cnRangelength: [0,64]
 	     },	   
 	     phone:{//办公电话
 		   		 isCompTel:true,
-		   		 //maxlength: 16
+		   		 maxlength:12 
 		   },
 	     mobile : {//移动电话
 				   required: true,
@@ -315,7 +318,7 @@ var complatUserNameInput=$("#name").val();
     jQuery.validator.addMethod("isCompTel", function(value, element) { 
            var corporName = /^(((0\d{3}[\-])?\d{7}|(0\d{2}[\-])?\d{8}))([\-]\d{2,4})?$/;   
            return this.optional(element) || (corporName.test(value));     
-    }, "电话号码格式错误");  
+    }, "电话号码格式错误,例如:XXX-XXXXXXXX或者XXXX-XXXXXXX");  
     //身份证号
      jQuery.validator.addMethod("isIdCard", function(value, element) { 
            var corporName = /([1-6]\d{5}(19|20)\d\d(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])\d{3}[0-9xX])|([1-6]\d{5}\d\d(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])\d{3})/;   
@@ -328,7 +331,7 @@ var complatUserNameInput=$("#name").val();
    
    
 	 //获取用户扩展属性
-						var htmlString = [];
+					var htmlString = [];
 						var count = 1;
 						var table = $(".form-table");
 						var fieldsListMap = eval('${fieldsListMap}');
@@ -336,11 +339,11 @@ var complatUserNameInput=$("#name").val();
 						var textName;
 						var textValue;
 						var userid = $("#iid").val().trim();
+						//alert("userid===="+userid);
 						for ( var i = 0; i < fieldsListMap.length; i++) {
 							var fieldsList = fieldsListMap[i];
 							for ( var j = 0; j < fieldsList.length; j++) {
 								var fields = fieldsList[j];
-								//alert("fields======"+fields.type);
 								if (fields.type == 1) {
 									for ( var key in fields) {
 										if(key == "fieldname"){
@@ -354,17 +357,17 @@ var complatUserNameInput=$("#name").val();
 											var textTitle = fields[key];
 											if(count==1){  
     					if(count%2==1){
-    					       htmlString.push("<th>"+ textTitle+ "：</th><td><input name='"+textName+"' type='text' value='"+textValue+"'></td>");   	    			       
+    					       htmlString.push("<th>"+ textTitle+ "：</th><td><input name='"+textName+"' type='text' value='"+textValue+"' style='width: 79.9%;'></td>");   	    			       
    	    			    }
      					 if(count%2==0){
-											 htmlString.push("<th>"+ textTitle+ "：</th><td><input type='text' name='"+textName+"' value='"+textValue+"'></td></tr>");
+											 htmlString.push("<th>"+ textTitle+ "：</th><td><input type='text' name='"+textName+"' value='"+textValue+"' style='width: 79.9%;'></td></tr>");
      	    			}   					
     				}else{
     				    if(count%2==1){
-    					 	       htmlString.push("<tr><td class='td_7'></td><th>"+ textTitle+ "：</th><td><input type='text' name='"+textName+"' value='"+textValue+"'></td>");
+    					 	       htmlString.push("<tr><td class='td_7'></td><th>"+ textTitle+ "：</th><td><input type='text' name='"+textName+"' value='"+textValue+"' style='width: 79.9%;'></td>");
     					 }
     	    			    if(count%2==0){
-    	    			    	htmlString.push("<th>"+ textTitle+ "：</th><td><input type='text' name='"+textName+"' value='"+textValue+"'></td></tr>");
+    	    			    	htmlString.push("<th>"+ textTitle+ "：</th><td><input type='text' name='"+textName+"' value='"+textValue+"' style='width: 79.9%;'></td></tr>");
     	    			    }
     				}
 												count++;
@@ -377,21 +380,18 @@ var complatUserNameInput=$("#name").val();
 								var values;
 								var keys;
 								var selectTitle;
-								//alert("fields======"+fields.type);
 								if (fields.type == 2) {
 									for ( var key in fields) {
 										var value = fields[key];
-										//alert("key======"+key);
-										//alert("value======"+value);
 										if(key == "showname"){
-										   
+										   //alert("key======"+key);
 											selectTitle = fields[key];
 										}
 										//alert("selectTitle======"+selectTitle);
 										if (key == 'fieldkeys') {
 											keys = value.split(",");
 										}
-                                          /// alert("keys======"+keys);
+                    //alert("keykey======"+key);
 										if (key == 'fieldvalues') {
 											values = value.split(",");
 										}
@@ -400,7 +400,7 @@ var complatUserNameInput=$("#name").val();
 											if (key == 'fieldname') {
 												if(count == 1){
     			    		if(count%2==1){
-    			    			htmlString.push("<tr><td class='td_7'></td><th>"+ selectTitle+ "：</th><td><select id='"+value+"' name= '"+value+"'>");
+    			    			htmlString.push("<tr><td class='td_7'></td><th>"+ selectTitle+ "：</th><td><select id='"+value+"' name= '"+value+"' style='width: 86.9%;'>");
 		    			    	//htmlString.push("<th>"+value+"</th><td><select  class='kzsx' id='"+value+"' name= '"+value+"' style='width=:88%;'>");
 		    			    	//循环key；
 		    			        for(var i=0;i<keys.length;i++){
@@ -420,7 +420,7 @@ var complatUserNameInput=$("#name").val();
 		    				   
 		    			    }
 		    			    if(count%2==0){
-		    			    	htmlString.push("<th>"+ selectTitle+ "：</th><td><select id='"+value+"' name= '"+value+"'>");
+		    			    	htmlString.push("<th>"+ selectTitle+ "：</th><td><select id='"+value+"' name= '"+value+"' style='width: 86.9%;'>");
 		    			    	//循环key；
 		    			        for(var i=0;i<keys.length;i++){
 		    			        	htmlString.push("<option value='"+keys[i]+"'");
@@ -440,12 +440,12 @@ var complatUserNameInput=$("#name").val();
 		    			    }	
     			    	}else{
     			    		if(count%2==1){
-		    			    	htmlString.push("<tr><td class='td_7'></td><th>"+ selectTitle+ "：</th><td><select id='"+value+"' name= '"+value+"'>");
+		    			    	htmlString.push("<tr><td class='td_7'></td><th>"+ selectTitle+ "：</th><td><select id='"+value+"' name= '"+value+"' style='width: 86.9%;'>");
 		    			    	//循环key；
 		    			        for(var i=0;i<keys.length;i++){
 		    			 			htmlString.push("<option value='"+keys[i]+"'");
 		    			          //获取下拉列表默认值
-								     if(userid!=""){
+								    if(userid!=""){
 		    			          	 var select = eval('${jsonMap}');
 								    for(var selectKey in select[0]){
 								    	var selectValue = select[0][selectKey];
@@ -461,12 +461,12 @@ var complatUserNameInput=$("#name").val();
 		    				   
 		    			    }
 		    			    if(count%2==0){
-		    			    	htmlString.push("<th>"+ selectTitle+ "：</th><td><select id='"+value+"' name= '"+value+"'>");
+		    			    	htmlString.push("<th>"+ selectTitle+ ": </th><td><select id='"+value+"' name= '"+value+"' style='width: 86.9%;'>");
 		    			    	//循环key；
 		    			        for(var i=0;i<keys.length;i++){
 		    			        	htmlString.push("<option value='"+keys[i]+"'");
 		    			          //获取下拉列表默认值
-								      if(userid!=""){
+								    if(userid!=""){
 		    			          	 var select = eval('${jsonMap}');
 								    for(var selectKey in select[0]){
 								    	var selectValue = select[0][selectKey];
@@ -481,6 +481,7 @@ var complatUserNameInput=$("#name").val();
 		    			    }
     			    	}
 												
+							
 												count++;
 											}
 										}
@@ -499,20 +500,33 @@ var complatUserNameInput=$("#name").val();
 
 function checkAndSave() { 
     var level = $("#level").val(); 
+    var pwdLevel=${pwdLevel};
     var pwd = $("#pwd").val();
-    if(level == "strong") {
-		$("#editForm").submit();
-	} else if(level == "weak" && pwd == "") {
-		$.dialog.confirm("请填写必填信息！",function(){
+    var msg = "";
+    if(pwd==""){
+    	$.dialog.alert("请填写必填信息！",function(){
 				return null;
 		});
-		return false;
-	} else {
-		$.dialog.confirm("密码强度必须为强！",function(){
+		return;
+    }
+    console.log(level>=pwdLevel);
+    console.log(level);
+    console.log(pwdLevel);
+    if(level>=pwdLevel){
+    	$("#editForm").submit();
+    	return;
+    }else{
+    	if(pwdLevel==0){
+    		msg= "密码强度至少为弱!";
+    	}else if(pwdLevel==1){
+    		msg = "密码强度至少为中!";
+    	}else if(pwdLevel==2){
+    		msg = "密码强度至少为强!";
+    	}
+    	$.dialog.alert(msg,function(){
 				return null;	            
 		});
-		return false;
-	}
+    }
 }
 
 
@@ -592,7 +606,7 @@ function checkAndSave() {
 				   </td>
 				   <th><b class="mustbe">*</b> 身份证号：</th>
 				   <td style="width:300px;">
-					<input type="text" <c:if test="${userDetail.cardid != null}"></c:if> id="cardid" class="cardid" name="cardid" value="${userDetail.cardid}" />
+					<input type="text" <c:if test="${userDetail.cardid != null}">readonly="readonly"</c:if> id="cardid" class="cardid" name="cardid" value="${userDetail.cardid}" />
 					<input type="hidden" id="oldCardid" class="oldCardid" name="oldCardid" value="${userDetail.cardid}" />
 				</td>
 			    </tr>		    
@@ -639,7 +653,7 @@ function checkAndSave() {
 					    <input type="hidden" id="groupid" name="groupid">	
 				    </c:if>
 				    <c:if test="${not empty complatUser.iid}">
-				        <input id="groupname" value="${groupMap[complatUser.groupid]}" name="groupname" type="text" style="cursor: pointer;"/> 
+				          <input id="groupname1" value="${groupMap[complatUser.groupid]}" name="groupname" readonly="readonly" type="text" style="cursor: pointer;"/> 
 					      <input type="hidden" id="groupid" name="groupid" value="${complatUser.groupid }">	
 				    </c:if>											
 				  </td>
