@@ -87,7 +87,7 @@ var deptCode=$("#regionCode").val();
 </script>
 <link rel="stylesheet" href="${ctx}/res/jslib/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css"/>
 <script type="text/javascript" src="${ctx}/res/jslib/ztree/js/jquery.ztree.all-3.5.min.js"></script>
-<script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgcore.lhgdialog.min.js"></script>
+<script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgdialog.js"></script>
 <script type="text/javascript" src="${ctx}/res/js/region/zone.js"></script>
 <style>
 #tablelist table { text-align: left; width: 100%; margin-bottom: 0; background: #FFF; border: 1px solid #DDD; /*margin-top: 60px;*/ margin-right: auto; margin-left: auto; /*_width: 98%;*/ }
