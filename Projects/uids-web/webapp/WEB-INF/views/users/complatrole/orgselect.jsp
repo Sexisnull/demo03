@@ -13,6 +13,7 @@
 <script type="text/javascript" src="${ctx }/res/skin/default/js/jquery-ui.js"></script>
 <script type="text/javascript" src="${ctx}/res/skin/login/js/jquery.draggable.js"></script>
 <script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgcore.lhgdialog.min.js"></script>
+<script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgdialog.js"></script>
 <link rel="stylesheet" href="${ctx}/res/skin/default/css/tabs.css"/>
 <script type="text/javascript" src="${ctx}/res/skin/login/js/jquery.parse.js"></script>
 <link type="text/css" rel="stylesheet" href="${ctx}/res/skin/login/css/panel.css"/>
@@ -803,7 +804,7 @@
 			dataType : "JSON",
 			success : function(data) {
 				if(data.result){
-					$.dialog.alert("新增成功",function(){
+					$.dialog.alertSuccess("新增成功",function(){
 						closeDialog();
 					});
 				}else{
