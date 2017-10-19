@@ -127,9 +127,9 @@
 									class="check_btn" style="display: none;" />
 							</div>
 						</th>
-						<th width="20%" style="text-align: center;">显示名称</th>
-						<th width="15%" style="text-align: center;">字段名称</th>
-						<th width="35%" style="text-align: center;">字段类型</th>
+						<th width="25%" style="text-align: center;">显示名称</th>
+						<th width="25%" style="text-align: center;">字段名称</th>
+						<th width="20%" style="text-align: center;">字段类型</th>
 						<th width="15%" style="text-align: center;">必填</th>
 						<th width="15%" style="text-align: center;">操作</th>
 					</tr>
@@ -145,11 +145,21 @@
 										style="display:none;" />
 								</div>
 							</td>
-							<td style="text-align: center;">
-								<div title="${jisFields.showname}" class="word_break">${jisFields.showname}</div>
+							<td align="center" title="${jisFields.showname}" class="box_main_td" nowrap="nowrap">
+								<c:if test="${fn:length(jisFields.showname)>=20}">
+								  ${fn:substring(jisFields.showname,0,20)}
+								</c:if>
+								<c:if test="${fn:length(jisFields.showname)<20}">
+								   ${jisFields.showname}&nbsp;
+								 </c:if> 
 							</td>
-							<td style="text-align: center;">
-								<div title="${jisFields.fieldname}" class="word_break">${jisFields.fieldname}</div>
+							<td align="center" title="${jisFields.fieldname}" class="box_main_td" nowrap="nowrap">
+								<c:if test="${fn:length(jisFields.fieldname)>=20}">
+								  ${fn:substring(jisFields.fieldname,0,20)}
+								</c:if>
+								<c:if test="${fn:length(jisFields.fieldname)<20}">
+								   ${jisFields.fieldname}&nbsp;
+								 </c:if> 
 							</td>
 							<td style="text-align: center;">
 								<div class="alignL">
