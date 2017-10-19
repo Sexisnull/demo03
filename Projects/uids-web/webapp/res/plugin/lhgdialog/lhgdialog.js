@@ -1597,7 +1597,25 @@ var _zIndex = function()
 {
     return lhgdialog.setting.zIndex;
 };
-
+/**
+ * 成功
+ */
+lhgdialog.alertSuccess = function( content, callback, parent )
+{
+	return lhgdialog({
+		title: '提示',
+		id: 'Alert',
+		zIndex: _zIndex(),
+		icon: 'success.gif',
+		fixed: true,
+		lock: true,
+		content: content,
+		ok: true,
+		resize: false,
+		close: callback,
+		parent: parent || null
+	});
+};
 /**
  * 警告
  * @param	{String}	消息内容
