@@ -139,7 +139,7 @@ public class ComplatUserController extends BaseController {
 	private ComplatZoneService complatZoneService;
 	
 	@Autowired
-	private  JisSettings jisSetting;
+	private JisSettings jisSetting;
 	
 	/**
 	 * 获取政府用户左侧机构树
@@ -299,9 +299,9 @@ public class ComplatUserController extends BaseController {
 				complatUser = new ComplatUser();
 				
 			}
-			String pwdLevel = jisSetting.getPpdLevel();
-			model.addAttribute("complatUser", complatUser);
+			String pwdLevel=jisSetting.getPpdLevel();
 			model.addAttribute("pwdLevel", pwdLevel);
+			model.addAttribute("complatUser", complatUser);
 			this.extendsAttr(model, request, response);			
 		} catch (Exception e) {
 			e.printStackTrace();
