@@ -56,7 +56,7 @@ function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
 	var setting = {
 		async : {
 			enable : true,
-			url : '../login/getGroup',
+			url : "${ctx}/uids/getGroup",
 			autoParam : [ "id=groupId", "isDisabled" ]
 		},
 		callback : {
@@ -121,7 +121,7 @@ function setting2(treeName, onClickFunction, onDblClickFunction, rootNode) {
 	var setting = {
 		async : {
 			enable : true,
-			url : "${ctx}/uids/getGroup",
+			url : "${ctx}/uids/getCodeid",
 			autoParam : [ "id=groupId", "isDisabled" ]
 		},
 		callback : {
@@ -318,7 +318,7 @@ jQuery.validator.addMethod("isName", function(value, element) {
     <div class="form-btn">
     	<input type="submit" tabindex="15" id="submit-btn" value="保存" class="btn bluegreen"/>
     	&nbsp;&nbsp;
-        <input type="button" tabindex="16" value="返回" onclick="javascript:window.location.href='${ctx}/uids/complatgroupList?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}'" class="btn gray"/>
+        <input type="button" tabindex="16" value="返回" onclick="javascript:window.location.href='${ctx}/uids/groupOrgTree?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}'" class="btn gray"/>
         
     </div>
     </form>

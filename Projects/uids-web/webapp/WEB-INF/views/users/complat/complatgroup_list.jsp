@@ -24,7 +24,7 @@ font-size: 12px;
 border: 1px solid #dddddd;
 padding: 3px 8px;
 height: 30px;
-width: 167px;
+width: 220px;
 }
 </style>
 <script type="text/javascript"> 
@@ -49,7 +49,7 @@ function checkSubmitForm(){
 				$.validator.errorShow($("#codeidSearch"),'只能输入不超过255位的数字');
 			}
 		} else{
-			$.validator.errorShow($("#nameSearch"),'只能输入字母、数字、下划线、中文，并且不能超过100位');
+			$.validator.errorShow($("#nameSearch"),'只能输入字母、数字、下划线、中文，并且不能超过32位');
 		}
 	}
 	/*
@@ -63,7 +63,7 @@ function checkSubmitForm(){
 		var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;
 		var re = new RegExp(regu);
 		if (re.test(s)) {
-		    if(s.length<100){
+		    if(s.length<32){
 				return true;
 			}
 		}else{
@@ -101,26 +101,6 @@ function checkSubmitForm(){
 		}
 	}
 
-	//删除
-	function deleteData() {
-		var paraTypeId=$(".iid").val();
-		if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checked').length!=0){
-				$.dialog.confirm('您确认要删除吗？',function(){
-					var ids = "";
-					$('.list-table tbody input[type=checkbox]').each(function(i, o) {
-						if($(o).attr('checked')) {
-							ids += $(o).val() + ",";
-						}
-					});
-					window.location.href="${ctx}/uids/complatgroupDelete?iid="+ids.substring(0,ids.length-1);
-				});
-				
-			}else{
-				$.dialog.confirm('请您至少选择一条数据',function(){
-					return null;
-				});
-			}
-	}
 
 	$(function(){
 		//高级搜索按钮点击事件
@@ -151,6 +131,7 @@ $(function(){
 		    }
 		});		
 });
+
 
 //搜索树的设置
 $(function(){
@@ -227,7 +208,7 @@ function exportGroup() {
 				});
 				window.location.href="${ctx}/uids/complatgroupExport?sId="+ids.substring(0,ids.length-1);
 			}else{
-				$.dialog.confirm('请您至少选择一条数据',function(){
+				$.dialog.alert('请您至少选择一条数据',function(){
 					return null;
 				});
 			}
@@ -247,6 +228,41 @@ function importGroup(){
 		drag : false,
 		resize : false
 	});
+}
+
+
+//新增
+function toAdd(){
+	parent.location = "complatgroupEdit";
+}
+
+//删除
+function deleteData() {
+	var paraTypeId=$(".iid").val();
+	if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checked').length!=0){
+		$.dialog.confirm('您确认要删除吗？',function(){
+			var ids = "";
+			$('.list-table tbody input[type=checkbox]').each(function(i, o) {
+				if($(o).attr('checked')) {
+					ids += $(o).val() + ",";
+						}
+			});
+			parent.location = "${ctx}/uids/complatgroupDelete?iid="+ids.substring(0,ids.length-1);
+		});
+	}else{
+		$.dialog.alert('请您至少选择一条数据',function(){
+			return null;
+		});
+	}
+}
+//编辑
+function toEdit(iids){
+	if(iids==null || iids==""){
+		parent.location = "complatgroupEdit";
+	}else{
+		parent.location = "complatgroupEdit?iid="+iids;
+	}
+	
 }
 </script>
 
@@ -276,7 +292,7 @@ function importGroup(){
 			<table class="advanced-content" width="100%">
 			    <tr>
 					<th style="padding-left: 5px">机构名称:</th>
-					<td width="15%">
+					<td width="220" height="30">
 						<input id="nameSearch" type="text" class="input" name="search_LIKE_name" value="${sParams['LIKE_name']}"  placeholder="机构名称"/>
 					</td>
 					<th style="padding-left: 5px">机构编码:</th>
@@ -291,7 +307,7 @@ function importGroup(){
 				<tr height="10px"></tr>
 				<tr>
 				    <th style="padding-left: 5px">区域代码:</th>
-					<td width="15%">
+					<td width="220" height="30">
               			<input id="areacodeSearch" type="text" class="input" name="search_LIKE_areacode" value="${sParams['LIKE_areacode']}" placeholder="区域代码"/>
 					</td>
 				    <th style="padding-left: 5px">节点类型:</th>
@@ -378,13 +394,14 @@ function importGroup(){
 	<div class="list">
 	<input type="hidden" id="orderField" name="orderField" value="${orderField}"/> 
 	<input type="hidden" id="orderSort" name="orderSort" value="${orderSort}"/>
+	<input type="hidden" id="orgIdSave" name="orgIdSave" value="${orgIdSave}"/>
         <div class="list-topBar  advanced-search">
            	<div class="list-toolbar">
             <!-- 操作按钮开始	 -->
               	 <!--<gsww:opTag menuId="8a92012d5e7de06a015e7de18b3a0001" tabIndex="1" operatorType="1"></gsww:opTag>-->
               	 <ul class="list-Topbtn">
 						<li class="add"><a title="新增"
-							onclick="add('uids/complatgroupEdit');">新增</a></li>
+							onclick="toAdd();">新增</a></li>
 						<li class="del"><a title="删除"
 							onclick="deleteData('uids/complatgroupDelete','iid');">删除</a></li>
 						<li class="query" id="importGroup" onclick="importGroup()"><a title="导入">导入</a></li>
@@ -409,13 +426,13 @@ function importGroup(){
 									<input type="checkbox" class="check_btn" style="display: none;" />
 						</div>             		
                 	</th>
-                    <th width="15%" style="text-align: center;">机构名称</th>
-                    <th width="15%" style="text-align: center;">机构编码</th>
-                    <th width="15%" style="text-align: center;">机构后缀</th>
-                    <th width="10%" style="text-align: center;">节点类型</th>
-                    <th width="25%" style="text-align: center;">机构全名</th>
+                    <th width="18%" style="text-align: center;">机构名称</th>
+                    <th width="18%" style="text-align: center;">机构编码</th>
+                    <th width="18%" style="text-align: center;">机构后缀</th>
+                    <th width="5%" style="text-align: center;">节点类型</th>
+                    <th width="26%" style="text-align: center;">机构全名</th>
                     <th width="10%" style="text-align: center;">上级机构</th>
-                    <th width="10%" style="text-align: center;">操作</th>
+                    <th width="5%" style="text-align: center;">操作</th>
                 </tr>
             </thead> 
             <tbody>
@@ -427,13 +444,34 @@ function importGroup(){
 	                        </div>
 	                    </td>
 	                	<td style="text-align: center;">
-	                    	<div title="${complatGroup.name}" class="word_break">${complatGroup.name}</div>
+	                    	<div title="${complatGroup.name}" class="word_break">
+		                    	<c:if test="${fn:length(complatGroup.name)>=7}">
+									  ${fn:substring(complatGroup.name,0,7)}...
+								</c:if>
+								<c:if test="${fn:length(complatGroup.name)<7}">
+									  ${complatGroup.name}&nbsp;
+								</c:if> 
+	                    	</div>
 	                    </td>
 	                	<td style="text-align: center;">
-	                    	<div title="${complatGroup.codeid}" class="word_break">${complatGroup.codeid}</div>
+	                    	<div title="${complatGroup.codeid}" class="word_break">
+		                    	<c:if test="${fn:length(complatGroup.codeid)>=15}">
+									  ${fn:substring(complatGroup.codeid,0,15)}...
+								</c:if>
+								<c:if test="${fn:length(complatGroup.codeid)<15}">
+									  ${complatGroup.codeid}&nbsp;
+								</c:if> 
+	                    	</div>
 	                    </td>
 	                    <td style="text-align: center;">
-	                    	<div title="${complatGroup.suffix}" class="word_break">${complatGroup.suffix}</div>
+	                    	<div title="${complatGroup.suffix}" class="word_break">
+	                    	    <c:if test="${fn:length(complatGroup.suffix)>=20}">
+									  ${fn:substring(complatGroup.suffix,0,20)}...
+								</c:if>
+								<c:if test="${fn:length(complatGroup.suffix)<20}">
+									  ${complatGroup.suffix}&nbsp;
+								</c:if>
+	                    	</div>
 	                    </td>
 	                    <td style="text-align: center;">
 	                    	<div class="alignL">
@@ -444,15 +482,32 @@ function importGroup(){
 	                    		</div>
 	                        </div>
 	                    </td>
-	                	<td class="alignL" style="text-align: center;">
-	                    	${complatGroup.groupallname}
+	                	<td style="text-align: center;">
+	                    	<div title="${complatGroup.groupallname}" class="word_break">
+	                    	    <c:if test="${fn:length(complatGroup.groupallname)>=15}">
+									  ${fn:substring(complatGroup.groupallname,0,15)}...
+								</c:if>
+								<c:if test="${fn:length(complatGroup.groupallname)<15}">
+									  ${complatGroup.groupallname}&nbsp;
+								</c:if>
+	                    	</div>
 	                    </td>
-	                	<td class="alignL" style="text-align: center;">
-	                    	${complatGroup.parentName}
+	                	<td style="text-align: center;">
+	                    	<div title="${complatGroup.parentName}" class="word_break">
+	                    	    <c:if test="${fn:length(complatGroup.parentName)>=5}">
+									  ${fn:substring(complatGroup.parentName,0,5)}...
+								</c:if>
+								<c:if test="${fn:length(complatGroup.parentName)<5}">
+									  ${complatGroup.parentName}&nbsp;
+								</c:if>
+	                    	</div>
 	                    </td>
 	        
-	                	<td class="position-content" style="text-align: center;" >
-	                        <gsww:opTag menuId="8a92012d5e7de06a015e7de18b3a0001" tabIndex="1" operatorType="2"></gsww:opTag>
+	                	<td class="listOper" >
+	                        <ul>
+	                        	<li class="blue" onclick="toEdit(${complatGroup.iid});"><i></i>
+	                        	<a>编辑</a></li>
+	                        </ul>
 	                    </td>
 	                </tr>
 				</c:forEach>

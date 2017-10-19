@@ -80,8 +80,6 @@ public class ComplatGroupController extends BaseController {
     //区域类型下拉选择集合
     private Map<Integer, Object> areatypeMap = new HashMap<Integer, Object>();
     
-    private String orgIdSave = "";//保存点击树的节点id
-    
     @RequestMapping(value = "/groupOrgTree", method = RequestMethod.GET)
 	public String complatList(
 			Model model, ServletRequest request, HttpServletRequest hrequest) {
@@ -93,7 +91,7 @@ public class ComplatGroupController extends BaseController {
 			//点击完查询时组织机构名称回显
 			String groupName = request.getParameter("groupname");
 			model.addAttribute("groupName", groupName);
-
+			
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			logger.error("机构树打开失败：" + ex.getMessage());
@@ -127,9 +125,7 @@ public class ComplatGroupController extends BaseController {
             if (StringUtils.isNotBlank(request.getParameter("orderSort"))) {
                 orderSort = (String) request.getParameter("orderSort");
             }
-            if (StringUtils.isNotBlank(orgId)){
-            	orgIdSave = orgId;
-            }
+           
             //初始化分页数据
             PageUtils pageUtils = new PageUtils(pageNo, pageSize, orderField, orderSort);
             PageRequest pageRequest = super.buildPageRequest(hrequest, pageUtils, ComplatGroup.class, findNowPage);
@@ -140,10 +136,11 @@ public class ComplatGroupController extends BaseController {
 
             //搜索属性初始化
 			Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
-			if(StringUtils.isEmpty(orgIdSave)){
+			if(searchParams.get("EQ_pid")==null){
 				searchParams.put("EQ_pid", deptId);
-			}else{
-				searchParams.put("EQ_pid", orgIdSave);
+			}
+			if(StringUtils.isNotBlank(orgId)){
+				searchParams.put("EQ_pid", orgId);
 			}
 			Specification<ComplatGroup>  spec=super.toSpecification(searchParams, ComplatGroup.class);
 			//分页
@@ -168,11 +165,11 @@ public class ComplatGroupController extends BaseController {
 			for (Map<String, Object> para : areatypeList) {
 				areatypeMap.put(Integer.parseInt((String) para.get("PARA_CODE")), para.get("PARA_NAME"));
 			}
-			//回显下拉菜单上级机构查询
 			model.addAttribute("pageInfo", pageInfo);
 			model.addAttribute("nodetypeMap", nodetypeMap);
 			model.addAttribute("areatypeMap", areatypeMap);
 			model.addAttribute("sortType", orderField);
+			model.addAttribute("orgId", orgId);
 			model.addAttribute("orderField", orderField);
 			model.addAttribute("orderSort", orderSort);
 			// 将搜索条件编码成字符串，用于排序，分页的URL
@@ -397,7 +394,7 @@ public class ComplatGroupController extends BaseController {
 			e.printStackTrace();
 			returnMsg("error","保存失败",request);
 		} finally{
-			return  new ModelAndView("redirect:/uids/complatgroupList");
+			return  new ModelAndView("redirect:/uids/groupOrgTree");
 		}
 		
 	}
@@ -438,7 +435,7 @@ public class ComplatGroupController extends BaseController {
 			e.printStackTrace();
 			returnMsg("error", "删除失败",request);			
 		} finally{
-			return  new ModelAndView("redirect:/uids/complatgroupList");
+			return  new ModelAndView("redirect:/uids/groupOrgTree");
 		}
 		
 	}
@@ -491,78 +488,97 @@ public class ComplatGroupController extends BaseController {
 	    fieldMap.put("11", "spec");
 	    List<ComplatGroup> group = ExcelUtil.readXls(fileName, multipartFile.getInputStream(), ComplatGroup.class, fieldMap);
 	    
-	    int row = 1;
-	    boolean flag = true;
-	    String strRow = "";
 		try {
-			for (ComplatGroup complatGroup : group) {
-				if (StringHelper.isNotBlack(complatGroup.getName()) && StringHelper.isNotBlack(complatGroup.getParentCode())) {
-						if (complatGroup.getStrNodeType().equals("区域")) {
-							complatGroup.setNodetype(Integer.valueOf(1));
-						} else if (complatGroup.getStrNodeType().equals("单位")) {
-							complatGroup.setNodetype(Integer.valueOf(2));
-						} else if (complatGroup.getStrNodeType().equals("部门或处室")) {
-							complatGroup.setNodetype(Integer.valueOf(3));
+			if(importCheck(group, model, request, response)){
+				for (ComplatGroup complatGroup : group) {
+					if (complatGroup.getStrNodeType().equals("区域")) {
+						complatGroup.setNodetype(Integer.valueOf(1));
+					} else if (complatGroup.getStrNodeType().equals("单位")) {
+						complatGroup.setNodetype(Integer.valueOf(2));
+					} else if (complatGroup.getStrNodeType().equals("部门或处室")) {
+						complatGroup.setNodetype(Integer.valueOf(3));
+					}
+					if (complatGroup.getStrAreaType().equals("省级")) {
+						complatGroup.setAreatype(Integer.valueOf(1));
+					} else if ((complatGroup.getStrAreaType().equals("市（州）级"))|| (complatGroup.getStrAreaType().equals("市(州)级"))) {
+						complatGroup.setAreatype(Integer.valueOf(2));
+					} else if (complatGroup.getStrAreaType().equals("区县")) {
+						complatGroup.setAreatype(Integer.valueOf(3));
+					} else if (complatGroup.getStrAreaType().equals("乡镇街道")) {
+						complatGroup.setAreatype(Integer.valueOf(4));
+					} else if (complatGroup.getStrAreaType().equals("其他")) {
+						complatGroup.setAreatype(Integer.valueOf(5));
+					}
+					if (complatGroup.getStrIsCombine().equals("否")) {
+						complatGroup.setIscombine(Integer.valueOf(0));
+					} else if (complatGroup.getStrIsCombine().equals("是")) {
+						complatGroup.setIscombine(Integer.valueOf(1));
+					}
+					String daPinYin = getPinYinHeadChar(complatGroup.getName());
+					complatGroup.setPinyin(daPinYin);
+					complatGroup.setCreatetime(Timestamp.valueOf(TimeHelper.getCurrentTime()));
+					complatGroup.setOpersign(Integer.valueOf(1));
+					complatGroup.setSynState(Integer.valueOf(2));
+					String parentCode = complatGroup.getParentCode();
+					Integer pId = complatGroupService.findByCodeid(parentCode).getIid();
+					String codeId = complatGroupService.findByIid(pId).getCodeid() + "001";
+					while (codeId.compareTo(codeId + "001") < 0) {
+						if (complatGroupService.findByCodeid(codeId) == null) {
+							break;
 						}
-						if (complatGroup.getStrAreaType().equals("省级")) {
-							complatGroup.setAreatype(Integer.valueOf(1));
-						} else if ((complatGroup.getStrAreaType().equals("市（州）级"))|| (complatGroup.getStrAreaType().equals("市(州)级"))) {
-							complatGroup.setAreatype(Integer.valueOf(2));
-						} else if (complatGroup.getStrAreaType().equals("区县")) {
-							complatGroup.setAreatype(Integer.valueOf(3));
-						} else if (complatGroup.getStrAreaType().equals("乡镇街道")) {
-							complatGroup.setAreatype(Integer.valueOf(4));
-						} else if (complatGroup.getStrAreaType().equals("其他")) {
-							complatGroup.setAreatype(Integer.valueOf(5));
-						}
-						if (complatGroup.getStrIsCombine().equals("否")) {
-							complatGroup.setIscombine(Integer.valueOf(0));
-						} else if (complatGroup.getStrIsCombine().equals("是")) {
-							complatGroup.setIscombine(Integer.valueOf(1));
-						}
-						String daPinYin = getPinYinHeadChar(complatGroup.getName());
-						complatGroup.setPinyin(daPinYin);
-						complatGroup.setCreatetime(Timestamp.valueOf(TimeHelper.getCurrentTime()));
-						complatGroup.setOpersign(Integer.valueOf(1));
-						complatGroup.setSynState(Integer.valueOf(2));
-						String parentCode = complatGroup.getParentCode();
-						String name = complatGroup.getName();
-							Integer pId = complatGroupService.findByCodeid(parentCode).getIid();
-							//进行重名校验
-							if (complatGroupService.queryNameIsUsed(name, pId)) {
-								flag = false;
-								strRow = "第<" + row + ">行数据，机构名重复！";
-								break;
-							} else {
-								String codeId = complatGroupService.findByIid(pId).getCodeid() + "001";
-								while (codeId.compareTo(codeId + "001") < 0) {
-									if (complatGroupService.findByCodeid(codeId) == null) {
-										break;
-									}
-									int num = Integer.valueOf(codeId.substring(codeId.length()-4,codeId.length())).intValue() + 1;
-									codeId = codeId.substring(0,codeId.length() - 4) + String.valueOf(num);
-								}
-								complatGroup.setCodeid(codeId);
-								complatGroup.setPid(pId);
-								complatGroup = complatGroupService.save(complatGroup);
-							}
-							synchronization(complatGroup, 1);//新增同步
-				} else {
-					flag = false;
-					strRow ="第<" + row + ">行数据，机构名或上级机构编码不能为空！";
-					break;
+						int num = Integer.valueOf(codeId.substring(codeId.length()-4,codeId.length())).intValue() + 1;
+						codeId = codeId.substring(0,codeId.length() - 4) + String.valueOf(num);
+					}
+					complatGroup.setCodeid(codeId);
+					complatGroup.setPid(pId);
+					complatGroup = complatGroupService.save(complatGroup);
+					synchronization(complatGroup, 1);//新增同步
 				}
-				row++;
-			}
-			if(flag){
 				returnMsg("success","导入成功",request);
-			}else{
-				returnMsg("error", "导入失败," + strRow ,request);
-			}
+			}	
 		} catch (Exception e) {
 		e.printStackTrace();
 		returnMsg("error", "导入失败",request);
 		}
+	}
+	
+	/**
+	 * 导入时数据校验
+	 * @param complatGroup
+	 * @param request
+	 * @param model
+	 * @param response
+	 * @return boolean
+	 * @throws Exception
+	 */
+	public boolean importCheck(List<ComplatGroup> group,Model model,HttpServletRequest request,HttpServletResponse response)throws Exception {
+		int row = 1;
+		for (ComplatGroup complatGroup : group) {
+			//进行机构名和上级机构编码不能为空的校验
+			if (StringUtils.isEmpty(complatGroup.getName()) || StringUtils.isEmpty(complatGroup.getParentCode())) {
+				returnMsg("error", "第" + row + "行导入失败,机构名或者上级机构编码不能为空！",request);
+				return false;
+			}
+			//进行机构重名校验
+			String parentCode = complatGroup.getParentCode();
+			String name = complatGroup.getName();
+			Integer pId = complatGroupService.findByCodeid(parentCode).getIid();
+			if (complatGroupService.queryNameIsUsed(name, pId)){
+				returnMsg("error", "第" + row + "行导入失败,机构名称重复！",request);
+				return false;
+			}
+			//进行在权限内的导入校验
+			SysUserSession sysUserSession = (SysUserSession) ((HttpServletRequest) request).getSession().getAttribute("sysUserSession");
+			String deptId = sysUserSession.getDeptId();// 获取部门id
+			String deptParentCode = complatGroupService.findByIid(Integer.valueOf(deptId)).getCodeid();
+			if(parentCode.length() < deptParentCode.length() || 
+			   !parentCode.substring(0, deptParentCode.length()).equals(deptParentCode)){
+				returnMsg("error", "第" + row + "行导入失败,只能导入权限以内的数据！",request);
+				return false;
+			}
+			row++;
+		}
+		return true;
 	}
 	
     /**
@@ -680,13 +696,13 @@ public class ComplatGroupController extends BaseController {
     }
 
     /**
-     * 加载机构区域编码页面
+     * 加载机构区域编码树
      *
      * @param request
      * @return
      */
-    @RequestMapping(value = "/getGroup", method = RequestMethod.POST)
-    public void getGroup(HttpServletRequest request,
+    @RequestMapping(value = "/getCodeid", method = RequestMethod.POST)
+    public void getCodeid(HttpServletRequest request,
                          HttpServletResponse response) {
         try {
             String groupId = request.getParameter("groupId");
@@ -745,7 +761,7 @@ public class ComplatGroupController extends BaseController {
     }
 
     /**
-     * @discription 获取区域树信息
+     * @discription 获取list列表机构树信息
      * @param request
      * @param response
      */
@@ -779,7 +795,7 @@ public class ComplatGroupController extends BaseController {
                     map.put("tld", String.valueOf(complatGroup.getIid()));
                     map.put("viewtype", "1");
                     map.put("regiontype", "1");
-                    if(complatGroup.getIid().equals(Integer.valueOf(deptId))||complatGroup.getPid().equals(Integer.valueOf(deptId))){
+                    if(complatGroup.getNodetype()==1){
                         map.put("open", true);
                     }else {
                         map.put("open", false);
@@ -796,6 +812,74 @@ public class ComplatGroupController extends BaseController {
             logger.error(e.getMessage(), e);
         }
     }
+    
+    /**
+	 * 加载上级机构树
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/getGroup", method = RequestMethod.POST)
+	public void getGroup(HttpServletRequest request,
+			HttpServletResponse response) {
+		try {
+			String groupId = request.getParameter("groupId");
+			String isDisabled = request.getParameter("isDisabled");
+			SysUserSession sysUserSession = (SysUserSession) ((HttpServletRequest) request).getSession()
+            .getAttribute("sysUserSession");
+			// 获取部门id
+			String deptId = sysUserSession.getDeptId();
+
+			List<ComplatGroup> list = new ArrayList<ComplatGroup>();
+
+			if (!"0".equals(groupId) && StringUtils.isNotBlank(groupId)) {
+				list = complatGroupService.findByPid(Integer.parseInt(groupId));
+			} else {
+				list.add(complatGroupService.findByIid(Integer.valueOf(deptId)));
+			}
+
+			List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+			for (ComplatGroup c : list) {
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("id", c.getIid() + "");
+				map.put("name", c.getName());
+				map.put("icon", null);
+				map.put("target", "page");
+				map.put("url", null);
+				// List<ComplatGroup> sets =
+				// complatGroupService.findByPid(c.getIid());
+				/*
+				 * if(sets.isEmpty()){ map.put("isParent", false); }else{
+				 * map.put("isParent", true); }
+				 */
+				map.put("isParent", true);
+				map.put("isDisabled", false);
+				map.put("open", true);
+				map.put("nocheck", false);
+				map.put("click", null);
+				map.put("checked", false);
+				map.put("iconClose", null);
+				map.put("iconOpen", null);
+				map.put("iconSkin", null);
+				map.put("pId", c.getPid());
+				map.put("chkDisabled", false);
+				map.put("halfCheck", false);
+				map.put("dynamic", null);
+				map.put("moduleId", null);
+				map.put("functionId", null);
+				map.put("allowedAdmin", null);
+				map.put("allowedGroup", null);
+				result.add(map);
+			}
+			String groups = JSONUtil.writeListMapJSONMap(result);
+			response.setContentType("text/json");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().write(groups);
+
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
+		}
+	}
 
 
 }
