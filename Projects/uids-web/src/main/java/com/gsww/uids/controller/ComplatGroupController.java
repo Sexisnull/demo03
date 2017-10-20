@@ -772,41 +772,39 @@ public class ComplatGroupController extends BaseController {
      * @param response
      */
     @RequestMapping(value = "/orgTree", method = RequestMethod.POST)
-    public void zoneTree(HttpServletRequest request, HttpServletResponse response, String orgId) {
+    public void zoneTree(HttpServletRequest request, HttpServletResponse response, String orgId, String pId) {
 		List<ComplatGroup> list = new ArrayList<ComplatGroup>();
         try {
             SysUserSession sysUserSession = (SysUserSession) ((HttpServletRequest) request).getSession()
                     .getAttribute("sysUserSession");
             // 获取部门id
             String deptId = sysUserSession.getDeptId();
-			if (StringUtils.isEmpty(deptId)){
-				list = complatGroupService.findAllOrg();
+			if (StringUtils.isEmpty(pId)){
+				if (StringUtils.isEmpty(orgId)){
+					list = complatGroupService.findAllDept(deptId);
+				} else {
+					list = complatGroupService.findAllDept(orgId);
+				}
 			} else {
-				list = complatGroupService.findAllDept(deptId);
-			}
-			if(orgId==null){
-				orgId="";
+				list = complatGroupService.findByPid(Integer.parseInt(pId));
 			}
             List<Map<String, Object>> treeList = new ArrayList<Map<String, Object>>();
             if (list != null && !list.isEmpty()) {
                 for (ComplatGroup complatGroup : list) {
                     Map<String, Object> map = new HashMap<String, Object>();
                     map.put("id", String.valueOf(complatGroup.getIid()));
-                    if (orgId.equals(String.valueOf(complatGroup.getIid()))){
-                        map.put("checked", true);
-                    }
                     map.put("pId", String.valueOf(complatGroup.getPid()));
                     map.put("name", complatGroup.getName());
                     map.put("title", complatGroup.getName());
                     map.put("tld", String.valueOf(complatGroup.getIid()));
                     map.put("viewtype", "1");
                     map.put("regiontype", "1");
-                    if(complatGroup.getNodetype()==1){
-                        map.put("open", true);
-                    }else {
-                        map.put("open", false);
-                    }
-//                    map.put("seq", String.valueOf(complatGroup.getType()));
+					map.put("isParent", true);
+					if (StringUtils.isEmpty(pId)){
+						map.put("open", true);
+					} else {
+						map.put("open", false);
+					}
                     treeList.add(map);
                 }
             }
