@@ -128,8 +128,8 @@ function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
 	var setting = {
 		async : {
 			enable : true,
-			url : '../uids/orgTree',
-			autoParam : [ "id=pId" ]
+			url : '../uids/getGroup',
+			autoParam : [ "id=groupId", "isDisabled" ]
 		},
 		callback : {
 			beforeClick : beforeClick,
