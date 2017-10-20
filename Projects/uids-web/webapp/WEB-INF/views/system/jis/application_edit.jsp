@@ -680,19 +680,19 @@ $(function(){
 			<tr>
 				<th style="text-align:left;"><b class="mustbe">*</b>网络类型：</th>
 				<td>
-					<c:if test="${jisApplication.netType=='1'}">
-						<input type="radio" name="netType" value="0"/>外网&nbsp;&nbsp;
-						<input type="radio" name="netType" checked="checked" value="1"/>专网
+					<c:if test="${jisApplication.netType=='2'}">
+						<input type="radio" name="netType" value="1"/>外网&nbsp;&nbsp;
+						<input type="radio" name="netType" checked="checked" value="2"/>专网
 					</c:if>
 					
-					<c:if test="${jisApplication.netType=='0'}">
-						<input type="radio" name="netType" checked="checked" value="0"/>外网&nbsp;&nbsp;
-						<input type="radio" name="netType" value="1"/>专网
+					<c:if test="${jisApplication.netType=='1'}">
+						<input type="radio" name="netType" checked="checked" value="1"/>外网&nbsp;&nbsp;
+						<input type="radio" name="netType" value="2"/>专网
 					</c:if>
 					
 					<c:if test="${jisApplication.netType==null}">
-						<input type="radio" name="netType" value="0" checked="checked"/>外网&nbsp;&nbsp;
-						<input type="radio" name="netType" value="1"/>专网
+						<input type="radio" name="netType" value="1" checked="checked"/>外网&nbsp;&nbsp;
+						<input type="radio" name="netType" value="2"/>专网
 					</c:if>
 				</td>
 				

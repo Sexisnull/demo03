@@ -24,7 +24,7 @@ font-size: 12px;
 border: 1px solid #dddddd;
 padding: 3px 8px;
 height: 30px;
-width: 220px;
+width: 179px;
 }
 </style>
 <script type="text/javascript"> 
@@ -292,26 +292,26 @@ function toEdit(iids){
 			<table class="advanced-content" width="100%">
 			    <tr>
 					<th style="padding-left: 5px">机构名称:</th>
-					<td width="220" height="30">
-						<input id="nameSearch" type="text" class="input" name="search_LIKE_name" value="${sParams['LIKE_name']}"  placeholder="机构名称"/>
+					<td width="20%" height="30">
+						<input id="nameSearch" type="text" class="input" name="search_LIKE_name" value="${sParams['LIKE_name']}"  placeholder="机构名称" style="width: 161px;"/>
 					</td>
 					<th style="padding-left: 5px">机构编码:</th>
-					<td width="15%">
-              			<input id="codeidSearch" type="text" class="input" name="search_LIKE_codeid" value="${sParams['LIKE_codeid']}"  placeholder="机构编码"/>
+					<td width="20%">
+              			<input id="codeidSearch" type="text" class="input" name="search_LIKE_codeid" value="${sParams['LIKE_codeid']}"  placeholder="机构编码" style="width: 161px;"/>
 					</td>
 					<th style="padding-left: 5px">组织机构代码:</th>
-					<td width="15%">
-              			<input id="orgcodeSearch" type="text" class="input" name="search_LIKE_orgcode" value="${sParams['LIKE_orgcode']}"  placeholder="组织机构代码"/>
+					<td width="20%">
+              			<input id="orgcodeSearch" type="text" class="input" name="search_LIKE_orgcode" value="${sParams['LIKE_orgcode']}"  placeholder="组织机构代码" style="width: 161px;"/>
 					</td>
 				</tr>
 				<tr height="10px"></tr>
 				<tr>
 				    <th style="padding-left: 5px">区域代码:</th>
-					<td width="220" height="30">
-              			<input id="areacodeSearch" type="text" class="input" name="search_LIKE_areacode" value="${sParams['LIKE_areacode']}" placeholder="区域代码"/>
+					<td width="20%" height="30">
+              			<input id="areacodeSearch" type="text" class="input" name="search_LIKE_areacode" value="${sParams['LIKE_areacode']}" placeholder="区域代码" style="width: 161px;"/>
 					</td>
 				    <th style="padding-left: 5px">节点类型:</th>
-					<td width="15%">
+					<td width="20%">
 	                <select id="search_EQ_nodetype"  name="search_EQ_nodetype" class="select" >
 	                	<option value="">---请选择节点类型---</option>
 						<c:forEach var="nodetype" items="${nodetypeMap}">
@@ -321,7 +321,7 @@ function toEdit(iids){
 	                </select>
 					</td>
 					<th style="padding-left: 5px">区域类型:</th>
-					<td width="15%">
+					<td width="20%">
 						<select id="search_EQ_areatype"  name="search_EQ_areatype" class="select" >
 	                		<option value="">---请选择区域类型---</option>
 							<c:forEach var="areatype" items="${areatypeMap}">

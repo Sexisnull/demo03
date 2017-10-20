@@ -39,7 +39,7 @@ public class JisApplication implements java.io.Serializable {
 	private Integer isLogOff;              //是否统一注销，0：否，1：是
 	private Integer isUnifyRegister;       //是否统一注册，0：否，1：是
 	private String logOffUrl;              //注销地址
-	private Integer netType;               //网络类型，0：外网，1：专网
+	private Integer netType;               //网络类型，1：外网，2：专网
 	
 	public JisApplication() {
 		super();

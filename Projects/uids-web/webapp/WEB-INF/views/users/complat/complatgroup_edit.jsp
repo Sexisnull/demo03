@@ -166,6 +166,9 @@ $("#editForm").validate({
 			maxlength: 255,
 			isSuffix: true
 		},
+		groupname : {
+			required: true
+		},
 		orgcode : {
 		    isOrgcode: true
 		},
@@ -274,11 +277,7 @@ jQuery.validator.addMethod("isName", function(value, element) {
 				</td>
 			</tr>
 			<tr>
-				<th>请输入组织机构代码：</th>
-				<td>
-					<input type="text" placeholder="请填写标准的九位机构代码" class="input" name="orgcode" value="${complatGroup.orgcode}" />
-	            </td>
-	        	<th>请输入上级机构：</th>
+			    <th><b class="mustbe">*</b> 请输入上级机构：</th>
 	        	<td>
 	        	    <c:if test="${empty complatGroup.iid}">
 				          <input name="groupname" id="groupname" type="text" placeholder="请选择上级机构" style="cursor: pointer;" value="${complatGroup.parentName}" /> 
@@ -289,6 +288,10 @@ jQuery.validator.addMethod("isName", function(value, element) {
 	        		      <input type="hidden" id="groupid"  name="groupid">
 				    </c:if>
 	        	</td>
+				<th>请输入组织机构代码：</th>
+				<td>
+					<input type="text" placeholder="请填写标准的九位机构代码" class="input" name="orgcode" value="${complatGroup.orgcode}" />
+	            </td>
 			</tr>
 			<tr>
 			    <c:if test="${empty complatGroup.iid}">

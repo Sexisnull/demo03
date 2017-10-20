@@ -349,45 +349,24 @@ public class ComplatGroupController extends BaseController {
 				//新增状态改变操作状态位（opersign）和创建时间（modifytime）
 				complatGroup.setOpersign(1);
 				complatGroup.setCreatetime(Timestamp.valueOf(TimeHelper.getCurrentTime()));
-				//判断上级机构是否存在
-			    if (StringHelper.isNotBlack(pid)){//如果上级机构存在的情况，即pid ！= null
-			        Integer pId = Integer.valueOf(pid);
-			        //判断机构是否重复
-			        if (complatGroupService.queryNameIsUsed(name, pId)){
-			        	returnMsg("error", "保存失败,机构名称重复", request);
-			        }else{//如果不重复
-			        	//自动生成机构编码
-			        	List<ComplatGroup> group = complatGroupService.findByPid(Integer.valueOf(pid));
-			        	String codeId = "";
-			        	if(null != group && group.size() > 0){
-			        		codeId = group.get(group.size()-1).getCodeid();
-			        	}
-			        	int num = Integer.valueOf(codeId.substring(codeId.length() - 4, codeId.length())).intValue() + 1;
-			            codeId = codeId.substring(0, codeId.length() - 4) + String.valueOf(num);
-			        	complatGroup.setCodeid(codeId); //存入机构编码
-			        	complatGroup.setPid(pId);  //保存pid
-			        	complatGroup = complatGroupService.save(complatGroup);
-			        	returnMsg("success", "保存成功", request);
-			        }
-			    }else{//如果上级机构不存在，即pid=null
-			        boolean isExist = false;
-			        List<ComplatGroup> group = complatGroupService.findByNoPid();
-			        for(ComplatGroup c : group){
-			        	if(c.getName().equals(name)){
-			        		isExist = true;
-			        	}
-			        }
-			        if(isExist){
-			        	returnMsg("error", "保存失败,机构名称重复", request);
-			        }else{
-			        	String lastCodeId = group.get(0).getCodeid();
-			        	Integer num = Integer.valueOf("1" + lastCodeId) + 1;
-			        	String codeId = String.valueOf(num).substring(1, lastCodeId.length()+1);
-			        	complatGroup.setCodeid(codeId);
-			        	complatGroup = complatGroupService.save(complatGroup);
-			        	returnMsg("success", "保存成功", request);
-			        }
-			     }
+			    Integer pId = Integer.valueOf(pid);
+			    //判断机构是否重复
+			    if (complatGroupService.queryNameIsUsed(name, pId)){
+			    	returnMsg("error", "保存失败,机构名称重复", request);
+			    }else{//如果不重复
+			    	//自动生成机构编码
+		        	List<ComplatGroup> group = complatGroupService.findByPid(Integer.valueOf(pid));
+		        	String codeId = "";
+		        	if(null != group && group.size() > 0){
+		        		codeId = group.get(group.size()-1).getCodeid();
+		        	}
+		        	int num = Integer.valueOf(codeId.substring(codeId.length() - 4, codeId.length())).intValue() + 1;
+		            codeId = codeId.substring(0, codeId.length() - 4) + String.valueOf(num);
+		        	complatGroup.setCodeid(codeId); //存入机构编码
+		        	complatGroup.setPid(pId);  //保存pid
+		        	complatGroup = complatGroupService.save(complatGroup);
+		        	returnMsg("success", "保存成功", request);
+			    }
 			    synchronization(complatGroup, 1);//新增同步
 			}
 		} catch (Exception e) {

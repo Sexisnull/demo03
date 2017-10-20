@@ -47,6 +47,7 @@ import com.gsww.uids.service.ComplatBanListService;
 import com.gsww.uids.service.ComplatGroupService;
 import com.gsww.uids.service.ComplatUserService;
 import com.gsww.uids.service.JisLogService;
+import com.hanweb.common.util.DateUtil;
 
 /**
  * <p>
@@ -161,6 +162,7 @@ public class SysLoginController extends BaseController {
 				}
 				SysUserSession sysUserSession = sysLoginService.login(userName,
 						passWord, group, loginIp);
+				ComplatUser user = complatUserService.findByKey(Integer.parseInt(sysUserSession.getAccountId()));
 				if (sysUserSession != null) {
 					if (sysUserSession.getUserState().equals("1")) {
 						request.getSession().setAttribute("sysUserSession",
@@ -169,6 +171,23 @@ public class SysLoginController extends BaseController {
 						resMap.put("msg", "登录成功！");
 						response.getWriter().write(
 								JSONObject.toJSONString(resMap));
+						
+						Date lastChangeTime = null;
+				        if (user.getModifyPassTime() == null) {
+				          Date modifyPassTime = new Date();
+				          lastChangeTime = modifyPassTime;
+				        }
+				        else {
+				          lastChangeTime = user.getModifyPassTime();
+				        }
+				        
+				        int differenceDays = (int)DateUtil.dayDiff(lastChangeTime, new Date());
+				        int differenceMonth = differenceDays / 30;
+				        int checktime =  Integer.parseInt(jisSettings.getModifyPassTime());
+				        if ((checktime != 0) && (differenceMonth >= checktime)) {
+				        	request.getSession().setAttribute("hasModifyPwd",1);
+				        }
+				        
 						try {
 							// 登录日志
 							jisLogService.save(sysUserSession.getLoginAccount(),

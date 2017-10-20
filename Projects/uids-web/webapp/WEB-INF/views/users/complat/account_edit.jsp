@@ -84,7 +84,7 @@
 
 /*********************机构树开始************************/
 $(function(){
-	var groupMenu = [{"name":"单位选择","id":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
+	var groupMenu = [{"name":"单位选择","title":"单位选择","id":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
 
 	$('#groupname').menu({
 		tree : 'groupmenu',
@@ -241,8 +241,15 @@ var complatUserNameInput=$("#name").val();
 				isIdCardNo:true,
 				uniqueCardid:true
 	    },
+	    groupname : {
+	    	required: true,	    	
+	    },
 	    submitHandler:function(form){
-		   		//alert("提交");
+		   		//if(groupid==null || groupid==""){
+		   			 // $.dialog.alert("请选择机构",function(){
+				          return null;
+		         // });
+		   	//	}
 				form.submit();
 			}
     } 

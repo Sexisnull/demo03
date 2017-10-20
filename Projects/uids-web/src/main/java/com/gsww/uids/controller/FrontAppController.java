@@ -78,6 +78,14 @@ public class FrontAppController extends BaseController {
 			if (checkHaveRight(session.getAccountId(), roleIds)) {
 				managerIcon = "";
 			}
+			Integer pwdTime = (Integer)request.getSession().getAttribute("hasModifyPwd");
+			if(pwdTime!=null && pwdTime==1){
+				model.addAttribute("warnChgPwd", 1);
+				request.getSession().setAttribute("hasModifyPwd", 0);
+			}else{
+				model.addAttribute("warnChgPwd", 0);
+			}
+			
 			String copyRight = jisSetting.getCopyRight();
 			model.addAttribute("application", apps);
 			model.addAttribute("rightMsg", copyRight);

@@ -102,8 +102,8 @@ $().ready(function() {
             if(callingTypeVal=='2'){
             	$.validator.errorShow($("#infoNum"),'请选择角色');
             	return false;
-            }else if(isVerification=='0'){
-            	$.validator.errorShow($("#isVerification"),'请选择机构');
+            }else if(callingTypeVal=='0'){
+            	$.validator.errorShow($(""),'请选择机构');
             	return false;
             }else{
 				 form.submit();

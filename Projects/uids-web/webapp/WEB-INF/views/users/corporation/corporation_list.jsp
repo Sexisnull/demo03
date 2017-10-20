@@ -4,6 +4,8 @@
 
 <%@ include file="/include/meta.jsp"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+
 <head>
 		<meta charset="utf-8"/>
 		<script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgcore.lhgdialog.min.js"></script>
@@ -222,10 +224,20 @@
 	                        </div>
 	                    </td>
 	                	<td style="text-align: center;">
-	                    	${complatCorporation.realName}
+		                	<c:if test="${fn:length(complatCorporation.realName)>=10}">
+							  ${fn:substring(complatCorporation.realName,0,10)}...
+							</c:if>
+							<c:if test="${fn:length(complatCorporation.realName)<10}">
+							   ${complatCorporation.realName}&nbsp;
+							</c:if> 
 	                    </td>
 	                	<td style="text-align: center;">
-	                		${complatCorporation.loginName}
+	                		<c:if test="${fn:length(complatCorporation.loginName)>=10}">
+							  ${fn:substring(complatCorporation.loginName,0,10)}...
+							</c:if>
+							<c:if test="${fn:length(complatCorporation.loginName)<10}">
+							   ${complatCorporation.loginName}&nbsp;
+							</c:if> 
 	                    </td>
 	                    <td style="text-align: center;">
 	                    	<div class="alignL">
@@ -236,7 +248,12 @@
 	                    	</div>
 	                    </td>
 	                    <td style="text-align: center;">
-	                    	${complatCorporation.name}
+	                    	<c:if test="${fn:length(complatCorporation.name)>=10}">
+							  ${fn:substring(complatCorporation.name,0,10)}...
+							</c:if>
+							<c:if test="${fn:length(complatCorporation.name)<10}">
+							   ${complatCorporation.name}&nbsp;
+							</c:if>
 	                    </td>
 	                	<td class="alignL" style="text-align: center;">
 	                    	${complatCorporation.mobile}
