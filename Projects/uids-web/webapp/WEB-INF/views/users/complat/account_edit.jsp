@@ -245,11 +245,6 @@ var complatUserNameInput=$("#name").val();
 	    	required: true,	    	
 	    },
 	    submitHandler:function(form){
-		   		//if(groupid==null || groupid==""){
-		   			 // $.dialog.alert("请选择机构",function(){
-				          return null;
-		         // });
-		   	//	}
 				form.submit();
 			}
     } 
@@ -468,7 +463,7 @@ var complatUserNameInput=$("#name").val();
 		    				   
 		    			    }
 		    			    if(count%2==0){
-		    			    	htmlString.push("<th>"+ selectTitle+ ": </th><td><select id='"+value+"' name= '"+value+"' style='width: 86.9%;'>");
+		    			    	htmlString.push("<th>"+ selectTitle+ "：</th><td><select id='"+value+"' name= '"+value+"' style='width: 86.9%;'>");
 		    			    	//循环key；
 		    			        for(var i=0;i<keys.length;i++){
 		    			        	htmlString.push("<option value='"+keys[i]+"'");
@@ -500,7 +495,8 @@ var complatUserNameInput=$("#name").val();
   //编辑页面密码强度判断
   //编辑页面密码强度判断
 	var pwding = $("#pwd").val();
-	$('#pwd').attachEvent('oninput',EvalPwd(pwding));	
+	EvalPwd(pwding);
+	//$('#pwd').attachEvent('oninput',EvalPwd(pwding));	
 
 });
 
@@ -515,10 +511,7 @@ function checkAndSave() {
 				return null;
 		});
 		return;
-    }
-    console.log(level>=pwdLevel);
-    console.log(level);
-    console.log(pwdLevel);
+    }    
     if(level>=pwdLevel){
     	$("#editForm").submit();
     	return;
@@ -680,7 +673,7 @@ function checkAndSave() {
 				<tr style="width:300px;">		
 				   <th><b class="mustbe">*</b> 密码：</th>
         	       <td style="width:300px;">
-        		      <input type="password" id="pwd" name="pwd"  value="${complatUser.pwd}" onkeyup="javascript:EvalPwd(this.value);"/>
+        		      <input type="password" id="pwd" name="pwd"  value="${pwd}" onkeyup="javascript:EvalPwd(this.value);"/>
         	       </td>
 	        	   <th><b class="mustbe">*</b> 请设置密码找回问题答案：</th>
 				   <td style="width:300px;">
@@ -713,7 +706,7 @@ function checkAndSave() {
     <div class="form-btn">
     	<input type="button" tabindex="15" id="submit-btn" value="保存" class="btn bluegreen" onclick="checkAndSave();"/>
     	&nbsp;&nbsp;
-        <input type="button" tabindex="16" value="返回" onclick="javascript:window.location.href='${ctx}/complat/complatList?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}'" class="btn gray"/>
+        <input type="button" tabindex="16" value="返回" onclick="javascript:window.location.href='${ctx}/complat/groupOrgTree?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}'" class="btn gray"/>
         
     </div>
     </form>

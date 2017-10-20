@@ -135,9 +135,6 @@ public class ComplatUserController extends BaseController {
 	private JisApplicationService jisApplicationService;
 
 	@Autowired
-	private ComplatZoneService complatZoneService;
-
-	@Autowired
 	private JisSettings jisSetting;
 
 	/**
@@ -200,41 +197,27 @@ public class ComplatUserController extends BaseController {
 			}
 
 			// 获取系统当前登录用户
-			SysUserSession sysUserSession = (SysUserSession) hrequest
-					.getSession().getAttribute("sysUserSession");
+			SysUserSession sysUserSession = (SysUserSession) hrequest.getSession().getAttribute("sysUserSession");
 			String deptId = sysUserSession.getDeptId();
 			// 初始化分页数据
-			PageUtils pageUtils = new PageUtils(pageNo, pageSize, orderField,
-					orderSort);
-			PageRequest pageRequest = super.buildPageRequest(hrequest,
-					pageUtils, ComplatUser.class, findNowPage);
+			PageUtils pageUtils = new PageUtils(pageNo, pageSize, orderField,orderSort);
+			PageRequest pageRequest = super.buildPageRequest(hrequest,pageUtils, ComplatUser.class, findNowPage);
 
 			// 搜索属性初始化
-			Map<String, Object> searchParams = Servlets
-					.getParametersStartingWith(request, "search_");
-			/*if (searchParams.get("EQ_groupid") == null) {
-				searchParams.put("EQ_groupid", deptId);
-				model.addAttribute("orgId", deptId);
-			} else {
-				model.addAttribute("orgId", searchParams.get("EQ_groupid"));
-			}
-
-			if (StringUtils.isNotBlank(orgId)) {
-				searchParams.put("EQ_groupid", orgId);
-				model.addAttribute("orgId", orgId);
-			}
-*/
+			Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 			if (StringUtils.isNotBlank(orgId)) {
 				searchParams.put("EQ_groupid", orgId);
 				model.addAttribute("orgId", orgId);
 			} else {
-				if(searchParams.size()==1 && searchParams.get("EQ_groupid") != null){
-					if (searchParams.get("EQ_groupid") == null) {
+				if(searchParams.size()>=1 && searchParams.get("EQ_groupid") == null){
+					if (searchParams.get("EQ_groupid") != null) {
 						searchParams.put("EQ_groupid", deptId);
 						model.addAttribute("orgId", deptId);
 					} else {
 						model.addAttribute("orgId", searchParams.get("EQ_groupid"));
 					}
+				}else{
+					searchParams.put("EQ_groupid", deptId);
 				}
 			}
 			Specification<ComplatUser> spec = super.toNewSpecification(
@@ -444,7 +427,7 @@ public class ComplatUserController extends BaseController {
 		} catch (Exception e) {
 			returnMsg("error", "保存用户失败", request);
 		} finally {
-			return new ModelAndView("redirect:/complat/complatList");
+			return new ModelAndView("redirect:/complat/groupOrgTree");
 		}
 
 	}
@@ -491,7 +474,7 @@ public class ComplatUserController extends BaseController {
 			e.printStackTrace();
 			returnMsg("error", "删除失败", request);
 		} finally {
-			return new ModelAndView("redirect:/complat/complatList");
+			return new ModelAndView("redirect:/complat/groupOrgTree");
 		}
 
 	}
@@ -806,7 +789,7 @@ public class ComplatUserController extends BaseController {
 		map.put(ExcelUtil.HEADERINFO, headList);
 		map.put(ExcelUtil.DATAINFON, dataList);
 		ExcelUtil.writeExcel(map, wb, response, fileName);
-		// return new ModelAndView("redirect:/complat/complatList");
+		// return new ModelAndView("redirect:/complat/groupOrgTree");
 
 	}
 
@@ -1219,7 +1202,7 @@ public class ComplatUserController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			return new ModelAndView("redirect:/complat/complatList");
+			return new ModelAndView("redirect:/complat/groupOrgTree");
 		}
 	}
 
@@ -1261,7 +1244,7 @@ public class ComplatUserController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			return new ModelAndView("redirect:/complat/complatList");
+			return new ModelAndView("redirect:/complat/groupOrgTree");
 		}
 	}
 
@@ -1688,7 +1671,7 @@ public class ComplatUserController extends BaseController {
 	}
 
 	public static void main(String[] args) {
-		String pwd = "f28FdHN4fHEGMgRKBTgFPwI7AE0COQ==";//
+		String pwd = "fmV1BQIACjADRnw4BjAEMnFFAEM=";//
 		String p = Md5Util.md5decode(pwd);
 		System.out.println("解密后的密码是:" + p);
 	}
