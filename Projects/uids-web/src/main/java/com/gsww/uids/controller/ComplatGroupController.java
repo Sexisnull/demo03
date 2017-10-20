@@ -136,11 +136,22 @@ public class ComplatGroupController extends BaseController {
 
             //搜索属性初始化
 			Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
-			if(searchParams.get("EQ_pid")==null){
-				searchParams.put("EQ_pid", deptId);
-			}
-			if(StringUtils.isNotBlank(orgId)){
+//			if(searchParams.get("EQ_pid")==null){
+//				searchParams.put("EQ_pid", deptId);
+//			}
+//			if(StringUtils.isNotBlank(orgId)){
+//				searchParams.put("EQ_pid", orgId);
+//			}
+			if (StringUtils.isNotBlank(orgId)) {
 				searchParams.put("EQ_pid", orgId);
+				model.addAttribute("orgId", orgId);
+			}else{
+				if(searchParams.size()>=1&&searchParams.get("EQ_pid") != null){
+					model.addAttribute("orgId", searchParams.get("EQ_pid"));
+				}else{
+					searchParams.put("EQ_pid", deptId);
+					model.addAttribute("orgId", deptId);
+				}
 			}
 			Specification<ComplatGroup>  spec=super.toSpecification(searchParams, ComplatGroup.class);
 			//分页

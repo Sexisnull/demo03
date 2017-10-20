@@ -294,6 +294,7 @@ function toEdit(iids){
 					<th style="padding-left: 5px">机构名称:</th>
 					<td width="20%" height="30">
 						<input id="nameSearch" type="text" class="input" name="search_LIKE_name" value="${sParams['LIKE_name']}"  placeholder="机构名称" style="width: 161px;"/>
+						<input type="hidden" id="orgId" name="orgId" value="${orgId}">
 					</td>
 					<th style="padding-left: 5px">机构编码:</th>
 					<td width="20%">
