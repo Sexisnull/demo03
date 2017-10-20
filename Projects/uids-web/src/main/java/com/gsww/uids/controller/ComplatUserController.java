@@ -1117,7 +1117,7 @@ public class ComplatUserController extends BaseController {
 		PrintWriter out = response.getWriter();
 		String json = array.toString();
 		out.write(json);
-		System.out.println("json--" + json);
+		//System.out.println("json--" + json);
 		model.addAttribute("fieldsListMap", json);
 
 		// 设置默认值
