@@ -30,6 +30,7 @@ width: 179px;
 <script type="text/javascript"> 
 //表单校验
 function checkSubmitForm(){
+        valueOfIsSearch();
 		var nameSearch = $("#nameSearch").val();
 		var codeidSearch = $("#codeidSearch").val(); 
 		var orgcodeSearch = $("#orgcodeSearch").val();
@@ -100,8 +101,12 @@ function checkSubmitForm(){
 			return false;
 		}
 	}
-
-
+	
+	function valueOfIsSearch(){
+	    var check = "1";
+	    $('#isSearch').val(check);
+	}
+	  
 	$(function(){
 		//高级搜索按钮点击事件
 		$('#advanced-btn').on('click',function(){
@@ -294,6 +299,7 @@ function toEdit(iids){
 					<th style="padding-left: 5px">机构名称:</th>
 					<td width="20%" height="30">
 						<input id="nameSearch" type="text" class="input" name="search_LIKE_name" value="${sParams['LIKE_name']}"  placeholder="机构名称" style="width: 161px;"/>
+						<input type="hidden" id="isSearch" name="isSearch" value="${isSearch}">
 						<input type="hidden" id="orgId" name="orgId" value="${orgId}">
 					</td>
 					<th style="padding-left: 5px">机构编码:</th>

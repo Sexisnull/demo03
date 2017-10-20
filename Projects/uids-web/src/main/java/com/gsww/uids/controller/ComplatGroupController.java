@@ -80,6 +80,7 @@ public class ComplatGroupController extends BaseController {
     //区域类型下拉选择集合
     private Map<Integer, Object> areatypeMap = new HashMap<Integer, Object>();
     
+    
     @RequestMapping(value = "/groupOrgTree", method = RequestMethod.GET)
 	public String complatList(
 			Model model, ServletRequest request, HttpServletRequest hrequest) {
@@ -133,26 +134,42 @@ public class ComplatGroupController extends BaseController {
          // 获取系统当前登录用户
 			SysUserSession sysUserSession = (SysUserSession) hrequest.getSession().getAttribute("sysUserSession");
 			String deptId = sysUserSession.getDeptId();
+			String deptCodeid = complatGroupService.findByIid(Integer.valueOf(deptId)).getCodeid();
 
             //搜索属性初始化
 			Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
-//			if(searchParams.get("EQ_pid")==null){
-//				searchParams.put("EQ_pid", deptId);
+//			String isSearch = request.getParameter("isSearch");//判断是否在搜索状态
+//			if(request.getParameter("isSearch") != null){
+//				searchParams.put("EQ_codeid", "001");
+//			}else{
+				if (StringUtils.isNotBlank(orgId)) {
+					searchParams.put("EQ_pid", orgId);
+					model.addAttribute("orgId", orgId);
+				}else{
+					if(searchParams.size()>=1&&searchParams.get("EQ_pid") != null){
+						model.addAttribute("orgId", searchParams.get("EQ_pid"));
+					}else{
+						searchParams.put("EQ_pid", deptId);
+						model.addAttribute("orgId", deptId);
+					}
+				}
 //			}
 //			if(StringUtils.isNotBlank(orgId)){
 //				searchParams.put("EQ_pid", orgId);
 //			}
-			if (StringUtils.isNotBlank(orgId)) {
-				searchParams.put("EQ_pid", orgId);
-				model.addAttribute("orgId", orgId);
-			}else{
-				if(searchParams.size()>=1&&searchParams.get("EQ_pid") != null){
-					model.addAttribute("orgId", searchParams.get("EQ_pid"));
-				}else{
-					searchParams.put("EQ_pid", deptId);
-					model.addAttribute("orgId", deptId);
-				}
-			}
+//			 (StringUtils.isNotBlank(orgId)) {
+//				searchParams.put("EQ_pid", orgId);
+//				model.addAttribute("orgId", orgId);
+//			} else {
+//				if(searchParams.size()==1 && searchParams.get("EQ_pid") != null){
+//					if (searchParams.get("EQ_pid") == null) {
+//						searchParams.put("EQ_pid", deptId);
+//						model.addAttribute("orgId", deptId);
+//					} else {
+//						model.addAttribute("orgId", searchParams.get("EQ_pid"));
+//					}
+//				}
+//			}
 			Specification<ComplatGroup>  spec=super.toSpecification(searchParams, ComplatGroup.class);
 			//分页
 			Page<ComplatGroup> pageInfo = complatGroupService.getUserPage(spec,pageRequest);
@@ -180,7 +197,6 @@ public class ComplatGroupController extends BaseController {
 			model.addAttribute("nodetypeMap", nodetypeMap);
 			model.addAttribute("areatypeMap", areatypeMap);
 			model.addAttribute("sortType", orderField);
-			model.addAttribute("orgId", orgId);
 			model.addAttribute("orderField", orderField);
 			model.addAttribute("orderSort", orderSort);
 			// 将搜索条件编码成字符串，用于排序，分页的URL
@@ -756,39 +772,41 @@ public class ComplatGroupController extends BaseController {
      * @param response
      */
     @RequestMapping(value = "/orgTree", method = RequestMethod.POST)
-    public void zoneTree(HttpServletRequest request, HttpServletResponse response, String orgId, String pId) {
+    public void zoneTree(HttpServletRequest request, HttpServletResponse response, String orgId) {
 		List<ComplatGroup> list = new ArrayList<ComplatGroup>();
         try {
             SysUserSession sysUserSession = (SysUserSession) ((HttpServletRequest) request).getSession()
                     .getAttribute("sysUserSession");
             // 获取部门id
             String deptId = sysUserSession.getDeptId();
-			if (StringUtils.isEmpty(pId)){
-				if (StringUtils.isEmpty(orgId)){
-					list = complatGroupService.findAllDept(deptId);
-				} else {
-					list = complatGroupService.findAllDept(orgId);
-				}
+			if (StringUtils.isEmpty(deptId)){
+				list = complatGroupService.findAllOrg();
 			} else {
-				list = complatGroupService.findByPid(Integer.parseInt(pId));
+				list = complatGroupService.findAllDept(deptId);
+			}
+			if(orgId==null){
+				orgId="";
 			}
             List<Map<String, Object>> treeList = new ArrayList<Map<String, Object>>();
             if (list != null && !list.isEmpty()) {
                 for (ComplatGroup complatGroup : list) {
                     Map<String, Object> map = new HashMap<String, Object>();
                     map.put("id", String.valueOf(complatGroup.getIid()));
+                    if (orgId.equals(String.valueOf(complatGroup.getIid()))){
+                        map.put("checked", true);
+                    }
                     map.put("pId", String.valueOf(complatGroup.getPid()));
                     map.put("name", complatGroup.getName());
                     map.put("title", complatGroup.getName());
                     map.put("tld", String.valueOf(complatGroup.getIid()));
                     map.put("viewtype", "1");
                     map.put("regiontype", "1");
-					map.put("isParent", true);
-					if (StringUtils.isEmpty(pId)){
-						map.put("open", true);
-					} else {
-						map.put("open", false);
-					}
+                    if(complatGroup.getNodetype()==1){
+                        map.put("open", true);
+                    }else {
+                        map.put("open", false);
+                    }
+//                    map.put("seq", String.valueOf(complatGroup.getType()));
                     treeList.add(map);
                 }
             }
@@ -800,7 +818,7 @@ public class ComplatGroupController extends BaseController {
             logger.error(e.getMessage(), e);
         }
     }
-
+    
     /**
 	 * 加载上级机构树
 	 * 

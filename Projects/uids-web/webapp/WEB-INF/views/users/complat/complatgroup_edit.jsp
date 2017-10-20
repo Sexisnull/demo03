@@ -176,6 +176,7 @@ $("#editForm").validate({
 	   		maxlength: 255
 	   	},
 	   	submitHandler:function(form){
+	   		
 			form.submit();
 		}
 	}
