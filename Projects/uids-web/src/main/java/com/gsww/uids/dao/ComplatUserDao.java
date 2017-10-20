@@ -60,7 +60,18 @@ public interface ComplatUserDao extends PagingAndSortingRepository<ComplatUser, 
 			" t.email = ?7,t.qq = ?8,t.modifytime = ?9 ,t.pwd = ?10 where t.iid = ?1")
 	public void updateUser(Integer iid,String name, String headShip, String phone,
 			String mobile, String fax, String email, String qq,Date modifyTime,String pwd);
+	
 
+	/**
+	 * 
+	 * 方法描述 : 用户设置修改用户信息,新增modifyPassTime
+	 *  @author yaoxi
+	 */
+	@Modifying
+	@Query("update ComplatUser t set t.name =?2,t.headship = ?3,t.phone = ?4,t.mobile = ?5,t.fax = ?6," +
+			" t.email = ?7,t.qq = ?8,t.modifytime = ?9 ,t.pwd = ?10,t.modifyPassTime = ?11 where t.iid = ?1")
+	public void updateUserPassTime(Integer iid,String name, String headShip, String phone,
+			String mobile, String fax, String email, String qq,Date modifyTime,String pwd,Date modifyPassTime);
 	
 	
 

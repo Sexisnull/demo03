@@ -517,6 +517,7 @@ function resetform() {
 								</th>
 								<td>
 									<input type="text" placeholder="姓名" value="${sParams['LIKE_name']}" id="nameSearch" name="search_LIKE_name" />
+								  <input type="hidden" id="orgId" name="orgId" value="${orgId}">
 								</td>
 								<th style="padding-left: 5px">
 									登录名：
