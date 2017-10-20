@@ -434,7 +434,7 @@ public class ComplatUserController extends BaseController {
 		} catch (Exception e) {
 			returnMsg("error", "保存用户失败", request);
 		} finally {
-			return new ModelAndView("redirect:/complat/complatList");
+			return new ModelAndView("redirect:/complat/groupOrgTree");
 		}
 
 	}
@@ -481,7 +481,7 @@ public class ComplatUserController extends BaseController {
 			e.printStackTrace();
 			returnMsg("error", "删除失败", request);
 		} finally {
-			return new ModelAndView("redirect:/complat/groupOrgTree");
+			return new ModelAndView("redirect:/complat/complatList");
 		}
 
 	}
@@ -1243,7 +1243,7 @@ public class ComplatUserController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			return new ModelAndView("redirect:/complat/groupOrgTree");
+			return new ModelAndView("redirect:/complat/complatList");
 		}
 	}
 
@@ -1285,7 +1285,7 @@ public class ComplatUserController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			return new ModelAndView("redirect:/complat/groupOrgTree");
+			return new ModelAndView("redirect:/complat/complatList");
 		}
 	}
 
