@@ -61,7 +61,7 @@
 		if (nameSearch == '' || isNumbOrLett1(nameSearch)) {
 			form1.submit();
 		} else {
-			$.validator.errorShow($("#nameSearch"), '只能包括中英文、数字和下划线，且不能超过255个字符');
+			$.validator.errorShow($("#nameSearch"), '只能包括中英文、数字和下划线，且不能超过50个字符');
 		}
 	}
 	function isNumbOrLett1( s ){
