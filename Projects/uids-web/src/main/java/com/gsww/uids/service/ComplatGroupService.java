@@ -114,13 +114,4 @@ public interface ComplatGroupService {
 
 	public List<ComplatGroup> findAllDept(String deptId) throws Exception;
 
-	public List<ComplatGroup> findAllDeptByPid(String pId) throws Exception;
-
-	
-	/**
-	 * 
-	 * 查询当前登录用户所属机构的下属
-	 * @return
-	 * @throws Exception
-	 */
 }

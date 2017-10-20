@@ -61,13 +61,6 @@ JpaSpecificationExecutor<ComplatGroup>{
 			,nativeQuery=true)
 	public List<ComplatGroup> findAllDepId(String detId);
 
-
-	/**
-	 * 查询所有对象
-	 * @return
-	 */
-	@Query(value = "SELECT * FROM complat_group where pid =?1", nativeQuery=true)
-	public List<ComplatGroup> findAllPid(String pId);
 //	@Query(value = "select group from ComplatGroup group where group.pid=? order by group.orderid asc")
 //	public List<ComplatGroup> findByNoPid();
 }
