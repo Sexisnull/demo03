@@ -162,8 +162,8 @@ public class SysLoginController extends BaseController {
 				}
 				SysUserSession sysUserSession = sysLoginService.login(userName,
 						passWord, group, loginIp);
-				ComplatUser user = complatUserService.findByKey(Integer.parseInt(sysUserSession.getAccountId()));
 				if (sysUserSession != null) {
+					ComplatUser user = complatUserService.findByKey(Integer.parseInt(sysUserSession.getAccountId()));
 					if (sysUserSession.getUserState().equals("1")) {
 						request.getSession().setAttribute("sysUserSession",
 								sysUserSession);

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.gsww.jup.controller.BaseController;
 import com.gsww.jup.entity.sys.SysUserSession;
+import com.gsww.jup.util.IntToSmallChineseNumber;
 import com.gsww.jup.util.JSONUtil;
 import com.gsww.jup.util.StringHelper;
 import com.gsww.uids.constant.JisSettings;
@@ -87,6 +88,8 @@ public class FrontAppController extends BaseController {
 			}
 			
 			String copyRight = jisSetting.getCopyRight();
+			String pwdMonth = IntToSmallChineseNumber.ToCH(Integer.parseInt(jisSetting.getModifyPassTime()));
+			model.addAttribute("pwdMonth", pwdMonth);
 			model.addAttribute("application", apps);
 			model.addAttribute("rightMsg", copyRight);
 			model.addAttribute("managerIcon", managerIcon);

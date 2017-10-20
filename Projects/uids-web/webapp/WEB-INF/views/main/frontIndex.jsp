@@ -139,9 +139,11 @@
 				</table>
 				<div style="height:20px"></div>
 				<div style="height: 50px;">
+					<c:if test="${not empty pwdMonth }">
 					<div style="text-align: center">
-						注：请至少在三个月内进行一次密码修改！
+						注：请至少在${pwdMonth }个月内进行一次密码修改！
 					</div>
+					</c:if>
 
 
 				</div>
