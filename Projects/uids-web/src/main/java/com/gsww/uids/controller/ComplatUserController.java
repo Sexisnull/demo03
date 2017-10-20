@@ -357,6 +357,16 @@ public class ComplatUserController extends BaseController {
 					complatUser.setEnable(power); // 是否禁用
 					complatUser.setOpersign(2);// 更新操作状态
 					synchronization(complatUser, 2);// 修改同步
+					
+					//对密码修改时间进行处理
+					String oldPwd = complatUserService.findByKey(complatUser.getIid()).getPwd();
+					if(StringHelper.isNotBlack(oldPwd)){
+						oldPwd = Md5Util.md5decode(oldPwd);
+						if(!oldPwd.equals(pwd)){
+							complatUser.setModifyPassTime(Timestamp.valueOf(TimeHelper.getCurrentTime()));
+						}
+					}
+					
 					complatUserService.save(complatUser);
 					// 身份证号处理 JisUserdetail
 					String cardId = request.getParameter("cardid");
@@ -398,6 +408,9 @@ public class ComplatUserController extends BaseController {
 					String p = Md5Util.md5encode(pwd);
 					complatUser.setPwd(p);
 					synchronization(complatUser, 1);// 新增同步
+					
+					//新增对密码修改时间做处理
+					complatUser.setModifyPassTime(TimeHelper.parseDate(TimeHelper.getCurrentTime()));
 					complatUserService.save(complatUser);
 					// 身份证号处理 JisUserdetail
 					userId = complatUser.getIid();
@@ -406,6 +419,7 @@ public class ComplatUserController extends BaseController {
 					jisUser.setCardid(cardId);
 					jisUser.setIid(userId);
 					jisUser.setUserid(userId);
+					
 					jisUserdetailService.save(jisUser);
 					// 扩展属性
 					Map<String, String> userMap = this.saveExendsAttr(userId,
@@ -427,7 +441,7 @@ public class ComplatUserController extends BaseController {
 		} catch (Exception e) {
 			returnMsg("error", "保存用户失败", request);
 		} finally {
-			return new ModelAndView("redirect:/complat/groupOrgTree");
+			return new ModelAndView("redirect:/complat/complatList");
 		}
 
 	}
@@ -951,8 +965,22 @@ public class ComplatUserController extends BaseController {
 					SimpleDateFormat sdf = new SimpleDateFormat(
 							"yyyy-MM-dd HH:mm:ss");
 					Date modifyTime = sdf.parse(time);
-					complatUserService.updateUser(userId, name, headShip,
-							phone, mobile, fax, email, qq, modifyTime, pwd);
+					
+					//新增modifyPassTime
+					String oldPwd = complatUserService.findByKey(userId).getPwd();
+					Date modifyPassTime = Timestamp.valueOf(TimeHelper.getCurrentTime());
+					if(StringHelper.isNotBlack(oldPwd)){
+						oldPwd = Md5Util.md5decode(oldPwd);
+						if(!oldPwd.equals(complatUser.getPwd())){
+							complatUserService.updateUserPassTime(userId, name, headShip,
+									phone, mobile, fax, email, qq, modifyTime, pwd,modifyPassTime);
+						}else{
+							complatUserService.updateUser(userId, name, headShip,
+									phone, mobile, fax, email, qq, modifyTime, pwd);
+						}
+					}
+					
+					
 
 					// 身份证号处理 JisUserdetail
 					String cardId = request.getParameter("cardid");
@@ -1068,7 +1096,6 @@ public class ComplatUserController extends BaseController {
 		}
 
 	}
-
 	/**
 	 * 获取用户扩展属性
 	 * 

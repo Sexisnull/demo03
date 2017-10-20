@@ -64,6 +64,14 @@ public interface ComplatUserService {
      */
     void updateUser(Integer iid, String name, String headShip, String phone, String mobile, String fax,
                     String email, String qq, Date modifyTime, String pwd) throws Exception;
+    
+    
+    /**
+     * 用户设置 保存,新增modifyPassTime
+     * @author yaoxi
+     */
+    void updateUserPassTime(Integer iid, String name, String headShip, String phone, String mobile, String fax,
+            String email, String qq, Date modifyTime, String pwd,Date modifyPassTime) throws Exception;
 
     public List<Map<String, Object>> findByGroupIds(String id);
 

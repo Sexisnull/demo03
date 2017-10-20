@@ -148,4 +148,14 @@ public class ComplatUserServiceImpl implements ComplatUserService{
     	List<Map<String,Object>> list=jdbcTemplate.queryForList(findSql);
 		return list;
     }
+
+
+
+
+	@Override
+	public void updateUserPassTime(Integer iid, String name, String headShip,
+			String phone, String mobile, String fax, String email, String qq,
+			Date modifyTime, String pwd, Date modifyPassTime) throws Exception {
+		complatUserDao.updateUserPassTime(iid,name,headShip,phone,mobile,fax,email,qq,modifyTime,pwd,modifyPassTime);
+	}
 }
