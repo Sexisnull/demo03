@@ -73,7 +73,7 @@ $(document).ready(function(){
         fileTypeExts : '*.xls;*.xlsx',//允许上传的文件类型           
         'removeCompleted':true,
         'onUploadComplete' : function(file) {
-        	W.location.href = "${ctx}/uids/complatgroupList?msg=success";
+        	W.parent.location.href = "${ctx}/uids/groupOrgTree?msg=success";
             //上传队列全部完成后执行的回调函数    
          }
     });
