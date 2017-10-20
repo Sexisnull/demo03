@@ -163,7 +163,7 @@ public class ComplatOutsideuserController extends BaseController {
 					outsideUser.setPwd(pwd);
 					outsideUserService.save(outsideUser);
 					returnMsg("success", "保存成功", request);
-					String desc = sysUserSession.getLoginAccount() + "新增个人用户:" + outsideUser.getName(); 
+					String desc = sysUserSession.getLoginAccount() + "新增 【" + outsideUser.getName() + "】 个人用户"; 
 					jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(),desc,10,1);
 				} else {
 					//注册时间
@@ -176,7 +176,7 @@ public class ComplatOutsideuserController extends BaseController {
 					outsideUser.setPwd(pwd);
 					outsideUserService.save(outsideUser);
 					returnMsg("success", "编辑成功", request);
-					String desc = sysUserSession.getLoginAccount() + "修改个人用户:" + outsideUser.getName(); 
+					String desc = sysUserSession.getLoginAccount() + "修改 【" + outsideUser.getName() + "】 个人用户"; 
 					jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(),desc,10,2);
 				}
 			}
@@ -209,7 +209,7 @@ public class ComplatOutsideuserController extends BaseController {
 				outsideUserService.delete(corId);
 				returnMsg("success", "删除成功", request);
 				complatOutsideuser = outsideUserService.findByKey(corId);
-				String desc = sysUserSession.getLoginAccount() + "删除了姓名为：" + complatOutsideuser.getName() +"的个人用户"; 
+				String desc = sysUserSession.getLoginAccount() + "删除 【" + complatOutsideuser.getName() + "】 个人用户"; 
 				jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(),desc,10,3);
 			}
 		} catch (Exception e) {
@@ -371,7 +371,7 @@ public class ComplatOutsideuserController extends BaseController {
 					complatOutsideuser.setAuthState(1);
 					outsideUserService.save(complatOutsideuser);
 					returnMsg("success", "用户认证成功！", request);
-					String desc = sysUserSession.getLoginAccount() + "对个人用户:" + complatOutsideuser.getName() + "认证通过"; 
+					String desc = sysUserSession.getLoginAccount() + "认证通过 【" + complatOutsideuser.getName() + "】 个人用户"; 
 					jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(),desc,10,12);
 				} else {
 					returnMsg("success", "用户已认证！", request);
@@ -385,7 +385,7 @@ public class ComplatOutsideuserController extends BaseController {
 				}
 				outsideUserService.save(complatOutsideuser);
 				returnMsg("success", "用户认证已拒绝！", request);
-				String desc = sysUserSession.getLoginAccount() + "对个人用户:" + complatOutsideuser.getName() + "拒绝认证"; 
+				String desc = sysUserSession.getLoginAccount() + "认证未通过 【" + complatOutsideuser.getName() + "】 个人用户"; 
 				jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(),desc,10,12);
 			} 
 		}catch(Exception e){

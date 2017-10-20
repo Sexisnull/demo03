@@ -146,7 +146,7 @@ public class JisFieldsController extends BaseController {
 					jisFieldsService.save(jisFields);
 					jisUserdetailService.addUserField(jisFields.getFieldname());
 					returnMsg("success", "保存成功", request);
-					String desc = sysUserSession.getLoginAccount() + "新增用户扩展属性:" + jisFields.getShowname(); 
+					String desc = sysUserSession.getLoginAccount() + "新增 【" + jisFields.getShowname() + "】 用户扩展属性"; 
 					jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(),desc,6,1);
 				} else { // 编辑
 					int type = jisFields.getType();
@@ -170,7 +170,7 @@ public class JisFieldsController extends BaseController {
 					}
 					jisFieldsService.save(jisFields);
 					returnMsg("success", "编辑成功", request);
-					String desc = sysUserSession.getLoginAccount() + "修改了用户扩展属性:" + jisFields.getShowname(); 
+					String desc = sysUserSession.getLoginAccount() + "修改 【" + jisFields.getShowname() + "】 用户扩展属性"; 
 					jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(),desc,6,2);
 				}
 			}
@@ -202,7 +202,7 @@ public class JisFieldsController extends BaseController {
 				Integer iid = Integer.parseInt(para[i].trim());
 				jisFields = jisFieldsService.findByKey(iid);
 				if (jisFields != null) {
-					String desc = sysUserSession.getLoginAccount() + "删除了用户扩展属性:" + jisFields.getShowname(); 
+					String desc = sysUserSession.getLoginAccount() + "删除 【" + jisFields.getShowname() + "】 用户扩展属性"; 
 					jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(),desc,6,3);
 					jisFieldsService.delete(jisFields);
 					jisUserdetailService.delUserField(jisFields.getFieldname());
@@ -235,7 +235,7 @@ public class JisFieldsController extends BaseController {
 				jisFields.setIswrite(iswrite);
 				jisFieldsService.save(jisFields);
 				if (fieldiid == null) {
-					String desc = sysUserSession.getLoginAccount() + "设置了用户扩展属性:" + jisFields.getShowname() + "非必填项"; 
+					String desc = sysUserSession.getLoginAccount() + "设置 【" + jisFields.getShowname() + "】 用户扩展属性非必填项"; 
 					jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(),desc,6,8);
 				}
 			}
@@ -247,7 +247,7 @@ public class JisFieldsController extends BaseController {
 					jisFields.setIswrite(1);
 					jisFieldsService.save(jisFields);
 					returnMsg("success", "设置成功", request);
-					String desc = sysUserSession.getLoginAccount() + "设置了用户扩展属性:" + jisFields.getShowname() + "必填项"; 
+					String desc = sysUserSession.getLoginAccount() + "设置 【" + jisFields.getShowname() + "】 用户扩展属性必填项"; 
 					jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(),desc,6,8);
 				}
 			}
