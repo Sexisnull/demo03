@@ -509,7 +509,7 @@ function resetform() {
 								</th>
 								<td>
 									<input name="groupname" id="groupname" value="${groupName }" readonly="true" type="text" style="cursor: pointer;width: 150px;" placeholder="所属机构"/>
-									<input type="hidden" id="groupid" name="search_EQ_groupid" value="${groupid}">
+									
 									<input type="hidden" id="orgId" name="orgId" value="${orgId}">
 								</td>-->
 								<th style="padding-left: 5px">
@@ -517,7 +517,7 @@ function resetform() {
 								</th>
 								<td>
 									<input type="text" placeholder="姓名" value="${sParams['LIKE_name']}" id="nameSearch" name="search_LIKE_name" />
-								  <input type="hidden" id="orgId" name="orgId" value="${orgId}">
+								  <input type="hidden" id="groupid" name="search_EQ_groupid" value="${sParams['EQ_groupid']}">
 								</td>
 								<th style="padding-left: 5px">
 									登录名：
