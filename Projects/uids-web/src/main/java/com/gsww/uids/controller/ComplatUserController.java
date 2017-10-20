@@ -209,14 +209,7 @@ public class ComplatUserController extends BaseController {
 				searchParams.put("EQ_groupid", orgId);
 				model.addAttribute("orgId", orgId);
 			} else {
-				if(searchParams.size()>=1 && searchParams.get("EQ_groupid") == null){
-					if (searchParams.get("EQ_groupid") != null) {
-						searchParams.put("EQ_groupid", deptId);
-						model.addAttribute("orgId", deptId);
-					} else {
-						model.addAttribute("orgId", searchParams.get("EQ_groupid"));
-					}
-				}else{
+				if(searchParams.size()==0){
 					searchParams.put("EQ_groupid", deptId);
 				}
 			}
