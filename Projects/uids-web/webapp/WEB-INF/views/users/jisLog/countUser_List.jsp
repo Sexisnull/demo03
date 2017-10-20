@@ -25,6 +25,10 @@
 			</li>
 			<li class="split"></li>
 			<li>
+				<a >系统管理</a>
+			</li>
+			<li class="split"></li>
+			<li>
 				<a >在线用户</a>
 			</li>
     	</ol>
