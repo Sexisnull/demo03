@@ -269,18 +269,18 @@
 	                        </div>
 	                    </td>
 	                	<td align="center" title="${outsideUser.name}" class="box_main_td" nowrap="nowrap">
-							<c:if test="${fn:length(outsideUser.name)>=6}">
+							<c:if test="${fn:length(outsideUser.name)>6}">
 							  ${fn:substring(outsideUser.name,0,6)}...
 							</c:if>
-							<c:if test="${fn:length(outsideUser.name)<6}">
+							<c:if test="${fn:length(outsideUser.name)<=6}">
 							   ${outsideUser.name}&nbsp;
 							 </c:if> 
 						</td>
 	                    <td align="center" title="${outsideUser.loginName}" class="box_main_td" nowrap="nowrap">
-							<c:if test="${fn:length(outsideUser.loginName)>=15}">
+							<c:if test="${fn:length(outsideUser.loginName)>15}">
 							  ${fn:substring(outsideUser.loginName,0,15)}...
 							</c:if>
-							<c:if test="${fn:length(outsideUser.loginName)<15}">
+							<c:if test="${fn:length(outsideUser.loginName)<=15}">
 							   ${outsideUser.loginName}&nbsp;
 							 </c:if> 
 						</td>
