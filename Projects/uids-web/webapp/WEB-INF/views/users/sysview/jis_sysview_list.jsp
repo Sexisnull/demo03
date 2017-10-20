@@ -237,10 +237,10 @@ width: 65px !important;
 						</td>
 						<td class="alignL" style="text-align: center">
 							<div class="list-longtext">
-								<c:if test="${fn:length(jisCurrent.synctime)>=19">
+								<c:if test="${fn:length(jisCurrent.synctime)>=19}">
 									${fn:substring(jisCurrent.synctime, 0, 19)}				
 								</c:if>
-								<c:if test="${fn:length(jisCurrent.synctime)<19">
+								<c:if test="${fn:length(jisCurrent.synctime)<19}">
 									${jisCurrent.synctime}				
 								</c:if>
 								
