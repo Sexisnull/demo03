@@ -150,7 +150,16 @@ $(function(){
 			$("#tr_isUniRgh").show();
 			$("#tr_isUniRgd").show();
 			$("#id_checknet").show();
-		 }
+	}
+	 if("${jisApplication.icon}" != null){
+		 $("#showpic").show();
+	 }
+	 if("${jisApplication.icon}" == null){
+		 $("#showpic").hide();
+	 }
+	 if("${jisApplication.icon}" == ""){
+		 $("#showpic").hide();
+	 }
 	setLoginType();
 	setSsoLogin();
 	 // 初始化Web Uploader
@@ -656,8 +665,8 @@ $(function(){
 						    <div id="filePicker">选择图片</div>
 						    <input type="button" class="btnother blue" onclick="selectpic()" value="默认图片">
 					</td>
-					<td id="showpic" colspan="2" style="text-align: left;display: none;">
-						<img id="icon2" width="100" height="100" src="${ctx}${jisApplication.icon}">
+					<td id="showpic" name="showpic" colspan="2" style="text-align:left;display:none;">
+						<img id="icon2" name="icon2" width="100" height="100" src="${ctx}${jisApplication.icon}">
 					</td>
 					
 			</tr>

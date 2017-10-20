@@ -1,4 +1,5 @@
 
+
 <!doctype html>
 		<%@ page language="java" pageEncoding="UTF-8"%>
 		<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -62,10 +63,6 @@
                     <li class="speaker modify-msgs" onclick="javascript:window.location.href='${ctx}/complat/userSetUpEdit?userMenu=2'">
                     	<p>账户设置</p>
                     </li>
-                    <li class="pwd modify-pwd"  onclick="toCountUser();">
-                        <p>在线用户</p>
-                    </li>
-                    
                     <li class="logout" onclick="loginOut();">
                         <p>退出系统</p>
                     </li>
