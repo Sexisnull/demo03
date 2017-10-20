@@ -22,6 +22,11 @@ function filter(treeId, parentNode, childNodes) {
 	return childNodes;
 }
 
+function zTreeOnExpand(event, treeId, treeNode) {
+    alert(treeNode.tId + ", " + treeNode.name);
+};
+
+
 $(document).ready(function() {
 	$("#treeDemo").height(500); //-20
 	$("#treeDemo").width(200); //-20
@@ -30,11 +35,12 @@ $(document).ready(function() {
         async : {
             enable : true,
             url : "../uids/orgTree",
-            autoParam : [ "id" ],
+            autoParam : [ "id=pId" ],
+            // autoParam : [ "id" ],
             otherParam : {
                 "orgId" : orgId
-            },
-            dataFilter : filter
+            }
+            // dataFilter : filter
         },
         // check: {
         //     enable: true,
@@ -52,6 +58,8 @@ $(document).ready(function() {
         },
         callback : {
             onClick : onClick
+            // onAsyncSuccess : ztreeOnAsyncSuccess
+            // onExpand: zTreeOnExpand
         }
     };
     $.fn.zTree.init($("#treeDemo"), setting1, zNodes);
