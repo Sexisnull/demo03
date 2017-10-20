@@ -205,12 +205,23 @@ public class ComplatUserController extends BaseController {
 
 			// 搜索属性初始化
 			Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
+//			if (StringUtils.isNotBlank(orgId)) {
+//				searchParams.put("EQ_groupid", orgId);
+//				model.addAttribute("orgId", orgId);
+//			} else {
+//				if(searchParams.size()==0){
+//					searchParams.put("EQ_groupid", deptId);
+//				}
+//			}
 			if (StringUtils.isNotBlank(orgId)) {
 				searchParams.put("EQ_groupid", orgId);
 				model.addAttribute("orgId", orgId);
-			} else {
-				if(searchParams.size()==0){
+			}else{
+				if(searchParams.size()>=1&&searchParams.get("EQ_groupid") != null){
+					model.addAttribute("orgId", searchParams.get("EQ_groupid"));
+				}else{
 					searchParams.put("EQ_groupid", deptId);
+					model.addAttribute("orgId", deptId);
 				}
 			}
 			Specification<ComplatUser> spec = super.toNewSpecification(
