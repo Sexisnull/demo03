@@ -457,7 +457,7 @@ function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
 			onDblClick : onDblClickFunction
 		}
 	};
-	console.log("-----"+treeName);
+	//console.log("-----"+treeName);
 	$("#" + treeName).tree(setting, rootNode);
 //	$("#" + treeName).tree().refreshNode('');
 }
