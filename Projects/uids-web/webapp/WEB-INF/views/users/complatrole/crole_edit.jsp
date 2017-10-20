@@ -29,11 +29,11 @@ $().ready(function() {
 	jQuery.validator.addMethod("isName", function(value, element) { 
 	    var corporName = /^[\u4E00-\u9FA5A-Za-z0-9]+$/;   
 	    return this.optional(element) || (corporName.test(value));     
-	}, "名称只能由字母、数字、数字组成");
+	}, "名称只能由中文、字母、数字组成");
 	jQuery.validator.addMethod("isSpec", function(value, element) { 
 	    var corporName = /^[\u4E00-\u9FA5A-Za-z0-9]+$/;   
 	    return this.optional(element) || (corporName.test(value));     
-	}, "描述只能由字母、数字、数字组成");
+	}, "描述只能由中文、字母、数字组成");
 </script>
 <style type="text/css">
 .form-content textarea {
