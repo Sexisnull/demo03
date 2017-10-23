@@ -20,7 +20,7 @@
 
 
 $(function(){
-	var groupMenu = [{"name":"单位选择","id":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
+	var groupMenu = [{"name":"机构选择","id":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
 
 	$('#groupname').menu({
 		tree : 'groupmenu',
@@ -65,7 +65,6 @@ function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
 			onDblClick : onDblClickFunction
 		}
 	};
-	console.log("-----"+treeName);
 	$("#" + treeName).tree(setting, rootNode);
 //	$("#" + treeName).tree().refreshNode('');
 }
@@ -85,7 +84,7 @@ function resetform() {
 //-------------------------区域编码树-----------------------------
 
 $(function(){
-	var groupMenu2 = [{"name":"区域选择","id":"0","codeid":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
+	var groupMenu2 = [{"name":"甘肃省","title":"甘肃省","id":"128","codeid":"620000000000","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
 
 	$('#groupname2').menu({
 		tree : 'groupmenu2',
@@ -110,7 +109,7 @@ function onDbClickGroup2(event, treeId, treeNode) {
 	if (treeNode.isDisabled )//根节点及失效节点双击无效
 		return;
 	$('#groupid2').val(treeNode.id);
-	$('#groupname2').val(treeNode.codeid);
+	$('#groupname2').val(treeNode.name);
 	$('#groupname2_menu').fadeOut(50);
 }
 
@@ -265,12 +264,17 @@ jQuery.validator.addMethod("isName", function(value, element) {
 			<tr>
 				<th><b class="mustbe">*</b> 请输入区域编码：</th>
 				<td>
-				    <input name="groupname2" id="groupname2" type="text" placeholder="请选择区域编码" readonly="readonly" style="cursor: pointer;" value="${complatGroup.areacode}"/>
+				    <c:if test="${empty complatGroup.iid}">
+				          <input name="groupname2" id="groupname2" type="text" placeholder="请选择区域编码" style="cursor: pointer;" value="${areacode}" readonly="readonly"/>
+				    </c:if>
+				    <c:if test="${not empty complatGroup.iid}">
+				          <input name="groupname2" id="groupname2" type="text" placeholder="请选择区域编码" style="cursor: pointer;" value="${complatGroup.areacode}" readonly="readonly"/>
+				    </c:if>
 				</td>
 	        	<th><b class="mustbe">*</b> 请输入机构后缀：</th>
 	        	<td>
 	        	    <c:if test="${empty complatGroup.iid}">
-				          <input type="text" placeholder="请填写最简洁的机构缩写，例如：fgw（发改委）" class="input" name="suffix" value="${complatGroup.suffix}"/>
+				          <input type="text" placeholder="请填写最简洁的机构缩写，例如：fgw（发改委）" class="input" name="suffix" value="${complatGroup.suffix}" />
 				    </c:if>
 				    <c:if test="${not empty complatGroup.iid}">
 				          <input type="text" placeholder="请填写最简洁的机构缩写，例如：fgw（发改委）" class="input" name="suffix" value="${complatGroup.suffix}" disabled="true"/>
@@ -281,11 +285,11 @@ jQuery.validator.addMethod("isName", function(value, element) {
 			    <th><b class="mustbe">*</b> 请输入上级机构：</th>
 	        	<td>
 	        	    <c:if test="${empty complatGroup.iid}">
-				          <input name="groupname" id="groupname" type="text" placeholder="请选择上级机构" style="cursor: pointer;" value="${complatGroup.parentName}" readonly="readonly" /> 
-	        		      <input type="hidden" id="groupid"  name="groupid">
+				          <input name="groupname" id="groupname" type="text" placeholder="请选择上级机构" style="cursor: pointer;" value="${groupname}" readonly="readonly"/> 
+	        		      <input type="hidden" id="groupid"  name="groupid" value="${groupid}">
 				    </c:if>
 				    <c:if test="${not empty complatGroup.iid}">
-				          <input name="groupname" id="groupname" type="text" style="cursor: pointer;" value="${complatGroup.parentName}" disabled="true" readonly="readonly"/> 
+				          <input name="groupname" id="groupname" type="text" style="cursor: pointer;" value="${complatGroup.parentName}" disabled="true"/> 
 	        		      <input type="hidden" id="groupid"  name="groupid">
 				    </c:if>
 	        	</td>

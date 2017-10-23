@@ -314,6 +314,14 @@ public class ComplatGroupController extends BaseController {
 				model.addAttribute("orderSort", orderSort);
 			}else{
 				complatGroup = new ComplatGroup();
+				SysUserSession sysUserSession = (SysUserSession) ((HttpServletRequest) request).getSession().getAttribute("sysUserSession");
+                // 获取部门id
+                String deptId = sysUserSession.getDeptId();
+                String name = complatGroupService.findByIid(Integer.valueOf(deptId)).getName();
+                model.addAttribute("areacode", "620000000000");
+                model.addAttribute("groupid", deptId);
+                model.addAttribute("groupname", name);
+                
 			}
 			model.addAttribute("nodetypeMap", nodetypeMap);
 			model.addAttribute("areatypeMap", areatypeMap);
@@ -365,6 +373,8 @@ public class ComplatGroupController extends BaseController {
 		        	String codeId = "";
 		        	if(null != group && group.size() > 0){
 		        		codeId = group.get(group.size()-1).getCodeid();
+		        	}else{
+		        		codeId = complatGroupService.findByIid(pId).getCodeid() + "000";
 		        	}
 		        	int num = Integer.valueOf(codeId.substring(codeId.length() - 4, codeId.length())).intValue() + 1;
 		            codeId = codeId.substring(0, codeId.length() - 4) + String.valueOf(num);
