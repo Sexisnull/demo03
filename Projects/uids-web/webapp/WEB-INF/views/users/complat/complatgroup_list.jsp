@@ -137,70 +137,6 @@ $(function(){
 		});		
 });
 
-
-//搜索树的设置
-$(function(){
-	var groupMenu = [{"name":"单位选择","id":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
-    
-	$('#groupname').menu({
-		tree : 'groupmenu',
-		height : 200,
-		init : function() {
-			setting('groupmenu', onClickGroup, onDbClickGroup, groupMenu);
-		}
-	});
-	
-});
-function hideGroupMenu(){
-	$('#groupname_menu').css('display','none');
-}
-function onClickGroup(event, treeId, treeNode) {
-	$('#groupid').val(treeNode.id);
-	$('#groupname').val(treeNode.name);
-	hideGroupMenu();
-}
-function onDbClickGroup(event, treeId, treeNode) {
-	if(treeNode == null){
-		return;
-	}
-	if (treeNode.isDisabled )//根节点及失效节点双击无效
-		return;
-	$('#groupid').val(treeNode.id);
-	$('#groupname').val(treeNode.name);
-	$('#groupname_menu').fadeOut(50);
-}
-
-/**
- *	初始化树
- */
-function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
-	var setting = {
-		async : {
-			enable : true,
-			url : "${ctx}/uids/getGroup",
-			autoParam : [ "id=groupId", "isDisabled" ]
-		},
-		callback : {
-			beforeClick : beforeClick,
-			onClick : onClickFunction,
-			onDblClick : onDblClickFunction
-		}
-	};
-	console.log("-----"+treeName);
-	$("#" + treeName).tree(setting, rootNode);
-//	$("#" + treeName).tree().refreshNode('');
-}
-/**
- *	机构选择节点点击前回调
- */
-function beforeClick(treeId, treeNode, clickFlag) {
-	if (treeNode.isDisabled)
-		return false;
-	return (treeNode.id != 0);
-}
-function resetform() {
-	$('form').find(':input').not(':button,:hidden,:submit,:reset').val('');
-}
 //机构导出
 function exportGroup() {
 		var paraTypeId=$(".iid").val();
@@ -301,6 +237,7 @@ function toEdit(iids){
 						<input id="nameSearch" type="text" class="input" name="search_LIKE_name" value="${sParams['LIKE_name']}"  placeholder="机构名称" style="width: 161px;"/>
 						<input type="hidden" id="isSearch" name="isSearch" value="${isSearch}">
 						<input type="hidden" id="orgId" name="orgId" value="${orgId}">
+						<input type="hidden" id="deptCodeid" name="deptCodeid" value="${deptCodeid}">
 					</td>
 					<th style="padding-left: 5px">机构编码:</th>
 					<td width="20%">

@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
@@ -138,38 +139,17 @@ public class ComplatGroupController extends BaseController {
 
             //搜索属性初始化
 			Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
-//			String isSearch = request.getParameter("isSearch");//判断是否在搜索状态
-//			if(request.getParameter("isSearch") != null){
-//				searchParams.put("EQ_codeid", "001");
-//			}else{
-				if (StringUtils.isNotBlank(orgId)) {
-					searchParams.put("EQ_pid", orgId);
-					model.addAttribute("orgId", orgId);
+			if (StringUtils.isNotBlank(orgId)) {
+				searchParams.put("EQ_pid", orgId);
+				model.addAttribute("orgId", orgId);
+			}else{
+				if(searchParams.size()>=1&&searchParams.get("EQ_pid") != null){
+					model.addAttribute("orgId", searchParams.get("EQ_pid"));
 				}else{
-					if(searchParams.size()>=1&&searchParams.get("EQ_pid") != null){
-						model.addAttribute("orgId", searchParams.get("EQ_pid"));
-					}else{
-						searchParams.put("EQ_pid", deptId);
-						model.addAttribute("orgId", deptId);
-					}
+					searchParams.put("EQ_pid", deptId);
+					model.addAttribute("orgId", deptId);
 				}
-//			}
-//			if(StringUtils.isNotBlank(orgId)){
-//				searchParams.put("EQ_pid", orgId);
-//			}
-//			 (StringUtils.isNotBlank(orgId)) {
-//				searchParams.put("EQ_pid", orgId);
-//				model.addAttribute("orgId", orgId);
-//			} else {
-//				if(searchParams.size()==1 && searchParams.get("EQ_pid") != null){
-//					if (searchParams.get("EQ_pid") == null) {
-//						searchParams.put("EQ_pid", deptId);
-//						model.addAttribute("orgId", deptId);
-//					} else {
-//						model.addAttribute("orgId", searchParams.get("EQ_pid"));
-//					}
-//				}
-//			}
+			}
 			Specification<ComplatGroup>  spec=super.toSpecification(searchParams, ComplatGroup.class);
 			//分页
 			Page<ComplatGroup> pageInfo = complatGroupService.getUserPage(spec,pageRequest);
@@ -559,32 +539,59 @@ public class ComplatGroupController extends BaseController {
 	 */
 	public boolean importCheck(List<ComplatGroup> group,Model model,HttpServletRequest request,HttpServletResponse response)throws Exception {
 		int row = 1;
+		String warn = "";
+		boolean check = true;
 		for (ComplatGroup complatGroup : group) {
 			//进行机构名和上级机构编码不能为空的校验
-			if (StringUtils.isEmpty(complatGroup.getName()) || StringUtils.isEmpty(complatGroup.getParentCode())) {
-				returnMsg("error", "第" + row + "行导入失败,机构名或者上级机构编码不能为空！",request);
-				return false;
-			}
+//			if (StringUtils.isEmpty(complatGroup.getName()) || StringUtils.isEmpty(complatGroup.getParentCode())) {
 			//进行机构重名校验
 			String parentCode = complatGroup.getParentCode();
 			String name = complatGroup.getName();
-			Integer pId = complatGroupService.findByCodeid(parentCode).getIid();
-			if (complatGroupService.queryNameIsUsed(name, pId)){
-				returnMsg("error", "第" + row + "行导入失败,机构名称重复！",request);
-				return false;
+			Integer pId = 0;
+			if(StringUtils.isNotBlank(parentCode)){
+				pId = complatGroupService.findByCodeid(parentCode).getIid();
 			}
+//			if (complatGroupService.queryNameIsUsed(name, pId)){
 			//进行在权限内的导入校验
 			SysUserSession sysUserSession = (SysUserSession) ((HttpServletRequest) request).getSession().getAttribute("sysUserSession");
 			String deptId = sysUserSession.getDeptId();// 获取部门id
 			String deptParentCode = complatGroupService.findByIid(Integer.valueOf(deptId)).getCodeid();
-			if(parentCode.length() < deptParentCode.length() || 
-			   !parentCode.substring(0, deptParentCode.length()).equals(deptParentCode)){
-				returnMsg("error", "第" + row + "行导入失败,只能导入权限以内的数据！",request);
-				return false;
+//			if(parentCode.length() < deptParentCode.length() || !parentCode.substring(0, deptParentCode.length()).equals(deptParentCode)){
+			//机构名称正则式校验
+			String zhengZeShi1 = "^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$";
+			//机构后缀正则式校验
+			String zhengZeShi2 = "^[^\u4e00-\u9fa5]{0,}$";
+			//组织机构代码正则式校验
+			String zhengZeShi3 = "^[a-zA-Z0-9]{9}$";
+			//区域编码正则式校验
+			String zhengZeShi4 = "^[0-9]{0,}$";
+			if((StringUtils.isEmpty(complatGroup.getName()) || StringUtils.isEmpty(complatGroup.getParentCode()))
+				||(complatGroupService.queryNameIsUsed(name, pId))
+				||(parentCode.length() < deptParentCode.length() || !parentCode.substring(0, deptParentCode.length()).equals(deptParentCode))
+				||(!Pattern.matches(zhengZeShi1, complatGroup.getName()) || complatGroup.getName().length() >= 100)
+				||(StringUtils.isNotBlank(complatGroup.getStrNodeType()) && (!Pattern.matches(zhengZeShi1, complatGroup.getStrNodeType()) || complatGroup.getStrNodeType().length() >= 50))
+				||(StringUtils.isEmpty(complatGroup.getSuffix()) || (!Pattern.matches(zhengZeShi2, complatGroup.getSuffix()) || complatGroup.getSuffix().length() >= 255))
+				||(StringUtils.isNotBlank(complatGroup.getGroupallname()) && (!Pattern.matches(zhengZeShi1, complatGroup.getGroupallname()) || complatGroup.getGroupallname().length() >= 255))
+				||(StringUtils.isNotBlank(complatGroup.getOrgcode()) && !Pattern.matches(zhengZeShi3, complatGroup.getOrgcode()))
+				||(StringUtils.isNotBlank(complatGroup.getOrgtype()) && (!Pattern.matches(zhengZeShi1, complatGroup.getOrgtype()) || complatGroup.getOrgtype().length() >= 255))
+				||(StringUtils.isNotBlank(complatGroup.getStrNodeType()) && (!Pattern.matches(zhengZeShi1, complatGroup.getStrNodeType()) || complatGroup.getStrNodeType().length() >= 50))
+				||(StringUtils.isNotBlank(complatGroup.getAreacode()) && (!Pattern.matches(zhengZeShi4, complatGroup.getAreacode()) || complatGroup.getAreacode().length() > 12))
+				||(StringUtils.isNotBlank(complatGroup.getStrIsCombine()) && (!Pattern.matches(zhengZeShi1, complatGroup.getStrIsCombine()) || complatGroup.getStrIsCombine().length() >= 20))
+				||(StringUtils.isNotBlank(complatGroup.getParentName()) && (!Pattern.matches(zhengZeShi1, complatGroup.getParentName()) || complatGroup.getParentName().length() >= 100))
+				||(!Pattern.matches(zhengZeShi4, complatGroup.getParentCode()) || complatGroup.getParentCode().length() >= 255)
+				||(StringUtils.isNotBlank(complatGroup.getSpec()) && complatGroup.getSpec().length() >= 255)){
+				warn = warn + String.valueOf(row) + "、";
+				check = false;
 			}
 			row++;
 		}
-		return true;
+		if(warn.length() >= 1){
+			warn = warn.substring(0, warn.length()-1);
+		}
+		if(check == false){
+			returnMsg("error", "导入失败,第" + warn + "行数据输入错误，请修正后重新导入！",request);
+		}
+		return check;
 	}
 	
     /**
