@@ -1,9 +1,9 @@
 document.writeln("<div class=\"pagecon\" id=\"pagecon\">");
-document.writeln("        <div class=\"topleft\"><a href=\"http://www.gansu.gov.cn/\" target=\"_blank\"><img src=\"../images/1512101414170988388.png\" />\"中国.甘肃\"门户网站</a></div>  ");
+document.writeln("        <div class=\"topleft\"><a href=\"http://www.gansu.gov.cn/\" target=\"_blank\"><img src=\"../ui/images/1512101414170988388.png\" />\"中国.甘肃\"门户网站</a></div>  ");
 document.writeln("        <div class=\"topright\" style=\"height:30px;\">");
 document.writeln("        <div style=\"float:left;width:165px;display:none;\">");
-document.writeln("        <a><img src=\"../images/1512101414171737037.png\" />移动版</a>");
-document.writeln("        <a><img src=\"../images/1512101414175034652.png\" />微信版</a></div>");
+document.writeln("        <a><img src=\"../ui/images/1512101414171737037.png\" />移动版</a>");
+document.writeln("        <a><img src=\"../ui/images/1512101414175034652.png\" />微信版</a></div>");
 document.writeln(" <div id=\"login\" style=\"float:left;position:relative;height:30px;\">");
 document.writeln("</div>");
 document.writeln("<div id='div_c' style='margin-left:3px; font-weight:bold; position:relative;height:30px;float:left'><a href='javascript:;' onclick='toggleToolBar();' id='font_c' style='font-family:'微软雅黑'; font-size:14px;'>无障碍阅读</a></div>");
@@ -11,7 +11,7 @@ document.writeln("        </div>");
 document.writeln("    </div> ");
 
 
-document.writeln("<script src='http://www.gszwfw.gov.cn/gszw/resources/bscx/sxcx/js/qlsx.js'></script>");
+document.writeln("<script src='../ui/js/qlsx.js'></script>");
 
 
 document.writeln("<script type=\"text/javascript\">var domain=document.domain;");

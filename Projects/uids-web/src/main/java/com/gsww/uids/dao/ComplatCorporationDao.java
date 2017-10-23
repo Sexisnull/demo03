@@ -1,5 +1,7 @@
 package com.gsww.uids.dao;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -41,6 +43,8 @@ public interface ComplatCorporationDao extends  PagingAndSortingRepository<Compl
 	@Modifying
 	@Query("update ComplatCorporation t set t.pwd = ?2 where t.loginName = ?1")
 	public int updatePwd(String loginName, String pwd);
+
+	public List<ComplatCorporation> findByOrgNumber(String orgnumber);
 	
 	/**
 	 * 根据工商注册编码查询法人用户
@@ -48,12 +52,4 @@ public interface ComplatCorporationDao extends  PagingAndSortingRepository<Compl
 	 * @return
 	 */
 	public ComplatCorporation findByRegNumber(String regNum);
-	
-	/**
-	 * 根据组织机构编码查询法人用户
-	 * @param inputByGuest
-	 * @return
-	 */
-	public ComplatCorporation findByOrgNumber(String inputByGuest);
-	
 }

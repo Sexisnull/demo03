@@ -41,7 +41,8 @@ public class OutsideUserDao extends JdbcTemplateDao {
 		return a;
 	}
 
-	public OutsideUser findByOpenId(String weChatOpenId) {
+	@SuppressWarnings("unchecked")
+	public OutsideUser findByWeChatOpenId(String weChatOpenId) {
 		List<OutsideUser> list = (List<OutsideUser>) ConvertSqlToDtoList.ExeSQL2List(jdbcTemplate, findByWeChatOpenId,
 				new Object[] { weChatOpenId }, "com.gsww.uids.gateway.entity.OutsideUser");
 		if (list.size() >= 1) {

@@ -1,11 +1,15 @@
 package com.gsww.uids.service;
 
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.gsww.uids.entity.ComplatCorporation;
+import com.gsww.uids.util.exception.OperationException;
 
 
 /**
@@ -49,13 +53,10 @@ public interface ComplatCorporationService {
 
 	boolean updatePwd(String loginName, String md5encode);
 	
-	/**
-     * @discription   验证loginName实体是否存在 
-     * @param loginName
-     * @return
-	 */
-	public ComplatCorporation findByLoginNameIsUsed(String loginName);
-	
+	ComplatCorporation checkUserLogin(String userName, String password, String ip);
+
+	void updateLoginIpAndLoginTime(ComplatCorporation corporation);
+
 	/**
 	 * 根据工商注册查询法人用户
 	 * @param regNum
@@ -76,5 +77,25 @@ public interface ComplatCorporationService {
 	 * @return
 	 */
 	public ComplatCorporation findByManyWay(String inputByGuest);
+
+	ComplatCorporation findByLoginNameIsUsed(String loginName);
+
+	boolean updateIsUpload(int intValue, int i);
+
+	boolean modify(ComplatCorporation corporation);
+
+	/**
+	 * 统一注册
+	 * @param corporation
+	 * @return
+	 * @throws OperationException
+	 */
+	boolean add(ComplatCorporation corporation) throws OperationException;
 	
+	void delete(ComplatCorporation corporation);
+	
+	/**
+	 * 根据loginName,regNumber,orgNumber校验数据唯一性
+	 */
+	Integer checkUnique(String loginName,String regNumber,String orgNumber) throws Exception;
 }

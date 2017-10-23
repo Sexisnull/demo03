@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gsww.jup.util.StringHelper;
+import com.gsww.uids.constant.JisSettings;
 //import com.gsww.uids.controller.ComplatRoleController;
 import com.gsww.uids.dao.JisApplicationDao;
 import com.gsww.uids.entity.JisApplication;
@@ -35,6 +36,8 @@ public class JisApplicationServiceImpl implements JisApplicationService {
 
 	@Autowired
 	private JisApplicationDao jisApplicationDao;
+	@Autowired
+	private JisSettings jisSetting;
 	
 	@Autowired
 	private JdbcTemplate jdbcTemplate ;
@@ -63,7 +66,7 @@ public class JisApplicationServiceImpl implements JisApplicationService {
 			PageRequest pageRequest) {
 		return jisApplicationDao.findAll(spec, pageRequest);
 	}
-
+	
 	@Override
 	public JisApplication findByMark(String mark) throws Exception {
 		JisApplication jisApplication=jisApplicationDao.findByMark(mark).get(0);
@@ -114,7 +117,8 @@ public class JisApplicationServiceImpl implements JisApplicationService {
 			ids+=i+"','";
 		}
 		ids = ids.substring(0,ids.length()-2);
-		String selApp = "select iid,name,icon,userdefined,logintype from jis_application where isshow=1 and iid in ("+ids+")";
+		String netType= jisSetting.getNetType();
+		String selApp = "select iid,name,icon,userdefined,logintype from jis_application where isshow=1 and nettype="+netType+" and iid in ("+ids+")";
 		
 		return jdbcTemplate.queryForList(selApp);
 	}
@@ -142,5 +146,17 @@ public class JisApplicationServiceImpl implements JisApplicationService {
 	      return url;
 	    }
 	    return url;
+	}
+	
+	@Override
+	public List<JisApplication> findByIsSyncGroupNotNullAndLoginType(Integer loginType) throws Exception{
+		List<JisApplication> list = jisApplicationDao.findByIsSyncGroupNotNullAndLoginType(loginType);
+		return list;
+	}
+
+	@Override
+	public List<JisApplication> findByNetType(Integer netType) {
+		List<JisApplication> list=jisApplicationDao.findByNetType(netType);
+		return list;
 	}
 }

@@ -11,8 +11,9 @@ import com.gsww.uids.gateway.ws.WsCorAuth;
 
 /**
  * WsCorAuth-Test(法人用户)
+ * 
  * @author zcc
- *
+ * 
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("/applicationContext.xml")
@@ -26,7 +27,8 @@ public class WsCorAuthTest {
 			String ticket = "5747f682ab4d2404f64039725eaa906a";
 			String time = "2015101616354";
 			String sign = "e28MG3NoBwsFEgNgAxp2YnRrdXQANXk1BUZ3RwZFczd4NXc3B0NzPgVEDTlyMg==";
-			String ticketValidate = wsCorAuth.ticketValidate(appmark, ticket, time, sign);
+			String ticketValidate = wsCorAuth.ticketValidate(appmark, ticket,
+					time, sign);
 			System.out.println("法人用户-票据认证:" + ticketValidate);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -41,7 +43,8 @@ public class WsCorAuthTest {
 			String token = "dx4HYnJpBnIOZAxiBUYJY3cED3UDBg==";
 			String time = "2015101616354";
 			String sign = "e28MG3NoBwsFEgNgAxp2YnRrdXQANXk1BUZ3RwZFczd4NXc3B0NzPgVEDTlyMg==";
-			String findUserByToken = wsCorAuth.findUserByToken(appmark, token, time, sign);
+			String findUserByToken = wsCorAuth.findUserByToken(appmark, token,
+					time, sign);
 			System.out.println("法人用户-根据令牌获取用户详细信息:" + findUserByToken);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -57,7 +60,8 @@ public class WsCorAuthTest {
 			String time = "2015101616354";
 			String sign = "e28MG3NoBwsFEgNgAxp2YnRrdXQANXk1BUZ3RwZFczd4NXc3B0NzPgVEDTlyMg==";
 			String proxyapp = "gszw";
-			String generateTicket = wsCorAuth.generateTicket(appmark, token, time, sign, proxyapp);
+			String generateTicket = wsCorAuth.generateTicket(appmark, token,
+					time, sign, proxyapp);
 			System.out.println("法人用户-根据令牌获取第三方接口资源票据:" + generateTicket);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -71,10 +75,11 @@ public class WsCorAuthTest {
 			String appmark = "gszw";
 			String time = "2015101616354";
 			String sign = "e28MG3NoBwsFEgNgAxp2YnRrdXQANXk1BUZ3RwZFczd4NXc3B0NzPgVEDTlyMg==";
-			String loginname = "hanweb";
-			String password = "BRpyEQMcCgcFFHJm";
-			String userValidate = wsCorAuth.userValidate(appmark, time, sign, loginname, password);
-			System.out.println("法人用户-2.4.4	用户认证:" + userValidate);
+			String loginname = "test";
+			String password = "123123";
+			String userValidate = wsCorAuth.userValidate(appmark, time, sign,
+					loginname, password);
+			System.out.println("法人用户-用户认证:" + userValidate);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

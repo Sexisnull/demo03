@@ -36,7 +36,6 @@ public class FileUploadController extends BaseController {
 			   System.err.println("start");
 			   for (Object object = null;e.hasMoreElements();){
 				   object = e.nextElement();
-				   System.out.println(object + ": " + request.getHeader(""+object));
 			   }
 			   System.err.println("end");
 			   File f1 = new File(filePath);

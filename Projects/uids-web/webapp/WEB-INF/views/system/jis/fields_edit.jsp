@@ -3,6 +3,7 @@
 <html>
 
 <%@ include file="/include/meta.jsp"%> 
+<script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgcore.lhgdialog.min.js"></script>
 
 <head>
 <title>甘肃万维JUP课题</title>
@@ -16,30 +17,132 @@ $().ready(function() {
 			showname: {
 		     required: true,
 		   	 maxlength: 50,
+		   	 isDefvalue:true,
+		   	 uniqueShowname: true
 		   	},
 		    fieldname : {
 		     required: true,
 		     maxlength: 50,
-		     uniqueName : true
-		     //stringCheck:fieldName
+		     isFieldname: true,
+		     uniqueFieldname: true
 		    },
 			defvalue : {
-				cnRangelength: [0,25]
+				maxlength: 50,
+				isDefvalue:true
 			},
 			fieldkeys : {
-				cnRangelength: [0,500]
+				cnRangelength: [0,500],
+				isFieldkeyAndvalues: true
 			},
 			fieldvalues : {
-				cnRangelength: [0,1000]
-			},
-		   	submitHandler:function(form){
-				form.submit();
+				cnRangelength: [0,1000],
+				isFieldkeyAndvalues: true
 			}
 		}
 	});
 	// Ajax重命名校验
-	$.uniqueValidate('uniqueName', '${ctx}/jis/checkFieldname', ['fieldname','oldFieldname'], '对不起，这个字段名称重复了');
+	$.uniqueValidate('uniqueFieldname', '${ctx}/jis/checkFieldname', ['fieldname','oldFieldname'], '对不起，这个字段名称重复了');
+	
+	$.uniqueValidate('uniqueShowname', '${ctx}/jis/checkShowname', ['showname','oldShowname'], '对不起，这个显示名称重复了');
+
+	// 字段名称校验
+	jQuery.validator.addMethod("isFieldname", function(value, element) { 
+           var corporName = /ex_[a-zA-Z0-9_]+$/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "字段名称只能由字母、数字、下划线组成且只能以ex_开头");
+    //固定值校验
+	jQuery.validator.addMethod("isDefvalue", function(value, element) { 
+           var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "固定值只能由字母、数字、下划线、中文组成，不能以下划线开头和结尾");
+    //建，值     
+    jQuery.validator.addMethod("isFieldkeyAndvalues", function(value, element) { 
+           //var corporName = /^(?!.*(^|,)([^,]*),(\2|.*,\2)(,|$))[^,]+(,[^,]+)+$/;
+           var corporName = /^[a-zA-Z0-9_\u4e00-\u9fa5]+(,[a-zA-Z0-9_\u4e00-\u9fa5]+)*$/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "此名称只能由字母、数字、下划线、中文、英文逗号组成，且不能以英文逗号开头或结尾");
 });
+
+function checkAndSave() {
+	var fieldkeysEdit = $("#fieldkeysEdit").val();
+	var fieldvaluesEdit = $("#fieldvaluesEdit").val();
+	var fieldkeysNew = $("#fieldkeysNew").val();
+	var fieldvaluesNew = $("#fieldvaluesNew").val();
+	var defvalueNew = $("#defvalueNew").val();
+	var defvalueEdit = $("#defvalueEdit").val();
+	var Jshowname = $("#showname").val();
+	var Jfieldname = $("#fieldname").val();
+	var type = $("#fieldsType").val();
+	//alert("type" + type + "--" + fieldkeysEdit + "-" + fieldvaluesEdit + "-" + fieldkeysNew + "-" + fieldvaluesNew);
+	if(type==2) {
+		if((fieldkeysEdit != "" && fieldkeysEdit != undefined) && (fieldvaluesEdit != "" && fieldvaluesEdit != undefined)) {
+			//alert("编辑" + fieldkeysEdit.split(",").length + "==" + fieldvaluesEdit.split(",").length);
+			if(fieldkeysEdit.split(",").length == fieldvaluesEdit.split(",").length) {
+				$("#editForm").submit();
+			} else {
+				$.dialog.alert('Value串和Key串个数请保持一致',function(){
+					return null;
+				});
+				return false;
+			}
+		} else if ((fieldkeysNew != "" && fieldkeysNew != undefined) && (fieldvaluesNew != "" && fieldvaluesNew != undefined)) {
+			//alert("新增" + fieldkeysNew.split(",").length + "==" + fieldvaluesNew.split(",").length);
+			if(fieldkeysNew.split(",").length == fieldvaluesNew.split(",").length) {
+				if(Jshowname != "" && Jfieldname != "ex_") {
+					$("#editForm").submit();
+				} else {
+					$.dialog.alert('请填写必填信息',function(){
+						return null;
+					});
+					return false;				
+				}
+			} else {
+				$.dialog.alert('Value串和Key串个数请保持一致',function(){
+					return null;
+				});
+				return false;
+			}
+		} else if((fieldkeysEdit != "" || fieldkeysEdit != undefined) && (fieldvaluesEdit == "" || fieldvaluesEdit == undefined)) {
+			$.dialog.alert('请正确填写Value串和Key串',function(){
+				return null;
+			});
+			return false;
+		} else if((fieldkeysEdit == "" || fieldkeysEdit == undefined) && (fieldvaluesEdit != "" || fieldvaluesEdit != undefined)) {
+			$.dialog.alert('请正确填写Value串和Key串',function(){
+				return null;
+			});
+			return false;
+		} else if((fieldkeysNew != "" || fieldkeysNew != undefined) && (fieldvaluesNew == "" || fieldvaluesNew == undefined)) {
+			$.dialog.alert('请正确填写Value串和Key串',function(){
+				return null;
+			});
+			return false;
+		} else if((fieldkeysNew == "" || fieldkeysNew == undefined) && (fieldvaluesNew != "" || fieldvaluesNew != undefined)) {
+			$.dialog.alert('请正确填写Value串和Key串',function(){
+				return null;
+			});
+			return false;
+		}
+	} else if(type==3) {
+		if((defvalueNew != "" && defvalueNew != undefined) || (defvalueEdit != "" && defvalueEdit != undefined)) {
+			if(Jshowname != "" && Jfieldname != "ex_") {
+				$("#editForm").submit();
+			} else {
+				$.dialog.alert('请填写必填信息',function(){
+					return null;
+				});
+				return false;
+			}
+		} else {
+			$.dialog.alert('请填写必填信息',function(){
+				return null;
+			});
+			return false;				
+		}
+	} else {
+		$("#editForm").submit();
+	}
+}
 
 $(document).on("change",'select#fieldsType',function(){
 	var a = $(this).val();
@@ -58,7 +161,6 @@ $(document).on("change",'select#fieldsType',function(){
 		$("#tr_2_1")[0].style.display = 'none';
 		$("#tr_2_2")[0].style.display = 'none';
 	}
-	
 });
 </script>
 
@@ -97,7 +199,8 @@ $(document).on("change",'select#fieldsType',function(){
     		<tr>
 				<th><b class="mustbe">*</b>显示名：</th>
 				<td>
-					<input type="text"  class="showname" name="showname" value="${jisFields.showname}" />
+					<input type="text"  class="showname" id="showname" name="showname" value="${jisFields.showname}" />
+					<input type="hidden"  class="oldShowname" id="oldShowname" name="oldShowname" value="${jisFields.showname}"/>
 	            </td>
 	        	<th></th>
 				<td></td>
@@ -114,10 +217,10 @@ $(document).on("change",'select#fieldsType',function(){
 			<tr>
 				<th>字段类型：</th>
 				<td>
-					<select id="fieldsType" name="type" value="${jisFields.type}">
-						<option value='1' <c:if test="${jisFields.type == '1'}">selected</c:if>>字符串</option>
-						<option value='2' <c:if test="${jisFields.type == '2'}">selected</c:if>>枚举型</option>
-						<option value='3' <c:if test="${jisFields.type == '3'}">selected</c:if>>固定值</option>
+					<select id="fieldsType" id="type" name="type" value="${jisFields.type}">
+						<option value="1" <c:if test="${jisFields.type == '1'}">selected</c:if>>字符串</option>
+						<option value="2" <c:if test="${jisFields.type == '2'}">selected</c:if>>枚举型</option>
+						<option value="3" <c:if test="${jisFields.type == '3'}">selected</c:if>>固定值</option>
 					</select>
 				</td>
 				<th></th>
@@ -127,7 +230,7 @@ $(document).on("change",'select#fieldsType',function(){
 				<tr id = "tr_3" style="display: table-row;">
 					<th><b class="mustbe">*</b>固定值：</th>
 					<td>
-						<input type="text"  class="defvalue" name="defvalue" value="${jisFields.defvalue}" />
+						<input type="text" id="defvalueEdit" class="defvalue" name="defvalue" value="${jisFields.defvalue}" />
 					</td>
 					<th></th>
 					<td></td>
@@ -136,7 +239,7 @@ $(document).on("change",'select#fieldsType',function(){
 			<tr id = "tr_3" style="display: none;">
 				<th><b class="mustbe">*</b>固定值：</th>
 				<td>
-					<input type="text"  class="defvalue" name="defvalue" />
+					<input type="text" id="defvalueNew" class="defvalue" name="defvalue" />
 				</td>
 				<th></th>
 				<td></td>
@@ -145,7 +248,7 @@ $(document).on("change",'select#fieldsType',function(){
 				<tr id = "tr_2_1" style="display: table-row;">
 					<th><b class="mustbe">*</b>Key串：</th>
 					<td>
-						<input type="text"  class="fieldkeys" name="fieldkeys" value="${jisFields.fieldkeys}" />
+						<input type="text"  class="fieldkeys" id="fieldkeysEdit" name="fieldkeys" value="${jisFields.fieldkeys}" />
 					</td>
 					<th></th>
 					<td></td>
@@ -153,7 +256,7 @@ $(document).on("change",'select#fieldsType',function(){
 				<tr id = "tr_2_2" style="display: table-row;">
 					<th><b class="mustbe">*</b>Value串：</th>
 					<td>
-						<input type="text"  class="fieldvalues" name="fieldvalues" value="${jisFields.fieldvalues}" />
+						<input type="text"  class="fieldvalues" id="fieldvaluesEdit" name="fieldvalues" value="${jisFields.fieldvalues}" />
 					</td>
 					<th></th>
 					<td></td>
@@ -162,7 +265,7 @@ $(document).on("change",'select#fieldsType',function(){
 			<tr id = "tr_2_1" style="display: none;">
 				<th><b class="mustbe">*</b>Key串：</th>
 				<td>
-					<input type="text"  class="fieldkeys" name="fieldkeys" />
+					<input type="text"  class="fieldkeys" id="fieldkeysNew" name="fieldkeys" />
 				</td>
 				<th></th>
 				<td></td>
@@ -170,7 +273,7 @@ $(document).on("change",'select#fieldsType',function(){
 			<tr id = "tr_2_2" style="display: none;">
 				<th><b class="mustbe">*</b>Value串：</th>
 				<td>
-					<input type="text"  class="fieldvalues" name="fieldvalues" />
+					<input type="text"  class="fieldvalues" id="fieldvaluesNew" name="fieldvalues" />
 				</td>
 				<th></th>
 				<td></td>
@@ -180,10 +283,9 @@ $(document).on("change",'select#fieldsType',function(){
     <div style="clear:both;"></div>
     <!--表单的按钮组区域-->
     <div class="form-btn">
-    	<input type="submit" tabindex="15" id="submit-btn" value="保存" class="btn bluegreen"/>
+    	<input type="button" tabindex="15" id="submit-btn" value="保存" class="btn bluegreen" onclick="checkAndSave();"/>
     	&nbsp;&nbsp;
         <input type="button" tabindex="16" value="返回" onclick="javascript:window.location.href='${ctx}/jis/fieldsList?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}'" class="btn gray"/>
-        
     </div>
     </form>
     <!--表单的底部区域-->

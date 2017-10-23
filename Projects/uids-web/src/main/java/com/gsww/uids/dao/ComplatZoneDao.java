@@ -32,4 +32,21 @@ public interface ComplatZoneDao
 	 */
 	@Query("select t from ComplatZone t where  t.name =?1  and t.codeId like %?2")
 	public List<ComplatZone> findByNameAndLikeCodeId(String nameInput, String codeId);
+	
+	/**
+	 * 根据父id找出子区域
+	 * @param pid
+	 * @return
+	 */
+	@Query("select t from ComplatZone t where  t.pid =?1 ORDER BY t.orderId ASC,t.iid ASC")
+	public List<ComplatZone> findChildByPid(int pid);
+	
+	/**
+	 * 根据pid查询对象
+	 * @author Lincx
+	 * @param pid
+	 * @return
+	 */
+	@Query(value = "select group from ComplatZone group where group.pid=?1 order by group.type asc")
+	public List<ComplatZone> findByPid(Integer pid);
 }

@@ -61,14 +61,13 @@ public class AuthLogServiceImpl implements AuthLogService{
 
 	try {
 		JisApplication appLication = this.appService.findByMark(appmark);
-		System.out.println("application ====" + appLication);
 		if (appLication != null) {
 			jisAuthLog.setAppid(appLication.getIid());
 			jisAuthLog.setAppmark(appmark);
 			Date createTime = new Date();
 			jisAuthLog.setCreatetime(new Timestamp(createTime.getTime()));
 			
-			ComplatSettings settings = ComplatSettings.getSettings();
+			ComplatSettings settings = new ComplatSettings();
 			String authEffectiveTime = settings.getTicketEffectiveTime();
 			long time = createTime.getTime() + NumberUtil.getLong(authEffectiveTime) * 1000L;
 			Date outTime = new Date(time);

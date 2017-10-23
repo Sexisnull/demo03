@@ -13,13 +13,29 @@
 		<script type="text/javascript" src="${ctx}/res/plugin/jquery/jquery-1.8.3.min.js"></script>
 		<link rel="stylesheet" href="${ctx}/res/skin/default/css/dragRole.css" type="text/css"></link>
 		<link rel="stylesheet" href="${ctx}/res/skin/default/css/role.css">
-		
+		<script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgcore.lhgdialog.min.js"></script>
 		<link rel="stylesheet" href="${ctx}/res/skin/default/css/role.css">
 		<link rel="stylesheet" href="${ctx}/res/skin/default/css/jquery-ui.css">
 		<script type="text/javascript" src="${ctx}/res/skin/default/js/jquery-ui.js"></script>
 			
 		
 		<script type="text/javascript">
+		var dialog;
+		dialog = $("#dialogframe").dialog({
+			autoOpen: false,
+			width : 800,
+			height : 500,
+			closed : false,
+			cache : false,
+			parentWindow : window,
+			modal:true,
+			title:'用户新增'
+		});
+		function closeDialog(){
+			dialog.dialog("close");
+			toLoadUser('');
+		}
+		
 		function choseall(){
 			var c=$('#checkallUser').attr("checked");
 			if(c=="checked"){
@@ -44,27 +60,20 @@
 		case 'remove':
 			var ids = getCheckedIds();
 			if (ids == "") {
-				alert("未选中任何记录");
+				$.dialog.alert("请至少选择一条数据");
 				return;
 			}
 			removeMembers(ids);
 			break;
 		case 'add':
 			var tmp_id = 'dialog_id_' + new Date().getTime();
-			$("#dialogframe").dialog({
-				width : 800,
-				height : 500,
-				closed : false,
-				cache : false,
-				parentWindow : window,
-				modal:true,
-				title:'用户新增'
-			});
+			dialog.dialog( "open" );
+			
 			break;
 		case 'clean':
-			if(confirm('您将清空当前角色下的所有成员\n是否继续？')){
+			$.dialog.confirm('您将清空当前角色下的所有成员\n是否继续？',function(){
 				cleanMembers();
-			}
+			})
 			break;
 		}
 	}
@@ -87,7 +96,7 @@
 		var userids = usersArray.join();
 		var groupids = groupsArray.join();
 		var roleId =  ${roleid};
-		if(confirm("您确定要删除这" + ids.split(",").length + "条记录吗")){
+		$.dialog.confirm("您确定要删除这" + ids.split(",").length + "条记录吗",function(){
 			$.ajax({
 				url : "${ctx}/complat/removeRelation",
 				data:{"roleId":roleId,"userIds":userids,"groupIds":groupids},
@@ -95,14 +104,14 @@
 				async : false,
 				success : function(data) {
 					if(data.result){
-						alert("删除成功");
-						location.reload();
+						$.dialog.alert("删除成功");
+						toLoadUser('');
 					}else{
-						alert("删除失败");
+						$.dialog.alert("删除失败");
 					}
 				}
 			});
-		}
+		})
 	}
 
 	/**
@@ -117,10 +126,10 @@
 			async : false,
 			success : function(data) {
 				if(data.result){
-					alert("清空成功");
-					location.reload();
+					$.dialog.alert("清空成功");
+					toLoadUser('');
 				}else{
-					alert("清空失败");
+					$.dialog.alert("清空失败");
 				}
 			}
 		});
@@ -135,7 +144,6 @@
 			$(".grid-advsearch").css({'display':'none'});
 			$(".datagrid-toolbar-search-wrap").css({'display':'block'});
 		});
-		
 	});
 	function toLoadUser(type){
 		var roleid = ${roleid};
@@ -176,7 +184,7 @@
 						var tr = "<tr id='datagrid-row-r1-2-0' datagrid-row-index='0' class='datagrid-row'>"+
 						"<td field='iid' style='width: 5px;'>"+
 						"<div class='datagrid-cell-check'>"+
-						"<input type='checkbox' value='"+object+"'>"+
+						"<input type='checkbox' name='iids' value='"+object+"'>"+
 						"</div>"+
 						"</td>"+
 						"<td field='name'>"+
@@ -301,10 +309,10 @@ body {
 		<div></div>
 		<div class="panel datagrid" style="width: auto;">
 			<div class="datagrid-wrap panel-body panel-body-noheader panel-body-noborder" title="" style=" height: 300px;">
-				<div class="datagrid-view" style=" height: 396px;">
+				<div class="datagrid-view" style=" height: 396px;width: 100%;">
 					
-					<div class="datagrid-view2" style="width: 710px;">
-						<div class="datagrid-header" style="width: 710px; height: 35px;">
+					<div class="datagrid-view2" style="width: 100%;">
+						<div class="datagrid-header" style="width: 100%; height: 35px;">
 							<div class="datagrid-header-inner" style="display: block;">
 								<table class="datagrid-htable" border="0" cellspacing="0" cellpadding="0" style="height: 36px;">
 									<tbody>
@@ -314,13 +322,13 @@ body {
 													<input type="checkbox" id="checkallUser" onclick="choseall();">
 												</div>
 											</td>
-											<td field="name">
-												<div class="datagrid-cell" style="width: 332px; text-align: left;">
+											<td field="name" style="width: 348px;">
+												<div class="datagrid-cell" style="width: 340px; text-align: left;">
 													<span> 成员名称 </span><span class="datagrid-sort-icon">&nbsp;</span>
 												</div>
 											</td>
-											<td field="type" class="">
-												<div class="datagrid-cell" style="width: 350px; text-align: center;">
+											<td field="type" class="" style="width: 349px;">
+												<div class="datagrid-cell" style="width: 341px; text-align: center;">
 													<span> 成员类型 </span><span class="datagrid-sort-icon">&nbsp;</span>
 												</div>
 											</td>
@@ -329,8 +337,8 @@ body {
 								</table>
 							</div>
 						</div>
-						<div class="datagrid-body" style="width: 710px; height: 215px; overflow-x: hidden;">
-							<table id="datatable" class="datagrid-btable" cellspacing="0" cellpadding="0" border="0" style="width:710px;table-layout: auto;">
+						<div class="datagrid-body" style="width: 100%; height: 265px; overflow-x: hidden;">
+							<table id="datatable" class="datagrid-btable" cellspacing="0" cellpadding="0" border="0" style="width:100%;table-layout: auto;">
 								<tbody>
 									
 									<c:forEach items="${userList}" var="u">
@@ -358,8 +366,11 @@ body {
 													<c:if test="${u.type==0 }">
 													${u.username }
 													</c:if>
-													<c:if test="${u.type==2 }">
+													<c:if test="${u.type==2 && u.objectid!=-1}">
 													${u.groupname }
+													</c:if>
+													<c:if test="${u.type==2 && u.objectid==-1}">
+													前台用户
 													</c:if>
 													</span>
 												</div>

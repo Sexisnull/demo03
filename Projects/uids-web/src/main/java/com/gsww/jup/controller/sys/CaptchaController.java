@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.Producer;
+import com.gsww.jup.util.TimeHelper;
 
 @Controller
 @RequestMapping("/kaptcha")
@@ -50,7 +51,7 @@ public class CaptchaController {
 		
 		// store the text in the session
 		session.setAttribute(Constants.KAPTCHA_SESSION_KEY, capText);
-		
+		session.setAttribute("kapcheTime", TimeHelper.getCurrentTime());
 		// create the image with the text
 		BufferedImage bi = captchaProducer.createImage(capText);
 		ServletOutputStream out = response.getOutputStream();

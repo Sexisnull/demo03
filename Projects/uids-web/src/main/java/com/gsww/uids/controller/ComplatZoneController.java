@@ -129,8 +129,6 @@ public class ComplatZoneController extends BaseController {
 	@RequestMapping(value = "/zoneTree", method = RequestMethod.GET)
 	public void zoneTree(HttpServletRequest request, HttpServletResponse response) {
 		try {
-			SysUserSession sysUserSession = (SysUserSession) ((HttpServletRequest) request).getSession()
-					.getAttribute("sysUserSession");
 			List<ComplatZone> list = complatZoneService.getAll();
 			List<Map<String, String>> treeList = new ArrayList<Map<String, String>>();
 			if (list != null && !list.isEmpty()) {
@@ -181,8 +179,8 @@ public class ComplatZoneController extends BaseController {
 				response.getWriter().write("success");
 				complatZone.setName(newName);
 				complatZoneService.save(complatZone);
-				String desc = sysUserSession.getUserName() + "将" + oldName +"区域名称" + "修改为" + newName; 
-				jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,11,2);
+				String desc = sysUserSession.getLoginAccount() + "修改 【" + oldName + "】 区域名称(区域管理)"; 
+				jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(),desc,11,2);
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
@@ -265,8 +263,8 @@ public class ComplatZoneController extends BaseController {
 			if (flag) {
 				complatZoneService.delete(complatZoneDel);
 				response.getWriter().write("success");
-				String desc = sysUserSession.getUserName() + "删除了区域:" + complatZoneDel.getName(); 
-				jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,11,3);
+				String desc = sysUserSession.getLoginAccount() + "删除 【" + complatZoneDel.getName() + "】 区域(区域管理)"; 
+				jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(),desc,11,3);
 			} else {
 				response.getWriter().write("exist");
 			}
@@ -350,8 +348,8 @@ public class ComplatZoneController extends BaseController {
 				resMap.put("ret", 1);
 				resMap.put("id", complatZoneSave.getIid());
 				response.getWriter().write(org.json.simple.JSONObject.toJSONString(resMap));
-				String desc = sysUserSession.getUserName() + "新增区域：" + name; 
-				jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,11,1);
+				String desc = sysUserSession.getLoginAccount() + "新增 【" + name + "】 区域(区域管理)"; 
+				jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(),desc,11,1);
 			} if (type > 3) {
 				Map<String, Object> resMap = new HashMap<String, Object>();
 				resMap.put("ret", 4);
@@ -420,8 +418,8 @@ public class ComplatZoneController extends BaseController {
 			ComplatZone complatZone = complatZoneService.fingByKey(Integer.parseInt(deptIid));
 			complatZone.setCodeId(deptCode);
 			complatZoneService.save(complatZone);
-			String desc = sysUserSession.getUserName() + "将" + complatZone.getName() + "区域编码修改为" + deptCode; 
-			jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,11,2);
+			String desc = sysUserSession.getLoginAccount() + "修改 【" + complatZone.getName() + "】 区域编码(区域管理)"; 
+			jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(),desc,11,2);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			returnMsg("error", "保存失败", request);

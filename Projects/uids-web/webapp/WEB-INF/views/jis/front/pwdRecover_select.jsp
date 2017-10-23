@@ -52,7 +52,7 @@
      
      <div class="findpd1">
           <div class="findpdstep1"><img src="${ctx}/ui/images/gszw_12.jpg" width="15" height="16" /></div>
-          <div class="findpdstep2"><a href="recoverPwdByPhone_show.do "><!--  <a href="#" onclick="javascript:alert('暂时未开通手机号码找回服务')">-->1. 通过手机短信找回密码</a></div>
+          <div class="findpdstep2"><a href="recoverPwdByPhone_show "><!--  <a href="#" onclick="javascript:alert('暂时未开通手机号码找回服务')">-->1. 通过手机短信找回密码</a></div>
       </div>
      
      

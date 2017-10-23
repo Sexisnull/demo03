@@ -19,22 +19,22 @@ function EvalPwd(sP)
     var aPQ=new Array(6);
     if(ClientSideStrongPassword(sP,gSimilarityMap,gDictionary))
     {
-    	level = "strong";
+    	level = "2";
         aPQ=["#F1F1F1","#F1F1F1","#0c6","#000","#000","#000"];
     }
     else if(ClientSideMediumPassword(sP,gSimilarityMap,gDictionary))
     {
-    	level = "medium";
+    	level = "1";
         aPQ=["#F1F1F1","#ff9","#F1F1F1","#000","#000","#000"];
     }
     else if(ClientSideWeakPassword(sP,gSimilarityMap,gDictionary))
     {
-    	level = "weak";
+    	level = "0";
         aPQ=["#f00","#F1F1F1","#F1F1F1","#000","#000","#000"];
     }
     else
     {
-    	level = "weak";
+    	level = "0";
         aPQ=["#F1F1F1","#F1F1F1","#F1F1F1","#adadad","#adadad","#adadad"];
     }
     var oW=GEId("pweak").style;
@@ -46,8 +46,8 @@ function EvalPwd(sP)
     oW.color=aPQ[3];
     oM.color=aPQ[4];
     oS.color=aPQ[5];
-    var levp=GEId("pwdpower");
-    levp.title= level;
+    var levp=GEId("level");
+    levp.value= level;
 }
 //*
 

@@ -22,6 +22,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.gsww.jup.controller.BaseController;
 import com.gsww.uids.entity.ComplatRole;
 import com.gsww.uids.entity.ComplatRolerelation;
+import com.gsww.uids.entity.JisRoleobject;
 import com.gsww.uids.service.ComplatRoleService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -101,9 +102,9 @@ public class ComplatRoleServiceTest{
 	public void findByUserId(){
 		int id=45;
 		try {
-			List<ComplatRolerelation> list=complatRoleService.findByUserId(id);
-			for(ComplatRolerelation relation : list){
-				System.out.println(relation.getRoleId());
+			List<JisRoleobject> list=complatRoleService.findByUserId(id,128);
+			for(JisRoleobject relation : list){
+				System.out.println(relation.getRoleid());
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);

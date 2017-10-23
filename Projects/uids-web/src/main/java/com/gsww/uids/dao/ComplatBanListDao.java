@@ -13,4 +13,7 @@ public interface ComplatBanListDao extends PagingAndSortingRepository<ComplatBan
 
 	List<ComplatBanlist> findAll();
 
+	ComplatBanlist findByLoginnameAndIpaddrAndUsertype(String loginallname,
+			String ipAddr, Integer userType);
+
 }

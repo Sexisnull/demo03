@@ -18,13 +18,12 @@ public class CellphoneShortMessageUtil
     String appId = settings.getAppId().trim();
     String appName = settings.getAppName().trim();
     String appAcc = settings.getAppAcc().trim();
-    String appPwd = settings.getAppPwd().trim();
+    String appPwd = settings.getAppPpd().trim();
     String importantLevel = settings.getImportantLevel().trim();
     String isSendAgain = settings.getIsSendAgain().trim();
     String isLose = settings.getIsLose().trim();
     String isUpstream = settings.getIsUpstream().trim();
     String urlRoot = settings.getUrlRoot().trim();
-    System.out.println(content);
 
     StringBuffer queryString = new StringBuffer();
     try
@@ -48,7 +47,6 @@ public class CellphoneShortMessageUtil
       e.printStackTrace();
       String error = "发短信读取配置文件参数连接连接抛异常。there is a exception of reading connection parameters when sending Cellphoneshortmessage ";
 
-      System.out.println(error);
       Map<String,String> map = new HashMap<String,String>();
       map.put("success", "false");
       map.put("code", "0");
@@ -91,7 +89,6 @@ public class CellphoneShortMessageUtil
       e.printStackTrace();
       String error = "发短信连接抛异常或读取短信接口的返回值异常。there is a exception of creating connection when sending Cellphoneshortmessage ";
 
-      System.out.println(error);
       Map<String,String> map = new HashMap<String,String>();
       map.put("success", "false");
       map.put("code", "0");

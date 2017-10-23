@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.gsww.jup.util.StringHelper;
 import com.gsww.uids.dao.JisFieldsDao;
 import com.gsww.uids.entity.JisFields;
-import com.gsww.uids.entity.JisUserdetail;
 import com.gsww.uids.service.JisFieldsService;
 
 /**
@@ -73,7 +72,7 @@ public class JisFieldsServiceImpl implements JisFieldsService {
 	public List<Map<String, Object>> findExtendAttr(List<JisFields> FieldsList, Integer userId,Integer type)
 			throws Exception {
 		
-		List<Map<String, Object>> listMap = null;
+		List<Map<String, Object>> listMap = new ArrayList<Map<String,Object>>();
 		
 		String querySql = "";
 		//查出字段
@@ -106,23 +105,29 @@ public class JisFieldsServiceImpl implements JisFieldsService {
 				}
 			}
 			whereFieldsName = whereFieldsName.substring(0,whereFieldsName.length()-1);
-			/*if(userId==null){
-				querySql="select fieldname from jis_fields  where type = '1'";
-				listMap= jdbcTemplate.queryForList(querySql);
-				querySql = "select distinct a.fieldname,"+queryFieldsName +" from jis_fields a,jis_userdetail b where "+
-				"type = '1' and a.fieldname in("+whereFieldsName+")";
-				System.out.println("新增扩展属性input============"+listMap);
+			if(userId==null){
+				String addSql = "select type,fieldname,showname from jis_fields a where type = '1'";
 				
-			}else{*/
-				querySql = "select distinct b.userid,type,"+ queryFieldsName +" from jis_fields a ,jis_userdetail b where b.userid = '"+userId+"' " +
+				/*querySql = "select type,"+ queryFieldsName +" from jis_fields a ,jis_userdetail b where " +
+				" type = '1' and a.fieldname in("+whereFieldsName+")";*/
+				List<Map<String, Object>> addFieldsMap= jdbcTemplate.queryForList(addSql);
+				for(int i=0;i<addFieldsMap.size();i++){
+					Map<String,Object> fieldsMap = addFieldsMap.get(i);
+					String title = fieldsMap.get("fieldname").toString();
+					//fieldsMap.remove("fieldname");
+					fieldsMap.put(title, "");
+					listMap.add(fieldsMap);
+				}				
+			}else{
+				querySql = "select distinct b.userid,type,fieldname,a.showname,"+ queryFieldsName +" from jis_fields a ,jis_userdetail b where b.userid = '"+userId+"' " +
 				" and type = '1' and a.fieldname in("+whereFieldsName+")";
-				
-			//}			
+				listMap = jdbcTemplate.queryForList(querySql);
+			}			
 		}else if(type == 2){
-			querySql = "select a.fieldkeys,a.fieldvalues,type,a.fieldname from jis_fields a where type = '2'";
-		}
-		listMap = jdbcTemplate.queryForList(querySql);
-		//System.out.println("新增扩展属性============"+listMap);
+			querySql = "select a.showname,a.fieldkeys,a.fieldvalues,type,a.fieldname from jis_fields a where type = '2'";			
+			//List<Map<String, Object>> addFieldsMap1= jdbcTemplate.queryForList(querySql);
+			listMap = jdbcTemplate.queryForList(querySql);
+		}		
 		return listMap;
 	}
 
@@ -149,14 +154,29 @@ public class JisFieldsServiceImpl implements JisFieldsService {
 			fieldName = fieldsList.get(i).getFieldname();
 			names += fieldName+",";
 		}
-		names = names.substring(0, names.length()-1);
-		String querySql = "select distinct "+names+" from jis_fields a ,jis_userdetail b where  a.type='2' and b.userid = '1'";
-		fieldsMap = jdbcTemplate.queryForMap(querySql);
+		if(StringHelper.isNotBlack(names)){
+			names = names.substring(0, names.length()-1);
+			String querySql= "select distinct "+names+" from jis_fields a ,jis_userdetail b where  a.type='2' and b.userid ="+userId;
+			fieldsMap = jdbcTemplate.queryForMap(querySql);
+		}
 		return fieldsMap;
 	}
 
 	@Override
 	public List<JisFields> findByFieldname(String fieldname) {
 		return jisFieldsDao.findByFieldname(fieldname);
+	}
+
+	@Override
+	public List<Map<String,Object>> findFieldName() {
+		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();		
+		String querySql= "select fieldname from jis_fields where type='1' or type='2' ";
+		list=jdbcTemplate.queryForList(querySql);
+		return list;
+	}
+
+	@Override
+	public List<JisFields> findByShowname(String showname) {
+		return jisFieldsDao.findByShowname(showname);
 	}
 }

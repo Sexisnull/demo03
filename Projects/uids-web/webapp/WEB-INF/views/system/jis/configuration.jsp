@@ -1,16 +1,131 @@
 <%@ page language="java" pageEncoding="utf-8"%>
 <!DOCTYPE html>
-<html>
-
-<%@ include file="/include/meta.jsp"%> 
-
+<%@ include file="/include/meta.jsp"%>
 <head>
 <title>甘肃万维JUP课题</title>
-<link rel="stylesheet" href="${ctx}/res/plugin/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css"/>
+<%-- <link rel="stylesheet" href="${ctx}/res/plugin/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css"/> --%>
 <%-- <script type="text/javascript" src="${ctx}/res/skin/default/plugin/z-tree/js/jquery.ztree.core-3.5.min.js"></script> --%>
 <script type="text/javascript" src="${ctx}/res/plugin/uploadify/js/jquery.uploadify-3.1.min.js"></script>
 
 <script type="text/javascript">
+$().ready(function() {
+ $("#oprform").validate({
+    rules: {
+    	sysName: {
+	    required:true
+	   },
+	   sysUrl: {
+	    required: true
+	   },
+	   emailSmtp: {
+	    required: true
+	   },
+	   emailBox:{
+	    required: true,
+	    email:true
+	   },
+	   emailSender:{
+	   required: true
+	   },
+	   emailFindPassTitle:{
+	   required: true
+	   },
+	   emailFindPassContent:{
+	   required: true
+	   },
+	   modifyPassTime:{
+	   required: true,
+	   digits:true
+	   },
+	   appId:{
+	   required: true
+	   },
+	   appName:{
+	   required: true
+	   },
+	   appAcc:{
+	   required: true
+	   },
+	   appPwd:{
+	   required: true
+	   },
+	   importantLevel:{
+	   required: true
+	   },
+	   isSendAgain:{
+	   required: true
+	   },
+	   isLose:{
+	   required: true
+	   },
+	   isUpstream:{
+	   required: true
+	   },
+	   urlRoot:{
+	   required: true
+	   },
+	   businessIdForRegestingPer:{
+	   required: true
+	   },
+	   businessNameForRegestingPer:{
+	   required: true
+	   },
+	   registPerMessageContent:{
+	   required: true
+	   },
+	   businessIdForRegestingCor:{
+	   required: true
+	   },
+	   businessNameForRegestingCor:{
+	   required: true
+	   },
+	   registCorMessageContent:{
+	   required: true
+	   },
+	   businessIdForRecovingPwd:{
+	   required: true
+	   },
+	   businessNameForRecovingPwd:{
+	   required: true
+	   },
+	   businessIdForGettingDynamicPwd:{
+	   required: true
+	   },
+	   businessNameForGettingDynamicPwd:{
+	   required: true
+	   },
+	   dynamicPwdMessageContent:{
+	   required: true
+	   }
+	  },submitHandler:function(form){
+            var callingTypeVal=$("").val(); 
+            if(callingTypeVal=='2'){
+            	$.validator.errorShow($("#infoNum"),'请选择角色');
+            	return false;
+            }else if(callingTypeVal=='0'){
+            	$.validator.errorShow($(""),'请选择机构');
+            	return false;
+            }else{
+				 form.submit();
+			}
+        } 
+    });
+});
+
+$(function(){
+	if("${jisParameter.isLoginfail}" == '1'){//1是0否
+		$("#logintimes_tr1").show();
+		$("#logintimes_tr2").show();
+	}
+	if("${jisParameter.isLoginfail}" == '0'){
+		$("#logintimes_tr1").hide();
+		$("#logintimes_tr2").hide();
+		$("#Dcard2Table").hide();
+	}
+	 
+});
+
+
 function loadTab(){
 		//读取cardBar下面所有li标签
 		var getId=document.getElementById("cardBar").getElementsByTagName("li");
@@ -55,68 +170,6 @@ function loadTab(){
 			}
 		}
 	}
-//--><!]]>
-/**
-* 表单验证
-*/
-$(function(){
-	$('#oprform').validate(function() {
-		$('#sysname').require('系统名称必须填写');
-		$('#sysurl').require('系统地址必须填写');
-		$('#email_smtp').require('邮件服务器必须填写');
-		$('#email_email').require('邮箱必须填写').match('email','邮箱格式不正确');
-		$('#email_sender').require('寄件方名称必须填写');
-		$('#email_title').require('注册邮件标题必须填写');
-		$('#email_content').require('注册邮件内容必须填写');
-		$('#email_passtitle').require('找回密码标题必须填写');
-		$('#email_passContent').require('找回密码内容必须填写');
-		$('#modifyPassTime').require('定时修改密码时间必须填写').match('num1','密码定时修改,只能为正数包括零,请重新输入!');
-		
-		
-		$('#appId').require('appId内容必须填写');
-		$('#appName').require('appName内容必须填写');
-		$('#appAcc').require('appAcc内容必须填写');
-		$('#appPwd').require('appPwd内容必须填写');
-		$('#importantLevel').require('importantLevel内容必须填写');
-		$('#isSendAgain').require('isSendAgain内容必须填写');
-		$('#isLose').require('isLose内容必须填写');
-		$('#isUpstream').require('isUpstream内容必须填写');
-		$('#urlRoot').require('urlRoot内容必须填写');
-		$('#businessIdForRegestingPer').require('个人注册短信业务Id必须填写');
-		$('#businessNameForRegestingPer').require('个人注册短信业务名称必须填写');
-		$('#registPerMessageContent').require('个人注册时的短信内容必须填写');
-		$('#businessIdForRegestingCor').require('法人注册短信业务Id必须填写');
-		$('#businessNameForRegestingCor').require('法人注册短信业务名称必须填写');
-		$('#registCorMessageContent').require('法人注册时的短信内容必须填写');
-		$('#businessIdForRecovingPwd').require('找回密码业务Id必须填写');
-		$('#businessNameForRecovingPwd').require('找回密码业务名称必须填写');
-		$('#businessIdForGettingDynamicPwd').require('获取动态登录密码业务Id必须填写');
-		$('#businessNameForGettingDynamicPwd').require('获取动态登录密码业务名称必须填写');
-		$('#dynamicPwdMessageContent').require('获取动态登录密码时的短信内容必须填写');
-		
-		
-		
-		var isrealnameauth = $('[name=realNameAuth]:checked').val();
-		if(isrealnameauth == '1'){
-			$('#realNameAuthUrl').require('开启实名认证后接口地址必须填写');
-		}
-		
-		setCookie();
-	},{
-		success:function(result){
-			if(result.success){
-				location.reload();
-			}
-		}
-	}); 
-
-	setregister();
-	setlogintime();
-	
-	initTabs();
-	showRealNameAuthUrl();
-});
-
 function setCookie(){
 	var tab = $('#tabs').tabs('getSelected');
 	var index = $('#tabs').tabs('getTabIndex',tab);
@@ -143,6 +196,7 @@ function setlogintime(){
 	var islogintime = $('[name=isLoginfail]:checked').val();
 	if(islogintime == '1'){
 	    $('[id^=logintimes_tr]').show();
+	    $("#Dcard2Table").show();
 	}
 	else{
 		$('[id^=logintimes_tr]').hide();
@@ -150,7 +204,7 @@ function setlogintime(){
 }
 
 function upfrontlogo(){
-	openDialog('configuration/frontlogo_upload.do', 400, 170, {
+	openDialog('configuration/frontlogo_upload', 400, 170, {
 		title : '上传-登录页logo'
 	});
 }
@@ -164,9 +218,9 @@ function showRealNameAuthUrl(){
 	}
 }
 </script>
-<style type="text/css">
+ <style type="text/css">
 	<!--/*--><![CDATA[/*><!--*/
-	body {margin:0 auto;padding:0;font:62.5%/2em "MingLiu" Arial;text-align:center;}
+	body {margin:0 auto;padding:0;font:/* 62.5%/2em "MingLiu" Arial */22px;text-align:center;}
 	img, a img {border:0;display:block;}
 	.clearfix:after {content:".";display:block;height:0;clear:both;visibility:hidden;}
 	.clearfix {display:inline-block;}
@@ -183,16 +237,25 @@ function showRealNameAuthUrl(){
 	/*对点击下栏显示边框的代码进行美化*/
 	.hackBox {display:none;padding:4px;margin:0 0 0 4px;}
 	.hackBox p {margin:0 1em 1em;color:#333;font-size:1.1em;text-align:left;}
-	.hackBox img {float:left;width:100px;margin:0 .8em .4em 0;}
+	.hackBox img {float:center;width:100px;margin:0 .4em .4em 0;}
 	/*]]>*/-->
-	</style>
+	</style> 
 
 </head>
 <body>
 <div class="tab">
 <br/><div style="text-align: left;font-size:22px;">系统参数</div><br/><hr/><br/>
 	<form action="${ctx}/parameter/parameterSave" method="post" id="oprform" name="oprform">
-		<input type="hidden" id="iid" name="iid" value="${jisParameter.iid}"/> 
+		<input type="hidden" id="iid" name="iid" value="${jisParameter.iid}"/>
+		<input type="hidden" id="isRegister" name="isRegister" value="${jisParameter.isRegister}"/>
+		<input type="hidden" id="registerType" name="registerType" value="${jisParameter.registerType}"/>
+		<input type="hidden" id="isFindPwd" name="isFindPwd" value="${jisParameter.isFindPwd}"/>
+		<input type="hidden" id="perGotoUrl" name="perGotoUrl" value="${jisParameter.perGotoUrl}"/>
+		<input type="hidden" id="corGotoUrl" name="corGotoUrl" value="${jisParameter.corGotoUrl}"/>
+		<input type="hidden" id="enableBackupsTask" name="enableBackupsTask" value="${jisParameter.enableBackupsTask}"/>
+		<input type="hidden" id="realNameAuth" name="realNameAuth" value="${jisParameter.realNameAuth}"/>
+		<input type="hidden" id="realNameAuthUrl" name="realNameAuthUrl" value="${jisParameter.realNameAuthUrl}"/> 
+		
 		<ul class="nav clearfix" id="cardBar">
 			<li id="card1"><a href="#" title="" onclick="javascript:switchTab('cardBar','card1');">基本参数</a></li>
 			<li id="card2"><a href="#" title="" onclick="javascript:switchTab('cardBar','card2');">前台参数</a></li>
@@ -243,13 +306,13 @@ function showRealNameAuthUrl(){
 							</c:if>
 						</td>
 					</tr>
-					<tr id="logintimes_tr1">
+					<tr id="logintimes_tr1" style="display: none;">
 						<td align="right" class="label" width="100">连续错误次数</td>
 						<td colspan="2">
 							<input type="text" id="loginError" name="loginError" placeholder="0表示不限制" maxlength="33" value="${jisParameter.loginError}" />
 						</td>
 					</tr>
-					<tr id="logintimes_tr2">
+					<tr id="logintimes_tr2" style="display: none;">
 						<td align="right" class="label" width="100">错误限制时长</td>
 						<td colspan="2">
 							<input type="text" id="banTimes" placeholder="单位：分钟" name="banTimes" maxlength="33" class="input-text" value="${jisParameter.banTimes}" />
@@ -285,7 +348,7 @@ function showRealNameAuthUrl(){
 			</div>
 			
 			<div id="Dcard2" class="hackBox">
-				<table class="form-table">
+				<table class="form-table" id="Dcard2Table">
 					<tr id="logintimes_tr2">
 						<td align="right" class="label">票据有效时间</td>
 						<!-- <td class="required">
@@ -387,7 +450,7 @@ function showRealNameAuthUrl(){
 						</td> 
 					</tr>
 					<tr id="n">
-						<td colspan="3"><hr style="height:1px;border-top:1px dashed #CCCCCC;"/></td> 
+						<!-- <td colspan="3"><hr style="height:1px;border-top:1px dashed #CCCCCC;"/></td>  -->
 					</tr>
 						<tr>
 						<td align="right" class="label" width="100">找回密码标题</td>
@@ -533,8 +596,8 @@ function showRealNameAuthUrl(){
 					<tr>
 						<td align="right" class="label" width="100">个人注册时的短信内容</td>
 						<!-- <td class="required">&nbsp;</td> -->
-						<td colspan="2">
-							<textarea  style="resize:none" id="registPerMessageContent" 
+						<td style="width: 190px;">
+							<textarea style="resize:none;height:80px;" id="registPerMessageContent" 
 							 name="registPerMessageContent" class="input-textarea">${jisParameter.registPerMessageContent}
 						 	</textarea>
 						</td>
@@ -560,7 +623,7 @@ function showRealNameAuthUrl(){
 						<td align="right" class="label" width="100">法人注册时的短信内容</td>
 						<!-- <td class="required">&nbsp;</td> -->
 						<td colspan="2">
-							<textarea style="resize:none" id="registCorMessageContent" 
+							<textarea style="resize:none;height: 80px;" id="registCorMessageContent" 
 							 name="registCorMessageContent" class="input-textarea">${jisParameter.registCorMessageContent}
 							</textarea>
 						</td>
@@ -586,7 +649,7 @@ function showRealNameAuthUrl(){
 						<td align="right" class="label" width="100">找回密码时的短信内容</td>
 						<!-- <td class="required">&nbsp;</td> -->
 						<td colspan="2">
-							<textarea style="resize:none" id="recovingPwdContent" name="recovingPwdContent" 
+							<textarea style="resize:none;height: 80px;" id="recovingPwdContent" name="recovingPwdContent" 
 							 class="input-textarea">${jisParameter.recovingPwdContent}
 							</textarea>
 						</td>
@@ -625,7 +688,7 @@ function showRealNameAuthUrl(){
 						<td align="right" class="label" width="100">获取动态登录密码时的短信内容</td>
 						<!-- <td class="required">&nbsp;</td> -->
 						<td colspan="2">
-							<textarea  style="resize:none" id="dynamicPwdMessageContent" 
+							<textarea  style="resize:none;height: 80px;" id="dynamicPwdMessageContent" 
 							 name="dynamicPwdMessageContent" class="input-textarea">${jisParameter.dynamicPwdMessageContent}
 							</textarea>
 						</td>
@@ -719,8 +782,8 @@ function showRealNameAuthUrl(){
 					<tr>
 						<td align="right" class="label"  width="250" >请选择认证模式</td>
 						<!-- <td class="required">&nbsp;</td> -->
-						<td colspan="2">
-							<select name="verify_mode" data-value="${jisParameter.verify_mode}" >
+						<td colspan="2" style="width: 299px;">
+							<select name="verify_mode" data-value="${jisParameter.verify_mode}">
 								<option value="0">0:身份证号码+姓名</option>
 								<option value="1">1:身份证号码+姓名+机构编码+机构名称+区域编码</option>
 								<option value="2">2:身份证号码+姓名+机构编码</option>

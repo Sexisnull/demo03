@@ -31,6 +31,7 @@ public class SysUserSession {
 	private String setName;				// 帐套名称
 	private String roleIds; 			// 用户所属角色ID
 	private String roleNames;			// 角色名称
+	private String roleTypes;
 	private String deptId; 				// 部门id
 	private String deptCode; 			// 用户所属部门ID
 	private String deptName;			// 部门名称
@@ -122,5 +123,12 @@ public class SysUserSession {
 	public void setUserSex(String userSex) {
 		this.userSex = userSex;
 	}
+	public String getRoleTypes() {
+		return roleTypes;
+	}
+	public void setRoleTypes(String roleTypes) {
+		this.roleTypes = roleTypes;
+	}
+	
 	
 }

@@ -23,7 +23,7 @@
 .mybg{
 	background-color:#000;
 	width:100%;
-	height:100%;
+	height:200%;
 	position:absolute;
 	top:0; 
 	left:0; 
@@ -31,7 +31,6 @@
 	opacity:0.3; 
 	filter:Alpha(opacity=30); 
 }
-
 .pic {
     width: 115px;
     height: 75px;
@@ -39,7 +38,6 @@
     line-height: 180px;
     cursor: pointer;
 }
-
 .title {
     width: 120px;
     height: 120px;
@@ -48,14 +46,13 @@
     font-size: 12pt;
     cursor: pointer;
 }
-
 .alert_tb {	
 	left:180px;
 	top:120px;
 	border:1px solid #F68A8A;
 	width:600px;
-	height:280px;
-	background-color:#e2ecf5;
+	height:350px;
+	background-color:white;
 	z-index:1000;
 	position:absolute;
 } 
@@ -102,7 +99,6 @@ function onDbClickGroup(event, treeId, treeNode) {
 	$('#groupname').val(treeNode.name);
 	$('#groupname_menu').fadeOut(50);
 }
-
 /**
  *	初始化树
  */
@@ -119,7 +115,6 @@ function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
 			onDblClick : onDblClickFunction
 		}
 	};
-	console.log("-----"+treeName);
 	$("#" + treeName).tree(setting, rootNode);
 //	$("#" + treeName).tree().refreshNode('');
 }
@@ -134,12 +129,39 @@ function beforeClick(treeId, treeNode, clickFlag) {
 function resetform() {
 	$('form').find(':input').not(':button,:hidden,:submit,:reset').val('');
 }
-
 $(function(){
-	$("#tr_logoffUrl").hide();
-	/* $("#tr_ssoLogin").hide(); */
+	if("${jisApplication.isLogOff}" == '1'){
+		$("#tr_logoffUrl").show();
+	}
+	 if("${jisApplication.userDefined}" == '1'){
+		$("#tr_ssoLogin_1").show();
+		$("#tr_ssoLogin_2").show();
+	} 
+	 if("${jisApplication.transType}" == '0'){
+		$("#ssoUrlh").hide();
+		$("#ssoUrld").hide();
+		$("#tr_isUniRgh").hide();
+		$("#tr_isUniRgd").hide();
+		$("#id_checknet").hide();
+	 }
+	 if("${jisApplication.transType}" == '1'){
+			$("#ssoUrlh").show();
+			$("#ssoUrld").show();
+			$("#tr_isUniRgh").show();
+			$("#tr_isUniRgd").show();
+			$("#id_checknet").show();
+	}
+	 if("${jisApplication.icon}" != null){
+		 $("#showpic").show();
+	 }
+	 if("${jisApplication.icon}" == null){
+		 $("#showpic").hide();
+	 }
+	 if("${jisApplication.icon}" == ""){
+		 $("#showpic").hide();
+	 }
 	setLoginType();
-	setSsoLogin(); 
+	setSsoLogin();
 	 // 初始化Web Uploader
     var uploader = WebUploader.create({
     	// 自动上传。
@@ -158,10 +180,9 @@ $(function(){
             mimeTypes: 'image/*'
         }
     });
-	 
     uploader.on( 'uploadSuccess', function( file, a ) {
-    	$("#picName").val(file.name);
-    	$("#icon2").attr("src","${ctx}/uploads/"+file.name);
+    	$("#icon").val("/resources/jis/front/app/"+file.name);
+    	$("#icon2").attr("src","${ctx}/resources/jis/front/app/"+file.name);
         $( '#'+file.id ).find('p.state').text('已上传');
         $("#showpic").show();
     });
@@ -177,12 +198,14 @@ $(function(){
 
 //统一注销
 function selectlogoff(value){
-	/* var islogoff=$('input[name="isLogoff"]:checked'); */
 	if(value == '0'){
 		$("#tr_logoffUrl").css("display",'none');
 	}
 	if(value== '1'){
 		$("#tr_logoffUrl").css("display",'');
+		$("#logOffUrl").rules("add",{required:true});
+		$("#logOffUrl").rules("add",{url:true});
+		$("#logOffUrl").rules("add",{maxlength: 255});
 	}
 	if(value=null){
 		$("#tr_logoffUrl").css("display",'none');
@@ -192,11 +215,20 @@ function selectlogoff(value){
 function setSsoLogin(value){
 	/* var ssoLogin = $('[name=userDefined]:checked').val(); */
 	if(value == '1'){
-		$('[id^=tr_ssoLogin_]').show();
-	}else{
+		$('[id^=tr_ssoLogin_]').show();   
+		$("#allLoginIid").rules("add",{required:true});
+		$("#allPwd").rules("add",{required:true});
+	}
+	if(value == '0'){
 		$('[id^=tr_ssoLogin_]').hide();
 	}
-}
+	if(value == '2'){
+		$('[id^=tr_ssoLogin_]').hide();
+	}
+	if(value == null){
+		$('[id^=tr_ssoLogin_]').hide();
+	}
+} 
 
 function checknet(){
 	var url = $('#appUrl').val();
@@ -253,8 +285,8 @@ function changSel(num){
 	}
 	var obj=document.getElementsByName("selectpicname");
 	obj[num-1].checked = true;
-	$("#picName").val(picName);
-	$("#icon2").attr("src","${ctx}/uploads/"+picName);
+	$("#icon").val(picName);
+	$("#icon2").attr("src","${ctx}/resources/jis/front/app/"+picName);
 	$("#showpic").show();
 }
 
@@ -274,7 +306,7 @@ function fastwrite(){
 	$(".mybg").addClass("mybg");
     document.body.appendChild(mybg);
 	document.body.style.overflow = "hidden"; 
-	$("#alerttb").show(); 				
+	$("#alerttb").show();			
 }
 
 function group(num){
@@ -340,18 +372,23 @@ function randomChar(num)
 }
 
 function selecttranstype(value){
-	/* var transtype=$('input[name="transtype"]:checked').val(); */
+	/* var transtype=$('input[name="transtype"]:checked').val(); 0:H  1:W*/
 	if(value == '0'){
 		$("#ssoUrlh").css("display",'none');
 		$("#ssoUrld").css("display",'none');
 		$("#tr_isUniRgh").css("display",'none');
 		$("#tr_isUniRgd").css("display",'none');
+		$("#ssoUrl").rules("remove","required");
 	}
 	if(value == '1'){
 		$("#ssoUrlh").css("display",'');
 		$("#ssoUrld").css("display",'');
 		$("#tr_isUniRgh").css("display",'');
 		$("#tr_isUniRgd").css("display",'');
+		$("#ssoUrl").rules("add",{required:true});
+	}
+	if(value == null || value == ""){
+		$("#ssoUrl").rules("remove","required");
 	}
 }
 
@@ -367,7 +404,6 @@ function setLoginType(){
 		$('#id_setsso').hide();
 		$('#id_checknet').show();
 		$('#id_fastwrite').show();
-		$('#loginType').val(0);
 		$('#loginType').val(0);
 		$('#isSyncGroup').val(1);
 	}else if(loginType == '00'){  //只同步后台
@@ -397,8 +433,10 @@ function setLoginType(){
 	}else{   //
 		$('#tr_ssoLogin').hide();
 		$('#id_fastwrite').show();
-		$('#ssoUrlh').show();
-		$('#ssoUrld').show();
+		$('#ssoUrlh').hide();
+		$('#ssoUrld').hide();
+		$('#tr_isUniRgh').hide();
+		$('#tr_isUniRgd').hide();
 	}
 	
 	setSsoLogin();
@@ -406,7 +444,6 @@ function setLoginType(){
 
 $().ready(function() { 
 //表单校验
-/* var userNameInput=$("#userName").val(); */
  $("#editForm").validate({
     rules: {
     	name: {
@@ -423,36 +460,21 @@ $().ready(function() {
 	   encryptKey: {
 	    required: true,
 	    chrnum:true,
-	    maxlength: 19,
+	    maxlength: 19
 	   },
 	   appUrl:{
 	   required: true,
 	   url:true,
 	   maxlength: 255
 	   },
-	   ssoUrl:{
+	  /*  ssoUrl:{
 	   required: true,
 	   url:true,
 	   maxlength: 255
-	   },
+	   }, */
 	   netType:{
 	   required: true
-	   },
-	   allLoginIid:{
-	   required: true,
-	   maxlength: 50,
-	   userName:true
-	   },
-	   allPwd:{
-	   required: true,
-	   maxlength: 50,
-	   chrnum:true
-	   },
-	   logOffUrl:{
-	   required: true, 
-	   maxlength: 255,
-	   url:true
-	   },
+	   }
 	  },submitHandler:function(form){
             var callingType=$("#callingType").val(); 
             var isVerification=$("#isVerification").val();
@@ -521,7 +543,7 @@ $(function(){
 	<div class="position">
 		<ol class="breadcrumb">
 			<li>
-				<a href="${ctx}/index" target="_top">首页</a>
+				<a href="${ctx}/backIndex" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
 			<li>
@@ -544,8 +566,11 @@ $(function(){
     	<input type="hidden" name="setId" value="1"  />
     	<input type="hidden" id="orderField" name="orderField" value="${orderField}"/> 
 		<input type="hidden" id="orderSort" name="orderSort" value="${orderSort}"/>
-		<input type="hidden" id="groupid" name="groupid" value=""/>
-		<input type="hidden" id="picName" name="picName" value=""/>
+		<input type="hidden" id="groupid" name="groupId" value="${jisApplication.groupId}"/>
+		<input type="hidden" id="icon" name="icon" value="${jisApplication.icon}"/>
+		<input type="hidden" id="loginType" name="loginType" value="${jisApplication.loginType}"/>
+		<input type="hidden" id="isSyncGroup" name="isSyncGroup" value="${jisApplication.isSyncGroup}"/>
+		<input type="hidden" id="orderId" name="orderId" value="${jisApplication.orderId}"/>
     </div>
     
     <!--表单的主内容区域-->
@@ -563,12 +588,12 @@ $(function(){
 				</td>
 			</tr>
 			<tr>
-				<th style="text-align:left;"><b class="mustbe">&nbsp;&nbsp;</b> 所属机构：</th>
+				<th style="text-align:left;"><b class="mustbe">&nbsp;&nbsp;</b>所属机构：</th>
 				<td>
-					<input id="groupname" value="${groupName}" name="groupname" type="text" style="cursor: pointer;"/> 
+					<input id="groupname" value="${groupMap[jisApplication.groupId]}" name="groupname" type="text" style="cursor: pointer;"/> 
 				</td>
 				<th style="text-align:center;"><b class="mustbe">&nbsp;&nbsp;</b> 同步用户：</th>
-                <td>
+                <td>   
                 	<select name="synctype" id="synctype" data-value="${jisApplication.loginType}${jisApplication.isSyncGroup}" 
 						onchange="setLoginType();">  
 						<option value="">--请选择--</option>   
@@ -579,7 +604,7 @@ $(function(){
                 </td>
             </tr>
             <tr>
-				<th style="text-align:center;"><b class="mustbe">&nbsp;&nbsp;</b>数据传送方式：</th>
+				<th style="text-align:left;"><b class="mustbe">&nbsp;&nbsp;</b>数据传送方式：</th>
 				<td>
 					<c:if test="${jisApplication.transType=='1'}">
 						<input type="radio" name="transType" value="0" onclick="selecttranstype(this.value);"/>HTTP&nbsp;&nbsp;
@@ -592,7 +617,7 @@ $(function(){
 					</c:if>
 					
 					<c:if test="${jisApplication.transType==null}">
-						<input type="radio" name="transType" value="0" onclick="selecttranstype(this.value);"/>HTTP&nbsp;&nbsp;
+						<input type="radio" name="transType" value="0" onclick="selecttranstype(this.value);" checked="checked"/>HTTP&nbsp;&nbsp;
 						<input type="radio" name="transType" value="1" onclick="selecttranstype(this.value);"/>WebService
 					</c:if>
 				</td>
@@ -600,28 +625,28 @@ $(function(){
 				<th style="text-align:center;"><b class="mustbe">&nbsp;&nbsp;</b>加密设置：</th>
 				<td>
 				
-					<c:if test="${jisApplication.encryptType=='2'}">
-						<input type="radio" name="encryptType" value="2" checked="checked"/>MD5&nbsp;&nbsp;
-						<input type="radio" name="encryptType" value="3"/>MD5+base64&nbsp;&nbsp;
-						<input type="radio" name="encryptType" value="1"/>不加密
-					</c:if>
-					
-					<c:if test="${jisApplication.encryptType=='3'}">
-						<input type="radio" name="encryptType" value="2"/>MD5&nbsp;&nbsp;
-						<input type="radio" name="encryptType" value="3" checked="checked"/>MD5+base64&nbsp;&nbsp;
-						<input type="radio" name="encryptType" value="1"/>不加密
-					</c:if>
-					
 					<c:if test="${jisApplication.encryptType=='1'}">
-						<input type="radio" name="encryptType" value="2"/>MD5&nbsp;&nbsp;
-						<input type="radio" name="encryptType" value="3"/>MD5+base64&nbsp;&nbsp;
-						<input type="radio" name="encryptType" value="1" checked="checked"/>不加密
+						<input type="radio" name="encryptType" value="1" checked="checked"/>MD5&nbsp;&nbsp;
+						<input type="radio" name="encryptType" value="2"/>MD5+base64&nbsp;&nbsp;
+						<input type="radio" name="encryptType" value="0"/>不加密
+					</c:if>
+					
+					<c:if test="${jisApplication.encryptType=='2'}">
+						<input type="radio" name="encryptType" value="1"/>MD5&nbsp;&nbsp;
+						<input type="radio" name="encryptType" value="2" checked="checked"/>MD5+base64&nbsp;&nbsp;
+						<input type="radio" name="encryptType" value="0"/>不加密
+					</c:if>
+					
+					<c:if test="${jisApplication.encryptType=='0'}">
+						<input type="radio" name="encryptType" value="1"/>MD5&nbsp;&nbsp;
+						<input type="radio" name="encryptType" value="2"/>MD5+base64&nbsp;&nbsp;
+						<input type="radio" name="encryptType" value="0" checked="checked"/>不加密
 					</c:if>
 					
 					<c:if test="${jisApplication.encryptType==null}">
-						<input type="radio" name="encryptType" value="2"/>MD5
-						<input type="radio" name="encryptType" value="3"/>MD5+base64
-						<input type="radio" name="encryptType" value="1"/>不加密
+						<input type="radio" name="encryptType" value="1" checked="checked"/>MD5
+						<input type="radio" name="encryptType" value="2"/>MD5+base64
+						<input type="radio" name="encryptType" value="0"/>不加密
 					</c:if>
 				</td>
 			</tr>
@@ -630,23 +655,18 @@ $(function(){
 	        	 <td>
 					<input type="text" id="encryptKey" name="encryptKey"
 						maxlength="16" value="${jisApplication.encryptKey}" />
-					<input type="button" name="button"
-						onclick="generateKey()" value="重新生成"/>
+					<input type="button" name="button" class="btnother blue"
+						   onclick="generateKey()" value="重新生成"/>
 				</td>
 				
 				<th style="text-align: center;"><b class="mustbe">&nbsp;&nbsp;</b> 应用图标：</th>
 					<td>
-					
-						<!-- <div id="uploader-demo"> -->
-						    <!--用来存放item-->
 						    <div id="fileList" class="uploader-list"></div>
 						    <div id="filePicker">选择图片</div>
-						    <input  type="button" class="btn btn-success btn-small" 
-							onclick="selectpic()" value="默认图片">
-						<!-- </div> -->
+						    <input type="button" class="btnother blue" onclick="selectpic()" value="默认图片">
 					</td>
-					<td id="showpic" colspan="2" style="text-align: left;display: none;">
-						<img id="icon2" width="100" height="100" src="${ctx}${jisApplication.icon}">
+					<td id="showpic" name="showpic" colspan="2" style="text-align:left;display:none;">
+						<img id="icon2" name="icon2" width="100" height="100" src="${ctx}${jisApplication.icon}">
 					</td>
 					
 			</tr>
@@ -654,8 +674,8 @@ $(function(){
 				<th style="text-align:left;"><b class="mustbe">*</b> 接口地址：</th>
 				<td>
 					<input type="text" id="appUrl" name="appUrl" maxlength="100" value="${jisApplication.appUrl }" />
-					<input id="id_fastwrite" type="button" 
-						onclick="fastwrite()" value="便捷录入"/>
+					<input id="id_fastwrite" type="button" class="btnother blue"
+						   onclick="fastwrite()" value="便捷录入"/>
 					<!-- <input id="id_setsso" type="button" class="btn btn-success btn-small" 
 					onclick="setsso()" value="接口配置"/></td> -->
 				</td>
@@ -663,53 +683,80 @@ $(function(){
 				<th id="ssoUrlh" style="text-align:center;"><b class="mustbe">*</b> 登录地址：</th>
 				<td id="ssoUrld"><input type="text" id="ssoUrl" name="ssoUrl" maxlength="100"
 						value="${jisApplication.ssoUrl }" />
-					<input id="id_checknet" type="button"
+					<input id="id_checknet" type="button" class="btnother blue"
 						onclick="checknet()" value="测试网络"></td>
 			</tr>
 			<tr>
 				<th style="text-align:left;"><b class="mustbe">*</b>网络类型：</th>
 				<td>
-					<c:if test="${jisApplication.netType=='1'}">
-						<input type="radio" name="netType" value="0"/>外网&nbsp;&nbsp;
-						<input type="radio" name="netType" checked="checked" value="1"/>专网
+					<c:if test="${jisApplication.netType=='2'}">
+						<input type="radio" name="netType" value="1"/>外网&nbsp;&nbsp;
+						<input type="radio" name="netType" checked="checked" value="2"/>专网
 					</c:if>
 					
-					<c:if test="${jisApplication.netType=='0'}">
-						<input type="radio" name="netType" checked="checked" value="0"/>外网&nbsp;&nbsp;
-						<input type="radio" name="netType" value="1"/>专网
+					<c:if test="${jisApplication.netType=='1'}">
+						<input type="radio" name="netType" checked="checked" value="1"/>外网&nbsp;&nbsp;
+						<input type="radio" name="netType" value="2"/>专网
 					</c:if>
 					
 					<c:if test="${jisApplication.netType==null}">
-						<input type="radio" name="netType" value="0"/>外网&nbsp;&nbsp;
-						<input type="radio" name="netType" value="1"/>专网
+						<input type="radio" name="netType" value="1" checked="checked"/>外网&nbsp;&nbsp;
+						<input type="radio" name="netType" value="2"/>专网
 					</c:if>
 				</td>
 				
 				<tr id="tr_ssoLogin">
 					<th style="text-align:left;"><b class="mustbe">&nbsp;&nbsp;</b>账号设置：</th>
-					<td><input type="radio" name="userDefined" value="0"
-						data-value="${jisApplication.userDefined }" onclick="setSsoLogin(this.value);">用户预设账号&nbsp;
-						<input type="radio" name="userDefined" value="2"
-						data-value="${jisApplication.userDefined }" onclick="setSsoLogin(this.value);">统一用户账号&nbsp;
-						<input type="radio" name="userDefined" value="1"
-						data-value="${jisApplication.userDefined }" onclick="setSsoLogin(this.value);">固定账号
+					<td>
+						<c:if test="${jisApplication.userDefined=='0'}">
+							<input type="radio" name="userDefined" value="0"
+							checked="checked" onclick="setSsoLogin(this.value);">用户预设账号&nbsp;
+							<input type="radio" name="userDefined" value="2"
+							 onclick="setSsoLogin(this.value);">统一用户账号&nbsp;
+							<input type="radio" name="userDefined" value="1"
+							 onclick="setSsoLogin(this.value);">固定账号
+						</c:if>
+						<c:if test="${jisApplication.userDefined=='2'}">
+							<input type="radio" name="userDefined" value="0"
+							 onclick="setSsoLogin(this.value);">用户预设账号&nbsp;
+							<input type="radio" name="userDefined" value="2"
+							checked="checked" onclick="setSsoLogin(this.value);">统一用户账号&nbsp;
+							<input type="radio" name="userDefined" value="1"
+							 onclick="setSsoLogin(this.value);">固定账号
+						</c:if>
+						<c:if test="${jisApplication.userDefined=='1'}">
+							<input type="radio" name="userDefined" value="0"
+							 onclick="setSsoLogin(this.value);">用户预设账号&nbsp;
+							<input type="radio" name="userDefined" value="2"
+							 onclick="setSsoLogin(this.value);">统一用户账号&nbsp;
+							<input type="radio" name="userDefined" value="1"
+							checked="checked" onclick="setSsoLogin(this.value);">固定账号
+						</c:if>
+						<c:if test="${jisApplication.userDefined==null}">
+							<input type="radio" name="userDefined" value="0" 
+							 checked="checked" onclick="setSsoLogin(this.value);">用户预设账号&nbsp;
+							<input type="radio" name="userDefined" value="2"
+							 onclick="setSsoLogin(this.value);">统一用户账号&nbsp;
+							<input type="radio" name="userDefined" value="1"
+							 onclick="setSsoLogin(this.value);">固定账号
+						</c:if>
 					</td>
 				</tr>
-				<tr id="tr_ssoLogin_1">
+				<tr id="tr_ssoLogin_1" style="display:none">
 					<th style="text-align:left;"><b class="mustbe">*</b>固定用户名：</th>
 					<td><input type="text" id="allLoginIid" name="allLoginIid" maxlength="20"
 						class="input-text" value="${jisApplication.allLoginIid }" /></td>
 					<td></td>
 				</tr>
-				<tr id="tr_ssoLogin_2">
+				<tr id="tr_ssoLogin_2" style="display:none">
 					<th style="text-align:left;"><b class="mustbe">*</b>固定密码：</th>
 					<td><input type="password" id="allPwd" name="allPwd" maxlength="20"
 						class="input-text" value="${jisApplication.allPwd }" /></td>
-					<td></td>
+					<!-- <td></td> -->
 				</tr>
 				
 				
-				<th style="text-align:center;"><b class="mustbe">&nbsp;&nbsp;</b>前台是否显示：</th>
+				<th style="text-align:left;"><b class="mustbe">&nbsp;&nbsp;</b>前台是否显示：</th>
 				<td>
 					<c:if test="${jisApplication.isShow=='0'}">
 						<input type="radio" name="isShow" value="1"/>是&nbsp;&nbsp;
@@ -723,7 +770,7 @@ $(function(){
 					
 					<c:if test="${jisApplication.isShow==null}">
 						<input type="radio" name="isShow" value="1"/>是&nbsp;&nbsp;
-						<input type="radio" name="isShow" value="0"/>否
+						<input type="radio" name="isShow" value="0" checked="checked"/>否
 					</c:if>
 				</td>
 			</tr>
@@ -742,7 +789,7 @@ $(function(){
 					
 					<c:if test="${jisApplication.isLogOff==null}">
 						<input type="radio" name="isLogOff" value="1" onclick="selectlogoff(this.value);"/>是&nbsp;&nbsp;
-						<input type="radio" name="isLogOff" value="0" onclick="selectlogoff(this.value);"/>否
+						<input type="radio" name="isLogOff" value="0" checked="checked" onclick="selectlogoff(this.value);"/>否
 					</c:if>
 				</td>
 				
@@ -760,11 +807,11 @@ $(function(){
 					
 					<c:if test="${jisApplication.isUnifyRegister==null}">
 						<input type="radio" name="isUnifyRegister" value="1"/>是&nbsp;&nbsp;
-						<input type="radio" name="isUnifyRegister" value="0"/>否
+						<input type="radio" name="isUnifyRegister" value="0" checked="checked"/>否
 					</c:if>
 				</td>
 			</tr>
-				<tr id="tr_logoffUrl">
+				<tr id="tr_logoffUrl" style="display:none">
 					<th style="text-align: left;"><b class="mustbe">*</b> 注销地址：</th>
 		        	 <td>
 						<input type="text" id="logOffUrl" name="logOffUrl" value="${jisApplication.logOffUrl}" />
@@ -791,40 +838,45 @@ $(function(){
     <div id="alerttb" class="alert_tb" style="display:none;"> 
     	<form action="${ctx}/application/applicationSave">
     	<table>
-    	<div style="font-size: 18px;">&nbsp;便捷录入</div>
-    	<hr/>
+    	<div style="font-size: 20px;padding-top: 15px;padding-bottom: 10px;cursor: auto;padding-left: 5px;">&nbsp;便捷录入
+    		<a href="${ctx}/application/applicationEdit?findNowPage=true&orderField=
+					 ${orderField}&orderSort=${orderSort}&iid=${jisApplication.iid}" title="关闭" 
+					 style="padding-left: 466px;font-size: 23px;color: black;text-decoration:none">x</a>
+    	</div>
+    	<hr/><br/>
     		<tr>
-    			<td style="font-size: 20px;" align="left">&nbsp;&nbsp;应用名称：&nbsp;&nbsp;</td>
-    			<td style="font-size: 17px;"><input  type="radio" id="jcms" name="fast" value="jcms" onclick="group(1);"/>&nbsp;JCMS后台用户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-    			<td style="font-size: 17px;"><input type="radio" id="jcms2" name="fast" value="jcms2" onclick="group(2);"/>&nbsp;JCMS个性化定制&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-    			<td style="font-size: 17px;"><input type="radio" id="xxgk" name="fast" value="xxgk" onclick="group(3);"/>&nbsp;XXGK</td>
+    			<td style="font-size: 17px;" align="left">&nbsp;&nbsp;应用名称：&nbsp;&nbsp;</td>
+    			<td style="font-size: 15px;"><input  type="radio" id="jcms" name="fast" value="jcms" onclick="group(1);"/>&nbsp;JCMS后台用户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    			<td style="font-size: 15px;"><input type="radio" id="jcms2" name="fast" value="jcms2" onclick="group(2);"/>&nbsp;JCMS个性化定制&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    			<td style="font-size: 15px;"><input type="radio" id="xxgk" name="fast" value="xxgk" onclick="group(3);"/>&nbsp;XXGK</td>
     		</tr>
     		<tr>
     			<td></td>
-    			<td style="font-size: 17px;"><input type="radio" id="jact" name="fast" value="jact" onclick="group(4);"/>&nbsp;JACT后台&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-    			<td style="font-size: 17px;"><input type="radio" id="jact2" name="fast" value="jact2" onclick="group(5);"/>&nbsp;JACT前台&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-    			<td style="font-size: 17px;"><input type="radio" id="jphoto" name="fast" value="jphoto" onclick="group(6);"/>&nbsp;JPHOTO前台</td>
+    			<td style="font-size: 15px;"><input type="radio" id="jact" name="fast" value="jact" onclick="group(4);"/>&nbsp;JACT后台&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    			<td style="font-size: 15px;"><input type="radio" id="jact2" name="fast" value="jact2" onclick="group(5);"/>&nbsp;JACT前台&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    			<td style="font-size: 15px;"><input type="radio" id="jphoto" name="fast" value="jphoto" onclick="group(6);"/>&nbsp;JPHOTO前台</td>
     		</tr>
     		<tr>
     			<td></td>
-    			<td style="font-size: 17px;"><input type="radio" id="jphoto2" name="fast" value="jphoto2" onclick="group(7);"/>&nbsp;JPHOTO后台</td>
+    			<td style="font-size: 15px;"><input type="radio" id="jphoto2" name="fast" value="jphoto2" onclick="group(7);"/>&nbsp;JPHOTO后台</td>
     		</tr>
-			<tr>
-				<td style="font-size: 20px;" align="left">&nbsp;&nbsp;应用域名：&nbsp;&nbsp;</td>
+			<tr style="line-height: 70px;">
+				<td style="font-size: 17px;" align="left" >&nbsp;&nbsp;应用域名：&nbsp;&nbsp;</td>
 				<td colspan="3"><input size="60" type="text" name="fasturl" id="fasturl" value=""></td>
-				
 			</tr>
 			<tr>
-				<td style="font-size: 20px;" align="left">&nbsp;&nbsp;接口地址：&nbsp;&nbsp;</td>
+				<td style="font-size: 17px;" align="left">&nbsp;&nbsp;接口地址：&nbsp;&nbsp;</td>
 				<td colspan="3"><input size="60" type="text" name="fastinter" id="fastinter" value=""></td>
 			</tr>
 		</table>
-		<div id="dialog-toolbar" style="text-align: center;">
+		<div id="dialog-toolbar" style="text-align: center;padding-top: 40px;">
 			<div id="dialog-toolbar-panel">
 				<input type="button" class="btn bluegreen" value="保存" 
-				 onclick="fastwriteSubmit();"/> 
-				<input type="button" class="btn" value="取消" 
-					 onclick="javascript:window.location.href='${ctx}/application/applicationEdit?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}&iid=${jisApplication.iid}'" />
+				 onclick="fastwriteSubmit();" style="background-color: #36c6d3;color:#ffffff;font-size: 15px;"/>
+				<%-- <input type="button" class="btn" value="取消" 
+					 onclick="javascript:window.location.href=
+					 '${ctx}/application/applicationEdit?findNowPage=true&orderField=
+					 ${orderField}&orderSort=${orderSort}&iid=${jisApplication.iid}'" /> --%>
 			</div>
 		</div>
 		</form>
@@ -833,7 +885,10 @@ $(function(){
     <div id="alertpic" class="alert_tb" style="display:none;"> 
     	<form action="${ctx}/application/applicationSave">
     	<table>
-    	<div style="font-size: 18px;">&nbsp;默认图标</div>
+    	<div style="font-size: 20px;padding-top: 15px;padding-bottom: 10px;cursor: auto;padding-left: 5px;">&nbsp;默认图标
+    		<a href="${ctx}/application/applicationEdit?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}&iid=${jisApplication.iid}" 
+    		title="关闭" style="padding-left: 466px;font-size: 23px;color: black;text-decoration:none">x</a>
+    	</div>
     	<hr/>
     		<tr>
 				<td ><div class="pic"><img id="img1" onclick="changSel(1);"  src="${ctx}/uploads/jcms.jpg"></div></td>
@@ -853,9 +908,7 @@ $(function(){
 		<div id="dialogpic-toolbar" style="text-align: center;">
 			<div id="dialogpic-toolbar-panel">
 				<input type="button" class="btn bluegreen" value="保存" 
-				 onclick="selectpicSubmit();"/> 
-				<input type="button" class="btn" value="取消" 
-					 onclick="javascript:window.location.href='${ctx}/application/applicationEdit?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}&iid=${jisApplication.iid}'" />
+				 onclick="selectpicSubmit();" style="background-color: #36c6d3;color:#ffffff;font-size: 15px;"/> 
 			</div>
 		</div>
 		</form>

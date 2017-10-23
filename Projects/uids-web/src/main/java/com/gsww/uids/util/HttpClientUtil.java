@@ -32,9 +32,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.NameValuePair;
 
 public class HttpClientUtil {
-	
+
 	private static PoolingClientConnectionManager connectionManager = null;
 	private static Log log = LogFactory.getLog(HttpClientUtil.class);
+
 	 private static EncodeUtil encodeUtil = new EncodeUtil();
 	 private static HttpParams httpParams = null;
 	 private static int overtime = 30000;
@@ -169,9 +170,10 @@ public class HttpClientUtil {
     {
       StringBuffer html = new StringBuffer();
       BufferedReader reader = null;
+      InputStreamReader isr = null;
       try {
-        reader = new BufferedReader(new InputStreamReader(httpEntity
-          .getContent(), charset));
+    	isr = new InputStreamReader(httpEntity.getContent(), charset);
+        reader = new BufferedReader(isr);
 
         String inputLine = null;
         while ((inputLine = reader.readLine()) != null) {
@@ -197,6 +199,7 @@ public class HttpClientUtil {
         if (reader != null)
           try {
             reader.close();
+            isr.close();
           }
           catch (IOException localIOException1) {
           }
@@ -216,4 +219,21 @@ public class HttpClientUtil {
         "http.protocol.expect-continue", Boolean.valueOf(false));
       return postMethod;
     }
+
+
+	public String doUrlGet(String url) {
+		try {
+			DefaultHttpClient httpClient = new DefaultHttpClient();
+			HttpGet httpGet = new HttpGet(url);
+			HttpResponse httpResponse = httpClient.execute(httpGet);
+			HttpEntity httpEntity = httpResponse.getEntity();
+			String urlInfo = EntityUtils.toString(httpEntity, "utf-8");
+			if (urlInfo != null && "".equals(urlInfo)) {
+				return urlInfo;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

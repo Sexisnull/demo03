@@ -17,7 +17,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.gsww.uids.util.MD5;
 import com.hanweb.common.util.Md5Util;
 //import com.gsww.uids.controller.ComplatRoleController;
 import com.gsww.uids.dao.ComplatOutsideuserDao;
@@ -136,20 +135,24 @@ public class ComplatOutsideuserServiceImpl implements ComplatOutsideuserService 
 	      if ((ip == null) || ("".equals(ip)) || (time == null)) {
 	        return false;
 	      }
-	      return updateLoginIpAndLoginTime(user.getIid().intValue(), time, ip);
+	      return updateLoginIpAndLoginTime(user,time,ip);
 	}
 	
-	  public boolean updateLoginIpAndLoginTime(int iid, Date time, String ip)
+	  public boolean updateLoginIpAndLoginTime(ComplatOutsideuser user, Date time, String ip)
 	  {
 	    boolean isSuccess = false;
 
 	    if ((ip == null) || ("".equals(ip)) || (time == null)) {
 	      return isSuccess;
 	    }
-	    isSuccess = this.outsideUserDao.updateLoginIpAndLoginTime(iid, time, ip);
+	    
+	    ComplatOutsideuser users = outsideUserDao.save(user);
+	    if(users!=null){
+	    	isSuccess = true;
+	    }
 
 	    if (isSuccess) {
-	      isSuccess = modifyOpersign(String.valueOf(iid), 0);
+	      isSuccess = modifyOpersign(String.valueOf(user.getIid()), 0);
 	    }
 
 	    return isSuccess;
@@ -160,7 +163,8 @@ public class ComplatOutsideuserServiceImpl implements ComplatOutsideuserService 
 	    if ((ids == null) || (ids.length() <= 0)) {
 	      return false;
 	    }
-	    return this.outsideUserDao.updateOpersign(ids, opersign);
+	    int i =this.outsideUserDao.updateOpersign(ids, opersign);
+	    return i==1;
 	  }
 
 	@Override
@@ -177,14 +181,9 @@ public class ComplatOutsideuserServiceImpl implements ComplatOutsideuserService 
 	      if (outsideUser.getEnable().intValue() == 0) {
 	        logger.error("login.isnotallowed");
 	      }
-	      MD5 md5 = new MD5();
-	      String a = "jcms2008";
-	      String password = "";
-	      try{
-	    	  password = md5.decrypt(outsideUser.getPwd(), a);
-	      }catch (Exception e) {
-	    	  e.printStackTrace();
-		}
+	      
+	      String password = Md5Util.md5decode(outsideUser.getPwd());
+	      
 	      if (StringUtils.equals(password, pwd))
 	      {
 	        outsideUser.setLoginIp(ip);
@@ -200,5 +199,10 @@ public class ComplatOutsideuserServiceImpl implements ComplatOutsideuserService 
 	@Override
 	public boolean insert(ComplatOutsideuser outsideUser) {
 		return outsideUserDao.save(outsideUser) !=null;
+	}
+
+	@Override
+	public boolean modifyAuthing(ComplatOutsideuser outsideUser) {
+		return false;
 	}
 }

@@ -59,4 +59,27 @@ public interface ComplatZoneService {
 	 * @return
 	 */
 	public List<ComplatZone> checkUniqueDeptName(String nameInput, String codeId);
+	
+	/**
+	 * 根据父Id找出子区域
+	 * @param int1
+	 * @return
+	 */
+	public List<ComplatZone> findChildByIid(int int1);
+	
+	/**
+	 * 根据pid查找对象
+	 * @author Lincx
+	 * @param pid
+	 * @throws Exception
+	 */
+	public List<ComplatZone> findByPid(Integer pid) throws Exception;
+	
+	/**
+	 * 根据iid查找对象
+	 * @author Lincx
+	 * @param iid
+	 * @return
+	 */
+	public ComplatZone findByIid(Integer iid);
 }

@@ -6,16 +6,16 @@ import com.hanweb.common.util.NumberUtil;
 import com.hanweb.common.util.SpringUtil;
 import com.hanweb.common.util.StringUtil;
 import com.hanweb.common.util.mvc.ControllerUtil;
-import com.hanweb.common.util.mvc.JsonResult;
-import com.hanweb.common.util.mvc.ResultState;
+import com.gsww.uids.util.JsonResult;
+import com.gsww.uids.util.ResultState;
 import com.gsww.uids.entity.ComplatCorporation;
 import com.gsww.uids.entity.ComplatOutsideuser;
+import com.gsww.uids.service.AuthLogService;
 import com.gsww.uids.service.ComplatCorporationService;
 import com.gsww.uids.service.ComplatOutsideuserService;
 import com.gsww.uids.constant.JisSettings;
 import com.gsww.uids.constant.PersonalSessionInfo;
 import com.gsww.uids.service.JisApplicationService;
-import com.gsww.uids.service.impl.AuthLogServiceImpl;
 import com.gsww.uids.util.AccessUtil;
 import com.gsww.jup.util.CellphoneShortMessageUtil;
 import com.gsww.jup.util.JSONUtil;
@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -63,11 +64,12 @@ public class PerLoginController {
 	private ComplatOutsideuserService OutsideUserService;
 
 	@Autowired
-	private AuthLogServiceImpl authLogService;
+	private AuthLogService authLogService;
 
-	private static JisSettings jisSettings = new JisSettings();
+	@Autowired
+	private JisSettings jisSettings;
 
-	@RequestMapping(value = "/perlogin.do")
+	@RequestMapping(value = "/perlogin")
 	public String personalLogin(HttpServletResponse response, String action,
 			String appmark, String gotoUrl, String domain, Model model) {
 		if (action == null) {
@@ -144,20 +146,25 @@ public class PerLoginController {
 		try {
 			session.setAttribute("appmark", appmark);
 
-			if ((String) session.getAttribute("rand") == null)
+			if ((String) session.getAttribute("rand") == null){
 				logger.error("verifycode.error");
+				throw new LoginException("verifycode.error");
+			}
 			if ((randomVeryfyCode == null) || ("".equals(randomVeryfyCode))
 					|| (randomVeryfyCode.length() == 0)) {
 				logger.error("verifycode.error");
+				throw new LoginException("verifycode.error");
 			}
 			String rand = (String) session.getAttribute("rand");
 			if (!rand.equalsIgnoreCase(randomVeryfyCode)) {
 				logger.error("verifycode.error");
+				throw new LoginException("verifycode.error");
 			}
 
 			if ((StringUtil.isEmpty(userName))
 					|| (StringUtil.isEmpty(password))) {
 				logger.error("login.error");
+				throw new LoginException("login.error");
 			}
 
 			String en_password = "";
@@ -168,8 +175,10 @@ public class PerLoginController {
 				StringBuffer sb = new StringBuffer();
 				sb.append(new String(de_result));
 				en_password = sb.reverse().toString();
+				en_password = URLDecoder.decode(en_password, "utf-8");
 			} catch (Exception ex) {
 				logger.error(ex.getMessage());
+				throw new LoginException("login.error");
 			}
 			password = en_password;
 
@@ -187,6 +196,7 @@ public class PerLoginController {
 
 			if (outsideUser == null) {
 				logger.error("login.error");
+				throw new LoginException("login.error");
 			}
 			userName = outsideUser.getLoginName();
 
@@ -206,12 +216,11 @@ public class PerLoginController {
 
 				String gotoUrlFlag = "";
 				if (StringUtil.isNotEmpty(appmark)) {
-					System.out.println("====user" + user);
 
 					String ticket = this.authLogService.add(user, appmark, 1);
-					System.out.println("====tickt" + ticket);
 					if (StringUtil.isEmpty(ticket)) {
 						logger.error("票据生成失败");
+						throw new LoginException("票据生成失败");
 					}
 
 					String domain = StringUtil.getString(session
@@ -236,11 +245,14 @@ public class PerLoginController {
 					jsonResult.addParam("ticket", ticket);
 				}
 				jsonResult.addParam("gotoUrlFlag", gotoUrlFlag);
-				this.OutsideUserService.updateLoginIpAndLoginTime(user);
+				this.OutsideUserService.save(user);
 			} else {
 				logger.error("您正在进行个人用户登录，用户名或密码不正确");
+				throw new LoginException("您正在进行个人用户登录，用户名或密码不正确");
 			}
 		} catch (Exception e) {
+			Map<String,String> map = new HashMap<String, String>();
+
 			session.setAttribute("rand",
 					StringUtil.getUUIDString().substring(0, 4));
 			if ("adminlogin.error".equals(e.getMessage())) {
@@ -349,15 +361,15 @@ public class PerLoginController {
 				.getValidityPeriod().trim());
 
 		String content = jisSettings
-				.getDynamicPwdMessageContent()
+				.getDynamicPpdMessageContent()
 				.trim()
 				.replace("cellphoneDynamicPwdMadeByJava",
 						cellphoneDynamicPwdMadeByJava)
 				.replace("validityPeriod", String.valueOf(validityPeriodInt));
-		String appBusinessId = jisSettings.getBusinessIdForGettingDynamicPwd()
+		String appBusinessId = jisSettings.getBusinessIdForGettingDynamicPpd()
 				.trim();
 		String appBusinessName = jisSettings
-				.getBusinessNameForGettingDynamicPwd().trim();
+				.getBusinessNameForGettingDynamicPpd().trim();
 		int loseTime = 60;
 		CellphoneShortMessageUtil cellMesUtil = new CellphoneShortMessageUtil();
 		String jsonRe = cellMesUtil.sendPhoneShortMessage(telNum, content,
@@ -371,6 +383,38 @@ public class PerLoginController {
 			session.setMaxInactiveInterval(validityPeriod);
 		}
 		return jsonRe;
+	}
+
+	/**
+	 * 16进制 To byte[]
+	 * 
+	 * @param hexString
+	 * @return byte[]
+	 */
+	public static byte[] hexStringToBytes(String hexString) {
+		if (hexString == null || hexString.equals("")) {
+			return null;
+		}
+		hexString = hexString.toUpperCase();
+		int length = hexString.length() / 2;
+		char[] hexChars = hexString.toCharArray();
+		byte[] d = new byte[length];
+		for (int i = 0; i < length; i++) {
+			int pos = i * 2;
+			d[i] = (byte) (charToByte(hexChars[pos]) << 4 | charToByte(hexChars[pos + 1]));
+		}
+		return d;
+	}
+
+	/**
+	 * Convert char to byte
+	 * 
+	 * @param c
+	 *            char
+	 * @return byte
+	 */
+	private static byte charToByte(char c) {
+		return (byte) "0123456789ABCDEF".indexOf(c);
 	}
 
 	@RequestMapping(value = "/pwdRecover_select")
@@ -396,10 +440,10 @@ public class PerLoginController {
 		if (typeEntity == null) {
 			return null;
 		}
-		String varicode = "<img id='verifyImg' src='../verifyCode.do?code=4&var=rand&width=162&height=30&random="
+		String varicode = "<img id='verifyImg' src='../verifyCode?code=4&var=rand&width=162&height=30&random="
 				+ (int) (Math.random() * 100000000.0D)
 				+ "'"
-				+ " onclick=\"this.src='../verifyCode.do?code=4&var=rand&width=140&height=30&random='+ Math.random()"
+				+ " onclick=\"this.src='../verifyCode?code=4&var=rand&width=140&height=30&random='+ Math.random()"
 				+ ";\" style='cursor:pointer'  width='140'  height='30' />";
 		model.addAttribute("url", "recoverPwdByPhone_submit");
 		model.addAttribute("verifycodeimg", varicode);
@@ -502,210 +546,225 @@ public class PerLoginController {
 	public String sendCellphoneShortMessageUserPwdRecover(HttpSession session,
 			String inputByGuest, String randCode) {
 		String resultJson = "";
-		if (!AccessUtil.checkAccess(SpringUtil.getRequest())) {
-			return null;
-		}
-		Map<String, Object> map1 = new HashMap<String, Object>();
-		String typeEntity = (String) session.getAttribute("typeEntity");
-		ComplatCorporation corporation = null;
+		try {
 
-		if (StringUtil.isEmpty(inputByGuest)) {
-			map1.put("msg", "账号不能为空");
-			map1.put("success", "false");
-			map1.put("code", "4");
-			return JsonUtil.objectToString(map1);
-		}
-		if (StringUtil.isEmpty(randCode)) {
-			map1.put("msg", "验证码不能为空");
-			map1.put("success", "false");
-			map1.put("code", "6");
-			return JsonUtil.objectToString(map1);
-		}
-		ComplatOutsideuser outsideUser = null;
+			if (!AccessUtil.checkAccess(SpringUtil.getRequest())) {
+				return null;
+			}
+			Map<String, Object> map1 = new HashMap<String, Object>();
+			String typeEntity = (String) session.getAttribute("typeEntity");
+			ComplatCorporation corporation = null;
 
-		if ("per".equals(typeEntity)) {
-			if (UserUtil.isMobilelegal(inputByGuest))
-				outsideUser = this.OutsideUserService
-						.findByMobile(inputByGuest);
-			else if (UserUtil.isIDnumberlegal(inputByGuest)) {
-				outsideUser = this.OutsideUserService
-						.findByIdCard(inputByGuest);
-			} else
-				outsideUser = this.OutsideUserService
-						.findByLoginName(inputByGuest);
-
-			if (outsideUser == null) {
-				map1.put("msg", "用户不存在");
+			if (StringUtil.isEmpty(inputByGuest)) {
+				map1.put("msg", "账号不能为空");
 				map1.put("success", "false");
-				map1.put("code", "1");
+				map1.put("code", "4");
 				return JsonUtil.objectToString(map1);
 			}
-
-			String sessionCode = StringUtil.getString(session
-					.getAttribute("rand"));
-			if (!randCode.equalsIgnoreCase(sessionCode)) {
-				map1.put("msg", "验证码不正确");
+			if (StringUtil.isEmpty(randCode)) {
+				map1.put("msg", "验证码不能为空");
 				map1.put("success", "false");
-				map1.put("code", "5");
+				map1.put("code", "6");
 				return JsonUtil.objectToString(map1);
 			}
+			ComplatOutsideuser outsideUser = null;
 
-			session.setAttribute("outsideUser", outsideUser);
+			if ("per".equals(typeEntity)) {
+				if (UserUtil.isMobilelegal(inputByGuest))
+					outsideUser = this.OutsideUserService
+							.findByMobile(inputByGuest);
+				else if (UserUtil.isIDnumberlegal(inputByGuest)) {
+					outsideUser = this.OutsideUserService
+							.findByIdCard(inputByGuest);
+				} else
+					outsideUser = this.OutsideUserService
+							.findByLoginName(inputByGuest);
 
-			Object mobileSend = session.getAttribute("mobilesend");
-			if (mobileSend == null) {
-				map1.put("msg", "参数为空");
-				map1.put("success", "false");
-				map1.put("code", "0");
-				return JsonUtil.objectToString(map1);
-			}
-
-			Object currentTimes = session.getAttribute("mobiletimes");
-			if (currentTimes != null) {
-				int times = NumberUtil.getInt(currentTimes);
-				if (times > 10) {
-					map1.put("msg", "超过最大短信发送次数");
+				if (outsideUser == null) {
+					map1.put("msg", "用户不存在");
 					map1.put("success", "false");
-					map1.put("code", "2");
+					map1.put("code", "1");
+					return JsonUtil.objectToString(map1);
+				}
+
+				String sessionCode = StringUtil.getString(session
+						.getAttribute("rand"));
+				if (!randCode.equalsIgnoreCase(sessionCode)) {
+					map1.put("msg", "验证码不正确");
+					map1.put("success", "false");
+					map1.put("code", "5");
+					return JsonUtil.objectToString(map1);
+				}
+
+				session.setAttribute("outsideUser", outsideUser);
+
+				Object mobileSend = session.getAttribute("mobilesend");
+				if (mobileSend == null) {
+					map1.put("msg", "参数为空");
+					map1.put("success", "false");
+					map1.put("code", "0");
+					return JsonUtil.objectToString(map1);
+				}
+
+				Object currentTimes = session.getAttribute("mobiletimes");
+				if (currentTimes != null) {
+					int times = NumberUtil.getInt(currentTimes);
+					if (times > 10) {
+						map1.put("msg", "超过最大短信发送次数");
+						map1.put("success", "false");
+						map1.put("code", "2");
+						return JsonUtil.objectToString(map1);
+					}
+
+				}
+
+				outsideUser = (ComplatOutsideuser) session
+						.getAttribute("outsideUser");
+				String phoneNumber = outsideUser.getMobile();
+
+				String cellphoneShortMessageRandomCodeMadeByJava = RandomCodeUtil
+						.getRandomNumber(6);
+				session.setAttribute(
+						"cellphoneShortMessageRandomCodeMadeByJava",
+						cellphoneShortMessageRandomCodeMadeByJava);
+				String content = JisSettings
+						.getSettings()
+						.getRecovingPpdContent()
+						.trim()
+						.replace("cellphoneShortMessageRandomCodeMadeByJava",
+								cellphoneShortMessageRandomCodeMadeByJava);
+				String appBusinessId = JisSettings.getSettings()
+						.getBusinessIdForRecovingPpd().trim();
+				String appBusinessName = JisSettings.getSettings()
+						.getBusinessNameForRecovingPpd().trim();
+
+				int loseTime = 60;
+				// CellphoneShortMessageUtil cellMesUtil = new
+				// CellphoneShortMessageUtil();
+				resultJson = "{'success':'true'}";// cellMesUtil.sendPhoneShortMessage(phoneNumber,content,
+													// appBusinessId,
+													// appBusinessName,
+													// loseTime);
+				Map map = (Map) JsonUtil.StringToObject(resultJson, Map.class);
+				if (StringUtil.getString(map.get("success")).equals("true")) {
+					if (currentTimes == null) {
+						session.setAttribute("mobiletimes", Integer.valueOf(1));
+					} else {
+						int times = NumberUtil.getInt(currentTimes);
+						session.setAttribute("mobiletimes",
+								Integer.valueOf(times + 1));
+					}
+					map1.put("success", "true");
+					map1.put("code", "3");
+					return JsonUtil.objectToString(map1);
+				}
+
+			} else {
+				corporation = this.corporationService
+						.findByManyWay(inputByGuest);
+				if (corporation == null) {
+					map1.put("msg", "用户不存在");
+					map1.put("success", "false");
+					map1.put("code", "1");
+					return JsonUtil.objectToString(map1);
+				}
+
+				String sessionCode = StringUtil.getString(session
+						.getAttribute("rand"));
+				if (!randCode.equalsIgnoreCase(sessionCode)) {
+					map1.put("msg", "验证码不正确");
+					map1.put("success", "false");
+					map1.put("code", "5");
+					return JsonUtil.objectToString(map1);
+				}
+
+				session.setAttribute("corporation", corporation);
+
+				Object currentTimes = session.getAttribute("mobiletimes");
+				if (currentTimes != null) {
+					int times = NumberUtil.getInt(currentTimes);
+					if (times > 10) {
+						map1.put("msg", "超过最大短信发送次数");
+						map1.put("success", "false");
+						map1.put("code", "2");
+						return JsonUtil.objectToString(map1);
+					}
+				}
+
+				corporation = (ComplatCorporation) session
+						.getAttribute("corporation");
+				String phoneNumber = corporation.getMobile();
+
+				String cellphoneShortMessageRandomCodeMadeByJava = RandomCodeUtil
+						.getRandomNumber(6);
+				session.setAttribute(
+						"cellphoneShortMessageRandomCodeMadeByJava",
+						cellphoneShortMessageRandomCodeMadeByJava);
+				String content = JisSettings
+						.getSettings()
+						.getRecovingPpdContent()
+						.trim()
+						.replace("cellphoneShortMessageRandomCodeMadeByJava",
+								cellphoneShortMessageRandomCodeMadeByJava);
+				String appBusinessId = JisSettings.getSettings()
+						.getBusinessIdForRecovingPpd().trim();
+				String appBusinessName = JisSettings.getSettings()
+						.getBusinessNameForRecovingPpd().trim();
+
+				int loseTime = 60;
+				// CellphoneShortMessageUtil cellMesUtil = new
+				// CellphoneShortMessageUtil();
+				resultJson = "{'success':'true'}";// cellMesUtil.sendPhoneShortMessage(phoneNumber,content,
+													// appBusinessId,
+													// appBusinessName,
+													// loseTime);
+				Map map = (Map) JsonUtil.StringToObject(resultJson, Map.class);
+				if (StringUtil.getString(map.get("success")).equals("true")) {
+					if (currentTimes == null) {
+						session.setAttribute("mobiletimes", Integer.valueOf(1));
+					} else {
+						int times = NumberUtil.getInt(currentTimes);
+						session.setAttribute("mobiletimes",
+								Integer.valueOf(times + 1));
+					}
+					map1.put("success", "true");
+					map1.put("code", "3");
 					return JsonUtil.objectToString(map1);
 				}
 
 			}
 
-			outsideUser = (ComplatOutsideuser) session
-					.getAttribute("outsideUser");
-			String phoneNumber = outsideUser.getMobile();
-
-			String cellphoneShortMessageRandomCodeMadeByJava = RandomCodeUtil
-					.getRandomNumber(6);
-			session.setAttribute("cellphoneShortMessageRandomCodeMadeByJava",
-					cellphoneShortMessageRandomCodeMadeByJava);
-			String content = JisSettings
-					.getSettings()
-					.getRecovingPwdContent()
-					.trim()
-					.replace("cellphoneShortMessageRandomCodeMadeByJava",
-							cellphoneShortMessageRandomCodeMadeByJava);
-			String appBusinessId = JisSettings.getSettings()
-					.getBusinessIdForRecovingPwd().trim();
-			String appBusinessName = JisSettings.getSettings()
-					.getBusinessNameForRecovingPwd().trim();
-
-			int loseTime = 60;
-			// CellphoneShortMessageUtil cellMesUtil = new
-			// CellphoneShortMessageUtil();
-			resultJson = "{'success':'true'}";// cellMesUtil.sendPhoneShortMessage(phoneNumber,content,
-												// appBusinessId,
-												// appBusinessName, loseTime);
-			Map map = (Map) JsonUtil.StringToObject(resultJson, Map.class);
-			if (StringUtil.getString(map.get("success")).equals("true")) {
-				if (currentTimes == null) {
-					session.setAttribute("mobiletimes", Integer.valueOf(1));
-				} else {
-					int times = NumberUtil.getInt(currentTimes);
-					session.setAttribute("mobiletimes",
-							Integer.valueOf(times + 1));
-				}
-				map1.put("success", "true");
-				map1.put("code", "3");
-				return JsonUtil.objectToString(map1);
-			}
-
-		} else {
-			corporation = this.corporationService.findByManyWay(inputByGuest);
-			if (corporation == null) {
-				map1.put("msg", "用户不存在");
-				map1.put("success", "false");
-				map1.put("code", "1");
-				return JsonUtil.objectToString(map1);
-			}
-
-			String sessionCode = StringUtil.getString(session
-					.getAttribute("rand"));
-			if (!randCode.equalsIgnoreCase(sessionCode)) {
-				map1.put("msg", "验证码不正确");
-				map1.put("success", "false");
-				map1.put("code", "5");
-				return JsonUtil.objectToString(map1);
-			}
-
-			session.setAttribute("corporation", corporation);
-
-			Object currentTimes = session.getAttribute("mobiletimes");
-			if (currentTimes != null) {
-				int times = NumberUtil.getInt(currentTimes);
-				if (times > 10) {
-					map1.put("msg", "超过最大短信发送次数");
-					map1.put("success", "false");
-					map1.put("code", "2");
-					return JsonUtil.objectToString(map1);
-				}
-			}
-
-			corporation = (ComplatCorporation) session
-					.getAttribute("corporation");
-			String phoneNumber = corporation.getMobile();
-
-			String cellphoneShortMessageRandomCodeMadeByJava = RandomCodeUtil
-					.getRandomNumber(6);
-			session.setAttribute("cellphoneShortMessageRandomCodeMadeByJava",
-					cellphoneShortMessageRandomCodeMadeByJava);
-			String content = JisSettings
-					.getSettings()
-					.getRecovingPwdContent()
-					.trim()
-					.replace("cellphoneShortMessageRandomCodeMadeByJava",
-							cellphoneShortMessageRandomCodeMadeByJava);
-			String appBusinessId = JisSettings.getSettings()
-					.getBusinessIdForRecovingPwd().trim();
-			String appBusinessName = JisSettings.getSettings()
-					.getBusinessNameForRecovingPwd().trim();
-
-			int loseTime = 60;
-			// CellphoneShortMessageUtil cellMesUtil = new
-			// CellphoneShortMessageUtil();
-			resultJson = "{'success':'true'}";// cellMesUtil.sendPhoneShortMessage(phoneNumber,content,
-												// appBusinessId,
-												// appBusinessName, loseTime);
-			Map map = (Map) JsonUtil.StringToObject(resultJson, Map.class);
-			if (StringUtil.getString(map.get("success")).equals("true")) {
-				if (currentTimes == null) {
-					session.setAttribute("mobiletimes", Integer.valueOf(1));
-				} else {
-					int times = NumberUtil.getInt(currentTimes);
-					session.setAttribute("mobiletimes",
-							Integer.valueOf(times + 1));
-				}
-				map1.put("success", "true");
-				map1.put("code", "3");
-				return JsonUtil.objectToString(map1);
-			}
-
+			return resultJson;
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-
-		return resultJson;
+		return null;
 	}
 
 	@RequestMapping(value = "/recoverPwdByPhone_submit")
 	@ResponseBody
-	public void submitPhoneverify(
+	public JsonResult submitPhoneverify(
 			HttpServletRequest request,
 			HttpServletResponse response,
 			@RequestParam(value = "username", required = false) String userName,
 			HttpSession session,
 			String cellphoneShortMessageRandomCodeWritenByGuest, String randCode) {
+		JsonResult jsonResult = JsonResult.getInstance();
 		try {
 
 			if (!AccessUtil.checkAccess(request)) {
-				return;
+				jsonResult.setMessage("请求参数非法");
+				jsonResult.setSuccess(false);
+				return jsonResult;
 			}
 			if ((SafeUtil
 					.isSqlAndXss(cellphoneShortMessageRandomCodeWritenByGuest))
 					|| (SafeUtil
 							.isSqlAndXss(cellphoneShortMessageRandomCodeWritenByGuest))) {
-				return;
+				jsonResult.setMessage("请求参数非法");
+				jsonResult.setSuccess(false);
+				return jsonResult;
 			}
-			Map<String, Object> result = new HashMap<String, Object>();
 			session.setAttribute(
 					"cellphoneShortMessageRandomCodeWritenByGuest",
 					cellphoneShortMessageRandomCodeWritenByGuest);
@@ -713,12 +772,9 @@ public class PerLoginController {
 			if (StringUtil.isNotEmpty(randCode)) {
 				String rand = (String) session.getAttribute("rand");
 				if (!rand.equalsIgnoreCase(randCode)) {
-					result.put("success", false);
-					result.put("message", "验证码错误,请重新输入!");
-					response.setContentType("text/json");
-					response.setCharacterEncoding("UTF-8");
-					response.getWriter().write(JSONUtil.writeMapJSON(result));
-					return;
+					jsonResult.setMessage("验证码错误,请重新输入!");
+					jsonResult.setSuccess(false);
+					return jsonResult;
 				}
 			}
 			if (StringUtil
@@ -727,30 +783,22 @@ public class PerLoginController {
 						.equals(cellphoneShortMessageRandomCodeWritenByGuest,
 								StringUtil.getString(session
 										.getAttribute("cellphoneShortMessageRandomCodeMadeByJava")))) {
-					result.put("success", false);
-					result.put("message", "短信验证码错误,请重新输入!");
-					response.setContentType("text/json");
-					response.setCharacterEncoding("UTF-8");
-					response.getWriter().write(JSONUtil.writeMapJSON(result));
-					return;
+					jsonResult.setMessage("短信验证码错误,请重新输入!");
+					jsonResult.setSuccess(false);
+					return jsonResult;
 				}
-				result.put("success", true);
-				result.put("message", "验证成功!");
-				response.setContentType("text/json");
-				response.setCharacterEncoding("UTF-8");
-				response.getWriter().write(JSONUtil.writeMapJSON(result));
-				return;
+				jsonResult.setMessage("验证成功!");
+				jsonResult.setSuccess(true);
+				return jsonResult;
 			} else {
-				result.put("success", false);
-				result.put("message", "短信验证码错误,请重新输入!");
-				response.setContentType("text/json");
-				response.setCharacterEncoding("UTF-8");
-				response.getWriter().write(JSONUtil.writeMapJSON(result));
-				return;
+				jsonResult.setMessage("短信验证码错误,请重新输入!");
+				jsonResult.setSuccess(false);
+				return jsonResult;
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
+		return jsonResult;
 	}
 
 	@RequestMapping(value = "/resetpwd_show")
@@ -800,51 +848,44 @@ public class PerLoginController {
 
 	@RequestMapping(value = "resetpwd_submit")
 	@ResponseBody
-	public void submitResetPwd(HttpSession session, String pwd,HttpServletResponse response) {
+	public JsonResult submitResetPwd(HttpSession session, String pwd,
+			HttpServletResponse response) {
+		JsonResult jsonResult = JsonResult.getInstance();
 		try {
-			Map<String,Object> result = new HashMap<String,Object>();
-			String typeEntity = (String)session.getAttribute("typeEntity");
-
-		    boolean isSuccess = false;
-		    if (("".equals(typeEntity)) || (typeEntity == null)) {
-		    	result.put("success", false);
-				result.put("message", "验证超时，请重新尝试！");
-				response.setContentType("text/json");
-				response.setCharacterEncoding("UTF-8");
-				response.getWriter().write(JSONUtil.writeMapJSON(result));
-				return;
-		    }
-		    if ("per".equals(typeEntity)) {
-		    	ComplatOutsideuser outsideUser = (ComplatOutsideuser)session
-		        .getAttribute("outsideUser");
-		      isSuccess = this.OutsideUserService.updatePwd(outsideUser.getIid(), 
-		        Md5Util.md5encode(pwd));
-		    } else {
-		    	ComplatCorporation corporation = (ComplatCorporation)session
-		        .getAttribute("corporation");
-		      String loginName = corporation.getLoginName();
-		      isSuccess = this.corporationService.updatePwd(loginName, 
-		        Md5Util.md5encode(pwd));
-		    }
-		    if (isSuccess) {
-		      session.invalidate();
-		      result.put("success", true);
-				result.put("message", "密码修改成功！");
-				response.setContentType("text/json");
-				response.setCharacterEncoding("UTF-8");
-				response.getWriter().write(JSONUtil.writeMapJSON(result));
-				return;
-		    } else {
-		    	result.put("success", false);
-				result.put("message", "密码修改失败！");
-				response.setContentType("text/json");
-				response.setCharacterEncoding("UTF-8");
-				response.getWriter().write(JSONUtil.writeMapJSON(result));
-				return;
-		    }
+			String typeEntity = (String) session.getAttribute("typeEntity");
+			
+			boolean isSuccess = false;
+			if (("".equals(typeEntity)) || (typeEntity == null)) {
+				jsonResult.setMessage("验证超时，请重新尝试！");
+				jsonResult.setSuccess(false);
+				return jsonResult;
+			}
+			if ("per".equals(typeEntity)) {
+				ComplatOutsideuser outsideUser = (ComplatOutsideuser) session
+						.getAttribute("outsideUser");
+				isSuccess = this.OutsideUserService.updatePwd(
+						outsideUser.getIid(), Md5Util.md5encode(pwd));
+			} else {
+				ComplatCorporation corporation = (ComplatCorporation) session
+						.getAttribute("corporation");
+				String loginName = corporation.getLoginName();
+				isSuccess = this.corporationService.updatePwd(loginName,
+						Md5Util.md5encode(pwd));
+			}
+			if (isSuccess) {
+				session.invalidate();
+				jsonResult.setMessage("密码修改成功！");
+				jsonResult.setSuccess(true);
+				return jsonResult;
+			} else {
+				jsonResult.setMessage("密码修改失败！");
+				jsonResult.setSuccess(false);
+				return jsonResult;
+			}
 		} catch (Exception e) {
-			logger.error(e.getMessage(),e);
+			logger.error(e.getMessage(), e);
 		}
+		return jsonResult;
 	}
 
 	@RequestMapping(value = "userresult")
@@ -904,7 +945,7 @@ public class PerLoginController {
 				+ "location.href='http://'+domain+'/gszw/member/login/login.do?url='+grloginurl+'&src='+src+'&domain='+encodeURIComponent(encodeURIComponent(domain));}"
 				+ " function showfrlogin(){var src=window.location.href;src=encodeURIComponent(src);   "
 				+ "frloginurl=encodeURIComponent(frloginurl);   "
-				+ "location.href='http://'+domain+'/gszw/member/login/login.do?url1='+frloginurl+'&src='+src+'&domain='+encodeURIComponent(encodeURIComponent(domain));  }"
+				+ "location.href='http://'main+'/gszw/member/login/login.do?url1='+frloginurl+'&src='+src+'&domain='+encodeURIComponent(encodeURIComponent(domain));  }"
 				+ "function showgrregedit(){"
 				+ "window.open(grregediturl);  }function showfrregedit(){window.open(frregediturl);}"
 				+ "$(function(){var $div_li =$('div.userinfomenu ul li');"
@@ -942,35 +983,4 @@ public class PerLoginController {
 
 	}
 
-	/**
-	 * 16进制 To byte[]
-	 * 
-	 * @param hexString
-	 * @return byte[]
-	 */
-	public static byte[] hexStringToBytes(String hexString) {
-		if (hexString == null || hexString.equals("")) {
-			return null;
-		}
-		hexString = hexString.toUpperCase();
-		int length = hexString.length() / 2;
-		char[] hexChars = hexString.toCharArray();
-		byte[] d = new byte[length];
-		for (int i = 0; i < length; i++) {
-			int pos = i * 2;
-			d[i] = (byte) (charToByte(hexChars[pos]) << 4 | charToByte(hexChars[pos + 1]));
-		}
-		return d;
-	}
-
-	/**
-	 * Convert char to byte
-	 * 
-	 * @param c
-	 *            char
-	 * @return byte
-	 */
-	private static byte charToByte(char c) {
-		return (byte) "0123456789ABCDEF".indexOf(c);
-	}
 }

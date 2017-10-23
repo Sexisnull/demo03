@@ -30,8 +30,7 @@ public class WeChatUtil {
 	 * @return
 	 */
 	public String getRequestCodeUrl(String redirectUrl) {
-		String requestUrl = String.format(
-				"https://open.weixin.qq.com/connect/qrconnect?appid=APPID&redirect_uri=REDIRECT_URI&response_type=CODE&scope=SCOPE&state=STATE#wechat_redirect");
+		String requestUrl = ReadProperties.getPropertyByStr("get_wechat_code_url");
 		String appId = "";
 		String scope = "";
 		String state = "";
@@ -49,7 +48,7 @@ public class WeChatUtil {
 	 * @param code
 	 * @return
 	 */
-	@SuppressWarnings("resource")
+	@SuppressWarnings({ "resource", "deprecation" })
 	public Map<String, String> getUserInfoAccessToken(String code) {
 		JsonObject jsonObject = null;
 		Map<String, String> data = new HashMap<String, String>();
@@ -60,14 +59,13 @@ public class WeChatUtil {
 			String secret = "www.localhost.com";
 			// 用于保持请求和回调的状态，授权请求后原样带回给第三方。
 			String state = "wechat_state";
-			String url = String.format(
-					"https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code");
-			url = url.replace("APPID", appId);
-			url = url.replace("SECRET", secret);
-			url = url.replace("CODE", code);
+			String get_wechat_accesstoken_url=ReadProperties.getPropertyByStr("get_wechat_accesstoken_url");
+			get_wechat_accesstoken_url = get_wechat_accesstoken_url.replace("APPID", appId);
+			get_wechat_accesstoken_url = get_wechat_accesstoken_url.replace("SECRET", secret);
+			get_wechat_accesstoken_url = get_wechat_accesstoken_url.replace("CODE", code);
 
 			DefaultHttpClient httpClient = new DefaultHttpClient();
-			HttpGet httpGet = new HttpGet(url);
+			HttpGet httpGet = new HttpGet(get_wechat_accesstoken_url);
 			HttpResponse httpResponse = httpClient.execute(httpGet);
 			HttpEntity httpEntity = httpResponse.getEntity();
 			String tokens = EntityUtils.toString(httpEntity, "utf-8");
@@ -91,7 +89,7 @@ public class WeChatUtil {
 	}
 
 	/**
-	 * 获取用户信息
+	 * 获取微信用户信息
 	 *
 	 * @param accessToken
 	 * @param openId

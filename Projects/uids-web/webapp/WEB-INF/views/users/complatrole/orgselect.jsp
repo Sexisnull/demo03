@@ -12,7 +12,8 @@
 <script type="text/javascript" src="${ctx}/res/plugin/jquery/jquery-1.8.3.min.js"></script>
 <script type="text/javascript" src="${ctx }/res/skin/default/js/jquery-ui.js"></script>
 <script type="text/javascript" src="${ctx}/res/skin/login/js/jquery.draggable.js"></script>
-
+<script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgcore.lhgdialog.min.js"></script>
+<script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgdialog.js"></script>
 <link rel="stylesheet" href="${ctx}/res/skin/default/css/tabs.css"/>
 <script type="text/javascript" src="${ctx}/res/skin/login/js/jquery.parse.js"></script>
 <link type="text/css" rel="stylesheet" href="${ctx}/res/skin/login/css/panel.css"/>
@@ -775,7 +776,7 @@
 		}
 
 		if (noSelected) {
-			alert('没有添加任何对象!');
+			$.dialog.alert('没有添加任何对象!');
 			return;
 		}
 		
@@ -801,20 +802,24 @@
 			url : "${ctx}/complat/modify_submit",
 			data:{"roleId":${roleid},"users":users,"groups":groups},
 			dataType : "JSON",
-			async : false,
 			success : function(data) {
 				if(data.result){
-					alert("新增成功");
+					$.dialog.alertSuccess("新增成功",function(){
+						closeDialog();
+					});
 				}else{
-					alert("新增失败");
+					$.dialog.alert("新增失败");
 				}
 			}
 		});
-		closeDialog();
 	}
 	
 	function closeDialog(){
-		window.parent.document.location.reload();
+		$(".selecttarget li").each(function(){
+			$(this).find(".checkbtn").click();
+		});
+		loadUserData(0);
+		window.parent.closeDialog();
 	}
 	
 </script>
@@ -1047,7 +1052,9 @@
 		<i class="icon-check" style="font-size: 60px;"></i><br /> 点击添加已选中
 	</div>
 	<div class="batchremove">
-		<i class="icon-remove-sign" style="font-size: 60px;"></i><br /> 点击移除已选中
+		<i class="icon-remove-sign" style="font-size: 60px;">
+		<button id="removed">移除</button>
+		</i><br /> 点击移除已选中
 	</div>
 	<div id="dialog-content" style="padding: 0; overflow: hidden;">
 		<div id="orgselect-source" data-options="tabPosition:'left',headerWidth:100" class="easyui-tabs" style="width: 500px; height: 368px;">
@@ -1116,7 +1123,7 @@
 	</div>
 	<div class="ui_buttons">
 			<input type="button" class="btn btn-primary" value="确定" onclick="ok();" />
-			<input type="button" class="btn ui-dialog-titlebar-close" value="关闭" onclick="closeDialog();" />
+			<input type="button" id="close" class="btn " value="关闭" onclick="closeDialog();" />
 		</div>
 </body>
 </html>

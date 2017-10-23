@@ -95,7 +95,7 @@ public class ComplatRoleController extends BaseController {
 			// 将搜索条件编码成字符串，用于排序，分页的URL
 			model.addAttribute("searchParams", Servlets
 					.encodeParameterStringWithPrefix(searchParams, "search_"));
-			model.addAttribute("cParams", searchParams);
+			model.addAttribute("sParams", searchParams);
 		} catch (Exception ex) {
 			logger.error("列表打开失败：" + ex.getMessage());
 			returnMsg("msgMap", "列表打开失败", (HttpServletRequest) request);
@@ -140,8 +140,8 @@ public class ComplatRoleController extends BaseController {
 			response.setContentType("text/json");
 			response.setCharacterEncoding("UTF-8");
 			response.getWriter().write(JSONUtil.writeMapJSON(result));
-			String desc=sysUserSession.getUserName()+"修改了"+cr.getName();
-			jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(), desc, 3, 2);
+			String desc=sysUserSession.getLoginAccount()+"修改了"+cr.getName();
+			jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(), desc, 3, 2);
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}
@@ -157,12 +157,13 @@ public class ComplatRoleController extends BaseController {
 		SysUserSession sysUserSession =(SysUserSession)request.getSession().getAttribute("sysUserSession");
 		try {
 			if(cRole.getIid()==null){
-				String desc=sysUserSession.getUserName()+"新增了"+cRole.getName();
-				jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(), desc, 3, 1);
+				String desc=sysUserSession.getLoginAccount()+"新增了"+cRole.getName();
+				jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(), desc, 3, 1);
 			}else{
-				String desc=sysUserSession.getUserName()+"修改了"+cRole.getName();
-				jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(), desc, 3, 2);
+				String desc=sysUserSession.getLoginAccount()+"修改了"+cRole.getName();
+				jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(), desc, 3, 2);
 			}
+			cRole.setType(6);
 			complatRoleService.save(cRole);
 			returnMsg("success", "保存成功", request);
 		} catch (Exception e) {
@@ -187,8 +188,8 @@ public class ComplatRoleController extends BaseController {
                 ComplatRole role = complatRoleService.findByKey(Integer.parseInt(para[i].trim()));
                 complatRoleService.delete(Integer.parseInt(para[i].trim()));
                 jisRoleobjectService.deleteByRoleId(Integer.parseInt(para[i].trim()));
-                String desc=session.getUserName()+"删除了"+role.getName();
-                jisLogService.save(session.getUserName(),session.getUserIp(), desc, 3, 3);
+                String desc=session.getLoginAccount()+"删除了"+role.getName();
+                jisLogService.save(session.getLoginAccount(),session.getUserIp(), desc, 3, 3);
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);

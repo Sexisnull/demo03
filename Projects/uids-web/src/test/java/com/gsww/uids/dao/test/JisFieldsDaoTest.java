@@ -21,7 +21,7 @@ public class JisFieldsDaoTest {
 	private JisFieldsDao jisFieldsDao;
 	@Test
 	public void findByIid(){
-		int iid=20;
+		int iid=61;
 		JisFields jis=jisFieldsDao.findByIid(iid);
 		System.out.println(jis.getShowname());
 		assertTrue(true);

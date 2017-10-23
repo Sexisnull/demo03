@@ -16,7 +16,10 @@ import com.gsww.jup.entity.sys.SysUserSession;
 import com.gsww.jup.service.sys.SysLoginService;
 import com.gsww.uids.dao.ComplatRoleDao;
 import com.gsww.uids.dao.ComplatUserDao;
+import com.gsww.uids.entity.ComplatRole;
 import com.gsww.uids.entity.ComplatUser;
+import com.gsww.uids.entity.JisRoleobject;
+import com.gsww.uids.service.JisRoleobjectService;
 import com.hanweb.common.util.Md5Util;
 
 /**
@@ -46,7 +49,7 @@ public class SysLoginServiceImpl implements SysLoginService {
 	@Autowired
 	private ComplatUserDao complatUserDao;
 	@Autowired
-	private SysRoleAcctRelDao sysRoleAcctRelDao;
+	private JisRoleobjectService jidRoleobjectService;
 	@Autowired
 	private ComplatRoleDao complatRoleDao;
 
@@ -63,8 +66,10 @@ public class SysLoginServiceImpl implements SysLoginService {
 				return null;
 			} else {
 				SysUserSession sysUserSession = new SysUserSession();
+				sysUserSession.setLoginAccount(user.getLoginname());
 				sysUserSession.setAccountId(user.getIid() + "");
 				sysUserSession.setUserName(user.getName());
+				sysUserSession.setDeptId(user.getGroupid()+"");
 				/*
 				 * sysUserSession.setDeptId(user.getSysDepartment().getDeptId());
 				 * sysUserSession
@@ -72,22 +77,28 @@ public class SysLoginServiceImpl implements SysLoginService {
 				 * sysUserSession
 				 * .setDeptName(user.getSysDepartment().getDeptName());
 				 */
+				
 				sysUserSession.setUserIp(ip);
-				List<SysRoleAcctRel> roleList = sysRoleAcctRelDao
-						.findByUserAcctId(user.getIid() + "");
+				List<JisRoleobject> roleList =jidRoleobjectService.findByObjectIdAndType(user.getIid(),0);
+				if(roleList.isEmpty()){
+					roleList =jidRoleobjectService.findByObjectIdAndType(user.getGroupid(),2);
+				}
 				String roles = "";
+				String roleTypes="";
 				String roleNames = "";
 				if (roleList != null && roleList.size() > 0) {
-					for (SysRoleAcctRel ra : roleList) {
-						roles += ra.getRoleId().toString() + ",";
-						roleNames += complatRoleDao.findByIid(
-								Integer.parseInt(ra.getRoleId())).getName()
-								+ ",";
+					for (JisRoleobject ra : roleList) {
+						ComplatRole role = complatRoleDao.findByIid(ra.getRoleid());
+						roles += ra.getRoleid().toString() + ",";
+						roleTypes +=role.getType().toString() + ",";
+						roleNames += role.getName()+ ",";
 					}
 					roles = roles.substring(0, roles.length() - 1);
+					roleTypes = roleTypes.substring(0, roleTypes.length() - 1);
 					roleNames = roleNames.substring(0, roleNames.length() - 1);
 				}
 				sysUserSession.setRoleIds(roles);
+				sysUserSession.setRoleTypes(roleTypes);
 				sysUserSession.setUserSex(user.getSex() + "");
 				sysUserSession.setRoleNames(roleNames);
 				sysUserSession.setUserState(user.getEnable() + "");

@@ -3,6 +3,7 @@
 <html>
 
 <%@ include file="/include/meta.jsp"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgcore.lhgdialog.min.js"></script>
 
 <head>
@@ -14,18 +15,19 @@
 		var nameSearch = $("#nameSearch").val();
 		var loginNameSearch = $("#loginNameSearch").val(); 
 		var papersNumberSearch = $("#papersNumberSearch").val();
+		var papersNumberLength = papersNumberSearch.length;
 		if(nameSearch ==  '' || isNumbOrLett1(nameSearch)){
 			if(loginNameSearch ==  '' || isNumbOrLett2(loginNameSearch)) {
-				if(papersNumberSearch ==  '' || isNumbOrLett3(papersNumberSearch)) {
+				if(papersNumberSearch ==  '' || (isNumbOrLett3(papersNumberSearch) && papersNumberLength <= 18)) {
 					form1.submit();
 				} else{
-					$.validator.errorShow($("#papersNumberSearch"),'只能包括数字和字母');
+					$.validator.errorShow($("#papersNumberSearch"),'只能包括数字和字母,且不能超过18个字符');
 				}
 			} else{
-				$.validator.errorShow($("#loginNameSearch"),'只能包括字母、数字、下划线');
+				$.validator.errorShow($("#loginNameSearch"),'只能包括字母、数字、下划线,且不能超过255个字符');
 			}
 		} else{
-			$.validator.errorShow($("#nameSearch"),'只能包括字母、数字、下划线、中文');
+			$.validator.errorShow($("#nameSearch"),'只能包括字母、数字、下划线、中文,且不能超过255个字符');
 		}
 	}
 	
@@ -37,7 +39,7 @@
 	如果通过验证返回true,否则返回false
 	*/
 	function isNumbOrLett1( s ){
-		var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;
+		var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]{1,255}$/;
 		var re = new RegExp(regu);
 		if (re.test(s)) {
 			return true;
@@ -47,7 +49,7 @@
 	}
 	
 	function isNumbOrLett2( s ){
-		var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_]+$/;
+		var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_]{1,255}$/;
 		var re = new RegExp(regu);
 		if (re.test(s)) {
 			return true;
@@ -66,66 +68,24 @@
 		}
 	}
 	
-	/* $(function(){
-		//高级搜索按钮点击事件
-		$('#advanced-btn').on('click',function(){
-			$('.advanced-content').toggle('fast');
-		});
-		$("#advanced-search-btn").click(function(){
-			$("#form2").submit();
-		});
-		//阻止按键盘Enter键提交表单
-		var $inp = $('input');
-		$inp.keypress(function (e) { 
-		    var key = e.which; 
-		    if (key == 13) {
-		        return false;
-		    }
-		});
-	}); */
-	
-	//弹出层
-	function openwindow(iid){
-	    var mybg = document.createElement("div"); 
-		mybg.setAttribute("class","mybg"); 
-		$(".mybg").addClass("mybg");
-	    document.body.appendChild(mybg);
-		document.body.style.overflow = "hidden"; 
-		$("#alerttb").show(); 
-		$.ajax({
-			type : "POST",
-			url : "getOutsideuserInfo",
-			data : "iid=" + iid,
-			dataType : "json",
-			success : function(data) {
-				$("#outsideUserIid").attr("value", data.iid);
-				$("#name").attr("value", data.name);
-				$("#papersNumber").attr("value", data.papersNumber);
-				if(data.rejectReason != "null" && data.rejectReason != '') {
-					$("#tr_reject_done")[0].style.display = 'table-row';
-					$("#rejectReason1").attr("value", data.rejectReason);
-				}
-			}
-		});				
+	//dialog弹框
+	function openwindow(userAcctId){
+		if(null != userAcctId && "" != userAcctId){
+			var api = $.dialog({
+				title : '个人用户-用户认证',
+				width : 470,
+				height: 358,
+				max : false,
+				min : false,
+				lock : true,
+				padding : '40px 20px',
+				content : 'url:${ctx}/complat/getOutsideuserInfo?iid='+userAcctId,
+				fixed : false,
+				drag : false,
+				resize : false
+			});
+		}
 	}
-	//拒绝
-	function regect() {
-		$("#input_four")[0].style.display = 'none';
-		$("#input_three")[0].style.display = 'table-row';
-		$("#tr_reject")[0].style.display = 'table-row';
-		$("#outsideUserType").attr("value", 0);
-	}
-	//拒绝取消
-	function rejectCancel() {
-		$("#tr_reject")[0].style.display = 'none';
-		$("#input_four")[0].style.display = 'table-row';
-		$("#input_three")[0].style.display = 'none';
-		$("#outsideUserType").attr("value", 1);
-	}
-	//关闭
-	$(".close").click(function() {
-        $("#alerttb").hide();
-    });
     
     /**批量关闭操作**/	
 	function stopData(url,parm){
@@ -262,9 +222,6 @@
 			</table>
 		</form>
 	</div>
-	
-       
-    
 	<!--列表内容区域-->
 	<div class="list">
 	<input type="hidden" id="orderField" name="orderField" value="${orderField}"/> 
@@ -311,12 +268,22 @@
 	                            <i class="check_btn"></i><input id="${outsideUser.iid}" value="${outsideUser.iid}" type="checkbox" class="check_btn" style="display:none;"/>
 	                        </div>
 	                    </td>
-	                	<td style="text-align: center;">
-	                    	<div title="${outsideUser.name}" class="word_break">${outsideUser.name}</div>
-	                    </td>
-	                	<td style="text-align: center;">
-	                    	<div title="${outsideUser.loginName}" class="word_break">${outsideUser.loginName}</div>
-	                    </td>
+	                	<td align="center" title="${outsideUser.name}" class="box_main_td" nowrap="nowrap">
+							<c:if test="${fn:length(outsideUser.name)>6}">
+							  ${fn:substring(outsideUser.name,0,6)}...
+							</c:if>
+							<c:if test="${fn:length(outsideUser.name)<=6}">
+							   ${outsideUser.name}&nbsp;
+							 </c:if> 
+						</td>
+	                    <td align="center" title="${outsideUser.loginName}" class="box_main_td" nowrap="nowrap">
+							<c:if test="${fn:length(outsideUser.loginName)>15}">
+							  ${fn:substring(outsideUser.loginName,0,15)}...
+							</c:if>
+							<c:if test="${fn:length(outsideUser.loginName)<=15}">
+							   ${outsideUser.loginName}&nbsp;
+							 </c:if> 
+						</td>
 	                    <td style="text-align: center;">
 	                    	<div title="${outsideUser.mobile}" class="word_break">${outsideUser.mobile}</div>
 	                    </td>
@@ -327,7 +294,7 @@
 	                    	<div class="alignL">
 	                    		<div class="list-longtext">
 	                    			<c:if test="${outsideUser.enable == '0'}"><font color="red">关闭</font></c:if>
-	                           		<c:if test="${outsideUser.enable == '1'}">开启</font></c:if>
+	                           		<c:if test="${outsideUser.enable == '1'}">开启</c:if>
 	                    		</div>
 	                        </div>
 	                    </td>
@@ -344,7 +311,7 @@
 	                    	<div class="alignL">
 	                    		<div class="list-longtext">
 	                    			<c:if test="${outsideUser.isAuth == '0'}">
-		                    			<input type="button" style="border: none;color: white;background: green;" value="   认   证   " onclick="openwindow(${outsideUser.iid});">
+		                    			<input type="button"  style="border: none;color: white;background: green;cursor:pointer;" value="   认   证   " onclick="openwindow(${outsideUser.iid});">
 		                    		</c:if>
 		                    		<c:if test="${outsideUser.isAuth == '1'}">
 		                    			已认证
@@ -353,7 +320,9 @@
 	                        </div>
 	                    </td>
 	                    <td style="text-align: center;">
-	                    	<div title="${outsideUser.createTime}" class="word_break">${outsideUser.createTime}</div>
+	                    	<div title="${outsideUser.createTime}" class="word_break">
+								<fmt:formatDate value="${outsideUser.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/>
+							</div>
 	                    </td>
 	                    
 	                	<td class="position-content" style="text-align: center;" >
@@ -369,72 +338,5 @@
     <!-- 分页 -->
     <tags:pagination page="${pageInfo}" paginationSize="5"/> 
 </div>
-	<!-- 弹出层 -->
-    <div id="alerttb" class="alert_tb" style="display:none;"> 
-      <div class="input_one">
-		<span id="inputUser">用户认证</span>
-		<i class="close"><a  id="close"  href="${ctx}/complat/outsideuserList">X&nbsp</a></i>
-      </div>   
-      <div class="input_two">
-	     <form align = "center" id="oprform" name="oprform" action="${ctx}/complat/outsideuserAuth" method="get">
-	    	<!--隐藏变量区-->
-			<div id="dialog-content">
-	        	<table class="form-table">
-	        		<input id="outsideUserIid" name="iid" value="" type="text" style="display:none;"/>
-	        		<input id="outsideUserType" name="outsideUserType" value="1" type="text" style="display:none;"/>
-	        		<tr style="display:none;" id="tr_reject_done">
-						<th>拒绝原因：</th>
-						<td>
-			            	<textarea readonly="readonly" rows="5" cols="5" id="rejectReason1" name="rejectReason1"></textarea>
-			            </td>
-			            <td></td>
-			        </tr>
-					<tr>
-						<th>姓名：</th>
-						<td>
-							<input readonly="readonly" type="text" id="name" class="name" name="name" />
-			            </td>
-			            <td></td>
-			        </tr>
-			        <tr>
-			        	<th>身份证号：</th>
-						<td>
-							<input readonly="readonly" type="text" id="papersNumber" class="papersNumber" name="papersNumber"/>
-						</td>
-						<td></td>
-					</tr>
-					<tr style="display:none;" id="tr_reject">
-						<th></th>
-						<td>
-						<textarea placeholder="请填写拒绝原因" rows="5" cols="5" class="rejectReason" name="rejectReason2"></textarea>
-						</td>
-						<td></td>
-					</tr>
-					<tr id="input_three" class="input_three" style="display:none;" align = "center">
-						<th></th>
-						<td></td>
-						<td>
-							<p align = "right">
-								<input type="submit" class="btn btn-primary" value="保存"/> 
-								<input type="button" class="btn" value="取消" onclick="rejectCancel();" />
-							</p>
-						</td>
-					</tr>
-					<tr id="input_four" class="input_four" align = "center">
-						<th></th>
-						<td></td>
-						<td>
-						<p align = "center">
-							<input type="button" class="btn btn-primary" value="拒绝" onclick="regect();" /> 
-							<input type="submit" class="btn" value="通过"/>
-							<input type="button" class="btn" value="取消" onclick="javascript:window.location.href='${ctx}/complat/outsideuserList'" />
-						</p>
-						</td>
-					</tr>
-				</table>
-			</div>
-		</form>
-      </div> 
-    </div>
 </body>
 </html>

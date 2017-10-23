@@ -23,9 +23,9 @@ import com.gsww.jup.entity.sys.SysRoleOperRel;
 import com.gsww.jup.util.NullHelper;
 import com.gsww.jup.util.StringHelper;
 import com.gsww.uids.dao.ComplatRoleDao;
-import com.gsww.uids.dao.ComplatRoleRelationDao;
+import com.gsww.uids.dao.JisRoleobjectDao;
 import com.gsww.uids.entity.ComplatRole;
-import com.gsww.uids.entity.ComplatRolerelation;
+import com.gsww.uids.entity.JisRoleobject;
 import com.gsww.uids.service.ComplatRoleService;
 
 @Transactional
@@ -33,9 +33,8 @@ import com.gsww.uids.service.ComplatRoleService;
 public class ComplatRoleServiceImpl implements ComplatRoleService {
 	@Autowired
 	private ComplatRoleDao roleDao;
-	// 角色用户关系
 	@Autowired
-	private ComplatRoleRelationDao comrelationDao;
+	private JisRoleobjectDao jisRoleobjectDao;
 	// 操作
 	@Autowired
 	private SysOperatorDao sysOperatorDao;
@@ -74,8 +73,8 @@ public class ComplatRoleServiceImpl implements ComplatRoleService {
 	}
 
 	@Override
-	public List<ComplatRolerelation> findAcctByroleId(Integer roleId) {
-		return comrelationDao.findByRoleId(roleId);
+	public List<JisRoleobject> findAcctByroleId(Integer roleId) {
+		return jisRoleobjectDao.findByRoleidAndType(roleId, 0);
 	}
 
 	@Override
@@ -92,8 +91,6 @@ public class ComplatRoleServiceImpl implements ComplatRoleService {
 		resAndAccreditSql
 				.append("left join sys_role_menu_rel rm on m.menu_id=rm.menu_id and rm.role_id=? where m.menu_state='1' ");
 		resAndAccreditSql.append("order by m.menu_seq asc");
-		System.out.println(resAndAccreditSql);
-		System.out.println(id);
 		List<Map<String, Object>> resAndAccreditList = jdbcTemplate
 				.queryForList(resAndAccreditSql.toString(), new String[] { id });
 		// 获取操作及授权记录
@@ -104,7 +101,6 @@ public class ComplatRoleServiceImpl implements ComplatRoleService {
 				.append("left join sys_role_oper_rel ro on ro.operator_id=o.operator_id and ro.role_id=? ");
 		operAndAccreditSql
 				.append("where o.operator_state='1' order by o.menu_id,o.tab_index,o.operator_type,o.operator_level asc");
-		System.out.println(operAndAccreditSql);
 		List<Map<String, Object>> operAndAccreditList = jdbcTemplate
 				.queryForList(operAndAccreditSql.toString(),
 						new String[] { id });
@@ -235,17 +231,20 @@ public class ComplatRoleServiceImpl implements ComplatRoleService {
 	 * 根据用户ID查询对应角色ID
 	 */
 	@Override
-	public List<ComplatRolerelation> findByUserId(Integer userId)
+	public List<JisRoleobject> findByUserId(Integer userId,Integer groupId)
 			throws Exception {
-		String getRoleSql = "select t.roleId from complat_rolerelation t where userId = ?";
-		List<Map<String, Object>> roleRelationMap = jdbcTemplate.queryForList(
-				getRoleSql, new Integer[] { userId });
-		List<ComplatRolerelation> roleRelationList = new ArrayList<ComplatRolerelation>();
+		String getRoleSql = "select t.roleid from jis_roleobject t where objectid = ? and type='0'";
+		List<Map<String, Object>> roleRelationMap = jdbcTemplate.queryForList(getRoleSql, new Integer[] { userId });
+		if(roleRelationMap ==null || roleRelationMap.size()==0){
+			getRoleSql = "select t.roleid from jis_roleobject t where objectid = ? and type='2'";
+			roleRelationMap = jdbcTemplate.queryForList(getRoleSql, new Integer[] { groupId });
+		}
+		List<JisRoleobject> roleRelationList = new ArrayList<JisRoleobject>();
 		for (Map<String, Object> map : roleRelationMap) {
-			ComplatRolerelation roleRelation = new ComplatRolerelation();
+			JisRoleobject roleRelation = new JisRoleobject();
 			String roleId = map.get("ROLEID").toString();
 			if (StringHelper.isNotBlack(roleId)) {
-				roleRelation.setRoleId(Integer.parseInt(roleId));
+				roleRelation.setRoleid(Integer.parseInt(roleId));
 				roleRelationList.add(roleRelation);
 			}
 		}
@@ -334,7 +333,6 @@ public class ComplatRoleServiceImpl implements ComplatRoleService {
 			}
 			user = user.substring(0, user.length()-2);
 			user+=")";
-			System.out.println(user);
 			String sql="delete from jis_roleobject where roleid="+roleId +" and " +
 					" objectid in "+user;
 			jdbcTemplate.execute(sql);
@@ -346,7 +344,6 @@ public class ComplatRoleServiceImpl implements ComplatRoleService {
 			}
 			user = user.substring(0, user.length()-2);
 			user+=")";
-			System.out.println(user);
 			String sql="delete from jis_roleobject where roleid="+roleId +" and " +
 					" objectid in "+user;
 			jdbcTemplate.execute(sql);

@@ -24,7 +24,16 @@
 		<script>
 	$(document).ready(function() {
 		$('#calltest').removeClass();
+		var warnPwdChg = ${warnChgPwd};
+		if(warnPwdChg!='' && warnPwdChg!=null && warnPwdChg==1){
+			$.dialog.alert("您的密码存在安全风险，请尽快修改！");
+		}
+		
 	});
+	function singleLogin(appid){
+		window.location.href = "${ctx}/RedirectSingleLogin?appid="+appid;
+		window.location.back;
+	}
 </script>
 		<style type="text/css">
 .logo-font {
@@ -60,12 +69,12 @@
 				<div class="header_userinfo" <c:if test="${topmenueValue eq '1' and nodeType != '1'}"> style="width: 575px;" </c:if>>
 					<ul class="header_nav">
 
-						<li class="home" onclick="toBack();">
+						<li class="home" onclick="toBack();" style="${managerIcon}">
 							<p>
 								后台管理
 							</p>
 						</li>
-						<li class="speaker modify-msgs" onclick="javascript:window.location.href='${ctx}/complat/userSetUpEdit?userMenu=2'">
+						<li class="speaker modify-msgs" onclick="javascript:window.location.href='${ctx}/complat/userSetUpEdit?userMenu=2&isFront=1'">
 							<p>
 								账户设置
 							</p>
@@ -110,9 +119,9 @@
 										<li>
 											<input type="hidden" name="iid" value="${app.iid }"/>
 											<div style='width: 450px; height: 110px; padding-left: 30px;'>
-												<img style='cursor: pointer; float: left;' id="img1" name="img1" src='${ctx}${app.icon}' onclick='' title='${app.name}' width='92' height='92' />
+												<img style='cursor: pointer; float: left;' id="img1" name="img1" src='${ctx}${app.icon}' onclick='singleLogin(${app.iid})' title='${app.name}' width='92' height='92' />
 												<ul>
-													<h4 title='${app.name }' style='cursor: pointer' onclick=''>
+													<h4 title='${app.name }' style='cursor: pointer' onclick='singleLogin(${app.iid})'>
 														${app.name }
 													</h4>
 													<p style='padding-right: 20px' title=''></p>
@@ -130,9 +139,11 @@
 				</table>
 				<div style="height:20px"></div>
 				<div style="height: 50px;">
+					<c:if test="${not empty pwdMonth }">
 					<div style="text-align: center">
-						注：请至少在三个月内进行一次密码修改！
+						注：请至少在${pwdMonth }个月内进行一次密码修改！
 					</div>
+					</c:if>
 
 
 				</div>
@@ -156,7 +167,7 @@
 			</div>
 			<div class="bottom">
 				<div class="foot" style="height:36px">
-					<span class="copyright">甘肃省人民政府办公厅版权所有</span>
+					<span class="copyright">${rightMsg }</span>
 					<span class="instruction">建议使用1024*768，IE8浏览器以上为最佳浏览模式</span>
 				</div>
 			</div>

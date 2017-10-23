@@ -1,7 +1,9 @@
 package com.gsww.uids.service;
 
+import java.util.List;
 import java.util.Map;
 
+import com.gsww.uids.entity.ComplatUser;
 import com.gsww.uids.entity.JisUserdetail;
 
 /**
@@ -29,4 +31,9 @@ public interface JisUserdetailService {
     //动态delete UserField
     public void delUserField(String fieldName) throws Exception;
 
+    
+
+    public JisUserdetail findByCardid(String cardid);
+	
+    
 }

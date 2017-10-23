@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
+import com.gsww.uids.entity.ComplatUser;
 import com.gsww.uids.entity.JisUserdetail;
 
 /**
@@ -25,4 +26,7 @@ public interface JisUserdetailDao extends  PagingAndSortingRepository<JisUserdet
 	@Modifying
 	@Query("update JisUserdetail t set t.cardid = ?2 where t.iid = ?1")
 	void update(Integer iid,String cardId);
+	
+	
+	JisUserdetail findByCardid(String cardid);
 }

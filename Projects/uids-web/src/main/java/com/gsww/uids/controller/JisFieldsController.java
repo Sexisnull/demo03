@@ -87,10 +87,6 @@ public class JisFieldsController extends BaseController {
 			Page<JisFields> pageInfo = jisFieldsService.getJisFieldsPage(spec, pageRequest);
 			model.addAttribute("pageInfo", pageInfo);
 			
-			//设置项
-			List<JisFields> jisFieldsList = jisFieldsService.findAllJisFields();
-			model.addAttribute("jisFieldsList", jisFieldsList);
-			
 			// 将搜索条件编码成字符串，用于排序，分页的URL
 			model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
 			model.addAttribute("sParams", searchParams);
@@ -98,7 +94,6 @@ public class JisFieldsController extends BaseController {
 		} catch (Exception ex) {
 			logger.error("列表打开失败：" + ex.getMessage());
 			returnMsg("error", "列表打开失败", (HttpServletRequest) request);
-			//return "redirect:/jis/fieldsList";
 		}
 		return "system/jis/fields_list";
 	}
@@ -151,8 +146,8 @@ public class JisFieldsController extends BaseController {
 					jisFieldsService.save(jisFields);
 					jisUserdetailService.addUserField(jisFields.getFieldname());
 					returnMsg("success", "保存成功", request);
-					String desc = sysUserSession.getUserName() + "新增用户扩展属性:" + jisFields.getShowname(); 
-					jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,6,1);
+					String desc = sysUserSession.getLoginAccount() + "新增 【" + jisFields.getShowname() + "】 用户扩展属性"; 
+					jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(),desc,6,1);
 				} else { // 编辑
 					int type = jisFields.getType();
 					if (type == 1) {//字符串
@@ -175,8 +170,8 @@ public class JisFieldsController extends BaseController {
 					}
 					jisFieldsService.save(jisFields);
 					returnMsg("success", "编辑成功", request);
-					String desc = sysUserSession.getUserName() + "修改了用户扩展属性:" + jisFields.getShowname(); 
-					jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,6,2);
+					String desc = sysUserSession.getLoginAccount() + "修改 【" + jisFields.getShowname() + "】 用户扩展属性"; 
+					jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(),desc,6,2);
 				}
 			}
 		} catch (Exception e) {
@@ -207,8 +202,8 @@ public class JisFieldsController extends BaseController {
 				Integer iid = Integer.parseInt(para[i].trim());
 				jisFields = jisFieldsService.findByKey(iid);
 				if (jisFields != null) {
-					String desc = sysUserSession.getUserName() + "删除了用户扩展属性:" + jisFields.getShowname(); 
-					jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,6,3);
+					String desc = sysUserSession.getLoginAccount() + "删除 【" + jisFields.getShowname() + "】 用户扩展属性"; 
+					jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(),desc,6,3);
 					jisFieldsService.delete(jisFields);
 					jisUserdetailService.delUserField(jisFields.getFieldname());
 					returnMsg("success", "删除成功", request);
@@ -234,6 +229,16 @@ public class JisFieldsController extends BaseController {
 			throws Exception {
 		try {
 			SysUserSession sysUserSession =  (SysUserSession) ((HttpServletRequest) request).getSession().getAttribute("sysUserSession");
+			Integer iswrite = 0;//0：非必填；1：必填
+			List<JisFields> jList = jisFieldsService.findAllJisFields();
+			for (JisFields jisFields : jList) {
+				jisFields.setIswrite(iswrite);
+				jisFieldsService.save(jisFields);
+				if (fieldiid == null) {
+					String desc = sysUserSession.getLoginAccount() + "设置 【" + jisFields.getShowname() + "】 用户扩展属性非必填项"; 
+					jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(),desc,6,8);
+				}
+			}
 			if(fieldiid != null) {
 				String[] para = fieldiid.split(",");
 				for (int i = 0; i < para.length; i++) {
@@ -242,18 +247,9 @@ public class JisFieldsController extends BaseController {
 					jisFields.setIswrite(1);
 					jisFieldsService.save(jisFields);
 					returnMsg("success", "设置成功", request);
-					String desc = sysUserSession.getUserName() + "设置了用户扩展属性:" + jisFields.getShowname() + "必填项"; 
-					jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,6,8);
+					String desc = sysUserSession.getLoginAccount() + "设置 【" + jisFields.getShowname() + "】 用户扩展属性必填项"; 
+					jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(),desc,6,8);
 				}
-			} else {
-				List<JisFields> jisFieldsList = jisFieldsService.findAllJisFields();
-				for (JisFields jisFields : jisFieldsList) {
-					jisFields.setIswrite(0);
-					jisFieldsService.save(jisFields);
-				}
-				String desc = sysUserSession.getUserName() + "设置了所有用户扩展属性必填项"; 
-				jisLogService.save(sysUserSession.getUserName(),sysUserSession.getUserIp(),desc,6,8);
-				returnMsg("success", "设置成功", request);
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
@@ -263,7 +259,7 @@ public class JisFieldsController extends BaseController {
 	}
 	
 	/**
-     * @discription    重命名校验
+     * @discription    字段名称重命名校验
      * @param fieldname
      * @param request
      * @param response
@@ -276,6 +272,54 @@ public class JisFieldsController extends BaseController {
 			String oldFieldname = StringUtils.trim((String) request.getParameter("oldFieldname"));
 			if(!fieldnameInput.equals(oldFieldname)){
 				List<JisFields> jisFields = jisFieldsService.findByFieldname(fieldname);
+				if(!jisFields.isEmpty()){					
+					response.getWriter().write("0");								
+				}else{
+					response.getWriter().write("1");
+				}
+			}else{
+				response.getWriter().write("1");
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+	}
+	
+	/**
+     * @discription    用户扩展属性设置弹框
+     * @param model
+     * @param request
+     * @param response
+     * @return
+	 */
+	@SuppressWarnings("finally")
+	@RequestMapping(value = { "/goFieldsSetting" }, method = {RequestMethod.GET })
+	public String goFieldsSetting(Model model, HttpServletRequest request, HttpServletResponse response) {
+		try {
+			// 设置项
+			List<JisFields> jisFieldsList = jisFieldsService.findAllJisFields();
+			model.addAttribute("jisFieldsList", jisFieldsList);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		} finally {
+			return "system/jis/fields_setting";
+		}
+	}
+	
+	/**
+     * @discription    显示名称重名校验
+     * @param fieldname
+     * @param request
+     * @param response
+     * @throws Exception
+	 */
+	@RequestMapping(value = "/checkShowname", method = RequestMethod.GET)
+	public void checkShowname(String showname,HttpServletRequest request, HttpServletResponse response) throws Exception {
+		try {
+			String shownameInput = StringUtils.trim((String) request.getParameter("showname"));
+			String oldShowname = StringUtils.trim((String) request.getParameter("oldShowname"));
+			if(!shownameInput.equals(oldShowname)){
+				List<JisFields> jisFields = jisFieldsService.findByShowname(showname);
 				if(!jisFields.isEmpty()){					
 					response.getWriter().write("0");								
 				}else{

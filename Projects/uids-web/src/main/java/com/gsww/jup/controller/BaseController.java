@@ -1,6 +1,7 @@
 package com.gsww.jup.controller;
 
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -130,6 +131,8 @@ public class BaseController {
 				criterion = Restrictions.gte(propertyName, propertyValue, true);
 			} else if (Operator.NE.equals(operator)) {
 				criterion = Restrictions.ne(propertyName, propertyValue, true);
+			}else if (Operator.IN.equals(operator)) {
+				criterion = Restrictions.in(propertyName, (Collection) propertyValue, true);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

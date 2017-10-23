@@ -49,7 +49,7 @@
 	<div class="position">
 		<ol class="breadcrumb">
 			<li>
-				<a href="${ctx}/index" target="_top">首页</a>
+				<a href="${ctx}/backIndex" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
 			<li>
@@ -68,11 +68,11 @@
 				<tr>
 					<th style="padding-left: 300px">数据名称：</th>
 						<td width="20%">
-							<input type="text"  style="width: 170px;" placeholder="数据名称" value="${sParams['LIKE_resName']}" id="resNameSearch" name="search_LIKE_resName" />
+							<input type="text" maxlength="30" style="width: 170px;" placeholder="数据名称" value="${sParams['LIKE_resName']}" id="resNameSearch" name="search_LIKE_resName" />
 						</td>
 					<th>数据标识：</th>
 						 <td>
-							<input type="text" style="width: 170px;" placeholder="数据标识" value="${sParams['LIKE_remark']}" id="remarkSearch" name="search_LIKE_remark" />
+							<input type="text" maxlength="30" style="width: 170px;" placeholder="数据标识" value="${sParams['LIKE_remark']}" id="remarkSearch" name="search_LIKE_remark" />
 						</td> 
 					<td class="btn-group"> <a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a></td>
 				</tr>
@@ -118,7 +118,7 @@
         <table cellpadding="0" cellspacing="0" border="0" width="100%" class="list-table">
         	<thead>
             	<tr>
-                	<th width="10px">   
+                	<th width="10px">
                 		<div class="label">
 									<i class="check_btn check_all"></i>
 									<input type="checkbox" class="check_btn" style="display: none;" />
@@ -127,12 +127,12 @@
                     <th width="10%" style="text-align: center;">
                   ID        
                     </th>
-                    <th width="15%" style="text-align: center;">数据名称</th>
-                    <th width="15%" style="text-align: center;">数据标识</th>
-                    <th width="15%" style="text-align: center;">地址</th>
+                    <th width="20%" style="text-align: center;">数据名称</th>
+                    <th width="20%" style="text-align: center;">数据标识</th>
+                    <th width="25%" style="text-align: center;">地址</th>
                     <th width="15%" class="alignL" style="text-align: center;">调用方式</th>
                     <th width="10%" class="alignL" style="text-align: center;">验证</th>
-                    <th width="30%" style="text-align: center;">操作</th>
+                    <th width="10%" style="text-align: center;">操作</th>
                 </tr>
             </thead> 
             <tbody>
@@ -146,14 +146,29 @@
 	                    <td style="text-align: center;">
 	                    	<div title="${datacall.iid}" class="word_break">${datacall.iid}</div>
 	                    </td>
-	                	<td style="text-align: center;">
-	                    	<div title="${datacall.resName}" class="word_break">${datacall.resName}</div>
+	                	<td style="text-align:center;" title="${datacall.resName}" class="word_break">
+	                		<c:if test="${fn:length(datacall.resName)>=20}">
+						    	${fn:substring(datacall.resName,0,20)}...
+						    </c:if>
+					    	<c:if test="${fn:length(datacall.resName)<20}">
+						    	${datacall.resName}
+						    </c:if>
 	                    </td>
-	                	<td style="text-align: center;">
-	                    	<div title="${datacall.remark}" class="word_break">${datacall.remark}</div>
+	                	<td style="text-align:center;" title="${datacall.remark}" class="word_break">
+	                		<c:if test="${fn:length(datacall.remark)>=20}">
+						    	${fn:substring(datacall.remark,0,20)}...
+						    </c:if>
+					    	<c:if test="${fn:length(datacall.remark)<20}">
+						    	${datacall.remark}
+						    </c:if>
 	                    </td>
-	                    <td style="text-align: center;">
-	                    	<div title="${datacall.resUrl}" class="word_break">${datacall.resUrl}</div>
+	                    <td style="text-align:center;" title="${datacall.resUrl}" class="word_break">
+	                    	<c:if test="${fn:length(datacall.resUrl)>=20}">
+						    	${fn:substring(datacall.resUrl,0,20)}...
+						    </c:if>
+					    	<c:if test="${fn:length(datacall.resUrl)<20}">
+						    	${datacall.resUrl}
+						    </c:if>
 	                    </td>
 	                    <td style="text-align: center;">
 	                    	<c:if test="${datacall.callingType==1}">IFRAME调用</c:if>

@@ -1,7 +1,6 @@
 package com.gsww.uids.constant;
 
 import com.gsww.jup.SpringContextHolder;
-import com.hanweb.common.util.SpringUtil;
 
 public class JisSettings
 {
@@ -15,9 +14,9 @@ public class JisSettings
 
   private String registerType = "";
 
-  private String isFindPwd = "";
+  private String isFindPpd = "";
 
-  private String pwdLevel = "1";
+  private String ppdLevel = "1";
 
   private String isLoginfail = "";
 
@@ -75,7 +74,7 @@ public class JisSettings
 
   private String appAcc = "";
 
-  private String appPwd = "";
+  private String appPpd = "";
 
   private String importantLevel = "";
 
@@ -89,11 +88,11 @@ public class JisSettings
 
   private String validityPeriod = "";
 
-  private String dynamicPwdMessageContent = "";
+  private String dynamicPpdMessageContent = "";
 
-  private String businessIdForGettingDynamicPwd = "";
+  private String businessIdForGettingDynamicPpd = "";
 
-  private String businessNameForGettingDynamicPwd = "";
+  private String businessNameForGettingDynamicPpd = "";
 
   private String businessIdForRegestingPer = "";
 
@@ -101,11 +100,11 @@ public class JisSettings
 
   private String registPerMessageContent = "您注册所需要的验证码为cellphoneShortMessageRandomCodeMadeByJava[甘肃政务服务网]";
 
-  private String businessIdForRecovingPwd = "";
+  private String businessIdForRecovingPpd = "";
 
-  private String businessNameForRecovingPwd = "";
+  private String businessNameForRecovingPpd = "";
 
-  private String recovingPwdContent = "";
+  private String recovingPpdContent = "";
 
   private String businessIdForRegestingCor = "";
 
@@ -176,28 +175,28 @@ public class JisSettings
     this.registCorMessageContent = registCorMessageContent;
   }
 
-  public String getBusinessIdForRecovingPwd() {
-    return this.businessIdForRecovingPwd;
+  public String getBusinessIdForRecovingPpd() {
+    return this.businessIdForRecovingPpd;
   }
 
-  public void setBusinessIdForRecovingPwd(String businessIdForRecovingPwd) {
-    this.businessIdForRecovingPwd = businessIdForRecovingPwd;
+  public void setBusinessIdForRecovingPpd(String businessIdForRecovingPpd) {
+    this.businessIdForRecovingPpd = businessIdForRecovingPpd;
   }
 
-  public String getBusinessNameForRecovingPwd() {
-    return this.businessNameForRecovingPwd;
+  public String getBusinessNameForRecovingPpd() {
+    return this.businessNameForRecovingPpd;
   }
 
-  public void setBusinessNameForRecovingPwd(String businessNameForRecovingPwd) {
-    this.businessNameForRecovingPwd = businessNameForRecovingPwd;
+  public void setBusinessNameForRecovingPpd(String businessNameForRecovingPpd) {
+    this.businessNameForRecovingPpd = businessNameForRecovingPpd;
   }
 
-  public String getRecovingPwdContent() {
-    return this.recovingPwdContent;
+  public String getRecovingPpdContent() {
+    return this.recovingPpdContent;
   }
 
-  public void setRecovingPwdContent(String recovingPwdContent) {
-    this.recovingPwdContent = recovingPwdContent;
+  public void setRecovingPpdContent(String recovingPpdContent) {
+    this.recovingPpdContent = recovingPpdContent;
   }
 
   public String getRegistPerMessageContent() {
@@ -224,22 +223,22 @@ public class JisSettings
     this.businessNameForRegestingPer = businessNameForRegestingPer;
   }
 
-  public String getBusinessNameForGettingDynamicPwd() {
-    return this.businessNameForGettingDynamicPwd;
+  public String getBusinessNameForGettingDynamicPpd() {
+    return this.businessNameForGettingDynamicPpd;
   }
 
-  public void setBusinessNameForGettingDynamicPwd(String businessNameForGettingDynamicPwd)
+  public void setBusinessNameForGettingDynamicPpd(String businessNameForGettingDynamicPpd)
   {
-    this.businessNameForGettingDynamicPwd = businessNameForGettingDynamicPwd;
+    this.businessNameForGettingDynamicPpd = businessNameForGettingDynamicPpd;
   }
 
-  public String getBusinessIdForGettingDynamicPwd() {
-    return this.businessIdForGettingDynamicPwd;
+  public String getBusinessIdForGettingDynamicPpd() {
+    return this.businessIdForGettingDynamicPpd;
   }
 
-  public void setBusinessIdForGettingDynamicPwd(String businessIdForGettingDynamicPwd)
+  public void setBusinessIdForGettingDynamicPpd(String businessIdForGettingDynamicPpd)
   {
-    this.businessIdForGettingDynamicPwd = businessIdForGettingDynamicPwd;
+    this.businessIdForGettingDynamicPpd = businessIdForGettingDynamicPpd;
   }
 
   public String getAppId() {
@@ -266,12 +265,12 @@ public class JisSettings
     this.appAcc = appAcc;
   }
 
-  public String getAppPwd() {
-    return this.appPwd;
+  public String getAppPpd() {
+    return this.appPpd;
   }
 
-  public void setAppPwd(String appPwd) {
-    this.appPwd = appPwd;
+  public void setAppPpd(String appPpd) {
+    this.appPpd = appPpd;
   }
 
   public String getImportantLevel() {
@@ -322,12 +321,12 @@ public class JisSettings
     this.validityPeriod = validityPeriod;
   }
 
-  public String getDynamicPwdMessageContent() {
-    return this.dynamicPwdMessageContent;
+  public String getDynamicPpdMessageContent() {
+    return this.dynamicPpdMessageContent;
   }
 
-  public void setDynamicPwdMessageContent(String dynamicPwdMessageContent) {
-    this.dynamicPwdMessageContent = dynamicPwdMessageContent;
+  public void setDynamicPpdMessageContent(String dynamicPpdMessageContent) {
+    this.dynamicPpdMessageContent = dynamicPpdMessageContent;
   }
 
   public static JisSettings getSettings()
@@ -376,20 +375,20 @@ public class JisSettings
     this.registerType = registerType;
   }
 
-  public String getIsFindPwd() {
-    return this.isFindPwd;
+  public String getIsFindPpd() {
+    return this.isFindPpd;
   }
 
-  public void setIsFindPwd(String isFindPwd) {
-    this.isFindPwd = isFindPwd;
+  public void setIsFindPpd(String isFindPpd) {
+    this.isFindPpd = isFindPpd;
   }
 
-  public String getPwdLevel() {
-    return this.pwdLevel;
+  public String getPpdLevel() {
+    return this.ppdLevel;
   }
 
-  public void setPwdLevel(String pwdLevel) {
-    this.pwdLevel = pwdLevel;
+  public void setPpdLevel(String ppdLevel) {
+    this.ppdLevel = ppdLevel;
   }
 
   public String getIsLoginfail() {

@@ -20,7 +20,7 @@ public class JisFieldsServiceTest {
 	private JisFieldsService jisFieldsService;
 	@Test
 	public void findByKey(){
-		int iid=20;
+		int iid=79;
 		JisFields jis=jisFieldsService.findByKey(iid);
 		System.out.println(jis.getFieldname());
 		assertTrue(true);

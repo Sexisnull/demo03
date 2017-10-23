@@ -5,7 +5,9 @@
 package com.gsww.jup.controller.sys;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URLDecoder;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -35,12 +37,17 @@ import com.gsww.jup.service.sys.SysMenuService;
 import com.gsww.jup.util.JSONUtil;
 import com.gsww.jup.util.RSAUtil;
 import com.gsww.jup.util.StringHelper;
+import com.gsww.jup.util.TimeHelper;
+import com.gsww.uids.constant.JisSettings;
+import com.gsww.uids.entity.ComplatBanlist;
 import com.gsww.uids.entity.ComplatGroup;
 import com.gsww.uids.entity.ComplatUser;
 import com.gsww.uids.entity.JisLog;
+import com.gsww.uids.service.ComplatBanListService;
 import com.gsww.uids.service.ComplatGroupService;
 import com.gsww.uids.service.ComplatUserService;
 import com.gsww.uids.service.JisLogService;
+import com.hanweb.common.util.DateUtil;
 
 /**
  * <p>
@@ -70,14 +77,16 @@ public class SysLoginController extends BaseController {
 	private ComplatUserService complatUserService;
 	@Autowired
 	private SysLoginService sysLoginService;
-	// @Autowired
-	// private SysLogService sysLogService;
+	@Autowired
+	private ComplatBanListService complatBanListService;
 	@Autowired
 	private SysMenuService sysMenuService;
 	@Autowired
 	private ComplatGroupService complatGroupService;
 	@Autowired
 	private JisLogService jisLogService;
+	@Autowired
+	private JisSettings jisSettings;
 
 	private static Logger logger = LoggerFactory
 			.getLogger(SysLoginController.class);
@@ -99,10 +108,20 @@ public class SysLoginController extends BaseController {
 		String inputKaptcha = (String) request.getParameter("kaptcha");
 		String sessionKaptcha = (String) request.getSession().getAttribute(
 				Constants.KAPTCHA_SESSION_KEY);
+		String kaptchaTime = (String)request.getSession().getAttribute("kapcheTime");
 		Map<String, Object> resMap = new HashMap<String, Object>();
 		String loginIp = getIpAddr(request);
 		// 为了自动化测试先屏蔽掉验证码，请大家先别修改回去，手下留情。谢谢。
 		// if (true) {
+		String passTime = TimeHelper.addMinute(kaptchaTime, 1);
+		Date passDate = TimeHelper.parseDateTime(passTime);
+		String isLoginFail = jisSettings.getIsLoginfail();
+		if(new Date().getTime()>passDate.getTime()){
+			resMap.put("ret", "1");
+			resMap.put("msg", "验证码过期！");
+			response.getWriter().write(JSONObject.toJSONString(resMap));
+			return;
+		}
 		if (sessionKaptcha.equals(inputKaptcha)) {
 			// 验证码正确，检查用户名和密码
 			try {
@@ -118,15 +137,33 @@ public class SysLoginController extends BaseController {
 						.getPrivate(), pwd_result);
 				StringBuffer name = new StringBuffer();
 				StringBuffer pwd = new StringBuffer();
+				
 				name.append(new String(de1_result));
 				pwd.append(new String(de2_result));
 				userName = name.reverse().toString();
 				passWord = pwd.reverse().toString();
 				userName = URLDecoder.decode(userName,"utf-8"); 
 				passWord = URLDecoder.decode(passWord,"utf-8"); 
+				ComplatBanlist banList = new ComplatBanlist();
+				if("1".equals(isLoginFail)){
+					banList = complatBanListService.checkLoginTimes(userName, loginIp, 0,group);
+					if(banList == null ){
+						resMap.put("ret", "2");
+						resMap.put("msg", "用户名或密码错误！");
+						response.getWriter().write(JSONObject.toJSONString(resMap));
+						return;
+					}
+					if (!banList.isCanLogin()) {
+						resMap.put("ret", "2");
+						resMap.put("msg", "登录次数过多，请"+jisSettings.getBanTimes()+"分钟后重试");
+						response.getWriter().write(JSONObject.toJSONString(resMap));
+						return;
+					}
+				}
 				SysUserSession sysUserSession = sysLoginService.login(userName,
 						passWord, group, loginIp);
 				if (sysUserSession != null) {
+					ComplatUser user = complatUserService.findByKey(Integer.parseInt(sysUserSession.getAccountId()));
 					if (sysUserSession.getUserState().equals("1")) {
 						request.getSession().setAttribute("sysUserSession",
 								sysUserSession);
@@ -134,12 +171,31 @@ public class SysLoginController extends BaseController {
 						resMap.put("msg", "登录成功！");
 						response.getWriter().write(
 								JSONObject.toJSONString(resMap));
+						
+						Date lastChangeTime = null;
+				        if (user.getModifyPassTime() == null) {
+				          Date modifyPassTime = new Date();
+				          lastChangeTime = modifyPassTime;
+				        }
+				        else {
+				          lastChangeTime = user.getModifyPassTime();
+				        }
+				        
+				        int differenceDays = (int)DateUtil.dayDiff(lastChangeTime, new Date());
+				        int differenceMonth = differenceDays / 30;
+				        int checktime =  Integer.parseInt(jisSettings.getModifyPassTime());
+				        if ((checktime != 0) && (differenceMonth >= checktime)) {
+				        	request.getSession().setAttribute("hasModifyPwd",1);
+				        }
+				        
 						try {
 							// 登录日志
-							jisLogService.save(sysUserSession.getUserName(),
+							jisLogService.save(sysUserSession.getLoginAccount(),
 									sysUserSession.getUserIp(), userName
 											+ "系统登录成功", 8, 9);
-
+							if ("1".equals(isLoginFail) && (banList != null) && (banList.getIid() != null)) {
+						          this.complatBanListService.removeById(banList.getIid());
+						    }
 						} catch (Exception e) {
 							logger.error(e.getMessage(), e);
 						}
@@ -150,7 +206,7 @@ public class SysLoginController extends BaseController {
 								JSONObject.toJSONString(resMap));
 						try {
 							JisLog log = new JisLog();
-							log.setUserId(sysUserSession.getAccountId());
+							log.setUserId(userName);
 							log.setIp(sysUserSession.getUserIp());
 							log.setOperateTime(new Date());
 							log.setSpec(userName + "系统登录失败[停用]");
@@ -163,8 +219,6 @@ public class SysLoginController extends BaseController {
 					}
 				} else {
 					resMap.put("ret", "2");
-					resMap.put("msg", "用户名或密码错误！");
-					response.getWriter().write(JSONObject.toJSONString(resMap));
 					try {
 						JisLog log = new JisLog();
 						log.setUserId(userName);
@@ -174,9 +228,26 @@ public class SysLoginController extends BaseController {
 						log.setModuleName(8);
 						log.setOperateType(9);
 						jisLogService.save(log);
+						if("1".equals(isLoginFail) && banList!=null){
+							int last = jisSettings.getLoginError() - 
+					          banList.getLogintimes().intValue() - 1;
+							if(last>0){
+								resMap.put("msg", "用户名或密码错误！您还可以尝试登录"+last+"次！");
+							}else{
+								resMap.put("msg", "用户名或密码错误！登录次数过多，请"+jisSettings.getBanTimes()+"分钟后重试");
+							}
+							banList.setLogintimes(Integer.valueOf(banList.getLogintimes().intValue() + 1));
+							banList.setLogindate(new Timestamp(new Date().getTime()));
+							this.complatBanListService.save(banList);
+							
+						}else{
+							resMap.put("msg", "用户名或密码错误！");
+						}
+						
 					} catch (Exception e) {
 						logger.error(e.getMessage(), e);
 					}
+					response.getWriter().write(JSONObject.toJSONString(resMap));
 				}
 			} catch (Exception e) {
 				logger.error(e.getMessage(), e);
@@ -244,13 +315,17 @@ public class SysLoginController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/login/getSysMain")
-	public String getSysIndexMain(ServletRequest request) {
+	public String getSysIndexMain(HttpServletRequest request) {
 		try {
-
+			SysUserSession sysUserSession = (SysUserSession) request.getSession().getAttribute("sysUserSession");
+			String roleIds = sysUserSession.getRoleIds();
+			if(roleIds==null ||roleIds.trim()==""){
+				return "/main/noRightAccess";
+			}
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
 		}
-		return "redirect:/complat/complatList";
+		return "redirect:/complat/groupOrgTree";
 	}
 
 	/**
@@ -290,7 +365,9 @@ public class SysLoginController extends BaseController {
 			String roleIds = sysUserSession.getRoleIds();
 			response.setCharacterEncoding("UTF-8");
 			response.setHeader("Content-type", "text/html;charset=UTF-8");
-			response.getWriter().write(sysMenuService.getSysMenuJson(roleIds));
+			PrintWriter pw = response.getWriter();
+			String json = sysMenuService.getSysMenuJson(roleIds);
+			pw.write(json!=null?json:"");
 			response.flushBuffer();
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);

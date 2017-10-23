@@ -8,4 +8,6 @@ import com.gsww.uids.entity.JisSysviewDetail;
 public interface JisSysviewDetailDao extends PagingAndSortingRepository<JisSysviewDetail, String>,JpaSpecificationExecutor<JisSysviewDetail>{
 
 	public JisSysviewDetail findByIid(Integer iid);
+
+	public JisSysviewDetail findByTranscationId(String transcationId);
 }

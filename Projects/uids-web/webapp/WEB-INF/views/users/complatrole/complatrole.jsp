@@ -58,10 +58,19 @@
 	/**搜索表单校验**/
 	function checkSubmitForm() {
 		var nameSearch = $("#nameSearch").val();
-		if (nameSearch == '' || isChinaOrNumbOrLett(nameSearch)) {
+		if (nameSearch == '' || isNumbOrLett1(nameSearch)) {
 			form1.submit();
 		} else {
-			$.validator.errorShow($("#nameSearch"), '只能包括中英文、数字、@和下划线');
+			$.validator.errorShow($("#nameSearch"), '只能包括中英文、数字和下划线，且不能超过50个字符');
+		}
+	}
+	function isNumbOrLett1( s ){
+		var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]{1,50}$/;
+		var re = new RegExp(regu);
+		if (re.test(s)) {
+			return true;
+		}else{
+			return false;
 		}
 	}
 	function deleteRole() {
@@ -70,7 +79,6 @@
 				$.dialog.confirm('您确认要删除吗？',function(){
 					var ids = "";
 					$('.list-table tbody .check_btn').each(function(i, o) {
-						console.log($(o));
 						if($(o).attr('checked')) {
 							ids += $(o).val() + ",";
 						}
@@ -79,7 +87,7 @@
 				});
 				
 			}else{
-				$.dialog.confirm('请您至少选择一条数据',function(){
+				$.dialog.alert('请您至少选择一条数据',function(){
 					return null;
 				});
 			}
@@ -133,7 +141,7 @@
 										角色名称：
 									</th>
 									<td width="20%">
-										<input type="text" placeholder="角色名称" value="${sParams['LIKE_name']}" id="nameSearch" name="search_LIKE_name" />
+										 <input type="text" placeholder="角色名称" value="${sParams['LIKE_name']}" id="nameSearch" name="search_LIKE_name" />
 									</td>
 									<td class="btn-group">
 										<a class="btnSearch" onclick="javascript:checkSubmitForm();">搜索</a>
@@ -234,10 +242,10 @@
 		</div>
 	
 <div id="tabs" style="display:none;width: 68%;margin: auto;position: absolute;left: 165px;top: 50.5px">
- 	<ul style="text-align: center;">
-	    <li style="text-align: center;width: 32.7%;"><a id="yhjg" style="width: 90%;" href="">用户机构管理</a></li>
-	    <li style="text-align: center;width: 32.7%;"><a id="yyqx" style="width: 90%;" href="">应用权限设置</a></li>
-	    <li style="text-align: center;width: 32.7%;"><a id="xtqx" style="width: 90%;" href="" >系统资源授权</a></li>
+ 	<ul style="text-align: center;margin-left: 16px; ">
+	    <li style="text-align: center;"><a id="yhjg"  href="">用户机构管理</a></li>
+	    <li style="text-align: center;"><a id="yyqx"  href="">应用权限设置</a></li>
+	    <li style="text-align: center;"><a id="xtqx"  href="" >系统资源授权</a></li>
   	</ul>
  <!--text-align: center;  -->
 </div>

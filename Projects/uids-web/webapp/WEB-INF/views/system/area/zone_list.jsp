@@ -8,29 +8,36 @@
 <title>天翼高清管理平台</title>
 <script type="text/javascript">
 $().ready(function() {
-//表单校验
-var deptNameInput=$("#name").val();
-var deptCode=$("#regionCode").val();
- $("#editForm").validate({
-    rules: {
-	   name: {
-	    required: true,
-	    maxlength: 32,
-	    /* uniqueName : true, */
-	    stringCheck:deptNameInput
-	   }
-	  },submitHandler:function(form){  
-	  		var iid=$("#iid").val();
-            if(iid==''){
-            	$.validator.errorShow($("#name"),'添加区域请从左侧树添加，此处只用于编辑');
-            	return false;   
-            }else{
-				 form.submit();
+	//表单校验
+	$("#editForm").validate({
+		rules : {
+			deptCode1: {
+				isRegionCode1 : true
 			}
-        } 
-    });
-    // Ajax重命名校验
+		},
+		submitHandler : function(form) {
+			var iid = $("#iid").val();
+			var regionCode1 = $("#regionCode1").val();
+			if (iid == '') {
+				$.dialog.alert('添加区域请从左侧树添加，此处只用于编辑');
+				return false;
+			} else {
+				if (regionCode1 == '') {
+					$.validator.errorShow($("#regionCode1"), '区域编码不能为空');
+					return false;
+				}
+				form.submit();
+			}
+		}
+	});
+	// Ajax重命名校验
 	$.uniqueValidate('uniqueName', '${ctx}/complat/checkZoneName', ['regionName','oldRoleName','regionCode'], '对不起，这个区域名称重复了');
+
+	//区域编码校验
+	jQuery.validator.addMethod("isRegionCode1", function(value, element) { 
+           var corporName = /^[0-9]*$/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "区域编码只能由数字组成");
 });
 </script>
 
@@ -87,6 +94,7 @@ var deptCode=$("#regionCode").val();
 </script>
 <link rel="stylesheet" href="${ctx}/res/jslib/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css"/>
 <script type="text/javascript" src="${ctx}/res/jslib/ztree/js/jquery.ztree.all-3.5.min.js"></script>
+<script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgdialog.js"></script>
 <script type="text/javascript" src="${ctx}/res/js/region/zone.js"></script>
 <style>
 #tablelist table { text-align: left; width: 100%; margin-bottom: 0; background: #FFF; border: 1px solid #DDD; /*margin-top: 60px;*/ margin-right: auto; margin-left: auto; /*_width: 98%;*/ }

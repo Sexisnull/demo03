@@ -8,7 +8,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.gsww.uids.entity.JisFields;
-import com.gsww.uids.entity.JisUserdetail;
 
 /**
  * Title: JisFieldsService.java Description: 用户扩展属性Service
@@ -84,4 +83,18 @@ public interface JisFieldsService {
      * @return
 	 */
 	List<JisFields> findByFieldname(String fieldname);
+	
+	
+	/**
+	 * 查询依据Iid查询fieldname字段的所有值
+	 */
+	List<Map<String,Object>> findFieldName();
+	
+	/**
+     * @discription   根据showname查找用户扩展属性实体集合 
+     * @param fieldname
+     * @return
+	 */
+	List<JisFields> findByShowname(String showname);
+	
 }

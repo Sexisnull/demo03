@@ -57,11 +57,6 @@ public class ComplatGroupServiceImpl implements ComplatGroupService{
 	}
     //根据机构主键查询机构信息
 	@Override
-	public ComplatGroup findByKey(String pk) throws Exception {
-		ComplatGroup complatGroup=complatGroupDao.findByIid(Integer.valueOf(pk));
-		return complatGroup;
-	}
-	@Override
 	public ComplatGroup findByIid(Integer iid) {
 		ComplatGroup complatGroup=complatGroupDao.findByIid(iid);
 		return complatGroup;
@@ -104,28 +99,6 @@ public class ComplatGroupServiceImpl implements ComplatGroupService{
 	    }else{
 	        return false;
 	    }
-	}	
-	
-//	/**
-//	 *同步用户 1
-//	 */
-//	@Override
-//	public ComplatGroup saveUser(ComplatGroup complatGroup){				
-//		return complatGroupDao.save(complatGroup);
-//	}
-
-	/**
-	 *查找用户是否存在
-	 */
-	@Override
-	public boolean getByName(String name)
-			throws Exception {
-	List list= complatGroupDao.findByName(name);
-	if(list.size()>0){
-		return true;	
-	}else{
-		return false;	
-		}	
 	}
 	
 	@Override
@@ -180,4 +153,25 @@ public class ComplatGroupServiceImpl implements ComplatGroupService{
 			return null;
 		}
 	}
+	
+	@Override
+	public List<ComplatGroup> findByNoPid() throws Exception{
+		List<ComplatGroup> list=new ArrayList<ComplatGroup>();
+		list=complatGroupDao.findByPidIsNullOrderByCodeidDesc();
+		return list;
+	}
+
+	@Override
+	public List<ComplatGroup> findAllOrg() throws Exception {
+		List<ComplatGroup> list=new ArrayList<ComplatGroup>();
+		list=complatGroupDao.findAllOrg();
+		return list;
+	}
+
+	public List<ComplatGroup> findAllDept(String deptId) throws Exception {
+		List<ComplatGroup> list=new ArrayList<ComplatGroup>();
+		list=complatGroupDao.findAllDepId(deptId);
+		return list;
+	}
+
 }

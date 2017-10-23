@@ -24,7 +24,3 @@ function toBack(){
 function toFront(){
 	window.location.href="/uids-web/frontIndex";
 }
-
-function toCountUser(){
-	document.getElementById("main").src="/uids-web/jisLog/countUser";
-}

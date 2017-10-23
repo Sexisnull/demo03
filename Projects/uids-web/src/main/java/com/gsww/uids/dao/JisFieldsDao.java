@@ -35,4 +35,11 @@ public interface JisFieldsDao
      * @return
 	 */
 	List<JisFields> findByFieldname(String fieldname);
+	
+	/**
+     * @discription    根据showname查找用户扩展属性实体集合
+     * @param fieldname
+     * @return
+	 */
+	List<JisFields> findByShowname(String showname);
 }

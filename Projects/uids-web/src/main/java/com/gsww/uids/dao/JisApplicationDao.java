@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import com.gsww.uids.entity.ComplatGroup;
 import com.gsww.uids.entity.JisApplication;
 /**
  * 应用表dao接口
@@ -40,4 +39,17 @@ public interface JisApplicationDao extends PagingAndSortingRepository<JisApplica
 	 * 查询所有对象
 	 */
 	List<JisApplication> findAll();
+	
+	/**
+	 * 通过是否支持同步查找应用
+	 * @author Lincx
+	 */
+	List<JisApplication> findByIsSyncGroupNotNullAndLoginType(Integer loginType);
+	
+	/**
+	 * 通过网络类型查询
+	 * @param netType
+	 * @return
+	 */
+	List<JisApplication> findByNetType(Integer netType);
 }

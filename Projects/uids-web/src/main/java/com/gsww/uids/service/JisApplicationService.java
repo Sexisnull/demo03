@@ -3,9 +3,6 @@ package com.gsww.uids.service;
 import java.util.List;
 import java.util.Map;
 
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -86,6 +83,8 @@ public interface JisApplicationService {
 	 */
 	public List<JisApplication> findAll();
 	
+	public List<JisApplication> findByNetType(Integer netType);
+	
 	/**
 	 * 根据用户角色获取有权访问的子系统
 	 * @param roleIds
@@ -94,4 +93,12 @@ public interface JisApplicationService {
 	public List<Map<String, Object>> findAppByRoleIds(String roleIds);
 
 	public String findURLBylogoff(int islogoff);
+	
+	/**
+	 * 通过是否支持同步来查找应用
+	 * @param isSyncGroup
+	 * @return JisApplication
+	 * @throws Exception
+	 */
+    public List<JisApplication> findByIsSyncGroupNotNullAndLoginType(Integer loginType) throws Exception;
 }

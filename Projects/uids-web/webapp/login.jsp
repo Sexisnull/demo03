@@ -68,7 +68,7 @@ function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
 	var setting = {
 		async : {
 			enable : true,
-			url : 'login/getGroup',
+			url : '${ctx}/login/getGroup',
 			autoParam : [ "id=groupId", "isDisabled" ]
 		},
 		callback : {
@@ -156,7 +156,7 @@ function resetform() {
 										</label>
 										<div class="controls">
 											<input type="text" class="input-medium" id="authCode" name="authCode" maxlength="4" placeholder="请输入验证码">
-											<img id="code_" src="kaptcha/image" alt="点击更换验证码" onclick="chimg();" style="width: 53px; height: 25px; cursor: pointer;" />
+											<img id="code_" src="${ctx}/kaptcha/image" alt="点击更换验证码" onclick="chimg();" style="width: 53px; height: 25px; cursor: pointer;" />
 										</div>
 									</div>
 									<div class="control-group">
@@ -309,7 +309,7 @@ function resetform() {
 		}
 		 $.ajax({
          	type : "post",
-				url : "sys/mybatis/getkey",
+				url : "${ctx}/sys/mybatis/getkey",
 				data : {},
 				dataType : "json",
 				async: false,
@@ -321,7 +321,7 @@ function resetform() {
 	                  var key = new RSAKeyPair(pubexponent, "", pubmodules);
 	                  passWord= encryptedString(key, encodeURIComponent(passWord));
 	                  userName = encryptedString(key, encodeURIComponent(userName));
-				},
+				}
          });
 		$.ajax({
 			type : "POST",
@@ -425,7 +425,7 @@ function resetform() {
 	function chimg() {
 		$("#code_").attr(
     				'src',
-    				'kaptcha/image?'	+ Math.floor(Math.random() * 100)).fadeIn();
+    				'${ctx}/kaptcha/image?'	+ Math.floor(Math.random() * 100)).fadeIn();
 		$("#authCode").val("");
 	}
 </script>

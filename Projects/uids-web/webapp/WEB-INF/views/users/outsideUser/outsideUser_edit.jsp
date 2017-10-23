@@ -5,6 +5,7 @@
 
 <%@ include file="/include/meta.jsp"%> 
 <script type="text/javascript" src="${ctx}/res/js/region/checkpwd.js"></script>
+<script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgcore.lhgdialog.min.js"></script>
 <head>
 <title>甘肃万维JUP课题</title>
 <script type="text/javascript">
@@ -32,21 +33,18 @@ $().ready(function() {
 				email:true,
 		   		maxlength: 64
 			},
-			mobile : {//固定电话
+			mobile : {//移动电话
 				required: true,
 				isPhone:true,
-		   		maxlength: 16
+		   		uniqueMobile:true
 			},
 			residenceDetail : {
 				required: true,
 				cnRangelength: [0,127],
 				isName:true
-				/* isResidenceDetail：true */
-				
 			},
 			livingAreaDetail : {
 				required: true,
-				/* isAddressInfo：true, */
 				cnRangelength: [0,127],
 				isName:true
 			},
@@ -55,45 +53,46 @@ $().ready(function() {
 			},
 			papersNumber : {
 				required: true,
-				isIdCardNo:true
+				isIdCardNo:true,
+				uniquePapersNumber:true
 			},
-			age:{
-		   		cnRangelength: [0,64]
+			age:{//年龄
+		   		cnRangelength: [0,64],
+		   		isAge: true
 		   	},
-			degree:{//学历
-		   		//cnRangelength: [0,64]
+			workUnit:{//工作单位
+		   		cnRangelength: [0,64],
+		   		isName : true
 		   	},
-			workUnit:{
-		   		cnRangelength: [0,64]
-		   	},
-			headShip:{
-		   		cnRangelength: [0,64]
+			headShip:{//职务
+		   		cnRangelength: [0,64],
+		   		isName : true
 		   	},
 			fax:{
-		   		cnRangelength: [0,64]
+		   		cnRangelength: [0,64],
+		   		isFax: true
 		   	},
-			phone:{
-		   		isMobile:true,
-		   		maxlength: 16
+			phone:{//什么都不加就能校验，奇怪
+		   		//isMobile:true
+		   		//isFixphone：true
 		   	},
 			compTel:{
-		   		isPhone:true,
-		   		maxlength: 16
+		   		isPhone:true
 		   	},
 			qq:{
-		   		maxlength: 11
+		   		maxlength: 11,
+		   		isQq: true
 		   	},
 			msn:{
-		   		cnRangelength: [0,64]
+		   		cnRangelength: [0,64],
+		   		isMsn: true
 		   	},
 			post:{
-				/* isEmail：true, */
-		   		maxlength: 6,
 		   		isPost:true
 		   	},
 			address:{
-				/* isAddressInfo:true, */
-		   		cnRangelength: [0,127]
+		   		cnRangelength: [0,127],
+		   		isName:true
 		   	},
 		   	submitHandler:function(form){
 				form.submit();
@@ -101,8 +100,9 @@ $().ready(function() {
 		}
 	});
 	// Ajax重命名校验
-	$.uniqueValidate('uniqueLoginName', '${ctx}/complat/checkOutisideUserLoginName', ['loginName','oldLoginName'], '对不起，这个账号重复了');
-
+	$.uniqueValidate('uniqueLoginName', '${ctx}/complat/checkOutisideUserLoginName', ['loginName','oldLoginName'], '对不起，这个登录名重复了');
+	$.uniqueValidate('uniqueMobile', '${ctx}/complat/checkOutisideUserMobile', ['mobile','oldMobile'], '对不起，这个手机号重复了');
+	$.uniqueValidate('uniquePapersNumber', '${ctx}/complat/checkOutisideUserPapersNumber', ['papersNumber','oldPapersNumber'], '对不起，这个身份证号重复了');
 	//个人用户名校验     
     jQuery.validator.addMethod("isName", function(value, element) { 
            var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;   
@@ -117,8 +117,49 @@ $().ready(function() {
     jQuery.validator.addMethod("isPost", function(value, element) { 
            var corporName = /^[1-9][0-9]{5}$/;   
            return this.optional(element) || (corporName.test(value));     
-    }, "邮政编码格式不正确（共6位,开头不能为0)");
+    }, "邮政编码格式错误（共6位,开头不能为0)");
+    //年龄
+    jQuery.validator.addMethod("isAge", function(value, element) { 
+           var corporName = /^([1-9]\d|\d)$/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "年龄格式错误");
+    //传真
+    jQuery.validator.addMethod("isFax", function(value, element) { 
+           var corporName = /^(\d{3,4}-)?\d{7,8}$/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "传真格式错误");
+    //qq
+    jQuery.validator.addMethod("isQq", function(value, element) { 
+           var corporName = /[1-9][0-9]{4,}/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "QQ格式错误");
+    //Msn
+    jQuery.validator.addMethod("isMsn", function(value, element) { 
+           var corporName = /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "MSN格式错误");
+    var pwding = $("#pwd").val();
+    EvalPwd(pwding);
 });
+
+function checkAndSave1() { 
+    var level = $("#level").val(); 
+    var pwd = $("#pwd").val();
+    if(level == "strong") {
+		$("#editForm").submit();
+	} else if(level == "weak" && pwd == "") {
+		$.dialog.alert('请填写必填信息',function(){
+			return null;
+		});
+	} else {
+		$.dialog.alert('密码强度必须为强',function(){
+			return null;
+		});
+	}
+}
+function checkAndSave() { 
+    $("#editForm").submit();
+}
 </script>
 
 <style>
@@ -189,31 +230,32 @@ color: rgb(119, 119, 119);
     	<input type="hidden" id="authState" name="authState" value="${outsideUser.authState}"/>
     	<input type="hidden" id="isAuth" name="isAuth" value="${outsideUser.isAuth}"/>
     	<input type="hidden" id="time" name="time" value="${time}"/>
+    	<input type="hidden" id="level"/>
     </div>
     
     <!--表单的主内容区域-->
     <div class="form-content">
     	<table class="form-table">
 			<tr>
-				<td class="td_1" rowspan="5" style="max-width:0px;width:100px;ont-weight:bold;" align="center">基本属性</td>
+				<td class="td_1" rowspan="4" style="max-width:0px;width:100px;ont-weight:bold;" align="center">基本属性</td>
 				<th><b class="mustbe">*</b>登录名：</th>
-				<td>
+				<td style="width:300px;">
 					<input type="text" id="loginName" name="loginName" value="${outsideUser.loginName}" />
 					<input type="hidden" id="oldLoginName" name="oldLoginName" value="${outsideUser.loginName}" />
 	            </td>
 	        	<th><b class="mustbe">*</b>密码：</th>
-				<td>
+				<td style="width:300px;">
 					<input type="password" id="pwd" class="pwd" name="pwd" value="${outsideUser.pwd}" onkeyup="javascript:EvalPwd(this.value);"/>
 				</td>
 			</tr>
 			<tr>
 				<th><b class="mustbe">*</b>姓名：</th>
-				<td>
+				<td style="width:300px;">
 					<input type="text"  class="name" name="name" value="${outsideUser.name}" />
 				</td>
 				<th>密码强度：</th>
-				<td>
-					<table id="pwdpower" style="width: 84%" cellspacing="0"
+				<td style="width:300px;">
+					<table id="pwdpower" style="width: 86%" cellspacing="0"
 					cellpadding="0" border="0">
 						<tbody>
 							<tr>
@@ -227,51 +269,22 @@ color: rgb(119, 119, 119);
 			</tr>
 			<tr>
 				<th><b class="mustbe">*</b>邮箱：</th>
-				<td>
+				<td style="width:300px;">
 					<input type="text"  class="email" name="email" value="${outsideUser.email}" />
 				</td>
 				<th><b class="mustbe">*</b>手机号码：</th>
-				<td>
-					<input type="text"  class="mobile" name="mobile" value="${outsideUser.mobile}" />
+				<td style="width:300px;">
+					<input type="text"  id="mobile" name="mobile" value="${outsideUser.mobile}" />
+					<input type="hidden" id="oldMobile" name="oldMobile" value="${outsideUser.mobile}" />
 				</td>
 			</tr>
 			<tr>
-				<th><!-- <b class="mustbe">*</b> -->户籍省市区：</th>
-				<td>
-					<%-- <select name="degree" value="${outsideUser.gpresidenceId}">
-						<option value="">请选择</option>
-						<option value="">甘肃省</option>
-					</select>
-					<select name="degree" value="${outsideUser.presidenceId}">
-						<option value="">请选择</option>
-					</select>
-					<select name="degree" value="${outsideUser.residenceId}">
-						<option value="">请选择</option>
-					</select> --%>
-					<input type="text"  class="" name="null" value="" />
-				</td>
-				<th><b class="mustbe">*</b>户籍详细地址：</th>
-				<td>
+				<th class="td_5"><b class="mustbe">*</b>户籍详细地址：</th>
+				<td class="td_3" style="width:300px;">
 					<input type="text"  class="residenceDetail" name="residenceDetail" value="${outsideUser.residenceDetail}" />
 	            </td>
-			</tr>
-			<tr>
-				<th class="td_5"><!-- <b class="mustbe">*</b> -->居住地省市区：</th>
-				<td class="td_3">
-					<%-- <select name="degree" value="${outsideUser.gplivingAreaId}">
-						<option value="">请选择</option>
-						<option value="">甘肃省</option>
-					</select>
-					<select name="degree" value="${outsideUser.plivingAreaId}">
-						<option value="">请选择</option>
-					</select>
-					<select name="degree" value="${outsideUser.livingAreaId}">
-						<option value="">请选择</option>
-					</select> --%>
-					<input type="text"  class="" name="null" value="" />
-				</td>
-				<th class="td_6"><b class="mustbe">*</b>居住地详细地址：</th>
-				<td class="td_4">
+	            <th class="td_6"><b class="mustbe">*</b>居住地详细地址：</th>
+				<td class="td_4" style="width:300px;">
 					<input type="text"  class="livingAreaDetail" name="livingAreaDetail" value="${outsideUser.livingAreaDetail}" />
 				</td>
 			</tr>
@@ -279,23 +292,25 @@ color: rgb(119, 119, 119);
 			<tr>
 				<td class="td_2" rowspan="7" tyle="max-width:0px;width:100px;ont-weight:bold;" align="center"">详细属性</td>
 				<th><b class="mustbe">*</b>性别：</th>
-				<td>
+				<td style="width:300px;">
+					<%-- <gsww:checkboxTag name="type" defaultValue="1" type="ZFYHXB" inputType="radio" value="${outsideUser.sex}"></gsww:checkboxTag> --%>
 					<input type="radio" name="sex" value = '男' <c:if test="${outsideUser.sex == '男'}">checked="checked" </c:if>>男&nbsp&nbsp&nbsp
     				<input type="radio" name="sex" value = '女' <c:if test="${outsideUser.sex == '女'}">checked="checked" </c:if>>女
 				</td>
 				<th>年龄：</th>
-				<td>
+				<td style="width:300px;">
 					<input type="text"  class="age" name="age" value="${outsideUser.age}" />
 				</td>
 			</tr>
 			<tr>
 				<th><b class="mustbe">*</b>身份证号：</th>
-				<td>
-					<input type="text" <c:if test="${outsideUser.papersNumber != null}">readonly="readonly"</c:if> class="papersNumber" name="papersNumber" value="${outsideUser.papersNumber}" />
+				<td style="width:300px;">
+					<input type="text" <c:if test="${outsideUser.papersNumber != null}">readonly="readonly"</c:if> id="papersNumber" class="papersNumber" name="papersNumber" value="${outsideUser.papersNumber}" />
+					<input type="hidden" id="oldPapersNumber" class="oldPapersNumber" name="oldPapersNumber" value="${outsideUser.papersNumber}" />
 				</td>
 				<th>学历：</th>
-				<td>
-					<select name="degree" value="${outsideUser.degree}">
+				<td style="width:300px;">
+					<select name="degree" value="${outsideUser.degree}" style="width: 86%">
 						<option value="">请选择学历</option>
 						<option value='其他' <c:if test="${outsideUser.degree == '其他'}">selected</c:if>>其他</option>
 						<option value='小学' <c:if test="${outsideUser.degree == '小学'}">selected</c:if>>小学</option>
@@ -310,47 +325,47 @@ color: rgb(119, 119, 119);
 			</tr>
 			<tr>
 				<th>工作单位：</th>
-				<td>
+				<td style="width:300px;">
 					<input type="text"  class="workUnit" name="workUnit" value="${outsideUser.workUnit}" />
 				</td>
 				<th>职务：</th>
-				<td>
+				<td style="width:300px;">
 					<input type="text"  class="headShip" name="headShip" value="${outsideUser.headShip}" />
 				</td>
 			</tr>
 			<tr>
 				<th>传真：</th>
-				<td>
+				<td style="width:300px;">
 					<input type="text"  class="fax" name="fax" value="${outsideUser.fax}" />
 				</td>
 				<th>固定电话：</th>
-				<td>
+				<td style="width:300px;">
 					<input type="text"  class="phone" name="phone" value="${outsideUser.phone}" />
 				</td>
 			</tr>
 			<tr>
 				<th>办公电话：</th>
-				<td>
+				<td style="width:300px;">
 					<input type="text"  class="compTel" name="compTel" value="${outsideUser.compTel}" />
 				</td>
 				<th>QQ：</th>
-				<td>
+				<td style="width:300px;">
 					<input type="text"  class="qq" name="qq" value="${outsideUser.qq}" />
 				</td>
 			</tr>
 			<tr>
 				<th>MSN：</th>
-				<td>
+				<td style="width:300px;">
 					<input type="text"  class="msn" name="msn" value="${outsideUser.msn}" />
 				</td>
 				<th>邮编：</th>
-				<td>
+				<td style="width:300px;">
 					<input type="text"  class="post" id="post" name="post" value="${outsideUser.post}" />
 				</td>
 			</tr>
 			<tr>
 				<th>联系地址：</th>
-				<td>
+				<td style="width:300px;">
 					<input type="text"  class="address" name="address" value="${outsideUser.address}" />
 				</td>
 				<th></th>
@@ -361,7 +376,7 @@ color: rgb(119, 119, 119);
     <div style="clear:both;"></div>
     <!--表单的按钮组区域-->
     <div class="form-btn">
-    	<input type="submit" tabindex="15" id="submit-btn" value="保存" class="btn bluegreen"/>
+    	<input type="button" tabindex="15" id="submit-btn" value="保存" class="btn bluegreen" onclick="checkAndSave();"/>
     	&nbsp;&nbsp;
         <input type="button" tabindex="16" value="返回" onclick="javascript:window.location.href='${ctx}/complat/outsideuserList?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}'" class="btn gray"/>
         

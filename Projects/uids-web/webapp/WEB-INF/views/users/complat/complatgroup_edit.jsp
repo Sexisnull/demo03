@@ -56,7 +56,7 @@ function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
 	var setting = {
 		async : {
 			enable : true,
-			url : '../login/getGroup',
+			url : "${ctx}/uids/getGroup",
 			autoParam : [ "id=groupId", "isDisabled" ]
 		},
 		callback : {
@@ -81,18 +81,76 @@ function resetform() {
 	$('form').find(':input').not(':button,:hidden,:submit,:reset').val('');
 }
 
+
+//-------------------------区域编码树-----------------------------
+
+$(function(){
+	var groupMenu2 = [{"name":"区域选择","id":"0","codeid":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
+
+	$('#groupname2').menu({
+		tree : 'groupmenu2',
+		height : 200,
+		init : function() {
+			setting2('groupmenu2', onClickGroup2, onDbClickGroup2, groupMenu2);
+		}
+	});
+});
+function hideGroupMenu2(){
+	$('#groupname2_menu').css('display','none');
+}
+function onClickGroup2(event, treeId, treeNode) {
+	$('#groupid2').val(treeNode.id);
+	$('#groupname2').val(treeNode.codeid);
+	hideGroupMenu2();
+}
+function onDbClickGroup2(event, treeId, treeNode) {
+	if(treeNode == null){
+		return;
+	}
+	if (treeNode.isDisabled )//根节点及失效节点双击无效
+		return;
+	$('#groupid2').val(treeNode.id);
+	$('#groupname2').val(treeNode.codeid);
+	$('#groupname2_menu').fadeOut(50);
+}
+
+/**
+ *	初始化树
+ */
+function setting2(treeName, onClickFunction, onDblClickFunction, rootNode) {
+	var setting = {
+		async : {
+			enable : true,
+			url : "${ctx}/uids/getCodeid",
+			autoParam : [ "id=groupId", "isDisabled" ]
+		},
+		callback : {
+			beforeClick : beforeClick,
+			onClick : onClickFunction,
+			onDblClick : onDblClickFunction
+		}
+	};
+	console.log("-----"+treeName);
+	$("#" + treeName).tree(setting, rootNode);
+//	$("#" + treeName).tree().refreshNode('');
+}
+/**
+ *	机构选择节点点击前回调
+ */
+
 //表单校验
 $().ready(function() {
-var outisideUserNameInput=$("#name").val();
 $("#editForm").validate({
 	rules: {
 		name : {
 			required: true,
-			cnRangelength: [0,127]
+			cnRangelength: [0,100],
+			isName : true
 		},
 	   	groupallname : {
 			required: true,
-			cnRangelength: [0,127]
+			cnRangelength: [0,255],
+			isName : true
 		},
 		nodetype : {
 			required: true
@@ -100,20 +158,44 @@ $("#editForm").validate({
 		areatype : {
 			required: true
 		},
-		areacode : {
+		groupname2 : {
 			required: true
 		},
 		suffix : {
+			required: true,
+			maxlength: 255,
+			isSuffix: true
+		},
+		groupname : {
 			required: true
 		},
+		orgcode : {
+		    isOrgcode: true
+		},
 		spec:{
-	   		cnRangelength: [0,255]
+	   		maxlength: 255
 	   	},
 	   	submitHandler:function(form){
+	   		
 			form.submit();
 		}
 	}
 });
+jQuery.validator.addMethod("isName", function(value, element) { 
+           var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "只能由字母、数字、下划线、中文组成，不能以下划线开头和结尾");
+    
+    jQuery.validator.addMethod("isSuffix", function(value, element) { 
+           var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9_]+$/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "只能由字母、数字、下划线组成，不能以下划线开头和结尾");
+    
+     jQuery.validator.addMethod("isOrgcode", function(value, element) { 
+           var corporName = /^[a-zA-Z0-9]{9}$/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "只能由字母、数字组成，只能为9位");
+    
 });
 
 </script>
@@ -124,7 +206,7 @@ $("#editForm").validate({
 	<div class="position">
 		<ol class="breadcrumb">
 			<li>
-				<a href="${ctx}/index" target="_top">首页</a>
+				<a href="${ctx}/backIndex" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
 			<li>
@@ -132,7 +214,7 @@ $("#editForm").validate({
 			</li>
 			<li class="split"></li>
 			<li class="active">
-				<a class="last-position"><c:if test="${empty complatGroup.iid}">用户新增</c:if><c:if test="${not empty complatGroup.iid}">用户编辑</c:if></a>
+				<a class="last-position"><c:if test="${empty complatGroup.iid}">机构新增</c:if><c:if test="${not empty complatGroup.iid}">机构编辑</c:if></a>
 			</li>
    		</ol>
     </div>
@@ -151,10 +233,8 @@ $("#editForm").validate({
     <div class="form-content">
     	<table class="form-table">
     		<tr>
-    		<!--  <ul class="form-table"> -->
-	        	<!--,nameCheck: true,isUnique:true,cnRangelength:[1,64] -->
-	        	 <th><b class="mustbe">*</b> 请输入机构名称：</th>
-	        	 <td>
+	        	<th><b class="mustbe">*</b> 请输入机构名称：</th>
+	        	<td>
 					<input type="text" placeholder="请填写机构简称，例如：省发改委" id="name" name="name" value="${complatGroup.name}" />
 				</td>
 				<th><b class="mustbe">*</b> 请输入机构全名：</th>
@@ -185,28 +265,52 @@ $("#editForm").validate({
 			<tr>
 				<th><b class="mustbe">*</b> 请输入区域编码：</th>
 				<td>
-					<input type="text" placeholder="请输入区域编码" class="input" name="areacode" value="${complatGroup.areacode}" />
+				    <input name="groupname2" id="groupname2" type="text" placeholder="请选择区域编码" style="cursor: pointer;" value="${complatGroup.areacode}"/>
 				</td>
 	        	<th><b class="mustbe">*</b> 请输入机构后缀：</th>
 	        	<td>
-					<input type="text" placeholder="请填写最简洁的机构缩写，例如：fwg（发改委）" class="input" name="suffix" value="${complatGroup.suffix}" />
+	        	    <c:if test="${empty complatGroup.iid}">
+				          <input type="text" placeholder="请填写最简洁的机构缩写，例如：fgw（发改委）" class="input" name="suffix" value="${complatGroup.suffix}"/>
+				    </c:if>
+				    <c:if test="${not empty complatGroup.iid}">
+				          <input type="text" placeholder="请填写最简洁的机构缩写，例如：fgw（发改委）" class="input" name="suffix" value="${complatGroup.suffix}" disabled="true"/>
+				    </c:if>
 				</td>
 			</tr>
 			<tr>
+			    <th><b class="mustbe">*</b> 请输入上级机构：</th>
+	        	<td>
+	        	    <c:if test="${empty complatGroup.iid}">
+				          <input name="groupname" id="groupname" type="text" placeholder="请选择上级机构" style="cursor: pointer;" value="${complatGroup.parentName}" /> 
+	        		      <input type="hidden" id="groupid"  name="groupid">
+				    </c:if>
+				    <c:if test="${not empty complatGroup.iid}">
+				          <input name="groupname" id="groupname" type="text" style="cursor: pointer;" value="${complatGroup.parentName}" disabled="true"/> 
+	        		      <input type="hidden" id="groupid"  name="groupid">
+				    </c:if>
+	        	</td>
 				<th>请输入组织机构代码：</th>
 				<td>
 					<input type="text" placeholder="请填写标准的九位机构代码" class="input" name="orgcode" value="${complatGroup.orgcode}" />
 	            </td>
-	        	<th>请输入上级机构：</th>
-	        	<td>
-	        		<input name="groupname" id="groupname" type="text" style="cursor: pointer;" value="${complatGroup.parentName}"/> 
-	        	</td>
 			</tr>
 			<tr>
-				<th>请输入机构描述：</th>
+			    <c:if test="${empty complatGroup.iid}">
+			    <th>请输入机构描述：</th>
 				<td>
-    			<textarea class="textarea" name="spec" style="width: 89.1%;">${complatGroup.spec}</textarea>
+    			    <textarea class="textarea" name="spec">${complatGroup.spec}</textarea>
     			</td>
+			    </c:if>
+			    <c:if test="${not empty complatGroup.iid}">
+    			<th>机构编码：</th>
+				<td>
+					<input type="text" id="codeid" name="codeid" value="${complatGroup.codeid}" disabled="true"/>
+				</td>
+    			<th>请输入机构描述：</th>
+				<td>
+    			    <textarea class="textarea" name="spec">${complatGroup.spec}</textarea>
+    			</td>
+    			</c:if>
 			</tr>
 			</table>
 	        
@@ -218,7 +322,7 @@ $("#editForm").validate({
     <div class="form-btn">
     	<input type="submit" tabindex="15" id="submit-btn" value="保存" class="btn bluegreen"/>
     	&nbsp;&nbsp;
-        <input type="button" tabindex="16" value="返回" onclick="javascript:window.location.href='${ctx}/uids/complatgroupList?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}'" class="btn gray"/>
+        <input type="button" tabindex="16" value="返回" onclick="javascript:window.location.href='${ctx}/uids/groupOrgTree?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}'" class="btn gray"/>
         
     </div>
     </form>

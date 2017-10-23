@@ -37,9 +37,6 @@ public class RSAUtil {
 		             final int KEY_SIZE = 1024;// 没什么好说的了，这个值关系到块加密的大小，可以更改，但是不要太大，否则效率会低  
 		             keyPairGen.initialize(KEY_SIZE, new SecureRandom());  
 		             KeyPair keyPair = keyPairGen.generateKeyPair();  
-		               
-		             System.out.println(keyPair.getPrivate());  
-		             System.out.println(keyPair.getPublic()); 
 //		             saveKeyPair(keyPair); 
 		             request.getSession().setAttribute("keyPair", keyPair);
 		             return keyPair;  
@@ -59,10 +56,15 @@ public class RSAUtil {
 	}  
 	public static void saveKeyPair(KeyPair kp) throws Exception {  
 		FileOutputStream fos = new FileOutputStream(RSAKeyStore);  
-		ObjectOutputStream oos = new ObjectOutputStream(fos);  
-		oos.writeObject(kp);  
-		oos.close();  
-		fos.close();  
+		ObjectOutputStream oos = new ObjectOutputStream(fos);
+		try { 
+			oos.writeObject(kp); 
+		} catch (Exception e) {
+			throw e;
+		} finally{
+			oos.close();  
+			fos.close();
+		}
 	}  
 	 public static RSAPublicKey generateRSAPublicKey(byte[] modulus,  byte[] publicExponent) throws Exception {  
 	    KeyFactory keyFac = null;  

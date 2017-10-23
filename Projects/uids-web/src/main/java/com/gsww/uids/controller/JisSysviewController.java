@@ -116,7 +116,6 @@ public class JisSysviewController extends BaseController {
 	public String accountEdit(int iid,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		
 		JisSysview sysview = jisSysviewService.findByIid(iid); 
-		JisSysviewDetail jisSysviewDetail = jisSysviewDetailService.findByIid(iid);
 		
 		//map放入
 		List<Map<String, Object>> applicationList =new ArrayList<Map<String,Object>>() ;
@@ -135,11 +134,15 @@ public class JisSysviewController extends BaseController {
 		Map<String,String> detailMap = new HashMap<String, String>();
 		detailMap.put("returnUrl", "sysview/jisSysviewList");
 		detailMap.put("syncType", "sysview");
+		
 		model.addAttribute("detailMap",detailMap);
 		model.addAttribute("applicationMap", applicationMap);
 		model.addAttribute("paraMap", paraMap);
 		model.addAttribute("jisSysview",sysview);
-		model.addAttribute("jisSysviewDetail",jisSysviewDetail);
+		if( null != sysview){
+			JisSysviewDetail jisSysviewDetail = jisSysviewDetailService.findByTranscationId(sysview.getTranscationId());
+			model.addAttribute("jisSysviewDetail",jisSysviewDetail);
+		}
 		return "users/sysview/jis_sysview_detail";
 	}
 

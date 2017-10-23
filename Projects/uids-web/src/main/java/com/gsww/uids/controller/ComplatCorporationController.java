@@ -1,9 +1,10 @@
 package com.gsww.uids.controller;
 
 import java.io.PrintWriter;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletRequest;
@@ -11,9 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
-import net.sf.json.JSONArray;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,7 @@ import com.gsww.uids.entity.ComplatCorporation;
 import com.gsww.uids.entity.JisLog;
 import com.gsww.uids.service.ComplatCorporationService;
 import com.gsww.uids.service.JisLogService;
+import com.hanweb.common.util.Md5Util;
 /**
  * <p>Copyright: Copyright (c) 2014</p>
  * <p>公司名称 : 中国电信甘肃万维公司</p>
@@ -79,7 +81,6 @@ public class ComplatCorporationController extends BaseController{
 			//初始化分页数据
 			PageUtils pageUtils=new PageUtils(pageNo,pageSize,orderField,orderSort);
 			PageRequest pageRequest=super.buildPageRequest(hrequest,pageUtils,ComplatCorporation.class,findNowPage);
-			
 			//搜索属性初始化
 			Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 			searchParams.put("NE_operSign", 3);
@@ -125,6 +126,13 @@ public class ComplatCorporationController extends BaseController{
 					String time = sdf.format(createTime);
 					model.addAttribute("time",time);
 				}
+				
+				//判断密码是否存在，若存在则解密
+				String pwd = corporation.getPwd();
+				if(StringHelper.isNotBlack(pwd)){
+					String minWenPwd = Md5Util.md5decode(pwd);
+					corporation.setPwd(minWenPwd);
+				}
 			}else{
 				corporation = new ComplatCorporation();
 			}
@@ -137,11 +145,12 @@ public class ComplatCorporationController extends BaseController{
 	
 	/**
 	 * 保存用户信息
+	 * @return 
 	 */
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/corporationSave", method = RequestMethod.POST)
-	public ModelAndView corporationSave(ComplatCorporation corporation,HttpServletRequest request,HttpServletResponse response)  throws Exception {
-		 
+	public void corporationSave(ComplatCorporation corporation,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+		Map<String, Object> resMap = new HashMap<String, Object>();
 		try {
 			Integer operType = null;
 			if(corporation != null){
@@ -173,21 +182,100 @@ public class ComplatCorporationController extends BaseController{
 				}
 				corporation.setCreateTime(createTime);
 				
-				String ip = this.getIpAddr(request);
-				corporation.setLoginIp(ip);
+				//对密码加密
+				String JiaMiPWD = Md5Util.md5encode(corporation.getPwd());
+				corporation.setPwd(JiaMiPWD);
+				
+				corporation.setLoginIp(this.getIpAddr(request));
 				//最后一次登录时间
 				corporation.setLoginTime(sdf.parse(TimeHelper.getCurrentTime()));
-				complatCorporationService.save(corporation);
-				returnMsg("success","保存成功",request);
 				
-				//记录日志
-				this.addJisLog(corporation, request,operType);
+				if(corporation.getType() == 1){
+					
+					//对民族处理  企业法人
+					String qyNation = request.getParameter("qyNation");
+					if(StringHelper.isNotBlack(qyNation)){
+						corporation.setNation(qyNation);
+					}
+					//对企业名称处理，企业法人
+					String qyName = request.getParameter("qyName");
+					if(StringHelper.isNotBlack(qyName)){
+						corporation.setName(qyName);
+					}
+					
+					//对企业负责人处理，企业法人
+					String qyRealName = request.getParameter("qyRealName");
+					if(StringHelper.isNotBlack(qyRealName)){
+						corporation.setRealName(qyRealName);
+					}
+					
+					//对企业负责人身份证号处理，企业法人
+					String qyCardNumber = request.getParameter("qyCardNumber");
+					if(StringHelper.isNotBlack(qyCardNumber)){
+						corporation.setCardNumber(qyCardNumber);
+					}
+					
+				}else{
+				
+					//对民族处理 非 企业法人
+					String fqyNation = request.getParameter("fqyNation");
+					if(StringHelper.isNotBlack(fqyNation)){
+						corporation.setNation(fqyNation);
+					}
+					
+					//对企业名称处理，非企业法人
+					String fqyName = request.getParameter("fqyName");
+					if(StringHelper.isNotBlack(fqyName)){
+						corporation.setName(fqyName);
+					}
+					
+					//对企业名称处理，非企业法人
+					String fqyRealName = request.getParameter("fqyRealName");
+					if(StringHelper.isNotBlack(fqyRealName)){
+						corporation.setRealName(fqyRealName);
+					}
+					
+					//对企业负责人身份证号处理，非企业法人
+					String fqyCardNumber = request.getParameter("fqyCardNumber");
+					if(StringHelper.isNotBlack(fqyCardNumber)){
+						corporation.setCardNumber(fqyCardNumber);
+					}
+				}
+				//重复校验
+				if(corporation.getIid() == null){
+					Integer checkData = complatCorporationService.checkUnique(corporation.getLoginName(), corporation.getRegNumber(), corporation.getOrgNumber());
+					if(checkData == 1){
+						resMap.put("ret", "0");
+						resMap.put("msg", "法人用户重复，保存失败！");
+						response.getWriter().write(JSONObject.toJSONString(resMap));
+						//returnMsg("error","法人用户重复，保存失败",request);
+					}else{
+						complatCorporationService.save(corporation);
+						resMap.put("ret", "1");
+						resMap.put("msg", "保存成功！");
+						response.getWriter().write(JSONObject.toJSONString(resMap));
+						//returnMsg("success","保存成功",request);
+						//记录日志
+						this.addJisLog(corporation, request,operType);
+					}
+					
+				}else{
+					complatCorporationService.save(corporation);
+					resMap.put("ret", "1");
+					resMap.put("msg", "保存成功！");
+					response.getWriter().write(JSONObject.toJSONString(resMap));
+					//returnMsg("success","保存成功",request);
+					//记录日志
+					this.addJisLog(corporation, request,operType);
+				}
+				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			returnMsg("error","保存失败",request);
-		} finally{
-			return  new ModelAndView("redirect:/complat/corporationList");
+			resMap.put("ret", "2");
+			resMap.put("msg", "保存失败！");
+			response.getWriter().write(JSONObject.toJSONString(resMap));
+			//returnMsg("error","保存失败",request);
 		}
 		
 	}
@@ -207,6 +295,7 @@ public class ComplatCorporationController extends BaseController{
 				if(corporation != null){
 					Integer iid = corporation.getIid();
 					complatCorporationService.updateCorporation(iid);
+					//complatCorporationService.delete(corporation);
 					returnMsg("success", "删除成功", request);
 					
 					//记录日志
@@ -299,39 +388,41 @@ public class ComplatCorporationController extends BaseController{
      * @throws Exception
 	 */
 	@SuppressWarnings("finally")
-	@RequestMapping(value = "/corporationAuth", method = RequestMethod.GET)
-	public ModelAndView corporationAuth(Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+	@RequestMapping(value = "/corporationAuth", method = RequestMethod.POST)
+	public void corporationAuth(ComplatCorporation corporation,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		ComplatCorporation complatCorporation = null;
+		Map<String, Object> resMap = new HashMap<String, Object>();
 		try{			
-			String iid = StringUtils.trim((String) request.getParameter("iid"));
-			String corporationType = StringUtils.trim((String) request.getParameter("outsideUserType"));
+			String corporationType = StringUtils.trim((String) request.getParameter("corporUserType"));
 			String rejectReason2 = StringUtils.trim((String) request.getParameter("rejectReason2"));
-			int type = Integer.parseInt(corporationType);//1:通过  2：拒绝
-			complatCorporation = complatCorporationService.findByKey(Integer.parseInt(iid));
-			if(type == 1) {
-				int isAuth = complatCorporation.getisAuth();
-				if (isAuth == 0) {
-					complatCorporation.setisAuth(1);
-					complatCorporation.setauthState(1);
+			int type = Integer.parseInt(corporationType);//1:通过  0：拒绝
+			if(corporation.getIid() != null){
+				complatCorporation = complatCorporationService.findByKey(corporation.getIid());
+				if(type == 1) {
+					int isAuth = complatCorporation.getisAuth();
+					if (isAuth == 0) {
+						complatCorporation.setisAuth(1);
+						complatCorporation.setauthState(1);
+						complatCorporationService.save(complatCorporation);
+						returnMsg("success", "用户认证成功！", request);
+						resMap.put("ret", "0");
+						response.getWriter().write(JSONObject.toJSONString(resMap));
+					}
+				} else if (type == 0) {
+					complatCorporation.setisAuth(0);
+					complatCorporation.setauthState(2);
+					if (rejectReason2 != null) {
+						complatCorporation.setrejectReason(rejectReason2);
+					}
 					complatCorporationService.save(complatCorporation);
-					returnMsg("success", "用户认证成功！", request);
-				} else {
-					returnMsg("success", "用户已认证！", request);
+					returnMsg("success", "用户认证已拒绝！", request);
+					resMap.put("ret","0");
+					response.getWriter().write(JSONObject.toJSONString(resMap));
 				}
-			} else if (type == 0) {
-				complatCorporation.setisAuth(0);
-				complatCorporation.setauthState(2);
-				if (rejectReason2 != null) {
-					complatCorporation.setrejectReason(rejectReason2);
-				}
-				complatCorporationService.save(complatCorporation);
-				returnMsg("success", "用户认证已拒绝！", request);
-			} 
+			}
 		}catch(Exception e){
 			e.printStackTrace();
 			returnMsg("error", "认证失败！", (HttpServletRequest) request);
-		}finally{
-			return  new ModelAndView("redirect:/complat/corporationList");
 		}
 	}
 	
@@ -340,21 +431,17 @@ public class ComplatCorporationController extends BaseController{
      * @param request
      * @param response
 	 */
-	@RequestMapping(value = { "/getCorporationInfo" }, method = {RequestMethod.POST })
-	public void getCorporationInfo(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value="/getCorporationInfo",method = RequestMethod.GET)
+	public String getCorporationInfo(Model model,HttpServletRequest request, HttpServletResponse response) {
 		try {
 			String pidStr = request.getParameter("iid");
 			Integer pid = Integer.valueOf(Integer.parseInt(pidStr));
 			ComplatCorporation complatCorporation = complatCorporationService.findByKey(pid);
-			if (complatCorporation != null) {
-				net.sf.json.JSONObject object = net.sf.json.JSONObject.fromObject(complatCorporation);
-				PrintWriter out = response.getWriter();
-				String json = object.toString();
-				out.write(json);
-			}
+			model.addAttribute("complatCorporation",complatCorporation);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return "users/corporation/corporation_authen_list";
 	}
 	
 	/**
@@ -386,8 +473,7 @@ public class ComplatCorporationController extends BaseController{
 			e.printStackTrace();
 		}
 	}
-	
-	
+
 	/**
 	 * 获取客户端IP
 	 */
@@ -404,20 +490,24 @@ public class ComplatCorporationController extends BaseController{
 	     }     
 	     return ip;     
 	}  
+	
 	  
+	/**
+	 * 日志记录
+	 * @param corporation
+	 * @param request
+	 * @param operType
+	 * @throws Exception
+	 */
 	private void addJisLog(ComplatCorporation corporation,HttpServletRequest request,Integer operType) throws Exception{
 		//日志记录JisLog
 		//获取当前登录用户,即操作用户
 		SysUserSession sysUserSession = (SysUserSession) request.getSession().getAttribute("sysUserSession");
-		String userName = sysUserSession.getUserName();
-		//获取操作时间
-		String currentTime = TimeHelper.getCurrentTime();
-		//获取IP
-		String ip = new ComplatCorporationController().getIpAddr(request);
+		String userName = sysUserSession.getLoginAccount();
 		JisLog jisLog = new JisLog();
 		jisLog.setUserId(userName);
-		jisLog.setIp(ip);
-		jisLog.setOperateTime(sdf.parse(currentTime));
+		jisLog.setIp(sysUserSession.getUserIp());
+		jisLog.setOperateTime(sdf.parse(TimeHelper.getCurrentTime()));
 		jisLog.setModuleName(10);//10-法人管理
 		String spec = "";
 		if(operType == 1){

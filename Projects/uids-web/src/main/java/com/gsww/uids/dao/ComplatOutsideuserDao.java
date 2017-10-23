@@ -51,11 +51,11 @@ public interface ComplatOutsideuserDao extends
 
 	@Modifying
 	@Query("update ComplatOutsideuser t set t.loginTime = ?2 , t.loginIp=?3 where t.iid = ?1")
-	boolean updateLoginIpAndLoginTime(int iid, Date time, String ip);
+	int updateLoginIpAndLoginTime(int iid, Date time, String ip);
 
 	@Modifying
 	@Query("update ComplatOutsideuser t set t.operSign = ?2 where t.iid = ?1")
-	boolean updateOpersign(String ids, int opersign);
+	int updateOpersign(String ids, int opersign);
 	
 	@Modifying
 	@Query("update ComplatOutsideuser t set t.pwd = ?2 where t.iid = ?1")

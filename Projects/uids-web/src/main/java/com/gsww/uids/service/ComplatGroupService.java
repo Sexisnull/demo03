@@ -40,7 +40,6 @@ public interface ComplatGroupService {
 	 * @param pk(iid为主键)
 	 * @throws Exception
 	 */
-	public ComplatGroup findByKey(String pk) throws Exception;
 	public ComplatGroup findByIid(Integer iid);
 	
 	/**
@@ -67,15 +66,6 @@ public interface ComplatGroupService {
 	 */
 	public boolean queryNameIsUsed(String name, Integer pid)throws Exception;
 	
-
-	/**
-	 * 查找机构是否存在
-	 * @param loginAccount
-	 * @throws Exception
-	 * @author anhang
-	 */
-	public boolean getByName(String name) throws Exception;
-	
 	/**
 	 * 查询所有机构
 	 * @return
@@ -84,7 +74,7 @@ public interface ComplatGroupService {
 	 */
 	public List<Map<String, Object>> getComplatGroupList() throws Exception;
 	
-		public List<Map<String,Object>> findChildGroupByIid(Integer iid);
+	public List<Map<String,Object>> findChildGroupByIid(Integer iid);
 	
 	/**
 	 * 关键字查询
@@ -100,8 +90,28 @@ public interface ComplatGroupService {
 	
 	public List<Map<String,Object>> findAllIidsAndName();
 	
-	
+	/**
+	 * 根据机构编码查找对象
+	 * @param codeid
+	 * @return
+	 * @throws Exception
+	 */
 	public ComplatGroup findByCodeid(String codeid) throws Exception;
 	
+	/**
+	 * 查询没有pid的机构
+	 * @return
+	 * @throws Exception
+	 */
+	public List<ComplatGroup> findByNoPid() throws Exception;
+
+	/**
+	 * 部门树专用
+	 * @return
+	 * @throws Exception
+	 */
+	public List<ComplatGroup> findAllOrg() throws Exception;
+
+	public List<ComplatGroup> findAllDept(String deptId) throws Exception;
 
 }

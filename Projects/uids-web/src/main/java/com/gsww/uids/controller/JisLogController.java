@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
+import com.gsww.jup.entity.sys.SysUserSession;
 import com.gsww.jup.service.sys.SysParaService;
 import com.gsww.jup.util.PageUtils;
 import com.gsww.uids.entity.JisLog;
@@ -69,11 +70,17 @@ public class JisLogController extends BaseController {
 	public String countUser(
 			@RequestParam(value = "page", defaultValue = "1") int pageNo,
 			@RequestParam(value = "page.size", defaultValue = "10") int pageSize,
-			Model model, ServletRequest request) {
+			Model model, HttpServletRequest request) {
 		try {
 			Page<Map<String, String>> pageInfo = jisLogService.getJisLogPage(
 					pageNo, pageSize, this.getSearchCondition(request));
 			model.addAttribute("pageInfo", pageInfo);
+			SysUserSession sysUserSession = (SysUserSession) request
+			.getSession().getAttribute("sysUserSession");
+			String roleIds = sysUserSession.getRoleIds();
+			if(roleIds==null || roleIds.trim() ==""){
+				return "/main/noRightAccess";
+			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			logger.error("列表打开失败：" + ex.getMessage());
