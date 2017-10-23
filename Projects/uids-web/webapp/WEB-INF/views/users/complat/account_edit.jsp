@@ -649,7 +649,7 @@ function checkAndSave() {
 				  <th class="td_6"><b class="mustbe">*</b> 所属机构：</th>
 				  <td class="td_4" style="width:300px;">
 				    <c:if test="${empty complatUser.iid}">
-				        <input id="groupname" value="${groupMap[complatUser.groupid]}" name="groupname" type="text" style="cursor: pointer;"/> 
+				        <input id="groupname" value="${groupMap[complatUser.groupid]}" name="groupname" readonly="readonly" type="text" style="cursor: pointer;"/> 
 					    <input type="hidden" id="groupid" name="groupid">	
 				    </c:if>
 				    <c:if test="${not empty complatUser.iid}">
