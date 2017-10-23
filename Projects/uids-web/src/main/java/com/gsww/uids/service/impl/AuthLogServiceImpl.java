@@ -25,8 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service("AuthLogService")
 public class AuthLogServiceImpl implements AuthLogService{
 
-	private static Logger logger = LoggerFactory.getLogger(AuthLogServiceImpl.class);
-	
   @Autowired
   private JisApplicationService appService;
 

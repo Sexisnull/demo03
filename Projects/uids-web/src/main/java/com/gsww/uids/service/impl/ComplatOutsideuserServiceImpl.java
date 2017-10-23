@@ -1,11 +1,9 @@
 package com.gsww.uids.service.impl;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpSession;
-
+import com.gsww.uids.dao.ComplatOutsideuserDao;
+import com.gsww.uids.entity.ComplatOutsideuser;
+import com.gsww.uids.service.ComplatOutsideuserService;
+import com.hanweb.common.util.Md5Util;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,11 +15,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.hanweb.common.util.Md5Util;
-//import com.gsww.uids.controller.ComplatRoleController;
-import com.gsww.uids.dao.ComplatOutsideuserDao;
-import com.gsww.uids.entity.ComplatOutsideuser;
-import com.gsww.uids.service.ComplatOutsideuserService;
+import javax.servlet.http.HttpSession;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 

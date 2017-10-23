@@ -542,7 +542,7 @@ public class ComplatOutsideuserController extends BaseController {
                 }  
                   
             } else {  
-                String err = response.getStatusLine().getStatusCode()+"";  
+                String err = String.valueOf(response.getStatusLine().getStatusCode());
                 strResult += "发送失败:"+err;  
             }  
     } catch (ClientProtocolException e) {  
