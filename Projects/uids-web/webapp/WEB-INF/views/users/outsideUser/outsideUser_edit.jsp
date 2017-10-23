@@ -35,7 +35,7 @@ $().ready(function() {
 			},
 			mobile : {//移动电话
 				required: true,
-				isPhone:true,
+				isMyPhone:true,
 		   		uniqueMobile:true
 			},
 			residenceDetail : {
@@ -77,7 +77,7 @@ $().ready(function() {
 		   		//isFixphone：true
 		   	},
 			compTel:{
-		   		isPhone:true
+		   		isMyMobile:true
 		   	},
 			qq:{
 		   		maxlength: 11,
@@ -107,12 +107,24 @@ $().ready(function() {
     jQuery.validator.addMethod("isName", function(value, element) { 
            var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;   
            return this.optional(element) || (corporName.test(value));     
-    }, "名称只能由字母、数字、下划线、中文组成，不能以下划线开头和结尾");
+    }, "该名称只能由字母、数字、下划线、中文组成，不能以下划线开头和结尾");
     
     jQuery.validator.addMethod("isLoginName", function(value, element) { 
            var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9_]+$/;   
            return this.optional(element) || (corporName.test(value));     
-    }, "名称只能由字母、数字、下划线组成，不能以下划线开头和结尾");
+    }, "该名称只能由字母、数字、下划线组成，不能以下划线开头和结尾");
+    
+    //自定义手机号码验证
+    jQuery.validator.addMethod("isMyPhone", function(value, element) { 
+           var corporName = /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "手机号码格式错误");
+    
+    //自定义办公电话验证
+    jQuery.validator.addMethod("isMyMobile", function(value, element) { 
+           var corporName = /\d{3}-\d{8}|\d{4}-\d{7}/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "办公电话格式错误");
     
     jQuery.validator.addMethod("isPost", function(value, element) { 
            var corporName = /^[1-9][0-9]{5}$/;   

@@ -265,7 +265,7 @@ jQuery.validator.addMethod("isName", function(value, element) {
 			<tr>
 				<th><b class="mustbe">*</b> 请输入区域编码：</th>
 				<td>
-				    <input name="groupname2" id="groupname2" type="text" placeholder="请选择区域编码" style="cursor: pointer;" value="${complatGroup.areacode}"/>
+				    <input name="groupname2" id="groupname2" type="text" placeholder="请选择区域编码" readonly="readonly" style="cursor: pointer;" value="${complatGroup.areacode}"/>
 				</td>
 	        	<th><b class="mustbe">*</b> 请输入机构后缀：</th>
 	        	<td>
@@ -281,11 +281,11 @@ jQuery.validator.addMethod("isName", function(value, element) {
 			    <th><b class="mustbe">*</b> 请输入上级机构：</th>
 	        	<td>
 	        	    <c:if test="${empty complatGroup.iid}">
-				          <input name="groupname" id="groupname" type="text" placeholder="请选择上级机构" style="cursor: pointer;" value="${complatGroup.parentName}" /> 
+				          <input name="groupname" id="groupname" type="text" placeholder="请选择上级机构" style="cursor: pointer;" value="${complatGroup.parentName}" readonly="readonly" /> 
 	        		      <input type="hidden" id="groupid"  name="groupid">
 				    </c:if>
 				    <c:if test="${not empty complatGroup.iid}">
-				          <input name="groupname" id="groupname" type="text" style="cursor: pointer;" value="${complatGroup.parentName}" disabled="true"/> 
+				          <input name="groupname" id="groupname" type="text" style="cursor: pointer;" value="${complatGroup.parentName}" disabled="true" readonly="readonly"/> 
 	        		      <input type="hidden" id="groupid"  name="groupid">
 				    </c:if>
 	        	</td>
