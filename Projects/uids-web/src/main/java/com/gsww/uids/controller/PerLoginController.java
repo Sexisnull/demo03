@@ -1,42 +1,19 @@
 package com.gsww.uids.controller;
 
-import com.hanweb.common.util.JsonUtil;
-import com.hanweb.common.util.Md5Util;
-import com.hanweb.common.util.NumberUtil;
-import com.hanweb.common.util.SpringUtil;
-import com.hanweb.common.util.StringUtil;
-import com.hanweb.common.util.mvc.ControllerUtil;
-import com.gsww.uids.util.JsonResult;
-import com.gsww.uids.util.ResultState;
+import com.gsww.jup.util.*;
+import com.gsww.uids.constant.JisSettings;
+import com.gsww.uids.constant.PersonalSessionInfo;
 import com.gsww.uids.entity.ComplatCorporation;
 import com.gsww.uids.entity.ComplatOutsideuser;
 import com.gsww.uids.service.AuthLogService;
 import com.gsww.uids.service.ComplatCorporationService;
 import com.gsww.uids.service.ComplatOutsideuserService;
-import com.gsww.uids.constant.JisSettings;
-import com.gsww.uids.constant.PersonalSessionInfo;
 import com.gsww.uids.service.JisApplicationService;
 import com.gsww.uids.util.AccessUtil;
-import com.gsww.jup.util.CellphoneShortMessageUtil;
-import com.gsww.jup.util.JSONUtil;
-import com.gsww.jup.util.RSAUtil;
-import com.gsww.jup.util.RandomCodeUtil;
-import com.gsww.jup.util.SafeUtil;
-import com.gsww.jup.util.UserUtil;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.security.auth.login.LoginException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.ws.rs.POST;
-
+import com.gsww.uids.util.JsonResult;
+import com.gsww.uids.util.ResultState;
+import com.hanweb.common.util.*;
+import com.hanweb.common.util.mvc.ControllerUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +24,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
+
+import javax.security.auth.login.LoginException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.ws.rs.POST;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping(value = "/front")

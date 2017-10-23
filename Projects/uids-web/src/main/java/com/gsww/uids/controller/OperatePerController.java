@@ -1,8 +1,13 @@
 package com.gsww.uids.controller;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
+import com.gsww.uids.constant.PersonalSessionInfo;
+import com.gsww.uids.entity.ComplatOutsideuser;
+import com.gsww.uids.service.ComplatOutsideuserService;
+import com.gsww.uids.util.JsonResult;
+import com.gsww.uids.util.ResultState;
+import com.hanweb.common.BaseInfo;
+import com.hanweb.common.util.Md5Util;
+import com.hanweb.common.util.mvc.ControllerUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.gsww.uids.constant.PersonalSessionInfo;
-import com.gsww.uids.entity.ComplatOutsideuser;
-import com.gsww.uids.service.ComplatOutsideuserService;
-import com.gsww.uids.util.JsonResult;
-import com.gsww.uids.util.ResultState;
-import com.hanweb.common.BaseInfo;
-import com.hanweb.common.util.Md5Util;
-import com.hanweb.common.util.mvc.ControllerUtil;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping({ "front" })
