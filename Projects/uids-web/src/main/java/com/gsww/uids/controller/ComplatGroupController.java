@@ -695,20 +695,6 @@ public class ComplatGroupController extends BaseController {
     }
 
     /**
-     * 关闭弹出框
-     */
-    @SuppressWarnings("finally")
-    @RequestMapping(value = "/closeImport", method = RequestMethod.GET)
-    public ModelAndView closeImport(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        try {
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            return new ModelAndView("redirect:/uids/complatgroupList");
-        }
-    }
-
-    /**
      * 加载机构区域编码树
      *
      * @param request
