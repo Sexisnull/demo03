@@ -13,6 +13,8 @@
 <meta http-equiv="Expires" content="-1" />
 <script type="text/javascript" src="${ctx}/res/plugin/jquery/jquery-1.8.3.min.js"></script>
 <script type="text/javascript" src="${ctx}/res/skin/default/js/jquery-validity.js"></script>
+<script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgdialog.js"></script>
+<script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgcore.lhgdialog.min.js"></script>
 	<script type="text/javascript">
 	function choseall(){
 		var c=$('#checkall').attr("checked");
@@ -48,7 +50,7 @@
 			success:function(result){
 				if(result.success){
 					
-					alert("设置成功！");
+					$.dialog.alertSuccess("设置成功");
 					location.href = '${ctx}/complat/croleList';
 					
 				}else{
@@ -57,7 +59,7 @@
 			}
 		});
 	}); 
-	function toSubmit(){
+	function toSubmit1(){
 		$("#appForm").submit();
 	}
 </script>
@@ -151,7 +153,7 @@
 	</form>
 	</div>
 	<div class="ui_buttons">
-		<input type="button" value="确定" onclick="toSubmit();">
+		<input type="button" value="确定" onclick="toSubmit1();">
 		<input type="button" value="关闭" onclick="javascript:window.location.href='${ctx}/complat/croleList'">
 	</div>
 	</body>
