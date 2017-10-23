@@ -713,7 +713,7 @@ public class ComplatUserController extends BaseController {
 			    || (StringUtils.isEmpty(complatUser.getEmail()) || (!StringUtils.isEmpty(complatUser.getEmail())&& !match(emailReg,complatUser.getEmail())))
 			    || (StringUtils.isEmpty(complatUser.getQq()) || (!match(qqReg,complatUser.getQq())))
 			    || (StringUtils.isEmpty(complatUser.getLoginname()) || (!StringUtils.isEmpty(complatUser.getLoginname())&& !match(loginameReg,complatUser.getLoginname())))
-//			    || (StringUtils.isEmpty(complatUser.getPwd()) || (!StringUtils.isEmpty(complatUser.getPwd())&& !match(pwdReg,complatUser.getPwd())))
+			    || (StringUtils.isEmpty(complatUser.getPwd()))
 			    || (StringUtils.isEmpty(complatUser.getPinyin()) || (!StringUtils.isEmpty(complatUser.getPinyin())&& !match(PinYinReg,complatUser.getPinyin())))
 			    || (StringUtils.isEmpty(complatUser.getCardid()) || (!StringUtils.isEmpty(complatUser.getCardid())&& !match(cardIdReg,complatUser.getCardid())))
 			) {
@@ -845,8 +845,8 @@ public class ComplatUserController extends BaseController {
 		headList.add("登录名");
 		headList.add("登录全名");
 		headList.add("账号密码");
-		headList.add("密码找回问题");
-		headList.add("密码找回问题答案");
+//		headList.add("密码找回问题");
+//		headList.add("密码找回问题答案");
 		headList.add("姓名首字母全拼");
 		headList.add("身份证号");
 		headList.add("是否启用");
@@ -899,9 +899,9 @@ public class ComplatUserController extends BaseController {
 			treeMap.put("24", complatUser.getLoginname());// 登录名
 			treeMap.put("25", complatUser.getLoginallname());// 登录全名
 			treeMap.put("26", complatUser.getPwd());// 账号密码
-			treeMap.put("27", complatUser.getPwdquestion());// 密码找回问题
-			treeMap.put("28", complatUser.getPwdanswer());// 密码找回问题答案
-			treeMap.put("29", complatUser.getPinyin());// 姓名首字母全拼
+//			treeMap.put("27", complatUser.getPwdquestion());// 密码找回问题
+//			treeMap.put("28", complatUser.getPwdanswer());// 密码找回问题答案
+			treeMap.put("27", complatUser.getPinyin());// 姓名首字母全拼
 			JisUserdetail userDetail = jisUserdetailService
 					.findByUserid(userId); // 获取当前用户的身份证号
 			String idCode;
@@ -910,14 +910,14 @@ public class ComplatUserController extends BaseController {
 			} else {
 				idCode = userDetail.getCardid();
 			}
-			treeMap.put("30", idCode);//
+			treeMap.put("28", idCode);//
 			int enable = complatUser.getEnable();
 			if (enable == 0) {
-				treeMap.put("31", "未启用");
+				treeMap.put("29", "未启用");
 			} else {
-				treeMap.put("31", "已启用");
+				treeMap.put("29", "已启用");
 			} // 是否启用
-			treeMap.put("32", complatUser.getCreatetime());// 创建日期
+			treeMap.put("30", complatUser.getCreatetime());// 创建日期
 			// 获取扩展属性的值
 			/*
 			 * Integer id=Integer.parseInt(iid); List<Map<String,Object>>
