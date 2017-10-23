@@ -18,7 +18,7 @@ JpaSpecificationExecutor<ComplatGroup>{
 	 * @param pid
 	 * @return
 	 */
-	@Query(value = "select group from ComplatGroup group where group.pid=?1 order by group.orderid asc")
+	@Query(value = "select group from ComplatGroup group where group.pid=?1 order by group.codeid asc")
 	public List<ComplatGroup> findByPid(Integer pid);
 	/**
 	 * 根据机构名称查询机构信息
