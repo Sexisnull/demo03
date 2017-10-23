@@ -15,6 +15,7 @@
 <link rel="stylesheet" href="${ctx}/res/plugin/jqtree/skin/default/jqtree.css" type="text/css"></link>
 <script type="text/javascript" src="${ctx}/res/plugin/jqtree/jquery.js"></script>
 <script type="text/javascript" src="${ctx}/res/plugin/jqtree/jqtree.js"></script>
+<script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgdialog.js"></script>
 <script type="text/javascript">
 	//授权树提交按钮添加事件处理
 	function accreditSubmit() {
@@ -25,10 +26,11 @@
 			async : false,
 			success : function(msg) {
 				if (msg.indexOf('success') >= 0) {
-					alert('授权成功');
-					location.href = '${ctx}/complat/croleList';
+					$.dialog.alertSuccess('授权成功',function(){
+						location.href = '${ctx}/complat/croleList';
+					});
 				} else {
-					alert('授权失败');
+					$.dialog.alert('授权失败');
 					//location.href = '/sys/roleList';
 				}
 			}
