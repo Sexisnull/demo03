@@ -106,4 +106,9 @@ public class JisUserdetailServiceImpl implements JisUserdetailService {
 	public JisUserdetail findByCardid(String idCode) {
 		return this.jisUserdetailDao.findByCardid(idCode);
 	}
+
+	@Override
+	public void delete(JisUserdetail jisUserdetail) {
+		jisUserdetailDao.delete(jisUserdetail);	
+	}
 }
