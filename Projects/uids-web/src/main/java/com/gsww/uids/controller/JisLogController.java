@@ -107,9 +107,10 @@ public class JisLogController extends BaseController {
 	/**
 	 * 获取查询条件
 	 * 
+	 * @param request
 	 * @return
 	 */
-	public List<List<String>> getSearchCondition() {
+	public List<List<String>> getSearchCondition(ServletRequest request) {
 
 		List<List<String>> searchList = new ArrayList<List<String>>();
 
@@ -119,7 +120,9 @@ public class JisLogController extends BaseController {
 	/**
 	 * 获取日志列表
 	 * 
+	 * @param pageNumber
 	 * @param pageSize
+	 * @param sortType
 	 * @param model
 	 * @param request
 	 * @return
