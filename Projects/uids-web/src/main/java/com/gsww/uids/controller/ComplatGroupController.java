@@ -135,7 +135,6 @@ public class ComplatGroupController extends BaseController {
          // 获取系统当前登录用户
 			SysUserSession sysUserSession = (SysUserSession) hrequest.getSession().getAttribute("sysUserSession");
 			String deptId = sysUserSession.getDeptId();
-			String deptCodeid = complatGroupService.findByIid(Integer.valueOf(deptId)).getCodeid();
 
             //搜索属性初始化
 			Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
@@ -379,10 +378,8 @@ public class ComplatGroupController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			returnMsg("error","保存失败",request);
-		} finally{
-			return  new ModelAndView("redirect:/uids/groupOrgTree");
 		}
-		
+		return  new ModelAndView("redirect:/uids/groupOrgTree");
 	}
 	/**
 	 * 删除用户信息
@@ -438,7 +435,7 @@ public class ComplatGroupController extends BaseController {
             char word = str.charAt(j);  
             String[] pinyinArray = PinyinHelper.toHanyuPinyinStringArray(word);  
             if (pinyinArray != null) {  
-                convert += pinyinArray[0].charAt(0);  
+                convert += pinyinArray[0].charAt(0);
             } else {  
                 convert += word;  
             }  
@@ -541,9 +538,20 @@ public class ComplatGroupController extends BaseController {
 		int row = 1;
 		String warn = "";
 		boolean check = true;
+		//机构名称正则式校验
+		String zhengZeShi1 = "^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$";
+		//机构后缀正则式校验
+		String zhengZeShi2 = "^[^\u4e00-\u9fa5]{0,}$";
+		//组织机构代码正则式校验
+		String zhengZeShi3 = "^[a-zA-Z0-9]{9}$";
+		//区域编码正则式校验
+		String zhengZeShi4 = "^[0-9]{0,}$";
+		//进行在权限内的导入校验
+		SysUserSession sysUserSession = (SysUserSession) ((HttpServletRequest) request).getSession().getAttribute("sysUserSession");
+		String deptId = sysUserSession.getDeptId();// 获取部门id
+		String deptParentCode = complatGroupService.findByIid(Integer.valueOf(deptId)).getCodeid();
 		for (ComplatGroup complatGroup : group) {
 			//进行机构名和上级机构编码不能为空的校验
-//			if (StringUtils.isEmpty(complatGroup.getName()) || StringUtils.isEmpty(complatGroup.getParentCode())) {
 			//进行机构重名校验
 			String parentCode = complatGroup.getParentCode();
 			String name = complatGroup.getName();
@@ -551,20 +559,6 @@ public class ComplatGroupController extends BaseController {
 			if(StringUtils.isNotBlank(parentCode)){
 				pId = complatGroupService.findByCodeid(parentCode).getIid();
 			}
-//			if (complatGroupService.queryNameIsUsed(name, pId)){
-			//进行在权限内的导入校验
-			SysUserSession sysUserSession = (SysUserSession) ((HttpServletRequest) request).getSession().getAttribute("sysUserSession");
-			String deptId = sysUserSession.getDeptId();// 获取部门id
-			String deptParentCode = complatGroupService.findByIid(Integer.valueOf(deptId)).getCodeid();
-//			if(parentCode.length() < deptParentCode.length() || !parentCode.substring(0, deptParentCode.length()).equals(deptParentCode)){
-			//机构名称正则式校验
-			String zhengZeShi1 = "^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$";
-			//机构后缀正则式校验
-			String zhengZeShi2 = "^[^\u4e00-\u9fa5]{0,}$";
-			//组织机构代码正则式校验
-			String zhengZeShi3 = "^[a-zA-Z0-9]{9}$";
-			//区域编码正则式校验
-			String zhengZeShi4 = "^[0-9]{0,}$";
 			if((StringUtils.isEmpty(complatGroup.getName()) || StringUtils.isEmpty(complatGroup.getParentCode()))
 				||(complatGroupService.queryNameIsUsed(name, pId))
 				||(parentCode.length() < deptParentCode.length() || !parentCode.substring(0, deptParentCode.length()).equals(deptParentCode))
@@ -689,9 +683,8 @@ public class ComplatGroupController extends BaseController {
             str = "users/complat/complatgroup_import";
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-        } finally {
-            return str;
         }
+		return str;
     }
 
     /**
@@ -705,7 +698,6 @@ public class ComplatGroupController extends BaseController {
                          HttpServletResponse response) {
         try {
             String groupId = request.getParameter("groupId");
-            String isDisabled = request.getParameter("isDisabled");
 
             List<ComplatZone> list = new ArrayList<ComplatZone>();
 
@@ -724,12 +716,6 @@ public class ComplatGroupController extends BaseController {
                 map.put("icon", null);
                 map.put("target", "page");
                 map.put("url", null);
-                // List<ComplatGroup> sets =
-                // complatGroupService.findByPid(c.getIid());
-            /*
-			 * if(sets.isEmpty()){ map.put("isParent", false); }else{
-			 * map.put("isParent", true); }
-			 */
                 map.put("isParent", true);
                 map.put("isDisabled", false);
                 map.put("open", true);
@@ -821,7 +807,6 @@ public class ComplatGroupController extends BaseController {
 			HttpServletResponse response) {
 		try {
 			String groupId = request.getParameter("groupId");
-			String isDisabled = request.getParameter("isDisabled");
 			SysUserSession sysUserSession = (SysUserSession) ((HttpServletRequest) request).getSession()
             .getAttribute("sysUserSession");
 			// 获取部门id
@@ -843,12 +828,6 @@ public class ComplatGroupController extends BaseController {
 				map.put("icon", null);
 				map.put("target", "page");
 				map.put("url", null);
-				// List<ComplatGroup> sets =
-				// complatGroupService.findByPid(c.getIid());
-				/*
-				 * if(sets.isEmpty()){ map.put("isParent", false); }else{
-				 * map.put("isParent", true); }
-				 */
 				map.put("isParent", true);
 				map.put("isDisabled", false);
 				map.put("open", true);
