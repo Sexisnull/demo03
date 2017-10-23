@@ -712,6 +712,7 @@ public class ComplatGroupController extends BaseController {
                 Map<String, Object> map = new HashMap<String, Object>();
                 map.put("id", c.getIid() + "");
                 map.put("name", c.getName());
+                map.put("title", c.getName());
                 map.put("codeid", c.getCodeId());
                 map.put("icon", null);
                 map.put("target", "page");
