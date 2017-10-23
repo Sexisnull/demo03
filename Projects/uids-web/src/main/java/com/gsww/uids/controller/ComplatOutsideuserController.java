@@ -111,10 +111,7 @@ public class ComplatOutsideuserController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/outsideuserEdit", method = RequestMethod.GET)
-	public String accountEdit(String outsideuserId, Model model, HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		// ModelAndView mav=new
-		// ModelAndView("users/outsideUser/outsideUser_edit");
+	public String accountEdit(String outsideuserId, Model model, HttpServletRequest request, HttpServletResponse response) {
 		try {
 			ComplatOutsideuser outsideUser = null;
 			if (StringHelper.isNotBlack(outsideuserId)) {
@@ -145,8 +142,7 @@ public class ComplatOutsideuserController extends BaseController {
 	 */
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/outsideuserSave", method = RequestMethod.POST)
-	public ModelAndView accountSave(ComplatOutsideuser outsideUser, HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+	public ModelAndView accountSave(ComplatOutsideuser outsideUser, HttpServletRequest request, HttpServletResponse response) {
 		try {
 			SysUserSession sysUserSession =  (SysUserSession) ((HttpServletRequest) request).getSession().getAttribute("sysUserSession");
 			if (outsideUser != null) {
@@ -163,7 +159,7 @@ public class ComplatOutsideuserController extends BaseController {
 					outsideUser.setPwd(pwd);
 					outsideUserService.save(outsideUser);
 					returnMsg("success", "保存成功", request);
-					String desc = sysUserSession.getLoginAccount() + "新增 【" + outsideUser.getName() + "】 个人用户"; 
+					String desc = sysUserSession.getLoginAccount() + "新增 【" + outsideUser.getName() + "】 个人用户";
 					jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(),desc,10,1);
 				} else {
 					//注册时间
@@ -198,8 +194,7 @@ public class ComplatOutsideuserController extends BaseController {
 	 */
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/outsideuserDelete", method = RequestMethod.GET)
-	public ModelAndView accountDelete(String corporationId, HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+	public ModelAndView accountDelete(String corporationId, HttpServletRequest request, HttpServletResponse response) {
 		ComplatOutsideuser complatOutsideuser = null;
 		try {
 			SysUserSession sysUserSession =  (SysUserSession) ((HttpServletRequest) request).getSession().getAttribute("sysUserSession");
@@ -230,7 +225,7 @@ public class ComplatOutsideuserController extends BaseController {
 	 */
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/outsideuserStart", method = RequestMethod.GET)
-	public ModelAndView outsideuserStart(String outsideuserIid,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+	public ModelAndView outsideuserStart(String outsideuserIid,Model model,HttpServletRequest request,HttpServletResponse response) {
 		ComplatOutsideuser complatOutsideuser = null;
 		try{			
 			if (StringHelper.isNotBlack(outsideuserIid)) {
@@ -262,7 +257,7 @@ public class ComplatOutsideuserController extends BaseController {
 	 */
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/outsideuserStop", method = RequestMethod.GET)
-	public ModelAndView outsideuserStop(String outsideuserIid,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+	public ModelAndView outsideuserStop(String outsideuserIid,Model model,HttpServletRequest request,HttpServletResponse response) {
 		ComplatOutsideuser complatOutsideuser = null;
 		try{			
 			if (StringHelper.isNotBlack(outsideuserIid)) {
@@ -294,7 +289,7 @@ public class ComplatOutsideuserController extends BaseController {
 	 */
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/outsideuserOperatrStart", method = RequestMethod.GET)
-	public ModelAndView outsideuserOperatrStart(String outsideuserOperatorId,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+	public ModelAndView outsideuserOperatrStart(String outsideuserOperatorId,Model model,HttpServletRequest request,HttpServletResponse response) {
 		ComplatOutsideuser complatOutsideuser = null;
 		try{
 			String[] para = outsideuserOperatorId.split(",");
@@ -324,7 +319,7 @@ public class ComplatOutsideuserController extends BaseController {
 	 */
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/outsideuserOperatorStop", method = RequestMethod.GET)
-	public ModelAndView outsideuserOperatorStop(String outsideuserOperatorId,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+	public ModelAndView outsideuserOperatorStop(String outsideuserOperatorId,Model model,HttpServletRequest request,HttpServletResponse response) {
 		ComplatOutsideuser complatOutsideuser = null;
 		try{			
 			String[] para = outsideuserOperatorId.split(",");
@@ -354,7 +349,7 @@ public class ComplatOutsideuserController extends BaseController {
 	 */
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/outsideuserAuth", method = RequestMethod.GET)
-	public ModelAndView outsideuserAuth(Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+	public ModelAndView outsideuserAuth(Model model,HttpServletRequest request,HttpServletResponse response) {
 		ComplatOutsideuser complatOutsideuser = null;
 		try{
 			SysUserSession sysUserSession =  (SysUserSession) ((HttpServletRequest) request).getSession().getAttribute("sysUserSession");
@@ -427,7 +422,7 @@ public class ComplatOutsideuserController extends BaseController {
      * @throws Exception
 	 */
 	@RequestMapping(value="/checkOutisideUserLoginName", method = RequestMethod.GET)
-	public void checkLoginName(String loginName,Model model,HttpServletRequest request,HttpServletResponse response)throws Exception {
+	public void checkLoginName(String loginName,Model model,HttpServletRequest request,HttpServletResponse response) {
 		try {
 			ComplatOutsideuser complatOutsideuser = null;
 			String loginNameInput=StringUtils.trim((String)request.getParameter("loginName"));
@@ -457,7 +452,7 @@ public class ComplatOutsideuserController extends BaseController {
      * @throws Exception
 	 */
 	@RequestMapping(value="/checkOutisideUserMobile", method = RequestMethod.GET)
-	public void checkOutisideUserMobile(String mobile,Model model,HttpServletRequest request,HttpServletResponse response)throws Exception {
+	public void checkOutisideUserMobile(String mobile,Model model,HttpServletRequest request,HttpServletResponse response) {
 		try {
 			ComplatOutsideuser complatOutsideuser = null;
 			String mobileInput=StringUtils.trim((String)request.getParameter("mobile"));
@@ -487,7 +482,7 @@ public class ComplatOutsideuserController extends BaseController {
      * @throws Exception
 	 */
 	@RequestMapping(value="/checkOutisideUserPapersNumber", method = RequestMethod.GET)
-	public void checkOutisideUserPapersNumber(String papersNumber,Model model,HttpServletRequest request,HttpServletResponse response)throws Exception {
+	public void checkOutisideUserPapersNumber(String papersNumber,Model model,HttpServletRequest request,HttpServletResponse response) {
 		try {
 			ComplatOutsideuser complatOutsideuser = null;
 			String papersNumberInput=StringUtils.trim((String)request.getParameter("papersNumber"));
@@ -536,8 +531,8 @@ public class ComplatOutsideuserController extends BaseController {
                 /*读返回数据*/  
                 String conResult = EntityUtils.toString(response  
                         .getEntity());  
-                JSONObject sobj = new JSONObject();  
-                sobj = JSONObject.fromObject(conResult);  
+                JSONObject sobj = new JSONObject();
+                sobj = JSONObject.fromObject(conResult);
                 String result = sobj.getString("result");  
                 String code = sobj.getString("code");  
                 if(result.equals("1")){  
@@ -565,7 +560,7 @@ public class ComplatOutsideuserController extends BaseController {
      * @return
 	 */
 	private static String getStringFromJson(JSONObject adata) {  
-        StringBuffer sb = new StringBuffer();  
+        StringBuilder sb = new StringBuilder();
         sb.append("{");  
         for(Object key:adata.keySet()){  
             sb.append("\""+key+"\":\""+adata.get(key)+"\",");  
