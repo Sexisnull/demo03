@@ -583,21 +583,21 @@ function resetform() {
 								<th width="15%" style="text-align: center;">
 									登录全名
 								</th>
-								<th width="10%" style="text-align: center;">
+								<th width="15%" style="text-align: center;">
 									所属机构
 								</th>
 								<th width="10%" class="alignL" style="text-align: center;">
 									用户职务
 								</th>
-								<th width="10%" style="text-align: center;">
+								<th width="12%" style="text-align: center;">
 									办公电话
 								</th>
-								<th width="5%" style="text-align: center;">
+								<th width="3%" style="text-align: center;">
 									账号开启
 								</th>
 								<!--
                 <th width="18%" class="alignL" style="text-align: center;">注册时间</th>-->
-								<th width="10%" style="text-align: center;">
+								<th width="5%" style="text-align: center;">
 									操作
 								</th>
 							</tr>

@@ -174,4 +174,11 @@ public class ComplatGroupServiceImpl implements ComplatGroupService{
 		return list;
 	}
 
+	@Override
+	public List<ComplatGroup> findAllChildDept(String deptId) throws Exception {
+		List<ComplatGroup> list=new ArrayList<ComplatGroup>();
+		list=complatGroupDao.findAllDeptByDeptId(deptId);
+		return list;
+	}
+
 }

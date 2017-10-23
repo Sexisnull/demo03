@@ -197,29 +197,34 @@ public class ComplatUserController extends BaseController {
 			}
 
 			// 获取系统当前登录用户
-			SysUserSession sysUserSession = (SysUserSession) hrequest.getSession().getAttribute("sysUserSession");
+			SysUserSession sysUserSession = (SysUserSession) hrequest
+					.getSession().getAttribute("sysUserSession");
 			String deptId = sysUserSession.getDeptId();
 			// 初始化分页数据
-			PageUtils pageUtils = new PageUtils(pageNo, pageSize, orderField,orderSort);
-			PageRequest pageRequest = super.buildPageRequest(hrequest,pageUtils, ComplatUser.class, findNowPage);
+			PageUtils pageUtils = new PageUtils(pageNo, pageSize, orderField,
+					orderSort);
+			PageRequest pageRequest = super.buildPageRequest(hrequest,
+					pageUtils, ComplatUser.class, findNowPage);
 
 			// 搜索属性初始化
-			Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
-//			if (StringUtils.isNotBlank(orgId)) {
-//				searchParams.put("EQ_groupid", orgId);
-//				model.addAttribute("orgId", orgId);
-//			} else {
-//				if(searchParams.size()==0){
-//					searchParams.put("EQ_groupid", deptId);
-//				}
-//			}
+			Map<String, Object> searchParams = Servlets
+					.getParametersStartingWith(request, "search_");
+			// if (StringUtils.isNotBlank(orgId)) {
+			// searchParams.put("EQ_groupid", orgId);
+			// model.addAttribute("orgId", orgId);
+			// } else {
+			// if(searchParams.size()==0){
+			// searchParams.put("EQ_groupid", deptId);
+			// }
+			// }
 			if (StringUtils.isNotBlank(orgId)) {
 				searchParams.put("EQ_groupid", orgId);
 				model.addAttribute("orgId", orgId);
-			}else{
-				if(searchParams.size()>=1&&searchParams.get("EQ_groupid") != null){
+			} else {
+				if (searchParams.size() >= 1
+						&& searchParams.get("EQ_groupid") != null) {
 					model.addAttribute("orgId", searchParams.get("EQ_groupid"));
-				}else{
+				} else {
 					searchParams.put("EQ_groupid", deptId);
 					model.addAttribute("orgId", deptId);
 				}
@@ -361,16 +366,18 @@ public class ComplatUserController extends BaseController {
 					complatUser.setEnable(power); // 是否禁用
 					complatUser.setOpersign(2);// 更新操作状态
 					synchronization(complatUser, 2);// 修改同步
-					
-					//对密码修改时间进行处理
-					String oldPwd = complatUserService.findByKey(complatUser.getIid()).getPwd();
-					if(StringHelper.isNotBlack(oldPwd)){
+
+					// 对密码修改时间进行处理
+					String oldPwd = complatUserService.findByKey(
+							complatUser.getIid()).getPwd();
+					if (StringHelper.isNotBlack(oldPwd)) {
 						oldPwd = Md5Util.md5decode(oldPwd);
-						if(!oldPwd.equals(pwd)){
-							complatUser.setModifyPassTime(Timestamp.valueOf(TimeHelper.getCurrentTime()));
+						if (!oldPwd.equals(pwd)) {
+							complatUser.setModifyPassTime(Timestamp
+									.valueOf(TimeHelper.getCurrentTime()));
 						}
 					}
-					
+
 					complatUserService.save(complatUser);
 					// 身份证号处理 JisUserdetail
 					String cardId = request.getParameter("cardid");
@@ -385,7 +392,7 @@ public class ComplatUserController extends BaseController {
 								cardId, userMap);
 					}
 					returnMsg("success", "编辑用户成功", request);
-					String desc = sysUserSession.getLoginAccount() + "修改政府用户："
+					String desc = sysUserSession.getUserName() + "修改政府用户："
 							+ complatUser.getName();
 					jisLogService.save(sysUserSession.getLoginAccount(),
 							sysUserSession.getUserIp(), desc, 2, 2);
@@ -412,9 +419,10 @@ public class ComplatUserController extends BaseController {
 					String p = Md5Util.md5encode(pwd);
 					complatUser.setPwd(p);
 					synchronization(complatUser, 1);// 新增同步
-					
-					//新增对密码修改时间做处理
-					complatUser.setModifyPassTime(TimeHelper.parseDate(TimeHelper.getCurrentTime()));
+
+					// 新增对密码修改时间做处理
+					complatUser.setModifyPassTime(TimeHelper
+							.parseDate(TimeHelper.getCurrentTime()));
 					complatUserService.save(complatUser);
 					// 身份证号处理 JisUserdetail
 					userId = complatUser.getIid();
@@ -423,7 +431,7 @@ public class ComplatUserController extends BaseController {
 					jisUser.setCardid(cardId);
 					jisUser.setIid(userId);
 					jisUser.setUserid(userId);
-					
+
 					jisUserdetailService.save(jisUser);
 					// 扩展属性
 					Map<String, String> userMap = this.saveExendsAttr(userId,
@@ -436,7 +444,7 @@ public class ComplatUserController extends BaseController {
 								cardId, userMap);
 					}
 					returnMsg("success", "新增用户成功", request);
-					String desc = sysUserSession.getLoginAccount() + "新增政府用户："
+					String desc = sysUserSession.getUserName() + "新增政府用户："
 							+ complatUser.getName();
 					jisLogService.save(sysUserSession.getLoginAccount(),
 							sysUserSession.getUserIp(), desc, 2, 1);
@@ -482,7 +490,7 @@ public class ComplatUserController extends BaseController {
 					returnMsg("success", "删除成功", request);
 				}
 
-				String desc = session.getLoginAccount() + "删除政府用户："
+				String desc = session.getUserName() + "删除政府用户："
 						+ complatUser.getName();
 				jisLogService.save(session.getUserName(), session.getUserIp(),
 						desc, 2, 3);
@@ -534,55 +542,51 @@ public class ComplatUserController extends BaseController {
 			@RequestParam("files") MultipartFile multipartFile,
 			HttpServletRequest request, Model model,
 			HttpServletResponse response) throws Exception {
-		SysUserSession session = (SysUserSession) request.getSession()
-				.getAttribute("sysUserSession");
-		Map resMap = new HashMap();
-		String fileName = multipartFile.getOriginalFilename();
-		LinkedHashMap<String, String> fieldMap = new LinkedHashMap<String, String>();
-		fieldMap.put("0", "name");
-		fieldMap.put("1", "age");
-		fieldMap.put("2", "sex");
-		fieldMap.put("3", "groupName");
-		fieldMap.put("4", "groupid");
-		fieldMap.put("5", "headship");
-		fieldMap.put("6", "phone");
-		fieldMap.put("7", "mobile");
-		fieldMap.put("8", "address");
-		fieldMap.put("9", "post");
-		fieldMap.put("10", "ip");
-		fieldMap.put("11", "fax");
-		fieldMap.put("12", "email");
-		fieldMap.put("13", "qq");
-		fieldMap.put("14", "loginname");
-		fieldMap.put("15", "pwd");
-		fieldMap.put("16", "pwdquestion");
-		fieldMap.put("17", "pwdanswer");
-		fieldMap.put("18", "pinyin");
-		fieldMap.put("19", "cardid");
-		List<ComplatUser> users = ExcelUtil.readXls(fileName,
-				multipartFile.getInputStream(), ComplatUser.class, fieldMap);
-		// 判断是哪行导入失败
-		int row = 1;
-		boolean flag = true;
-		String strRow = "";
 		try {
-			for (ComplatUser complatUser : users) {
-				// List<ComplatUser> list =
-				// complatUserService.findByUserAllName(complatUser.getLoginallname());
-				List<Map<String, Object>> userList = complatUserService
-						.findByLoginnameAndgroupid(complatUser.getLoginname(),
-								complatUser.getGroupid());
-				if (userList.size() == 0) {
-					if (StringHelper.isNotBlack(complatUser.getGroupName())) { // 判断excel表格导入的数据是否规范
+			String name = "";
+			String names="";
+			SysUserSession session = (SysUserSession) request.getSession()
+					.getAttribute("sysUserSession");
+			Map resMap = new HashMap();
+			String fileName = multipartFile.getOriginalFilename();
+			LinkedHashMap<String, String> fieldMap = new LinkedHashMap<String, String>();
+			fieldMap.put("0", "name");
+			fieldMap.put("1", "age");
+			fieldMap.put("2", "sex");
+			fieldMap.put("3", "groupName");
+			fieldMap.put("4", "groupid");
+			fieldMap.put("5", "headship");
+			fieldMap.put("6", "phone");
+			fieldMap.put("7", "mobile");
+			fieldMap.put("8", "address");
+			fieldMap.put("9", "post");
+			fieldMap.put("10", "ip");
+			fieldMap.put("11", "fax");
+			fieldMap.put("12", "email");
+			fieldMap.put("13", "qq");
+			fieldMap.put("14", "loginname");
+			fieldMap.put("15", "pwd");
+			fieldMap.put("16", "pwdquestion");
+			fieldMap.put("17", "pwdanswer");
+			fieldMap.put("18", "pinyin");
+			fieldMap.put("19", "cardid");
+			List<ComplatUser> users = ExcelUtil
+					.readXls(fileName, multipartFile.getInputStream(),
+							ComplatUser.class, fieldMap);
+			//ComplatUser complatUser = new ComplatUser();
+			if(importCheck(users, model, request, response)){//判断数据格式是否合适	
+				//机构是否存在，机构下是否存在用户					
+				if(dataCheck(users, model, request, response)){
+					for(ComplatUser complatUser : users){
 						// 新增时将机构名汉字转换成首字母大写保存到pinyin字段中
 						String daPinYin = getPinYinHeadChar(complatUser
 								.getName());
 						complatUser.setPinyin(daPinYin);
 						// 设置创建时间
-						complatUser.setCreatetime(Timestamp.valueOf(TimeHelper
-								.getCurrentTime()));// 创建时间
-						complatUser.setModifytime(Timestamp.valueOf(TimeHelper
-								.getCurrentTime()));// 修改时间
+						complatUser.setCreatetime(Timestamp
+								.valueOf(TimeHelper.getCurrentTime()));// 创建时间
+						complatUser.setModifytime(Timestamp
+								.valueOf(TimeHelper.getCurrentTime()));// 修改时间
 						// 设置状态值
 						complatUser.setEnable(0);
 						complatUser.setOpersign(1);
@@ -592,85 +596,204 @@ public class ComplatUserController extends BaseController {
 						int groupId = complatUser.getGroupid();
 						ComplatGroup complatGroup = complatGroupService
 								.findByIid(groupId);
-						String suffix = complatGroup.getSuffix();
-						String loginallname = loginname + "." + suffix;
-						complatUser.setLoginallname(loginallname);
-						// //对机构名称做判断
-						// if(complatGroup.equals(complatUser.getGroupName())){
-						// flag = false;
-						// strRow = "第<" + row + ">行数据，机构名称不正确！";
-						// break;
-						// }
-						// 对密码进行加密
-						String pwd = complatUser.getPwd();
-						String p = Md5Util.md5encode(pwd);
-						complatUser.setPwd(p);
-						complatUserService.save(complatUser);
-						// 身份证号
-						String cardId = complatUser.getCardid();
-						Integer userId = complatUser.getIid();
-						complatUser.setIid(userId);
-						JisUserdetail jisUser = new JisUserdetail();
-						jisUser.setCardid(cardId);
-						jisUser.setIid(userId);
-						jisUser.setUserid(userId);
-						jisUserdetailService.save(jisUser);
-						// //扩展属性
-						// String Kzsx=complatUser.getKzsx();
-						// String kzsx="";
-						// String [] fields=Kzsx.split(",");
-						// //List<Map<String,String>> listFields = new
-						// ArrayList<Map<String,String>>();
-						// //List<String> listFields = new ArrayList<String>();
-						// Map<String,String> map = new
-						// HashMap<String,String>();
-						// for (int i = 0; i < fields.length; i++) {
-						// kzsx=fields[i].trim();
-						// String kzsx1=kzsx.substring(1);
-						//
-						// int length=kzsx1.length();
-						// String kzsx2=kzsx1.substring(0,length-1);
-						// String [] arr = kzsx2.split(":");
-						//
-						// for(int j=0;j<arr.length;j++){
-						// String str1 = arr[0].trim();
-						// String str2 = arr[1].trim();
-						// if(j==0){
-						// map.put(str1, "");
-						// }else{
-						// map.put(str1, str2);
-						// }
-						// }
-						// }
-						// JisUserdetail jisUserdetail =
-						// jisUserdetailService.findByUserid(userId);
-						// if(jisUserdetail.getIid() != null){
-						// //对身份证号和用户扩展属性update
-						// jisUserdetailService.update(jisUserdetail.getIid(),cardId,map);
-						// }
-						synchronization(complatUser, 1);// 新增同步
-						String desc = session.getUserName() + "导入了"
-								+ complatUser.getName();
-						jisLogService.save(session.getUserName(),
-								session.getUserIp(), desc, 2, 5);
-					} else {
-						returnMsg("error", "机构名称为空导入失败", request);
-					}// else
-					row++;// 导入行数加一
-				}// if(list
-			}// for
-
-			if (flag) {
+						if (complatGroup != null) {
+							String suffix = complatGroup.getSuffix();
+							String loginallname = loginname + "."
+									+ suffix;
+							complatUser.setLoginallname(loginallname);
+							// 对密码进行加密
+							String pwd = complatUser.getPwd();
+							String p = Md5Util.md5encode(pwd);
+							complatUser.setPwd(p);
+							complatUserService.save(complatUser);
+							// 身份证号
+							String cardId = complatUser.getCardid();
+							Integer userId = complatUser.getIid();
+							complatUser.setIid(userId);
+							JisUserdetail jisUser = new JisUserdetail();
+							jisUser.setCardid(cardId);
+							jisUser.setIid(userId);
+							jisUser.setUserid(userId);
+							jisUserdetailService.save(jisUser);
+							synchronization(complatUser, 1);// 新增同步
+							String desc = session.getUserName() + "导入政府用户 ："
+									+ complatUser.getName();
+							jisLogService.save(session.getUserName(),
+									session.getUserIp(), desc, 2, 5);
+						}
+						
+					}
+				}
 				returnMsg("success", "导入成功", request);
-			} else {
-				returnMsg("error", "导入失败", request);
-			}
+			}			
 		} catch (Exception e) {
 			e.printStackTrace();
 			returnMsg("error", "导入失败", request);
 		}
 	}
 
+	
+	/**
+	* @param regex
+	* 正则表达式字符串
+	* @param str
+	* 要匹配的字符串
+	* @return 如果str 符合 regex的正则表达式格式,返回true, 否则返回 false;
+	*/
+	private static boolean match(String regex, String str) {
+	Pattern pattern = Pattern.compile(regex);
+	Matcher matcher = pattern.matcher(str);
+	return matcher.matches();
+	}
+	
+    /**
+	* 导入时数据校验
+	* 
+	* @param user
+	* @param model
+    * @param request
+	* @param response
+	* @return boolean
+	* @throws Exception
+	*/
+
+    public boolean importCheck(List<ComplatUser> users, Model model,HttpServletRequest request, HttpServletResponse response) throws Exception { 
+		  int row = 1;
+		  String warn = "";
+		  boolean check = true;
+		  List<String> resultList = new ArrayList<String>();
+		  //定义所有字段的正则表达式
+		  String nameReg = "^(?!_)(?!.*?_$)[a-zA-Z0-9\u4e00-\u9fa5]{1,255}$";
+		  //String ageReg = "^(?:[1-9]?\d|100)$";
+		  String ageReg="^(?:[1-9]?\\d|100)$";
+		  //String sexReg = "^(\d{3,4}-)?\d{7,8}$";
+		  //String groupNameReg = "[\u4e00-\u9fa5]{1,255}$";
+		  String groupIdReg = "^[0-9]*$";
+		  String headshipReg = "[\u4e00-\u9fa5]{1,255}$";
+		  String phoneReg="(((0\\d{3}[\\-])?\\d{7}|(0\\d{2}[\\-])?\\d{8}))([\\-]\\d{2,4})?$";
+//		  String phoneReg="((d{3,4})|d{3,4}-|s)?d{7,14}";
+		  String mobileReg = "(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\\d{8}$";
+		  String addressReg = "[\u4e00-\u9fa5]{1,255}$";
+		  String postReg = "^[1-9][0-9]{5}$";
+		  String num = "(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)";
+		  String ipReg = "^" + num + "\\." + num + "\\." + num + "\\." + num + "$";
+		  String faxReg = "^(\\d{3,4}-)?\\d{7,8}$";
+		  String emailReg = "^([\\w-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([\\w-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$";
+		  String qqReg = "[1-9][0-9]{4,}";
+		  String loginameReg = "^(?!_)(?!.*?_$)[a-zA-Z0-9_]{1,255}$";
+//		  String pwdReg = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,10}$";		
+		  String PinYinReg = "^[A-Z]+$";
+		  String cardIdReg = "([1-6]\\d{5}(19|20)\\d\\d(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])\\d{3}[0-9xX])|([1-6]\\d{5}\\d\\d(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])\\d{3})";		 
+		  for (ComplatUser complatUser : users) {
+			  //判断是否有不合规范的数据
+			if ((StringUtils.isEmpty(complatUser.getName()) || (!StringUtils.isEmpty(complatUser.getName())&& !match(nameReg,complatUser.getName())))
+				|| (StringUtils.isEmpty(complatUser.getAge().toString().trim()) || (!StringUtils.isEmpty(complatUser.getAge().toString().trim())&& !match(ageReg,complatUser.getAge().toString().trim())))
+			    || (StringUtils.isEmpty(complatUser.getSex().toString().trim()) || (!StringUtils.isEmpty(complatUser.getSex().toString().trim())&& (!(complatUser.getSex()!=1) || (complatUser.getSex()!=0))))			   
+			    || (StringUtils.isEmpty(complatUser.getGroupid().toString().trim()) || (!StringUtils.isEmpty(complatUser.getGroupid().toString().trim())&& !match(groupIdReg,complatUser.getGroupid().toString().trim())))
+			    || (StringUtils.isEmpty(complatUser.getHeadship()) || (!StringUtils.isEmpty(complatUser.getHeadship())&& !match(headshipReg,complatUser.getHeadship())))
+			    || (StringUtils.isEmpty(complatUser.getPhone()) || (!match(phoneReg,complatUser.getPhone())))
+			    || (StringUtils.isEmpty(complatUser.getMobile()) || (!StringUtils.isEmpty(complatUser.getMobile())&& !match(mobileReg,complatUser.getMobile())))
+			    || (StringUtils.isEmpty(complatUser.getAddress()) || (!StringUtils.isEmpty(complatUser.getAddress())&& !match(addressReg,complatUser.getAddress())))
+			    || (StringUtils.isEmpty(complatUser.getPost()) || (!StringUtils.isEmpty(complatUser.getPost())&& !match(postReg,complatUser.getPost())))
+			    || (StringUtils.isEmpty(complatUser.getIp()) || (!StringUtils.isEmpty(complatUser.getIp())&& !match(ipReg,complatUser.getIp())))
+			    || (StringUtils.isEmpty(complatUser.getFax()) || (!match(faxReg,complatUser.getFax())))
+			    || (StringUtils.isEmpty(complatUser.getEmail()) || (!StringUtils.isEmpty(complatUser.getEmail())&& !match(emailReg,complatUser.getEmail())))
+			    || (StringUtils.isEmpty(complatUser.getQq()) || (!match(qqReg,complatUser.getQq())))
+			    || (StringUtils.isEmpty(complatUser.getLoginname()) || (!StringUtils.isEmpty(complatUser.getLoginname())&& !match(loginameReg,complatUser.getLoginname())))
+//			    || (StringUtils.isEmpty(complatUser.getPwd()) || (!StringUtils.isEmpty(complatUser.getPwd())&& !match(pwdReg,complatUser.getPwd())))
+			    || (StringUtils.isEmpty(complatUser.getPinyin()) || (!StringUtils.isEmpty(complatUser.getPinyin())&& !match(PinYinReg,complatUser.getPinyin())))
+			    || (StringUtils.isEmpty(complatUser.getCardid()) || (!StringUtils.isEmpty(complatUser.getCardid())&& !match(cardIdReg,complatUser.getCardid())))
+			) {
+				warn = warn + String.valueOf(row) + "、";
+				check = false;							
+			}	
+			
+			if(warn.length() >= 1){
+				warn = warn.substring(0, warn.length()-1);
+			}
+			if(check == false){
+				returnMsg("error", "导入失败,第" + warn + "行数据输入错误，请修正后重新导入！",request);
+				return check;
+			}
+			
+			//判断当前登录用户是否有导入该条数据的权限
+			// 获取系统当前登录用户
+			SysUserSession sysUserSession = (SysUserSession) request
+					.getSession().getAttribute("sysUserSession");
+			String deptId = sysUserSession.getDeptId();
+			List<ComplatGroup> list = complatGroupService.findAllChildDept(deptId);
+			for (int i = 0; i < list.size();i++) {
+				String Iid = list.get(i).getIid().toString();
+				resultList.add(Iid);
+			}	
+			
+			if (!resultList.contains(complatUser.getGroupid().toString())) {
+				check=false;
+				warn = warn + String.valueOf(row) + ",";
+				
+				returnMsg("error", "导入失败,第" + warn.substring(0,warn.length()-1) + "行,您没有操作权限",request);	
+				return check;								
+			} else {													 ;
+			    check=true;
+			    return check;
+			}
+		  }
+		  row++;
+          return check;
+	  }
+	 
+
+    
+    /**
+	 * 判断机构和用户是否存在
+	 * 
+	 * @param file
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 * @author <a href=" ">shenxh</a>
+	 */
+    public boolean dataCheck(List<ComplatUser> users,Model model,HttpServletRequest request, HttpServletResponse response) throws Exception { 
+    	//判断excel文件中的机构名称在当前登录机构下面是否存在				
+		int row = 1;
+		 String warn = "";
+		boolean check = true; 
+		for (ComplatUser complatUser : users) {
+			int iid = complatUser.getGroupid();
+			ComplatGroup complatGroup = complatGroupService.findByIid(iid);
+			//Integer groupid = complatUser.getGroupid();			
+			if(warn.length() >= 1){
+				warn = warn.substring(0, warn.length()-1);
+			}
+			if (complatGroup.getName()==null || complatGroup.getName()=="") { 				
+				check=false;
+				returnMsg("error", "第" + warn + "行的机构不存在，导入失败",request);
+				return check;
+			}else{
+				check=true;
+			}	
+			
+			//判断机构下面是否存在该用户
+			List<Map<String, Object>> userList = complatUserService.findByLoginnameAndgroupid(
+					complatUser.getLoginname(),complatUser.getGroupid());
+			if(userList.size()!=0){		
+				String name=complatUser.getName();
+				check=false;
+				returnMsg("error", "第" + warn + "行导入失败,用户名为:"+name+"的用户已存在",request);
+				return check;
+			}else{
+				check=true;
+			}
+			row++;
+		}		
+    	return check;
+    }
+	
+	
+	
+	
+	
 	/**
 	 * 数据导出
 	 * 
@@ -801,7 +924,7 @@ public class ComplatUserController extends BaseController {
 			 */
 			dataList.add(treeMap);
 		}
-		String desc = session.getUserName() + "导出了" + complatUser.getName();
+		String desc = session.getUserName() + "导出政府用户 ：" + complatUser.getName();
 		jisLogService.save(session.getUserName(), session.getUserIp(), desc, 2,
 				4);
 		map.put(ExcelUtil.HEADERINFO, headList);
@@ -969,22 +1092,24 @@ public class ComplatUserController extends BaseController {
 					SimpleDateFormat sdf = new SimpleDateFormat(
 							"yyyy-MM-dd HH:mm:ss");
 					Date modifyTime = sdf.parse(time);
-					
-					//新增modifyPassTime
-					String oldPwd = complatUserService.findByKey(userId).getPwd();
-					Date modifyPassTime = Timestamp.valueOf(TimeHelper.getCurrentTime());
-					if(StringHelper.isNotBlack(oldPwd)){
+
+					// 新增modifyPassTime
+					String oldPwd = complatUserService.findByKey(userId)
+							.getPwd();
+					Date modifyPassTime = Timestamp.valueOf(TimeHelper
+							.getCurrentTime());
+					if (StringHelper.isNotBlack(oldPwd)) {
 						oldPwd = Md5Util.md5decode(oldPwd);
-						if(!oldPwd.equals(complatUser.getPwd())){
-							complatUserService.updateUserPassTime(userId, name, headShip,
-									phone, mobile, fax, email, qq, modifyTime, pwd,modifyPassTime);
-						}else{
-							complatUserService.updateUser(userId, name, headShip,
-									phone, mobile, fax, email, qq, modifyTime, pwd);
+						if (!oldPwd.equals(complatUser.getPwd())) {
+							complatUserService.updateUserPassTime(userId, name,
+									headShip, phone, mobile, fax, email, qq,
+									modifyTime, pwd, modifyPassTime);
+						} else {
+							complatUserService.updateUser(userId, name,
+									headShip, phone, mobile, fax, email, qq,
+									modifyTime, pwd);
 						}
 					}
-					
-					
 
 					// 身份证号处理 JisUserdetail
 					String cardId = request.getParameter("cardid");
@@ -998,10 +1123,11 @@ public class ComplatUserController extends BaseController {
 						jisUserdetailService.update(jisUserdetail.getIid(),
 								cardId, userMap);
 					}
-					
-					//日志
-					String desc = complatUser.getLoginname()+ "修改用户设置";
-					jisLogService.save(complatUser.getLoginname(),this.getIpAddr(request), desc, 2, 2);
+
+					// 日志
+					String desc = complatUser.getLoginname() + "修改用户设置";
+					jisLogService.save(complatUser.getLoginname(),
+							this.getIpAddr(request), desc, 2, 2);
 
 					// 同步
 					List<Map<String, Object>> syListMap = complatUserService
@@ -1104,23 +1230,24 @@ public class ComplatUserController extends BaseController {
 		}
 
 	}
-	
+
 	/**
 	 * 获取客户端IP
 	 */
-	  private String getIpAddr(HttpServletRequest request) {     
-	      String ip = request.getHeader("x-forwarded-for");     
-	      if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {     
-	         ip = request.getHeader("Proxy-Client-IP");     
-	     }     
-	      if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {     
-	         ip = request.getHeader("WL-Proxy-Client-IP");     
-	      }     
-	     if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {     
-	          ip = request.getRemoteAddr();     
-	     }     
-	     return ip;     
-	}  
+	private String getIpAddr(HttpServletRequest request) {
+		String ip = request.getHeader("x-forwarded-for");
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("Proxy-Client-IP");
+		}
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("WL-Proxy-Client-IP");
+		}
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getRemoteAddr();
+		}
+		return ip;
+	}
+
 	/**
 	 * 获取用户扩展属性
 	 * 
@@ -1169,7 +1296,7 @@ public class ComplatUserController extends BaseController {
 		PrintWriter out = response.getWriter();
 		String json = array.toString();
 		out.write(json);
-		//System.out.println("json--" + json);
+		// System.out.println("json--" + json);
 		model.addAttribute("fieldsListMap", json);
 
 		// 设置默认值
@@ -1723,7 +1850,7 @@ public class ComplatUserController extends BaseController {
 	}
 
 	public static void main(String[] args) {
-		String pwd = "fmV1BQIACjADRnw4BjAEMnFFAEM=";//
+		String pwd = "BEJ0R3Y2fDd2M3Yx";//
 		String p = Md5Util.md5decode(pwd);
 		System.out.println("解密后的密码是:" + p);
 	}

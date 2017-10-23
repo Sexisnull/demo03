@@ -173,15 +173,21 @@ var complatUserNameInput=$("#name").val();
 	         required: true
 	     },
 	     age: {
+	     	   required: true,
 	         cnRangelength: [0,64],
 	         maxlength: 3,
-	         isAge: true
-	         
-	     },		       	   
-	     headship:{
-	         cnRangelength: [0,64]
+	         isAge: true	         
+	     },	
+	     pinyin: {
+	         cnRangelength: [0,64],
+	         isPinYin: true	         
+	     },		     	       	   	     
+	     headship: {
+	     	   required: true,
+	         cnRangelength: [0,64],
+	         isHeadship: true
 	     },	   
-	     phone:{//办公电话
+	     phone: {//办公电话
 		   		 isCompTel:true,
 		   		 maxlength:12 
 		   },
@@ -208,12 +214,14 @@ var complatUserNameInput=$("#name").val();
 		   		 isFax: true
 		   },
 	   	 address:{
+	   	 	   required: true,
 				   /* isAddressInfo:true, */
 		   		 cnRangelength: [0,127],
-		   		 isName : true
+		   		 isAddress: true
 		   	},
 		   post:{
 				  /* isEmail：true, */
+				  required: true,
 		   		maxlength: 6,
 		   		isPost:true
 		   	},
@@ -229,10 +237,12 @@ var complatUserNameInput=$("#name").val();
 			 },
 	   
 	     pwdquestion : {
+	     	  required: true,
 			    cnRangelength: [0,127],
 			    //isName : true
 		   },
 	     pwdanswer : {
+	     	  required: true,
 			    cnRangelength: [0,127],
 			    //isName : true
 	     },
@@ -286,12 +296,12 @@ var complatUserNameInput=$("#name").val();
            var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9\u4e00-\u9fa5]+$/;   
            return this.optional(element) || (corporName.test(value));     
     }, "名称只能由字母、数字、中文组成，不能以下划线开头和结尾");
-    
+    //登录名
     jQuery.validator.addMethod("isLoginname", function(value, element) { 
            var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;   
            return this.optional(element) || (corporName.test(value));     
     }, "名称只能由字母、数字、下划线、中文组成，不能以下划线开头和结尾");
-    
+    //邮政编码
     jQuery.validator.addMethod("isPost", function(value, element) { 
            var corporName = /^[1-9][0-9]{5}$/;   
            return this.optional(element) || (corporName.test(value));     
@@ -326,6 +336,21 @@ var complatUserNameInput=$("#name").val();
            var corporName = /([1-6]\d{5}(19|20)\d\d(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])\d{3}[0-9xX])|([1-6]\d{5}\d\d(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])\d{3})/;   
            return this.optional(element) || (corporName.test(value));     
     }, "身份证号格式错误"); 
+     //职务
+     jQuery.validator.addMethod("isHeadship", function(value, element) { 
+           var corporName = /[\u4e00-\u9fa5]{1,255}$/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "请不要输入除汉字以外的其他内容"); 
+    //姓名首字母
+     jQuery.validator.addMethod("isPinYin", function(value, element) { 
+           var corporName = /^[A-Z]+$/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "请不要输入除大写字母以外的其他内容");
+    //地址
+     jQuery.validator.addMethod("isAddress", function(value, element) { 
+           var corporName = /^(?=.*?[\u4E00-\u9FA5])[\dA-Za-z\u4E00-\u9FA5]/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "地址由汉字，字母和数字构成"); 
    //编辑时密码强度回显
     var pwding = $("#pwd").val();
 	  EvalPwd(pwding);
@@ -507,7 +532,7 @@ function checkAndSave() {
     var pwd = $("#pwd").val();
     var msg = "";
     if(pwd==""){
-    	$.dialog.alert("请填写必填信息！",function(){
+    	$.dialog.alert("请填写密码！",function(){
 				return null;
 		});
 		return;
@@ -594,7 +619,7 @@ function checkAndSave() {
 				  <td style="width:300px;">
 					<input type="text" id="age" name="age" value="${complatUser.age}"">
 	              </td>
-	               <th>姓名的首字母全称：</th>
+	               <th>姓名的首字母全拼(大写)：</th>
 	        	   <td style="width:300px;">
 	        		  <input type="text" id="pinyin" name="pinyin" value="${complatUser.pinyin}" />
 	        	   </td>
@@ -611,7 +636,7 @@ function checkAndSave() {
 				</td>
 			    </tr>		    
 			    <tr>
-			      <th><b class="mustbe">*</b> 固定电话：</th>
+			      <th>办公电话：</th>
 				  <td style="width:300px;">
 					<input type="text"  id="phone" name="phone" value="${complatUser.phone}" />
 				  </td>
@@ -648,8 +673,8 @@ function checkAndSave() {
 				  </td>
 				  <th class="td_6"><b class="mustbe">*</b> 所属机构：</th>
 				  <td class="td_4" style="width:300px;">
-				    <c:if test="${empty complatUser.iid}">
-				        <input id="groupname" value="${groupMap[complatUser.groupid]}" name="groupname" readonly="readonly" type="text" style="cursor: pointer;"/> 
+				    <c:if test="${empty complatUser.iid}"> 
+				        <input id="groupname" value="${groupMap[complatUser.groupid]}" name="groupname" type="text" style="cursor: pointer;"/> 
 					    <input type="hidden" id="groupid" name="groupid">	
 				    </c:if>
 				    <c:if test="${not empty complatUser.iid}">
@@ -665,20 +690,20 @@ function checkAndSave() {
                    	   <input type="text" id="loginname" name="loginname" value="${complatUser.loginname}" />
 					             <input type="hidden" id="oldLoginname" name=oldLoginname" value="${complatUser.loginname}" />					           
 	               </td>
-	        	   <th><b class="mustbe">*</b> 请设置密码找回问题：</th>
+	        	  <!-- <th><b class="mustbe">*</b> 请设置密码找回问题：</th>
 				   <td style="width:300px;">
 					  <input type="text"  class="input" id="pwdquestion" name="pwdquestion" value="${complatUser.pwdquestion}"  />
-				   </td>
+				   </td>-->
 			    </tr>	
 				<tr style="width:300px;">		
 				   <th><b class="mustbe">*</b> 密码：</th>
         	       <td style="width:300px;">
         		      <input type="password" id="pwd" name="pwd"  value="${pwd}" onkeyup="javascript:EvalPwd(this.value);"/>
         	       </td>
-	        	   <th><b class="mustbe">*</b> 请设置密码找回问题答案：</th>
+	        	 <!--  <th><b class="mustbe">*</b> 请设置密码找回问题答案：</th>
 				   <td style="width:300px;">
 					  <input type="text"  class="input" id="pwdanswer" name="pwdanswer" value="${complatUser.pwdanswer}"  />
-				   </td>
+				   </td>-->
 				   
 			    </tr>
 			    <tr>				

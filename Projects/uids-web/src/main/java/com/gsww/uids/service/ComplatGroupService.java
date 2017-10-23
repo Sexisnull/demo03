@@ -113,5 +113,8 @@ public interface ComplatGroupService {
 	public List<ComplatGroup> findAllOrg() throws Exception;
 
 	public List<ComplatGroup> findAllDept(String deptId) throws Exception;
+	
+	public List<ComplatGroup> findAllChildDept(String deptId) throws Exception;
+	
 
 }
