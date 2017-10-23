@@ -556,8 +556,6 @@ public class ComplatUserController extends BaseController {
 			HttpServletRequest request, Model model,
 			HttpServletResponse response) throws Exception {
 		try {
-			String name = "";
-			String names="";
 			SysUserSession session = (SysUserSession) request.getSession()
 					.getAttribute("sysUserSession");
 			Map resMap = new HashMap();
@@ -579,10 +577,10 @@ public class ComplatUserController extends BaseController {
 			fieldMap.put("13", "qq");
 			fieldMap.put("14", "loginname");
 			fieldMap.put("15", "pwd");
-			fieldMap.put("16", "pwdquestion");
-			fieldMap.put("17", "pwdanswer");
-			fieldMap.put("18", "pinyin");
-			fieldMap.put("19", "cardid");
+//			fieldMap.put("16", "pwdquestion");
+//			fieldMap.put("17", "pwdanswer");
+			fieldMap.put("16", "pinyin");
+			fieldMap.put("17", "cardid");
 			List<ComplatUser> users = ExcelUtil
 					.readXls(fileName, multipartFile.getInputStream(),
 							ComplatUser.class, fieldMap);
@@ -591,53 +589,55 @@ public class ComplatUserController extends BaseController {
 				//机构是否存在，机构下是否存在用户					
 				if(dataCheck(users, model, request, response)){
 					for(ComplatUser complatUser : users){
-						// 新增时将机构名汉字转换成首字母大写保存到pinyin字段中
-						String daPinYin = getPinYinHeadChar(complatUser
-								.getName());
-						complatUser.setPinyin(daPinYin);
-						// 设置创建时间
-						complatUser.setCreatetime(Timestamp
-								.valueOf(TimeHelper.getCurrentTime()));// 创建时间
-						complatUser.setModifytime(Timestamp
-								.valueOf(TimeHelper.getCurrentTime()));// 修改时间
-						// 设置状态值
-						complatUser.setEnable(0);
-						complatUser.setOpersign(1);
-						complatUser.setSynState(2);
-						// 对登录全名进行唯一性判断
-						String loginname = complatUser.getLoginname();
-						int groupId = complatUser.getGroupid();
-						ComplatGroup complatGroup = complatGroupService
-								.findByIid(groupId);
-						if (complatGroup != null) {
-							String suffix = complatGroup.getSuffix();
-							String loginallname = loginname + "."
-									+ suffix;
-							complatUser.setLoginallname(loginallname);
-							// 对密码进行加密
-							String pwd = complatUser.getPwd();
-							String p = Md5Util.md5encode(pwd);
-							complatUser.setPwd(p);
-							complatUserService.save(complatUser);
-							// 身份证号
-							String cardId = complatUser.getCardid();
-							Integer userId = complatUser.getIid();
-							complatUser.setIid(userId);
-							JisUserdetail jisUser = new JisUserdetail();
-							jisUser.setCardid(cardId);
-							jisUser.setIid(userId);
-							jisUser.setUserid(userId);
-							jisUserdetailService.save(jisUser);
-							synchronization(complatUser, 1);// 新增同步
-							String desc = session.getUserName() + "导入政府用户 ："
-									+ complatUser.getName();
-							jisLogService.save(session.getUserName(),
-									session.getUserIp(), desc, 2, 5);
-						}
-						
+						//if(userCheck(complatUser, model, request, response)){
+							// 新增时将机构名汉字转换成首字母大写保存到pinyin字段中
+							String daPinYin = getPinYinHeadChar(complatUser
+									.getName());
+							complatUser.setPinyin(daPinYin);
+							// 设置创建时间
+							complatUser.setCreatetime(Timestamp
+									.valueOf(TimeHelper.getCurrentTime()));// 创建时间
+							complatUser.setModifytime(Timestamp
+									.valueOf(TimeHelper.getCurrentTime()));// 修改时间
+							// 设置状态值
+							complatUser.setEnable(0);
+							complatUser.setOpersign(1);
+							complatUser.setSynState(2);
+							// 对登录全名进行唯一性判断
+							String loginname = complatUser.getLoginname();
+							int groupId = complatUser.getGroupid();
+							ComplatGroup complatGroup = complatGroupService
+									.findByIid(groupId);
+							if (complatGroup != null) {
+								String suffix = complatGroup.getSuffix();
+								String loginallname = loginname + "."
+										+ suffix;
+								complatUser.setLoginallname(loginallname);
+								// 对密码进行加密
+								String pwd = complatUser.getPwd();
+								String p = Md5Util.md5encode(pwd);
+								complatUser.setPwd(p);
+								complatUserService.save(complatUser);
+								// 身份证号
+								String cardId = complatUser.getCardid();
+								Integer userId = complatUser.getIid();
+								complatUser.setIid(userId);
+								JisUserdetail jisUser = new JisUserdetail();
+								jisUser.setCardid(cardId);
+								jisUser.setIid(userId);
+								jisUser.setUserid(userId);
+								jisUserdetailService.save(jisUser);
+								synchronization(complatUser, 1);// 新增同步
+								String desc = session.getUserName() + "导入政府用户 ："
+										+ complatUser.getName();
+								jisLogService.save(session.getUserName(),
+										session.getUserIp(), desc, 2, 5);
+								
+							}
+						//}
 					}
-				}
-				returnMsg("success", "导入成功", request);
+					returnMsg("success", "导入成功", request);
+				}				
 			}			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -742,13 +742,15 @@ public class ComplatUserController extends BaseController {
 			
 			if (!resultList.contains(complatUser.getGroupid().toString())) {
 				check=false;
-				warn = warn + String.valueOf(row) + ",";
-				
-				returnMsg("error", "导入失败,第" + warn.substring(0,warn.length()-1) + "行,您没有操作权限",request);	
-				return check;								
+				warn = warn + String.valueOf(row) + ",";							
 			} else {													 ;
 			    check=true;
 			    return check;
+			}
+			
+			if(check==false){
+				returnMsg("error", "导入失败,第" + warn.substring(0,warn.length()-1) + "行,您没有操作权限",request);	
+				return check;	
 			}
 		  }
 		  row++;
@@ -770,40 +772,72 @@ public class ComplatUserController extends BaseController {
     public boolean dataCheck(List<ComplatUser> users,Model model,HttpServletRequest request, HttpServletResponse response) throws Exception { 
     	//判断excel文件中的机构名称在当前登录机构下面是否存在				
 		int row = 1;
-		 String warn = "";
+		String warn = "";
 		boolean check = true; 
 		for (ComplatUser complatUser : users) {
 			int iid = complatUser.getGroupid();
 			ComplatGroup complatGroup = complatGroupService.findByIid(iid);
 			//Integer groupid = complatUser.getGroupid();			
+
+			if (complatGroup.getName()==null || complatGroup.getName()=="") { 	
+				warn = warn + String.valueOf(row) + ",";
+				check=false;				
+			}else{
+				check=true;
+			}
 			if(warn.length() >= 1){
 				warn = warn.substring(0, warn.length()-1);
 			}
-			if (complatGroup.getName()==null || complatGroup.getName()=="") { 				
-				check=false;
+			if(check==false){				
 				returnMsg("error", "第" + warn + "行的机构不存在，导入失败",request);
 				return check;
-			}else{
-				check=true;
-			}	
-			
-			//判断机构下面是否存在该用户
+			}
 			List<Map<String, Object>> userList = complatUserService.findByLoginnameAndgroupid(
 					complatUser.getLoginname(),complatUser.getGroupid());
-			if(userList.size()!=0){		
-				String name=complatUser.getName();
-				check=false;
-				returnMsg("error", "第" + warn + "行导入失败,用户名为:"+name+"的用户已存在",request);
-				return check;
-			}else{
-				check=true;
+			String name=complatUser.getName();
+			if(userList.size()!=0){
+				warn = warn + String.valueOf(row) + ",";
+	    		check=false;	    			    		
+	    	}else{
+	    		check=true;
+	    	}
+	    	if(warn.length() >= 1){
+				warn = warn.substring(0, warn.length()-1);
 			}
+	    	if(check==false){	    		
+	    		returnMsg("error", "第" + warn + "行导入失败,用户名为:"+name+"的用户已存在",request);
+	    	}
 			row++;
 		}		
     	return check;
     }
 	
 	
+    
+    
+//    //判断机构下面是否存在该用户
+//    public boolean userCheck(ComplatUser user,Model model,HttpServletRequest request, HttpServletResponse response) throws Exception { 
+//    	//判断机构下面是否存在该用户
+//		 String warn = "";
+//		 boolean check = true;
+//    	List<Map<String, Object>> userList = complatUserService.findByLoginnameAndgroupid(
+//    			user.getLoginname(),user.getGroupid());
+//    	String name=user.getName();
+//    	if(userList.size()!=0){		    		
+//    		check=false;   		
+//    	}else{
+//    		check=true;
+//    	}
+//    	if(warn.length() >= 1){
+//			warn = warn.substring(0, warn.length()-1);
+//		}
+//    	if(check==false){
+//    		returnMsg("error", "第" + warn + "行导入失败,用户名为:"+name+"的用户已存在",request);
+//    		return check;
+//    	}
+//    	return check;
+//    }
+//  
 	
 	
 	
