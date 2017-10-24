@@ -5,10 +5,7 @@
 package com.gsww.jup.criteria;
 
 import java.util.Collection;
-
-import org.hibernate.criterion.MatchMode;
 import org.springframework.util.StringUtils;
-
 import com.gsww.jup.criteria.Criterion.Operator;
 
 /**
