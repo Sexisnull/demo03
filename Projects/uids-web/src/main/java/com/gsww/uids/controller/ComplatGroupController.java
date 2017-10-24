@@ -719,8 +719,12 @@ public class ComplatGroupController extends BaseController {
 			SysUserSession sysUserSession = (SysUserSession) ((HttpServletRequest) request).getSession().getAttribute("sysUserSession");
 			// 获取部门id
 			String deptId = sysUserSession.getDeptId();
+			//如果登陆id是非市县的部门id，则区域编码为它自身的区域编码
+			if(!complatZoneService.checkToIid(Integer.valueOf(deptId))){
+				String areaCode = complatGroupService.findByIid(Integer.valueOf(deptId)).getAreacode();
+				deptId = String.valueOf(complatZoneService.findByCodeId(areaCode).getIid());
+			}
             List<ComplatZone> list = new ArrayList<ComplatZone>();
-
             if (!"0".equals(groupId) && StringUtils.isNotBlank(groupId)) {
                 list = complatZoneService.findByPid(Integer.parseInt(groupId));
             } else {
