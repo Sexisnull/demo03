@@ -702,6 +702,7 @@ public class ComplatUserController extends BaseController {
 			if ((StringUtils.isEmpty(complatUser.getName()) || (!StringUtils.isEmpty(complatUser.getName())&& !match(nameReg,complatUser.getName())))
 				|| (StringUtils.isEmpty(complatUser.getAge().toString().trim()) || (!StringUtils.isEmpty(complatUser.getAge().toString().trim())&& !match(ageReg,complatUser.getAge().toString().trim())))
 			    || (StringUtils.isEmpty(complatUser.getSex().toString().trim()) || (!StringUtils.isEmpty(complatUser.getSex().toString().trim())&& (!(complatUser.getSex()!=1) || (complatUser.getSex()!=0))))			   
+			    || (StringUtils.isEmpty(complatUser.getGroupName().toString().trim()))
 			    || (StringUtils.isEmpty(complatUser.getGroupid().toString().trim()) || (!StringUtils.isEmpty(complatUser.getGroupid().toString().trim())&& !match(groupIdReg,complatUser.getGroupid().toString().trim())))
 			    || (StringUtils.isEmpty(complatUser.getHeadship()) || (!StringUtils.isEmpty(complatUser.getHeadship())&& !match(headshipReg,complatUser.getHeadship())))
 			    || (StringUtils.isEmpty(complatUser.getPhone()) || (!match(phoneReg,complatUser.getPhone())))
@@ -717,7 +718,7 @@ public class ComplatUserController extends BaseController {
 			    || (StringUtils.isEmpty(complatUser.getPinyin()) || (!StringUtils.isEmpty(complatUser.getPinyin())&& !match(PinYinReg,complatUser.getPinyin())))
 			    || (StringUtils.isEmpty(complatUser.getCardid()) || (!StringUtils.isEmpty(complatUser.getCardid())&& !match(cardIdReg,complatUser.getCardid())))
 			) {
-				warn = warn + String.valueOf(row) + "、";
+				warn = warn + String.valueOf(row) + ",";
 				check = false;							
 			}	
 			
@@ -792,6 +793,7 @@ public class ComplatUserController extends BaseController {
 				returnMsg("error", "第" + warn + "行的机构不存在，导入失败",request);
 				return check;
 			}
+			//判断当前机构及其子机构下面是否存在登录名为导入数据中的用户
 			List<Map<String, Object>> userList = complatUserService.findByLoginnameAndgroupid(
 					complatUser.getLoginname(),complatUser.getGroupid());
 			String name=complatUser.getName();
@@ -801,9 +803,9 @@ public class ComplatUserController extends BaseController {
 	    	}else{
 	    		check=true;
 	    	}
-	    	if(warn.length() >= 1){
-				warn = warn.substring(0, warn.length()-1);
-			}
+//	    	if(warn.length() >= 1){
+//				warn = warn.substring(0, warn.length()-1);
+//			}
 	    	if(check==false){	    		
 	    		returnMsg("error", "第" + warn + "行导入失败,用户名为:"+name+"的用户已存在",request);
 	    	}
@@ -1800,11 +1802,11 @@ public class ComplatUserController extends BaseController {
 			jsonMap.put("allParName", "");
 
 			jsonMap.put("appName", jisApplication.getName());
-			jsonMap.put("cardId", "");
+			jsonMap.put("cardId", complatUser.getCardid());
 			jsonMap.put("appid", sysView.getAppid());
 			JisUserdetail jisUserdetail = new JisUserdetail();
 			jsonMap.put("compfax", complatUser.getFax());
-			jsonMap.put("comptel", "");
+			jsonMap.put("comptel", complatUser.getPhone());//
 			jsonMap.put("email", complatUser.getEmail());
 			jsonMap.put("groupCode", sysView.getCodeid());
 			// jsonMap.put("groupName",group.getName());

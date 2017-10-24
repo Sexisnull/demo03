@@ -49,9 +49,9 @@
 //下载模板
 function downloadTemplate(fileName){
 	//window.location.href="${ctx}/complat/uploadFile";
-	 //var api = frameElement.api, W = api.opener;    
+	 var api = frameElement.api, W = api.opener;    
 	 window.location.href="${ctx}/uploadFile/complat/userList.xlsx";
-	 //W.location.href = "${ctx}/complat/complatList?msg=success";
+	 W.location.href = "${ctx}/complat/complatList?msg=success";
 }	  
 
 //导入
