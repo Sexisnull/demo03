@@ -2,6 +2,7 @@ package com.gsww.uids.controller;
 
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -392,15 +393,20 @@ public class ComplatCorporationController extends BaseController{
 	public void corporationAuth(ComplatCorporation corporation,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		ComplatCorporation complatCorporation = null;
 		Map<String, Object> resMap = new HashMap<String, Object>();
-		try{			
+		try{
+			int type = 1;
 			String corporationType = StringUtils.trim((String) request.getParameter("corporUserType"));
 			String rejectReason2 = StringUtils.trim((String) request.getParameter("rejectReason2"));
-			int type = Integer.parseInt(corporationType);//1:通过  0：拒绝
-			if(corporation.getIid() != null){
+			if(StringHelper.isNotBlack(corporationType)){
+				type = Integer.parseInt(corporationType);//1:通过  0：拒绝
+			}
+			if(corporation.getIid() != null){ 
 				complatCorporation = complatCorporationService.findByKey(corporation.getIid());
 				if(type == 1) {
 					int isAuth = complatCorporation.getisAuth();
 					if (isAuth == 0) {
+						//认证通过调接口，还没写
+						
 						complatCorporation.setisAuth(1);
 						complatCorporation.setauthState(1);
 						complatCorporationService.save(complatCorporation);
@@ -523,4 +529,5 @@ public class ComplatCorporationController extends BaseController{
 		jisLog.setSpec(spec);
 		jisLogService.save(jisLog);
 	}
+	
 }
