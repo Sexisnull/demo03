@@ -476,13 +476,13 @@ function resetform() {
 </script>
 		<%--<script type="text/javascript" src="${ctx}/res/js/region/orgTree.js"></script>--%>
 	</head>
-	<body>
+	<body overflow:auto;> 
         <!-- 提示信息开始 -->
 		<div class="form-alert;">
 			<tags:message msgMap="${msgMap}"></tags:message>
 		</div>
 		<!-- 提示信息结束 -->
-		<div class="list-warper">
+		<div class="list-warper" style="overflow:-Scroll;overflow-y:hidden;overflow-x:hidden;">
 			<!--左侧树形结构-->
 			<%--<div id="tablelist" style="width:20%;float:left;min-width:0px;">--%>
 				<%--<table class="tablelist" >--%>
@@ -577,22 +577,22 @@ function resetform() {
 								<th width="10%" style="text-align: center;">
 									姓名
 								</th>
-								<th width="10%" style="text-align: center;">
+								<th width="15%" style="text-align: center;">
 									登录名
 								</th>
-								<th width="15%" style="text-align: center;">
+								<th width="20%" style="text-align: center;">
 									登录全名
 								</th>
 								<th width="15%" style="text-align: center;">
 									所属机构
 								</th>
-								<th width="10%" class="alignL" style="text-align: center;">
+								<th width="15%" class="alignL" style="text-align: center;">
 									用户职务
 								</th>
-								<th width="12%" style="text-align: center;">
+								<th width="15%" style="text-align: center;">
 									办公电话
 								</th>
-								<th width="3%" style="text-align: center;">
+								<th width="5%" style="text-align: center;">
 									账号开启
 								</th>
 								<!--

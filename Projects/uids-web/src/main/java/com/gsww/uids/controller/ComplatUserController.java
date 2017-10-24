@@ -361,7 +361,7 @@ public class ComplatUserController extends BaseController {
 						//获取当前机器的ip地址
 						String IP = getIpAddr(request);
 						complatUser.setIp(IP);
-						System.out.println("当前机器的ip地址:"+IP);
+//						System.out.println("当前机器的ip地址:"+IP);
 						// 注册时间
 						complatUser.setCreatetime(Timestamp.valueOf(TimeHelper
 								.getCurrentTime()));// 创建时间
@@ -429,7 +429,7 @@ public class ComplatUserController extends BaseController {
 						//获取当前机器的ip地址
 						String IP = getIpAddr(request);
 						complatUser.setIp(IP);
-						System.out.println("当前机器的ip地址:"+IP);
+//						System.out.println("当前机器的ip地址:"+IP);
 						synchronization(complatUser, 1);// 新增同步
 
 						// 新增对密码修改时间做处理
@@ -580,16 +580,16 @@ public class ComplatUserController extends BaseController {
 			fieldMap.put("7", "mobile");
 			fieldMap.put("8", "address");
 			fieldMap.put("9", "post");
-			fieldMap.put("10", "ip");
-			fieldMap.put("11", "fax");
-			fieldMap.put("12", "email");
-			fieldMap.put("13", "qq");
-			fieldMap.put("14", "loginname");
-			fieldMap.put("15", "pwd");
+//			fieldMap.put("10", "ip");
+			fieldMap.put("10", "fax");
+			fieldMap.put("11", "email");
+			fieldMap.put("12", "qq");
+			fieldMap.put("13", "loginname");
+			fieldMap.put("14", "pwd");
 //			fieldMap.put("16", "pwdquestion");
 //			fieldMap.put("17", "pwdanswer");
-			fieldMap.put("16", "pinyin");
-			fieldMap.put("17", "cardid");
+			fieldMap.put("15", "pinyin");
+			fieldMap.put("16", "cardid");
 			List<ComplatUser> users = ExcelUtil
 					.readXls(fileName, multipartFile.getInputStream(),
 							ComplatUser.class, fieldMap);
@@ -615,7 +615,7 @@ public class ComplatUserController extends BaseController {
 							//获取当前机器的ip地址
 							String IP = getIpAddr(request);
 							complatUser.setIp(IP);
-							System.out.println("当前机器的ip地址:"+IP);
+//							System.out.println("当前机器的ip地址:"+IP);
 							// 对登录全名进行唯一性判断
 							String loginname = complatUser.getLoginname();
 							int groupId = complatUser.getGroupid();
@@ -722,7 +722,7 @@ public class ComplatUserController extends BaseController {
 			    || (StringUtils.isEmpty(complatUser.getMobile()) || (!StringUtils.isEmpty(complatUser.getMobile())&& !match(mobileReg,complatUser.getMobile())))
 			    || (StringUtils.isEmpty(complatUser.getAddress()) || (!StringUtils.isEmpty(complatUser.getAddress())&& !match(addressReg,complatUser.getAddress())))
 			    || (StringUtils.isEmpty(complatUser.getPost()) || (!StringUtils.isEmpty(complatUser.getPost())&& !match(postReg,complatUser.getPost())))
-			    || (StringUtils.isEmpty(complatUser.getIp()) || (!StringUtils.isEmpty(complatUser.getIp())&& !match(ipReg,complatUser.getIp())))
+//			    || (StringUtils.isEmpty(complatUser.getIp()) || (!StringUtils.isEmpty(complatUser.getIp())&& !match(ipReg,complatUser.getIp())))
 			    || (StringUtils.isEmpty(complatUser.getFax()) || (!match(faxReg,complatUser.getFax())))
 			    || (StringUtils.isEmpty(complatUser.getEmail()) || (!StringUtils.isEmpty(complatUser.getEmail())&& !match(emailReg,complatUser.getEmail())))
 			    || (StringUtils.isEmpty(complatUser.getQq()) || (!match(qqReg,complatUser.getQq())))
@@ -739,7 +739,7 @@ public class ComplatUserController extends BaseController {
 				warn = warn.substring(0, warn.length()-1);
 			}
 			if(check == false){
-				returnMsg("error", "导入失败,第" + warn + "行数据输入错误，请修正后重新导入！",request);
+				returnMsg("error", "导入失败,第" + warn + "行数据有误，请修正后重新导入！",request);
 				return check;
 			}
 			
