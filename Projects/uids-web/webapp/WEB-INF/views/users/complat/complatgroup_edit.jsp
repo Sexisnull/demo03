@@ -20,13 +20,13 @@
 
 
 $(function(){
-	var groupMenu = [{"name":"机构选择","id":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
+//	var groupMenu = [{"name":"甘肃省","id":"128","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
 
 	$('#groupname').menu({
 		tree : 'groupmenu',
 		height : 200,
 		init : function() {
-			setting('groupmenu', onClickGroup, onDbClickGroup, groupMenu);
+			setting('groupmenu', onClickGroup, onDbClickGroup);
 		}
 	});
 });
@@ -52,7 +52,7 @@ function onDbClickGroup(event, treeId, treeNode) {
 /**
  *	初始化树
  */
-function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
+function setting(treeName, onClickFunction, onDblClickFunction) {
 	var setting = {
 		async : {
 			enable : true,
@@ -65,7 +65,8 @@ function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
 			onDblClick : onDblClickFunction
 		}
 	};
-	$("#" + treeName).tree(setting, rootNode);
+	console.log("-----"+treeName);
+	$("#" + treeName).tree(setting);
 //	$("#" + treeName).tree().refreshNode('');
 }
 /**
@@ -84,13 +85,13 @@ function resetform() {
 //-------------------------区域编码树-----------------------------
 
 $(function(){
-	var groupMenu2 = [{"name":"甘肃省","title":"甘肃省","id":"128","codeid":"620000000000","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
+//	var groupMenu2 = [{"name":"区域选择","id":"0","codeid":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
 
 	$('#groupname2').menu({
 		tree : 'groupmenu2',
 		height : 200,
 		init : function() {
-			setting2('groupmenu2', onClickGroup2, onDbClickGroup2, groupMenu2);
+			setting2('groupmenu2', onClickGroup2, onDbClickGroup2);
 		}
 	});
 });
@@ -109,7 +110,7 @@ function onDbClickGroup2(event, treeId, treeNode) {
 	if (treeNode.isDisabled )//根节点及失效节点双击无效
 		return;
 	$('#groupid2').val(treeNode.id);
-	$('#groupname2').val(treeNode.name);
+	$('#groupname2').val(treeNode.codeid);
 	$('#groupname2_menu').fadeOut(50);
 }
 
@@ -130,7 +131,7 @@ function setting2(treeName, onClickFunction, onDblClickFunction, rootNode) {
 		}
 	};
 	console.log("-----"+treeName);
-	$("#" + treeName).tree(setting, rootNode);
+	$("#" + treeName).tree(setting);
 //	$("#" + treeName).tree().refreshNode('');
 }
 /**
@@ -175,26 +176,26 @@ $("#editForm").validate({
 	   		maxlength: 255
 	   	},
 	   	submitHandler:function(form){
-	   		
+
 			form.submit();
 		}
 	}
 });
-jQuery.validator.addMethod("isName", function(value, element) { 
-           var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;   
-           return this.optional(element) || (corporName.test(value));     
+jQuery.validator.addMethod("isName", function(value, element) {
+           var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;
+           return this.optional(element) || (corporName.test(value));
     }, "只能由字母、数字、下划线、中文组成，不能以下划线开头和结尾");
-    
-    jQuery.validator.addMethod("isSuffix", function(value, element) { 
-           var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9_]+$/;   
-           return this.optional(element) || (corporName.test(value));     
+
+    jQuery.validator.addMethod("isSuffix", function(value, element) {
+           var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9_]+$/;
+           return this.optional(element) || (corporName.test(value));
     }, "只能由字母、数字、下划线组成，不能以下划线开头和结尾");
-    
-     jQuery.validator.addMethod("isOrgcode", function(value, element) { 
-           var corporName = /^[a-zA-Z0-9]{9}$/;   
-           return this.optional(element) || (corporName.test(value));     
+
+     jQuery.validator.addMethod("isOrgcode", function(value, element) {
+           var corporName = /^[a-zA-Z0-9]{9}$/;
+           return this.optional(element) || (corporName.test(value));
     }, "只能由字母、数字组成，只能为9位");
-    
+
 });
 
 </script>
@@ -217,17 +218,17 @@ jQuery.validator.addMethod("isName", function(value, element) {
 			</li>
    		</ol>
     </div>
-	<!--表单的标题区域--> 
+	<!--表单的标题区域-->
 	<%-- <div class="form-title"><c:if test="${empty sysAccount.userAcctId}">用户新增</c:if><c:if test="${not empty sysAccount.userAcctId}">用户编辑</c:if></div> --%>
     <!--表单的选项卡切换-->
     <form id="editForm" method="post" action="${ctx}/uids/complatgroupSave">
-    
+
     <div style="display:none;">
           <input type="hidden" id="iid" name="iid" value="${complatGroup.iid}"/>
-          <input type="hidden" id="orderField" name="orderField" value="${orderField}"/> 
+          <input type="hidden" id="orderField" name="orderField" value="${orderField}"/>
 		  <input type="hidden" id="orderSort" name="orderSort" value="${orderSort}"/>
     </div>
-    
+
     <!--表单的主内容区域-->
     <div class="form-content">
     	<table class="form-table">
@@ -262,19 +263,14 @@ jQuery.validator.addMethod("isName", function(value, element) {
 				</td>
 			</tr>
 			<tr>
-				<th><b class="mustbe">*</b> 请输入区域编码：</th>
+				<th><b class="mustbe">*</b> 请选择区域编码：</th>
 				<td>
-				    <c:if test="${empty complatGroup.iid}">
-				          <input name="groupname2" id="groupname2" type="text" placeholder="请选择区域编码" style="cursor: pointer;" value="${areacode}" readonly="readonly"/>
-				    </c:if>
-				    <c:if test="${not empty complatGroup.iid}">
-				          <input name="groupname2" id="groupname2" type="text" placeholder="请选择区域编码" style="cursor: pointer;" value="${complatGroup.areacode}" readonly="readonly"/>
-				    </c:if>
+				    <input name="groupname2" id="groupname2" type="text" placeholder="请选择区域编码" readonly="readonly" style="cursor: pointer;" value="${complatGroup.areacode}"/>
 				</td>
 	        	<th><b class="mustbe">*</b> 请输入机构后缀：</th>
 	        	<td>
 	        	    <c:if test="${empty complatGroup.iid}">
-				          <input type="text" placeholder="请填写最简洁的机构缩写，例如：fgw（发改委）" class="input" name="suffix" value="${complatGroup.suffix}" />
+				          <input type="text" placeholder="请填写最简洁的机构缩写，例如：fgw（发改委）" class="input" name="suffix" value="${complatGroup.suffix}"/>
 				    </c:if>
 				    <c:if test="${not empty complatGroup.iid}">
 				          <input type="text" placeholder="请填写最简洁的机构缩写，例如：fgw（发改委）" class="input" name="suffix" value="${complatGroup.suffix}" disabled="true"/>
@@ -282,14 +278,14 @@ jQuery.validator.addMethod("isName", function(value, element) {
 				</td>
 			</tr>
 			<tr>
-			    <th><b class="mustbe">*</b> 请输入上级机构：</th>
+			    <th><b class="mustbe">*</b> 请选择上级机构：</th>
 	        	<td>
 	        	    <c:if test="${empty complatGroup.iid}">
-				          <input name="groupname" id="groupname" type="text" placeholder="请选择上级机构" style="cursor: pointer;" value="${groupname}" readonly="readonly"/> 
-	        		      <input type="hidden" id="groupid"  name="groupid" value="${groupid}">
+				          <input name="groupname" id="groupname" type="text" placeholder="请选择上级机构" readonly="readonly" style="cursor: pointer;" value="${complatGroup.parentName}" />
+	        		      <input type="hidden" id="groupid"  name="groupid">
 				    </c:if>
 				    <c:if test="${not empty complatGroup.iid}">
-				          <input name="groupname" id="groupname" type="text" style="cursor: pointer;" value="${complatGroup.parentName}" disabled="true"/> 
+				          <input name="groupname" id="groupname" type="text" style="cursor: pointer;"  readonly="readonly" value="${complatGroup.parentName}" disabled="true"/>
 	        		      <input type="hidden" id="groupid"  name="groupid">
 				    </c:if>
 	        	</td>
@@ -317,9 +313,9 @@ jQuery.validator.addMethod("isName", function(value, element) {
     			</c:if>
 			</tr>
 			</table>
-	        
+
 	        <!-- </ul> -->
-        
+
     </div>
     <div style="clear:both;"></div>
     <!--表单的按钮组区域-->
@@ -327,7 +323,7 @@ jQuery.validator.addMethod("isName", function(value, element) {
     	<input type="submit" tabindex="15" id="submit-btn" value="保存" class="btn bluegreen"/>
     	&nbsp;&nbsp;
         <input type="button" tabindex="16" value="返回" onclick="javascript:window.location.href='${ctx}/uids/groupOrgTree?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}'" class="btn gray"/>
-        
+
     </div>
     </form>
     <!--表单的底部区域-->
@@ -338,9 +334,9 @@ jQuery.validator.addMethod("isName", function(value, element) {
     <div class="form-tip"></div>
     <!--表单的弹出层区域-->
     <div class="form-dialog"></div>
-    
+
     <div id="menuContent" class="menuContent" style="display:none; position: absolute;">
-	
+
 </div>
 </div>
 </body>

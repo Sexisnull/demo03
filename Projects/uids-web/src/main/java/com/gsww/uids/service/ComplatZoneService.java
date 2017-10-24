@@ -82,4 +82,5 @@ public interface ComplatZoneService {
 	 * @return
 	 */
 	public ComplatZone findByIid(Integer iid);
+	public List<ComplatZone> findAllByIid(Integer iid) throws Exception;
 }

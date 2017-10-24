@@ -84,13 +84,13 @@
 
 /*********************机构树开始************************/
 $(function(){
-	var groupMenu = [{"name":"单位选择","title":"单位选择","id":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
+//	var groupMenu = [{"name":"单位选择","title":"单位选择","id":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
 
 	$('#groupname').menu({
 		tree : 'groupmenu',
 		height : 200,
 		init : function() {
-			setting('groupmenu', onClickGroup, onDbClickGroup, groupMenu);
+			setting('groupmenu', onClickGroup, onDbClickGroup);
 		}
 	});
 });
@@ -124,7 +124,7 @@ function onDbClickGroup(event, treeId, treeNode) {
 /**
  *	初始化树
  */
-function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
+function setting(treeName, onClickFunction, onDblClickFunction) {
 	var setting = {
 		async : {
 			enable : true,
@@ -138,7 +138,7 @@ function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
 		}
 	};
 	console.log("-----"+treeName);
-	$("#" + treeName).tree(setting, rootNode);
+	$("#" + treeName).tree(setting);
 //	$("#" + treeName).tree().refreshNode('');
 }
 /**
@@ -671,14 +671,14 @@ function checkAndSave() {
 				  <td class="td_3" style="width:300px;">
 					<input type="text" id="headship" name="headship" value="${complatUser.headship}"">
 				  </td>
-				  <th class="td_6"><b class="mustbe">*</b> 所属机构：</th>
+				  <th class="td_6"><b class="mustbe">*</b> 请选择所属机构：</th>
 				  <td class="td_4" style="width:300px;">
 				    <c:if test="${empty complatUser.iid}"> 
-				        <input id="groupname" value="${groupMap[complatUser.groupid]}" name="groupname" type="text" style="cursor: pointer;"/> 
+				        <input id="groupname" value="${groupMap[complatUser.groupid]}" placeholder="请选择所属机构" name="groupname" type="text" style="cursor: pointer;" readonly="readonly"/>
 					    <input type="hidden" id="groupid" name="groupid">	
 				    </c:if>
 				    <c:if test="${not empty complatUser.iid}">
-				          <input id="groupname1" value="${groupMap[complatUser.groupid]}" name="groupname" readonly="readonly" type="text" style="cursor: pointer;"/> 
+				          <input id="groupname1" value="${groupMap[complatUser.groupid]}" placeholder="请选择所属机构" name="groupname" readonly="readonly" type="text" style="cursor: pointer;" readonly="readonly"/>
 					      <input type="hidden" id="groupid" name="groupid" value="${complatUser.groupid }">	
 				    </c:if>											
 				  </td>

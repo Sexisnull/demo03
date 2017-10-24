@@ -708,13 +708,16 @@ public class ComplatGroupController extends BaseController {
                          HttpServletResponse response) {
         try {
             String groupId = request.getParameter("groupId");
-
+			SysUserSession sysUserSession = (SysUserSession) ((HttpServletRequest) request).getSession()
+					.getAttribute("sysUserSession");
+			// 获取部门id
+			String deptId = sysUserSession.getDeptId();
             List<ComplatZone> list = new ArrayList<ComplatZone>();
 
             if (!"0".equals(groupId) && StringUtils.isNotBlank(groupId)) {
                 list = complatZoneService.findByPid(Integer.parseInt(groupId));
             } else {
-                list.add(complatZoneService.findByIid(128));
+                list=complatZoneService.findAllByIid(Integer.parseInt(deptId));
             }
 
             List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
@@ -828,7 +831,7 @@ public class ComplatGroupController extends BaseController {
 			if (!"0".equals(groupId) && StringUtils.isNotBlank(groupId)) {
 				list = complatGroupService.findByPid(Integer.parseInt(groupId));
 			} else {
-				list.add(complatGroupService.findByIid(Integer.valueOf(deptId)));
+                list = complatGroupService.findAllDept(deptId);
 			}
 
 			List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();

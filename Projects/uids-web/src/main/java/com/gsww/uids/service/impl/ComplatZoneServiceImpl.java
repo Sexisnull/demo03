@@ -104,4 +104,10 @@ public class ComplatZoneServiceImpl implements ComplatZoneService {
 		ComplatZone complatZone=complatZoneDao.findByIid(iid);
 		return complatZone;
 	}
+	@Override
+	public List<ComplatZone> findAllByIid(Integer iid) throws Exception {
+		List<ComplatZone> list=new ArrayList<ComplatZone>();
+		list=complatZoneDao.findAllByIid(iid);
+		return list;
+	}
 }
