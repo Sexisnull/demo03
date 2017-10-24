@@ -64,6 +64,9 @@
 								},
 								qq : {
 									isQQ : true
+								},
+								headship : {
+									isHeadship : true
 								}
 							},
 							submitHandler : function() {
@@ -230,6 +233,11 @@
 					           var corporName = /^(((0\d{3}[\-])?\d{7}|(0\d{2}[\-])?\d{8}))([\-]\d{2,4})?$/;   
 					           return this.optional(element) || (corporName.test(value));     
 					    }, "电话号码格式错误");
+					    //职务
+					     jQuery.validator.addMethod("isHeadship", function(value, element) { 
+					           var corporName = /[\u4e00-\u9fa5]{1,255}$/;   
+					           return this.optional(element) || (corporName.test(value));     
+					    }, "只能输入汉字"); 
 					});
 
 
