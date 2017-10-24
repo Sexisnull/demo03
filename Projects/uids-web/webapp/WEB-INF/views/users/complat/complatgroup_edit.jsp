@@ -270,7 +270,7 @@ jQuery.validator.addMethod("isName", function(value, element) {
 	        	<th><b class="mustbe">*</b> 请输入机构后缀：</th>
 	        	<td>
 	        	    <c:if test="${empty complatGroup.iid}">
-				          <input type="text" placeholder="请填写最简洁的机构缩写，例如：fgw（发改委）" class="input" name="suffix" value="${complatGroup.suffix}"/>
+				          <input type="text" placeholder="请填写最简洁的机构缩写，例如：fgw（发改委）" class="input" name="suffix" value="${suffix}"/>
 				    </c:if>
 				    <c:if test="${not empty complatGroup.iid}">
 				          <input type="text" placeholder="请填写最简洁的机构缩写，例如：fgw（发改委）" class="input" name="suffix" value="${complatGroup.suffix}" disabled="true"/>

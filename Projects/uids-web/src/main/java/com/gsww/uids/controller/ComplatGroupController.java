@@ -341,8 +341,8 @@ public class ComplatGroupController extends BaseController {
 		try {
 			String name = request.getParameter("name");
 			String areacode = request.getParameter("groupname2");
+			String suffix = request.getParameter("suffix");
 			complatGroup.setAreacode(areacode); //设置区域编码
-//			boolean syn = false;
 			if(StringHelper.isNotBlack(iid)){
 				//编辑状态改变操作状态位（opersign）和修改时间（modifytime）
 				complatGroup.setOpersign(2);
@@ -357,12 +357,6 @@ public class ComplatGroupController extends BaseController {
 				synchronization(complatGroup, 2); //编辑同步
 			}else{
 				String pid = request.getParameter("groupid");
-				//新增时将机构名汉字转换成首字母大写保存到pinyin字段中
-				String daPinYin = getPinYinHeadChar(complatGroup.getName());
-				complatGroup.setPinyin(daPinYin);
-				//新增状态改变操作状态位（opersign）和创建时间（modifytime）
-				complatGroup.setOpersign(1);
-				complatGroup.setCreatetime(Timestamp.valueOf(TimeHelper.getCurrentTime()));
 			    Integer pId = Integer.valueOf(pid);
 			    //判断机构是否重复
 			    if (complatGroupService.queryNameIsUsed(name, pId)){
@@ -380,6 +374,15 @@ public class ComplatGroupController extends BaseController {
 		            codeId = codeId.substring(0, codeId.length() - 4) + String.valueOf(num);
 		        	complatGroup.setCodeid(codeId); //存入机构编码
 		        	complatGroup.setPid(pId);  //保存pid
+		        	//新增时将机构名汉字转换成首字母大写保存到pinyin字段中
+					String daPinYin = getPinYinHeadChar(complatGroup.getName());
+					complatGroup.setPinyin(daPinYin);
+					//新增状态改变操作状态位（opersign）和创建时间（modifytime）
+					complatGroup.setOpersign(1);
+					complatGroup.setCreatetime(Timestamp.valueOf(TimeHelper.getCurrentTime()));
+					//自动处理拼接机构后缀
+					suffix = suffix + "." + complatGroupService.findByIid(pId).getSuffix();
+					complatGroup.setSuffix(suffix);//保存机构后缀
 		        	complatGroup = complatGroupService.save(complatGroup);
 		        	returnMsg("success", "保存成功", request);
 			    }
@@ -507,11 +510,13 @@ public class ComplatGroupController extends BaseController {
 					} else if (complatGroup.getStrIsCombine().equals("是")) {
 						complatGroup.setIscombine(Integer.valueOf(1));
 					}
+					//自动生成机构名称首字母大写
 					String daPinYin = getPinYinHeadChar(complatGroup.getName());
 					complatGroup.setPinyin(daPinYin);
 					complatGroup.setCreatetime(Timestamp.valueOf(TimeHelper.getCurrentTime()));
 					complatGroup.setOpersign(Integer.valueOf(1));
 					complatGroup.setSynState(Integer.valueOf(2));
+					//自动生成机构编码
 					String parentCode = complatGroup.getParentCode();
 					Integer pId = complatGroupService.findByCodeid(parentCode).getIid();
 					String codeId = complatGroupService.findByIid(pId).getCodeid() + "001";
@@ -524,6 +529,9 @@ public class ComplatGroupController extends BaseController {
 					}
 					complatGroup.setCodeid(codeId);
 					complatGroup.setPid(pId);
+					//自动进行机构后缀拼接
+					String suffix = complatGroup.getSuffix() + "." + complatGroupService.findByIid(pId).getSuffix();
+                    complatGroup.setSuffix(suffix);
 					complatGroup = complatGroupService.save(complatGroup);
 					synchronization(complatGroup, 1);//新增同步
 				}
@@ -708,8 +716,7 @@ public class ComplatGroupController extends BaseController {
                          HttpServletResponse response) {
         try {
             String groupId = request.getParameter("groupId");
-			SysUserSession sysUserSession = (SysUserSession) ((HttpServletRequest) request).getSession()
-					.getAttribute("sysUserSession");
+			SysUserSession sysUserSession = (SysUserSession) ((HttpServletRequest) request).getSession().getAttribute("sysUserSession");
 			// 获取部门id
 			String deptId = sysUserSession.getDeptId();
             List<ComplatZone> list = new ArrayList<ComplatZone>();
@@ -811,7 +818,7 @@ public class ComplatGroupController extends BaseController {
     }
     
     /**
-	 * 加载上级机构树
+	 * 加载编辑新增页面上级机构树
 	 * 
 	 * @param request
 	 * @return
