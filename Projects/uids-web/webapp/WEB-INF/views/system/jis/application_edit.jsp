@@ -71,13 +71,13 @@
 	<script type="text/javascript" src="${ctx}/res/skin/login/js/tree.js"></script>
 <script type="text/javascript">
 $(function(){
-	var groupMenu = [{"name":"单位选择","title":"单位选择","id":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
+//	var groupMenu = [{"name":"单位选择","title":"单位选择","id":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
 
 	$('#groupname').menu({
 		tree : 'groupmenu',
 		height : 200,
 		init : function() {
-			setting('groupmenu', onClickGroup, onDbClickGroup, groupMenu);
+			setting('groupmenu', onClickGroup, onDbClickGroup);
 		}
 	});
 });
@@ -102,11 +102,11 @@ function onDbClickGroup(event, treeId, treeNode) {
 /**
  *	初始化树
  */
-function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
+function setting(treeName, onClickFunction, onDblClickFunction) {
 	var setting = {
 		async : {
 			enable : true,
-			url : '../login/getGroup',
+			url : '../uids/getGroup',
 			autoParam : [ "id=groupId", "isDisabled" ]
 		},
 		callback : {
@@ -115,7 +115,7 @@ function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
 			onDblClick : onDblClickFunction
 		}
 	};
-	$("#" + treeName).tree(setting, rootNode);
+	$("#" + treeName).tree(setting);
 //	$("#" + treeName).tree().refreshNode('');
 }
 /**
@@ -590,7 +590,7 @@ $(function(){
 			<tr>
 				<th style="text-align:left;"><b class="mustbe">&nbsp;&nbsp;</b>所属机构：</th>
 				<td>
-					<input id="groupname" value="${groupMap[jisApplication.groupId]}" name="groupname" type="text" style="cursor: pointer;"/> 
+					<input id="groupname" value="${groupMap[jisApplication.groupId]}" placeholder="请选择所属机构" name="groupname" type="text" style="cursor: pointer;" readonly="readonly"/>
 				</td>
 				<th style="text-align:center;"><b class="mustbe">&nbsp;&nbsp;</b> 同步用户：</th>
                 <td>   
