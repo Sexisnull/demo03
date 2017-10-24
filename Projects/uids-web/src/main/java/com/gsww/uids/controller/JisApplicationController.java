@@ -73,6 +73,26 @@ public class JisApplicationController extends BaseController{
 	@Autowired
 	private JisLogService jisLogService;
 
+	@RequestMapping(value = "/groupOrgTree", method = RequestMethod.GET)
+	public String complatList(
+			Model model, ServletRequest request, HttpServletRequest hrequest) {
+		try {
+			// 获取系统当前登录用户
+			SysUserSession sysUserSession = (SysUserSession) hrequest.getSession().getAttribute("sysUserSession");
+			String deptId = sysUserSession.getDeptId();
+
+			//点击完查询时组织机构名称回显
+			String groupName = request.getParameter("groupname");
+			model.addAttribute("groupName", groupName);
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			logger.error("机构树打开失败：" + ex.getMessage());
+			returnMsg("error", "机构树打开失败", (HttpServletRequest) request);
+			return "redirect:/application/applicationList";
+		}
+		return "system/jis/application_tree";
+	}
 	
 	/**
 	 * 获取应用列表
@@ -89,7 +109,7 @@ public class JisApplicationController extends BaseController{
 			@RequestParam(value = "order.field", defaultValue = "iid") String orderField,
 			@RequestParam(value = "order.sort", defaultValue = "ASC") String orderSort,
 			@RequestParam(value = "findNowPage", defaultValue = "false") String findNowPage,
-			Model model,ServletRequest request,HttpServletRequest hrequest) {
+			String orgId,Model model,ServletRequest request,HttpServletRequest hrequest) {
 		try{
 			if(StringUtils.isNotBlank(request.getParameter("orderField"))){
 				orderField=(String)request.getParameter("orderField");
@@ -101,11 +121,28 @@ public class JisApplicationController extends BaseController{
 			PageUtils pageUtils=new PageUtils(pageNo,pageSize,orderField,orderSort);
 			PageRequest pageRequest=super.buildPageRequest(hrequest,pageUtils,JisApplication.class,findNowPage);
 			
+			// 获取系统当前登录用户
+			SysUserSession sysUserSession = (SysUserSession) hrequest.getSession().getAttribute("sysUserSession");
+			String deptId = sysUserSession.getDeptId();
+			
 			//搜索属性初始化
 			Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 			
+			if (StringUtils.isNotBlank(orgId)) {
+				searchParams.put("EQ_groupId", orgId);
+				model.addAttribute("orgId", orgId);
+			}else{
+				if(searchParams.size()>=1&&searchParams.get("EQ_groupId") != null){
+					model.addAttribute("orgId", searchParams.get("EQ_groupId"));
+				}else{
+					searchParams.put("EQ_groupId", deptId);
+					model.addAttribute("orgId", deptId);
+				}
+			}
+			
+			
 			//分页
-			SysUserSession sysUserSession = (SysUserSession) hrequest.getSession().getAttribute("sysUserSession");
+			/*SysUserSession sysUserSession = (SysUserSession) hrequest.getSession().getAttribute("sysUserSession");*/
 			String[] roleIds = sysUserSession.getRoleIds().split(",");
 			List<JisRoleobject> jisRoleobjects = new ArrayList<JisRoleobject>();
 			for(String s :roleIds){
@@ -248,7 +285,7 @@ public class JisApplicationController extends BaseController{
 			e.printStackTrace();
 			returnMsg("error","保存失败",request);
 		} finally{
-			return new ModelAndView("redirect:/application/applicationList");
+			return new ModelAndView("redirect:/application/groupOrgTree");
 		}
 	}
 	
@@ -290,7 +327,7 @@ public class JisApplicationController extends BaseController{
 			e.printStackTrace();
 			returnMsg("error", "删除失败",request);*/			
 		} finally{
-			return  new ModelAndView("redirect:/application/applicationList");
+			return  new ModelAndView("redirect:/application/groupOrgTree");
 		}
 		
 	}

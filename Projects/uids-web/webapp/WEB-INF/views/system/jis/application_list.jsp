@@ -157,13 +157,45 @@ function synfuction(){
    	}
    	$("#synaction").submit();
 }
+//新增
+function toAdd(){
+	parent.location = "applicationEdit";
+}
+
+//删除
+function deleteData() {
+	var paraTypeId=$(".iid").val();
+	if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checked').length!=0){
+		$.dialog.confirm('您确认要删除吗？',function(){
+			var ids = "";
+			$('.list-table tbody input[type=checkbox]').each(function(i, o) {
+				if($(o).attr('checked')) {
+					ids += $(o).val() + ",";
+						}
+			});
+			parent.location = "${ctx}/application/applicationDelete?iid="+ids.substring(0,ids.length-1);
+		});
+	}else{
+		$.dialog.alert('请您至少选择一条数据',function(){
+			return null;
+		});
+	}
+}
+//编辑
+function toEdit(iids){
+	if(iids==null || iids==""){
+		parent.location = "applicationEdit";
+	}else{
+		parent.location = "applicationEdit?iid="+iids;
+	}
+}
 
 </script>
 </head>
 <body>
 <div class="list-warper">
 	<!--列表的面包屑区域-->
-	<div class="position">
+	<%-- <div class="position">
 		<ol class="breadcrumb">
 			<li>
 				<a href="${ctx}/backIndex" target="_top">首页</a>
@@ -177,7 +209,7 @@ function synfuction(){
 				应用列表
 			</li>
     	</ol>
-    </div>
+    </div> --%>
     
     <div class="search-content">
 		<form id="form1" name="pageForm" action="${ctx}/application/applicationList" method="get">
@@ -186,13 +218,14 @@ function synfuction(){
 					<th style="padding-left: 300px">应用名称：</th>
 						<td width="20%">
 							<input type="text" maxlength="30" style="width: 170px;" placeholder="应用名称" value="${sParams['LIKE_name']}" id="nameSearch" name="search_LIKE_name" />
+							<input type="hidden" id="orgId" name="orgId" value="${orgId}">
 						</td>
-					<th>所属机构：</th>
+					<%-- <th>所属机构：</th>
 						 <td>
 						 	<input id="groupname" value="${groupName}" name="groupname" type="text" style="cursor: pointer;" placeholder="所属机构"/> 
 							<input type="hidden" id="groupid" value="${sParams['EQ_groupId']}" name="search_EQ_groupId">
-							<%-- <select  style="width: 170px;" placeholder="数据标识" value="${sParams['LIKE_remark']}" id="remarkSearch" name="search_LIKE_remark" /> --%>
-						</td> 
+							<select  style="width: 170px;" placeholder="数据标识" value="${sParams['LIKE_remark']}" id="remarkSearch" name="search_LIKE_remark" />
+						</td>  --%>
 					<td class="btn-group"> <a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a></td>
 				</tr>
 			</table>
@@ -206,7 +239,14 @@ function synfuction(){
         <div class="list-topBar  advanced-search">
         	 <div class="list-toolbar">
             <!-- 操作按钮开始 -->	 
-             <gsww:opTag menuId="8a929cb35e7a893b015e7a925b900001" tabIndex="1" operatorType="1"></gsww:opTag>
+             <%-- <gsww:opTag menuId="8a929cb35e7a893b015e7a925b900001" tabIndex="1" operatorType="1"></gsww:opTag> --%>
+             <ul class="list-Topbtn">
+						<li class="add"><a title="新增"
+							onclick="toAdd();">新增</a></li>
+						<li class="del"><a title="删除"
+							onclick="deleteData('application/applicationDelete','iid');">删除</a></li>
+				 </ul>
+             
              <!-- 操作按钮结束 -->
            </div> 
             
@@ -242,8 +282,8 @@ function synfuction(){
                     <th width="30%" style="text-align: center;">
                                                              应用名称        
                     </th>
-                    <th width="15%" style="text-align: center;">应用标识</th>
-                    <th width="25%" style="text-align: center;">所属机构</th>
+                    <th width="20%" style="text-align: center;">应用标识</th>
+                    <th width="20%" style="text-align: center;">所属机构</th>
                     <th width="10%" style="text-align: center;">同步用户</th>
                     <th width="30%" style="text-align: center;">操作</th>
                 </tr>
@@ -291,14 +331,14 @@ function synfuction(){
 	                	<td class="position-content" style="text-align: center;" >
 	                		<div class="listOper">
 								<ul>
-									<li class="blue" onclick="add('application/applicationEdit','iid',this);">
+									<li class="blue" onclick="toEdit(${application.iid});">
 										<!-- <i></i> -->
 										<a>编辑</a>
 									</li>
-									<li class="red" onclick="deleteSingle('application/applicationDelete','iid',this);">
-										<!-- <i></i> -->
+									<!-- <li class="red" onclick="deleteSingle('application/applicationDelete','iid',this);">
+										<i></i>
 										<a>删除</a>
-									</li>
+									</li> -->
 									<li class="bluegreen" onclick="syngroup(${application.iid},0);">
 										<!-- <i></i> -->
 										<a>同步机构</a>
