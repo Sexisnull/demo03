@@ -358,6 +358,10 @@ public class ComplatUserController extends BaseController {
 						// 对密码进行加密
 						String p = Md5Util.md5encode(pwd);
 						complatUser.setPwd(p);
+						//获取当前机器的ip地址
+						String IP = getIpAddr(request);
+						complatUser.setIp(IP);
+						System.out.println("当前机器的ip地址:"+IP);
 						// 注册时间
 						complatUser.setCreatetime(Timestamp.valueOf(TimeHelper
 								.getCurrentTime()));// 创建时间
@@ -421,6 +425,11 @@ public class ComplatUserController extends BaseController {
 						// 对密码进行加密
 						String p = Md5Util.md5encode(pwd);
 						complatUser.setPwd(p);
+						
+						//获取当前机器的ip地址
+						String IP = getIpAddr(request);
+						complatUser.setIp(IP);
+						System.out.println("当前机器的ip地址:"+IP);
 						synchronization(complatUser, 1);// 新增同步
 
 						// 新增对密码修改时间做处理
@@ -603,6 +612,10 @@ public class ComplatUserController extends BaseController {
 							complatUser.setEnable(0);
 							complatUser.setOpersign(1);
 							complatUser.setSynState(2);
+							//获取当前机器的ip地址
+							String IP = getIpAddr(request);
+							complatUser.setIp(IP);
+							System.out.println("当前机器的ip地址:"+IP);
 							// 对登录全名进行唯一性判断
 							String loginname = complatUser.getLoginname();
 							int groupId = complatUser.getGroupid();
@@ -1421,7 +1434,9 @@ public class ComplatUserController extends BaseController {
 				complatUser = complatUserService.findByKey(userId);
 				if (complatUser.getEnable() == 0) {
 					complatUser.setEnable(1);
+					complatUser.setModifytime(Timestamp.valueOf(TimeHelper.getCurrentTime()));// 修改时间
 					complatUserService.save(complatUser);
+					synchronization(complatUser, 4);// 启用同步
 					returnMsg("success", "开启成功！", request);
 				} else if (complatUser.getEnable() == 1) {
 					returnMsg("success", "账号已开启！", request);
@@ -1463,8 +1478,10 @@ public class ComplatUserController extends BaseController {
 				complatUser = complatUserService.findByKey(userId);
 				if (complatUser.getEnable() == 1) {
 					complatUser.setEnable(0);
+					complatUser.setModifytime(Timestamp.valueOf(TimeHelper.getCurrentTime()));// 修改时间
 					complatUserService.save(complatUser);
 					returnMsg("success", "关闭成功！", request);
+					synchronization(complatUser, 5);// 停用同步
 				} else if (complatUser.getEnable() == 0) {
 					returnMsg("success", "账号已关闭", request);
 				}
@@ -1727,6 +1744,12 @@ public class ComplatUserController extends BaseController {
 				synctime = String.valueOf(complatUser.getModifytime());
 			} else if (type == 3) {
 				operatetype = "删除用户";
+				synctime = String.valueOf(complatUser.getModifytime());
+			}else if(type == 4){
+				operatetype = "启用用户";
+				synctime = String.valueOf(complatUser.getModifytime());
+			}else if(type == 5){
+				operatetype = "停用用户";
 				synctime = String.valueOf(complatUser.getModifytime());
 			}
 			// 将所有支持同步的应用进行同步
