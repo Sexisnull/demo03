@@ -318,6 +318,9 @@ public class ComplatUserController extends BaseController {
 		return "users/complat/account_edit";
 	}
 
+	
+	
+	
 	/**
 	 * 保存政府用户信息
 	 * 
@@ -361,6 +364,9 @@ public class ComplatUserController extends BaseController {
 						//获取当前机器的ip地址
 						String IP = getIpAddr(request);
 						complatUser.setIp(IP);
+						//获取用户姓名的首字母
+						String pinYin = getPinYinHeadChar(complatUser.getName());
+						complatUser.setPinyin(pinYin);
 //						System.out.println("当前机器的ip地址:"+IP);
 						// 注册时间
 						complatUser.setCreatetime(Timestamp.valueOf(TimeHelper
@@ -430,8 +436,10 @@ public class ComplatUserController extends BaseController {
 						String IP = getIpAddr(request);
 						complatUser.setIp(IP);
 //						System.out.println("当前机器的ip地址:"+IP);
+						//获取用户姓名的首字母
+						String pinYin = getPinYinHeadChar(complatUser.getName());
+						complatUser.setPinyin(pinYin);						
 						synchronization(complatUser, 1);// 新增同步
-
 						// 新增对密码修改时间做处理
 						complatUser.setModifyPassTime(TimeHelper
 								.parseDate(TimeHelper.getCurrentTime()));
@@ -528,9 +536,9 @@ public class ComplatUserController extends BaseController {
 	}
 
 	/**
-	 * 将机构名首字母大写返回
+	 * 将机构名首字母大写返回，用户姓名的首字母转大写
 	 * 
-	 * @author LinCX
+	 * @author shenxh
 	 * @param str
 	 * @return convert
 	 */
@@ -588,8 +596,8 @@ public class ComplatUserController extends BaseController {
 			fieldMap.put("14", "pwd");
 //			fieldMap.put("16", "pwdquestion");
 //			fieldMap.put("17", "pwdanswer");
-			fieldMap.put("15", "pinyin");
-			fieldMap.put("16", "cardid");
+//			fieldMap.put("15", "pinyin");
+			fieldMap.put("15", "cardid");
 			List<ComplatUser> users = ExcelUtil
 					.readXls(fileName, multipartFile.getInputStream(),
 							ComplatUser.class, fieldMap);
@@ -599,7 +607,7 @@ public class ComplatUserController extends BaseController {
 				if(dataCheck(users, model, request, response)){
 					for(ComplatUser complatUser : users){
 						//if(userCheck(complatUser, model, request, response)){
-							// 新增时将机构名汉字转换成首字母大写保存到pinyin字段中
+							// 导入时将机构名汉字转换成首字母大写保存到pinyin字段中
 							String daPinYin = getPinYinHeadChar(complatUser
 									.getName());
 							complatUser.setPinyin(daPinYin);
@@ -608,6 +616,9 @@ public class ComplatUserController extends BaseController {
 									.valueOf(TimeHelper.getCurrentTime()));// 创建时间
 							complatUser.setModifytime(Timestamp
 									.valueOf(TimeHelper.getCurrentTime()));// 修改时间
+							//获取用户姓名的首字母
+							String pinYin = getPinYinHeadChar(complatUser.getName());
+							complatUser.setPinyin(pinYin);
 							// 设置状态值
 							complatUser.setEnable(0);
 							complatUser.setOpersign(1);
@@ -708,7 +719,7 @@ public class ComplatUserController extends BaseController {
 		  String qqReg = "[1-9][0-9]{4,}";
 		  String loginameReg = "^(?!_)(?!.*?_$)[a-zA-Z0-9_]{1,255}$";
 //		  String pwdReg = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,10}$";		
-		  String PinYinReg = "^[A-Z]+$";
+//		  String PinYinReg = "^[A-Z]+$";
 		  String cardIdReg = "([1-6]\\d{5}(19|20)\\d\\d(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])\\d{3}[0-9xX])|([1-6]\\d{5}\\d\\d(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])\\d{3})";		 
 		  for (ComplatUser complatUser : users) {
 			  //判断是否有不合规范的数据
@@ -728,7 +739,7 @@ public class ComplatUserController extends BaseController {
 			    || (StringUtils.isEmpty(complatUser.getQq()) || (!match(qqReg,complatUser.getQq())))
 			    || (StringUtils.isEmpty(complatUser.getLoginname()) || (!StringUtils.isEmpty(complatUser.getLoginname())&& !match(loginameReg,complatUser.getLoginname())))
 			    || (StringUtils.isEmpty(complatUser.getPwd()))
-			    || (StringUtils.isEmpty(complatUser.getPinyin()) || (!StringUtils.isEmpty(complatUser.getPinyin())&& !match(PinYinReg,complatUser.getPinyin())))
+//			    || (StringUtils.isEmpty(complatUser.getPinyin()) || (!StringUtils.isEmpty(complatUser.getPinyin())&& !match(PinYinReg,complatUser.getPinyin())))
 			    || (StringUtils.isEmpty(complatUser.getCardid()) || (!StringUtils.isEmpty(complatUser.getCardid())&& !match(cardIdReg,complatUser.getCardid())))
 			) {
 				warn = warn + String.valueOf(row) + ",";
@@ -1922,8 +1933,12 @@ public class ComplatUserController extends BaseController {
 	}
 
 	public static void main(String[] args) {
-		String pwd = "BEJ0R3Y2fDd2M3Yx";//
-		String p = Md5Util.md5decode(pwd);
-		System.out.println("解密后的密码是:" + p);
+//		String pwd = "BEJ0R3Y2fDd2M3Yx";//
+//		String p = Md5Util.md5decode(pwd);
+//		System.out.println("解密后的密码是:" + p);
+		
+		String str = "我是中国人";
+		String pinyin=getPinYinHeadChar(str);
+        System.out.println(pinyin);
 	}
 }

@@ -84,13 +84,13 @@
 
 /*********************机构树开始************************/
 $(function(){
-//	var groupMenu = [{"name":"单位选择","title":"单位选择","id":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
+	var groupMenu = [{"name":"单位选择","title":"单位选择","id":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
 
 	$('#groupname').menu({
 		tree : 'groupmenu',
 		height : 200,
 		init : function() {
-			setting('groupmenu', onClickGroup, onDbClickGroup);
+			setting('groupmenu', onClickGroup, onDbClickGroup, groupMenu);
 		}
 	});
 });
@@ -124,7 +124,7 @@ function onDbClickGroup(event, treeId, treeNode) {
 /**
  *	初始化树
  */
-function setting(treeName, onClickFunction, onDblClickFunction) {
+function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
 	var setting = {
 		async : {
 			enable : true,
@@ -138,7 +138,7 @@ function setting(treeName, onClickFunction, onDblClickFunction) {
 		}
 	};
 	console.log("-----"+treeName);
-	$("#" + treeName).tree(setting);
+	$("#" + treeName).tree(setting, rootNode);
 //	$("#" + treeName).tree().refreshNode('');
 }
 /**
@@ -617,12 +617,28 @@ function checkAndSave() {
 		 		<tr>  
 		 		  <th><b class="mustbe">*</b> 年龄：</th>
 				  <td style="width:300px;">
-					<input type="text" id="age" name="age" value="${complatUser.age}"">
-	              </td>
-	               <th>姓名的首字母全拼(大写)：</th>
+					   <input type="text" id="age" name="age" value="${complatUser.age}"">
+	        </td>
+	         <th><b class="mustbe">*</b> 所属机构：</th>
+				  <td style="width:300px;">
+				    <c:if test="${empty complatUser.iid}"> 
+				        <input id="groupname" value="${groupMap[complatUser.groupid]}" name="groupname" type="text" style="cursor: pointer;"/> 
+					    <input type="hidden" id="groupid" name="groupid">	
+				    </c:if>
+				    <c:if test="${not empty complatUser.iid}">
+				          <input id="groupname1" value="${groupMap[complatUser.groupid]}" name="groupname" readonly="readonly" type="text" style="cursor: pointer;"/> 
+					      <input type="hidden" id="groupid" name="groupid" value="${complatUser.groupid }">	
+				    </c:if>											
+				  </td>
+	        <!--<th> MSN：</th>
+	        <td>
+	        	 <input type="text" id="msn" name="msn" value="${complatUser.msn}"">	        	
+	        </td>
+	             -->
+	             <!--  <th>姓名的首字母全拼(大写)：</th>
 	        	   <td style="width:300px;">
 	        		  <input type="text" id="pinyin" name="pinyin" value="${complatUser.pinyin}" />
-	        	   </td>
+	        	   </td> -->
 			    </tr>	
 			    <tr>
 			       <th> QQ：</th>
@@ -671,17 +687,20 @@ function checkAndSave() {
 				  <td class="td_3" style="width:300px;">
 					<input type="text" id="headship" name="headship" value="${complatUser.headship}"">
 				  </td>
-				  <th class="td_6"><b class="mustbe">*</b> 请选择所属机构：</th>
+				 <!--  <th class="td_6"><b class="mustbe">*</b> 所属机构：</th>
 				  <td class="td_4" style="width:300px;">
 				    <c:if test="${empty complatUser.iid}"> 
-				        <input id="groupname" value="${groupMap[complatUser.groupid]}" placeholder="请选择所属机构" name="groupname" type="text" style="cursor: pointer;" readonly="readonly"/>
+				        <input id="groupname" value="${groupMap[complatUser.groupid]}" name="groupname" type="text" style="cursor: pointer;"/> 
 					    <input type="hidden" id="groupid" name="groupid">	
 				    </c:if>
 				    <c:if test="${not empty complatUser.iid}">
-				          <input id="groupname1" value="${groupMap[complatUser.groupid]}" placeholder="请选择所属机构" name="groupname" readonly="readonly" type="text" style="cursor: pointer;" readonly="readonly"/>
+				          <input id="groupname1" value="${groupMap[complatUser.groupid]}" name="groupname" readonly="readonly" type="text" style="cursor: pointer;"/> 
 					      <input type="hidden" id="groupid" name="groupid" value="${complatUser.groupid }">	
 				    </c:if>											
 				  </td>
+				  -->
+				  <th class="td_6"></th> 
+				  <td class="td_4"></td> 
 			    </tr>			   		
 		        <tr>
 		           <td class="td_1" rowspan="3" style="max-width:0px;width:100px;ont-weight:bold;" align="center"">账号信息</td>
