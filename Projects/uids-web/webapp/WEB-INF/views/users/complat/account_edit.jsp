@@ -714,7 +714,7 @@ function checkAndSave() {
 				  -->
 			    </tr>			   		
 		      <tr>
-		         <td class="td_1" rowspan="3" style="max-width:0px;width:100px;ont-weight:bold;" align="center"">详细信息</td>
+		         <td class="td_1" rowspan="3" style="max-width:0px;width:100px;ont-weight:bold;" align="center"">详细属性</td>
              <th> QQ：</th>
 				     <td style="width:300px;">
 					      <input type="text" id="qq" name="qq" value="${complatUser.qq}" />
