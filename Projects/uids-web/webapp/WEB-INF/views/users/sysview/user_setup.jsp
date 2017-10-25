@@ -68,6 +68,7 @@
 									isQQ : true
 								},
 								headship : {
+									cnRangelength: [0,64],
 									isHeadship : true
 								}
 							},
@@ -237,10 +238,10 @@
 					           return this.optional(element) || (corporName.test(value));     
 					    }, "电话号码格式错误");
 					     //职务
-					     jQuery.validator.addMethod("isHeadship", function(value, element) { 
-					           var corporName = /[\u4e00-\u9fa5]{1,255}$/;   
+					     jQuery.validator.addMethod("isHeadship", function(value, element) {
+					           var  corporName = /^[\u4e00-\u9fa5a-zA-Z0-9]+$/; 
 					           return this.optional(element) || (corporName.test(value));     
-					    }, "只能输入汉字"); 
+					    }, "职务只能由汉字、字母和数字组成"); 
   					 });
 
 

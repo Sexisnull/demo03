@@ -66,7 +66,7 @@ $().ready(function() {
 		   	},
 			headShip:{//职务
 		   		cnRangelength: [0,64],
-		   		isName : true
+		   		isHeadship : true
 		   	},
 			fax:{
 		   		cnRangelength: [0,64],
@@ -150,6 +150,11 @@ $().ready(function() {
            var corporName = /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;   
            return this.optional(element) || (corporName.test(value));     
     }, "MSN格式错误");
+    //职务
+    jQuery.validator.addMethod("isHeadship", function(value, element) {
+           var  corporName = /^[\u4e00-\u9fa5a-zA-Z0-9]+$/; 
+           return this.optional(element) || (corporName.test(value));     
+    }, "职务只能由汉字、字母和数字组成"); 
     var pwding = $("#pwd").val();
     EvalPwd(pwding);
 });
