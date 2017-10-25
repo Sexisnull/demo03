@@ -29,7 +29,7 @@
 		<script type="text/javascript" src="${ctx}/res/skin/default/plugin/rsa/RSA.js"></script>
 		<script type="text/javascript">
 $(function(){
-	var groupMenu = [{"name":"单位选择","id":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
+	var groupMenu = [{"name":"单位选择","id":"0","title":"单位选择","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
 
 	$('#groupname').menu({
 		tree : 'groupmenu',
@@ -69,7 +69,7 @@ function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
 		async : {
 			enable : true,
 			url : '${ctx}/login/getGroup',
-			autoParam : [ "id=groupId", "isDisabled" ]
+			autoParam : [ "id=groupId", "isDisabled" ,"title=groupName"]
 		},
 		callback : {
 			beforeClick : beforeClick,
