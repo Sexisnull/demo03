@@ -193,7 +193,7 @@ var complatUserNameInput=$("#name").val();
 		   },
 	     mobile : {//移动电话
 				   required: true,
-				   isPhone:true,
+				   isMyPhone:true,
 		   		 uniqueMobile:true
 			 },
 		   email : {//email校验
@@ -352,6 +352,12 @@ var complatUserNameInput=$("#name").val();
            var corporName = /^(?=.*?[\u4E00-\u9FA5])[\dA-Za-z\u4E00-\u9FA5]/;   
            return this.optional(element) || (corporName.test(value));     
     }, "地址由汉字，字母和数字构成"); 
+    //手机号
+    jQuery.validator.addMethod("isMyPhone", function(value, element) { 
+           var corporName = /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "请输入正确的手机号"); 
+    
    //编辑时密码强度回显
     var pwding = $("#pwd").val();
 	  EvalPwd(pwding);
@@ -621,7 +627,7 @@ function checkAndSave() {
      <div class="form-content">
 		 	<table class="form-table" id="dataTable">
 		 		<tr>
-		 		  <td class="td_1" rowspan="7" style="max-width:0px;width:100px;ont-weight:bold;" align="center">基本属性</td>
+		 		  <td class="td_1" rowspan="5" style="max-width:0px;width:100px;ont-weight:bold;" align="center">基本属性</td>
 				  <th><b class="mustbe">*</b>姓名：</th>
 				  <td style="width:300px;">
 					<input type="text" id="name" name="name" value="${complatUser.name}" />
@@ -637,17 +643,12 @@ function checkAndSave() {
 				  <td style="width:300px;">
 					   <input type="text" id="age" name="age" value="${complatUser.age}"">
 	        </td>
-	         <th><b class="mustbe">*</b> 所属机构：</th>
-				  <td style="width:300px;">
-				    <c:if test="${empty complatUser.iid}"> 
-				        <input id="groupname" value="${groupMap[complatUser.groupid]}" name="groupname" type="text" style="cursor: pointer;"/> 
-					    <input type="hidden" id="groupid" name="groupid">	
-				    </c:if>
-				    <c:if test="${not empty complatUser.iid}">
-				          <input id="groupname1" value="${groupMap[complatUser.groupid]}" name="groupname" readonly="readonly" type="text" style="cursor: pointer;"/> 
-					      <input type="hidden" id="groupid" name="groupid" value="${complatUser.groupid }">	
-				    </c:if>											
-				  </td>
+	        <th><b class="mustbe">*</b> 移动电话：</th>
+                  <td style="width:300px;">
+                	<input type="text"  id="mobile" name="mobile" value="${complatUser.mobile}" />
+					        <input type="hidden" id="oldMobile" name="oldMobile" value="${complatUser.mobile}" />
+                  </td>		        
+	        
 	        <!--<th> MSN：</th>
 	        <td>
 	        	 <input type="text" id="msn" name="msn" value="${complatUser.msn}"">	        	
@@ -659,52 +660,46 @@ function checkAndSave() {
 	        	   </td> -->
 			    </tr>	
 			    <tr>
-			       <th> QQ：</th>
-				   <td style="width:300px;">
-					   <input type="text" id="qq" name="qq" value="${complatUser.qq}" />
-				   </td>
-				   <th><b class="mustbe">*</b> 身份证号：</th>
-				   <td style="width:300px;">
-					<input type="text" <c:if test="${userDetail.cardid != null}">readonly="readonly"</c:if> id="cardid" class="cardid" name="cardid" value="${userDetail.cardid}" />
-					<input type="hidden" id="oldCardid" class="oldCardid" name="oldCardid" value="${userDetail.cardid}" />
-				</td>
+			    	<th><b class="mustbe">*</b>登录名：</th>
+            <td style="width:300px;">
+               <input type="text" id="loginname" name="loginname" value="${complatUser.loginname}" />
+					     <input type="hidden" id="oldLoginname" name=oldLoginname" value="${complatUser.loginname}" />					           
+	          </td>
+			    	<th><b class="mustbe">*</b> 密码：</th>
+        	  <td style="width:300px;">
+        		   <input type="password" id="pwd" name="pwd"  value="${pwd}" onkeyup="javascript:EvalPwd(this.value);"/>
+        	     </td>
 			    </tr>		    
 			    <tr>
 			      <th>办公电话：</th>
-				  <td style="width:300px;">
-					<input type="text"  id="phone" name="phone" value="${complatUser.phone}" />
-				  </td>
-				  <th><b class="mustbe">*</b> 移动电话：</th>
-                  <td style="width:300px;">
-                	<input type="text"  id="mobile" name="mobile" value="${complatUser.mobile}" />
-					        <input type="hidden" id="oldMobile" name="oldMobile" value="${complatUser.mobile}" />
-                  </td>				
+				    <td style="width:300px;">
+					     <input type="text"  id="phone" name="phone" value="${complatUser.phone}" />
+				    </td>
+				    <th>密码强度：</th>
+			      <td style="width:300px;">
+				      <table id="pwdpower" style="width: 86%" cellspacing="0"  cellpadding="0" border="0">
+					     <tbody>
+						     <tr>
+							      <td id="pweak" style="text-align: center;width: 100px;border: 1px solid  grey">弱</td>
+							      <td id="pmedium" style="text-align: center;width: 100px;border: 1px solid  grey">中</td>
+							      <td id="pstrong" style="text-align: center;width: 100px;border: 1px solid  grey">强</td>
+						    </tr>
+					     </tbody>
+				      </table>
+			      </td>				  			
 			    </tr>
 			    <tr>
-				  <th> 传真：</th>
-				  <td style="width:300px;">
-					<input type="text" id="fax" name="fax" value="${complatUser.fax}" />
-				  </td>
-				  <th><b class="mustbe">*</b> Email：</th>				
-				  <td style="width:300px;">
-					<input type="text"  id="email" name="email" value="${complatUser.email}" />
-				  </td>
-			    </tr>	
-			     <tr>
-				  <th><b class="mustbe">*</b> 地址：</th>
-				  <td style="width:300px;">
-					<input type="text" id="address" name="address" value="${complatUser.address}" />
-				  </td>
-				  <th><b class="mustbe">*</b> 邮政编码：</th>				
-				  <td style="width:300px;">
-					<input type="text"  id="post" name="post" value="${complatUser.post}" />
-				  </td>
+				     <th class="td_5"><b class="mustbe">*</b> 地址：</th>
+				     <td class="td_3" style="width:300px;">
+					       <input type="text" id="address" name="address" value="${complatUser.address}" />
+				     </td>
+				     <th class="td_6"><b class="mustbe">*</b> 邮政编码：</th>				
+				     <td class="td_4" style="width:300px;">
+					       <input type="text"  id="post" name="post" value="${complatUser.post}" />
+				     </td>
 			    </tr>		    
 			    <tr>
-			      <th class="td_5"><b class="mustbe">*</b> 用户职务：</th>
-				  <td class="td_3" style="width:300px;">
-					<input type="text" id="headship" name="headship" value="${complatUser.headship}"">
-				  </td>
+			     
 				 <!--  <th class="td_6"><b class="mustbe">*</b> 所属机构：</th>
 				  <td class="td_4" style="width:300px;">
 				    <c:if test="${empty complatUser.iid}"> 
@@ -717,47 +712,56 @@ function checkAndSave() {
 				    </c:if>											
 				  </td>
 				  -->
-				  <th class="td_6"></th> 
-				  <td class="td_4"></td> 
 			    </tr>			   		
-		        <tr>
-		           <td class="td_1" rowspan="3" style="max-width:0px;width:100px;ont-weight:bold;" align="center"">账号信息</td>
-                   <th><b class="mustbe">*</b>登录名：</th>
-                   <td style="width:300px;">
-                   	   <input type="text" id="loginname" name="loginname" value="${complatUser.loginname}" />
-					             <input type="hidden" id="oldLoginname" name=oldLoginname" value="${complatUser.loginname}" />					           
-	               </td>
+		      <tr>
+		         <td class="td_1" rowspan="3" style="max-width:0px;width:100px;ont-weight:bold;" align="center"">详细信息</td>
+             <th> QQ：</th>
+				     <td style="width:300px;">
+					      <input type="text" id="qq" name="qq" value="${complatUser.qq}" />
+				     </td>
+				     <th><b class="mustbe">*</b> 身份证号：</th>
+				     <td style="width:300px;">
+					      <input type="text" <c:if test="${userDetail.cardid != null}">readonly="readonly"</c:if> id="cardid" class="cardid" name="cardid" value="${userDetail.cardid}" />
+					      <input type="hidden" id="oldCardid" class="oldCardid" name="oldCardid" value="${userDetail.cardid}" />
+				     </td>
+				     
+                   
 	        	  <!-- <th><b class="mustbe">*</b> 请设置密码找回问题：</th>
 				   <td style="width:300px;">
 					  <input type="text"  class="input" id="pwdquestion" name="pwdquestion" value="${complatUser.pwdquestion}"  />
 				   </td>-->
 			    </tr>	
 				<tr style="width:300px;">		
-				   <th><b class="mustbe">*</b> 密码：</th>
-        	       <td style="width:300px;">
-        		      <input type="password" id="pwd" name="pwd"  value="${pwd}" onkeyup="javascript:EvalPwd(this.value);"/>
-        	       </td>
+				  <th> 传真：</th>
+				  <td style="width:300px;">
+					    <input type="text" id="fax" name="fax" value="${complatUser.fax}" />
+				  </td>
+				  <th><b class="mustbe">*</b> Email：</th>				
+				  <td style="width:300px;">
+					    <input type="text"  id="email" name="email" value="${complatUser.email}" />
+				  </td>
 	        	 <!--  <th><b class="mustbe">*</b> 请设置密码找回问题答案：</th>
 				   <td style="width:300px;">
 					  <input type="text"  class="input" id="pwdanswer" name="pwdanswer" value="${complatUser.pwdanswer}"  />
 				   </td>-->
 				   
 			    </tr>
-			    <tr>				
-		           <th class="td_6">密码强度：</th>
-			       <td class="td_6" style="width:300px;">
-				      <table id="pwdpower" style="width: 86%" cellspacing="0"  cellpadding="0" border="0">
-					     <tbody>
-						    <tr>
-							   <td id="pweak" style="text-align: center;width: 100px;border: 1px solid  grey">弱</td>
-							   <td id="pmedium" style="text-align: center;width: 100px;border: 1px solid  grey">中</td>
-							   <td id="pstrong" style="text-align: center;width: 100px;border: 1px solid  grey">强</td>
-						    </tr>
-					     </tbody>
-				      </table>
-			       </td>
-			       <th class="td_6"></th>
-			       <td class="td_4"></td>
+			    <tr>	
+			    	  <th class="td_5"><b class="mustbe">*</b> 所属机构：</th>
+				      <td class="td_3" style="width:300px;">
+				          <c:if test="${empty complatUser.iid}"> 
+				             <input id="groupname" value="${groupMap[complatUser.groupid]}" name="groupname" type="text" style="cursor: pointer;"/> 
+					           <input type="hidden" id="groupid" name="groupid">	
+				          </c:if>
+				          <c:if test="${not empty complatUser.iid}">
+				             <input id="groupname1" value="${groupMap[complatUser.groupid]}" name="groupname" readonly="readonly" type="text" style="cursor: pointer;"/> 
+					           <input type="hidden" id="groupid" name="groupid" value="${complatUser.groupid }">	
+				          </c:if>											
+				      </td>			
+		          <th class="td_6"><b class="mustbe">*</b> 用户职务：</th>
+				      <td class="td_4" style="width:300px;">
+					        <input type="text" id="headship" name="headship" value="${complatUser.headship}"">
+				      </td>			       
 			    </tr>	
 	    </table>
   </div> 
