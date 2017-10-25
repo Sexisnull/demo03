@@ -308,9 +308,10 @@ var complatUserNameInput=$("#name").val();
     }, "邮政编码格式不正确（共6位,开头不能为0)");
     //年龄
     jQuery.validator.addMethod("isAge", function(value, element) { 
-           var corporName = /^([1-9]\d|\d)$/;   
+           //var corporName = /^([1-9]\d|\d)$/; 
+           var corporName = /^(?:[1-9][0-9]?|1[01][0-9]|120)$/;
            return this.optional(element) || (corporName.test(value));     
-    }, "年龄格式错误");
+    }, "年龄为1至120之间");
     //传真
     jQuery.validator.addMethod("isFax", function(value, element) { 
            var corporName = /^(\d{3,4}-)?\d{7,8}$/;   

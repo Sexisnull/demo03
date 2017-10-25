@@ -131,10 +131,11 @@ $().ready(function() {
            return this.optional(element) || (corporName.test(value));     
     }, "邮政编码格式错误（共6位,开头不能为0)");
     //年龄
-    jQuery.validator.addMethod("isAge", function(value, element) { 
-           var corporName = /^([1-9]\d|\d)$/;   
+    jQuery.validator.addMethod("isAge", function(value, element) {
+           //var corporName = /^([1-9]\d|\d)$/;
+            var corporName = /^(?:[1-9][0-9]?|1[01][0-9]|120)$/;  
            return this.optional(element) || (corporName.test(value));     
-    }, "年龄格式错误");
+    }, "年龄为1至120之间");
     //传真
     jQuery.validator.addMethod("isFax", function(value, element) { 
            var corporName = /^(\d{3,4}-)?\d{7,8}$/;   
@@ -311,8 +312,14 @@ color: rgb(119, 119, 119);
 				<th><b class="mustbe">*</b>性别：</th>
 				<td style="width:300px;">
 					<%-- <gsww:checkboxTag name="type" defaultValue="1" type="ZFYHXB" inputType="radio" value="${outsideUser.sex}"></gsww:checkboxTag> --%>
-					<input type="radio" name="sex" value = '男' <c:if test="${outsideUser.sex == '男'}">checked="checked" </c:if>>男&nbsp&nbsp&nbsp
+					<c:if test="${empty outsideUser.sex}">
+						<input type="radio" name="sex" value = '男' checked="checked">男&nbsp&nbsp&nbsp
+    					<input type="radio" name="sex" value = '女'>女
+					</c:if>
+					<c:if test="${not empty outsideUser.sex}">
+						<input type="radio" name="sex" value = '男' <c:if test="${outsideUser.sex == '男'}">checked="checked" </c:if>>男&nbsp&nbsp&nbsp
     				<input type="radio" name="sex" value = '女' <c:if test="${outsideUser.sex == '女'}">checked="checked" </c:if>>女
+					</c:if>
 				</td>
 				<th>年龄：</th>
 				<td style="width:300px;">
