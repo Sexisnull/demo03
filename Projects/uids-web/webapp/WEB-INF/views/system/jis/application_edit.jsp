@@ -832,7 +832,7 @@ $(function(){
     <div class="form-btn">
     	<input type="submit" tabindex="15" id="submit-btn" value="保存" class="btn bluegreen"/>
     	&nbsp;&nbsp;
-        <input type="button" tabindex="16" value="返回" onclick="javascript:window.location.href='${ctx}/application/groupOrgTree?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}'" class="btn gray"/>
+        <input type="button" tabindex="16" value="返回" onclick="javascript:window.location.href='${ctx}/application/applicationList?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}'" class="btn gray"/>
     </div>
     </form>
     <div id="alerttb" class="alert_tb" style="display:none;"> 

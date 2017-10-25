@@ -45,12 +45,12 @@
 </style>
 <script type="text/javascript"> 
 $(function(){
-	var groupMenu = [{"name":"单位选择","title":"单位选择","id":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
+	//var groupMenu = [{"name":"单位选择","title":"单位选择","id":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
 	$('#groupname').menu({
 		tree : 'groupmenu',
 		height : 200,
 		init : function() {
-			setting('groupmenu', onClickGroup, onDbClickGroup, groupMenu);
+			setting('groupmenu', onClickGroup, onDbClickGroup);
 		}
 	});
 	
@@ -76,11 +76,11 @@ function onDbClickGroup(event, treeId, treeNode) {
 /**
  *	初始化树
  */
-function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
+function setting(treeName, onClickFunction, onDblClickFunction) {
 	var setting = {
 		async : {
 			enable : true,
-			url : '../login/getGroup',
+			url : '../uids/getGroup',
 			autoParam : [ "id=groupId", "isDisabled" ]
 		},
 		callback : {
@@ -90,7 +90,7 @@ function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
 		}
 	};
 	console.log("-----"+treeName);
-	$("#" + treeName).tree(setting, rootNode);
+	$("#" + treeName).tree(setting);
 //	$("#" + treeName).tree().refreshNode('');
 }
 /**
@@ -157,45 +157,13 @@ function synfuction(){
    	}
    	$("#synaction").submit();
 }
-//新增
-function toAdd(){
-	parent.location = "applicationEdit";
-}
-
-//删除
-function deleteData() {
-	var paraTypeId=$(".iid").val();
-	if($(".check_btn:checked").length!=0&&$('.list-table tbody input:checkbox:checked').length!=0){
-		$.dialog.confirm('您确认要删除吗？',function(){
-			var ids = "";
-			$('.list-table tbody input[type=checkbox]').each(function(i, o) {
-				if($(o).attr('checked')) {
-					ids += $(o).val() + ",";
-						}
-			});
-			parent.location = "${ctx}/application/applicationDelete?iid="+ids.substring(0,ids.length-1);
-		});
-	}else{
-		$.dialog.alert('请您至少选择一条数据',function(){
-			return null;
-		});
-	}
-}
-//编辑
-function toEdit(iids){
-	if(iids==null || iids==""){
-		parent.location = "applicationEdit";
-	}else{
-		parent.location = "applicationEdit?iid="+iids;
-	}
-}
 
 </script>
 </head>
 <body>
 <div class="list-warper">
 	<!--列表的面包屑区域-->
-	<%-- <div class="position">
+	<div class="position">
 		<ol class="breadcrumb">
 			<li>
 				<a href="${ctx}/backIndex" target="_top">首页</a>
@@ -209,7 +177,7 @@ function toEdit(iids){
 				应用列表
 			</li>
     	</ol>
-    </div> --%>
+    </div>
     
     <div class="search-content">
 		<form id="form1" name="pageForm" action="${ctx}/application/applicationList" method="get">
@@ -218,14 +186,13 @@ function toEdit(iids){
 					<th style="padding-left: 300px">应用名称：</th>
 						<td width="20%">
 							<input type="text" maxlength="30" style="width: 170px;" placeholder="应用名称" value="${sParams['LIKE_name']}" id="nameSearch" name="search_LIKE_name" />
-							<input type="hidden" id="orgId" name="orgId" value="${orgId}">
 						</td>
-					<%-- <th>所属机构：</th>
+					<th>所属机构：</th>
 						 <td>
-						 	<input id="groupname" value="${groupName}" name="groupname" type="text" style="cursor: pointer;" placeholder="所属机构"/> 
+						 	<input id="groupname" value="${groupName}" name="groupname" type="text" style="cursor: pointer;" placeholder="所属机构" readonly="readonly"/> 
 							<input type="hidden" id="groupid" value="${sParams['EQ_groupId']}" name="search_EQ_groupId">
-							<select  style="width: 170px;" placeholder="数据标识" value="${sParams['LIKE_remark']}" id="remarkSearch" name="search_LIKE_remark" />
-						</td>  --%>
+							<%-- <select  style="width: 170px;" placeholder="数据标识" value="${sParams['LIKE_remark']}" id="remarkSearch" name="search_LIKE_remark" /> --%>
+						</td> 
 					<td class="btn-group"> <a class="btnSearch" onclick="javascript:checkSubmitForm()">搜索</a></td>
 				</tr>
 			</table>
@@ -239,14 +206,7 @@ function toEdit(iids){
         <div class="list-topBar  advanced-search">
         	 <div class="list-toolbar">
             <!-- 操作按钮开始 -->	 
-             <%-- <gsww:opTag menuId="8a929cb35e7a893b015e7a925b900001" tabIndex="1" operatorType="1"></gsww:opTag> --%>
-             <ul class="list-Topbtn">
-						<li class="add"><a title="新增"
-							onclick="toAdd();">新增</a></li>
-						<li class="del"><a title="删除"
-							onclick="deleteData('application/applicationDelete','iid');">删除</a></li>
-				 </ul>
-             
+             <gsww:opTag menuId="8a929cb35e7a893b015e7a925b900001" tabIndex="1" operatorType="1"></gsww:opTag>
              <!-- 操作按钮结束 -->
            </div> 
             
@@ -279,12 +239,12 @@ function toEdit(iids){
 									<input type="checkbox" class="check_btn" style="display: none;" />
 								</div>             		
                 	</th>
-                    <th width="30%" style="text-align: center;">
+                    <th width="25%" style="text-align: center;">
                                                              应用名称        
                     </th>
                     <th width="20%" style="text-align: center;">应用标识</th>
-                    <th width="20%" style="text-align: center;">所属机构</th>
-                    <th width="10%" style="text-align: center;">同步用户</th>
+                    <th width="15%" style="text-align: center;">所属机构</th>
+                    <th width="15%" style="text-align: center;">同步用户</th>
                     <th width="30%" style="text-align: center;">操作</th>
                 </tr>
             </thead> 
@@ -331,7 +291,7 @@ function toEdit(iids){
 	                	<td class="position-content" style="text-align: center;" >
 	                		<div class="listOper">
 								<ul>
-									<li class="blue" onclick="toEdit(${application.iid});">
+									<li class="blue" onclick="add('application/applicationEdit','iid',this);">
 										<!-- <i></i> -->
 										<a>编辑</a>
 									</li>
