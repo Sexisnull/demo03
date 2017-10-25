@@ -358,11 +358,22 @@ var complatUserNameInput=$("#name").val();
    
    
 	 //获取用户扩展属性
+	
 					var htmlString = [];
 						var count = 1;
 						var table = $(".form-table");
 						var fieldsListMap = eval('${fieldsListMap}');
-						htmlString.push("<tr><td  class='td_2' id='td_7' rowspan='"+count+"' align='center'>"+"扩展属性"+"</td>");
+						var sum=0;
+						for ( var i = 0; i < fieldsListMap.length; i++) {
+							 var length=fieldsListMap[i].length;
+							 sum +=	length;						 
+						}
+	 if(sum%2==0){
+	 	sum=sum/2;
+	 }else if(sum%2==1){
+	 	 sum=Math.ceil(sum/2);
+	 }
+						htmlString.push("<tr><td  class='td_2' id='td_7' rowspan='"+sum+"' align='center'>"+"扩展属性"+"</td>");
 						var textName;
 						var textValue;
 						var userid = $("#iid").val().trim();
@@ -391,7 +402,7 @@ var complatUserNameInput=$("#name").val();
      	    			}   					
     				}else{
     				    if(count%2==1){
-    					 	       htmlString.push("<tr><td class='td_7'></td><th>"+ textTitle+ "：</th><td><input type='text' name='"+textName+"' value='"+textValue+"' style='width: 79.9%;'></td>");
+    					 	       htmlString.push("<tr><th>"+ textTitle+ "：</th><td><input type='text' name='"+textName+"' value='"+textValue+"' style='width: 79.9%;'></td>");
     					 }
     	    			    if(count%2==0){
     	    			    	htmlString.push("<th>"+ textTitle+ "：</th><td><input type='text' name='"+textName+"' value='"+textValue+"' style='width: 79.9%;'></td></tr>");
@@ -427,7 +438,7 @@ var complatUserNameInput=$("#name").val();
 											if (key == 'fieldname') {
 												if(count == 1){
     			    		if(count%2==1){
-    			    			htmlString.push("<tr><td class='td_7'></td><th>"+ selectTitle+ "：</th><td><select id='"+value+"' name= '"+value+"' style='width: 86.9%;'>");
+    			    			htmlString.push("<tr><th>"+ selectTitle+ "：</th><td><select id='"+value+"' name= '"+value+"' style='width: 86.9%;'>");
 		    			    	//htmlString.push("<th>"+value+"</th><td><select  class='kzsx' id='"+value+"' name= '"+value+"' style='width=:88%;'>");
 		    			    	//循环key；
 		    			        for(var i=0;i<keys.length;i++){
@@ -467,7 +478,7 @@ var complatUserNameInput=$("#name").val();
 		    			    }	
     			    	}else{
     			    		if(count%2==1){
-		    			    	htmlString.push("<tr><td class='td_7'></td><th>"+ selectTitle+ "：</th><td><select id='"+value+"' name= '"+value+"' style='width: 86.9%;'>");
+		    			    	htmlString.push("<tr><th>"+ selectTitle+ "：</th><td><select id='"+value+"' name= '"+value+"' style='width: 86.9%;'>");
 		    			    	//循环key；
 		    			        for(var i=0;i<keys.length;i++){
 		    			 			htmlString.push("<option value='"+keys[i]+"'");
