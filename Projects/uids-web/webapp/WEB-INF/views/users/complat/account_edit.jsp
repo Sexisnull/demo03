@@ -338,9 +338,9 @@ var complatUserNameInput=$("#name").val();
     }, "身份证号格式错误"); 
      //职务
      jQuery.validator.addMethod("isHeadship", function(value, element) { 
-           var corporName = /[\u4e00-\u9fa5]{1,255}$/;   
+           var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9\u4e00-\u9fa5]+$/;   
            return this.optional(element) || (corporName.test(value));     
-    }, "请不要输入除汉字以外的其他内容"); 
+    }, "职务只能由字母、数字、中文组成，不能以下划线开头和结尾"); 
     //姓名首字母
      jQuery.validator.addMethod("isPinYin", function(value, element) { 
            var corporName = /^[A-Z]+$/;   
@@ -368,12 +368,13 @@ var complatUserNameInput=$("#name").val();
 							 var length=fieldsListMap[i].length;
 							 sum +=	length;						 
 						}
-	 if(sum%2==0){
-	 	sum=sum/2;
-	 }else if(sum%2==1){
-	 	 sum=Math.ceil(sum/2);
-	 }
-						htmlString.push("<tr><td  class='td_2' id='td_7' rowspan='"+sum+"' align='center'>"+"扩展属性"+"</td>");
+						if(sum!=0){
+							if(sum%2==0){
+	 	              sum=sum/2;
+	            }else if(sum%2==1){
+	 	              sum=Math.ceil(sum/2);
+	            }
+	            htmlString.push("<tr><td  class='td_2' id='td_7' rowspan='"+sum+"' align='center'>"+"扩展属性"+"</td>");
 						var textName;
 						var textValue;
 						var userid = $("#iid").val().trim();
@@ -528,6 +529,11 @@ var complatUserNameInput=$("#name").val();
 							}
 						}
 						table.append(htmlString.join(""));
+						}else if(sum==0){
+	 	           htmlString.push("");
+	 	           table.append(htmlString.join(""));
+	          } 
+						
   //编辑页面密码强度判断
   //编辑页面密码强度判断
 	var pwding = $("#pwd").val();
