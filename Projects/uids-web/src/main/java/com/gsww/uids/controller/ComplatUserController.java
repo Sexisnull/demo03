@@ -387,7 +387,7 @@ public class ComplatUserController extends BaseController {
 						jisUserdetailService.update(jisUserdetail.getIid(),cardId, userMap);
 					}
 					returnMsg("success", "编辑用户成功！", request);
-					String desc = sysUserSession.getUserName() + "修改【" + complatUser.getName() + "】 政府用户";
+					String desc = sysUserSession.getLoginAccount() + "修改【" + complatUser.getName() + "】 政府用户";
 					jisLogService.save(sysUserSession.getLoginAccount(),
 							sysUserSession.getUserIp(), desc, 2, 2);
 				} else {
@@ -440,7 +440,7 @@ public class ComplatUserController extends BaseController {
 								cardId, userMap);
 					}
 					returnMsg("success", "新增用户成功！", request);
-					String desc = sysUserSession.getUserName() + "新增【" + complatUser.getName() + "】 政府用户";
+					String desc = sysUserSession.getLoginAccount() + "新增【" + complatUser.getName() + "】 政府用户";
 					jisLogService.save(sysUserSession.getLoginAccount(),
 							sysUserSession.getUserIp(), desc, 2, 1);
 				}
@@ -496,7 +496,7 @@ public class ComplatUserController extends BaseController {
 					returnMsg("success", "删除成功！", request);
 				}
 
-				String desc = sysUserSession.getUserName() + "删除【" + complatUser.getName() + "】 政府用户";
+				String desc = sysUserSession.getLoginAccount() + "删除【" + complatUser.getName() + "】 政府用户";
 				jisLogService.save(sysUserSession.getUserName(), sysUserSession.getUserIp(),
 						desc, 2, 3);
 			}
@@ -623,7 +623,7 @@ public class ComplatUserController extends BaseController {
 							jisUser.setUserid(userId);
 							jisUserdetailService.save(jisUser);
 							synchronization(complatUser, 1);// 新增同步
-							String desc = sysUserSession.getUserName() + "删除【" + complatUser.getName() + "】 政府用户";
+							String desc = sysUserSession.getLoginAccount() + "删除【" + complatUser.getName() + "】 政府用户";
 							jisLogService.save(sysUserSession.getUserName(),
 									sysUserSession.getUserIp(), desc, 2, 5);
 
@@ -970,7 +970,7 @@ public class ComplatUserController extends BaseController {
 			 * }
 			 */
 			dataList.add(treeMap);
-			String desc = sysUserSession.getUserName() + "导出【" + complatUser.getName() + "】 政府用户";
+			String desc = sysUserSession.getLoginAccount() + "导出【" + complatUser.getName() + "】 政府用户";
 	        jisLogService.save(sysUserSession.getUserName(), sysUserSession.getUserIp(), desc, 2,4);
 		}
 		
