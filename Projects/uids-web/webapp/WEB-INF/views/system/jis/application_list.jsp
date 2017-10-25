@@ -35,7 +35,7 @@
 	left:300px;
 	top:18px;
 	border-radius:15px;
-	border:1px solid #F68A8A;
+	border:1px solid gray;
 	width:400px;
 	height:520px;
 	background-color:white;
@@ -189,7 +189,7 @@ function synfuction(){
 						</td>
 					<th>所属机构：</th>
 						 <td>
-						 	<input id="groupname" value="${groupName}" name="groupname" type="text" style="cursor: pointer;" placeholder="所属机构" readonly="readonly"/> 
+						 	<input id="groupname" value="${groupName}" name="groupname" type="text" style="cursor: pointer;" placeholder="请选择所属机构" readonly="readonly" size="35"/> 
 							<input type="hidden" id="groupid" value="${sParams['EQ_groupId']}" name="search_EQ_groupId">
 							<%-- <select  style="width: 170px;" placeholder="数据标识" value="${sParams['LIKE_remark']}" id="remarkSearch" name="search_LIKE_remark" /> --%>
 						</td> 
@@ -239,13 +239,13 @@ function synfuction(){
 									<input type="checkbox" class="check_btn" style="display: none;" />
 								</div>             		
                 	</th>
-                    <th width="25%" style="text-align: center;">
+                    <th width="30%" style="text-align: center;">
                                                              应用名称        
                     </th>
                     <th width="20%" style="text-align: center;">应用标识</th>
                     <th width="15%" style="text-align: center;">所属机构</th>
-                    <th width="15%" style="text-align: center;">同步用户</th>
-                    <th width="30%" style="text-align: center;">操作</th>
+                    <th width="10%" style="text-align: center;">同步用户</th>
+                    <th width="25%" style="text-align: center;">操作</th>
                 </tr>
             </thead> 
             <tbody>

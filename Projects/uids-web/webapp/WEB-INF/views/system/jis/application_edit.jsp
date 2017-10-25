@@ -49,7 +49,8 @@
 .alert_tb {	
 	left:180px;
 	top:120px;
-	border:1px solid #F68A8A;
+	border-radius:15px;
+	border:1px solid gray;
 	width:600px;
 	height:350px;
 	background-color:white;
@@ -846,19 +847,19 @@ $(function(){
     	<hr/><br/>
     		<tr>
     			<td style="font-size: 17px;" align="left">&nbsp;&nbsp;应用名称：&nbsp;&nbsp;</td>
-    			<td style="font-size: 15px;"><input  type="radio" id="jcms" name="fast" value="jcms" onclick="group(1);"/>&nbsp;JCMS后台用户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-    			<td style="font-size: 15px;"><input type="radio" id="jcms2" name="fast" value="jcms2" onclick="group(2);"/>&nbsp;JCMS个性化定制&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-    			<td style="font-size: 15px;"><input type="radio" id="xxgk" name="fast" value="xxgk" onclick="group(3);"/>&nbsp;XXGK</td>
+    			<td style="font-size: 16px;"><input  type="radio" id="jcms" name="fast" value="jcms" onclick="group(1);"/>&nbsp;JCMS后台用户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    			<td style="font-size: 16px;"><input type="radio" id="jcms2" name="fast" value="jcms2" onclick="group(2);"/>&nbsp;JCMS个性化定制&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    			<td style="font-size: 16px;"><input type="radio" id="xxgk" name="fast" value="xxgk" onclick="group(3);"/>&nbsp;XXGK</td>
     		</tr>
     		<tr>
     			<td></td>
-    			<td style="font-size: 15px;"><input type="radio" id="jact" name="fast" value="jact" onclick="group(4);"/>&nbsp;JACT后台&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-    			<td style="font-size: 15px;"><input type="radio" id="jact2" name="fast" value="jact2" onclick="group(5);"/>&nbsp;JACT前台&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-    			<td style="font-size: 15px;"><input type="radio" id="jphoto" name="fast" value="jphoto" onclick="group(6);"/>&nbsp;JPHOTO前台</td>
+    			<td style="font-size: 16px;"><input type="radio" id="jact" name="fast" value="jact" onclick="group(4);"/>&nbsp;JACT后台&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    			<td style="font-size: 16px;"><input type="radio" id="jact2" name="fast" value="jact2" onclick="group(5);"/>&nbsp;JACT前台&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    			<td style="font-size: 16px;"><input type="radio" id="jphoto" name="fast" value="jphoto" onclick="group(6);"/>&nbsp;JPHOTO前台</td>
     		</tr>
     		<tr>
     			<td></td>
-    			<td style="font-size: 15px;"><input type="radio" id="jphoto2" name="fast" value="jphoto2" onclick="group(7);"/>&nbsp;JPHOTO后台</td>
+    			<td style="font-size: 16px;"><input type="radio" id="jphoto2" name="fast" value="jphoto2" onclick="group(7);"/>&nbsp;JPHOTO后台</td>
     		</tr>
 			<tr style="line-height: 70px;">
 				<td style="font-size: 17px;" align="left" >&nbsp;&nbsp;应用域名：&nbsp;&nbsp;</td>
@@ -908,7 +909,7 @@ $(function(){
 		<div id="dialogpic-toolbar" style="text-align: center;">
 			<div id="dialogpic-toolbar-panel">
 				<input type="button" class="btn bluegreen" value="保存" 
-				 onclick="selectpicSubmit();" style="background-color: #36c6d3;color:#ffffff;font-size: 15px;"/> 
+				 onclick="selectpicSubmit();" style="background-color: #36c6d3;color:#ffffff;font-size: 15px;/> 
 			</div>
 		</div>
 		</form>
