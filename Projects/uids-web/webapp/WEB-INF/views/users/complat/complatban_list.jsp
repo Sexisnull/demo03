@@ -11,10 +11,20 @@
 		/**搜索表单校验**/
 	function checkSubmitForm() {
 		var loginnameSearch = $("#loginnameSearch").val();
-		if (loginnameSearch == '' || isChinaOrNumbOrLett(loginnameSearch)) {
+		if (loginnameSearch == '' || checkLoginName(loginnameSearch)) {
 			form1.submit();
 		} else {
-			$.validator.errorShow($("#loginnameSearch"), '只能包括中英文、数字、@和下划线');
+			$.validator.errorShow($("#loginnameSearch"), '只能包括字母、数字、下划线和.');
+		}
+	}
+	
+	function checkLoginName(s){
+		var regu = /^[0-9a-zA-Z_\.]+$/;
+		var re = new RegExp(regu);
+		if (re.test(s)) {
+			return true;
+		}else{
+			return false;
 		}
 	}
 	
