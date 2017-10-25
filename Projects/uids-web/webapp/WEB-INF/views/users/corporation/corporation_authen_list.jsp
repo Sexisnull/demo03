@@ -8,7 +8,7 @@
 		<link type="text/css" rel="stylesheet" href="${ctx}/res/skin/login/css/menu.css" />
 		<script type="text/javascript" src="${ctx}/res/skin/default/js/jquery-ui.js"></script>
 <head>
-<meta charset="utf-8"/>
+<meta charset="utf-8"/> 
 <title>甘肃万维JUP课题</title>
 
 <script type="text/javascript"> 

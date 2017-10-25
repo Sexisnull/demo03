@@ -1,18 +1,13 @@
 package com.gsww.uids.controller;
 
-import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-
 
 import org.apache.commons.lang.StringUtils;
 import org.json.simple.JSONObject;
@@ -388,7 +383,7 @@ public class ComplatCorporationController extends BaseController{
      * @return
      * @throws Exception
 	 */
-	@SuppressWarnings("finally")
+	@SuppressWarnings("finally") 
 	@RequestMapping(value = "/corporationAuth", method = RequestMethod.POST)
 	public void corporationAuth(ComplatCorporation corporation,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		ComplatCorporation complatCorporation = null;
