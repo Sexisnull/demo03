@@ -173,15 +173,21 @@ var complatUserNameInput=$("#name").val();
 	         required: true
 	     },
 	     age: {
+	     	   required: true,
 	         cnRangelength: [0,64],
 	         maxlength: 3,
-	         isAge: true
-	         
-	     },		       	   
-	     headship:{
-	         cnRangelength: [0,64]
+	         isAge: true	         
+	     },	
+	     pinyin: {
+	         cnRangelength: [0,64],
+	         isPinYin: true	         
+	     },		     	       	   	     
+	     headship: {
+	     	   required: true,
+	         cnRangelength: [0,64],
+	         isHeadship: true
 	     },	   
-	     phone:{//办公电话
+	     phone: {//办公电话
 		   		 isCompTel:true,
 		   		 maxlength:12 
 		   },
@@ -208,12 +214,14 @@ var complatUserNameInput=$("#name").val();
 		   		 isFax: true
 		   },
 	   	 address:{
+	   	 	   required: true,
 				   /* isAddressInfo:true, */
 		   		 cnRangelength: [0,127],
-		   		 isName : true
+		   		 isAddress: true
 		   	},
 		   post:{
 				  /* isEmail：true, */
+				  required: true,
 		   		maxlength: 6,
 		   		isPost:true
 		   	},
@@ -229,10 +237,12 @@ var complatUserNameInput=$("#name").val();
 			 },
 	   
 	     pwdquestion : {
+	     	  required: true,
 			    cnRangelength: [0,127],
 			    //isName : true
 		   },
 	     pwdanswer : {
+	     	  required: true,
 			    cnRangelength: [0,127],
 			    //isName : true
 	     },
@@ -286,21 +296,22 @@ var complatUserNameInput=$("#name").val();
            var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9\u4e00-\u9fa5]+$/;   
            return this.optional(element) || (corporName.test(value));     
     }, "名称只能由字母、数字、中文组成，不能以下划线开头和结尾");
-    
+    //登录名
     jQuery.validator.addMethod("isLoginname", function(value, element) { 
            var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;   
            return this.optional(element) || (corporName.test(value));     
     }, "名称只能由字母、数字、下划线、中文组成，不能以下划线开头和结尾");
-    
+    //邮政编码
     jQuery.validator.addMethod("isPost", function(value, element) { 
            var corporName = /^[1-9][0-9]{5}$/;   
            return this.optional(element) || (corporName.test(value));     
     }, "邮政编码格式不正确（共6位,开头不能为0)");
     //年龄
     jQuery.validator.addMethod("isAge", function(value, element) { 
-           var corporName = /^([1-9]\d|\d)$/;   
+           //var corporName = /^([1-9]\d|\d)$/; 
+           var corporName = /^(?:[1-9][0-9]?|1[01][0-9]|120)$/;
            return this.optional(element) || (corporName.test(value));     
-    }, "年龄格式错误");
+    }, "年龄为1至120之间");
     //传真
     jQuery.validator.addMethod("isFax", function(value, element) { 
            var corporName = /^(\d{3,4}-)?\d{7,8}$/;   
@@ -326,6 +337,21 @@ var complatUserNameInput=$("#name").val();
            var corporName = /([1-6]\d{5}(19|20)\d\d(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])\d{3}[0-9xX])|([1-6]\d{5}\d\d(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])\d{3})/;   
            return this.optional(element) || (corporName.test(value));     
     }, "身份证号格式错误"); 
+     //职务
+     jQuery.validator.addMethod("isHeadship", function(value, element) { 
+           var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9\u4e00-\u9fa5]+$/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "职务只能由字母、数字、中文组成，不能以下划线开头和结尾"); 
+    //姓名首字母
+     jQuery.validator.addMethod("isPinYin", function(value, element) { 
+           var corporName = /^[A-Z]+$/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "请不要输入除大写字母以外的其他内容");
+    //地址
+     jQuery.validator.addMethod("isAddress", function(value, element) { 
+           var corporName = /^(?=.*?[\u4E00-\u9FA5])[\dA-Za-z\u4E00-\u9FA5]/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "地址由汉字，字母和数字构成"); 
    //编辑时密码强度回显
     var pwding = $("#pwd").val();
 	  EvalPwd(pwding);
@@ -333,11 +359,23 @@ var complatUserNameInput=$("#name").val();
    
    
 	 //获取用户扩展属性
+	
 					var htmlString = [];
 						var count = 1;
 						var table = $(".form-table");
 						var fieldsListMap = eval('${fieldsListMap}');
-						htmlString.push("<tr><td  class='td_2' id='td_7' rowspan='"+count+"' align='center'>"+"扩展属性"+"</td>");
+						var sum=0;
+						for ( var i = 0; i < fieldsListMap.length; i++) {
+							 var length=fieldsListMap[i].length;
+							 sum +=	length;						 
+						}
+						if(sum!=0){
+							if(sum%2==0){
+	 	              sum=sum/2;
+	            }else if(sum%2==1){
+	 	              sum=Math.ceil(sum/2);
+	            }
+	            htmlString.push("<tr><td  class='td_2' id='td_7' rowspan='"+sum+"' align='center'>"+"扩展属性"+"</td>");
 						var textName;
 						var textValue;
 						var userid = $("#iid").val().trim();
@@ -366,7 +404,7 @@ var complatUserNameInput=$("#name").val();
      	    			}   					
     				}else{
     				    if(count%2==1){
-    					 	       htmlString.push("<tr><td class='td_7'></td><th>"+ textTitle+ "：</th><td><input type='text' name='"+textName+"' value='"+textValue+"' style='width: 79.9%;'></td>");
+    					 	       htmlString.push("<tr><th>"+ textTitle+ "：</th><td><input type='text' name='"+textName+"' value='"+textValue+"' style='width: 79.9%;'></td>");
     					 }
     	    			    if(count%2==0){
     	    			    	htmlString.push("<th>"+ textTitle+ "：</th><td><input type='text' name='"+textName+"' value='"+textValue+"' style='width: 79.9%;'></td></tr>");
@@ -402,7 +440,7 @@ var complatUserNameInput=$("#name").val();
 											if (key == 'fieldname') {
 												if(count == 1){
     			    		if(count%2==1){
-    			    			htmlString.push("<tr><td class='td_7'></td><th>"+ selectTitle+ "：</th><td><select id='"+value+"' name= '"+value+"' style='width: 86.9%;'>");
+    			    			htmlString.push("<tr><th>"+ selectTitle+ "：</th><td><select id='"+value+"' name= '"+value+"' style='width: 86.9%;'>");
 		    			    	//htmlString.push("<th>"+value+"</th><td><select  class='kzsx' id='"+value+"' name= '"+value+"' style='width=:88%;'>");
 		    			    	//循环key；
 		    			        for(var i=0;i<keys.length;i++){
@@ -442,7 +480,7 @@ var complatUserNameInput=$("#name").val();
 		    			    }	
     			    	}else{
     			    		if(count%2==1){
-		    			    	htmlString.push("<tr><td class='td_7'></td><th>"+ selectTitle+ "：</th><td><select id='"+value+"' name= '"+value+"' style='width: 86.9%;'>");
+		    			    	htmlString.push("<tr><th>"+ selectTitle+ "：</th><td><select id='"+value+"' name= '"+value+"' style='width: 86.9%;'>");
 		    			    	//循环key；
 		    			        for(var i=0;i<keys.length;i++){
 		    			 			htmlString.push("<option value='"+keys[i]+"'");
@@ -492,6 +530,11 @@ var complatUserNameInput=$("#name").val();
 							}
 						}
 						table.append(htmlString.join(""));
+						}else if(sum==0){
+	 	           htmlString.push("");
+	 	           table.append(htmlString.join(""));
+	          } 
+						
   //编辑页面密码强度判断
   //编辑页面密码强度判断
 	var pwding = $("#pwd").val();
@@ -507,7 +550,7 @@ function checkAndSave() {
     var pwd = $("#pwd").val();
     var msg = "";
     if(pwd==""){
-    	$.dialog.alert("请填写必填信息！",function(){
+    	$.dialog.alert("请填写密码！",function(){
 				return null;
 		});
 		return;
@@ -592,12 +635,28 @@ function checkAndSave() {
 		 		<tr>  
 		 		  <th><b class="mustbe">*</b> 年龄：</th>
 				  <td style="width:300px;">
-					<input type="text" id="age" name="age" value="${complatUser.age}"">
-	              </td>
-	               <th>姓名的首字母全称：</th>
+					   <input type="text" id="age" name="age" value="${complatUser.age}"">
+	        </td>
+	         <th><b class="mustbe">*</b> 所属机构：</th>
+				  <td style="width:300px;">
+				    <c:if test="${empty complatUser.iid}"> 
+				        <input id="groupname" value="${groupMap[complatUser.groupid]}" name="groupname" type="text" style="cursor: pointer;"/> 
+					    <input type="hidden" id="groupid" name="groupid">	
+				    </c:if>
+				    <c:if test="${not empty complatUser.iid}">
+				          <input id="groupname1" value="${groupMap[complatUser.groupid]}" name="groupname" readonly="readonly" type="text" style="cursor: pointer;"/> 
+					      <input type="hidden" id="groupid" name="groupid" value="${complatUser.groupid }">	
+				    </c:if>											
+				  </td>
+	        <!--<th> MSN：</th>
+	        <td>
+	        	 <input type="text" id="msn" name="msn" value="${complatUser.msn}"">	        	
+	        </td>
+	             -->
+	             <!--  <th>姓名的首字母全拼(大写)：</th>
 	        	   <td style="width:300px;">
 	        		  <input type="text" id="pinyin" name="pinyin" value="${complatUser.pinyin}" />
-	        	   </td>
+	        	   </td> -->
 			    </tr>	
 			    <tr>
 			       <th> QQ：</th>
@@ -611,7 +670,7 @@ function checkAndSave() {
 				</td>
 			    </tr>		    
 			    <tr>
-			      <th><b class="mustbe">*</b> 固定电话：</th>
+			      <th>办公电话：</th>
 				  <td style="width:300px;">
 					<input type="text"  id="phone" name="phone" value="${complatUser.phone}" />
 				  </td>
@@ -646,9 +705,9 @@ function checkAndSave() {
 				  <td class="td_3" style="width:300px;">
 					<input type="text" id="headship" name="headship" value="${complatUser.headship}"">
 				  </td>
-				  <th class="td_6"><b class="mustbe">*</b> 所属机构：</th>
+				 <!--  <th class="td_6"><b class="mustbe">*</b> 所属机构：</th>
 				  <td class="td_4" style="width:300px;">
-				    <c:if test="${empty complatUser.iid}">
+				    <c:if test="${empty complatUser.iid}"> 
 				        <input id="groupname" value="${groupMap[complatUser.groupid]}" name="groupname" type="text" style="cursor: pointer;"/> 
 					    <input type="hidden" id="groupid" name="groupid">	
 				    </c:if>
@@ -657,6 +716,9 @@ function checkAndSave() {
 					      <input type="hidden" id="groupid" name="groupid" value="${complatUser.groupid }">	
 				    </c:if>											
 				  </td>
+				  -->
+				  <th class="td_6"></th> 
+				  <td class="td_4"></td> 
 			    </tr>			   		
 		        <tr>
 		           <td class="td_1" rowspan="3" style="max-width:0px;width:100px;ont-weight:bold;" align="center"">账号信息</td>
@@ -665,20 +727,20 @@ function checkAndSave() {
                    	   <input type="text" id="loginname" name="loginname" value="${complatUser.loginname}" />
 					             <input type="hidden" id="oldLoginname" name=oldLoginname" value="${complatUser.loginname}" />					           
 	               </td>
-	        	   <th><b class="mustbe">*</b> 请设置密码找回问题：</th>
+	        	  <!-- <th><b class="mustbe">*</b> 请设置密码找回问题：</th>
 				   <td style="width:300px;">
 					  <input type="text"  class="input" id="pwdquestion" name="pwdquestion" value="${complatUser.pwdquestion}"  />
-				   </td>
+				   </td>-->
 			    </tr>	
 				<tr style="width:300px;">		
 				   <th><b class="mustbe">*</b> 密码：</th>
         	       <td style="width:300px;">
         		      <input type="password" id="pwd" name="pwd"  value="${pwd}" onkeyup="javascript:EvalPwd(this.value);"/>
         	       </td>
-	        	   <th><b class="mustbe">*</b> 请设置密码找回问题答案：</th>
+	        	 <!--  <th><b class="mustbe">*</b> 请设置密码找回问题答案：</th>
 				   <td style="width:300px;">
 					  <input type="text"  class="input" id="pwdanswer" name="pwdanswer" value="${complatUser.pwdanswer}"  />
-				   </td>
+				   </td>-->
 				   
 			    </tr>
 			    <tr>				

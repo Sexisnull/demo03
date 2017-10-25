@@ -13,6 +13,7 @@
 <meta http-equiv="Expires" content="-1" />
 <script type="text/javascript" src="${ctx}/res/plugin/jquery/jquery-1.8.3.min.js"></script>
 <script type="text/javascript" src="${ctx}/res/skin/default/js/jquery-validity.js"></script>
+<script type="text/javascript" src="${ctx}/res/plugin/lhgdialog/lhgdialog.js"></script>
 	<script type="text/javascript">
 	function choseall(){
 		var c=$('#checkall').attr("checked");
@@ -48,11 +49,13 @@
 			success:function(result){
 				if(result.success){
 					
-					alert("设置成功！");
-					location.href = '${ctx}/complat/croleList';
+					$.dialog.alertSuccess("设置成功",function(){
+						location.href = '${ctx}/complat/croleList';
+					});
+					
 					
 				}else{
-					alert("设置失败！");
+					$.dialog.alert("设置失败！");
 				}
 			}
 		});

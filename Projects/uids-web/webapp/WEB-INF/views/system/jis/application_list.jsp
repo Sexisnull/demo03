@@ -35,7 +35,7 @@
 	left:300px;
 	top:18px;
 	border-radius:15px;
-	border:1px solid #F68A8A;
+	border:1px solid gray;
 	width:400px;
 	height:520px;
 	background-color:white;
@@ -45,12 +45,12 @@
 </style>
 <script type="text/javascript"> 
 $(function(){
-	var groupMenu = [{"name":"单位选择","id":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
+	//var groupMenu = [{"name":"单位选择","title":"单位选择","id":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
 	$('#groupname').menu({
 		tree : 'groupmenu',
 		height : 200,
 		init : function() {
-			setting('groupmenu', onClickGroup, onDbClickGroup, groupMenu);
+			setting('groupmenu', onClickGroup, onDbClickGroup);
 		}
 	});
 	
@@ -76,11 +76,11 @@ function onDbClickGroup(event, treeId, treeNode) {
 /**
  *	初始化树
  */
-function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
+function setting(treeName, onClickFunction, onDblClickFunction) {
 	var setting = {
 		async : {
 			enable : true,
-			url : '../login/getGroup',
+			url : '../uids/getGroup',
 			autoParam : [ "id=groupId", "isDisabled" ]
 		},
 		callback : {
@@ -90,7 +90,7 @@ function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
 		}
 	};
 	console.log("-----"+treeName);
-	$("#" + treeName).tree(setting, rootNode);
+	$("#" + treeName).tree(setting);
 //	$("#" + treeName).tree().refreshNode('');
 }
 /**
@@ -189,7 +189,7 @@ function synfuction(){
 						</td>
 					<th>所属机构：</th>
 						 <td>
-						 	<input id="groupname" value="${groupName}" name="groupname" type="text" style="cursor: pointer;" placeholder="所属机构"/> 
+						 	<input id="groupname" value="${groupName}" name="groupname" type="text" style="cursor: pointer;" placeholder="请选择所属机构" readonly="readonly" size="35"/> 
 							<input type="hidden" id="groupid" value="${sParams['EQ_groupId']}" name="search_EQ_groupId">
 							<%-- <select  style="width: 170px;" placeholder="数据标识" value="${sParams['LIKE_remark']}" id="remarkSearch" name="search_LIKE_remark" /> --%>
 						</td> 
@@ -242,10 +242,10 @@ function synfuction(){
                     <th width="30%" style="text-align: center;">
                                                              应用名称        
                     </th>
-                    <th width="15%" style="text-align: center;">应用标识</th>
-                    <th width="25%" style="text-align: center;">所属机构</th>
+                    <th width="20%" style="text-align: center;">应用标识</th>
+                    <th width="15%" style="text-align: center;">所属机构</th>
                     <th width="10%" style="text-align: center;">同步用户</th>
-                    <th width="30%" style="text-align: center;">操作</th>
+                    <th width="25%" style="text-align: center;">操作</th>
                 </tr>
             </thead> 
             <tbody>
@@ -295,10 +295,10 @@ function synfuction(){
 										<!-- <i></i> -->
 										<a>编辑</a>
 									</li>
-									<li class="red" onclick="deleteSingle('application/applicationDelete','iid',this);">
-										<!-- <i></i> -->
+									<!-- <li class="red" onclick="deleteSingle('application/applicationDelete','iid',this);">
+										<i></i>
 										<a>删除</a>
-									</li>
+									</li> -->
 									<li class="bluegreen" onclick="syngroup(${application.iid},0);">
 										<!-- <i></i> -->
 										<a>同步机构</a>

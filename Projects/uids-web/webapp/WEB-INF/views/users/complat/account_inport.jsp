@@ -28,7 +28,7 @@
     height:34px;
     text-align:center;
     background-color:#fff;
-    background-color锛�dfdfdf;
+    background-color:#dfdfdf;
 	border: 1px solid #357ebd;
 	color: #000;
 	cursor: pointer;
@@ -49,9 +49,9 @@
 //下载模板
 function downloadTemplate(fileName){
 	//window.location.href="${ctx}/complat/uploadFile";
-	 //var api = frameElement.api, W = api.opener;    
+	 var api = frameElement.api, W = api.opener;    
 	 window.location.href="${ctx}/uploadFile/complat/userList.xlsx";
-	 //W.location.href = "${ctx}/complat/complatList?msg=success";
+	 W.location.href = "${ctx}/complat/complatList?msg=success";
 }	  
 
 //导入
@@ -63,7 +63,7 @@ $(document).ready(function(){
         multi: false,//是否能选择多个文件
         auto:true,//文件选择完成后，是否自动上传
         fileObjName : 'files',
-        'uploader' : '${ctx}/complat/complatImport',//文件上传后台处理类
+        'uploader' : '${ctx}/complat/complatImport;jsessionid=${pageContext.session.id}',//文件上传后台处理类
         // Your options here
         'langFile':'${ctx}/res/plugin/uploadify/js/uploadifyLang_zh.js',
         'height':28,

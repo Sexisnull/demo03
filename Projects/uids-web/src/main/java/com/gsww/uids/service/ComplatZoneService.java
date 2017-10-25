@@ -82,4 +82,21 @@ public interface ComplatZoneService {
 	 * @return
 	 */
 	public ComplatZone findByIid(Integer iid);
+	public List<ComplatZone> findAllByIid(Integer iid) throws Exception;
+	
+	/**
+	 * 通过iid来判断所查对象是否存在
+	 * @param iid
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean checkToIid(Integer iid) throws Exception;
+	
+	/**
+	 * 通过区域编码查找对象
+	 * @param codeId
+	 * @return
+	 * @throws Exception
+	 */
+	public ComplatZone findByCodeId(String codeId) throws Exception;
 }

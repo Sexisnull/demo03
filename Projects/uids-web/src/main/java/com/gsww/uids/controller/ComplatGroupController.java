@@ -135,7 +135,6 @@ public class ComplatGroupController extends BaseController {
          // 获取系统当前登录用户
 			SysUserSession sysUserSession = (SysUserSession) hrequest.getSession().getAttribute("sysUserSession");
 			String deptId = sysUserSession.getDeptId();
-			String deptCodeid = complatGroupService.findByIid(Integer.valueOf(deptId)).getCodeid();
 
             //搜索属性初始化
 			Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
@@ -315,6 +314,14 @@ public class ComplatGroupController extends BaseController {
 				model.addAttribute("orderSort", orderSort);
 			}else{
 				complatGroup = new ComplatGroup();
+				SysUserSession sysUserSession = (SysUserSession) ((HttpServletRequest) request).getSession().getAttribute("sysUserSession");
+                // 获取部门id
+                String deptId = sysUserSession.getDeptId();
+                String name = complatGroupService.findByIid(Integer.valueOf(deptId)).getName();
+                model.addAttribute("areacode", "620000000000");
+                model.addAttribute("groupid", deptId);
+                model.addAttribute("groupname", name);
+                
 			}
 			model.addAttribute("nodetypeMap", nodetypeMap);
 			model.addAttribute("areatypeMap", areatypeMap);
@@ -334,8 +341,8 @@ public class ComplatGroupController extends BaseController {
 		try {
 			String name = request.getParameter("name");
 			String areacode = request.getParameter("groupname2");
+			String suffix = request.getParameter("suffix");
 			complatGroup.setAreacode(areacode); //设置区域编码
-//			boolean syn = false;
 			if(StringHelper.isNotBlack(iid)){
 				//编辑状态改变操作状态位（opersign）和修改时间（modifytime）
 				complatGroup.setOpersign(2);
@@ -350,12 +357,6 @@ public class ComplatGroupController extends BaseController {
 				synchronization(complatGroup, 2); //编辑同步
 			}else{
 				String pid = request.getParameter("groupid");
-				//新增时将机构名汉字转换成首字母大写保存到pinyin字段中
-				String daPinYin = getPinYinHeadChar(complatGroup.getName());
-				complatGroup.setPinyin(daPinYin);
-				//新增状态改变操作状态位（opersign）和创建时间（modifytime）
-				complatGroup.setOpersign(1);
-				complatGroup.setCreatetime(Timestamp.valueOf(TimeHelper.getCurrentTime()));
 			    Integer pId = Integer.valueOf(pid);
 			    //判断机构是否重复
 			    if (complatGroupService.queryNameIsUsed(name, pId)){
@@ -366,11 +367,22 @@ public class ComplatGroupController extends BaseController {
 		        	String codeId = "";
 		        	if(null != group && group.size() > 0){
 		        		codeId = group.get(group.size()-1).getCodeid();
+		        	}else{
+		        		codeId = complatGroupService.findByIid(pId).getCodeid() + "000";
 		        	}
 		        	int num = Integer.valueOf(codeId.substring(codeId.length() - 4, codeId.length())).intValue() + 1;
 		            codeId = codeId.substring(0, codeId.length() - 4) + String.valueOf(num);
 		        	complatGroup.setCodeid(codeId); //存入机构编码
 		        	complatGroup.setPid(pId);  //保存pid
+		        	//新增时将机构名汉字转换成首字母大写保存到pinyin字段中
+					String daPinYin = getPinYinHeadChar(complatGroup.getName());
+					complatGroup.setPinyin(daPinYin);
+					//新增状态改变操作状态位（opersign）和创建时间（modifytime）
+					complatGroup.setOpersign(1);
+					complatGroup.setCreatetime(Timestamp.valueOf(TimeHelper.getCurrentTime()));
+					//自动处理拼接机构后缀
+					suffix = suffix + "." + complatGroupService.findByIid(pId).getSuffix();
+					complatGroup.setSuffix(suffix);//保存机构后缀
 		        	complatGroup = complatGroupService.save(complatGroup);
 		        	returnMsg("success", "保存成功", request);
 			    }
@@ -379,10 +391,8 @@ public class ComplatGroupController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			returnMsg("error","保存失败",request);
-		} finally{
-			return  new ModelAndView("redirect:/uids/groupOrgTree");
 		}
-		
+		return  new ModelAndView("redirect:/uids/groupOrgTree");
 	}
 	/**
 	 * 删除用户信息
@@ -438,7 +448,7 @@ public class ComplatGroupController extends BaseController {
             char word = str.charAt(j);  
             String[] pinyinArray = PinyinHelper.toHanyuPinyinStringArray(word);  
             if (pinyinArray != null) {  
-                convert += pinyinArray[0].charAt(0);  
+                convert += pinyinArray[0].charAt(0);
             } else {  
                 convert += word;  
             }  
@@ -500,11 +510,13 @@ public class ComplatGroupController extends BaseController {
 					} else if (complatGroup.getStrIsCombine().equals("是")) {
 						complatGroup.setIscombine(Integer.valueOf(1));
 					}
+					//自动生成机构名称首字母大写
 					String daPinYin = getPinYinHeadChar(complatGroup.getName());
 					complatGroup.setPinyin(daPinYin);
 					complatGroup.setCreatetime(Timestamp.valueOf(TimeHelper.getCurrentTime()));
 					complatGroup.setOpersign(Integer.valueOf(1));
 					complatGroup.setSynState(Integer.valueOf(2));
+					//自动生成机构编码
 					String parentCode = complatGroup.getParentCode();
 					Integer pId = complatGroupService.findByCodeid(parentCode).getIid();
 					String codeId = complatGroupService.findByIid(pId).getCodeid() + "001";
@@ -517,6 +529,9 @@ public class ComplatGroupController extends BaseController {
 					}
 					complatGroup.setCodeid(codeId);
 					complatGroup.setPid(pId);
+					//自动进行机构后缀拼接
+					String suffix = complatGroup.getSuffix() + "." + complatGroupService.findByIid(pId).getSuffix();
+                    complatGroup.setSuffix(suffix);
 					complatGroup = complatGroupService.save(complatGroup);
 					synchronization(complatGroup, 1);//新增同步
 				}
@@ -541,9 +556,20 @@ public class ComplatGroupController extends BaseController {
 		int row = 1;
 		String warn = "";
 		boolean check = true;
+		//机构名称正则式校验
+		String zhengZeShi1 = "^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$";
+		//机构后缀正则式校验
+		String zhengZeShi2 = "^[^\u4e00-\u9fa5]{0,}$";
+		//组织机构代码正则式校验
+		String zhengZeShi3 = "^[a-zA-Z0-9]{9}$";
+		//区域编码正则式校验
+		String zhengZeShi4 = "^[0-9]{0,}$";
+		//进行在权限内的导入校验
+		SysUserSession sysUserSession = (SysUserSession) ((HttpServletRequest) request).getSession().getAttribute("sysUserSession");
+		String deptId = sysUserSession.getDeptId();// 获取部门id
+		String deptParentCode = complatGroupService.findByIid(Integer.valueOf(deptId)).getCodeid();
 		for (ComplatGroup complatGroup : group) {
 			//进行机构名和上级机构编码不能为空的校验
-//			if (StringUtils.isEmpty(complatGroup.getName()) || StringUtils.isEmpty(complatGroup.getParentCode())) {
 			//进行机构重名校验
 			String parentCode = complatGroup.getParentCode();
 			String name = complatGroup.getName();
@@ -551,20 +577,6 @@ public class ComplatGroupController extends BaseController {
 			if(StringUtils.isNotBlank(parentCode)){
 				pId = complatGroupService.findByCodeid(parentCode).getIid();
 			}
-//			if (complatGroupService.queryNameIsUsed(name, pId)){
-			//进行在权限内的导入校验
-			SysUserSession sysUserSession = (SysUserSession) ((HttpServletRequest) request).getSession().getAttribute("sysUserSession");
-			String deptId = sysUserSession.getDeptId();// 获取部门id
-			String deptParentCode = complatGroupService.findByIid(Integer.valueOf(deptId)).getCodeid();
-//			if(parentCode.length() < deptParentCode.length() || !parentCode.substring(0, deptParentCode.length()).equals(deptParentCode)){
-			//机构名称正则式校验
-			String zhengZeShi1 = "^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$";
-			//机构后缀正则式校验
-			String zhengZeShi2 = "^[^\u4e00-\u9fa5]{0,}$";
-			//组织机构代码正则式校验
-			String zhengZeShi3 = "^[a-zA-Z0-9]{9}$";
-			//区域编码正则式校验
-			String zhengZeShi4 = "^[0-9]{0,}$";
 			if((StringUtils.isEmpty(complatGroup.getName()) || StringUtils.isEmpty(complatGroup.getParentCode()))
 				||(complatGroupService.queryNameIsUsed(name, pId))
 				||(parentCode.length() < deptParentCode.length() || !parentCode.substring(0, deptParentCode.length()).equals(deptParentCode))
@@ -689,23 +701,8 @@ public class ComplatGroupController extends BaseController {
             str = "users/complat/complatgroup_import";
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-        } finally {
-            return str;
         }
-    }
-
-    /**
-     * 关闭弹出框
-     */
-    @SuppressWarnings("finally")
-    @RequestMapping(value = "/closeImport", method = RequestMethod.GET)
-    public ModelAndView closeImport(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        try {
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            return new ModelAndView("redirect:/uids/complatgroupList");
-        }
+		return str;
     }
 
     /**
@@ -719,14 +716,19 @@ public class ComplatGroupController extends BaseController {
                          HttpServletResponse response) {
         try {
             String groupId = request.getParameter("groupId");
-            String isDisabled = request.getParameter("isDisabled");
-
+			SysUserSession sysUserSession = (SysUserSession) ((HttpServletRequest) request).getSession().getAttribute("sysUserSession");
+			// 获取部门id
+			String deptId = sysUserSession.getDeptId();
+			//如果登陆id是非市县的部门id，则区域编码为它自身的区域编码
+			if(!complatZoneService.checkToIid(Integer.valueOf(deptId))){
+				String areaCode = complatGroupService.findByIid(Integer.valueOf(deptId)).getAreacode();
+				deptId = String.valueOf(complatZoneService.findByCodeId(areaCode).getIid());
+			}
             List<ComplatZone> list = new ArrayList<ComplatZone>();
-
             if (!"0".equals(groupId) && StringUtils.isNotBlank(groupId)) {
                 list = complatZoneService.findByPid(Integer.parseInt(groupId));
             } else {
-                list.add(complatZoneService.findByIid(128));
+                list=complatZoneService.findAllByIid(Integer.parseInt(deptId));
             }
 
             List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
@@ -734,16 +736,11 @@ public class ComplatGroupController extends BaseController {
                 Map<String, Object> map = new HashMap<String, Object>();
                 map.put("id", c.getIid() + "");
                 map.put("name", c.getName());
+                map.put("title", c.getName());
                 map.put("codeid", c.getCodeId());
                 map.put("icon", null);
                 map.put("target", "page");
                 map.put("url", null);
-                // List<ComplatGroup> sets =
-                // complatGroupService.findByPid(c.getIid());
-            /*
-			 * if(sets.isEmpty()){ map.put("isParent", false); }else{
-			 * map.put("isParent", true); }
-			 */
                 map.put("isParent", true);
                 map.put("isDisabled", false);
                 map.put("open", true);
@@ -825,7 +822,7 @@ public class ComplatGroupController extends BaseController {
     }
     
     /**
-	 * 加载上级机构树
+	 * 加载编辑新增页面上级机构树
 	 * 
 	 * @param request
 	 * @return
@@ -835,7 +832,6 @@ public class ComplatGroupController extends BaseController {
 			HttpServletResponse response) {
 		try {
 			String groupId = request.getParameter("groupId");
-			String isDisabled = request.getParameter("isDisabled");
 			SysUserSession sysUserSession = (SysUserSession) ((HttpServletRequest) request).getSession()
             .getAttribute("sysUserSession");
 			// 获取部门id
@@ -846,7 +842,7 @@ public class ComplatGroupController extends BaseController {
 			if (!"0".equals(groupId) && StringUtils.isNotBlank(groupId)) {
 				list = complatGroupService.findByPid(Integer.parseInt(groupId));
 			} else {
-				list.add(complatGroupService.findByIid(Integer.valueOf(deptId)));
+                list = complatGroupService.findAllDept(deptId);
 			}
 
 			List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
@@ -854,15 +850,10 @@ public class ComplatGroupController extends BaseController {
 				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("id", c.getIid() + "");
 				map.put("name", c.getName());
+				map.put("title", c.getName());
 				map.put("icon", null);
 				map.put("target", "page");
 				map.put("url", null);
-				// List<ComplatGroup> sets =
-				// complatGroupService.findByPid(c.getIid());
-				/*
-				 * if(sets.isEmpty()){ map.put("isParent", false); }else{
-				 * map.put("isParent", true); }
-				 */
 				map.put("isParent", true);
 				map.put("isDisabled", false);
 				map.put("open", true);

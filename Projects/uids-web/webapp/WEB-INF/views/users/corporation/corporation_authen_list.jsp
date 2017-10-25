@@ -8,7 +8,7 @@
 		<link type="text/css" rel="stylesheet" href="${ctx}/res/skin/login/css/menu.css" />
 		<script type="text/javascript" src="${ctx}/res/skin/default/js/jquery-ui.js"></script>
 <head>
-<meta charset="utf-8"/>
+<meta charset="utf-8"/> 
 <title>甘肃万维JUP课题</title>
 
 <script type="text/javascript"> 
@@ -27,9 +27,19 @@
 	}
 	
 	//通过
-	function oprOutsideUser(){
+	function oprCorporationUser() {
 		alert("通过接口没调通!!");
-	}
+		$.ajax({
+			type:'POST',
+			url:'corporationAuth',
+			data:$("#oprform").serialize(),
+			async:false,
+			success:function() {
+				api.reload(api.parent,"");
+				api.close();
+			}
+		});
+	};
 	
 	//保存认证信息
 	var api = frameElement.api, W = api.opener;
@@ -110,7 +120,7 @@
 	   <div class="form-btn"  id="input_four" >
 	   	<input type="button" tabindex="15" value="拒绝" onclick="regect();" class="btn bluegreen"/> 
 	   	&nbsp;&nbsp;
-	   	<input type="button" tabindex="15" value="通过" onclick="oprOutsideUser();" class="btn bluegreen"/>
+	   	<input type="button" tabindex="15" value="通过" onclick="oprCorporationUser();" class="btn bluegreen"/>
 	   </div>
      </div> 
 </body>

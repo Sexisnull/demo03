@@ -49,4 +49,13 @@ public interface ComplatZoneDao
 	 */
 	@Query(value = "select group from ComplatZone group where group.pid=?1 order by group.type asc")
 	public List<ComplatZone> findByPid(Integer pid);
+	@Query(value = "select * from complat_zone where iid =?1 union (select * from complat_zone where pid =?1)",nativeQuery=true)
+	public List<ComplatZone>findAllByIid(Integer iid);
+	
+	/**
+	 * 通过区域编码查找对象
+	 * @param codeId
+	 * @return
+	 */
+	public ComplatZone findByCodeId(String codeId);
 }

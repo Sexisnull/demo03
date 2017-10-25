@@ -71,7 +71,6 @@ public class JisParameterController extends BaseController{
 			
 			//分页
 			Page<JisParameter> pageInfo = jisParameterService.getParameterPage(spec,pageRequest);
-			//model.addAttribute("pageInfo", pageInfo);
 			JisParameter jisParameter = pageInfo.getContent().get(0);
 			
 			// 将搜索条件编码成字符串，用于排序，分页的URL
@@ -91,16 +90,5 @@ public class JisParameterController extends BaseController{
 	public ModelAndView parameterSave(JisParameter jisParameter,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		jisParameterService.save(jisParameter);
 		return new ModelAndView("redirect:/parameter/parameterList");
-		/*try {
-			if(jisParameter != null){
-				jisParameterService.save(jisParameter);
-				returnMsg("success","保存成功",request);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			returnMsg("error","保存失败",request);
-		} finally{
-			return new ModelAndView("redirect:/parameter/parameterList");
-		}*/
 	}
 }

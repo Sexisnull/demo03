@@ -29,4 +29,5 @@ public interface JisUserdetailDao extends  PagingAndSortingRepository<JisUserdet
 	
 	
 	JisUserdetail findByCardid(String cardid);
+	
 }

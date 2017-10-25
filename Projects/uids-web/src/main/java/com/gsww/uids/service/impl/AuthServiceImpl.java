@@ -20,12 +20,6 @@ public class AuthServiceImpl implements AuthService {
 	@Override
 	public String authGetToken() {
 		String auth_url = ReadProperties.getPropertyByStr("auth_url");
-		// syscode = "I3eUZj";
-		// username = "tysfrzxt";
-		// password = "tysfrzxt";
-		// auth_url = auth_url.replace("SYSCODE", syscode);
-		// auth_url = auth_url.replace("USERNAME", username);
-		// auth_url = auth_url.replace("PASSWORD", password);
 		HttpClientUtil httpClientUtil = new HttpClientUtil();
 		String auth_info = httpClientUtil.doUrlGet(auth_url);
 		JsonObject jsonObject = null;
@@ -49,20 +43,16 @@ public class AuthServiceImpl implements AuthService {
 	@Override
 	public String corporCont(
 			@PathVariable("verify_mode") int verify_mode,
-			// @PathVariable("syscode") String syscode,
-			// @PathVariable("token") String token,
 			@RequestParam("zzjgdm") String zzjgdm,
 			@RequestParam("tyshxydm") String tyshxydm,
 			@RequestParam("gszch") String gszch,
 			@RequestParam("qymcqc") String qymcqc) {
 		String token = this.authGetToken();
 		if (token == null && "".equals(token)) {
-			// verify_mode="";
 			String corpor_cont_url = ReadProperties
 					.getPropertyByStr("corpor_cont_url");
 			corpor_cont_url = corpor_cont_url.replace("VERIFY_MODE",
 					verify_mode + "");
-			// corpor_cont_url = corpor_cont_url.replace("SYSCODE", syscode);
 			corpor_cont_url = corpor_cont_url.replace("TOKEN", token);
 			corpor_cont_url = corpor_cont_url.replace("ZZJGDM", zzjgdm);
 			corpor_cont_url = corpor_cont_url.replace("TYSHXYDM", tyshxydm);
@@ -114,8 +104,6 @@ public class AuthServiceImpl implements AuthService {
 	// 个人：验证个人信息
 	@Override
 	public String perporAuth(
-			// final @PathVariable("syscode") String syscode,
-			// final @PathVariable("token") String req_token, // token
 			final @RequestParam("id") String id,
 			final @RequestParam("name") String name) {
 		String req_token = this.authGetToken();

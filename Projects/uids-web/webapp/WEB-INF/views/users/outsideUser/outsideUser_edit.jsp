@@ -35,7 +35,7 @@ $().ready(function() {
 			},
 			mobile : {//移动电话
 				required: true,
-				isPhone:true,
+				isMyPhone:true,
 		   		uniqueMobile:true
 			},
 			residenceDetail : {
@@ -66,7 +66,7 @@ $().ready(function() {
 		   	},
 			headShip:{//职务
 		   		cnRangelength: [0,64],
-		   		isName : true
+		   		isHeadship : true
 		   	},
 			fax:{
 		   		cnRangelength: [0,64],
@@ -77,7 +77,7 @@ $().ready(function() {
 		   		//isFixphone：true
 		   	},
 			compTel:{
-		   		isPhone:true
+		   		isMyMobile:true
 		   	},
 			qq:{
 		   		maxlength: 11,
@@ -107,22 +107,35 @@ $().ready(function() {
     jQuery.validator.addMethod("isName", function(value, element) { 
            var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;   
            return this.optional(element) || (corporName.test(value));     
-    }, "名称只能由字母、数字、下划线、中文组成，不能以下划线开头和结尾");
+    }, "该名称只能由字母、数字、下划线、中文组成，不能以下划线开头和结尾");
     
     jQuery.validator.addMethod("isLoginName", function(value, element) { 
            var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9_]+$/;   
            return this.optional(element) || (corporName.test(value));     
-    }, "名称只能由字母、数字、下划线组成，不能以下划线开头和结尾");
+    }, "该名称只能由字母、数字、下划线组成，不能以下划线开头和结尾");
+    
+    //自定义手机号码验证
+    jQuery.validator.addMethod("isMyPhone", function(value, element) { 
+           var corporName = /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "手机号码格式错误");
+    
+    //自定义办公电话验证
+    jQuery.validator.addMethod("isMyMobile", function(value, element) { 
+           var corporName = /\d{3}-\d{8}|\d{4}-\d{7}/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "办公电话格式错误");
     
     jQuery.validator.addMethod("isPost", function(value, element) { 
            var corporName = /^[1-9][0-9]{5}$/;   
            return this.optional(element) || (corporName.test(value));     
     }, "邮政编码格式错误（共6位,开头不能为0)");
     //年龄
-    jQuery.validator.addMethod("isAge", function(value, element) { 
-           var corporName = /^([1-9]\d|\d)$/;   
+    jQuery.validator.addMethod("isAge", function(value, element) {
+           //var corporName = /^([1-9]\d|\d)$/;
+            var corporName = /^(?:[1-9][0-9]?|1[01][0-9]|120)$/;  
            return this.optional(element) || (corporName.test(value));     
-    }, "年龄格式错误");
+    }, "年龄为1至120之间");
     //传真
     jQuery.validator.addMethod("isFax", function(value, element) { 
            var corporName = /^(\d{3,4}-)?\d{7,8}$/;   
@@ -138,6 +151,11 @@ $().ready(function() {
            var corporName = /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;   
            return this.optional(element) || (corporName.test(value));     
     }, "MSN格式错误");
+    //职务
+    jQuery.validator.addMethod("isHeadship", function(value, element) {
+           var  corporName = /^[\u4e00-\u9fa5a-zA-Z0-9]+$/; 
+           return this.optional(element) || (corporName.test(value));     
+    }, "职务只能由汉字、字母和数字组成"); 
     var pwding = $("#pwd").val();
     EvalPwd(pwding);
 });
@@ -294,8 +312,14 @@ color: rgb(119, 119, 119);
 				<th><b class="mustbe">*</b>性别：</th>
 				<td style="width:300px;">
 					<%-- <gsww:checkboxTag name="type" defaultValue="1" type="ZFYHXB" inputType="radio" value="${outsideUser.sex}"></gsww:checkboxTag> --%>
-					<input type="radio" name="sex" value = '男' <c:if test="${outsideUser.sex == '男'}">checked="checked" </c:if>>男&nbsp&nbsp&nbsp
+					<c:if test="${empty outsideUser.sex}">
+						<input type="radio" name="sex" value = '男' checked="checked">男&nbsp&nbsp&nbsp
+    					<input type="radio" name="sex" value = '女'>女
+					</c:if>
+					<c:if test="${not empty outsideUser.sex}">
+						<input type="radio" name="sex" value = '男' <c:if test="${outsideUser.sex == '男'}">checked="checked" </c:if>>男&nbsp&nbsp&nbsp
     				<input type="radio" name="sex" value = '女' <c:if test="${outsideUser.sex == '女'}">checked="checked" </c:if>>女
+					</c:if>
 				</td>
 				<th>年龄：</th>
 				<td style="width:300px;">

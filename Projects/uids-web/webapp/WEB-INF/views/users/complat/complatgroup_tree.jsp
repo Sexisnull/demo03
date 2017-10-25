@@ -39,7 +39,7 @@
 			</div>
 
 			<!--左侧树形结构-->
-			<div id="tablelist" style="width:18%;float:left;min-width:0px;">
+			<div id="tablelist" style="width:20%;float:left;min-width:0px;">
 				<table class="tablelist" >
 					<tbody>
 					<tr>
@@ -53,7 +53,7 @@
 				</table>
 			</div>
 			<!--右侧表单结构-->
-			<div style="width:80%; height:600px; float:left;">
+			<div style="width:78%; height:600px; float:left;">
 				<iframe id="main1" src="${ctx}/uids/complatgroupList" class="ui-layout-center" frameborder="0" height="100%" width="100%" name="iframe" scrolling="yes">
 
 				</iframe>

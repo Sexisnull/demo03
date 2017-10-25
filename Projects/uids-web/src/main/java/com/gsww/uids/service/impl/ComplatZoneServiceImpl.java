@@ -104,4 +104,25 @@ public class ComplatZoneServiceImpl implements ComplatZoneService {
 		ComplatZone complatZone=complatZoneDao.findByIid(iid);
 		return complatZone;
 	}
+	@Override
+	public List<ComplatZone> findAllByIid(Integer iid) throws Exception {
+		List<ComplatZone> list=new ArrayList<ComplatZone>();
+		list=complatZoneDao.findAllByIid(iid);
+		return list;
+	}
+	
+	@Override
+	public boolean checkToIid(Integer iid) throws Exception {
+		if(complatZoneDao.findByIid(iid) != null){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	@Override
+	public ComplatZone findByCodeId(String codeId) throws Exception {
+		ComplatZone complatZone = complatZoneDao.findByCodeId(codeId);
+		return complatZone;
+	}
 }

@@ -56,13 +56,13 @@ public class JisUserdetailServiceImpl implements JisUserdetailService {
 		}
 		String updateSql = "";
 		if(StringHelper.isNotBlack(cardId) && StringHelper.isNotBlack(whereSqls)){
-			updateSql = "update jis_userdetail t set t.cardid = "+cardId+","+whereSqls+" where t.iid = "+iid;
+			updateSql = "update jis_userdetail t set t.cardid = '"+cardId+"',"+whereSqls+" where t.iid = "+iid;
 			jdbcDAO.execute(updateSql);
 		}else if(!StringHelper.isNotBlack(cardId) && StringHelper.isNotBlack(whereSqls)){
 			updateSql = "update jis_userdetail t set "+whereSqls+" where t.iid = "+iid;
 			jdbcDAO.execute(updateSql);
 		}else if(StringHelper.isNotBlack(cardId) && !StringHelper.isNotBlack(whereSqls)){
-			updateSql = "update jis_userdetail t set t.cardid = "+cardId+" where t.iid = "+iid;
+			updateSql = "update jis_userdetail t set t.cardid = '"+cardId+"' where t.iid = "+iid;
 			jdbcDAO.execute(updateSql);
 		}		
 	}
@@ -105,5 +105,10 @@ public class JisUserdetailServiceImpl implements JisUserdetailService {
     @Override
 	public JisUserdetail findByCardid(String idCode) {
 		return this.jisUserdetailDao.findByCardid(idCode);
+	}
+
+	@Override
+	public void delete(JisUserdetail jisUserdetail) {
+		jisUserdetailDao.delete(jisUserdetail);	
 	}
 }

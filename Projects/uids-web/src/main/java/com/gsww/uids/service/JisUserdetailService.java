@@ -36,4 +36,7 @@ public interface JisUserdetailService {
     public JisUserdetail findByCardid(String cardid);
 	
     
+    //依据用户userId去删除扩展属性
+    public void delete(JisUserdetail jisUserdetail);
+    
 }
