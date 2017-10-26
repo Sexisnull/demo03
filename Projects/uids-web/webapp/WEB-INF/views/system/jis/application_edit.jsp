@@ -292,12 +292,19 @@ function changSel(num){
 }
 
 function selectpicSubmit(){
-	 
+	
 	 var mybg = document.createElement("div"); 
 		$(".mybg").removeClass("mybg");
 	    document.body.appendChild(mybg);
 		document.body.style.overflow = "show"; 
 		document.getElementById("alertpic").style.display="none"; 
+		
+		var picradio = document.getElementsByName("selectpicname");  
+	    for (i=0; i<picradio.length; i++) {  
+	        if (picradio[i].checked) {  
+	        	changSel(picradio[i].value); 
+	        }  
+	    }  
 }
 
 //便捷录入弹出层
@@ -847,7 +854,7 @@ $(function(){
     	<hr/><br/>
     		<tr>
     			<td style="font-size: 17px;" align="left">&nbsp;&nbsp;应用名称：&nbsp;&nbsp;</td>
-    			<td style="font-size: 16px;"><input  type="radio" id="jcms" name="fast" value="jcms" onclick="group(1);"/>&nbsp;JCMS后台用户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    			<td style="font-size: 16px;"><input type="radio" id="jcms" name="fast" value="jcms" onclick="group(1);" checked="checked"/>&nbsp;JCMS后台用户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
     			<td style="font-size: 16px;"><input type="radio" id="jcms2" name="fast" value="jcms2" onclick="group(2);"/>&nbsp;JCMS个性化定制&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
     			<td style="font-size: 16px;"><input type="radio" id="xxgk" name="fast" value="xxgk" onclick="group(3);"/>&nbsp;XXGK</td>
     		</tr>
@@ -863,11 +870,11 @@ $(function(){
     		</tr>
 			<tr style="line-height: 70px;">
 				<td style="font-size: 17px;" align="left" >&nbsp;&nbsp;应用域名：&nbsp;&nbsp;</td>
-				<td colspan="3"><input size="60" type="text" name="fasturl" id="fasturl" value=""></td>
+				<td colspan="3"><input size="60" type="text" name="fasturl" id="fasturl" value="http://127.0.0.1:8080/jcms"></td>
 			</tr>
 			<tr>
 				<td style="font-size: 17px;" align="left">&nbsp;&nbsp;接口地址：&nbsp;&nbsp;</td>
-				<td colspan="3"><input size="60" type="text" name="fastinter" id="fastinter" value=""></td>
+				<td colspan="3"><input size="60" type="text" name="fastinter" id="fastinter" value="/interface/ldap/synchro.jsp"></td>
 			</tr>
 		</table>
 		<div id="dialog-toolbar" style="text-align: center;padding-top: 40px;">
@@ -885,7 +892,7 @@ $(function(){
     
     <div id="alertpic" class="alert_tb" style="display:none;"> 
     	<form action="${ctx}/application/applicationSave">
-    	<table>
+    	<table id="picId">
     	<div style="font-size: 20px;padding-top: 15px;padding-bottom: 10px;cursor: auto;padding-left: 5px;">&nbsp;默认图标
     		<a href="${ctx}/application/applicationEdit?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}&iid=${jisApplication.iid}" 
     		title="关闭" style="padding-left: 466px;font-size: 23px;color: black;text-decoration:none">x</a>
@@ -899,11 +906,11 @@ $(function(){
 				<td ><div class="pic"><img id="img5" onclick="changSel(5);"  src="${ctx}/resources/jis/front/app/xxgk.jpg"></div></td>
 			</tr>
 			<tr>
-				<td><div class="title" onclick="changSel(1);"><input type="radio" name="selectpicname" value="img1" checked onfocus="this.blur()"/>JCMS</div></td>
-				<td><div class="title" onclick="changSel(2);"><input type="radio" name="selectpicname" value="img2" onfocus="this.blur()"/>互动平台</div></td>
-				<td><div class="title" onclick="changSel(3);"><input type="radio" name="selectpicname" value="img3" onfocus="this.blur()"/>OA</div></td>
-				<td><div class="title" onclick="changSel(4);"><input type="radio" name="selectpicname" value="img4" onfocus="this.blur()"/>信息公开</div></td>
-				<td><div class="title" onclick="changSel(5);"><input type="radio" name="selectpicname" value="img5" onfocus="this.blur()"/>电子邮件</div></td>
+				<td><div class="title" onclick="changSel(1);"><input type="radio" name="selectpicname" value="1" checked="checked" onfocus="this.blur()"/>JCMS</div></td>
+				<td><div class="title" onclick="changSel(2);"><input type="radio" name="selectpicname" value="2" onfocus="this.blur()"/>互动平台</div></td>
+				<td><div class="title" onclick="changSel(3);"><input type="radio" name="selectpicname" value="3" onfocus="this.blur()"/>OA</div></td>
+				<td><div class="title" onclick="changSel(4);"><input type="radio" name="selectpicname" value="4" onfocus="this.blur()"/>信息公开</div></td>
+				<td><div class="title" onclick="changSel(5);"><input type="radio" name="selectpicname" value="5" onfocus="this.blur()"/>电子邮件</div></td>
 			</tr>
 		</table>
 		<div id="dialogpic-toolbar" style="text-align: center;">
