@@ -674,7 +674,7 @@ $(function(){
 						    <input type="button" class="btnother blue" onclick="selectpic()" value="默认图片">
 					</td>
 					<td id="showpic" name="showpic" colspan="2" style="text-align:left;display:none;">
-						<img id="icon2" name="icon2" width="100" height="100" src="${ctx}${jisApplication.icon}">
+						<img id="icon2" name="icon2" width="75" height="60" src="${ctx}${jisApplication.icon}">
 					</td>
 					
 			</tr>
