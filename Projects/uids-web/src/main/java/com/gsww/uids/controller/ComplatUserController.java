@@ -1751,7 +1751,7 @@ public class ComplatUserController extends BaseController {
 	/**
 	 * 同步数据到表jis_sysview_detail
 	 * 
-	 * @param complatGroup
+	 * @param complatUser
 	 * @param jisApplication
 	 * @throws Exception
 	 */
@@ -1759,65 +1759,49 @@ public class ComplatUserController extends BaseController {
 			JisApplication jisApplication, JisSysview sysView) throws Exception {
 
 		try {
-			/*
-			 * Map<String,Object> jsonMap = new HashMap<String,Object>();
-			 * jsonMap.put("allParCode", complatGroup.getSuffix());
-			 * jsonMap.put("allParName", complatGroup.getGroupallname());
-			 * jsonMap.put("appName", jisApplication.getName());
-			 * jsonMap.put("appid", String.valueOf(jisApplication.getIid()));
-			 * jsonMap.put("cardId",""); jsonMap.put("compfax","");
-			 * jsonMap.put("comptel",""); jsonMap.put("email","");
-			 * jsonMap.put("groupCode",complatGroup.getCodeid());
-			 * jsonMap.put("groupName",complatGroup.getName());
-			 * jsonMap.put("headShip",""); jsonMap.put("hometel","");
-			 * jsonMap.put("id", String.valueOf(complatGroup.getIid()));
-			 * jsonMap.put("loginName",""); jsonMap.put("loginPass","");
-			 * jsonMap.put("mobile",""); jsonMap.put("msn","");
-			 * jsonMap.put("ndlogin","");
-			 * jsonMap.put("parCode",complatGroupService
-			 * .findByIid(complatGroup.getPid()).getCodeid());
-			 * jsonMap.put("parName"
-			 * ,complatGroupService.findByIid(complatGroup.getPid()).getName());
-			 * jsonMap.put("qq",""); jsonMap.put("state","T");
-			 * jsonMap.put("userName",""); String detail =
-			 * JSONUtil.writeMapJSON(jsonMap); JisSysviewDetail jisSysviewDetail
-			 * = new JisSysviewDetail(); jisSysviewDetail.setSendmsg(detail);
-			 * jisSysviewDetail.setTranscationId(jisSysview.getTranscationId());
-			 * jisSysviewDetailService.save(jisSysviewDetail);
-			 */
-
 			Map<String, Object> jsonMap = new HashMap<String, Object>();
-			ComplatGroup group = complatGroupService.findByCodeid(sysView
-					.getCodeid());
-			/*
-			 * if(group==null){ jsonMap.put("cardId",""); }else{
-			 * 
-			 * }
-			 */
 			jsonMap.put("allParCode", "");
 			jsonMap.put("allParName", "");
-
 			jsonMap.put("appName", jisApplication.getName());
 			jsonMap.put("cardId", complatUser.getCardid());
 			jsonMap.put("appid", sysView.getAppid());
-			// JisUserdetail jisUserdetail = new JisUserdetail();
-			jsonMap.put("compfax", complatUser.getFax());
-			jsonMap.put("comptel", complatUser.getPhone());//
+			String fax=complatUser.getFax();
+			if(fax==null || fax==""){
+				jsonMap.put("compfax", "");
+			}else{
+				jsonMap.put("compfax", fax);
+			}
+			jsonMap.put("comptel", "");//
 			jsonMap.put("email", complatUser.getEmail());
 			jsonMap.put("groupCode", sysView.getCodeid());
-			// jsonMap.put("groupName",group.getName());
-			jsonMap.put("groupName", "");
+			String groupName = complatGroupService.findByIid(complatUser.getGroupid()).getName();
+			jsonMap.put("groupName", groupName);
 			jsonMap.put("headShip", complatUser.getHeadship());
-			jsonMap.put("hometel", complatUser.getPhone());
-			jsonMap.put("id", "");
+			String phone=complatUser.getPhone();
+			if(phone==null || phone==""){
+				jsonMap.put("hometel", "");
+			}else{
+				jsonMap.put("hometel", phone);
+			}
+			jsonMap.put("id", complatUser.getIid());
 			jsonMap.put("loginName", complatUser.getLoginname());
 			jsonMap.put("loginPass", complatUser.getPwd());
 			jsonMap.put("mobile", complatUser.getMobile());
-			jsonMap.put("msn", "");
+			String msn=complatUser.getMsn();
+			if(msn==null || msn==""){
+				jsonMap.put("msn", "");
+			}else{
+				jsonMap.put("msn", msn);
+			}			
 			jsonMap.put("ndlogin", "");
 			jsonMap.put("parCode", "");
 			jsonMap.put("parName", "");
-			jsonMap.put("qq", complatUser.getQq());
+			String qq = complatUser.getQq();
+			if(qq==null || qq==""){
+				jsonMap.put("qq", "");
+			}else{
+				jsonMap.put("qq", qq);
+			}
 			jsonMap.put("state", "T");
 			jsonMap.put("userName", complatUser.getName());
 			String detail = JSONUtil.writeMapJSON(jsonMap);
