@@ -497,7 +497,7 @@ public class ComplatUserController extends BaseController {
 				}
 
 				String desc = sysUserSession.getLoginAccount() + "删除【" + complatUser.getName() + "】 政府用户";
-				jisLogService.save(sysUserSession.getUserName(), sysUserSession.getUserIp(),
+				jisLogService.save(sysUserSession.getLoginAccount(), sysUserSession.getUserIp(),
 						desc, 2, 3);
 			}
 
@@ -623,8 +623,8 @@ public class ComplatUserController extends BaseController {
 							jisUser.setUserid(userId);
 							jisUserdetailService.save(jisUser);
 							synchronization(complatUser, 1);// 新增同步
-							String desc = sysUserSession.getLoginAccount() + "删除【" + complatUser.getName() + "】 政府用户";
-							jisLogService.save(sysUserSession.getUserName(),
+							String desc = sysUserSession.getLoginAccount() + "导入【" + complatUser.getName() + "】 政府用户";
+							jisLogService.save(sysUserSession.getLoginAccount(),
 									sysUserSession.getUserIp(), desc, 2, 5);
 
 						}
@@ -971,7 +971,7 @@ public class ComplatUserController extends BaseController {
 			 */
 			dataList.add(treeMap);
 			String desc = sysUserSession.getLoginAccount() + "导出【" + complatUser.getName() + "】 政府用户";
-	        jisLogService.save(sysUserSession.getUserName(), sysUserSession.getUserIp(), desc, 2,4);
+	        jisLogService.save(sysUserSession.getLoginAccount(), sysUserSession.getUserIp(), desc, 2,4);
 		}
 		
 		map.put(ExcelUtil.HEADERINFO, headList);

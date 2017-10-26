@@ -252,7 +252,7 @@ var complatUserNameInput=$("#name").val();
 				uniqueCardid:true
 	    },
 	    groupname : {
-	    	required: true,	    	
+	    	required: true	    	
 	    },
 	    submitHandler:function(form){
 				form.submit();
