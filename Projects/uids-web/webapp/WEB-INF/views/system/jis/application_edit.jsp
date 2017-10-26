@@ -286,7 +286,7 @@ function changSel(num){
 	}
 	var obj=document.getElementsByName("selectpicname");
 	obj[num-1].checked = true;
-	$("#icon").val(picName);
+	$("#icon").val("/resources/jis/front/app"+picName);
 	$("#icon2").attr("src","${ctx}/resources/jis/front/app/"+picName);
 	$("#showpic").show();
 }
@@ -892,11 +892,11 @@ $(function(){
     	</div>
     	<hr/>
     		<tr>
-				<td ><div class="pic"><img id="img1" onclick="changSel(1);"  src="${ctx}/uploads/jcms.jpg"></div></td>
-				<td ><div class="pic"><img id="img2" onclick="changSel(2);"  src="${ctx}/uploads/jact.jpg"></div></td>
-				<td ><div class="pic"><img id="img3" onclick="changSel(3);"  src="${ctx}/uploads/oa.jpg"></div></td>
-				<td ><div class="pic"><img id="img4" onclick="changSel(4);"  src="${ctx}/uploads/email.jpg"></div></td>
-				<td ><div class="pic"><img id="img5" onclick="changSel(5);"  src="${ctx}/uploads/xxgk.jpg"></div></td>
+				<td ><div class="pic"><img id="img1" onclick="changSel(1);"  src="${ctx}/resources/jis/front/app/jcms.jpg"></div></td>
+				<td ><div class="pic"><img id="img2" onclick="changSel(2);"  src="${ctx}/resources/jis/front/app/jact.jpg"></div></td>
+				<td ><div class="pic"><img id="img3" onclick="changSel(3);"  src="${ctx}/resources/jis/front/app/oa.jpg"></div></td>
+				<td ><div class="pic"><img id="img4" onclick="changSel(4);"  src="${ctx}/resources/jis/front/app/email.jpg"></div></td>
+				<td ><div class="pic"><img id="img5" onclick="changSel(5);"  src="${ctx}/resources/jis/front/app/xxgk.jpg"></div></td>
 			</tr>
 			<tr>
 				<td><div class="title" onclick="changSel(1);"><input type="radio" name="selectpicname" value="img1" checked onfocus="this.blur()"/>JCMS</div></td>
