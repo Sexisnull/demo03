@@ -11,7 +11,7 @@ import com.gsww.uids.entity.JisApplication;
 
 /**
  * 应用表service接口
- * @author zhanglei
+ * @author Seven
  *
  */
 public interface JisApplicationService {

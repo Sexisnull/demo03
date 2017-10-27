@@ -1,6 +1,5 @@
 package com.gsww.uids.service.impl;
 
-import java.net.URI;
 import java.net.URL;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +13,8 @@ import com.gsww.uids.constant.JisSettings;
 import com.gsww.uids.dao.JisParameterDao;
 import com.gsww.uids.entity.JisParameter;
 import com.gsww.uids.service.JisParameterService;
-import com.hanweb.common.BaseInfo;
 import com.hanweb.common.util.Properties;
+
 /**
  * 系统参数业务实现类
  * @author Seven
