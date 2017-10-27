@@ -849,7 +849,7 @@ $(function(){
     	<div style="font-size: 20px;padding-top: 15px;padding-bottom: 10px;cursor: auto;padding-left: 5px;">&nbsp;便捷录入
     		<a href="${ctx}/application/applicationEdit?findNowPage=true&orderField=
 					 ${orderField}&orderSort=${orderSort}&iid=${jisApplication.iid}" title="关闭" 
-					 style="padding-left: 466px;font-size: 23px;color: black;text-decoration:none">x</a>
+					 style="padding-left: 466px;font-size:26px;color: gray;text-decoration:none">x</a>
     	</div>
     	<hr/><br/>
     		<tr>
@@ -895,7 +895,7 @@ $(function(){
     	<table id="picId">
     	<div style="font-size: 20px;padding-top: 15px;padding-bottom: 10px;cursor: auto;padding-left: 5px;">&nbsp;默认图标
     		<a href="${ctx}/application/applicationEdit?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}&iid=${jisApplication.iid}" 
-    		title="关闭" style="padding-left: 466px;font-size: 23px;color: black;text-decoration:none">x</a>
+    		title="关闭" style="padding-left:466px;font-size:26px;color: gray;text-decoration:none">x</a>
     	</div>
     	<hr/>
     		<tr>

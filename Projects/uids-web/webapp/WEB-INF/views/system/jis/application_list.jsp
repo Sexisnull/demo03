@@ -327,7 +327,7 @@ function synfuction(){
 	    		&nbsp;&nbsp;&nbsp;同步列表
 	    		<a href="${ctx}/application/applicationList?findNowPage
 						 =true&orderField=${orderField}&orderSort=${orderSort}" title="关闭" 
-					 style="padding-left:260px;line-height:25px;font-size:24px;color: black;text-decoration:none">x</a>
+					 style="padding-left:260px;line-height:30px;font-size:28px;color: black;text-decoration:none;color:gray;">x</a>
 	    		<hr/><br/></div>
 	    		<div style="text-align: left;padding-top:5px;font-size: 16px;height: 300px;padding-left:42px">
 	    			<div style="padding-left: 6px;padding-bottom:10px; font-size: 16px;">选择机构：</div>
