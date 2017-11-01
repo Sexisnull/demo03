@@ -157,7 +157,7 @@ function exportGroup() {
 //机构导入
 function importGroup(){
 	var api = $.dialog({
-		title : '机构管理-机构导出',
+		title : '机构管理-机构导入',
 		width : 450,
 		height: 125,
 		max : false,
