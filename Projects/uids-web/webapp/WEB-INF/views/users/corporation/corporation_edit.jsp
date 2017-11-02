@@ -105,6 +105,8 @@ $().ready(function() {
 			$(".fqyUserInfo").hide();
 			$(".qyBusName").show();
 			$(".qyUserInfo").show();
+			$("#fqyOrgNumber").hide();
+			$("#qyOrgNumber").show();
 			showOrHideRegNumber();
 		}else{
 			var fqyNation = $("#fqyNation");
@@ -127,6 +129,8 @@ $().ready(function() {
 			$(".userScope").hide();
 			$(".regNum").hide();
 			$(".td_regNum").hide();
+			$("#qyOrgNumber").hide();
+			$("#fqyOrgNumber").show();
 			
 		}
 	
@@ -160,6 +164,9 @@ $().ready(function() {
 		$(".qyUserInfo").show();
 		$(".regNum").show();
 		$(".td_regNum").show();
+		$("#fqyOrgNumber").hide();
+		$("#qyOrgNumber").show();
+		
 		
 		//输入字段校验
 		$("#fqyName").rules("remove","required");
@@ -212,7 +219,8 @@ $().ready(function() {
 			$(".td_regNum").hide();
 			$(".orgNum").show();
 			$(".td_orgNum").show();
-			$("#orgNumber").show();
+			$("#fqyOrgNumber").show();
+			$("#qyOrgNumber").hide();
 			
 			//输入字段校验
 			$("#qyName").rules("remove","required");
@@ -242,46 +250,66 @@ $().ready(function() {
 		var type = $('input:radio[name="type"]:checked').val();
 		if(type == 1){
 			var regNumber = $("#regNumber").val(); //企业工商注册号或统一社会信用代码	  
-			var orgNumber = $("#orgNumber").val(); //组织机构代码  
+			var qyOrgNumber = $("#qyOrgNumber").val(); //组织机构代码  
 			if(regNumber == null || regNumber == ""){
 				$.dialog.alert("请填写企业工商注册号或统一社会信用代码！");
 				return false;
 			}
 			if(regNumber.substring(0, 1) == '9' && regNumber.length == 18){
-				$("#editForm").submit();
-			}else{
-				if(orgNumber == null || orgNumber == ""){
-					$.dialog.alert("请填写组织机构代码！");
-					return false;
-				}
-				if(orgNumber.length != 10 || orgNumber.substring(8, 9) != '-'){
-					$.dialog.alert("组织机构代码或统一社会信用代码填写错误，请重新填写！（组织机构代码需包含短横杠“-”）",function(){
-						return null;
-					});
+				if(!isNumbOrLett(regNumber)){
+					$.dialog.alert("企业工商注册号由数字、字母和下划线组成，不能以下划线开头和结尾！");
 					return false;
 				}else{
 					$("#editForm").submit();
+				}
+			}else{
+				if(qyOrgNumber == null || qyOrgNumber == ""){
+					$.dialog.alert("请填写组织机构代码！");
+					return false;
+				}
+				if(qyOrgNumber.length != 10 || qyOrgNumber.substring(8, 9) != '-'){
+					$.dialog.alert("组织机构代码或统一社会信用代码填写错误，请重新填写！（组织机构代码需包含短横杠“-”）");
+					return false;
+				}else{
+					if(!isNumbOrLett2(qyOrgNumber)){
+						$.dialog.alert("组织机构代码由数字、字母、下划线和短横杠组成，不能以下划线开头和结尾！");
+						return false;
+					}else{
+						$("#editForm").submit();
+					}
 				}
 			}
 		}else{
-			var orgNumber = $("#orgNumber").val(); //组织机构代码
-			if(orgNumber == null || orgNumber == ""){
+			var fqyOrgNumber = $("#fqyOrgNumber").val(); //组织机构代码
+			if(fqyOrgNumber == null || fqyOrgNumber == ""){
 					$.dialog.alert("请填写组织机构代码！");
 					return false;
 			}
-			if (orgNumber.indexOf("-") != -1) {
-				$("#orgNumber").attr("name", "orgNumber");
-				if (orgNumber.length != 10 || orgNumber.substring(8, 9) != '-') {
-					$.dialog.alert("组织机构代码或统一社会信用代码填写错误，请重新填写！（组织机构代码需包含短横杠“-”）");
-					return false;
-				}
-			}else{
-				$("#orgNumber").attr("name", "regNumber");
-				if ( orgNumber.length != 18) {
+			if (fqyOrgNumber.indexOf("-") != -1) {
+				$("#fqyOrgNumber").attr("name", "fqyOrgNumber");
+				if (fqyOrgNumber.length != 10 || fqyOrgNumber.substring(8, 9) != '-') {
 					$.dialog.alert("组织机构代码或统一社会信用代码填写错误，请重新填写！（组织机构代码需包含短横杠“-”）");
 					return false;
 				}else{
-					$("#editForm").submit();
+					if(!isNumbOrLett2(fqyOrgNumber)){
+						$.dialog.alert("组织机构代码由数字、字母、下划线和短横杠组成，不能以下划线开头和结尾！");
+						return false;
+					}else{
+						$("#editForm").submit();
+					}
+				}
+			}else{
+				$("#fqyOrgNumber").attr("name", "regNumber");
+				if ( fqyOrgNumber.length != 18) {
+					$.dialog.alert("组织机构代码或统一社会信用代码填写错误，请重新填写！（组织机构代码需包含短横杠“-”）");
+					return false;
+				}else{
+					if(!isNumbOrLett(fqyOrgNumber)){
+						$.dialog.alert("组织机构代码由数字、字母和下划线组成，不能以下划线开头和结尾！");
+						return false;
+					}else{
+						$("#editForm").submit();
+					}
 				}
 			}
 			
@@ -297,10 +325,10 @@ $().ready(function() {
 					if ($(this).val().substring(0, 1) == '9'
 							&& $(this).val().length == 18) {
 						$(".orgNum").hide();
-						$("#orgNumber").hide();
+						$("#qyOrgNumber").hide();
 					} else {
 						$(".orgNum").show();
-						$("#orgNumber").show();
+						$("#qyOrgNumber").show();
 					}
 				});
 
@@ -310,10 +338,31 @@ $().ready(function() {
 		var orgNumber = $("#regNumber").val();
 		if (orgNumber.substring(0, 1) == '9' && orgNumber.length == 18) {
 			$(".orgNum").hide();
-			$("#orgNumber").hide();
+			$("#qyOrgNumber").hide();
 		} else {
 			$(".orgNum").show();
-			$("#orgNumber").show();
+			$("#qyOrgNumber").show();
+		}
+	}
+	
+	
+	function isNumbOrLett( s ){
+		var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_]+$/;
+		var re = new RegExp(regu);
+		if (re.test(s)) {
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	function isNumbOrLett2( s ){
+		var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_-]+$/;
+		var re = new RegExp(regu);
+		if (re.test(s)) {
+			return true;
+		}else{
+			return false;
 		}
 	}
 
@@ -452,7 +501,15 @@ color: rgb(119, 119, 119);
 			</td>
 			<th class="orgNum"><b class="mustbe">*</b> 组织机构代码：</th>
 			<td style="width:300px;" class="td_orgNum">
-				<input type="text"  id="orgNumber" name="orgNumber" value="${corporation.orgNumber}"/>
+				<input type="text"  id="qyOrgNumber" name="qyOrgNumber" value="${corporation.orgNumber}"/>
+				<input type="text"  id="fqyOrgNumber" name="fqyOrgNumber" 
+					<c:if test="${corporation.orgNumber != null}">
+						value="${corporation.orgNumber}"
+					</c:if>
+					<c:if test="${corporation.orgNumber == null && corporation.regNumber != null}">
+						value="${corporation.regNumber}" readonly = "readonly"
+					</c:if>
+				/>
 			</td>
 		</tr>
 		<tr>

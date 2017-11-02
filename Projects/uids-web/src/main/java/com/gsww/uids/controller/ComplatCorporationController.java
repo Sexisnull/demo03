@@ -1,13 +1,29 @@
 package com.gsww.uids.controller;
 
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+
 
 import org.apache.commons.lang.StringUtils;
 import org.json.simple.JSONObject;
@@ -211,6 +227,12 @@ public class ComplatCorporationController extends BaseController{
 						corporation.setCardNumber(qyCardNumber);
 					}
 					
+					//对企业组织机构代码处理，企业法人
+					String qyOrgNumber = request.getParameter("qyOrgNumber");
+					if(StringHelper.isNotBlack(qyOrgNumber)){
+						corporation.setOrgNumber(qyOrgNumber);
+					}
+					
 				}else{
 				
 					//对民族处理 非 企业法人
@@ -235,6 +257,14 @@ public class ComplatCorporationController extends BaseController{
 					String fqyCardNumber = request.getParameter("fqyCardNumber");
 					if(StringHelper.isNotBlack(fqyCardNumber)){
 						corporation.setCardNumber(fqyCardNumber);
+					}
+					
+					//对企业组织机构代码处理，非企业法人
+					String fqyOrgNumber = request.getParameter("fqyOrgNumber");
+					if(StringHelper.isNotBlack(fqyOrgNumber)){
+						corporation.setOrgNumber(fqyOrgNumber);
+					}else{
+						corporation.setRegNumber(corporation.getRegNumber().substring(1, corporation.getRegNumber().length()));
 					}
 				}
 				//重复校验
@@ -524,5 +554,4 @@ public class ComplatCorporationController extends BaseController{
 		jisLog.setSpec(spec);
 		jisLogService.save(jisLog);
 	}
-	
 }
