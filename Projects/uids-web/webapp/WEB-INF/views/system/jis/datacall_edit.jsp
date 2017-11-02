@@ -42,7 +42,7 @@ var userNameInput=$("#userName").val();
 	  },submitHandler:function(form){
             var callingTypeVal=$("").val(); 
             if(callingTypeVal=='2'){
-            	$.validator.errorShow($("#infoNum"),'请选择角色');
+            	$.validator.errorShow($(""),'请选择角色');
             	return false;
             }else if(isVerification=='0'){
             	$.validator.errorShow($("#isVerification"),'请选择机构');
@@ -90,6 +90,8 @@ function calltype(value){
 		$("#hiddenTr1").css("display",'none');
 		$("#hiddenTr2").css("display",'none');
 		$("#hiddenTr3").css("display",'none');
+		$("#infoNum").rules("remove","required");
+		$("#infoNum").rules("remove","range");
 	}
 	if(value == '2'){
 		$("#hiddenTr1").css("display",'');
