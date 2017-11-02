@@ -166,7 +166,7 @@ $().ready(function() {
 		$(".td_regNum").show();
 		$("#fqyOrgNumber").hide();
 		$("#qyOrgNumber").show();
-		
+		$(".userScope").show();		
 		
 		//输入字段校验
 		$("#fqyName").rules("remove","required");
