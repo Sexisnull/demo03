@@ -172,6 +172,9 @@
 							type="机构";
 							name = data[i].groupname;
 							object = "g_"+data[i].objectid
+							if(object == "g_-1"){
+								name="前台用户"
+							}
 						}else if(type==1){
 							type="用户";
 							name = data[i].outname;
