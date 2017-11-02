@@ -255,7 +255,11 @@ $().ready(function() {
 				$.dialog.alert("请填写企业工商注册号或统一社会信用代码！");
 				return false;
 			}
-			if(regNumber.substring(0, 1) == '9' && regNumber.length == 18){
+			if(regNumber.length > 18){
+				$.dialog.alert("企业工商注册号长度等于或小于18位！");
+				return false;
+			}else{
+				if(regNumber.substring(0, 1) == '9' && regNumber.length == 18){
 				if(!isNumbOrLett(regNumber)){
 					$.dialog.alert("企业工商注册号由数字、字母和下划线组成，不能以下划线开头和结尾！");
 					return false;
@@ -279,6 +283,8 @@ $().ready(function() {
 					}
 				}
 			}
+			}
+			
 		}else{
 			var fqyOrgNumber = $("#fqyOrgNumber").val(); //组织机构代码
 			if(fqyOrgNumber == null || fqyOrgNumber == ""){
