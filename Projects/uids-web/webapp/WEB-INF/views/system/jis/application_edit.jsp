@@ -232,9 +232,9 @@ function setSsoLogin(value){
 } 
 
 function checknet(){
-	var url = $('#appUrl').val();
+	var url = $('#ssoUrl').val();
 	if(url == ""){
-		alert("接口地址不能为空！");
+		alert("登陆地址不能为空！");
 		return false;
 	}
 	var reg = /[\u0391-\uFFE5]+$/;
