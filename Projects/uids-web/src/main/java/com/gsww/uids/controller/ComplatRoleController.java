@@ -425,22 +425,23 @@ public class ComplatRoleController extends BaseController {
 			List<Map<String, Object>> groupList = complatGroupService
 					.findChildGroupByIid(Integer.parseInt(id));
 			if (!"1".equals(roleid) && !"2".equals(roleid)) {
-				if ("0".equals(id)) {
-					HashMap<String, Object> outNode = new HashMap<String, Object>();
-					outNode.put("id", Integer.valueOf(-1));
-					outNode.put("text", "前台用户");
-					outNode.put("ic", "qtyh");
-					groupNodes.add(outNode);
-
-					for (Map<String, Object> g : groupList) {
-						groupNode = new HashMap<String, Object>();
-						groupNode.put("id", g.get("iid"));
-						groupNode.put("text", g.get("name"));
-						groupNode.put("ic", g.get("codeid"));
-						groupNodes.add(groupNode);
-					}
-
-				} else if (!"-1".equals(id)) {
+//				if ("0".equals(id)) {
+//					HashMap<String, Object> outNode = new HashMap<String, Object>();
+//					outNode.put("id", Integer.valueOf(-1));
+//					outNode.put("text", "前台用户");
+//					outNode.put("ic", "qtyh");
+//					groupNodes.add(outNode);
+//
+//					for (Map<String, Object> g : groupList) {
+//						groupNode = new HashMap<String, Object>();
+//						groupNode.put("id", g.get("iid"));
+//						groupNode.put("text", g.get("name"));
+//						groupNode.put("ic", g.get("codeid"));
+//						groupNodes.add(groupNode);
+//					}
+//
+//				} else
+					if (!"-1".equals(id)) {
 					for (Map<String, Object> g : groupList) {
 						groupNode = new HashMap<String, Object>();
 						groupNode.put("id", g.get("iid"));
