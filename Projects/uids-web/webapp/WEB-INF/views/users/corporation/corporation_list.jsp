@@ -21,22 +21,22 @@
 		var nameSearch = $("#nameSearch").val();
 		var cardNumberSearch = $("#cardNumberSearch").val();
 		var cardNumberLength = cardNumberSearch.length;
-		if(loginNameSearch == '' || isNumbOrLett2(loginNameSearch)){
+		if(loginNameSearch == '' || isNumbOrLett1(loginNameSearch)){
 			if(realNameSearch == '' || isNumbOrLett1(realNameSearch)){
 				if(nameSearch == '' || isNumbOrLett1(nameSearch)){
 					if(cardNumberSearch == '' || (isNumbOrLett3(cardNumberSearch) && cardNumberLength <= 18) ){
 						form1.submit();
 					}else{
-						$.validator.errorShow($("#cardNumberSearch"),'只能包括数字和字母,且不能超过18个字符');
+						$.validator.errorShow($("#cardNumberSearch"),'身份证号码只能包括数字和字母,且不能超过18个字符');
 					}	
 				}else{
-					$.validator.errorShow($("#nameSearch"),'只能包括字母、数字、下划线,且不能超过255个字符');
+					$.validator.errorShow($("#nameSearch"),'企业（机构）名称只能包括字母、数字、下划线和中文,且不能超过255个字符');
 				}
 			}else{
-				$.validator.errorShow($("#realNameSearch"),'只能包括字母、数字、下划线,且不能超过255个字符');
+				$.validator.errorShow($("#realNameSearch"),'姓名只能包括字母、数字、下划线和中文,且不能超过255个字符');
 			}
  		}else{
- 			$.validator.errorShow($("#loginNameSearch"),'只能包括字母、数字、下划线,且不能超过255个字符');
+ 			$.validator.errorShow($("#loginNameSearch"),'用户名只能包括字母、数字、下划线和中文,且不能超过255个字符');
  		}
 	}
 	/*
@@ -156,9 +156,9 @@
 		<form id="form1" name="pageForm" action="${ctx}/complat/corporationList" method="get">
 			<table class="advanced-content">
 				<tr>
-					<th>登录名：</th>
+					<th>用户名：</th>
 					<td>
-						<input type="text" placeholder="登录名" value="${sParams['LIKE_loginName']}" id="loginNameSearch" name="search_LIKE_loginName" class="input"/>
+						<input type="text" placeholder="用户名" value="${sParams['LIKE_loginName']}" id="loginNameSearch" name="search_LIKE_loginName" class="input"/>
 					</td>
 					<th style="width: 5%">姓名:</th>
 					<td>
@@ -204,7 +204,7 @@
 								</div>             		
                 	</th>
                     <th width="10%" style="text-align: center;">姓名</th>
-                    <th width="10%" style="text-align: center;">登录名</th>
+                    <th width="10%" style="text-align: center;">用户名</th>
                     <th width="10%" style="text-align: center;">法人类型</th>
                     <th width="15%" style="text-align: center;">企业（机构）名称</th>
                     <th width="13%" class="alignL" style="text-align: center;">手机号码</th>
