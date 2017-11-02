@@ -73,9 +73,8 @@ value：字符串
 返回：
 如果通过验证返回true,否则返回false
 */
-function isNumbOrLett( s ){//判断是否是字母、数字组成
-	//var regu = "^[0-9a-zA-Z\u4e00-\u9fa5]+$";
-	var regu = /^([a-zA-Z0-9]+)$/;
+function isNumbOrLett( s ){
+	var regu = "^[0-9a-zA-Z\u4e00-\u9fa5]+$";
 	var re = new RegExp(regu);
 	if (re.test(s)) {
 		return true;
