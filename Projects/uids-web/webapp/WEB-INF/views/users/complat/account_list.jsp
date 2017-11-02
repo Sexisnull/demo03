@@ -615,10 +615,10 @@ function resetform() {
 									</td>
 									<td style="text-align: center;">
 										<div title="${complatUser.name}" class="word_break">
-												<c:if test="${fn:length(complatUser.name)>=5}">
-									         ${fn:substring(complatUser.name,0,5)}...
+												<c:if test="${fn:length(complatUser.name)>=7}">
+									         ${fn:substring(complatUser.name,0,7)}...
 								        </c:if>
-								        <c:if test="${fn:length(complatUser.name)<5}">
+								        <c:if test="${fn:length(complatUser.name)<7}">
 									         ${complatUser.name}&nbsp;
 								        </c:if> 
 										</div>
