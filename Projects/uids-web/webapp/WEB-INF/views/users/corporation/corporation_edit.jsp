@@ -256,7 +256,7 @@ $().ready(function() {
 				return false;
 			}
 			if(regNumber.length > 18){
-				$.dialog.alert("企业工商注册号长度等于或小于18位！");
+				$.dialog.alert("企业工商注册号长度最多为18位！");
 				return false;
 			}else{
 				if(regNumber.substring(0, 1) == '9' && regNumber.length == 18){
@@ -531,7 +531,7 @@ color: rgb(119, 119, 119);
 		     </td>
 		</tr>
 		<tr>
-			<th> 密码：</th>
+			<th><b class="mustbe">*</b> 密码：</th>
         	<td style="width:300px;">
         		<input type="password" id="pwd" name="pwd"  value="${corporation.pwd}" onkeyup="javascript:EvalPwd(this.value);"/>
             	

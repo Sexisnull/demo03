@@ -570,7 +570,7 @@ function checkAndSave() {
     	}else if(pwdLevel==1){
     		msg = "密码强度至少为中!";
     	}else if(pwdLevel==2){
-    		msg = "密码强度至少为强!";
+    		msg = "密码强度必须为强!";
     	}
     	$.dialog.alert(msg,function(){
 				return null;	            

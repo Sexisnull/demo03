@@ -1262,7 +1262,7 @@ public class ComplatUserController extends BaseController {
 				} else if (intPwdLevel == 1) {
 					resMap.put("msg", "密码强度至少为中！");
 				} else if (intPwdLevel == 2) {
-					resMap.put("msg", "密码强度至少为强！");
+					resMap.put("msg", "密码强度必须为强！");
 				}
 				resMap.put("ret", "2");
 				response.getWriter().write(JSONObject.toJSONString(resMap));
