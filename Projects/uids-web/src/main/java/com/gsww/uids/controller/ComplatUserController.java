@@ -556,22 +556,22 @@ public class ComplatUserController extends BaseController {
 			fieldMap.put("1", "age");
 			fieldMap.put("2", "sex");
 			fieldMap.put("3", "groupName");
-			fieldMap.put("4", "groupid");
-			fieldMap.put("5", "headship");
-			fieldMap.put("6", "phone");
-			fieldMap.put("7", "mobile");
-			fieldMap.put("8", "address");
-			fieldMap.put("9", "post");
+//			fieldMap.put("4", "groupid");
+			fieldMap.put("4", "headship");
+			fieldMap.put("5", "phone");
+			fieldMap.put("6", "mobile");
+			fieldMap.put("7", "address");
+			fieldMap.put("8", "post");
 			// fieldMap.put("10", "ip");
-			fieldMap.put("10", "fax");
-			fieldMap.put("11", "email");
-			fieldMap.put("12", "qq");
-			fieldMap.put("13", "loginname");
-			fieldMap.put("14", "pwd");
+			fieldMap.put("9", "fax");
+			fieldMap.put("10", "email");
+			fieldMap.put("11", "qq");
+			fieldMap.put("12", "loginname");
+			fieldMap.put("13", "pwd");
 			// fieldMap.put("16", "pwdquestion");
 			// fieldMap.put("17", "pwdanswer");
 			// fieldMap.put("15", "pinyin");
-			fieldMap.put("15", "cardid");
+			fieldMap.put("14", "cardid");
 			List<ComplatUser> users = ExcelUtil
 					.readXls(fileName, multipartFile.getInputStream(),
 							ComplatUser.class, fieldMap);
@@ -601,9 +601,12 @@ public class ComplatUserController extends BaseController {
 						// System.out.println("当前机器的ip地址:"+IP);
 						// 对登录全名进行唯一性判断
 						String loginname = complatUser.getLoginname();
-						int groupId = complatUser.getGroupid();
+						String groupName = complatUser.getGroupName();
 						ComplatGroup complatGroup = complatGroupService
-								.findByIid(groupId);
+								.findByName(groupName);
+						//设置机构编码
+                        Integer groupId = complatGroup.getIid();
+                        complatUser.setGroupid(groupId);
 						if (complatGroup != null) {
 							String suffix = complatGroup.getSuffix();
 							String loginallname = loginname + "." + suffix;
@@ -673,11 +676,11 @@ public class ComplatUserController extends BaseController {
 		// 定义所有字段的正则表达式
 		String nameReg = "^(?!_)(?!.*?_$)[a-zA-Z0-9\u4e00-\u9fa5]{1,255}$";
 		String ageReg = "^(?:[1-9][0-9]?|1[01][0-9]|120)$";
-		String groupIdReg = "^[0-9]*$";
+//		String groupIdReg = "^[0-9]*$";
 		String headshipReg = "[\u4e00-\u9fa5]{1,255}$";
 		String phoneReg = "(((0\\d{3}[\\-])?\\d{7}|(0\\d{2}[\\-])?\\d{8}))([\\-]\\d{2,4})?$";
 		String mobileReg = "^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\\d{8}$";
-		String addressReg = "[\u4e00-\u9fa5]{1,255}$";
+		String addressReg = "[\\dA-Za-z0-9\u4E00-\u9FA5]{1,255}";
 		String postReg = "^[1-9][0-9]{5}$";
 		String faxReg = "^(\\d{3,4}-)?\\d{7,8}$";
 		String emailReg = "^([\\w-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([\\w-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$";
@@ -687,58 +690,28 @@ public class ComplatUserController extends BaseController {
 		String cardIdReg = "([1-6]\\d{5}(19|20)\\d\\d(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])\\d{3}[0-9xX])|([1-6]\\d{5}\\d\\d(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])\\d{3})";
 		for (ComplatUser complatUser : users) {
 			// 判断是否有不合规范的数据
-			if ((StringUtils.isEmpty(complatUser.getName()) || (!StringUtils
-					.isEmpty(complatUser.getName()) && !match(nameReg,
-					complatUser.getName())))
-					|| (StringUtils.isEmpty(complatUser.getAge().toString()
-							.trim()) || (!StringUtils.isEmpty(complatUser
-							.getAge().toString().trim()) && !match(ageReg,
-							complatUser.getAge().toString().trim())))
-					|| (StringUtils.isEmpty(complatUser.getSex().toString()
-							.trim()) || (!StringUtils.isEmpty(complatUser
-							.getSex().toString().trim()) && (!(complatUser
-							.getSex() != 1) || (complatUser.getSex() != 0))))
-					|| (StringUtils.isEmpty(complatUser.getGroupName()
-							.toString().trim()))
-					|| (StringUtils.isEmpty(complatUser.getGroupid().toString()
-							.trim()) || (!StringUtils.isEmpty(complatUser
-							.getGroupid().toString().trim()) && !match(
-							groupIdReg, complatUser.getGroupid().toString()
-									.trim())))
-					|| (StringUtils.isEmpty(complatUser.getHeadship()) || (!StringUtils
-							.isEmpty(complatUser.getHeadship()) && !match(
-							headshipReg, complatUser.getHeadship())))
-					|| (StringUtils.isEmpty(complatUser.getPhone()) || (!match(
-							phoneReg, complatUser.getPhone())))
-					|| (StringUtils.isEmpty(complatUser.getMobile()) || (!StringUtils
-							.isEmpty(complatUser.getMobile()) && !match(
-							mobileReg, complatUser.getMobile())))
-					|| (StringUtils.isEmpty(complatUser.getAddress()) || (!StringUtils
-							.isEmpty(complatUser.getAddress()) && !match(
-							addressReg, complatUser.getAddress())))
-					|| (StringUtils.isEmpty(complatUser.getPost()) || (!StringUtils
-							.isEmpty(complatUser.getPost()) && !match(postReg,
-							complatUser.getPost())))
+			if ((StringUtils.isEmpty(complatUser.getName()) || (!StringUtils.isEmpty(complatUser.getName()) && !match(nameReg,complatUser.getName())))
+					|| (StringUtils.isEmpty(complatUser.getAge().toString().trim()) || (!StringUtils.isEmpty(complatUser.getAge().toString().trim()) && !match(ageReg,complatUser.getAge().toString().trim())))
+					|| (StringUtils.isEmpty(complatUser.getSex().toString().trim()) || (!StringUtils.isEmpty(complatUser.getSex().toString().trim()) && !((complatUser.getSex() != 1) || (complatUser.getSex() != 0))))
+					|| (StringUtils.isEmpty(complatUser.getGroupName().toString().trim()))
+//					|| (StringUtils.isEmpty(complatUser.getGroupid().toString().trim()) || (!StringUtils.isEmpty(complatUser.getGroupid().toString().trim()) && !match(groupIdReg, complatUser.getGroupid().toString().trim())))
+					|| (StringUtils.isEmpty(complatUser.getHeadship()) || (!StringUtils.isEmpty(complatUser.getHeadship()) && !match(headshipReg, complatUser.getHeadship())))
+					|| (StringUtils.isEmpty(complatUser.getPhone()) || (!match(phoneReg, complatUser.getPhone())))
+					|| (StringUtils.isEmpty(complatUser.getMobile()) || (!StringUtils.isEmpty(complatUser.getMobile()) && !match(mobileReg, complatUser.getMobile())))
+					|| (StringUtils.isEmpty(complatUser.getAddress()) || (!StringUtils.isEmpty(complatUser.getAddress()) && !match(addressReg, complatUser.getAddress())))
+					|| (StringUtils.isEmpty(complatUser.getPost()) || (!StringUtils.isEmpty(complatUser.getPost()) && !match(postReg,complatUser.getPost())))
 					// || (StringUtils.isEmpty(complatUser.getIp()) ||
 					// (!StringUtils.isEmpty(complatUser.getIp())&&
 					// !match(ipReg,complatUser.getIp())))
-					|| (StringUtils.isEmpty(complatUser.getFax()) || (!match(
-							faxReg, complatUser.getFax())))
-					|| (StringUtils.isEmpty(complatUser.getEmail()) || (!StringUtils
-							.isEmpty(complatUser.getEmail()) && !match(
-							emailReg, complatUser.getEmail())))
-					|| (StringUtils.isEmpty(complatUser.getQq()) || (!match(
-							qqReg, complatUser.getQq())))
-					|| (StringUtils.isEmpty(complatUser.getLoginname()) || (!StringUtils
-							.isEmpty(complatUser.getLoginname()) && !match(
-							loginameReg, complatUser.getLoginname())))
+					|| (StringUtils.isEmpty(complatUser.getFax()) || (!match(faxReg, complatUser.getFax())))
+					|| (StringUtils.isEmpty(complatUser.getEmail()) || (!StringUtils.isEmpty(complatUser.getEmail()) && !match(emailReg, complatUser.getEmail())))
+					|| (StringUtils.isEmpty(complatUser.getQq()) || (!match(qqReg, complatUser.getQq())))
+					|| (StringUtils.isEmpty(complatUser.getLoginname()) || (!StringUtils.isEmpty(complatUser.getLoginname()) && !match(loginameReg, complatUser.getLoginname())))
 					|| (StringUtils.isEmpty(complatUser.getPwd()))
 					// || (StringUtils.isEmpty(complatUser.getPinyin()) ||
 					// (!StringUtils.isEmpty(complatUser.getPinyin())&&
 					// !match(PinYinReg,complatUser.getPinyin())))
-					|| (StringUtils.isEmpty(complatUser.getCardid()) || (!StringUtils
-							.isEmpty(complatUser.getCardid()) && !match(
-							cardIdReg, complatUser.getCardid())))) {
+					|| (StringUtils.isEmpty(complatUser.getCardid()) || (!StringUtils.isEmpty(complatUser.getCardid()) && !match(cardIdReg, complatUser.getCardid())))) {
 				warn = warn + String.valueOf(row) + ",";
 				check = false;
 			}
@@ -762,8 +735,13 @@ public class ComplatUserController extends BaseController {
 				String Iid = list.get(i).getIid().toString();
 				resultList.add(Iid);
 			}
-
-			if (!resultList.contains(complatUser.getGroupid().toString())) {
+            
+			String groupName = complatUser.getGroupName();
+			ComplatGroup complatGroup = complatGroupService
+					.findByName(groupName);
+			//设置机构编码
+            Integer groupId = complatGroup.getIid();
+			if (!resultList.contains(groupId.toString())) {
 				check = false;
 				warn = warn + String.valueOf(row) + ",";
 			} else {
@@ -800,12 +778,13 @@ public class ComplatUserController extends BaseController {
 		int row = 1;
 		String warn = "";
 		boolean check = true;
+		ComplatGroup complatGroup = null;
 		for (ComplatUser complatUser : users) {
-			int iid = complatUser.getGroupid();
-			ComplatGroup complatGroup = complatGroupService.findByIid(iid);
+			String groupName = complatUser.getGroupName();
+			complatGroup = complatGroupService.findByName(groupName);
 			// Integer groupid = complatUser.getGroupid();
 
-			if (complatGroup.getName() == null || complatGroup.getName() == "") {
+			if (complatGroup==null) {
 				warn = warn + String.valueOf(row) + ",";
 				check = false;
 			} else {
@@ -821,7 +800,7 @@ public class ComplatUserController extends BaseController {
 			// 判断当前机构及其子机构下面是否存在登录名为导入数据中的用户
 			List<Map<String, Object>> userList = complatUserService
 					.findByLoginnameAndgroupid(complatUser.getLoginname(),
-							complatUser.getGroupid());
+							complatGroup.getIid());
 			String name = complatUser.getName();
 			if (userList.size() != 0) {
 				warn = warn + String.valueOf(row) + ",";
