@@ -475,6 +475,9 @@ $().ready(function() {
 	   url:true,
 	   maxlength: 255
 	   },
+	   spec:{
+	   maxlength: 255   
+	   },
 	  /*  ssoUrl:{
 	   required: true,
 	   url:true,
