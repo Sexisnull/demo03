@@ -125,7 +125,7 @@
 				</li>
 				<li class="split"></li>
 				<li class="active">
-					角色管理
+					角色列表
 				</li>
 			</ol>
 			<!--列表内容区域-->
