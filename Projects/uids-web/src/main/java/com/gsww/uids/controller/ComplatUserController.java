@@ -556,26 +556,27 @@ public class ComplatUserController extends BaseController {
 			fieldMap.put("1", "age");
 			fieldMap.put("2", "sex");
 			fieldMap.put("3", "groupName");
-//			fieldMap.put("4", "groupid");
-			fieldMap.put("4", "headship");
-			fieldMap.put("5", "phone");
-			fieldMap.put("6", "mobile");
-			fieldMap.put("7", "address");
-			fieldMap.put("8", "post");
+			fieldMap.put("4", "codeid");
+			fieldMap.put("5", "headship");
+			fieldMap.put("6", "phone");
+			fieldMap.put("7", "mobile");
+			fieldMap.put("8", "address");
+			fieldMap.put("9", "post");
 			// fieldMap.put("10", "ip");
-			fieldMap.put("9", "fax");
-			fieldMap.put("10", "email");
-			fieldMap.put("11", "qq");
-			fieldMap.put("12", "loginname");
-			fieldMap.put("13", "pwd");
+			fieldMap.put("10", "fax");
+			fieldMap.put("11", "email");
+			fieldMap.put("12", "qq");
+			fieldMap.put("13", "loginname");
+			fieldMap.put("14", "pwd");
 			// fieldMap.put("16", "pwdquestion");
 			// fieldMap.put("17", "pwdanswer");
 			// fieldMap.put("15", "pinyin");
-			fieldMap.put("14", "cardid");
+			fieldMap.put("15", "cardid");
 			List<ComplatUser> users = ExcelUtil
 					.readXls(fileName, multipartFile.getInputStream(),
 							ComplatUser.class, fieldMap);
 			// ComplatUser complatUser = new ComplatUser();
+			ComplatGroup complatGroup = null; 
 			if (importCheck(users, model, request, response)) {// 判断数据格式是否合适
 				// 机构是否存在，机构下是否存在用户
 				if (dataCheck(users, model, request, response)) {
@@ -583,6 +584,11 @@ public class ComplatUserController extends BaseController {
 						// 导入时将机构名汉字转换成首字母大写保存到pinyin字段中
 						String daPinYin = getPinYinHeadChar(complatUser.getName());
 						complatUser.setPinyin(daPinYin);
+						//设置机构编码
+						String codeid = complatUser.getCodeid();
+						complatGroup = complatGroupService.findByCodeid(codeid);	
+						Integer iid = complatGroup.getIid();
+						complatUser.setGroupid(iid);
 						// 设置创建时间
 						complatUser.setCreatetime(Timestamp.valueOf(TimeHelper
 								.getCurrentTime()));// 创建时间
@@ -602,11 +608,7 @@ public class ComplatUserController extends BaseController {
 						// 对登录全名进行唯一性判断
 						String loginname = complatUser.getLoginname();
 						String groupName = complatUser.getGroupName();
-						ComplatGroup complatGroup = complatGroupService
-								.findByName(groupName);
-						//设置机构编码
-                        Integer groupId = complatGroup.getIid();
-                        complatUser.setGroupid(groupId);
+						complatGroup = complatGroupService.findByName(groupName);						
 						if (complatGroup != null) {
 							String suffix = complatGroup.getSuffix();
 							String loginallname = loginname + "." + suffix;
@@ -676,7 +678,7 @@ public class ComplatUserController extends BaseController {
 		// 定义所有字段的正则表达式
 		String nameReg = "^(?!_)(?!.*?_$)[a-zA-Z0-9\u4e00-\u9fa5]{1,255}$";
 		String ageReg = "^(?:[1-9][0-9]?|1[01][0-9]|120)$";
-//		String groupIdReg = "^[0-9]*$";
+		String groupIdReg = "^[0-9]*$";
 		String headshipReg = "[\u4e00-\u9fa5]{1,255}$";
 		String phoneReg = "(((0\\d{3}[\\-])?\\d{7}|(0\\d{2}[\\-])?\\d{8}))([\\-]\\d{2,4})?$";
 		String mobileReg = "^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\\d{8}$";
@@ -694,7 +696,7 @@ public class ComplatUserController extends BaseController {
 					|| (StringUtils.isEmpty(complatUser.getAge().toString().trim()) || (!StringUtils.isEmpty(complatUser.getAge().toString().trim()) && !match(ageReg,complatUser.getAge().toString().trim())))
 					|| (StringUtils.isEmpty(complatUser.getSex().toString().trim()) || (!StringUtils.isEmpty(complatUser.getSex().toString().trim()) && !((complatUser.getSex() != 1) || (complatUser.getSex() != 0))))
 					|| (StringUtils.isEmpty(complatUser.getGroupName().toString().trim()))
-//					|| (StringUtils.isEmpty(complatUser.getGroupid().toString().trim()) || (!StringUtils.isEmpty(complatUser.getGroupid().toString().trim()) && !match(groupIdReg, complatUser.getGroupid().toString().trim())))
+					|| (StringUtils.isEmpty(complatUser.getCodeid().toString().trim()) || (!StringUtils.isEmpty(complatUser.getCodeid().toString().trim()) && !match(groupIdReg, complatUser.getCodeid().toString().trim())))
 					|| (StringUtils.isEmpty(complatUser.getHeadship()) || (!StringUtils.isEmpty(complatUser.getHeadship()) && !match(headshipReg, complatUser.getHeadship())))
 					|| (StringUtils.isEmpty(complatUser.getPhone()) || (!match(phoneReg, complatUser.getPhone())))
 					|| (StringUtils.isEmpty(complatUser.getMobile()) || (!StringUtils.isEmpty(complatUser.getMobile()) && !match(mobileReg, complatUser.getMobile())))
@@ -736,9 +738,9 @@ public class ComplatUserController extends BaseController {
 				resultList.add(Iid);
 			}
             
-			String groupName = complatUser.getGroupName();
+			String codeid = complatUser.getCodeid();
 			ComplatGroup complatGroup = complatGroupService
-					.findByName(groupName);
+					.findByCodeid(codeid);			
 			//设置机构编码
             Integer groupId = complatGroup.getIid();
 			if (!resultList.contains(groupId.toString())) {
@@ -780,10 +782,8 @@ public class ComplatUserController extends BaseController {
 		boolean check = true;
 		ComplatGroup complatGroup = null;
 		for (ComplatUser complatUser : users) {
-			String groupName = complatUser.getGroupName();
-			complatGroup = complatGroupService.findByName(groupName);
-			// Integer groupid = complatUser.getGroupid();
-
+			String codeid = complatUser.getCodeid();
+			complatGroup = complatGroupService.findByCodeid(codeid);	
 			if (complatGroup==null) {
 				warn = warn + String.valueOf(row) + ",";
 				check = false;

@@ -38,7 +38,7 @@ public class ComplatUser implements java.io.Serializable{
 	private String loginname;        // 登录名，如张三zhangs
 	private String pwd;              // 密码(加密)
 	private String name;             // 姓名
-	private Integer groupid;         // 组织机构id
+	private Integer groupid;         // 机构id
 	private Integer age;             // 年龄
 	private Integer sex;             // 性别1：男0：女
 	private Integer enable;          // 是否启用：0：禁用1：启用
@@ -64,9 +64,10 @@ public class ComplatUser implements java.io.Serializable{
 	private Integer synState;        // 0-未备份      1-备份失败         4-备份成功
 	private Integer Opersign;        // 1-新增      2-修改       3-假删	
     private Date modifyPassTime;
-    private String groupName;             //机构名称
+    private String groupName;        //机构名称
     private String cardid;           //身份证号
-	/** default constructor */
+    private String codeid;           //机构编码
+	/** default constructor */         
 	public ComplatUser() {
 		super();
 	}
@@ -417,5 +418,19 @@ public class ComplatUser implements java.io.Serializable{
 		this.cardid = cardid;
 	}
 
+
+	@Transient
+	public String getCodeid() {
+		return codeid;
+	}
+
+
+
+	public void setCodeid(String codeid) {
+		this.codeid = codeid;
+	}
+
+	
+	
 
 }
