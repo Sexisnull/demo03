@@ -50,7 +50,7 @@ $(function(){
 		tree : 'groupmenu',
 		height : 200,
 		init : function() {
-			setting('groupmenu', onClickGroup, onDbClickGroup);
+			setting('groupmenu', onClickGroup123, onDbClickGroup);
 		}
 	});
 	
@@ -58,7 +58,7 @@ $(function(){
 function hideGroupMenu(){
 	$('#groupname_menu').css('display','none');
 }
-function onClickGroup(event, treeId, treeNode) {
+function onClickGroup123(event, treeId, treeNode) {
 	$('#groupid').val(treeNode.id);
 	$('#groupname').val(treeNode.name);
 	hideGroupMenu();
@@ -89,7 +89,7 @@ function setting(treeName, onClickFunction, onDblClickFunction) {
 			onDblClick : onDblClickFunction
 		}
 	};
-	console.log("-----"+treeName);
+	/* console.log("-----"+treeName); */
 	$("#" + treeName).tree(setting);
 //	$("#" + treeName).tree().refreshNode('');
 }
@@ -355,7 +355,7 @@ function synfuction(){
 <script type="text/javascript">
 $(function(){
 var zNodes = [];
-		var setting = {
+		var setting1 = {
 			async : {
 				enable : true,
 				type:"post",
@@ -410,15 +410,15 @@ var zNodes = [];
 		};
 		
 		//初始化组织机构树
-		$.fn.zTree.init($("#areaTree"), setting, zNodes);
+		$.fn.zTree.init($("#areaTree"), setting1, zNodes);
 		
 	});
 
-	function beforeClick(treeId, treeNode) {
+	/* function beforeClick(treeId, treeNode) {
 		var check = (treeNode && !treeNode.isParent);
 		if (!check) return false;
 		return check;
-	}
+	} */
 	
 	function showMenu() {
 		var cityObj = $("#areaname");
@@ -443,7 +443,6 @@ var zNodes = [];
 		form1.submit();
 	}
 	 function onCheck(e,treeId,treeNode){
-		 debugger;
 		 treeNode.isParent.checked=false;
          var treeObj=$.fn.zTree.getZTreeObj("areaTree"),
          nodes=treeObj.getCheckedNodes(true),
