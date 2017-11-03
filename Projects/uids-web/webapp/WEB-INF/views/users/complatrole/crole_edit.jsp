@@ -14,12 +14,12 @@ $().ready(function() {
 		    required: true,
 		    cnRangelength: [0,50],
 		    uniqueRoleName:true,
-		    isName : true,
+		    isName : true
 		   },
 		   spec: {
 			   required: true,
 			   cnRangelength: [0,255],
-			   isSpec:true,
+			   isSpec:true
 		   }
 		  }
 	    });
@@ -49,8 +49,8 @@ $().ready(function() {
 				<a href="${ctx}/backIndex" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
-			<li>
-				<a href="#">角色管理</a>
+			<li class="active">
+				角色管理
 			</li>
 			<li class="split"></li>
 			<li class="active">

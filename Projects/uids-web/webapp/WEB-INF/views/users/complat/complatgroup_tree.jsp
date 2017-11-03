@@ -28,12 +28,12 @@
 						<a href="${ctx}/backIndex" target="_top">首页</a>
 					</li>
 					<li class="split"></li>
-					<li>
-						<a>机构管理</a>
+					<li class="active">
+						机构管理
 					</li>
 					<li class="split"></li>
 					<li class="active">
-						<a>机构列表</a>
+						机构列表
 					</li>
 				</ol>
 			</div>

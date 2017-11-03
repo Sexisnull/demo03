@@ -554,12 +554,12 @@ $(function(){
 				<a href="${ctx}/backIndex" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
-			<li>
-				<a >应用管理</a>
+			<li class="active">
+				应用管理
 			</li>
 			<li class="split"></li>
 			<li class="active">
-				<a class="last-position"><c:if test="${empty jisApplication.iid}">应用列表新增</c:if><c:if test="${not empty jisApplication.iid}">应用列表编辑</c:if></a>
+				<c:if test="${empty jisApplication.iid}">应用列表新增</c:if><c:if test="${not empty jisApplication.iid}">应用列表编辑</c:if>
 			</li>
    		</ol>
     </div>

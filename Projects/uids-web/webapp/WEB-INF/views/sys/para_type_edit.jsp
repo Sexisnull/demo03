@@ -37,8 +37,8 @@ $().ready(function() {
 					<a href="${ctx}/backIndex" target="_top">首页</a>
 				</li>
 				<li class="split"></li>
-				<li>
-					<a href="#">系统管理</a>
+				<li class="active">
+					系统管理
 				</li>
 				<li class="split"></li>
 				<li class="active">

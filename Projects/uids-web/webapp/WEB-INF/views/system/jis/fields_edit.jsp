@@ -174,12 +174,12 @@ $(document).on("change",'select#fieldsType',function(){
 				<a href="${ctx}/backIndex" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
-			<li>
-				<a>个性化设置</a>
+			<li class="active">
+				个性化设置
 			</li>
 			<li class="split"></li>
 			<li class="active">
-				<a class="last-position"><c:if test="${empty jisFields.iid}">用户扩展属性新增</c:if><c:if test="${not empty jisFields.iid}">用户扩展属性编辑</c:if></a>
+				<c:if test="${empty jisFields.iid}">用户扩展属性新增</c:if><c:if test="${not empty jisFields.iid}">用户扩展属性编辑</c:if>
 			</li>
    		</ol>
     </div>

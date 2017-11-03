@@ -209,12 +209,12 @@ jQuery.validator.addMethod("isName", function(value, element) {
 				<a href="${ctx}/backIndex" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
-			<li>
-				<a >机构管理</a>
+			<li class="active">
+				机构管理
 			</li>
 			<li class="split"></li>
 			<li class="active">
-				<a class="last-position"><c:if test="${empty complatGroup.iid}">机构新增</c:if><c:if test="${not empty complatGroup.iid}">机构编辑</c:if></a>
+				<c:if test="${empty complatGroup.iid}">机构新增</c:if><c:if test="${not empty complatGroup.iid}">机构编辑</c:if>
 			</li>
    		</ol>
     </div>

@@ -198,12 +198,12 @@ $(function(){
 				<a href="${ctx}/backIndex" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
-			<li>
-				<a >个性化设置</a>
+			<li class="active">
+				个性化设置
 			</li>
 			<li class="split"></li>
 			<li class="active">
-				<a class="last-position"><c:if test="${empty jisDatacall.iid}">数据调用新增</c:if><c:if test="${not empty jisDatacall.iid}">数据调用编辑</c:if></a>
+				<c:if test="${empty jisDatacall.iid}">数据调用新增</c:if><c:if test="${not empty jisDatacall.iid}">数据调用编辑</c:if>
 			</li>
    		</ol>
     </div>

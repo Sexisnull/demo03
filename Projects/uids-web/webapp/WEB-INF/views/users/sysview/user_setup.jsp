@@ -319,10 +319,9 @@
 					<a href="${ctx}/backIndex" target="_top">首页</a>
 				</li>
 				<li class="split"></li>
-				<li>
-					<a>账户设置</a>
+				<li class="active">
+					账户设置
 				</li>
-				<li class="split"></li>
 			</ol>
 		</div>
 		<!--表单的标题区域-->

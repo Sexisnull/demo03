@@ -100,8 +100,8 @@ width: 66px !important;
 						<a href="${ctx}/backIndex" target="_top">首页</a>
 					</li>
 					<li class="split"></li>
-					<li>
-						<a href="#">同步管理</a>
+					<li class="active">
+						同步管理
 					</li>
 					<li class="split"></li>
 					<li class="active">

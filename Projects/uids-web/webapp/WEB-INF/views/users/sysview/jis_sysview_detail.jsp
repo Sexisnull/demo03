@@ -25,16 +25,16 @@
 				<a href="${ctx}/backIndex" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
-			<li>
-				<a >同步管理</a>
-			</li>
-			<li class="split"></li>
-			<li>
-				<a ><c:if test="${detailMap.syncType == 'sysview'}">实时</c:if><c:if test="${detailMap.syncType == 'current'}">当前</c:if><c:if test="${detailMap.syncType == 'history'}">历史</c:if>同步列表</a>
+			<li class="active">
+				同步管理
 			</li>
 			<li class="split"></li>
 			<li class="active">
-				<a class="last-position">同步详情</a>
+				<c:if test="${detailMap.syncType == 'sysview'}">实时</c:if><c:if test="${detailMap.syncType == 'current'}">当前</c:if><c:if test="${detailMap.syncType == 'history'}">历史</c:if>同步列表
+			</li>
+			<li class="split"></li>
+			<li class="active">
+				同步详情
 			</li>
    		</ol>
     </div>
