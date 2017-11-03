@@ -307,6 +307,8 @@ function resetform() {
 		}else{
 			$("#authCode").poshytip('hide');
 		}
+		var user = userName;
+		var pwd = passWord;
 		 $.ajax({
          	type : "post",
 				url : "${ctx}/sys/mybatis/getkey",
@@ -331,23 +333,19 @@ function resetform() {
 			success : function(msg) {
 				if (msg.ret == 0) {
 					if (getCookie('rememberme') == 'YES') {
-						SetCookie("userName", userName);
-						SetCookie("passWord", passWord);
+						SetCookie("userName", user);
+						SetCookie("passWord", pwd);
 						SetCookie("groupId", groupid);
-						SetCookie("authCode", authCode);
 					}
 					window.location.href = indexURL;
 				} else if (msg.ret == 2 || msg.ret == 3) {
 					$("#userName").poshytip('update', msg.msg);
 					$("#userName").poshytip('show');
-					//$("#sub").removeClass("login_submit");
-					//$("#sub").addClass("login_box");;
 					$("#userName").focus();
 					chimg();
 				}else if(msg.ret == 1){
 					$("#authCode").poshytip('update', msg.msg);
 					$("#authCode").poshytip('show');
-					//$("#sub").removeClass("login_submit");
 					$("#authCode").focus();
 					chimg();
 				}

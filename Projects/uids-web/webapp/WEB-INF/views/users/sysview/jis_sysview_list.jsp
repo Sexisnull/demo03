@@ -80,13 +80,13 @@ font-size: 12px;
 border: 1px solid #dddddd;
 padding: 3px 8px;
 height: 30px;
-width: 186px;
+width: 187px;
 }
 #objectnameSearchHigh{
-width: 168px !important;
+width: 169px !important;
 }
 .syncTime{
-width: 65px !important;
+width: 66px !important;
 }
 </style>
 </head>
@@ -152,8 +152,8 @@ width: 65px !important;
 								</td>
 								<th>操作时间：</th>
 								<td>
-									<input type="text" class="syncTime Wdate" id="synctimeSearchStart" name="search_GTE_synctime" placeholder="起始时间" value="${sParams['GTE_synctime']}" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-									 至 <input class="syncTime Wdate" type="text" id="synctimeSearchEnd" name="search_LTE_synctime" placeholder="结束时间" value="${sParams['LTE_synctime']}" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+									<input type="text" class="syncTime" id="synctimeSearchStart" name="search_GTE_synctime" placeholder="起始时间" value="${sParams['GTE_synctime']}" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+									 至 <input class="syncTime" type="text" id="synctimeSearchEnd" name="search_LTE_synctime" placeholder="结束时间" value="${sParams['LTE_synctime']}" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" />
 									<!-- search_LIKE_ -->
 								</td>
 								<th></th>
