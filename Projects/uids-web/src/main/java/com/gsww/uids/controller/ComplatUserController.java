@@ -908,7 +908,7 @@ public class ComplatUserController extends BaseController {
 			} else {
 				treeMap.put("14", complatGroup.getName());// 机构名称
 			}
-			treeMap.put("15", complatUser.getGroupid());// 机构ID
+			treeMap.put("15", complatGroupService.findByIid(complatUser.getGroupid()).getCodeid());// 机构编码
 			treeMap.put("16", complatUser.getHeadship());// 用户职务
 			treeMap.put("17", complatUser.getPhone());// 办公电话
 			treeMap.put("18", complatUser.getMobile());// 移动电话
