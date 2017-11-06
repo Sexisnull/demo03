@@ -42,6 +42,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.web.Servlets;
 
+import com.gsww.jup.Constants;
 import com.gsww.jup.controller.BaseController;
 import com.gsww.jup.service.sys.SysParaService;
 import com.gsww.jup.util.ExcelUtil;
@@ -80,6 +81,8 @@ public class ComplatGroupController extends BaseController {
     private Map<Integer, Object> nodetypeMap = new HashMap<Integer, Object>();
     //区域类型下拉选择集合
     private Map<Integer, Object> areatypeMap = new HashMap<Integer, Object>();
+    
+    private String strWarn;
     
     
     @RequestMapping(value = "/groupOrgTree", method = RequestMethod.GET)
@@ -475,13 +478,12 @@ public class ComplatGroupController extends BaseController {
 	    fieldMap.put("2", "suffix");
 	    fieldMap.put("3", "groupallname");
 	    fieldMap.put("4", "orgcode");
-	    fieldMap.put("5", "orgtype");
-	    fieldMap.put("6", "strAreaType");
-	    fieldMap.put("7", "areacode");
-	    fieldMap.put("8", "strIsCombine");
-	    fieldMap.put("9", "parentName");
-	    fieldMap.put("10", "parentCode");
-	    fieldMap.put("11", "spec");
+	    fieldMap.put("5", "strAreaType");
+	    fieldMap.put("6", "areacode");
+	    fieldMap.put("7", "strIsCombine");
+	    fieldMap.put("8", "parentName");
+	    fieldMap.put("9", "parentCode");
+	    fieldMap.put("10", "spec");
 	    List<ComplatGroup> group = ExcelUtil.readXls(fileName, multipartFile.getInputStream(), ComplatGroup.class, fieldMap);
 	    
 		try {
@@ -554,7 +556,8 @@ public class ComplatGroupController extends BaseController {
 	 */
 	public boolean importCheck(List<ComplatGroup> group,Model model,HttpServletRequest request,HttpServletResponse response)throws Exception {
 		int row = 1;
-		String warn = "";
+		String allWarn = "";
+		String oneWarn = "";
 		boolean check = true;
 		//机构名称正则式校验
 		String zhengZeShi1 = "^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$";
@@ -569,41 +572,89 @@ public class ComplatGroupController extends BaseController {
 		String deptId = sysUserSession.getDeptId();// 获取部门id
 		String deptParentCode = complatGroupService.findByIid(Integer.valueOf(deptId)).getCodeid();
 		for (ComplatGroup complatGroup : group) {
-			//进行机构名和上级机构编码不能为空的校验
-			//进行机构重名校验
-			String parentCode = complatGroup.getParentCode();
-			String name = complatGroup.getName();
-			Integer pId = 0;
+			String parentCode = complatGroup.getParentCode();//上级机构编码
+			String name = complatGroup.getName();//机构名称
+			Integer pId = 0; //初始化上级机构id
 			if(StringUtils.isNotBlank(parentCode)){
-				pId = complatGroupService.findByCodeid(parentCode).getIid();
+				pId = complatGroupService.findByCodeid(parentCode).getIid();//上级机构id
 			}
-			if((StringUtils.isEmpty(complatGroup.getName()) || StringUtils.isEmpty(complatGroup.getParentCode()))
-				||(complatGroupService.queryNameIsUsed(name, pId))
-				||(parentCode.length() < deptParentCode.length() || !parentCode.substring(0, deptParentCode.length()).equals(deptParentCode))
-				||(!Pattern.matches(zhengZeShi1, complatGroup.getName()) || complatGroup.getName().length() >= 100)
-				||(StringUtils.isNotBlank(complatGroup.getStrNodeType()) && (!Pattern.matches(zhengZeShi1, complatGroup.getStrNodeType()) || complatGroup.getStrNodeType().length() >= 50))
-				||(StringUtils.isEmpty(complatGroup.getSuffix()) || (!Pattern.matches(zhengZeShi2, complatGroup.getSuffix()) || complatGroup.getSuffix().length() >= 255))
-				||(StringUtils.isNotBlank(complatGroup.getGroupallname()) && (!Pattern.matches(zhengZeShi1, complatGroup.getGroupallname()) || complatGroup.getGroupallname().length() >= 255))
-				||(StringUtils.isNotBlank(complatGroup.getOrgcode()) && !Pattern.matches(zhengZeShi3, complatGroup.getOrgcode()))
-				||(StringUtils.isNotBlank(complatGroup.getOrgtype()) && (!Pattern.matches(zhengZeShi1, complatGroup.getOrgtype()) || complatGroup.getOrgtype().length() >= 255))
-				||(StringUtils.isNotBlank(complatGroup.getStrNodeType()) && (!Pattern.matches(zhengZeShi1, complatGroup.getStrNodeType()) || complatGroup.getStrNodeType().length() >= 50))
-				||(StringUtils.isNotBlank(complatGroup.getAreacode()) && (!Pattern.matches(zhengZeShi4, complatGroup.getAreacode()) || complatGroup.getAreacode().length() > 12))
-				||(StringUtils.isNotBlank(complatGroup.getStrIsCombine()) && (!Pattern.matches(zhengZeShi1, complatGroup.getStrIsCombine()) || complatGroup.getStrIsCombine().length() >= 20))
-				||(StringUtils.isNotBlank(complatGroup.getParentName()) && (!Pattern.matches(zhengZeShi1, complatGroup.getParentName()) || complatGroup.getParentName().length() >= 100))
-				||(!Pattern.matches(zhengZeShi4, complatGroup.getParentCode()) || complatGroup.getParentCode().length() >= 255)
-				||(StringUtils.isNotBlank(complatGroup.getSpec()) && complatGroup.getSpec().length() >= 255)){
-				warn = warn + String.valueOf(row) + "、";
-				check = false;
+			//校验机构名称，机构后缀，和上级机构编码是否为空
+			if(complatGroup.getName().isEmpty() || complatGroup.getSuffix().isEmpty() || complatGroup.getParentCode().isEmpty()){
+				oneWarn = oneWarn + "机构名称，机构后缀和上级机构编码不能为空。";
+			}
+			//进行权限校验
+			if((parentCode.length() < deptParentCode.length()) || !(parentCode.substring(0, deptParentCode.length()).equals(deptParentCode))){
+				oneWarn = oneWarn + "不是权限内的导入。";
+			}
+			//重名校验
+			if(complatGroupService.queryNameIsUsed(name, pId)){
+				oneWarn = oneWarn + "机构名称重复。";
+			}
+			//每个导入字段正则式校验
+			if(!Pattern.matches(zhengZeShi1, complatGroup.getName()) || complatGroup.getName().length() >= 100){
+				oneWarn = oneWarn + "机构名称不符合规范。";
+			}
+			if(StringUtils.isNotBlank(complatGroup.getStrNodeType()) && (!Pattern.matches(zhengZeShi1, complatGroup.getStrNodeType()) || complatGroup.getStrNodeType().length() >= 50)){
+				oneWarn = oneWarn + "节点类型不符合规范。";
+			}
+			if(StringUtils.isEmpty(complatGroup.getSuffix()) || (!Pattern.matches(zhengZeShi2, complatGroup.getSuffix()) || complatGroup.getSuffix().length() >= 255)){
+				oneWarn = oneWarn + "机构后缀不符合规范。";
+			}
+			if(StringUtils.isNotBlank(complatGroup.getGroupallname()) && (!Pattern.matches(zhengZeShi1, complatGroup.getGroupallname()) || complatGroup.getGroupallname().length() >= 255)){
+				oneWarn = oneWarn + "机构全名不符合规范。";
+			}
+			if(StringUtils.isNotBlank(complatGroup.getOrgcode()) && !Pattern.matches(zhengZeShi3, complatGroup.getOrgcode())){
+				oneWarn = oneWarn + "组织机构代码不符合规范。";
+			}
+			if(StringUtils.isNotBlank(complatGroup.getStrAreaType()) && (!Pattern.matches(zhengZeShi1, complatGroup.getStrAreaType()) || complatGroup.getStrAreaType().length() >= 50)){
+				oneWarn = oneWarn + "区域类型不符合规范。";
+			}
+			if(StringUtils.isNotBlank(complatGroup.getAreacode()) && (!Pattern.matches(zhengZeShi4, complatGroup.getAreacode()) || complatGroup.getAreacode().length() != 12)){
+				oneWarn = oneWarn + "区域编码不符合规范。";
+			}
+			if(StringUtils.isNotBlank(complatGroup.getStrIsCombine()) && (!Pattern.matches(zhengZeShi1, complatGroup.getStrIsCombine()) || complatGroup.getStrIsCombine().length() >= 20)){
+				oneWarn = oneWarn + "是否为合并机构不符合规范。";
+			}
+			if(StringUtils.isNotBlank(complatGroup.getParentName()) && (!Pattern.matches(zhengZeShi1, complatGroup.getParentName()) || complatGroup.getParentName().length() >= 100)){
+				oneWarn = oneWarn + "上级机构名称不符合规范。";
+			}
+			if(!Pattern.matches(zhengZeShi4, complatGroup.getParentCode()) || complatGroup.getParentCode().length() >= 255){
+				oneWarn = oneWarn + "上级机构编码不符合规范。";
+			}
+			if(StringUtils.isNotBlank(complatGroup.getSpec()) && complatGroup.getSpec().length() >= 255){
+				oneWarn = oneWarn + "机构后缀不符合规范。";
+			}
+			if(StringUtils.isNotBlank(oneWarn)){
+				oneWarn = "第" + row + "行数据导入失败：" + oneWarn + "\n";
+				allWarn = allWarn + oneWarn;
+				oneWarn = "";
 			}
 			row++;
 		}
-		if(warn.length() >= 1){
-			warn = warn.substring(0, warn.length()-1);
-		}
-		if(check == false){
-			returnMsg("error", "导入失败,第" + warn + "行数据输入错误，请修正后重新导入！",request);
+		if(StringUtils.isNotBlank(allWarn)){
+			check = false;
+			strWarn = allWarn;
 		}
 		return check;
+	}
+	
+	/**
+	 * 将导入失败提示语传入前台
+	 */
+	@SuppressWarnings("finally")
+	@RequestMapping(value = "/importWarn", method = RequestMethod.POST)
+	public void importWarn(Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+		try {
+			if(StringUtils.isNotBlank(strWarn)){
+				response.getWriter().write(strWarn);
+				strWarn = "";
+			}else{
+				response.getWriter().write("");
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			response.getWriter().write(-1);
+		}
 	}
 	
     /**
@@ -614,7 +665,7 @@ public class ComplatGroupController extends BaseController {
 		try{
 			String sId = request.getParameter("sId");
 			String[] para = sId.split(",");		
-			String fileName = "机构列表";
+			String fileName = "groupdata";
 			Map<String,Object> map = new HashMap<String,Object>(); 
 			List headList = new ArrayList();//表头数据  
 	        headList.add("机构名称");
