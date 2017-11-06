@@ -465,7 +465,7 @@ background: #249bf3;color: #fff;border: 1px solid #249BF3;}
     <div class="form-content double fn-left">
         <ul class="form-table">
         	<!--,nameCheck: true,isUnique:true,cnRangelength:[1,64] -->
-        	 <li><b class="mustbe">*</b>区域名称</li>
+        	 <li>区域名称</li>
             <li>
             	<input type="text" disabled="disabled" style="background:#F0F0F0;" class="input" id="regionName1" name="name1" value="${complatZone.name}"  />
             	 <input type="hidden" class="input" id="regionName" name="name" value="${complatZone.name}"  />
@@ -473,7 +473,7 @@ background: #249bf3;color: #fff;border: 1px solid #249BF3;}
             	<i class="form-icon-clear"></i>
             </li>
 																
-            <li>区域编码</li>
+            <li><b class="mustbe">*</b>区域编码</li>
             <li>
             	<input type="text" style="background:#F0F0F0;" class="input regionCode" id="regionCode1" name="deptCode1" value="${complatZone.codeId}" />
             	<input type="hidden" class="input regionCode" id="regionCode" name="deptCode" value="${complatZone.codeId}" />

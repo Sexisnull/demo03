@@ -54,7 +54,7 @@
 			</div>
 			<!--左侧树形结构-->
 			<div style="width:78%; height:600px; float:left;">
-				<iframe id="main1" src="${ctx}/complat/complatList" class="ui-layout-center" frameborder="0" height="100%" width="100%" name="iframe" scrolling="yes">
+				<iframe id="main1" src="${ctx}/complat/complatList?editGroupId=${editGroupId1}" class="ui-layout-center" frameborder="0" height="100%" width="100%" name="iframe" scrolling="yes">
 
 				</iframe>
 
