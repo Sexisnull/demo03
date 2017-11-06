@@ -358,195 +358,182 @@ var complatUserNameInput=$("#name").val();
            return this.optional(element) || (corporName.test(value));     
     }, "请输入正确的手机号"); 
     
-   //编辑时密码强度回显
-    var pwding = $("#pwd").val();
-	  EvalPwd(pwding);
+        //编辑时密码强度回显
+        var pwding = $("#pwd").val();
+	    EvalPwd(pwding);
 
    
    
-	 //获取用户扩展属性
-	
-					var htmlString = [];
-						var count = 1;
-						var table = $(".form-table");
-						var fieldsListMap = eval('${fieldsListMap}');
-						var sum=0;
-						for ( var i = 0; i < fieldsListMap.length; i++) {
-							 var length=fieldsListMap[i].length;
-							 sum +=	length;						 
-						}
-						if(sum!=0){
-							if(sum%2==0){
-	 	              sum=sum/2;
-	            }else if(sum%2==1){
-	 	              sum=Math.ceil(sum/2);
-	            }
-	            htmlString.push("<tr><td  class='td_2' id='td_7' rowspan='"+sum+"' align='center'>"+"扩展属性"+"</td>");
-						var textName;
-						var textValue;
-						var userid = $("#iid").val().trim();
-						//alert("userid===="+userid);
-						for ( var i = 0; i < fieldsListMap.length; i++) {
-							var fieldsList = fieldsListMap[i];
-							for ( var j = 0; j < fieldsList.length; j++) {
-								var fields = fieldsList[j];
-								if (fields.type == 1) {
-									for ( var key in fields) {
-										if(key == "fieldname"){
-											textName = fields[key];//类似ex_test
-											textValue = fields[textName];
-											if(textValue == null){
-												textValue = "";
-											}
-										}
-										if(key == "showname"){
-											var textTitle = fields[key];
-											if(count==1){  
-    					if(count%2==1){
-    					       htmlString.push("<th>"+ textTitle+ "：</th><td><input name='"+textName+"' type='text' value='"+textValue+"' style='width: 79.9%;'></td>");   	    			       
-   	    			    }
-     					 if(count%2==0){
-											 htmlString.push("<th>"+ textTitle+ "：</th><td><input type='text' name='"+textName+"' value='"+textValue+"' style='width: 79.9%;'></td></tr>");
-     	    			}   					
-    				}else{
-    				    if(count%2==1){
-    					 	       htmlString.push("<tr><th>"+ textTitle+ "：</th><td><input type='text' name='"+textName+"' value='"+textValue+"' style='width: 79.9%;'></td>");
-    					 }
-    	    			    if(count%2==0){
-    	    			    	htmlString.push("<th>"+ textTitle+ "：</th><td><input type='text' name='"+textName+"' value='"+textValue+"' style='width: 79.9%;'></td></tr>");
-    	    			    }
-    				}
-												count++;
-										}
-										
+	    //获取用户扩展属性
+	    var htmlString = [];
+		var count = 1;
+		var table = $(".form-table");
+		var fieldsListMap = eval('${fieldsListMap}');
+		var sum=0;
+		for ( var i = 0; i < fieldsListMap.length; i++) {
+			var length=fieldsListMap[i].length;
+			sum +=	length;						 
+		}
+		if(sum!=0){
+			if(sum%2==0){
+	 	        sum=sum/2;
+	        }else if(sum%2==1){
+	 	        sum=Math.ceil(sum/2);
+	        }
+	        htmlString.push("<tr><td  class='td_2' id='td_7' rowspan='"+sum+"' align='center'>"+"扩展属性"+"</td>");
+			var textName;
+			var textValue;
+			var userid = $("#iid").val().trim();
+			//alert("userid===="+userid);
+			for ( var i = 0; i < fieldsListMap.length; i++) {
+				var fieldsList = fieldsListMap[i];
+					for ( var j = 0; j < fieldsList.length; j++) {
+						var fields = fieldsList[j];
+						if (fields.type == 1) {
+							for ( var key in fields) {
+								if(key == "fieldname"){
+									textName = fields[key];//类似ex_test
+									textValue = fields[textName];
+									if(textValue == null){
+										textValue = "";
 									}
 								}
+								if(key == "showname"){
+									var textTitle = fields[key];
+									if(count==1){  
+    					                if(count%2==1){
+    					                    htmlString.push("<th>"+ textTitle+ "：</th><td><input name='"+textName+"' type='text' value='"+textValue+"' style='width: 79.9%;'></td>");   	    			       
+   	    			                    }
+     					                if(count%2==0){
+											htmlString.push("<th>"+ textTitle+ "：</th><td><input type='text' name='"+textName+"' value='"+textValue+"' style='width: 79.9%;'></td></tr>");
+     	    			                }   					
+    				                }else{
+    				                    if(count%2==1){
+    					 	                htmlString.push("<tr><th>"+ textTitle+ "：</th><td><input type='text' name='"+textName+"' value='"+textValue+"' style='width: 79.9%;'></td>");
+    					                }
+    	    			                if(count%2==0){
+    	    			    	            htmlString.push("<th>"+ textTitle+ "：</th><td><input type='text' name='"+textName+"' value='"+textValue+"' style='width: 79.9%;'></td></tr>");
+    	    			                }
+    				                }
+										count++;
+								}
+					        }
+						}
 
-
-								var values;
-								var keys;
-								var selectTitle;
-								if (fields.type == 2) {
-									for ( var key in fields) {
-										var value = fields[key];
-										if(key == "showname"){
-										   //alert("key======"+key);
-											selectTitle = fields[key];
-										}
-										//alert("selectTitle======"+selectTitle);
-										if (key == 'fieldkeys') {
-											keys = value.split(",");
-										}
-                    //alert("keykey======"+key);
-										if (key == 'fieldvalues') {
-											values = value.split(",");
-										}
-										//alert("values======"+values);
-										if (key != 'type' && key != 'userid') {										
-											if (key == 'fieldname') {
-												if(count == 1){
-    			    		if(count%2==1){
-    			    			htmlString.push("<tr><th>"+ selectTitle+ "：</th><td><select id='"+value+"' name= '"+value+"' style='width: 86.9%;'>");
-		    			    	//htmlString.push("<th>"+value+"</th><td><select  class='kzsx' id='"+value+"' name= '"+value+"' style='width=:88%;'>");
-		    			    	//循环key；
-		    			        for(var i=0;i<keys.length;i++){
-		    			 			htmlString.push("<option value='"+keys[i]+"'");
-		    			            //获取下拉列表默认值
-								    var select = eval('${jsonMap}');
-								    for(var selectKey in select[0]){
-								    	var selectValue = select[0][selectKey];
-								    	if(selectValue == keys[i]){
-		    			        			htmlString.push("selected = 'selected'");
-		    			        		}
-							    	}
-							    	htmlString.push(">"+values[i]+"</option>");
-		    				    }
-		    			       htmlString.push("</select></td>");
-		    			       
-		    				   
-		    			    }
-		    			    if(count%2==0){
-		    			    	htmlString.push("<th>"+ selectTitle+ "：</th><td><select id='"+value+"' name= '"+value+"' style='width: 86.9%;'>");
-		    			    	//循环key；
-		    			        for(var i=0;i<keys.length;i++){
-		    			        	htmlString.push("<option value='"+keys[i]+"'");
-		    			          //获取下拉列表默认值
-		    			          if(userid!=""){
-		    			          	 var select = eval('${jsonMap}');
-								    for(var selectKey in select[0]){
-								    	var selectValue = select[0][selectKey];
-								    	if(selectValue == keys[i]){
-		    			        			htmlString.push("selected = 'selected'");
-		    			        		}
-							    	}
-		    			          }
-							    	htmlString.push(">"+values[i]+"</option>");
-		    				    }
-		    			       htmlString.push("</select></td></tr>");
-		    			    }	
-    			    	}else{
-    			    		if(count%2==1){
-		    			    	htmlString.push("<tr><th>"+ selectTitle+ "：</th><td><select id='"+value+"' name= '"+value+"' style='width: 86.9%;'>");
-		    			    	//循环key；
-		    			        for(var i=0;i<keys.length;i++){
-		    			 			htmlString.push("<option value='"+keys[i]+"'");
-		    			          //获取下拉列表默认值
-								    if(userid!=""){
-		    			          	 var select = eval('${jsonMap}');
-								    for(var selectKey in select[0]){
-								    	var selectValue = select[0][selectKey];
-								    	if(selectValue == keys[i]){
-		    			        			htmlString.push("selected = 'selected'");
-		    			        		}
-							    	}
-		    			          }
-							    	htmlString.push(">"+values[i]+"</option>");
-		    				    }
-		    			       htmlString.push("</select></td>");
-		    			       
-		    				   
-		    			    }
-		    			    if(count%2==0){
-		    			    	htmlString.push("<th>"+ selectTitle+ "：</th><td><select id='"+value+"' name= '"+value+"' style='width: 86.9%;'>");
-		    			    	//循环key；
-		    			        for(var i=0;i<keys.length;i++){
-		    			        	htmlString.push("<option value='"+keys[i]+"'");
-		    			          //获取下拉列表默认值
-								    if(userid!=""){
-		    			          	 var select = eval('${jsonMap}');
-								    for(var selectKey in select[0]){
-								    	var selectValue = select[0][selectKey];
-								    	if(selectValue == keys[i]){
-		    			        			htmlString.push("selected = 'selected'");
-		    			        		}
-							    	}
-		    			          }
-							    	htmlString.push(">"+values[i]+"</option>");
-		    				    }
-		    			       htmlString.push("</select></td></tr>");
-		    			    }
-    			    	}
-												
-							
-												count++;
-											}
-										}
-									}
+                        var values;
+						var keys;
+						var selectTitle;
+						if (fields.type == 2) {
+							for ( var key in fields) {
+								var value = fields[key];
+								if(key == "showname"){
+									//alert("key======"+key);
+									selectTitle = fields[key];
+								}
+								//alert("selectTitle======"+selectTitle);
+								if (key == 'fieldkeys') {
+									keys = value.split(",");
+								}
+                                //alert("keykey======"+key);
+								if (key == 'fieldvalues') {
+									values = value.split(",");
+								}
+								//alert("values======"+values);
+								if (key != 'type' && key != 'userid') {										
+									if (key == 'fieldname') {
+										if(count == 1){
+    			    		                if(count%2==1){          
+    			    			                htmlString.push("<tr><th>"+ selectTitle+ "：</th><td><select id='"+value+"' name= '"+value+"' style='width: 86.9%;'>");
+		    			    	                //htmlString.push("<th>"+value+"</th><td><select  class='kzsx' id='"+value+"' name= '"+value+"' style='width=:88%;'>");
+		    			    	                //循环key；
+		    			                        for(var i=0;i<keys.length;i++){
+		    			 			               htmlString.push("<option value='"+keys[i]+"'");
+		    			                           //获取下拉列表默认值
+								                   var select = eval('${jsonMap}');
+								                   for(var selectKey in select[0]){
+								    	              var selectValue = select[0][selectKey];
+								    	              if(selectValue == keys[i]){
+		    			        			              htmlString.push("selected = 'selected'");
+		    			        		              }
+							    	               }
+							    	               htmlString.push(">"+values[i]+"</option>");
+		    				                    }
+		    			                        htmlString.push("</select></td>");
+		    			                    }
+		    			                    if(count%2==0){
+		    			    	                htmlString.push("<th>"+ selectTitle+ "：</th><td><select id='"+value+"' name= '"+value+"' style='width: 86.9%;'>");
+		    			    	                //循环key；
+		    			                        for(var i=0;i<keys.length;i++){
+		    			        	               htmlString.push("<option value='"+keys[i]+"'");
+		    			                           //获取下拉列表默认值
+		    			                           if(userid!=""){
+		    			          	                  var select = eval('${jsonMap}');
+								                      for(var selectKey in select[0]){
+								    	                  var selectValue = select[0][selectKey];
+								    	                  if(selectValue == keys[i]){
+		    			        			                  htmlString.push("selected = 'selected'");
+		    			        		                  }
+							    	                  }
+		    			                           }
+							    	               htmlString.push(">"+values[i]+"</option>");
+		    				                    }
+		    			                        htmlString.push("</select></td></tr>");
+		    			                    }	
+    			    	                }else{
+    			    		                if(count%2==1){
+		    			    	                htmlString.push("<tr><th>"+ selectTitle+ "：</th><td><select id='"+value+"' name= '"+value+"' style='width: 86.9%;'>");
+		    			    	                //循环key；
+		    			                        for(var i=0;i<keys.length;i++){
+		    			 			               htmlString.push("<option value='"+keys[i]+"'");
+		    			                           //获取下拉列表默认值
+								                   if(userid!=""){
+		    			          	                  var select = eval('${jsonMap}');
+								                      for(var selectKey in select[0]){
+								    	                var selectValue = select[0][selectKey];
+								    	                if(selectValue == keys[i]){
+		    			        			               htmlString.push("selected = 'selected'");
+		    			        		                }
+							    	                  }
+		    			                           }
+							    	               htmlString.push(">"+values[i]+"</option>");
+		    				                    }
+		    			                        htmlString.push("</select></td>");
+		    			                    }
+		    			                    if(count%2==0){
+		    			    	                htmlString.push("<th>"+ selectTitle+ "：</th><td><select id='"+value+"' name= '"+value+"' style='width: 86.9%;'>");
+		    			    	                //循环key；
+		    			                        for(var i=0;i<keys.length;i++){
+		    			        	               htmlString.push("<option value='"+keys[i]+"'");
+		    			                           //获取下拉列表默认值
+								                   if(userid!=""){
+		    			          	                   var select = eval('${jsonMap}');
+								                       for(var selectKey in select[0]){
+								    	                   var selectValue = select[0][selectKey];
+								    	                   if(selectValue == keys[i]){
+		    			        			                   htmlString.push("selected = 'selected'");
+		    			        		                   }
+							    	                   }
+		    			                           }
+							    	               htmlString.push(">"+values[i]+"</option>");
+		    				                    }
+		    			                        htmlString.push("</select></td></tr>");
+		    			                    }
+    			    	                }
+			                            count++;
+							        }
 								}
 							}
 						}
-						table.append(htmlString.join(""));
-						}else if(sum==0){
-	 	           htmlString.push("");
-	 	           table.append(htmlString.join(""));
-	          } 
-						
-  //编辑页面密码强度判断
-  //编辑页面密码强度判断
-	var pwding = $("#pwd").val();
-	EvalPwd(pwding);
-	//$('#pwd').attachEvent('oninput',EvalPwd(pwding));	
-
+					}
+			}
+			table.append(htmlString.join(""));
+		}else if(sum==0){
+	 	    htmlString.push("");
+	 	    table.append(htmlString.join(""));
+	    } 						
+        //编辑页面密码强度判断
+	    var pwding = $("#pwd").val();
+	    EvalPwd(pwding);
 });
 
 
@@ -593,9 +580,7 @@ function checkAndSave() {
 				<a href="${ctx}/backIndex" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
-			<li class="active">
-				政府用户
-			</li>
+			<li class="active">政府用户</li>
 			<li class="split"></li>
 			<li class="active">
 				<c:if test="${empty complatUser.iid}">用户新增</c:if><c:if test="${not empty complatUser.iid}">用户编辑</c:if>
