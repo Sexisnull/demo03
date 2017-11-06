@@ -223,7 +223,7 @@
 	                            <i class="check_btn"></i><input id="${complatCorporation.iid}" value="${complatCorporation.iid}" type="checkbox" class="check_btn" style="display:none;"/>
 	                        </div>
 	                    </td>
-	                	<td style="text-align: center;">
+	                	<td style="text-align: center;" title="${complatCorporation.realName}">
 		                	<c:if test="${fn:length(complatCorporation.realName)>=10}">
 							  ${fn:substring(complatCorporation.realName,0,10)}...
 							</c:if>
@@ -231,7 +231,7 @@
 							   ${complatCorporation.realName}&nbsp;
 							</c:if> 
 	                    </td>
-	                	<td style="text-align: center;">
+	                	<td style="text-align: center;" title="${complatCorporation.loginName}">
 	                		<c:if test="${fn:length(complatCorporation.loginName)>=10}">
 							  ${fn:substring(complatCorporation.loginName,0,10)}...
 							</c:if>
@@ -247,7 +247,7 @@
 	                    		</div>
 	                    	</div>
 	                    </td>
-	                    <td style="text-align: center;">
+	                    <td style="text-align: center;" title="${complatCorporation.name}">
 	                    	<c:if test="${fn:length(complatCorporation.name)>=10}">
 							  ${fn:substring(complatCorporation.name,0,10)}...
 							</c:if>
