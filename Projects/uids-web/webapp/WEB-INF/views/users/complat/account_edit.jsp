@@ -75,16 +75,15 @@
 
 /*********************机构树开始************************/
 $(function(){
-	var groupMenu = [{"name":"单位选择","title":"单位选择","id":"0","isParent":true,"isDisabled":false,"open":true,"nocheck":false}];
+//	var groupMenu = [{"name":"单位选择","title":"单位选择","id":"0","isParent":true,"isDisabled":false,"open":true,"nocheck":false}];
 
 	$('#groupname').menu({
 		tree : 'groupmenu',
 		height : 200,
-//		init : function() {
-
-//		}
+		init : function() {
+			setting('groupmenu', onClickGroup, onDbClickGroup);
+		}
 	});
-	setting('groupmenu', onClickGroup, onDbClickGroup, groupMenu);
 });
 function hideGroupMenu(){
 	$('#groupname_menu').css('display','none');
@@ -116,7 +115,7 @@ function onDbClickGroup(event, treeId, treeNode) {
 /**
  *	初始化树
  */
-function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
+function setting(treeName, onClickFunction, onDblClickFunction) {
 	var setting = {
 		async : {
 			enable : true,
@@ -130,7 +129,7 @@ function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
 		}
 	};
 	console.log("-----"+treeName);
-	$("#" + treeName).tree(setting, rootNode);
+	$("#" + treeName).tree(setting);
 }
 /**
  *	机构选择节点点击前回调
