@@ -614,7 +614,7 @@ public class ComplatGroupController extends BaseController {
 		try{
 			String sId = request.getParameter("sId");
 			String[] para = sId.split(",");		
-			String fileName = new String("机构列表".getBytes(),"GB2312");
+			String fileName = "机构列表";
 			Map<String,Object> map = new HashMap<String,Object>(); 
 			List headList = new ArrayList();//表头数据  
 	        headList.add("机构名称");
