@@ -153,7 +153,10 @@ public class ComplatUserController extends BaseController {
 			// 点击完查询时组织机构名称回显
 			String groupName = request.getParameter("groupname");
 			model.addAttribute("groupName", groupName);
-
+			
+			String editGroupId = request.getParameter("editGroupId");
+			model.addAttribute("editGroupId1",editGroupId );
+			
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			logger.error("机构树打开失败：" + ex.getMessage());
@@ -181,7 +184,7 @@ public class ComplatUserController extends BaseController {
 			@RequestParam(value = "order.sort", defaultValue = "DESC") String orderSort,
 			@RequestParam(value = "findNowPage", defaultValue = "false") String findNowPage,
 			String orgId, Model model, ServletRequest request,
-			HttpServletRequest hrequest) {
+			HttpServletRequest hrequest,String editGroupId) {
 		try {
 			if (StringUtils.isNotBlank(request.getParameter("orderField"))) {
 				orderField = (String) request.getParameter("orderField");
@@ -189,7 +192,6 @@ public class ComplatUserController extends BaseController {
 			if (StringUtils.isNotBlank(request.getParameter("orderSort"))) {
 				orderSort = (String) request.getParameter("orderSort");
 			}
-
 			// 获取系统当前登录用户
 			SysUserSession sysUserSession = (SysUserSession) hrequest
 					.getSession().getAttribute("sysUserSession");
@@ -211,16 +213,20 @@ public class ComplatUserController extends BaseController {
 			// searchParams.put("EQ_groupid", deptId);
 			// }
 			// }
-			if (StringUtils.isNotBlank(orgId)) {
-				searchParams.put("EQ_groupid", orgId);
-				model.addAttribute("orgId", orgId);
-			} else {
-				if (searchParams.size() >= 1
-						&& searchParams.get("EQ_groupid") != null) {
-					model.addAttribute("orgId", searchParams.get("EQ_groupid"));
+			if(StringUtils.isNotBlank(editGroupId)){
+				searchParams.put("EQ_groupid", editGroupId);
+			}else{
+				if (StringUtils.isNotBlank(orgId)) {
+					searchParams.put("EQ_groupid", orgId);
+					model.addAttribute("orgId", orgId);
 				} else {
-					searchParams.put("EQ_groupid", deptId);
-					model.addAttribute("orgId", deptId);
+					if (searchParams.size() >= 1
+							&& searchParams.get("EQ_groupid") != null) {
+						model.addAttribute("orgId", searchParams.get("EQ_groupid"));
+					} else {
+						searchParams.put("EQ_groupid", deptId);
+						model.addAttribute("orgId", deptId);
+					}
 				}
 			}
 			Specification<ComplatUser> spec = super.toNewSpecification(
@@ -329,6 +335,9 @@ public class ComplatUserController extends BaseController {
 		SysUserSession sysUserSession = (SysUserSession) request.getSession()
 				.getAttribute("sysUserSession");
 		// Map<String, Object> resMap = new HashMap<String, Object>();
+		
+		//modify by yaoxi
+		ModelAndView mav = new ModelAndView("redirect:/complat/groupOrgTree");
 		try {
 			Integer userId = null;
 			String pwd;
@@ -448,12 +457,13 @@ public class ComplatUserController extends BaseController {
 				// else{
 				// returnMsg("error", "保存用户失败,登录名已经被占用", request);
 				// }
-
+				mav.addObject("editGroupId",complatUser.getGroupid());
 			}
 		} catch (Exception e) {
 			returnMsg("error", "保存用户失败！", request);
 		} finally {
-			return new ModelAndView("redirect:/complat/groupOrgTree");
+			//return new ModelAndView("redirect:/complat/groupOrgTree");
+			return mav;
 		}
 
 	}

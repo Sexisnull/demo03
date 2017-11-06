@@ -279,7 +279,7 @@
 							返回首页
 						</p>
 					</li>
-					<li class="speaker modify-msgs"   onclick="javascript:window.location.href='${ctx}/complat/userSetUpEdit?userMenu=2'">
+					<li class="speaker modify-msgs"   onclick="javascript:window.location.href='${ctx}/complat/userSetUpEdit?userMenu=2&isFront=1'">
 						<p>
 							账户设置
 						</p>

@@ -78,7 +78,7 @@
 		        		<tr>
 							<th>拒绝原因：</th>
 							<td style="width: 100%">
-				            	<textarea readonly="readonly" rows="8" cols="8" id="rejectReason" name="rejectReason" >
+				            	<textarea readonly="readonly" rows="8" cols="8" id="rejectReason" name="rejectReason" style= "word-break:break-all; ">
 				            		${complatCorporation.rejectReason}
 				            	</textarea>
 				            </td>
@@ -93,7 +93,14 @@
 			        <tr>
 			        	<th>组织机构代码：</th>
 						<td style="width: 100%">
-							<input readonly="readonly" type="text" id="orgNumber" name="orgNumber" value="${complatCorporation.orgNumber}"/>
+							<input readonly="readonly" type="text" id="orgNumber" name="orgNumber" 
+								<c:if test="${complatCorporation.orgNumber != null && complatCorporation.orgNumber != ''}">
+									value="${complatCorporation.orgNumber}"
+								</c:if>
+								<c:if test="${(complatCorporation.orgNumber == null || complatCorporation.orgNumber == '') && complatCorporation.type == 2}">
+									value="${complatCorporation.regNumber}"
+								</c:if>
+							/>
 						</td>
 					</tr>
 					<tr>
@@ -105,7 +112,7 @@
 					<tr style="display:none;" id="tr_reject">
 						<th>拒绝原因：</th>
 						<td style="width: 100%">
-						<textarea placeholder="请填写拒绝原因" rows="8" cols="8" name="rejectReason2"></textarea>
+						<textarea placeholder="请填写拒绝原因" rows="8" cols="8" name="rejectReason2" style= "word-break:break-all; "></textarea>
 						</td>
 					</tr>
 				</table>
