@@ -28,12 +28,12 @@
 .form-table th:first-child {
     padding-left: 0px;
 	width:130px;
-	
+
 }
 .form-table td {
     height: 32px;
     line-height: 32px;
-    white-space: nowrap;    
+    white-space: nowrap;
     padding: 2px 2px;
 }
 
@@ -57,9 +57,9 @@
 }
 .td_6 {
 	border-bottom : 1px solid #C6E6FF;
-}  
+}
 .td_7{
-   border-right : 1px solid #C6E6FF;  
+   border-right : 1px solid #C6E6FF;
 }
 #td_7{
    align:center;
@@ -69,30 +69,22 @@
    width:300px;
 }
 
-
-/*角色信息分区样式*/
-.role1,.role2{
-    border:1px solid #000;
-    margin:0px 40px 0px 40px;
-    width:200px;
-    height:300px;
-}
-
 </style>
 
 <script type="text/javascript">
 
 /*********************机构树开始************************/
 $(function(){
-	var groupMenu = [{"name":"单位选择","title":"单位选择","id":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
+	var groupMenu = [{"name":"单位选择","title":"单位选择","id":"0","isParent":true,"isDisabled":false,"open":true,"nocheck":false}];
 
 	$('#groupname').menu({
 		tree : 'groupmenu',
 		height : 200,
-		init : function() {
-			setting('groupmenu', onClickGroup, onDbClickGroup, groupMenu);
-		}
+//		init : function() {
+
+//		}
 	});
+	setting('groupmenu', onClickGroup, onDbClickGroup, groupMenu);
 });
 function hideGroupMenu(){
 	$('#groupname_menu').css('display','none');
@@ -139,7 +131,6 @@ function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
 	};
 	console.log("-----"+treeName);
 	$("#" + treeName).tree(setting, rootNode);
-//	$("#" + treeName).tree().refreshNode('');
 }
 /**
  *	机构选择节点点击前回调
