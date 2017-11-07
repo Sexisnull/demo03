@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -82,7 +83,7 @@ public class ComplatGroupController extends BaseController {
     //区域类型下拉选择集合
     private Map<Integer, Object> areatypeMap = new HashMap<Integer, Object>();
     
-    private String strWarn;
+    private String strWarn;//导入失败的提示语句
     
     
     @RequestMapping(value = "/groupOrgTree", method = RequestMethod.GET)
@@ -91,7 +92,6 @@ public class ComplatGroupController extends BaseController {
 		try {
 			// 获取系统当前登录用户
 			SysUserSession sysUserSession = (SysUserSession) hrequest.getSession().getAttribute("sysUserSession");
-			String deptId = sysUserSession.getDeptId();
 
 			//点击完查询时组织机构名称回显
 			String groupName = request.getParameter("groupname");
@@ -485,6 +485,7 @@ public class ComplatGroupController extends BaseController {
 	    fieldMap.put("9", "parentCode");
 	    fieldMap.put("10", "spec");
 	    List<ComplatGroup> group = ExcelUtil.readXls(fileName, multipartFile.getInputStream(), ComplatGroup.class, fieldMap);
+	    Collections.reverse(group);//倒序排列list，以便导入后数据顺序跟excel表格里的顺序一致
 	    
 		try {
 			if(importCheck(group, model, request, response)){

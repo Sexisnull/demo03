@@ -13,14 +13,12 @@
     <script type="text/javascript" src="${ctx}/res/plugin/uploadify/js/jquery.uploadify-3.1.js"></script>
     <script type="text/javascript" src="${ctx}/res/plugin/uploadify/js/uploadifyLang_zh.js"></script>
     <script type="text/javascript" src="${ctx}/res/plugin/ztree/js/jquery.ztree.all-3.5.min.js"></script>
-    <script type="text/javascript" src="${ctx}/res/plugin/uploadify/js/jquery.uploadify-3.1.min.js"></script>
     <script type="text/javascript" src="${ctx}/res/skin/login/js/tree.js"></script>
     <link type="text/css" rel="stylesheet" href="${ctx}/res/skin/login/css/menu.css" />
 	<script type="text/javascript" src="${ctx}/res/skin/login/js/menu.js"></script>
 	<link type="text/css" rel="stylesheet" href="${ctx}/res/jslib/ztree/css/zTreeStyle/zTreeStyle.css" />
 	<link type="text/css" rel="stylesheet" href="${ctx}/res/skin/login/css/tree.css" />
 	<script type="text/javascript" src="${ctx}/res/jslib/ztree/js/jquery.ztree.all-3.5.min.js"></script>
-
 
 <style type="text/css">
 
