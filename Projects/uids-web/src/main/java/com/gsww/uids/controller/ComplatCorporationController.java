@@ -407,8 +407,8 @@ public class ComplatCorporationController extends BaseController{
 	@SuppressWarnings("finally") 
 	@RequestMapping(value = "/corporationAuth", method = RequestMethod.POST)
 	public void corporationAuth(ComplatCorporation corporation,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
-		ComplatCorporation complatCorporation = new ComplatCorporation();
 		Map<String, Object> resMap = new HashMap<String, Object>();
+		ComplatCorporation complatCorporation = new ComplatCorporation();
 		try{
 			int type = 1;
 			String corporationType = StringUtils.trim((String) request.getParameter("corporUserType"));
@@ -433,7 +433,7 @@ public class ComplatCorporationController extends BaseController{
 				} else if (type == 0) {
 					complatCorporation.setisAuth(0);
 					complatCorporation.setauthState(2);
-					if (rejectReason2 != null) {
+					if (StringHelper.isNotBlack(rejectReason2)) {
 						complatCorporation.setrejectReason(rejectReason2);
 					}
 					complatCorporationService.save(complatCorporation);

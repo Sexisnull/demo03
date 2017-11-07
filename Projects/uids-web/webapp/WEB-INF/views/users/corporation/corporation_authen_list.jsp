@@ -74,7 +74,7 @@
     		</div>
 			<div id="form-content">
 	        	<table class="form-table">
-	        		<c:if test="${complatCorporation.rejectReason != null && complatCorporation.rejectReason != ''}">
+	        		<c:if test="${complatCorporation.rejectReason != null && complatCorporation.rejectReason != '' || complatCorporation.authState == 2}">
 		        		<tr>
 							<th>拒绝原因：</th>
 							<td style="width: 100%">

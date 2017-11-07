@@ -375,7 +375,7 @@ public class ComplatOutsideuserController extends BaseController {
 			} else if (type == 0) {
 				complatOutsideuser.setIsAuth(0);
 				complatOutsideuser.setAuthState(2);
-				if (rejectReason2 != null) {
+				if (StringHelper.isNotBlack(rejectReason2)) {
 					complatOutsideuser.setRejectReason(rejectReason2);
 				}
 				outsideUserService.save(complatOutsideuser);
