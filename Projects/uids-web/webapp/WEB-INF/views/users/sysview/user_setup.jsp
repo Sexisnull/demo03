@@ -39,7 +39,8 @@
 									cnRangelength : [ 0, 33 ]
 								},
 								pwd : {
-									required : true
+									required : true,
+									cnRangelength: [6,18]
 								},
 								confPwd : {
 									required : true,
@@ -51,9 +52,6 @@
 								},
 								mobile : {
 									isMobile : true
-								},
-								pwd : {
-									required : true
 								},
 								email : {
 									email : true
