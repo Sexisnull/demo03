@@ -312,7 +312,7 @@ public class ComplatUserController extends BaseController {
 			model.addAttribute("complatUser", complatUser);
 			this.extendsAttr(model, request, response);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return "users/complat/account_edit";
 	}
@@ -460,6 +460,7 @@ public class ComplatUserController extends BaseController {
 				mav.addObject("editGroupId",complatUser.getGroupid());
 			}
 		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
 			returnMsg("error", "保存用户失败！", request);
 		} finally {
 			//return new ModelAndView("redirect:/complat/groupOrgTree");
@@ -512,7 +513,7 @@ public class ComplatUserController extends BaseController {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 			returnMsg("error", "删除失败！", request);
 		} finally {
 			return new ModelAndView("redirect:/complat/complatList");
@@ -649,7 +650,7 @@ public class ComplatUserController extends BaseController {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 			returnMsg("error", "导入失败", request);
 		}
 	}
@@ -1028,8 +1029,8 @@ public class ComplatUserController extends BaseController {
 				managerIcon = "";
 			}
 			model.addAttribute("managerIcon", managerIcon);
-		} catch (Exception exception) {
-			exception.printStackTrace();
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
 		}
 		if ("1".equals(isFront)) {
 			return "users/sysview/frontIndex_user_setup";
@@ -1372,7 +1373,7 @@ public class ComplatUserController extends BaseController {
 				userMap.put(fieldName, fieldKey);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return userMap;
 	}
@@ -1449,7 +1450,7 @@ public class ComplatUserController extends BaseController {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} finally {
 			return new ModelAndView("redirect:/complat/complatList");
 		}
@@ -1484,7 +1485,7 @@ public class ComplatUserController extends BaseController {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} finally {
 			return new ModelAndView("redirect:/complat/complatList");
 		}
@@ -1520,7 +1521,7 @@ public class ComplatUserController extends BaseController {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} finally {
 			return new ModelAndView("redirect:/complat/complatList");
 		}
@@ -1553,7 +1554,7 @@ public class ComplatUserController extends BaseController {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} finally {
 			return new ModelAndView("redirect:/complat/complatList");
 		}
@@ -1732,8 +1733,8 @@ public class ComplatUserController extends BaseController {
 				jisSysviewService.save(jisSysview);
 				syncDetail(complatUser, jisApplication, jisSysview);
 			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
 		}
 	}
 
@@ -1798,8 +1799,8 @@ public class ComplatUserController extends BaseController {
 			jisSysviewDetail.setSendmsg(detail);
 			jisSysviewDetail.setTranscationId(sysView.getTranscationId());
 			jisSysviewDetailService.save(jisSysviewDetail);
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
 		}
 	}
 
