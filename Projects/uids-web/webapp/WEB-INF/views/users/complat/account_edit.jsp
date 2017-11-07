@@ -748,7 +748,7 @@ function checkAndSave() {
     <div class="form-btn">
     	<input type="button" tabindex="15" id="submit-btn" value="保存" class="btn bluegreen" onclick="checkAndSave();"/>
     	&nbsp;&nbsp;
-        <input type="button" tabindex="16" value="返回" onclick="javascript:window.location.href='${ctx}/complat/groupOrgTree?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}'" class="btn gray"/>
+        <input type="button" tabindex="16" value="返回" onclick="javascript:window.location.href='${ctx}/complat/groupOrgTree?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}&editGroupId=${complatUser.groupid}'" class="btn gray"/>
         
     </div>
     </form>

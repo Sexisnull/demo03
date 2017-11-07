@@ -486,14 +486,19 @@ public class ComplatUserController extends BaseController {
 			throws Exception {
 		SysUserSession sysUserSession = (SysUserSession) request.getSession()
 				.getAttribute("sysUserSession");
+		String sGroupId = "";
 		try {
 			String[] para = iid.split(",");
-			ComplatUser complatUser = null;
+			ComplatUser complatUser = new ComplatUser();
 			JisUserdetail jisUserdetail = null;
 			for (int i = 0; i < para.length; i++) {
 				// Integer corId = Integer.parseInt(para[i].trim());
 				Integer userId = Integer.parseInt(para[i].trim());
 				complatUser = complatUserService.findByKey(userId);
+				Integer groupId = complatUser.getGroupid();
+				if(groupId != null){
+					sGroupId = groupId.toString();
+				}
 				complatUser.setModifytime(Timestamp.valueOf(TimeHelper
 						.getCurrentTime()));// 修改时间
 				// 删除扩展属性
@@ -516,7 +521,7 @@ public class ComplatUserController extends BaseController {
 			logger.error(e.getMessage(), e);
 			returnMsg("error", "删除失败！", request);
 		} finally {
-			return new ModelAndView("redirect:/complat/complatList");
+			return new ModelAndView("redirect:/complat/complatList?editGroupId="+sGroupId);
 		}
 
 	}
@@ -1262,6 +1267,7 @@ public class ComplatUserController extends BaseController {
 			resMap.put("ret", "1");
 			resMap.put("msg", "保存失败！");
 			response.getWriter().write(JSONObject.toJSONString(resMap));
+			logger.error(e.getMessage(), e);
 		}
 
 	}
@@ -1392,6 +1398,7 @@ public class ComplatUserController extends BaseController {
 	@RequestMapping(value = "/startUserEnable", method = RequestMethod.GET)
 	public ModelAndView startUserEnable(String iid, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
+		String sGroupId = null;
 		try {
 			String[] para = iid.split(",");
 			ComplatUser complatUser = null;
@@ -1399,6 +1406,10 @@ public class ComplatUserController extends BaseController {
 				// Integer corId = Integer.parseInt(para[i].trim());
 				Integer userId = Integer.parseInt(para[i].trim());
 				complatUser = complatUserService.findByKey(userId);
+				Integer groupId = complatUser.getGroupid();
+				if(groupId != null){
+					sGroupId = groupId.toString();
+				}
 				if (complatUser.getEnable() == 0) {
 					complatUser.setEnable(1);
 					complatUser.setModifytime(Timestamp.valueOf(TimeHelper
@@ -1413,7 +1424,7 @@ public class ComplatUserController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			return new ModelAndView("redirect:/complat/complatList");
+			return new ModelAndView("redirect:/complat/complatList?editGroupId="+sGroupId);
 		}
 	}
 
@@ -1431,6 +1442,7 @@ public class ComplatUserController extends BaseController {
 	@RequestMapping(value = "/stopUserEnable", method = RequestMethod.GET)
 	public ModelAndView stopUserEnable(String iid, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
+		String sGroupId = "";
 		try {
 			String[] para = iid.split(",");
 			ComplatUser complatUser = null;
@@ -1438,6 +1450,10 @@ public class ComplatUserController extends BaseController {
 				// Integer corId = Integer.parseInt(para[i].trim());
 				Integer userId = Integer.parseInt(para[i].trim());
 				complatUser = complatUserService.findByKey(userId);
+				Integer groupId = complatUser.getGroupid();
+				if(groupId != null){
+					sGroupId = groupId.toString();
+				}
 				if (complatUser.getEnable() == 1) {
 					complatUser.setEnable(0);
 					complatUser.setModifytime(Timestamp.valueOf(TimeHelper
@@ -1452,7 +1468,7 @@ public class ComplatUserController extends BaseController {
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		} finally {
-			return new ModelAndView("redirect:/complat/complatList");
+			return new ModelAndView("redirect:/complat/complatList?editGroupId="+sGroupId);
 		}
 	}
 
