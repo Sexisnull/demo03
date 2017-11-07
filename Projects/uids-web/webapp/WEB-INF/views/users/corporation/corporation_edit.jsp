@@ -260,29 +260,33 @@ $().ready(function() {
 				return false;
 			}else{
 				if(regNumber.substring(0, 1) == '9' && regNumber.length == 18){
-				if(!isNumbOrLett(regNumber)){
-					$.dialog.alert("企业工商注册号由数字、字母和下划线组成，不能以下划线开头和结尾！");
-					return false;
-				}else{
-					$("#editForm").submit();
-				}
-			}else{
-				if(qyOrgNumber == null || qyOrgNumber == ""){
-					$.dialog.alert("请填写组织机构代码！");
-					return false;
-				}
-				if(qyOrgNumber.length != 10 || qyOrgNumber.substring(8, 9) != '-'){
-					$.dialog.alert("组织机构代码或统一社会信用代码填写错误，请重新填写！（组织机构代码需包含短横杠“-”）");
-					return false;
-				}else{
-					if(!isNumbOrLett2(qyOrgNumber)){
-						$.dialog.alert("组织机构代码由数字、字母、下划线和短横杠组成，不能以下划线开头和结尾！");
+					if(!isNumbOrLett(regNumber)){
+						$.dialog.alert("企业工商注册号由数字、字母和下划线组成，不能以下划线开头和结尾！");
 						return false;
 					}else{
 						$("#editForm").submit();
 					}
+				}else{
+					if(!isNumbOrLett(regNumber)){
+						$.dialog.alert("企业工商注册号由数字、字母和下划线组成，不能以下划线开头和结尾！");
+						return false;
+					}
+					if(qyOrgNumber == null || qyOrgNumber == ""){
+						$.dialog.alert("请填写组织机构代码！");
+						return false;
+					}
+					if(qyOrgNumber.length != 10 || qyOrgNumber.substring(8, 9) != '-'){
+						$.dialog.alert("组织机构代码或统一社会信用代码填写错误，请重新填写！（组织机构代码需包含短横杠“-”）");
+						return false;
+					}else{
+						if(!isNumbOrLett2(qyOrgNumber)){
+							$.dialog.alert("组织机构代码由数字、字母、下划线和短横杠组成，不能以下划线和短横杠(“-”)开头和结尾！");
+							return false;
+						}else{
+							$("#editForm").submit();
+						}
+					}
 				}
-			}
 			}
 			
 		}else{
@@ -298,7 +302,7 @@ $().ready(function() {
 					return false;
 				}else{
 					if(!isNumbOrLett2(fqyOrgNumber)){
-						$.dialog.alert("组织机构代码由数字、字母、下划线和短横杠组成，不能以下划线开头和结尾！");
+						$.dialog.alert("组织机构代码由数字、字母、下划线和短横杠组成，不能以下划线和短横杠(“-”)开头和结尾！");
 						return false;
 					}else{
 						$("#editForm").submit();
@@ -311,7 +315,7 @@ $().ready(function() {
 					return false;
 				}else{
 					if(!isNumbOrLett(fqyOrgNumber)){
-						$.dialog.alert("组织机构代码由数字、字母和下划线组成，不能以下划线开头和结尾！");
+						$.dialog.alert("企业工商注册号由数字、字母和下划线组成，不能以下划线开头和结尾！");
 						return false;
 					}else{
 						$("#editForm").submit();
@@ -363,7 +367,7 @@ $().ready(function() {
 	}
 	
 	function isNumbOrLett2( s ){
-		var regu = /^(?!_)(?!.*?_$)[a-zA-Z0-9_-]+$/;
+		var regu = /^(?!_)(?!.*?_$)(?!-)(?!.*?-$)[a-zA-Z0-9_-]+$/;
 		var re = new RegExp(regu);
 		if (re.test(s)) {
 			return true;
