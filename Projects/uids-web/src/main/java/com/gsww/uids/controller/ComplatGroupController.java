@@ -88,15 +88,21 @@ public class ComplatGroupController extends BaseController {
     
     @RequestMapping(value = "/groupOrgTree", method = RequestMethod.GET)
 	public String complatList(
-			Model model, ServletRequest request, HttpServletRequest hrequest) {
+			String jumpId,Model model, ServletRequest request, HttpServletRequest hrequest) {
 		try {
 			// 获取系统当前登录用户
 			SysUserSession sysUserSession = (SysUserSession) hrequest.getSession().getAttribute("sysUserSession");
-
+			String deptId = sysUserSession.getDeptId();
 			//点击完查询时组织机构名称回显
 			String groupName = request.getParameter("groupname");
 			model.addAttribute("groupName", groupName);
-			
+			//获取跳转时的id
+			if(StringUtils.isNotBlank(jumpId)){
+				model.addAttribute("jumpId", jumpId);
+			}else{
+				String backId = request.getParameter("backId");
+				model.addAttribute("jumpId", backId);
+			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			logger.error("机构树打开失败：" + ex.getMessage());
@@ -122,7 +128,7 @@ public class ComplatGroupController extends BaseController {
                                    @RequestParam(value = "order.field", defaultValue = "createtime") String orderField,
                                    @RequestParam(value = "order.sort", defaultValue = "DESC") String orderSort,
                                    @RequestParam(value = "findNowPage", defaultValue = "false") String findNowPage,
-                                   String orgId,Model model, ServletRequest request, HttpServletRequest hrequest) {
+                                   String orgId,String jumpId,Model model, ServletRequest request, HttpServletRequest hrequest) {
         try {
             if (StringUtils.isNotBlank(request.getParameter("orderField"))) {
                 orderField = (String) request.getParameter("orderField");
@@ -141,15 +147,19 @@ public class ComplatGroupController extends BaseController {
 
             //搜索属性初始化
 			Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
-			if (StringUtils.isNotBlank(orgId)) {
-				searchParams.put("EQ_pid", orgId);
-				model.addAttribute("orgId", orgId);
+			if(StringUtils.isNotBlank(jumpId)){//保存，删除，编辑，返回页面跳转
+				searchParams.put("EQ_pid", jumpId);
 			}else{
-				if(searchParams.size()>=1&&searchParams.get("EQ_pid") != null){
-					model.addAttribute("orgId", searchParams.get("EQ_pid"));
+				if (StringUtils.isNotBlank(orgId)) {
+					searchParams.put("EQ_pid", orgId);
+					model.addAttribute("orgId", orgId);
 				}else{
-					searchParams.put("EQ_pid", deptId);
-					model.addAttribute("orgId", deptId);
+					if(searchParams.size()>=1&&searchParams.get("EQ_pid") != null){
+						model.addAttribute("orgId", searchParams.get("EQ_pid"));
+					}else{
+						searchParams.put("EQ_pid", deptId);
+						model.addAttribute("orgId", deptId);
+					}
 				}
 			}
 			Specification<ComplatGroup>  spec=super.toSpecification(searchParams, ComplatGroup.class);
@@ -395,7 +405,11 @@ public class ComplatGroupController extends BaseController {
 			e.printStackTrace();
 			returnMsg("error","保存失败",request);
 		}
-		return  new ModelAndView("redirect:/uids/groupOrgTree");
+		if(StringUtils.isNotBlank(iid)){
+			return  new ModelAndView("redirect:/uids/groupOrgTree?jumpId="+String.valueOf(complatGroup.getPid()));
+		}else{
+			return  new ModelAndView("redirect:/uids/groupOrgTree?jumpId="+request.getParameter("groupid"));
+		}
 	}
 	/**
 	 * 删除用户信息
@@ -403,6 +417,7 @@ public class ComplatGroupController extends BaseController {
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/complatgroupDelete", method = RequestMethod.GET)
 	public ModelAndView complatgroupDelete(String iid,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+		Integer pId = complatGroupService.findByIid(Integer.valueOf(iid)).getPid();
 		try {
 			String[] para=iid.split(",");
 			ComplatGroup complatGroup = null;
@@ -434,7 +449,7 @@ public class ComplatGroupController extends BaseController {
 			e.printStackTrace();
 			returnMsg("error", "删除失败",request);			
 		} finally{
-			return  new ModelAndView("redirect:/uids/groupOrgTree");
+			return  new ModelAndView("redirect:/uids/groupOrgTree?jumpId="+String.valueOf(pId));
 		}
 		
 	}

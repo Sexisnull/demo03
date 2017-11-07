@@ -322,7 +322,7 @@ jQuery.validator.addMethod("isName", function(value, element) {
     <div class="form-btn">
     	<input type="submit" tabindex="15" id="submit-btn" value="保存" class="btn bluegreen"/>
     	&nbsp;&nbsp;
-        <input type="button" tabindex="16" value="返回" onclick="javascript:window.history.back()" class="btn gray"/>
+        <input type="button" tabindex="16" value="返回" onclick="javascript:window.location.href='${ctx}/uids/groupOrgTree?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}&backId=${complatGroup.pid}'" class="btn gray"/>
 
     </div>
     </form>
