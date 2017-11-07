@@ -346,13 +346,13 @@ public class ComplatCorporationController extends BaseController{
 				if(enable == 0){
 					complatCorporation.setEnable(1);
 					complatCorporationService.save(complatCorporation);
-					returnMsg("success", "启用成功！", request);				
+					returnMsg("success", "账号开启成功！", request);				
 				} else {
-					returnMsg("success", "账号已启用！", request);
+					returnMsg("success", "账号已开启！", request);
 				}
 			}
 		}catch(Exception e){
-			returnMsg("error", "账号启用失败！", request);
+			returnMsg("error", "账号开启失败！", request);
 			logger.error(e.getMessage(), e);
 
 		}finally{
@@ -381,7 +381,7 @@ public class ComplatCorporationController extends BaseController{
 				if(enable == 1){
 					complatCorporation.setEnable(0);
 					complatCorporationService.save(complatCorporation);
-					returnMsg("success", "关闭成功！", request);				
+					returnMsg("success", "账号关闭成功！", request);				
 				} else {
 					returnMsg("success", "账号已关闭！", request);
 				}
