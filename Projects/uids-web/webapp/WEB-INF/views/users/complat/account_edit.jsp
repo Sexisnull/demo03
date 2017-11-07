@@ -80,10 +80,11 @@ $(function(){
 	$('#groupname').menu({
 		tree : 'groupmenu',
 		height : 200,
-		init : function() {
-			setting('groupmenu', onClickGroup, onDbClickGroup);
-		}
+//		init : function() {
+//
+//		}
 	});
+    setting('groupmenu', onClickGroup, onDbClickGroup);
 });
 function hideGroupMenu(){
 	$('#groupname_menu').css('display','none');
