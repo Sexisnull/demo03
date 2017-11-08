@@ -521,6 +521,8 @@ color: rgb(119, 119, 119);
 					</c:if>
 				/>
 			</td>
+			<td><input type="hidden"></td>
+			<td><input type="hidden"></td>
 		</tr>
 		<tr>
 			<td class="td_2" rowspan="4" tyle="max-width:0px;width:100px;ont-weight:bold;" align="center">账户信息</td>

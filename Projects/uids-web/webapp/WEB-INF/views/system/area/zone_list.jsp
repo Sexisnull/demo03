@@ -35,9 +35,9 @@ $().ready(function() {
 
 	//区域编码校验
 	jQuery.validator.addMethod("isRegionCode1", function(value, element) { 
-           var corporName = /^[0-9]*$/;   
+           var corporName = /^[0-9]{1,32}$/;   
            return this.optional(element) || (corporName.test(value));     
-    }, "区域编码只能由数字组成");
+    }, "区域编码只能由数字组成且长度不能超过32位");
 });
 </script>
 
@@ -439,6 +439,11 @@ background: #249bf3;color: #fff;border: 1px solid #249BF3;}
 			</li>
     	</ol>
     </div>
+     <!-- 提示信息开始 -->
+		<div class="form-alert;">
+			<tags:message msgMap="${msgMap}"></tags:message>
+		</div>
+	<!-- 提示信息结束 -->
     <!--左侧树形结构-->
     <div id="tablelist">
     <table class="tablelist" style="width:300px;float:left;min-width:0px;">

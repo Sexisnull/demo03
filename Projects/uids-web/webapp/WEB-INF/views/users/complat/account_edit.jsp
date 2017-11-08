@@ -79,7 +79,7 @@ $(function(){
 
 	$('#groupname').menu({
 		tree : 'groupmenu',
-		height : 200,
+		height : 200
 //		init : function() {
 //
 //		}
@@ -207,8 +207,8 @@ var complatUserNameInput=$("#name").val();
 	   	 address:{
 	   	 	   required: true,
 				   /* isAddressInfo:true, */
-		   		 cnRangelength: [0,127],
-		   		 isAddress: true
+		   		 cnRangelength: [0,127]
+		   		 //isAddress: true
 		   	},
 		   post:{
 				  /* isEmail：true, */
@@ -229,12 +229,12 @@ var complatUserNameInput=$("#name").val();
 	   
 	     pwdquestion : {
 	     	  required: true,
-			    cnRangelength: [0,127],
+			    cnRangelength: [0,127]
 			    //isName : true
 		   },
 	     pwdanswer : {
 	     	  required: true,
-			    cnRangelength: [0,127],
+			    cnRangelength: [0,127]
 			    //isName : true
 	     },
 	     cardid : {
@@ -342,7 +342,7 @@ var complatUserNameInput=$("#name").val();
      jQuery.validator.addMethod("isAddress", function(value, element) { 
            var corporName = /^(?=.*?[\u4E00-\u9FA5])[\dA-Za-z\u4E00-\u9FA5]/;   
            return this.optional(element) || (corporName.test(value));     
-    }, "地址由汉字，字母和数字构成"); 
+    }, "地址由汉字、字母和数字构成"); 
     //手机号
     jQuery.validator.addMethod("isMyPhone", function(value, element) { 
            var corporName = /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/;   
