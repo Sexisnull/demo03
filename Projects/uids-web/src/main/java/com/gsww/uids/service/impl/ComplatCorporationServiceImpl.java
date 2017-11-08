@@ -240,7 +240,15 @@ public class ComplatCorporationServiceImpl implements ComplatCorporationService{
 	@Override
 	public Integer checkUnique(String loginName, String regNumber, String orgNumber)
 			throws Exception {
-		String sql = "select count(1) from Complat_Corporation t where t.loginname = '"+loginName+"' and t.regnumber = '"+regNumber+"' and t.orgnumber='"+orgNumber+"'";
+		String sql = "";
+		if(StringHelper.isNotBlack(orgNumber) && StringHelper.isNotBlack(regNumber)){
+			sql = "select count(1) from Complat_Corporation t where t.loginname = '"+loginName+"' and t.regnumber = '"+regNumber+"' and t.orgnumber='"+orgNumber+"'";
+		}else if(!StringHelper.isNotBlack(regNumber)){
+			sql = "select count(1) from Complat_Corporation t where t.loginname = '"+loginName+"' and t.orgnumber='"+orgNumber+"'";
+		}else{
+			sql = "select count(1) from Complat_Corporation t where t.loginname = '"+loginName+"' and t.regnumber = '"+regNumber+"'";
+		}
+		
 		Integer countData = jdbcTemplate.queryForObject(sql, Integer.class);
 		return countData;
 	}
