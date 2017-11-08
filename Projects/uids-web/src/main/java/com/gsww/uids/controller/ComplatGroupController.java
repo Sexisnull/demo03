@@ -348,7 +348,6 @@ public class ComplatGroupController extends BaseController {
 	/**
 	 * 保存用户信息
 	 */
-	@SuppressWarnings("finally")
 	@RequestMapping(value = "/complatgroupSave", method = RequestMethod.POST)
 	public ModelAndView complatgroupSave(String iid,ComplatGroup complatGroup,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		try {
@@ -414,10 +413,9 @@ public class ComplatGroupController extends BaseController {
 	/**
 	 * 删除用户信息
 	 */
-	@SuppressWarnings("finally")
 	@RequestMapping(value = "/complatgroupDelete", method = RequestMethod.GET)
 	public ModelAndView complatgroupDelete(String iid,HttpServletRequest request,HttpServletResponse response)  throws Exception {
-		Integer pId = complatGroupService.findByIid(Integer.valueOf(iid)).getPid();
+		Integer pId = null;
 		try {
 			String[] para=iid.split(",");
 			ComplatGroup complatGroup = null;
@@ -425,6 +423,7 @@ public class ComplatGroupController extends BaseController {
 			for(int i=0;i<para.length;i++){
 				String mId = para[i].trim();
 				complatGroup = complatGroupService.findByIid(Integer.valueOf(mId));
+				pId = complatGroup.getPid();
 				complatGroup.setOpersign(3);//将操作状态位改为3
 				complatGroup.setModifytime(Timestamp.valueOf(TimeHelper.getCurrentTime()));//保存删除时间在同步时使用
 				complatGroup = complatGroupService.save(complatGroup);
@@ -448,10 +447,8 @@ public class ComplatGroupController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			returnMsg("error", "删除失败",request);			
-		} finally{
-			return  new ModelAndView("redirect:/uids/groupOrgTree?jumpId="+String.valueOf(pId));
-		}
-		
+		} 
+		return  new ModelAndView("redirect:/uids/groupOrgTree?jumpId="+String.valueOf(pId));
 	}
 	
 	/**
