@@ -295,10 +295,14 @@ $().ready(function() {
 					$.dialog.alert("请填写组织机构代码！");
 					return false;
 			}
+			if(fqyOrgNumber.length > 18){
+				$.dialog.alert("组织机构代码长度最多为18位！");
+				return false;
+			}
 			if (fqyOrgNumber.indexOf("-") != -1) {
 				$("#fqyOrgNumber").attr("name", "fqyOrgNumber");
 				if (fqyOrgNumber.length != 10 || fqyOrgNumber.substring(8, 9) != '-') {
-					$.dialog.alert("组织机构代码或统一社会信用代码填写错误，请重新填写！（组织机构代码需包含短横杠“-”）");
+					$.dialog.alert("组织机构代码填写错误，请重新填写！（组织机构代码需包含短横杠“-”）");
 					return false;
 				}else{
 					if(!isNumbOrLett2(fqyOrgNumber)){
@@ -311,11 +315,11 @@ $().ready(function() {
 			}else{
 				$("#fqyOrgNumber").attr("name", "regNumber");
 				if ( fqyOrgNumber.length != 18) {
-					$.dialog.alert("组织机构代码或统一社会信用代码填写错误，请重新填写！（组织机构代码需包含短横杠“-”）");
+					$.dialog.alert("组织机构代码填写错误，请重新填写！（组织机构代码需包含短横杠“-”）");
 					return false;
 				}else{
 					if(!isNumbOrLett(fqyOrgNumber)){
-						$.dialog.alert("企业工商注册号由数字、字母和下划线组成，不能以下划线开头和结尾！");
+						$.dialog.alert("组织机构代码由数字、字母和下划线组成，不能以下划线开头和结尾！");
 						return false;
 					}else{
 						$("#editForm").submit();
