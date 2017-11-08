@@ -483,23 +483,22 @@ public class ComplatGroupController extends BaseController {
 	 */
 	@RequestMapping(value = "/complatgroupImport", method = RequestMethod.POST)
 	public void complatgroupImport(@RequestParam("files")MultipartFile multipartFile,HttpServletRequest request,Model model,HttpServletResponse response) throws Exception {				      
-		String fileName = multipartFile.getOriginalFilename();	
-		LinkedHashMap<String, String> fieldMap = new LinkedHashMap<String, String>();
-		fieldMap.put("0", "name");
-	    fieldMap.put("1", "strNodeType");
-	    fieldMap.put("2", "suffix");
-	    fieldMap.put("3", "groupallname");
-	    fieldMap.put("4", "orgcode");
-	    fieldMap.put("5", "strAreaType");
-	    fieldMap.put("6", "areacode");
-	    fieldMap.put("7", "strIsCombine");
-	    fieldMap.put("8", "parentName");
-	    fieldMap.put("9", "parentCode");
-	    fieldMap.put("10", "spec");
-	    List<ComplatGroup> group = ExcelUtil.readXls(fileName, multipartFile.getInputStream(), ComplatGroup.class, fieldMap);
-	    Collections.reverse(group);//倒序排列list，以便导入后数据顺序跟excel表格里的顺序一致
-	    
 		try {
+			String fileName = multipartFile.getOriginalFilename();	
+			LinkedHashMap<String, String> fieldMap = new LinkedHashMap<String, String>();
+			fieldMap.put("0", "name");
+		    fieldMap.put("1", "strNodeType");
+		    fieldMap.put("2", "suffix");
+		    fieldMap.put("3", "groupallname");
+		    fieldMap.put("4", "orgcode");
+		    fieldMap.put("5", "strAreaType");
+		    fieldMap.put("6", "areacode");
+		    fieldMap.put("7", "strIsCombine");
+		    fieldMap.put("8", "parentName");
+		    fieldMap.put("9", "parentCode");
+		    fieldMap.put("10", "spec");
+			List<ComplatGroup> group = ExcelUtil.readXls(fileName, multipartFile.getInputStream(), ComplatGroup.class, fieldMap);
+		    Collections.reverse(group);//倒序排列list，以便导入后数据顺序跟excel表格里的顺序一致
 			if(importCheck(group, model, request, response)){
 				for (ComplatGroup complatGroup : group) {
 					if (complatGroup.getStrNodeType().equals("区域")) {
