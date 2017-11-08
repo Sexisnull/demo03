@@ -118,7 +118,7 @@ public class JisApplicationServiceImpl implements JisApplicationService {
 		}
 		ids = ids.substring(0,ids.length()-2);
 		String netType= jisSetting.getNetType();
-		String selApp = "select iid,name,icon,userdefined,logintype from jis_application where isshow=1 and nettype="+netType+" and iid in ("+ids+")";
+		String selApp = "select iid,name,icon,userdefined,logintype,ssourl from jis_application where isshow=1 and nettype="+netType+" and iid in ("+ids+")";
 		
 		return jdbcTemplate.queryForList(selApp);
 	}

@@ -119,13 +119,15 @@
 										<li>
 											<input type="hidden" name="iid" value="${app.iid }"/>
 											<div style='width: 450px; height: 110px; padding-left: 30px;'>
-												<img style='cursor: pointer; float: left;' id="img1" name="img1" src='${ctx}${app.icon}' onclick='singleLogin(${app.iid})' title='${app.name}' width='92' height='92' />
-												<ul>
-													<h4 title='${app.name }' style='cursor: pointer' onclick='singleLogin(${app.iid})'>
-														${app.name }
-													</h4>
-													<p style='padding-right: 20px' title=''></p>
-												</ul>
+												<a target="_blank" href="${app.ssourl}">
+													<img style='cursor: pointer; float: left;' id="img1" name="img1" src='${ctx}${app.icon}' title='${app.name}' width='92' height='92' />
+													<ul>
+														<h4 title='${app.name }' style='cursor: pointer'>
+															${app.name }
+														</h4>
+														<p style='padding-right: 20px' title=''></p>
+													</ul>
+												</a>
 											</div>
 										</li>
 										</c:forEach>
