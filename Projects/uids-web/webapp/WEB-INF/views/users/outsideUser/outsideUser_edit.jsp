@@ -226,16 +226,16 @@ color: rgb(119, 119, 119);
 				<a href="${ctx}/backIndex" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
-			<li>
-				<a>公网用户</a>
-			</li>
-			<li class="split"></li>
-			<li>
-				<a>个人用户</a>
+			<li class="active">
+				公网用户
 			</li>
 			<li class="split"></li>
 			<li class="active">
-				<a class="last-position"><c:if test="${empty outsideUser.iid}">用户新增</c:if><c:if test="${not empty outsideUser.iid}">用户编辑</c:if></a>
+				个人用户
+			</li>
+			<li class="split"></li>
+			<li class="active">
+				<c:if test="${empty outsideUser.iid}">用户新增</c:if><c:if test="${not empty outsideUser.iid}">用户编辑</c:if>
 			</li>
    		</ol>
     </div>

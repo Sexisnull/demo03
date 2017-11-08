@@ -37,7 +37,8 @@
 									cnRangelength : [ 0, 33 ]
 								},
 								pwd : {
-									required : true
+									required : true,
+									cnRangelength: [6,18]
 								},
 								confPwd : {
 									required : true,
@@ -49,9 +50,6 @@
 								},
 								mobile : {
 									isMobile : true
-								},
-								pwd : {
-									required : true
 								},
 								email : {
 									email : true
@@ -279,7 +277,7 @@
 							返回首页
 						</p>
 					</li>
-					<li class="speaker modify-msgs"   onclick="javascript:window.location.href='${ctx}/complat/userSetUpEdit?userMenu=2'">
+					<li class="speaker modify-msgs"   onclick="javascript:window.location.href='${ctx}/complat/userSetUpEdit?userMenu=2&isFront=1'">
 						<p>
 							账户设置
 						</p>
@@ -313,10 +311,9 @@
 					<a href="${ctx}/frontIndex" target="_top">首页</a>
 				</li>
 				<li class="split"></li>
-				<li>
-					<a>账户设置</a>
+				<li class="active">
+					账户设置
 				</li>
-				<li class="split"></li>
 			</ol>
 		</div>
 		<!--表单的标题区域-->
@@ -340,7 +337,7 @@
 								value="${complatUser.name}" maxlength="33" />
 						</td>
 						<th>
-							登录名：
+							<b class="mustbe">*</b>登录名：
 						</th>
 						<td>
 							<input type="text" id="loginname" name="loginname"
@@ -350,7 +347,7 @@
 					</tr>
 					<tr>
 						<th>
-							密码：
+							<b class="mustbe">*</b>密码：
 						</th>
 						<td>
 							<input type="password" id="pwd" name="pwd" value="${pwd}"
@@ -399,7 +396,7 @@
 					</tr>
 					<tr>
 						<th>
-							重复密码：
+							<b class="mustbe">*</b>重复密码：
 						</th>
 						<td>
 							<input type="password" name="confPwd" id="confPwd" value="${pwd}">

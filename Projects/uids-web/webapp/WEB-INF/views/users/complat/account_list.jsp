@@ -574,19 +574,19 @@ function resetform() {
 											   type="checkbox" class="check_btn" style="display: none;" />
 									</div>
 								</th>
-								<th width="10%" style="text-align: center;">
+								<th width="15%" style="text-align: center;">
 									姓名
 								</th>
 								<th width="15%" style="text-align: center;">
 									登录名
 								</th>
-								<th width="20%" style="text-align: center;">
-									登录全名
-								</th>
 								<th width="15%" style="text-align: center;">
+									登录名全称
+								</th>
+								<th width="20%" style="text-align: center;">
 									所属机构
 								</th>
-								<th width="15%" class="alignL" style="text-align: center;">
+								<th width="10%" class="alignL" style="text-align: center;">
 									用户职务
 								</th>
 								<th width="15%" style="text-align: center;">
@@ -615,27 +615,52 @@ function resetform() {
 									</td>
 									<td style="text-align: center;">
 										<div title="${complatUser.name}" class="word_break">
-												${complatUser.name}
+												<c:if test="${fn:length(complatUser.name)>=7}">
+									         ${fn:substring(complatUser.name,0,7)}...
+								        </c:if>
+								        <c:if test="${fn:length(complatUser.name)<7}">
+									         ${complatUser.name}&nbsp;
+								        </c:if> 
 										</div>
 									</td>
 									<td style="text-align: center;">
 										<div title="${complatUser.loginname}" class="word_break">
-												${complatUser.loginname}
+											  <c:if test="${fn:length(complatUser.loginname)>=15}">
+									         ${fn:substring(complatUser.loginname,0,15)}...
+								        </c:if>
+								        <c:if test="${fn:length(complatUser.loginname)<15}">
+									         ${complatUser.loginname}&nbsp;
+								        </c:if>
 										</div>
 									</td>
 									<td style="text-align: center;">
 										<div title="${complatUser.loginallname}" class="word_break">
-												${complatUser.loginallname}
+												<c:if test="${fn:length(complatUser.loginallname)>=20}">
+									         ${fn:substring(complatUser.loginallname,0,20)}...
+								        </c:if>
+								        <c:if test="${fn:length(complatUser.loginallname)<20}">
+									         ${complatUser.loginallname}&nbsp;
+								        </c:if>
 										</div>
 									</td>
 									<td style="text-align: center;">
 										<div class="word_break">
-												${groupMap[complatUser.groupid]}
+											  <c:if test="${fn:length(groupMap[complatUser.groupid])>=15}">
+									         ${fn:substring(groupMap[complatUser.groupid],0,20)}...
+								        </c:if>
+								        <c:if test="${fn:length(groupMap[complatUser.groupid])<15}">
+									         ${groupMap[complatUser.groupid]}&nbsp;
+								        </c:if>
 										</div>
 									</td>
 									<td style="text-align: center;">
 										<div class="word_break">
-												${complatUser.headship}
+											  <c:if test="${fn:length(complatUser.headship)>=10}">
+									         ${fn:substring(complatUser.headship,0,20)}...
+								        </c:if>
+								        <c:if test="${fn:length(complatUser.headship)<10}">
+									         ${complatUser.headship}&nbsp;
+								        </c:if>
 										</div>
 									</td>
 									<td style="text-align: center;">

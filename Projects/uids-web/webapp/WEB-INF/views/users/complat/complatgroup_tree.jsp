@@ -28,12 +28,12 @@
 						<a href="${ctx}/backIndex" target="_top">首页</a>
 					</li>
 					<li class="split"></li>
-					<li>
-						<a>机构管理</a>
+					<li class="active">
+						机构管理
 					</li>
 					<li class="split"></li>
 					<li class="active">
-						<a>机构管理</a>
+						机构列表
 					</li>
 				</ol>
 			</div>
@@ -54,7 +54,7 @@
 			</div>
 			<!--右侧表单结构-->
 			<div style="width:78%; height:600px; float:left;">
-				<iframe id="main1" src="${ctx}/uids/complatgroupList" class="ui-layout-center" frameborder="0" height="100%" width="100%" name="iframe" scrolling="yes">
+				<iframe id="main1" src="${ctx}/uids/complatgroupList?jumpId=${jumpId}" class="ui-layout-center" frameborder="0" height="100%" width="100%" name="iframe" scrolling="yes">
 
 				</iframe>
 

@@ -13,14 +13,12 @@
     <script type="text/javascript" src="${ctx}/res/plugin/uploadify/js/jquery.uploadify-3.1.js"></script>
     <script type="text/javascript" src="${ctx}/res/plugin/uploadify/js/uploadifyLang_zh.js"></script>
     <script type="text/javascript" src="${ctx}/res/plugin/ztree/js/jquery.ztree.all-3.5.min.js"></script>
-    <script type="text/javascript" src="${ctx}/res/plugin/uploadify/js/jquery.uploadify-3.1.min.js"></script>
     <script type="text/javascript" src="${ctx}/res/skin/login/js/tree.js"></script>
     <link type="text/css" rel="stylesheet" href="${ctx}/res/skin/login/css/menu.css" />
 	<script type="text/javascript" src="${ctx}/res/skin/login/js/menu.js"></script>
 	<link type="text/css" rel="stylesheet" href="${ctx}/res/jslib/ztree/css/zTreeStyle/zTreeStyle.css" />
 	<link type="text/css" rel="stylesheet" href="${ctx}/res/skin/login/css/tree.css" />
 	<script type="text/javascript" src="${ctx}/res/jslib/ztree/js/jquery.ztree.all-3.5.min.js"></script>
-
 
 <style type="text/css">
 
@@ -73,26 +71,55 @@ $(document).ready(function(){
         fileTypeExts : '*.xls;*.xlsx',//允许上传的文件类型           
         'removeCompleted':true,
         'onUploadComplete' : function(file) {
-        	W.parent.location.href = "${ctx}/uids/groupOrgTree?msg=success";
+            $.ajax({
+				 type: "POST",
+				 url: "${ctx}/uids/importWarn",
+				 dataType: 'text',
+				 async:false,
+				 success: function (data) {
+				 if (data != "" && data != null) {
+					 hidden();
+					 show(data);				 
+				 }else {
+				     W.parent.location.href = "${ctx}/uids/groupOrgTree";
+				 }
+				}
+             });
+//         	W.parent.location.href = "${ctx}/uids/groupOrgTree?msg=success";
             //上传队列全部完成后执行的回调函数    
          }
     });
 });
 
+function hidden(){
+document.getElementById("import").style.display="none";
+//alert(document.getElementById("div").style.display)
+}
+
+function show(data){
+document.getElementById("showWarn").style.display="block";
+//先创建一个文本节点
+var textNode = document.createTextNode(data);
+//获取div对象
+var divNode = document.getElementById("showWarn");
+//给div添加文本元素
+divNode.appendChild(textNode);
+}
 </script>
 
 </head>
 <body>
 
 	<!-- 导入用户的弹出层 -->
-			<div class="Popup">
-				<!-- 隐藏div -->				
+			<div class="Popup" id="import" name="import">			
 				<div class="Popup_cen">
 				    <ul class="mainInput">
 				        <li style="float:left;"><input type="button" class="btnImport" value="模板下载" onclick="downloadTemplate()"/></li>
 				        <li style="float:left;"><input type="file" id="file_upload" name="file_upload" class="uploadify"></li>
 				    </ul>					
 				</div>
+			</div>
+			<div id="showWarn" name="showWarn" style="display: none"></div>
 
 </body>
 </html>

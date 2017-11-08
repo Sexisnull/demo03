@@ -153,7 +153,10 @@ public class ComplatUserController extends BaseController {
 			// 点击完查询时组织机构名称回显
 			String groupName = request.getParameter("groupname");
 			model.addAttribute("groupName", groupName);
-
+			
+			String editGroupId = request.getParameter("editGroupId");
+			model.addAttribute("editGroupId1",editGroupId );
+			
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			logger.error("机构树打开失败：" + ex.getMessage());
@@ -181,7 +184,7 @@ public class ComplatUserController extends BaseController {
 			@RequestParam(value = "order.sort", defaultValue = "DESC") String orderSort,
 			@RequestParam(value = "findNowPage", defaultValue = "false") String findNowPage,
 			String orgId, Model model, ServletRequest request,
-			HttpServletRequest hrequest) {
+			HttpServletRequest hrequest,String editGroupId) {
 		try {
 			if (StringUtils.isNotBlank(request.getParameter("orderField"))) {
 				orderField = (String) request.getParameter("orderField");
@@ -189,7 +192,6 @@ public class ComplatUserController extends BaseController {
 			if (StringUtils.isNotBlank(request.getParameter("orderSort"))) {
 				orderSort = (String) request.getParameter("orderSort");
 			}
-
 			// 获取系统当前登录用户
 			SysUserSession sysUserSession = (SysUserSession) hrequest
 					.getSession().getAttribute("sysUserSession");
@@ -211,16 +213,20 @@ public class ComplatUserController extends BaseController {
 			// searchParams.put("EQ_groupid", deptId);
 			// }
 			// }
-			if (StringUtils.isNotBlank(orgId)) {
-				searchParams.put("EQ_groupid", orgId);
-				model.addAttribute("orgId", orgId);
-			} else {
-				if (searchParams.size() >= 1
-						&& searchParams.get("EQ_groupid") != null) {
-					model.addAttribute("orgId", searchParams.get("EQ_groupid"));
+			if(StringUtils.isNotBlank(editGroupId)){
+				searchParams.put("EQ_groupid", editGroupId);
+			}else{
+				if (StringUtils.isNotBlank(orgId)) {
+					searchParams.put("EQ_groupid", orgId);
+					model.addAttribute("orgId", orgId);
 				} else {
-					searchParams.put("EQ_groupid", deptId);
-					model.addAttribute("orgId", deptId);
+					if (searchParams.size() >= 1
+							&& searchParams.get("EQ_groupid") != null) {
+						model.addAttribute("orgId", searchParams.get("EQ_groupid"));
+					} else {
+						searchParams.put("EQ_groupid", deptId);
+						model.addAttribute("orgId", deptId);
+					}
 				}
 			}
 			Specification<ComplatUser> spec = super.toNewSpecification(
@@ -306,7 +312,7 @@ public class ComplatUserController extends BaseController {
 			model.addAttribute("complatUser", complatUser);
 			this.extendsAttr(model, request, response);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return "users/complat/account_edit";
 	}
@@ -329,6 +335,9 @@ public class ComplatUserController extends BaseController {
 		SysUserSession sysUserSession = (SysUserSession) request.getSession()
 				.getAttribute("sysUserSession");
 		// Map<String, Object> resMap = new HashMap<String, Object>();
+		
+		//modify by yaoxi
+		ModelAndView mav = new ModelAndView("redirect:/complat/groupOrgTree");
 		try {
 			Integer userId = null;
 			String pwd;
@@ -339,17 +348,17 @@ public class ComplatUserController extends BaseController {
 				// List<Map<String, Object>> userList=
 				// complatUserService.findByLoginnameAndgroupid(loginname,Integer.parseInt(iid));
 				// if(userList.size()==0){
-				if (StringHelper.isNotBlack(iid)) {
+				if (StringHelper.isNotBlack(iid)) {//编辑
+					// 对密码进行加密
 					pwd = complatUser.getPwd();
+					String p = Md5Util.md5encode(pwd);
+					complatUser.setPwd(p);										
 					// 对登录全名做处理
 					int groupId = complatUser.getGroupid();
 					ComplatGroup complatGroup = complatGroupService.findByIid(groupId);
 					String suffix = complatGroup.getSuffix();
 					String loginallname = complatUser.getLoginname() + "."+ suffix;
-					complatUser.setLoginallname(loginallname);
-					// 对密码进行加密
-					String p = Md5Util.md5encode(pwd);
-					complatUser.setPwd(p);
+					complatUser.setLoginallname(loginallname);					
 					// 获取当前机器的ip地址
 					String IP = getIpAddr(request);
 					complatUser.setIp(IP);
@@ -368,7 +377,6 @@ public class ComplatUserController extends BaseController {
 					complatUser.setEnable(power); // 是否禁用
 					complatUser.setOpersign(2);// 更新操作状态
 					synchronization(complatUser, 2);// 修改同步
-
 					// 对密码修改时间进行处理
 					String oldPwd = complatUserService.findByKey(complatUser.getIid()).getPwd();
 					if (StringHelper.isNotBlack(oldPwd)) {
@@ -377,7 +385,6 @@ public class ComplatUserController extends BaseController {
 							complatUser.setModifyPassTime(Timestamp.valueOf(TimeHelper.getCurrentTime()));
 						}
 					}
-
 					complatUserService.save(complatUser);
 					// 身份证号处理 JisUserdetail
 					String cardId = request.getParameter("cardid");
@@ -389,19 +396,20 @@ public class ComplatUserController extends BaseController {
 						jisUserdetailService.update(jisUserdetail.getIid(),cardId, userMap);
 					}
 					returnMsg("success", "编辑用户成功！", request);
-					String desc = sysUserSession.getUserName() + "修改政府用户："
-							+ complatUser.getName();
+					String desc = sysUserSession.getLoginAccount() + "修改【" + complatUser.getName() + "】 政府用户";
 					jisLogService.save(sysUserSession.getLoginAccount(),
 							sysUserSession.getUserIp(), desc, 2, 2);
 				} else {
+					// 对密码进行加密
 					pwd = complatUser.getPwd();
+					String p = Md5Util.md5encode(pwd);
+					complatUser.setPwd(p);					
 					// 对登录全名做处理
 					String groupid = request.getParameter("groupid");
 					ComplatGroup complatGroup = complatGroupService.findByIid(Integer.parseInt(groupid));
 					String suffix = complatGroup.getSuffix();
 					String loginallname = complatUser.getLoginname() + "."+ suffix;
 					complatUser.setLoginallname(loginallname);
-
 					complatUser.setOpersign(1);// 1:新增2:修改3:删除
 					complatUser.setSynState(0);
 					complatUser.setEnable(0); // 是否禁用
@@ -409,11 +417,7 @@ public class ComplatUserController extends BaseController {
 							.getCurrentTime()));// 创建时间
 					complatUser.setModifytime(Timestamp.valueOf(TimeHelper
 							.getCurrentTime()));// 修改时间
-					// complatUser.setAccesstime(d);//访问时间
-					// 对密码进行加密
-					String p = Md5Util.md5encode(pwd);
-					complatUser.setPwd(p);
-
+					// complatUser.setAccesstime(d);//访问时间				
 					// 获取当前机器的ip地址
 					String IP = getIpAddr(request);
 					complatUser.setIp(IP);
@@ -433,7 +437,6 @@ public class ComplatUserController extends BaseController {
 					jisUser.setCardid(cardId);
 					// jisUser.setIid(userId);
 					jisUser.setUserid(userId);
-
 					jisUserdetailService.save(jisUser);
 					// 扩展属性
 					Map<String, String> userMap = this.saveExendsAttr(userId,
@@ -446,8 +449,7 @@ public class ComplatUserController extends BaseController {
 								cardId, userMap);
 					}
 					returnMsg("success", "新增用户成功！", request);
-					String desc = sysUserSession.getUserName() + "新增政府用户："
-							+ complatUser.getName();
+					String desc = sysUserSession.getLoginAccount() + "新增【" + complatUser.getName() + "】 政府用户";
 					jisLogService.save(sysUserSession.getLoginAccount(),
 							sysUserSession.getUserIp(), desc, 2, 1);
 				}
@@ -455,12 +457,14 @@ public class ComplatUserController extends BaseController {
 				// else{
 				// returnMsg("error", "保存用户失败,登录名已经被占用", request);
 				// }
-
+				mav.addObject("editGroupId",complatUser.getGroupid());
 			}
 		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
 			returnMsg("error", "保存用户失败！", request);
 		} finally {
-			return new ModelAndView("redirect:/complat/groupOrgTree");
+			//return new ModelAndView("redirect:/complat/groupOrgTree");
+			return mav;
 		}
 
 	}
@@ -480,16 +484,21 @@ public class ComplatUserController extends BaseController {
 	public ModelAndView complatUserDelete(String iid,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		SysUserSession session = (SysUserSession) request.getSession()
+		SysUserSession sysUserSession = (SysUserSession) request.getSession()
 				.getAttribute("sysUserSession");
+		String sGroupId = "";
 		try {
 			String[] para = iid.split(",");
-			ComplatUser complatUser = null;
+			ComplatUser complatUser = new ComplatUser();
 			JisUserdetail jisUserdetail = null;
 			for (int i = 0; i < para.length; i++) {
 				// Integer corId = Integer.parseInt(para[i].trim());
 				Integer userId = Integer.parseInt(para[i].trim());
 				complatUser = complatUserService.findByKey(userId);
+				Integer groupId = complatUser.getGroupid();
+				if(groupId != null){
+					sGroupId = groupId.toString();
+				}
 				complatUser.setModifytime(Timestamp.valueOf(TimeHelper
 						.getCurrentTime()));// 修改时间
 				// 删除扩展属性
@@ -503,17 +512,16 @@ public class ComplatUserController extends BaseController {
 					returnMsg("success", "删除成功！", request);
 				}
 
-				String desc = session.getUserName() + "删除政府用户："
-						+ complatUser.getName();
-				jisLogService.save(session.getUserName(), session.getUserIp(),
+				String desc = sysUserSession.getLoginAccount() + "删除【" + complatUser.getName() + "】 政府用户";
+				jisLogService.save(sysUserSession.getLoginAccount(), sysUserSession.getUserIp(),
 						desc, 2, 3);
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 			returnMsg("error", "删除失败！", request);
 		} finally {
-			return new ModelAndView("redirect:/complat/complatList");
+			return new ModelAndView("redirect:/complat/complatList?editGroupId="+sGroupId);
 		}
 
 	}
@@ -556,7 +564,7 @@ public class ComplatUserController extends BaseController {
 			HttpServletRequest request, Model model,
 			HttpServletResponse response) throws Exception {
 		try {
-			SysUserSession session = (SysUserSession) request.getSession()
+			SysUserSession sysUserSession = (SysUserSession) request.getSession()
 					.getAttribute("sysUserSession");
 			String fileName = multipartFile.getOriginalFilename();
 			LinkedHashMap<String, String> fieldMap = new LinkedHashMap<String, String>();
@@ -564,7 +572,7 @@ public class ComplatUserController extends BaseController {
 			fieldMap.put("1", "age");
 			fieldMap.put("2", "sex");
 			fieldMap.put("3", "groupName");
-			fieldMap.put("4", "groupid");
+			fieldMap.put("4", "codeid");
 			fieldMap.put("5", "headship");
 			fieldMap.put("6", "phone");
 			fieldMap.put("7", "mobile");
@@ -584,6 +592,7 @@ public class ComplatUserController extends BaseController {
 					.readXls(fileName, multipartFile.getInputStream(),
 							ComplatUser.class, fieldMap);
 			// ComplatUser complatUser = new ComplatUser();
+			ComplatGroup complatGroup = null; 
 			if (importCheck(users, model, request, response)) {// 判断数据格式是否合适
 				// 机构是否存在，机构下是否存在用户
 				if (dataCheck(users, model, request, response)) {
@@ -591,6 +600,11 @@ public class ComplatUserController extends BaseController {
 						// 导入时将机构名汉字转换成首字母大写保存到pinyin字段中
 						String daPinYin = getPinYinHeadChar(complatUser.getName());
 						complatUser.setPinyin(daPinYin);
+						//设置机构编码
+						String codeid = complatUser.getCodeid();
+						complatGroup = complatGroupService.findByCodeid(codeid);	
+						Integer iid = complatGroup.getIid();
+						complatUser.setGroupid(iid);
 						// 设置创建时间
 						complatUser.setCreatetime(Timestamp.valueOf(TimeHelper
 								.getCurrentTime()));// 创建时间
@@ -609,9 +623,8 @@ public class ComplatUserController extends BaseController {
 						// System.out.println("当前机器的ip地址:"+IP);
 						// 对登录全名进行唯一性判断
 						String loginname = complatUser.getLoginname();
-						int groupId = complatUser.getGroupid();
-						ComplatGroup complatGroup = complatGroupService
-								.findByIid(groupId);
+						String groupName = complatUser.getGroupName();
+						complatGroup = complatGroupService.findByName(groupName);						
 						if (complatGroup != null) {
 							String suffix = complatGroup.getSuffix();
 							String loginallname = loginname + "." + suffix;
@@ -631,10 +644,9 @@ public class ComplatUserController extends BaseController {
 							jisUser.setUserid(userId);
 							jisUserdetailService.save(jisUser);
 							synchronization(complatUser, 1);// 新增同步
-							String desc = session.getUserName() + "导入政府用户 ："
-									+ complatUser.getName();
-							jisLogService.save(session.getUserName(),
-									session.getUserIp(), desc, 2, 5);
+							String desc = sysUserSession.getLoginAccount() + "导入【" + complatUser.getName() + "】 政府用户";
+							jisLogService.save(sysUserSession.getLoginAccount(),
+									sysUserSession.getUserIp(), desc, 2, 5);
 
 						}
 						// }
@@ -643,7 +655,7 @@ public class ComplatUserController extends BaseController {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 			returnMsg("error", "导入失败", request);
 		}
 	}
@@ -681,81 +693,43 @@ public class ComplatUserController extends BaseController {
 		List<String> resultList = new ArrayList<String>();
 		// 定义所有字段的正则表达式
 		String nameReg = "^(?!_)(?!.*?_$)[a-zA-Z0-9\u4e00-\u9fa5]{1,255}$";
-		// String ageReg = "^(?:[1-9]?\d|100)$";
-		String ageReg = "^(?:[1-9]?\\d|100)$";
-		// String sexReg = "^(\d{3,4}-)?\d{7,8}$";
-		// String groupNameReg = "[\u4e00-\u9fa5]{1,255}$";
+		String ageReg = "^(?:[1-9][0-9]?|1[01][0-9]|120)$";
 		String groupIdReg = "^[0-9]*$";
 		String headshipReg = "[\u4e00-\u9fa5]{1,255}$";
 		String phoneReg = "(((0\\d{3}[\\-])?\\d{7}|(0\\d{2}[\\-])?\\d{8}))([\\-]\\d{2,4})?$";
-		// String phoneReg="((d{3,4})|d{3,4}-|s)?d{7,14}";
-		String mobileReg = "(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\\d{8}$";
-		String addressReg = "[\u4e00-\u9fa5]{1,255}$";
+		String mobileReg = "^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\\d{8}$";
+		String addressReg = "[\\dA-Za-z0-9\u4E00-\u9FA5]{1,255}";
 		String postReg = "^[1-9][0-9]{5}$";
-		// String num = "(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)";
-		// String ipReg = "^" + num + "\\." + num + "\\." + num + "\\." + num +
-		// "$";
 		String faxReg = "^(\\d{3,4}-)?\\d{7,8}$";
 		String emailReg = "^([\\w-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([\\w-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$";
 		String qqReg = "[1-9][0-9]{4,}";
 		String loginameReg = "^(?!_)(?!.*?_$)[a-zA-Z0-9_]{1,255}$";
 		// String pwdReg = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,10}$";
-		// String PinYinReg = "^[A-Z]+$";
 		String cardIdReg = "([1-6]\\d{5}(19|20)\\d\\d(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])\\d{3}[0-9xX])|([1-6]\\d{5}\\d\\d(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])\\d{3})";
 		for (ComplatUser complatUser : users) {
 			// 判断是否有不合规范的数据
-			if ((StringUtils.isEmpty(complatUser.getName()) || (!StringUtils
-					.isEmpty(complatUser.getName()) && !match(nameReg,
-					complatUser.getName())))
-					|| (StringUtils.isEmpty(complatUser.getAge().toString()
-							.trim()) || (!StringUtils.isEmpty(complatUser
-							.getAge().toString().trim()) && !match(ageReg,
-							complatUser.getAge().toString().trim())))
-					|| (StringUtils.isEmpty(complatUser.getSex().toString()
-							.trim()) || (!StringUtils.isEmpty(complatUser
-							.getSex().toString().trim()) && (!(complatUser
-							.getSex() != 1) || (complatUser.getSex() != 0))))
-					|| (StringUtils.isEmpty(complatUser.getGroupName()
-							.toString().trim()))
-					|| (StringUtils.isEmpty(complatUser.getGroupid().toString()
-							.trim()) || (!StringUtils.isEmpty(complatUser
-							.getGroupid().toString().trim()) && !match(
-							groupIdReg, complatUser.getGroupid().toString()
-									.trim())))
-					|| (StringUtils.isEmpty(complatUser.getHeadship()) || (!StringUtils
-							.isEmpty(complatUser.getHeadship()) && !match(
-							headshipReg, complatUser.getHeadship())))
-					|| (StringUtils.isEmpty(complatUser.getPhone()) || (!match(
-							phoneReg, complatUser.getPhone())))
-					|| (StringUtils.isEmpty(complatUser.getMobile()) || (!StringUtils
-							.isEmpty(complatUser.getMobile()) && !match(
-							mobileReg, complatUser.getMobile())))
-					|| (StringUtils.isEmpty(complatUser.getAddress()) || (!StringUtils
-							.isEmpty(complatUser.getAddress()) && !match(
-							addressReg, complatUser.getAddress())))
-					|| (StringUtils.isEmpty(complatUser.getPost()) || (!StringUtils
-							.isEmpty(complatUser.getPost()) && !match(postReg,
-							complatUser.getPost())))
+			if ((StringUtils.isEmpty(complatUser.getName()) || (!StringUtils.isEmpty(complatUser.getName()) && !match(nameReg,complatUser.getName())))
+					|| (StringUtils.isEmpty(complatUser.getAge().toString().trim()) || (!StringUtils.isEmpty(complatUser.getAge().toString().trim()) && !match(ageReg,complatUser.getAge().toString().trim())))
+					|| (StringUtils.isEmpty(complatUser.getSex().toString().trim()) || (!StringUtils.isEmpty(complatUser.getSex().toString().trim()) && !((complatUser.getSex() != 1) || (complatUser.getSex() != 0))))
+					|| (StringUtils.isEmpty(complatUser.getGroupName().toString().trim()))
+					|| (StringUtils.isEmpty(complatUser.getCodeid().toString().trim()) || (!StringUtils.isEmpty(complatUser.getCodeid().toString().trim()) && !match(groupIdReg, complatUser.getCodeid().toString().trim())))
+					|| (StringUtils.isEmpty(complatUser.getHeadship()) || (!StringUtils.isEmpty(complatUser.getHeadship()) && !match(headshipReg, complatUser.getHeadship())))
+					|| (StringUtils.isEmpty(complatUser.getPhone()) || (!match(phoneReg, complatUser.getPhone())))
+					|| (StringUtils.isEmpty(complatUser.getMobile()) || (!StringUtils.isEmpty(complatUser.getMobile()) && !match(mobileReg, complatUser.getMobile())))
+					|| (StringUtils.isEmpty(complatUser.getAddress()) || (!StringUtils.isEmpty(complatUser.getAddress()) && !match(addressReg, complatUser.getAddress())))
+					|| (StringUtils.isEmpty(complatUser.getPost()) || (!StringUtils.isEmpty(complatUser.getPost()) && !match(postReg,complatUser.getPost())))
 					// || (StringUtils.isEmpty(complatUser.getIp()) ||
 					// (!StringUtils.isEmpty(complatUser.getIp())&&
 					// !match(ipReg,complatUser.getIp())))
-					|| (StringUtils.isEmpty(complatUser.getFax()) || (!match(
-							faxReg, complatUser.getFax())))
-					|| (StringUtils.isEmpty(complatUser.getEmail()) || (!StringUtils
-							.isEmpty(complatUser.getEmail()) && !match(
-							emailReg, complatUser.getEmail())))
-					|| (StringUtils.isEmpty(complatUser.getQq()) || (!match(
-							qqReg, complatUser.getQq())))
-					|| (StringUtils.isEmpty(complatUser.getLoginname()) || (!StringUtils
-							.isEmpty(complatUser.getLoginname()) && !match(
-							loginameReg, complatUser.getLoginname())))
+					|| (StringUtils.isEmpty(complatUser.getFax()) || (!match(faxReg, complatUser.getFax())))
+					|| (StringUtils.isEmpty(complatUser.getEmail()) || (!StringUtils.isEmpty(complatUser.getEmail()) && !match(emailReg, complatUser.getEmail())))
+					|| (StringUtils.isEmpty(complatUser.getQq()) || (!match(qqReg, complatUser.getQq())))
+					|| (StringUtils.isEmpty(complatUser.getLoginname()) || (!StringUtils.isEmpty(complatUser.getLoginname()) && !match(loginameReg, complatUser.getLoginname())))
 					|| (StringUtils.isEmpty(complatUser.getPwd()))
 					// || (StringUtils.isEmpty(complatUser.getPinyin()) ||
 					// (!StringUtils.isEmpty(complatUser.getPinyin())&&
 					// !match(PinYinReg,complatUser.getPinyin())))
-					|| (StringUtils.isEmpty(complatUser.getCardid()) || (!StringUtils
-							.isEmpty(complatUser.getCardid()) && !match(
-							cardIdReg, complatUser.getCardid())))) {
+					|| (StringUtils.isEmpty(complatUser.getCardid()) || (!StringUtils.isEmpty(complatUser.getCardid()) && !match(cardIdReg, complatUser.getCardid())))) {
 				warn = warn + String.valueOf(row) + ",";
 				check = false;
 			}
@@ -779,8 +753,13 @@ public class ComplatUserController extends BaseController {
 				String Iid = list.get(i).getIid().toString();
 				resultList.add(Iid);
 			}
-
-			if (!resultList.contains(complatUser.getGroupid().toString())) {
+            
+			String codeid = complatUser.getCodeid();
+			ComplatGroup complatGroup = complatGroupService
+					.findByCodeid(codeid);			
+			//设置机构编码
+            Integer groupId = complatGroup.getIid();
+			if (!resultList.contains(groupId.toString())) {
 				check = false;
 				warn = warn + String.valueOf(row) + ",";
 			} else {
@@ -817,12 +796,11 @@ public class ComplatUserController extends BaseController {
 		int row = 1;
 		String warn = "";
 		boolean check = true;
+		ComplatGroup complatGroup = null;
 		for (ComplatUser complatUser : users) {
-			int iid = complatUser.getGroupid();
-			ComplatGroup complatGroup = complatGroupService.findByIid(iid);
-			// Integer groupid = complatUser.getGroupid();
-
-			if (complatGroup.getName() == null || complatGroup.getName() == "") {
+			String codeid = complatUser.getCodeid();
+			complatGroup = complatGroupService.findByCodeid(codeid);	
+			if (complatGroup==null) {
 				warn = warn + String.valueOf(row) + ",";
 				check = false;
 			} else {
@@ -838,7 +816,7 @@ public class ComplatUserController extends BaseController {
 			// 判断当前机构及其子机构下面是否存在登录名为导入数据中的用户
 			List<Map<String, Object>> userList = complatUserService
 					.findByLoginnameAndgroupid(complatUser.getLoginname(),
-							complatUser.getGroupid());
+							complatGroup.getIid());
 			String name = complatUser.getName();
 			if (userList.size() != 0) {
 				warn = warn + String.valueOf(row) + ",";
@@ -872,7 +850,7 @@ public class ComplatUserController extends BaseController {
 	public void complatExport(String iid, Model model,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		SysUserSession session = (SysUserSession) request.getSession()
+		SysUserSession sysUserSession = (SysUserSession) request.getSession()
 				.getAttribute("sysUserSession");
 		String userIid = request.getParameter("iid");
 		String[] complatUserIds = userIid.split(",");
@@ -936,7 +914,7 @@ public class ComplatUserController extends BaseController {
 			} else {
 				treeMap.put("14", complatGroup.getName());// 机构名称
 			}
-			treeMap.put("15", complatUser.getGroupid());// 机构ID
+			treeMap.put("15", complatGroupService.findByIid(complatUser.getGroupid()).getCodeid());// 机构编码
 			treeMap.put("16", complatUser.getHeadship());// 用户职务
 			treeMap.put("17", complatUser.getPhone());// 办公电话
 			treeMap.put("18", complatUser.getMobile());// 移动电话
@@ -987,8 +965,8 @@ public class ComplatUserController extends BaseController {
 			 * }
 			 */
 			dataList.add(treeMap);
-			String desc = session.getUserName() + "导出政府用户 ："+ complatUser.getName();
-	        jisLogService.save(session.getUserName(), session.getUserIp(), desc, 2,4);
+			String desc = sysUserSession.getLoginAccount() + "导出【" + complatUser.getName() + "】 政府用户";
+	        jisLogService.save(sysUserSession.getLoginAccount(), sysUserSession.getUserIp(), desc, 2,4);
 		}
 		
 		map.put(ExcelUtil.HEADERINFO, headList);
@@ -1056,8 +1034,8 @@ public class ComplatUserController extends BaseController {
 				managerIcon = "";
 			}
 			model.addAttribute("managerIcon", managerIcon);
-		} catch (Exception exception) {
-			exception.printStackTrace();
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
 		}
 		if ("1".equals(isFront)) {
 			return "users/sysview/frontIndex_user_setup";
@@ -1279,7 +1257,7 @@ public class ComplatUserController extends BaseController {
 				} else if (intPwdLevel == 1) {
 					resMap.put("msg", "密码强度至少为中！");
 				} else if (intPwdLevel == 2) {
-					resMap.put("msg", "密码强度至少为强！");
+					resMap.put("msg", "密码强度必须为强！");
 				}
 				resMap.put("ret", "2");
 				response.getWriter().write(JSONObject.toJSONString(resMap));
@@ -1289,6 +1267,7 @@ public class ComplatUserController extends BaseController {
 			resMap.put("ret", "1");
 			resMap.put("msg", "保存失败！");
 			response.getWriter().write(JSONObject.toJSONString(resMap));
+			logger.error(e.getMessage(), e);
 		}
 
 	}
@@ -1400,7 +1379,7 @@ public class ComplatUserController extends BaseController {
 				userMap.put(fieldName, fieldKey);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return userMap;
 	}
@@ -1419,6 +1398,7 @@ public class ComplatUserController extends BaseController {
 	@RequestMapping(value = "/startUserEnable", method = RequestMethod.GET)
 	public ModelAndView startUserEnable(String iid, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
+		String sGroupId = null;
 		try {
 			String[] para = iid.split(",");
 			ComplatUser complatUser = null;
@@ -1426,6 +1406,10 @@ public class ComplatUserController extends BaseController {
 				// Integer corId = Integer.parseInt(para[i].trim());
 				Integer userId = Integer.parseInt(para[i].trim());
 				complatUser = complatUserService.findByKey(userId);
+				Integer groupId = complatUser.getGroupid();
+				if(groupId != null){
+					sGroupId = groupId.toString();
+				}
 				if (complatUser.getEnable() == 0) {
 					complatUser.setEnable(1);
 					complatUser.setModifytime(Timestamp.valueOf(TimeHelper
@@ -1440,7 +1424,7 @@ public class ComplatUserController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			return new ModelAndView("redirect:/complat/complatList");
+			return new ModelAndView("redirect:/complat/complatList?editGroupId="+sGroupId);
 		}
 	}
 
@@ -1458,6 +1442,7 @@ public class ComplatUserController extends BaseController {
 	@RequestMapping(value = "/stopUserEnable", method = RequestMethod.GET)
 	public ModelAndView stopUserEnable(String iid, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
+		String sGroupId = "";
 		try {
 			String[] para = iid.split(",");
 			ComplatUser complatUser = null;
@@ -1465,6 +1450,10 @@ public class ComplatUserController extends BaseController {
 				// Integer corId = Integer.parseInt(para[i].trim());
 				Integer userId = Integer.parseInt(para[i].trim());
 				complatUser = complatUserService.findByKey(userId);
+				Integer groupId = complatUser.getGroupid();
+				if(groupId != null){
+					sGroupId = groupId.toString();
+				}
 				if (complatUser.getEnable() == 1) {
 					complatUser.setEnable(0);
 					complatUser.setModifytime(Timestamp.valueOf(TimeHelper
@@ -1477,9 +1466,9 @@ public class ComplatUserController extends BaseController {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} finally {
-			return new ModelAndView("redirect:/complat/complatList");
+			return new ModelAndView("redirect:/complat/complatList?editGroupId="+sGroupId);
 		}
 	}
 
@@ -1512,7 +1501,7 @@ public class ComplatUserController extends BaseController {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} finally {
 			return new ModelAndView("redirect:/complat/complatList");
 		}
@@ -1548,7 +1537,7 @@ public class ComplatUserController extends BaseController {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} finally {
 			return new ModelAndView("redirect:/complat/complatList");
 		}
@@ -1581,7 +1570,7 @@ public class ComplatUserController extends BaseController {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} finally {
 			return new ModelAndView("redirect:/complat/complatList");
 		}
@@ -1760,15 +1749,15 @@ public class ComplatUserController extends BaseController {
 				jisSysviewService.save(jisSysview);
 				syncDetail(complatUser, jisApplication, jisSysview);
 			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
 		}
 	}
 
 	/**
 	 * 同步数据到表jis_sysview_detail
 	 * 
-	 * @param complatGroup
+	 * @param complatUser
 	 * @param jisApplication
 	 * @throws Exception
 	 */
@@ -1776,65 +1765,49 @@ public class ComplatUserController extends BaseController {
 			JisApplication jisApplication, JisSysview sysView) throws Exception {
 
 		try {
-			/*
-			 * Map<String,Object> jsonMap = new HashMap<String,Object>();
-			 * jsonMap.put("allParCode", complatGroup.getSuffix());
-			 * jsonMap.put("allParName", complatGroup.getGroupallname());
-			 * jsonMap.put("appName", jisApplication.getName());
-			 * jsonMap.put("appid", String.valueOf(jisApplication.getIid()));
-			 * jsonMap.put("cardId",""); jsonMap.put("compfax","");
-			 * jsonMap.put("comptel",""); jsonMap.put("email","");
-			 * jsonMap.put("groupCode",complatGroup.getCodeid());
-			 * jsonMap.put("groupName",complatGroup.getName());
-			 * jsonMap.put("headShip",""); jsonMap.put("hometel","");
-			 * jsonMap.put("id", String.valueOf(complatGroup.getIid()));
-			 * jsonMap.put("loginName",""); jsonMap.put("loginPass","");
-			 * jsonMap.put("mobile",""); jsonMap.put("msn","");
-			 * jsonMap.put("ndlogin","");
-			 * jsonMap.put("parCode",complatGroupService
-			 * .findByIid(complatGroup.getPid()).getCodeid());
-			 * jsonMap.put("parName"
-			 * ,complatGroupService.findByIid(complatGroup.getPid()).getName());
-			 * jsonMap.put("qq",""); jsonMap.put("state","T");
-			 * jsonMap.put("userName",""); String detail =
-			 * JSONUtil.writeMapJSON(jsonMap); JisSysviewDetail jisSysviewDetail
-			 * = new JisSysviewDetail(); jisSysviewDetail.setSendmsg(detail);
-			 * jisSysviewDetail.setTranscationId(jisSysview.getTranscationId());
-			 * jisSysviewDetailService.save(jisSysviewDetail);
-			 */
-
 			Map<String, Object> jsonMap = new HashMap<String, Object>();
-			ComplatGroup group = complatGroupService.findByCodeid(sysView
-					.getCodeid());
-			/*
-			 * if(group==null){ jsonMap.put("cardId",""); }else{
-			 * 
-			 * }
-			 */
 			jsonMap.put("allParCode", "");
 			jsonMap.put("allParName", "");
-
 			jsonMap.put("appName", jisApplication.getName());
 			jsonMap.put("cardId", complatUser.getCardid());
 			jsonMap.put("appid", sysView.getAppid());
-			// JisUserdetail jisUserdetail = new JisUserdetail();
-			jsonMap.put("compfax", complatUser.getFax());
-			jsonMap.put("comptel", complatUser.getPhone());//
+			String fax=complatUser.getFax();
+			if(fax==null || fax==""){
+				jsonMap.put("compfax", "");
+			}else{
+				jsonMap.put("compfax", fax);
+			}
+			jsonMap.put("comptel", "");//
 			jsonMap.put("email", complatUser.getEmail());
 			jsonMap.put("groupCode", sysView.getCodeid());
-			// jsonMap.put("groupName",group.getName());
-			jsonMap.put("groupName", "");
+			String groupName = complatGroupService.findByIid(complatUser.getGroupid()).getName();
+			jsonMap.put("groupName", groupName);
 			jsonMap.put("headShip", complatUser.getHeadship());
-			jsonMap.put("hometel", complatUser.getPhone());
-			jsonMap.put("id", "");
+			String phone=complatUser.getPhone();
+			if(phone==null || phone==""){
+				jsonMap.put("hometel", "");
+			}else{
+				jsonMap.put("hometel", phone);
+			}
+			jsonMap.put("id", complatUser.getIid());
 			jsonMap.put("loginName", complatUser.getLoginname());
 			jsonMap.put("loginPass", complatUser.getPwd());
 			jsonMap.put("mobile", complatUser.getMobile());
-			jsonMap.put("msn", "");
+			String msn=complatUser.getMsn();
+			if(msn==null || msn==""){
+				jsonMap.put("msn", "");
+			}else{
+				jsonMap.put("msn", msn);
+			}			
 			jsonMap.put("ndlogin", "");
 			jsonMap.put("parCode", "");
 			jsonMap.put("parName", "");
-			jsonMap.put("qq", complatUser.getQq());
+			String qq = complatUser.getQq();
+			if(qq==null || qq==""){
+				jsonMap.put("qq", "");
+			}else{
+				jsonMap.put("qq", qq);
+			}
 			jsonMap.put("state", "T");
 			jsonMap.put("userName", complatUser.getName());
 			String detail = JSONUtil.writeMapJSON(jsonMap);
@@ -1842,8 +1815,8 @@ public class ComplatUserController extends BaseController {
 			jisSysviewDetail.setSendmsg(detail);
 			jisSysviewDetail.setTranscationId(sysView.getTranscationId());
 			jisSysviewDetailService.save(jisSysviewDetail);
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
 		}
 	}
 
@@ -1912,9 +1885,9 @@ public class ComplatUserController extends BaseController {
 	}
 
 	public static void main(String[] args) {
-		// String pwd = "BEJ0R3Y2fDd2M3Yx";//
-		// String p = Md5Util.md5decode(pwd);
-		// System.out.println("解密后的密码是:" + p);
+		String pwd = "BEJ0R3Y2fDd2M3Yx";
+		String p = Md5Util.md5decode(pwd);
+		System.out.println("解密后的密码是:" + p);
 
 		String str = "我是中国人";
 		String pinyin = getPinYinHeadChar(str);

@@ -209,12 +209,12 @@ jQuery.validator.addMethod("isName", function(value, element) {
 				<a href="${ctx}/backIndex" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
-			<li>
-				<a >机构管理</a>
+			<li class="active">
+				机构管理
 			</li>
 			<li class="split"></li>
 			<li class="active">
-				<a class="last-position"><c:if test="${empty complatGroup.iid}">机构新增</c:if><c:if test="${not empty complatGroup.iid}">机构编辑</c:if></a>
+				<c:if test="${empty complatGroup.iid}">机构新增</c:if><c:if test="${not empty complatGroup.iid}">机构编辑</c:if>
 			</li>
    		</ol>
     </div>
@@ -265,15 +265,15 @@ jQuery.validator.addMethod("isName", function(value, element) {
 			<tr>
 				<th><b class="mustbe">*</b> 请选择区域编码：</th>
 				<td>
-				    <input name="groupname2" id="groupname2" type="text" placeholder="请选择区域编码" readonly="readonly" style="cursor: pointer;" value="${complatGroup.areacode}"/>
+				    <input name="groupname2" id="groupname2" type="text" placeholder="请选择区域编码" readonly="readonly"  value="${complatGroup.areacode}"/>
 				</td>
 	        	<th><b class="mustbe">*</b> 请输入机构后缀：</th>
 	        	<td>
 	        	    <c:if test="${empty complatGroup.iid}">
-				          <input type="text" placeholder="请填写最简洁的机构缩写，例如：fgw（发改委）" class="input" name="suffix" value="${suffix}"/>
+				          <input type="text" placeholder="请填写最简洁的机构缩写，例如：fgw（发改委）" name="suffix" value="${suffix}"/>
 				    </c:if>
 				    <c:if test="${not empty complatGroup.iid}">
-				          <input type="text" placeholder="请填写最简洁的机构缩写，例如：fgw（发改委）" class="input" name="suffix" value="${complatGroup.suffix}" disabled="true"/>
+				          <input type="text" placeholder="请填写最简洁的机构缩写，例如：fgw（发改委）" name="suffix" value="${complatGroup.suffix}" disabled="true"/>
 				    </c:if>
 				</td>
 			</tr>
@@ -281,11 +281,11 @@ jQuery.validator.addMethod("isName", function(value, element) {
 			    <th><b class="mustbe">*</b> 请选择上级机构：</th>
 	        	<td>
 	        	    <c:if test="${empty complatGroup.iid}">
-				          <input name="groupname" id="groupname" type="text" placeholder="请选择上级机构" readonly="readonly" style="cursor: pointer;" value="${complatGroup.parentName}" />
+				          <input name="groupname" id="groupname" type="text" placeholder="请选择上级机构" readonly="readonly" value="${complatGroup.parentName}" />
 	        		      <input type="hidden" id="groupid"  name="groupid">
 				    </c:if>
 				    <c:if test="${not empty complatGroup.iid}">
-				          <input name="groupname" id="groupname" type="text" style="cursor: pointer;"  readonly="readonly" value="${complatGroup.parentName}" disabled="true"/>
+				          <input name="groupname" id="groupname" type="text" readonly="readonly" value="${complatGroup.parentName}" disabled="true"/>
 	        		      <input type="hidden" id="groupid"  name="groupid">
 				    </c:if>
 	        	</td>
@@ -322,7 +322,7 @@ jQuery.validator.addMethod("isName", function(value, element) {
     <div class="form-btn">
     	<input type="submit" tabindex="15" id="submit-btn" value="保存" class="btn bluegreen"/>
     	&nbsp;&nbsp;
-        <input type="button" tabindex="16" value="返回" onclick="javascript:window.location.href='${ctx}/uids/groupOrgTree?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}'" class="btn gray"/>
+        <input type="button" tabindex="16" value="返回" onclick="javascript:window.location.href='${ctx}/uids/groupOrgTree?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}&backId=${complatGroup.pid}'" class="btn gray"/>
 
     </div>
     </form>

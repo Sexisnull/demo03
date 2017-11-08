@@ -59,14 +59,12 @@ function changeImageDiv(){
 				<a href="${ctx}/backIndex" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
-			<li>
-				<a href="#">系统管理</a>
+			<li class="active">
+				系统管理
 			</li>
 			<li class="split"></li>
 			<li class="active">
-				<a href="#" class="last-position">
-    		<c:if test="${empty sysMenu.menuId}">菜单新增</c:if><c:if test="${not empty sysMenu.menuId}">菜单编辑</c:if>
-    	</a>
+    			<c:if test="${empty sysMenu.menuId}">菜单新增</c:if><c:if test="${not empty sysMenu.menuId}">菜单编辑</c:if>
 			</li>
     	</ol>
     	

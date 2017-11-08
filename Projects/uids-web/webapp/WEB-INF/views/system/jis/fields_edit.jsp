@@ -22,7 +22,6 @@ $().ready(function() {
 		   	},
 		    fieldname : {
 		     required: true,
-		     maxlength: 50,
 		     isFieldname: true,
 		     uniqueFieldname: true
 		    },
@@ -47,9 +46,9 @@ $().ready(function() {
 
 	// 字段名称校验
 	jQuery.validator.addMethod("isFieldname", function(value, element) { 
-           var corporName = /ex_[a-zA-Z0-9_]+$/;   
+           var corporName = /ex_[a-zA-Z0-9_]{3,20}$/;   
            return this.optional(element) || (corporName.test(value));     
-    }, "字段名称只能由字母、数字、下划线组成且只能以ex_开头");
+    }, "字段名称只能由字母、数字、下划线组成且只能以ex_开头且长度必须大于3小于20");
     //固定值校验
 	jQuery.validator.addMethod("isDefvalue", function(value, element) { 
            var corporName = /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/;   
@@ -174,12 +173,12 @@ $(document).on("change",'select#fieldsType',function(){
 				<a href="${ctx}/backIndex" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
-			<li>
-				<a>个性化设置</a>
+			<li class="active">
+				个性化设置
 			</li>
 			<li class="split"></li>
 			<li class="active">
-				<a class="last-position"><c:if test="${empty jisFields.iid}">用户扩展属性新增</c:if><c:if test="${not empty jisFields.iid}">用户扩展属性编辑</c:if></a>
+				<c:if test="${empty jisFields.iid}">用户扩展属性新增</c:if><c:if test="${not empty jisFields.iid}">用户扩展属性编辑</c:if>
 			</li>
    		</ol>
     </div>
@@ -208,7 +207,7 @@ $(document).on("change",'select#fieldsType',function(){
 			<tr>
 				<th><b class="mustbe">*</b>字段名：</th>
 				<td>
-					<input type="text"  class="fieldname" id="fieldname" name="fieldname" <c:if test="${jisFields.fieldname != '' && jisFields.fieldname != null}">value="${jisFields.fieldname}" readonly="readonly"</c:if> value="ex_"/>
+					<input type="text"  class="fieldname" id="fieldname" name="fieldname" maxlength="20" <c:if test="${jisFields.fieldname != '' && jisFields.fieldname != null}">value="${jisFields.fieldname}" readonly="readonly"</c:if> value="ex_"/>
 					<input type="hidden"  class="oldFieldname" id="oldFieldname" name="oldFieldname" value="${jisFields.fieldname}"/>
 				</td>
 				<th></th>

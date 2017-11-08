@@ -52,8 +52,8 @@
 				<a href="${ctx}/backIndex" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
-			<li>
-				<a >个性化设置</a>
+			<li class="active">
+				个性化设置
 			</li>
 			<li class="split"></li>
 			<li class="active">

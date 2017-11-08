@@ -157,7 +157,7 @@ function exportGroup() {
 //机构导入
 function importGroup(){
 	var api = $.dialog({
-		title : '机构管理-机构导出',
+		title : '机构管理-机构导入',
 		width : 450,
 		height: 125,
 		max : false,
@@ -218,8 +218,8 @@ function toEdit(iids){
 				<a href="${ctx}/index" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
-			<li>
-				<a >机构管理</a>
+			<li class="active">
+				机构管理
 			</li>
 			<li class="split"></li>
 			<li class="active">

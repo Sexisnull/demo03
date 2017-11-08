@@ -248,7 +248,8 @@ public class ExcelUtil {
 			//SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 			//fileName = fileName+"111_" + sdf.format(now).toString();
 			response.setContentType("application/vnd.ms-excel");
-			response.setHeader("Content-disposition", "attachment;filename="+  new String(fileName.getBytes(),"iso-8859-1") + ".xlsx");
+			response.setCharacterEncoding("utf-8");
+			response.setHeader("Content-disposition", "attachment;filename="+  new String(fileName.getBytes("gbk"),"iso-8859-1") + ".xlsx");
 			OutputStream out = response.getOutputStream();
 			wb.write(out);
 			out.flush();

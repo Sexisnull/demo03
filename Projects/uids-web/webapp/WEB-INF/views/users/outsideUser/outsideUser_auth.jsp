@@ -98,7 +98,7 @@
 				<tr>
 					<th>拒绝原因：</th>
 					<td style="width: 100%;">
-						<textarea readonly="readonly" rows="5" cols="5" id="rejectReason1" name="rejectReason1">${complatOutsideuser.rejectReason}</textarea>
+						<textarea readonly="readonly" rows="5" cols="5" id="rejectReason1" name="rejectReason1" style= "word-break:break-all; ">${complatOutsideuser.rejectReason}</textarea>
 		            </td>
 				</tr>
 			</c:if>
@@ -115,9 +115,9 @@
 				</td>
 			</tr>
 			<tr style="display:none;" id="tr_reject">
-				<th></th>
+				<th>拒绝原因：</th>
 				<td style="width: 100%;">
-				<textarea placeholder="请填写拒绝原因" rows="5" cols="5" class="rejectReason" id="rejectReason2" name="rejectReason2"></textarea>
+				<textarea placeholder="请填写拒绝原因" rows="5" cols="5" class="rejectReason" id="rejectReason2" name="rejectReason2" style= "word-break:break-all; "></textarea>
 				</td>
 			</tr>
 		</table>

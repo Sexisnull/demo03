@@ -28,12 +28,12 @@
 .form-table th:first-child {
     padding-left: 0px;
 	width:130px;
-	
+
 }
 .form-table td {
     height: 32px;
     line-height: 32px;
-    white-space: nowrap;    
+    white-space: nowrap;
     padding: 2px 2px;
 }
 
@@ -57,9 +57,9 @@
 }
 .td_6 {
 	border-bottom : 1px solid #C6E6FF;
-}  
+}
 .td_7{
-   border-right : 1px solid #C6E6FF;  
+   border-right : 1px solid #C6E6FF;
 }
 #td_7{
    align:center;
@@ -69,30 +69,22 @@
    width:300px;
 }
 
-
-/*角色信息分区样式*/
-.role1,.role2{
-    border:1px solid #000;
-    margin:0px 40px 0px 40px;
-    width:200px;
-    height:300px;
-}
-
 </style>
 
 <script type="text/javascript">
 
 /*********************机构树开始************************/
 $(function(){
-	var groupMenu = [{"name":"单位选择","title":"单位选择","id":"0","icon":null,"target":"page","url":null,"attr":{},"isParent":true,"isDisabled":false,"open":true,"nocheck":false,"click":null,"font":{},"checked":false,"iconClose":null,"iconOpen":null,"iconSkin":null,"pId":"menu","chkDisabled":false,"halfCheck":false,"dynamic":null,"moduleId":null,"functionId":null,"allowedAdmin":null,"allowedGroup":null}];
+//	var groupMenu = [{"name":"单位选择","title":"单位选择","id":"0","isParent":true,"isDisabled":false,"open":true,"nocheck":false}];
 
 	$('#groupname').menu({
 		tree : 'groupmenu',
-		height : 200,
-		init : function() {
-			setting('groupmenu', onClickGroup, onDbClickGroup, groupMenu);
-		}
+		height : 200
+//		init : function() {
+//
+//		}
 	});
+    setting('groupmenu', onClickGroup, onDbClickGroup);
 });
 function hideGroupMenu(){
 	$('#groupname_menu').css('display','none');
@@ -124,7 +116,7 @@ function onDbClickGroup(event, treeId, treeNode) {
 /**
  *	初始化树
  */
-function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
+function setting(treeName, onClickFunction, onDblClickFunction) {
 	var setting = {
 		async : {
 			enable : true,
@@ -138,8 +130,7 @@ function setting(treeName, onClickFunction, onDblClickFunction, rootNode) {
 		}
 	};
 	console.log("-----"+treeName);
-	$("#" + treeName).tree(setting, rootNode);
-//	$("#" + treeName).tree().refreshNode('');
+	$("#" + treeName).tree(setting);
 }
 /**
  *	机构选择节点点击前回调
@@ -193,7 +184,7 @@ var complatUserNameInput=$("#name").val();
 		   },
 	     mobile : {//移动电话
 				   required: true,
-				   isPhone:true,
+				   isMyPhone:true,
 		   		 uniqueMobile:true
 			 },
 		   email : {//email校验
@@ -216,8 +207,8 @@ var complatUserNameInput=$("#name").val();
 	   	 address:{
 	   	 	   required: true,
 				   /* isAddressInfo:true, */
-		   		 cnRangelength: [0,127],
-		   		 isAddress: true
+		   		 cnRangelength: [0,127]
+		   		 //isAddress: true
 		   	},
 		   post:{
 				  /* isEmail：true, */
@@ -238,12 +229,12 @@ var complatUserNameInput=$("#name").val();
 	   
 	     pwdquestion : {
 	     	  required: true,
-			    cnRangelength: [0,127],
+			    cnRangelength: [0,127]
 			    //isName : true
 		   },
 	     pwdanswer : {
 	     	  required: true,
-			    cnRangelength: [0,127],
+			    cnRangelength: [0,127]
 			    //isName : true
 	     },
 	     cardid : {
@@ -252,7 +243,7 @@ var complatUserNameInput=$("#name").val();
 				uniqueCardid:true
 	    },
 	    groupname : {
-	    	required: true,	    	
+	    	required: true	    	
 	    },
 	    submitHandler:function(form){
 				form.submit();
@@ -351,196 +342,189 @@ var complatUserNameInput=$("#name").val();
      jQuery.validator.addMethod("isAddress", function(value, element) { 
            var corporName = /^(?=.*?[\u4E00-\u9FA5])[\dA-Za-z\u4E00-\u9FA5]/;   
            return this.optional(element) || (corporName.test(value));     
-    }, "地址由汉字，字母和数字构成"); 
-   //编辑时密码强度回显
-    var pwding = $("#pwd").val();
-	  EvalPwd(pwding);
+    }, "地址由汉字、字母和数字构成"); 
+    //手机号
+    jQuery.validator.addMethod("isMyPhone", function(value, element) { 
+           var corporName = /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/;   
+           return this.optional(element) || (corporName.test(value));     
+    }, "请输入正确的手机号"); 
+    
+        //编辑时密码强度回显
+        var pwding = $("#pwd").val();
+	    EvalPwd(pwding);
 
    
    
-	 //获取用户扩展属性
-	
-					var htmlString = [];
-						var count = 1;
-						var table = $(".form-table");
-						var fieldsListMap = eval('${fieldsListMap}');
-						var sum=0;
-						for ( var i = 0; i < fieldsListMap.length; i++) {
-							 var length=fieldsListMap[i].length;
-							 sum +=	length;						 
-						}
-						if(sum!=0){
-							if(sum%2==0){
-	 	              sum=sum/2;
-	            }else if(sum%2==1){
-	 	              sum=Math.ceil(sum/2);
-	            }
-	            htmlString.push("<tr><td  class='td_2' id='td_7' rowspan='"+sum+"' align='center'>"+"扩展属性"+"</td>");
-						var textName;
-						var textValue;
-						var userid = $("#iid").val().trim();
-						//alert("userid===="+userid);
-						for ( var i = 0; i < fieldsListMap.length; i++) {
-							var fieldsList = fieldsListMap[i];
-							for ( var j = 0; j < fieldsList.length; j++) {
-								var fields = fieldsList[j];
-								if (fields.type == 1) {
-									for ( var key in fields) {
-										if(key == "fieldname"){
-											textName = fields[key];//类似ex_test
-											textValue = fields[textName];
-											if(textValue == null){
-												textValue = "";
-											}
-										}
-										if(key == "showname"){
-											var textTitle = fields[key];
-											if(count==1){  
-    					if(count%2==1){
-    					       htmlString.push("<th>"+ textTitle+ "：</th><td><input name='"+textName+"' type='text' value='"+textValue+"' style='width: 79.9%;'></td>");   	    			       
-   	    			    }
-     					 if(count%2==0){
-											 htmlString.push("<th>"+ textTitle+ "：</th><td><input type='text' name='"+textName+"' value='"+textValue+"' style='width: 79.9%;'></td></tr>");
-     	    			}   					
-    				}else{
-    				    if(count%2==1){
-    					 	       htmlString.push("<tr><th>"+ textTitle+ "：</th><td><input type='text' name='"+textName+"' value='"+textValue+"' style='width: 79.9%;'></td>");
-    					 }
-    	    			    if(count%2==0){
-    	    			    	htmlString.push("<th>"+ textTitle+ "：</th><td><input type='text' name='"+textName+"' value='"+textValue+"' style='width: 79.9%;'></td></tr>");
-    	    			    }
-    				}
-												count++;
-										}
-										
+	    //获取用户扩展属性
+	    var htmlString = [];
+		var count = 1;
+		var table = $(".form-table");
+		var fieldsListMap = eval('${fieldsListMap}');
+		var sum=0;
+		for ( var i = 0; i < fieldsListMap.length; i++) {
+			var length=fieldsListMap[i].length;
+			sum +=	length;						 
+		}
+		if(sum!=0){
+			if(sum%2==0){
+	 	        sum=sum/2;
+	        }else if(sum%2==1){
+	 	        sum=Math.ceil(sum/2);
+	        }
+	        htmlString.push("<tr><td  class='td_2' id='td_7' rowspan='"+sum+"' align='center'>"+"扩展属性"+"</td>");
+			var textName;
+			var textValue;
+			var userid = $("#iid").val().trim();
+			//alert("userid===="+userid);
+			for ( var i = 0; i < fieldsListMap.length; i++) {
+				var fieldsList = fieldsListMap[i];
+					for ( var j = 0; j < fieldsList.length; j++) {
+						var fields = fieldsList[j];
+						if (fields.type == 1) {
+							for ( var key in fields) {
+								if(key == "fieldname"){
+									textName = fields[key];//类似ex_test
+									textValue = fields[textName];
+									if(textValue == null){
+										textValue = "";
 									}
 								}
+								if(key == "showname"){
+									var textTitle = fields[key];
+									if(count==1){  
+    					                if(count%2==1){
+    					                    htmlString.push("<th>"+ textTitle+ "：</th><td><input name='"+textName+"' type='text' value='"+textValue+"' style='width: 79.9%;'></td>");   	    			       
+   	    			                    }
+     					                if(count%2==0){
+											htmlString.push("<th>"+ textTitle+ "：</th><td><input type='text' name='"+textName+"' value='"+textValue+"' style='width: 79.9%;'></td></tr>");
+     	    			                }   					
+    				                }else{
+    				                    if(count%2==1){
+    					 	                htmlString.push("<tr><th>"+ textTitle+ "：</th><td><input type='text' name='"+textName+"' value='"+textValue+"' style='width: 79.9%;'></td>");
+    					                }
+    	    			                if(count%2==0){
+    	    			    	            htmlString.push("<th>"+ textTitle+ "：</th><td><input type='text' name='"+textName+"' value='"+textValue+"' style='width: 79.9%;'></td></tr>");
+    	    			                }
+    				                }
+										count++;
+								}
+					        }
+						}
 
-
-								var values;
-								var keys;
-								var selectTitle;
-								if (fields.type == 2) {
-									for ( var key in fields) {
-										var value = fields[key];
-										if(key == "showname"){
-										   //alert("key======"+key);
-											selectTitle = fields[key];
-										}
-										//alert("selectTitle======"+selectTitle);
-										if (key == 'fieldkeys') {
-											keys = value.split(",");
-										}
-                    //alert("keykey======"+key);
-										if (key == 'fieldvalues') {
-											values = value.split(",");
-										}
-										//alert("values======"+values);
-										if (key != 'type' && key != 'userid') {										
-											if (key == 'fieldname') {
-												if(count == 1){
-    			    		if(count%2==1){
-    			    			htmlString.push("<tr><th>"+ selectTitle+ "：</th><td><select id='"+value+"' name= '"+value+"' style='width: 86.9%;'>");
-		    			    	//htmlString.push("<th>"+value+"</th><td><select  class='kzsx' id='"+value+"' name= '"+value+"' style='width=:88%;'>");
-		    			    	//循环key；
-		    			        for(var i=0;i<keys.length;i++){
-		    			 			htmlString.push("<option value='"+keys[i]+"'");
-		    			            //获取下拉列表默认值
-								    var select = eval('${jsonMap}');
-								    for(var selectKey in select[0]){
-								    	var selectValue = select[0][selectKey];
-								    	if(selectValue == keys[i]){
-		    			        			htmlString.push("selected = 'selected'");
-		    			        		}
-							    	}
-							    	htmlString.push(">"+values[i]+"</option>");
-		    				    }
-		    			       htmlString.push("</select></td>");
-		    			       
-		    				   
-		    			    }
-		    			    if(count%2==0){
-		    			    	htmlString.push("<th>"+ selectTitle+ "：</th><td><select id='"+value+"' name= '"+value+"' style='width: 86.9%;'>");
-		    			    	//循环key；
-		    			        for(var i=0;i<keys.length;i++){
-		    			        	htmlString.push("<option value='"+keys[i]+"'");
-		    			          //获取下拉列表默认值
-		    			          if(userid!=""){
-		    			          	 var select = eval('${jsonMap}');
-								    for(var selectKey in select[0]){
-								    	var selectValue = select[0][selectKey];
-								    	if(selectValue == keys[i]){
-		    			        			htmlString.push("selected = 'selected'");
-		    			        		}
-							    	}
-		    			          }
-							    	htmlString.push(">"+values[i]+"</option>");
-		    				    }
-		    			       htmlString.push("</select></td></tr>");
-		    			    }	
-    			    	}else{
-    			    		if(count%2==1){
-		    			    	htmlString.push("<tr><th>"+ selectTitle+ "：</th><td><select id='"+value+"' name= '"+value+"' style='width: 86.9%;'>");
-		    			    	//循环key；
-		    			        for(var i=0;i<keys.length;i++){
-		    			 			htmlString.push("<option value='"+keys[i]+"'");
-		    			          //获取下拉列表默认值
-								    if(userid!=""){
-		    			          	 var select = eval('${jsonMap}');
-								    for(var selectKey in select[0]){
-								    	var selectValue = select[0][selectKey];
-								    	if(selectValue == keys[i]){
-		    			        			htmlString.push("selected = 'selected'");
-		    			        		}
-							    	}
-		    			          }
-							    	htmlString.push(">"+values[i]+"</option>");
-		    				    }
-		    			       htmlString.push("</select></td>");
-		    			       
-		    				   
-		    			    }
-		    			    if(count%2==0){
-		    			    	htmlString.push("<th>"+ selectTitle+ "：</th><td><select id='"+value+"' name= '"+value+"' style='width: 86.9%;'>");
-		    			    	//循环key；
-		    			        for(var i=0;i<keys.length;i++){
-		    			        	htmlString.push("<option value='"+keys[i]+"'");
-		    			          //获取下拉列表默认值
-								    if(userid!=""){
-		    			          	 var select = eval('${jsonMap}');
-								    for(var selectKey in select[0]){
-								    	var selectValue = select[0][selectKey];
-								    	if(selectValue == keys[i]){
-		    			        			htmlString.push("selected = 'selected'");
-		    			        		}
-							    	}
-		    			          }
-							    	htmlString.push(">"+values[i]+"</option>");
-		    				    }
-		    			       htmlString.push("</select></td></tr>");
-		    			    }
-    			    	}
-												
-							
-												count++;
-											}
-										}
-									}
+                        var values;
+						var keys;
+						var selectTitle;
+						if (fields.type == 2) {
+							for ( var key in fields) {
+								var value = fields[key];
+								if(key == "showname"){
+									//alert("key======"+key);
+									selectTitle = fields[key];
+								}
+								//alert("selectTitle======"+selectTitle);
+								if (key == 'fieldkeys') {
+									keys = value.split(",");
+								}
+                                //alert("keykey======"+key);
+								if (key == 'fieldvalues') {
+									values = value.split(",");
+								}
+								//alert("values======"+values);
+								if (key != 'type' && key != 'userid') {										
+									if (key == 'fieldname') {
+										if(count == 1){
+    			    		                if(count%2==1){          
+    			    			                htmlString.push("<tr><th>"+ selectTitle+ "：</th><td><select id='"+value+"' name= '"+value+"' style='width: 86.9%;'>");
+		    			    	                //htmlString.push("<th>"+value+"</th><td><select  class='kzsx' id='"+value+"' name= '"+value+"' style='width=:88%;'>");
+		    			    	                //循环key；
+		    			                        for(var i=0;i<keys.length;i++){
+		    			 			               htmlString.push("<option value='"+keys[i]+"'");
+		    			                           //获取下拉列表默认值
+								                   var select = eval('${jsonMap}');
+								                   for(var selectKey in select[0]){
+								    	              var selectValue = select[0][selectKey];
+								    	              if(selectValue == keys[i]){
+		    			        			              htmlString.push("selected = 'selected'");
+		    			        		              }
+							    	               }
+							    	               htmlString.push(">"+values[i]+"</option>");
+		    				                    }
+		    			                        htmlString.push("</select></td>");
+		    			                    }
+		    			                    if(count%2==0){
+		    			    	                htmlString.push("<th>"+ selectTitle+ "：</th><td><select id='"+value+"' name= '"+value+"' style='width: 86.9%;'>");
+		    			    	                //循环key；
+		    			                        for(var i=0;i<keys.length;i++){
+		    			        	               htmlString.push("<option value='"+keys[i]+"'");
+		    			                           //获取下拉列表默认值
+		    			                           if(userid!=""){
+		    			          	                  var select = eval('${jsonMap}');
+								                      for(var selectKey in select[0]){
+								    	                  var selectValue = select[0][selectKey];
+								    	                  if(selectValue == keys[i]){
+		    			        			                  htmlString.push("selected = 'selected'");
+		    			        		                  }
+							    	                  }
+		    			                           }
+							    	               htmlString.push(">"+values[i]+"</option>");
+		    				                    }
+		    			                        htmlString.push("</select></td></tr>");
+		    			                    }	
+    			    	                }else{
+    			    		                if(count%2==1){
+		    			    	                htmlString.push("<tr><th>"+ selectTitle+ "：</th><td><select id='"+value+"' name= '"+value+"' style='width: 86.9%;'>");
+		    			    	                //循环key；
+		    			                        for(var i=0;i<keys.length;i++){
+		    			 			               htmlString.push("<option value='"+keys[i]+"'");
+		    			                           //获取下拉列表默认值
+								                   if(userid!=""){
+		    			          	                  var select = eval('${jsonMap}');
+								                      for(var selectKey in select[0]){
+								    	                var selectValue = select[0][selectKey];
+								    	                if(selectValue == keys[i]){
+		    			        			               htmlString.push("selected = 'selected'");
+		    			        		                }
+							    	                  }
+		    			                           }
+							    	               htmlString.push(">"+values[i]+"</option>");
+		    				                    }
+		    			                        htmlString.push("</select></td>");
+		    			                    }
+		    			                    if(count%2==0){
+		    			    	                htmlString.push("<th>"+ selectTitle+ "：</th><td><select id='"+value+"' name= '"+value+"' style='width: 86.9%;'>");
+		    			    	                //循环key；
+		    			                        for(var i=0;i<keys.length;i++){
+		    			        	               htmlString.push("<option value='"+keys[i]+"'");
+		    			                           //获取下拉列表默认值
+								                   if(userid!=""){
+		    			          	                   var select = eval('${jsonMap}');
+								                       for(var selectKey in select[0]){
+								    	                   var selectValue = select[0][selectKey];
+								    	                   if(selectValue == keys[i]){
+		    			        			                   htmlString.push("selected = 'selected'");
+		    			        		                   }
+							    	                   }
+		    			                           }
+							    	               htmlString.push(">"+values[i]+"</option>");
+		    				                    }
+		    			                        htmlString.push("</select></td></tr>");
+		    			                    }
+    			    	                }
+			                            count++;
+							        }
 								}
 							}
 						}
-						table.append(htmlString.join(""));
-						}else if(sum==0){
-	 	           htmlString.push("");
-	 	           table.append(htmlString.join(""));
-	          } 
-						
-  //编辑页面密码强度判断
-  //编辑页面密码强度判断
-	var pwding = $("#pwd").val();
-	EvalPwd(pwding);
-	//$('#pwd').attachEvent('oninput',EvalPwd(pwding));	
-
+					}
+			}
+			table.append(htmlString.join(""));
+		}else if(sum==0){
+	 	    htmlString.push("");
+	 	    table.append(htmlString.join(""));
+	    } 						
+        //编辑页面密码强度判断
+	    var pwding = $("#pwd").val();
+	    EvalPwd(pwding);
 });
 
 
@@ -564,7 +548,7 @@ function checkAndSave() {
     	}else if(pwdLevel==1){
     		msg = "密码强度至少为中!";
     	}else if(pwdLevel==2){
-    		msg = "密码强度至少为强!";
+    		msg = "密码强度必须为强!";
     	}
     	$.dialog.alert(msg,function(){
 				return null;	            
@@ -587,12 +571,10 @@ function checkAndSave() {
 				<a href="${ctx}/backIndex" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
-			<li>
-				<a>政府用户</a>
-			</li>
+			<li class="active">政府用户</li>
 			<li class="split"></li>
 			<li class="active">
-				<a class="last-position"><c:if test="${empty complatUser.iid}">用户新增</c:if><c:if test="${not empty complatUser.iid}">用户编辑</c:if></a>
+				<c:if test="${empty complatUser.iid}">用户新增</c:if><c:if test="${not empty complatUser.iid}">用户编辑</c:if>
 			</li>
    		</ol>
     </div>
@@ -621,7 +603,7 @@ function checkAndSave() {
      <div class="form-content">
 		 	<table class="form-table" id="dataTable">
 		 		<tr>
-		 		  <td class="td_1" rowspan="7" style="max-width:0px;width:100px;ont-weight:bold;" align="center">基本属性</td>
+		 		  <td class="td_1" rowspan="5" style="max-width:0px;width:100px;ont-weight:bold;" align="center">基本属性</td>
 				  <th><b class="mustbe">*</b>姓名：</th>
 				  <td style="width:300px;">
 					<input type="text" id="name" name="name" value="${complatUser.name}" />
@@ -637,17 +619,12 @@ function checkAndSave() {
 				  <td style="width:300px;">
 					   <input type="text" id="age" name="age" value="${complatUser.age}"">
 	        </td>
-	         <th><b class="mustbe">*</b> 所属机构：</th>
-				  <td style="width:300px;">
-				    <c:if test="${empty complatUser.iid}"> 
-				        <input id="groupname" value="${groupMap[complatUser.groupid]}" name="groupname" type="text" style="cursor: pointer;"/> 
-					    <input type="hidden" id="groupid" name="groupid">	
-				    </c:if>
-				    <c:if test="${not empty complatUser.iid}">
-				          <input id="groupname1" value="${groupMap[complatUser.groupid]}" name="groupname" readonly="readonly" type="text" style="cursor: pointer;"/> 
-					      <input type="hidden" id="groupid" name="groupid" value="${complatUser.groupid }">	
-				    </c:if>											
-				  </td>
+	        <th><b class="mustbe">*</b> 移动电话：</th>
+                  <td style="width:300px;">
+                	<input type="text"  id="mobile" name="mobile" value="${complatUser.mobile}" />
+					        <input type="hidden" id="oldMobile" name="oldMobile" value="${complatUser.mobile}" />
+                  </td>		        
+	        
 	        <!--<th> MSN：</th>
 	        <td>
 	        	 <input type="text" id="msn" name="msn" value="${complatUser.msn}"">	        	
@@ -659,52 +636,46 @@ function checkAndSave() {
 	        	   </td> -->
 			    </tr>	
 			    <tr>
-			       <th> QQ：</th>
-				   <td style="width:300px;">
-					   <input type="text" id="qq" name="qq" value="${complatUser.qq}" />
-				   </td>
-				   <th><b class="mustbe">*</b> 身份证号：</th>
-				   <td style="width:300px;">
-					<input type="text" <c:if test="${userDetail.cardid != null}">readonly="readonly"</c:if> id="cardid" class="cardid" name="cardid" value="${userDetail.cardid}" />
-					<input type="hidden" id="oldCardid" class="oldCardid" name="oldCardid" value="${userDetail.cardid}" />
-				</td>
+			    	<th><b class="mustbe">*</b>登录名：</th>
+            <td style="width:300px;">
+               <input type="text" id="loginname" name="loginname" value="${complatUser.loginname}" />
+					     <input type="hidden" id="oldLoginname" name=oldLoginname" value="${complatUser.loginname}" />					           
+	          </td>
+			    	<th><b class="mustbe">*</b> 密码：</th>
+        	  <td style="width:300px;">
+        		   <input type="password" id="pwd" name="pwd"  value="${pwd}" onkeyup="javascript:EvalPwd(this.value);"/>
+        	     </td>
 			    </tr>		    
 			    <tr>
 			      <th>办公电话：</th>
-				  <td style="width:300px;">
-					<input type="text"  id="phone" name="phone" value="${complatUser.phone}" />
-				  </td>
-				  <th><b class="mustbe">*</b> 移动电话：</th>
-                  <td style="width:300px;">
-                	<input type="text"  id="mobile" name="mobile" value="${complatUser.mobile}" />
-					        <input type="hidden" id="oldMobile" name="oldMobile" value="${complatUser.mobile}" />
-                  </td>				
+				    <td style="width:300px;">
+					     <input type="text"  id="phone" name="phone" value="${complatUser.phone}" />
+				    </td>
+				    <th>密码强度：</th>
+			      <td style="width:300px;">
+				      <table id="pwdpower" style="width: 86%" cellspacing="0"  cellpadding="0" border="0">
+					     <tbody>
+						     <tr>
+							      <td id="pweak" style="text-align: center;width: 100px;border: 1px solid  grey">弱</td>
+							      <td id="pmedium" style="text-align: center;width: 100px;border: 1px solid  grey">中</td>
+							      <td id="pstrong" style="text-align: center;width: 100px;border: 1px solid  grey">强</td>
+						    </tr>
+					     </tbody>
+				      </table>
+			      </td>				  			
 			    </tr>
 			    <tr>
-				  <th> 传真：</th>
-				  <td style="width:300px;">
-					<input type="text" id="fax" name="fax" value="${complatUser.fax}" />
-				  </td>
-				  <th><b class="mustbe">*</b> Email：</th>				
-				  <td style="width:300px;">
-					<input type="text"  id="email" name="email" value="${complatUser.email}" />
-				  </td>
-			    </tr>	
-			     <tr>
-				  <th><b class="mustbe">*</b> 地址：</th>
-				  <td style="width:300px;">
-					<input type="text" id="address" name="address" value="${complatUser.address}" />
-				  </td>
-				  <th><b class="mustbe">*</b> 邮政编码：</th>				
-				  <td style="width:300px;">
-					<input type="text"  id="post" name="post" value="${complatUser.post}" />
-				  </td>
+				     <th class="td_5"><b class="mustbe">*</b> 地址：</th>
+				     <td class="td_3" style="width:300px;">
+					       <input type="text" id="address" name="address" value="${complatUser.address}" />
+				     </td>
+				     <th class="td_6"><b class="mustbe">*</b> 邮政编码：</th>				
+				     <td class="td_4" style="width:300px;">
+					       <input type="text"  id="post" name="post" value="${complatUser.post}" />
+				     </td>
 			    </tr>		    
 			    <tr>
-			      <th class="td_5"><b class="mustbe">*</b> 用户职务：</th>
-				  <td class="td_3" style="width:300px;">
-					<input type="text" id="headship" name="headship" value="${complatUser.headship}"">
-				  </td>
+			     
 				 <!--  <th class="td_6"><b class="mustbe">*</b> 所属机构：</th>
 				  <td class="td_4" style="width:300px;">
 				    <c:if test="${empty complatUser.iid}"> 
@@ -717,47 +688,56 @@ function checkAndSave() {
 				    </c:if>											
 				  </td>
 				  -->
-				  <th class="td_6"></th> 
-				  <td class="td_4"></td> 
 			    </tr>			   		
-		        <tr>
-		           <td class="td_1" rowspan="3" style="max-width:0px;width:100px;ont-weight:bold;" align="center"">账号信息</td>
-                   <th><b class="mustbe">*</b>登录名：</th>
-                   <td style="width:300px;">
-                   	   <input type="text" id="loginname" name="loginname" value="${complatUser.loginname}" />
-					             <input type="hidden" id="oldLoginname" name=oldLoginname" value="${complatUser.loginname}" />					           
-	               </td>
+		      <tr>
+		         <td class="td_1" rowspan="3" style="max-width:0px;width:100px;ont-weight:bold;" align="center"">详细属性</td>
+             <th> QQ：</th>
+				     <td style="width:300px;">
+					      <input type="text" id="qq" name="qq" value="${complatUser.qq}" />
+				     </td>
+				     <th><b class="mustbe">*</b> 身份证号：</th>
+				     <td style="width:300px;">
+					      <input type="text" <c:if test="${userDetail.cardid != null}">readonly="readonly"</c:if> id="cardid" class="cardid" name="cardid" value="${userDetail.cardid}" />
+					      <input type="hidden" id="oldCardid" class="oldCardid" name="oldCardid" value="${userDetail.cardid}" />
+				     </td>
+				     
+                   
 	        	  <!-- <th><b class="mustbe">*</b> 请设置密码找回问题：</th>
 				   <td style="width:300px;">
 					  <input type="text"  class="input" id="pwdquestion" name="pwdquestion" value="${complatUser.pwdquestion}"  />
 				   </td>-->
 			    </tr>	
 				<tr style="width:300px;">		
-				   <th><b class="mustbe">*</b> 密码：</th>
-        	       <td style="width:300px;">
-        		      <input type="password" id="pwd" name="pwd"  value="${pwd}" onkeyup="javascript:EvalPwd(this.value);"/>
-        	       </td>
+				  <th> 传真：</th>
+				  <td style="width:300px;">
+					    <input type="text" id="fax" name="fax" value="${complatUser.fax}" />
+				  </td>
+				  <th><b class="mustbe">*</b> Email：</th>				
+				  <td style="width:300px;">
+					    <input type="text"  id="email" name="email" value="${complatUser.email}" />
+				  </td>
 	        	 <!--  <th><b class="mustbe">*</b> 请设置密码找回问题答案：</th>
 				   <td style="width:300px;">
 					  <input type="text"  class="input" id="pwdanswer" name="pwdanswer" value="${complatUser.pwdanswer}"  />
 				   </td>-->
 				   
 			    </tr>
-			    <tr>				
-		           <th class="td_6">密码强度：</th>
-			       <td class="td_6" style="width:300px;">
-				      <table id="pwdpower" style="width: 86%" cellspacing="0"  cellpadding="0" border="0">
-					     <tbody>
-						    <tr>
-							   <td id="pweak" style="text-align: center;width: 100px;border: 1px solid  grey">弱</td>
-							   <td id="pmedium" style="text-align: center;width: 100px;border: 1px solid  grey">中</td>
-							   <td id="pstrong" style="text-align: center;width: 100px;border: 1px solid  grey">强</td>
-						    </tr>
-					     </tbody>
-				      </table>
-			       </td>
-			       <th class="td_6"></th>
-			       <td class="td_4"></td>
+			    <tr>	
+			    	  <th class="td_5"><b class="mustbe">*</b> 所属机构：</th>
+				      <td class="td_3" style="width:300px;">
+				          <c:if test="${empty complatUser.iid}"> 
+				             <input id="groupname" value="${groupMap[complatUser.groupid]}" name="groupname" type="text" style="cursor: pointer;"/> 
+					           <input type="hidden" id="groupid" name="groupid">	
+				          </c:if>
+				          <c:if test="${not empty complatUser.iid}">
+				             <input id="groupname1" value="${groupMap[complatUser.groupid]}" name="groupname" readonly="readonly" type="text" style="cursor: pointer;"/> 
+					           <input type="hidden" id="groupid" name="groupid" value="${complatUser.groupid }">	
+				          </c:if>											
+				      </td>			
+		          <th class="td_6"><b class="mustbe">*</b> 用户职务：</th>
+				      <td class="td_4" style="width:300px;">
+					        <input type="text" id="headship" name="headship" value="${complatUser.headship}"">
+				      </td>			       
 			    </tr>	
 	    </table>
   </div> 
@@ -768,7 +748,7 @@ function checkAndSave() {
     <div class="form-btn">
     	<input type="button" tabindex="15" id="submit-btn" value="保存" class="btn bluegreen" onclick="checkAndSave();"/>
     	&nbsp;&nbsp;
-        <input type="button" tabindex="16" value="返回" onclick="javascript:window.location.href='${ctx}/complat/groupOrgTree?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}'" class="btn gray"/>
+        <input type="button" tabindex="16" value="返回" onclick="javascript:window.location.href='${ctx}/complat/groupOrgTree?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}&editGroupId=${complatUser.groupid}'" class="btn gray"/>
         
     </div>
     </form>

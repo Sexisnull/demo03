@@ -232,9 +232,9 @@ function setSsoLogin(value){
 } 
 
 function checknet(){
-	var url = $('#appUrl').val();
+	var url = $('#ssoUrl').val();
 	if(url == ""){
-		alert("接口地址不能为空！");
+		alert("登陆地址不能为空！");
 		return false;
 	}
 	var reg = /[\u0391-\uFFE5]+$/;
@@ -286,18 +286,25 @@ function changSel(num){
 	}
 	var obj=document.getElementsByName("selectpicname");
 	obj[num-1].checked = true;
-	$("#icon").val(picName);
+	$("#icon").val("/resources/jis/front/app"+picName);
 	$("#icon2").attr("src","${ctx}/resources/jis/front/app/"+picName);
 	$("#showpic").show();
 }
 
 function selectpicSubmit(){
-	 
+	
 	 var mybg = document.createElement("div"); 
 		$(".mybg").removeClass("mybg");
 	    document.body.appendChild(mybg);
 		document.body.style.overflow = "show"; 
 		document.getElementById("alertpic").style.display="none"; 
+		
+		var picradio = document.getElementsByName("selectpicname");  
+	    for (i=0; i<picradio.length; i++) {  
+	        if (picradio[i].checked) {  
+	        	changSel(picradio[i].value); 
+	        }  
+	    }  
 }
 
 //便捷录入弹出层
@@ -468,6 +475,9 @@ $().ready(function() {
 	   url:true,
 	   maxlength: 255
 	   },
+	   spec:{
+	   maxlength: 255   
+	   },
 	  /*  ssoUrl:{
 	   required: true,
 	   url:true,
@@ -547,12 +557,12 @@ $(function(){
 				<a href="${ctx}/backIndex" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
-			<li>
-				<a >应用管理</a>
+			<li class="active">
+				应用管理
 			</li>
 			<li class="split"></li>
 			<li class="active">
-				<a class="last-position"><c:if test="${empty jisApplication.iid}">应用列表新增</c:if><c:if test="${not empty jisApplication.iid}">应用列表编辑</c:if></a>
+				<c:if test="${empty jisApplication.iid}">应用列表新增</c:if><c:if test="${not empty jisApplication.iid}">应用列表编辑</c:if>
 			</li>
    		</ol>
     </div>
@@ -667,7 +677,7 @@ $(function(){
 						    <input type="button" class="btnother blue" onclick="selectpic()" value="默认图片">
 					</td>
 					<td id="showpic" name="showpic" colspan="2" style="text-align:left;display:none;">
-						<img id="icon2" name="icon2" width="100" height="100" src="${ctx}${jisApplication.icon}">
+						<img id="icon2" name="icon2" width="75" height="60" src="${ctx}${jisApplication.icon}">
 					</td>
 					
 			</tr>
@@ -842,12 +852,12 @@ $(function(){
     	<div style="font-size: 20px;padding-top: 15px;padding-bottom: 10px;cursor: auto;padding-left: 5px;">&nbsp;便捷录入
     		<a href="${ctx}/application/applicationEdit?findNowPage=true&orderField=
 					 ${orderField}&orderSort=${orderSort}&iid=${jisApplication.iid}" title="关闭" 
-					 style="padding-left: 466px;font-size: 23px;color: black;text-decoration:none">x</a>
+					 style="padding-left: 466px;font-size:26px;color: gray;text-decoration:none">x</a>
     	</div>
     	<hr/><br/>
     		<tr>
     			<td style="font-size: 17px;" align="left">&nbsp;&nbsp;应用名称：&nbsp;&nbsp;</td>
-    			<td style="font-size: 16px;"><input  type="radio" id="jcms" name="fast" value="jcms" onclick="group(1);"/>&nbsp;JCMS后台用户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    			<td style="font-size: 16px;"><input type="radio" id="jcms" name="fast" value="jcms" onclick="group(1);" checked="checked"/>&nbsp;JCMS后台用户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
     			<td style="font-size: 16px;"><input type="radio" id="jcms2" name="fast" value="jcms2" onclick="group(2);"/>&nbsp;JCMS个性化定制&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
     			<td style="font-size: 16px;"><input type="radio" id="xxgk" name="fast" value="xxgk" onclick="group(3);"/>&nbsp;XXGK</td>
     		</tr>
@@ -863,11 +873,11 @@ $(function(){
     		</tr>
 			<tr style="line-height: 70px;">
 				<td style="font-size: 17px;" align="left" >&nbsp;&nbsp;应用域名：&nbsp;&nbsp;</td>
-				<td colspan="3"><input size="60" type="text" name="fasturl" id="fasturl" value=""></td>
+				<td colspan="3"><input size="60" type="text" name="fasturl" id="fasturl" value="http://127.0.0.1:8080/jcms"></td>
 			</tr>
 			<tr>
 				<td style="font-size: 17px;" align="left">&nbsp;&nbsp;接口地址：&nbsp;&nbsp;</td>
-				<td colspan="3"><input size="60" type="text" name="fastinter" id="fastinter" value=""></td>
+				<td colspan="3"><input size="60" type="text" name="fastinter" id="fastinter" value="/interface/ldap/synchro.jsp"></td>
 			</tr>
 		</table>
 		<div id="dialog-toolbar" style="text-align: center;padding-top: 40px;">
@@ -885,25 +895,25 @@ $(function(){
     
     <div id="alertpic" class="alert_tb" style="display:none;"> 
     	<form action="${ctx}/application/applicationSave">
-    	<table>
+    	<table id="picId">
     	<div style="font-size: 20px;padding-top: 15px;padding-bottom: 10px;cursor: auto;padding-left: 5px;">&nbsp;默认图标
     		<a href="${ctx}/application/applicationEdit?findNowPage=true&orderField=${orderField}&orderSort=${orderSort}&iid=${jisApplication.iid}" 
-    		title="关闭" style="padding-left: 466px;font-size: 23px;color: black;text-decoration:none">x</a>
+    		title="关闭" style="padding-left:466px;font-size:26px;color: gray;text-decoration:none">x</a>
     	</div>
     	<hr/>
     		<tr>
-				<td ><div class="pic"><img id="img1" onclick="changSel(1);"  src="${ctx}/uploads/jcms.jpg"></div></td>
-				<td ><div class="pic"><img id="img2" onclick="changSel(2);"  src="${ctx}/uploads/jact.jpg"></div></td>
-				<td ><div class="pic"><img id="img3" onclick="changSel(3);"  src="${ctx}/uploads/oa.jpg"></div></td>
-				<td ><div class="pic"><img id="img4" onclick="changSel(4);"  src="${ctx}/uploads/email.jpg"></div></td>
-				<td ><div class="pic"><img id="img5" onclick="changSel(5);"  src="${ctx}/uploads/xxgk.jpg"></div></td>
+				<td ><div class="pic"><img id="img1" onclick="changSel(1);"  src="${ctx}/resources/jis/front/app/jcms.jpg"></div></td>
+				<td ><div class="pic"><img id="img2" onclick="changSel(2);"  src="${ctx}/resources/jis/front/app/jact.jpg"></div></td>
+				<td ><div class="pic"><img id="img3" onclick="changSel(3);"  src="${ctx}/resources/jis/front/app/oa.jpg"></div></td>
+				<td ><div class="pic"><img id="img4" onclick="changSel(4);"  src="${ctx}/resources/jis/front/app/email.jpg"></div></td>
+				<td ><div class="pic"><img id="img5" onclick="changSel(5);"  src="${ctx}/resources/jis/front/app/xxgk.jpg"></div></td>
 			</tr>
 			<tr>
-				<td><div class="title" onclick="changSel(1);"><input type="radio" name="selectpicname" value="img1" checked onfocus="this.blur()"/>JCMS</div></td>
-				<td><div class="title" onclick="changSel(2);"><input type="radio" name="selectpicname" value="img2" onfocus="this.blur()"/>互动平台</div></td>
-				<td><div class="title" onclick="changSel(3);"><input type="radio" name="selectpicname" value="img3" onfocus="this.blur()"/>OA</div></td>
-				<td><div class="title" onclick="changSel(4);"><input type="radio" name="selectpicname" value="img4" onfocus="this.blur()"/>信息公开</div></td>
-				<td><div class="title" onclick="changSel(5);"><input type="radio" name="selectpicname" value="img5" onfocus="this.blur()"/>电子邮件</div></td>
+				<td><div class="title" onclick="changSel(1);"><input type="radio" name="selectpicname" value="1" checked="checked" onfocus="this.blur()"/>JCMS</div></td>
+				<td><div class="title" onclick="changSel(2);"><input type="radio" name="selectpicname" value="2" onfocus="this.blur()"/>互动平台</div></td>
+				<td><div class="title" onclick="changSel(3);"><input type="radio" name="selectpicname" value="3" onfocus="this.blur()"/>OA</div></td>
+				<td><div class="title" onclick="changSel(4);"><input type="radio" name="selectpicname" value="4" onfocus="this.blur()"/>信息公开</div></td>
+				<td><div class="title" onclick="changSel(5);"><input type="radio" name="selectpicname" value="5" onfocus="this.blur()"/>电子邮件</div></td>
 			</tr>
 		</table>
 		<div id="dialogpic-toolbar" style="text-align: center;">

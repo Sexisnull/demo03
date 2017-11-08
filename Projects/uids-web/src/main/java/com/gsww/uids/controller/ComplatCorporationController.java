@@ -109,7 +109,7 @@ public class ComplatCorporationController extends BaseController{
 	@RequestMapping(value = "/corporationEdit", method = RequestMethod.GET)
 	public ModelAndView accountEdit(String corporationId,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		ModelAndView mav=new ModelAndView("users/corporation/corporation_edit");
-		ComplatCorporation corporation = null;   
+		ComplatCorporation corporation = new ComplatCorporation();   
 		try {
 			if(StringHelper.isNotBlack(corporationId)){
 				Integer iid = Integer.parseInt(corporationId);
@@ -211,6 +211,12 @@ public class ComplatCorporationController extends BaseController{
 						corporation.setCardNumber(qyCardNumber);
 					}
 					
+					//对企业组织机构代码处理，企业法人
+					String qyOrgNumber = request.getParameter("qyOrgNumber");
+					if(StringHelper.isNotBlack(qyOrgNumber)){
+						corporation.setOrgNumber(qyOrgNumber);
+					}
+					
 				}else{
 				
 					//对民族处理 非 企业法人
@@ -235,6 +241,14 @@ public class ComplatCorporationController extends BaseController{
 					String fqyCardNumber = request.getParameter("fqyCardNumber");
 					if(StringHelper.isNotBlack(fqyCardNumber)){
 						corporation.setCardNumber(fqyCardNumber);
+					}
+					
+					//对企业组织机构代码处理，非企业法人
+					String fqyOrgNumber = request.getParameter("fqyOrgNumber");
+					if(StringHelper.isNotBlack(fqyOrgNumber)){
+						corporation.setOrgNumber(fqyOrgNumber);
+					}else{
+						corporation.setRegNumber(corporation.getRegNumber().substring(1, corporation.getRegNumber().length()));
 					}
 				}
 				//重复校验
@@ -271,7 +285,8 @@ public class ComplatCorporationController extends BaseController{
 			resMap.put("ret", "2");
 			resMap.put("msg", "保存失败！");
 			response.getWriter().write(JSONObject.toJSONString(resMap));
-			//returnMsg("error","保存失败",request);
+			logger.error(e.getMessage(), e);
+
 		}
 		
 	}
@@ -284,7 +299,7 @@ public class ComplatCorporationController extends BaseController{
 	public ModelAndView accountDelete(String corporationId,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		try {
 			String[] para=corporationId.split(",");
-			ComplatCorporation corporation = null;
+			ComplatCorporation corporation = new ComplatCorporation();
 			for(int i=0;i<para.length;i++){
 				Integer corId = Integer.parseInt(para[i].trim());
 				corporation=complatCorporationService.findByKey(corId);
@@ -301,7 +316,9 @@ public class ComplatCorporationController extends BaseController{
 				
 			}
 		} catch (Exception e) {
-			returnMsg("error", "删除失败",request);			
+			returnMsg("error", "删除失败",request);
+			logger.error(e.getMessage(), e);
+
 		} finally{
 			return  new ModelAndView("redirect:/complat/corporationList");
 		}
@@ -320,7 +337,7 @@ public class ComplatCorporationController extends BaseController{
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/corporationStart", method = RequestMethod.GET)
 	public ModelAndView corporationStart(String corporationIid,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
-		ComplatCorporation complatCorporation = null;
+		ComplatCorporation complatCorporation = new ComplatCorporation();
 		try{
 			String[] para = corporationIid.split(",");
 			for(int i=0;i<para.length;i++){
@@ -329,13 +346,15 @@ public class ComplatCorporationController extends BaseController{
 				if(enable == 0){
 					complatCorporation.setEnable(1);
 					complatCorporationService.save(complatCorporation);
-					returnMsg("success", "启用成功！", request);				
+					returnMsg("success", "账号开启成功！", request);				
 				} else {
-					returnMsg("success", "账号已启用！", request);
+					returnMsg("success", "账号已开启！", request);
 				}
 			}
 		}catch(Exception e){
-			returnMsg("error", "账号启用失败！", request);
+			returnMsg("error", "账号开启失败！", request);
+			logger.error(e.getMessage(), e);
+
 		}finally{
 			return  new ModelAndView("redirect:/complat/corporationList");
 		}
@@ -353,7 +372,7 @@ public class ComplatCorporationController extends BaseController{
 	@SuppressWarnings("finally")
 	@RequestMapping(value = "/corporationStop", method = RequestMethod.GET)
 	public ModelAndView corporationStop(String corporationIid,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
-		ComplatCorporation complatCorporation = null;
+		ComplatCorporation complatCorporation = new ComplatCorporation();
 		try{
 			String[] para = corporationIid.split(",");
 			for(int i=0;i<para.length;i++){
@@ -362,13 +381,15 @@ public class ComplatCorporationController extends BaseController{
 				if(enable == 1){
 					complatCorporation.setEnable(0);
 					complatCorporationService.save(complatCorporation);
-					returnMsg("success", "关闭成功！", request);				
+					returnMsg("success", "账号关闭成功！", request);				
 				} else {
 					returnMsg("success", "账号已关闭！", request);
 				}
 			}
 		}catch(Exception e){
 			returnMsg("error", "账号关闭失败！", request);
+			logger.error(e.getMessage(), e);
+
 		}finally{
 			return  new ModelAndView("redirect:/complat/corporationList");
 		}
@@ -386,8 +407,8 @@ public class ComplatCorporationController extends BaseController{
 	@SuppressWarnings("finally") 
 	@RequestMapping(value = "/corporationAuth", method = RequestMethod.POST)
 	public void corporationAuth(ComplatCorporation corporation,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
-		ComplatCorporation complatCorporation = null;
 		Map<String, Object> resMap = new HashMap<String, Object>();
+		ComplatCorporation complatCorporation = new ComplatCorporation();
 		try{
 			int type = 1;
 			String corporationType = StringUtils.trim((String) request.getParameter("corporUserType"));
@@ -412,7 +433,7 @@ public class ComplatCorporationController extends BaseController{
 				} else if (type == 0) {
 					complatCorporation.setisAuth(0);
 					complatCorporation.setauthState(2);
-					if (rejectReason2 != null) {
+					if (StringHelper.isNotBlack(rejectReason2)) {
 						complatCorporation.setrejectReason(rejectReason2);
 					}
 					complatCorporationService.save(complatCorporation);
@@ -422,7 +443,7 @@ public class ComplatCorporationController extends BaseController{
 				}
 			}
 		}catch(Exception e){
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 			returnMsg("error", "认证失败！", (HttpServletRequest) request);
 		}
 	}
@@ -440,7 +461,7 @@ public class ComplatCorporationController extends BaseController{
 			ComplatCorporation complatCorporation = complatCorporationService.findByKey(pid);
 			model.addAttribute("complatCorporation",complatCorporation);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return "users/corporation/corporation_authen_list";
 	}
@@ -456,7 +477,7 @@ public class ComplatCorporationController extends BaseController{
 	@RequestMapping(value="/checkCorporationLoginName", method = RequestMethod.GET)
 	public void checkLoginName(String loginName,Model model,HttpServletRequest request,HttpServletResponse response)throws Exception {
 		try {
-			ComplatCorporation complatCorporation = null;
+			ComplatCorporation complatCorporation = new ComplatCorporation();
 			String loginNameInput=StringUtils.trim((String)request.getParameter("loginName"));
 			String oldLoginName=StringUtils.trim((String)request.getParameter("oldLoginName"));
 			if(!loginNameInput.equals(oldLoginName)){
@@ -471,7 +492,7 @@ public class ComplatCorporationController extends BaseController{
 			}
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 
@@ -524,5 +545,4 @@ public class ComplatCorporationController extends BaseController{
 		jisLog.setSpec(spec);
 		jisLogService.save(jisLog);
 	}
-	
 }

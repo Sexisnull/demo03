@@ -64,9 +64,8 @@ value：字符串
 返回：
 如果通过验证返回true,否则返回false
 */
-function isNumbOrLett( s ){//判断是否是字母、数字组成
-	//var regu = "^[0-9a-zA-Z\u4e00-\u9fa5]+$";
-	var regu = /^([a-zA-Z0-9]+)$/;
+function isNumbOrLett( s ){
+	var regu = "^[0-9a-zA-Z\u4e00-\u9fa5]+$";
 	var re = new RegExp(regu);
 	if (re.test(s)) {
 		return true;
@@ -81,13 +80,13 @@ font-size: 12px;
 border: 1px solid #dddddd;
 padding: 3px 8px;
 height: 30px;
-width: 186px;
+width: 187px;
 }
 #objectnameSearchHigh{
-width: 168px !important;
+width: 169px !important;
 }
 .syncTime{
-width: 65px !important;
+width: 66px !important;
 }
 </style>
 </head>
@@ -101,8 +100,8 @@ width: 65px !important;
 						<a href="${ctx}/backIndex" target="_top">首页</a>
 					</li>
 					<li class="split"></li>
-					<li>
-						<a href="#">同步管理</a>
+					<li class="active">
+						同步管理
 					</li>
 					<li class="split"></li>
 					<li class="active">
@@ -152,10 +151,15 @@ width: 65px !important;
 									<input type="text" id="objectnameSearchHigh" name="search_LIKE_objectname" placeholder="操作对象名称" value="${sParams['LIKE_objectname']}" class="input" />
 								</td>
 								<th>操作时间：</th>
+								<!--<td>
+									<input type="text" class="syncTime" id="synctimeSearchStart" name="search_GTE_synctime" placeholder="起始时间" value="${sParams['GTE_synctime']}" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+									 至 <input class="syncTime" type="text" id="synctimeSearchEnd" name="search_LTE_synctime" placeholder="结束时间" value="${sParams['LTE_synctime']}" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" />
+									 search_LIKE_ 
+								</td>
+								-->
 								<td>
-									<input type="text" class="syncTime Wdate" id="synctimeSearchStart" name="search_GTE_synctime" placeholder="起始时间" value="${sParams['GTE_synctime']}" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-									 至 <input class="syncTime Wdate" type="text" id="synctimeSearchEnd" name="search_LTE_synctime" placeholder="结束时间" value="${sParams['LTE_synctime']}" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" />
-									<!-- search_LIKE_ -->
+									<input type="text" class="syncTime" id="synctimeSearchStart" name="search_GTE_synctime" placeholder="起始时间" value="${sParams['GTE_synctime']}" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd 00:00:00',maxDate:'#F{$dp.$D(\'synctimeSearchEnd\')}'})" />
+									 至 <input class="syncTime" type="text" id="synctimeSearchEnd" name="search_LTE_synctime" placeholder="结束时间" value="${sParams['LTE_synctime']}" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd 23:59:59',minDate:'#F{$dp.$D(\'synctimeSearchStart\')}'})" />
 								</td>
 								<th></th>
 								<td class="btn-group" style="text-align:right;">

@@ -35,9 +35,9 @@ $().ready(function() {
 
 	//区域编码校验
 	jQuery.validator.addMethod("isRegionCode1", function(value, element) { 
-           var corporName = /^[0-9]*$/;   
+           var corporName = /^[0-9]{1,32}$/;   
            return this.optional(element) || (corporName.test(value));     
-    }, "区域编码只能由数字组成");
+    }, "区域编码只能由数字组成且长度不能超过32位");
 });
 </script>
 
@@ -430,8 +430,8 @@ background: #249bf3;color: #fff;border: 1px solid #249BF3;}
 				<a href="${ctx}/backIndex" target="_top">首页</a>
 			</li>
 			<li class="split"></li>
-			<li>
-				<a >系统管理</a>
+			<li class="active">
+				系统管理
 			</li>
 			<li class="split"></li>
 			<li class="active">
@@ -439,6 +439,11 @@ background: #249bf3;color: #fff;border: 1px solid #249BF3;}
 			</li>
     	</ol>
     </div>
+     <!-- 提示信息开始 -->
+		<div class="form-alert;">
+			<tags:message msgMap="${msgMap}"></tags:message>
+		</div>
+	<!-- 提示信息结束 -->
     <!--左侧树形结构-->
     <div id="tablelist">
     <table class="tablelist" style="width:300px;float:left;min-width:0px;">
@@ -465,7 +470,7 @@ background: #249bf3;color: #fff;border: 1px solid #249BF3;}
     <div class="form-content double fn-left">
         <ul class="form-table">
         	<!--,nameCheck: true,isUnique:true,cnRangelength:[1,64] -->
-        	 <li><b class="mustbe">*</b>区域名称</li>
+        	 <li>区域名称</li>
             <li>
             	<input type="text" disabled="disabled" style="background:#F0F0F0;" class="input" id="regionName1" name="name1" value="${complatZone.name}"  />
             	 <input type="hidden" class="input" id="regionName" name="name" value="${complatZone.name}"  />
@@ -473,7 +478,7 @@ background: #249bf3;color: #fff;border: 1px solid #249BF3;}
             	<i class="form-icon-clear"></i>
             </li>
 																
-            <li>区域编码</li>
+            <li><b class="mustbe">*</b>区域编码</li>
             <li>
             	<input type="text" style="background:#F0F0F0;" class="input regionCode" id="regionCode1" name="deptCode1" value="${complatZone.codeId}" />
             	<input type="hidden" class="input regionCode" id="regionCode" name="deptCode" value="${complatZone.codeId}" />

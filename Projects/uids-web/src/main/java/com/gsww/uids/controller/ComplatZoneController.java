@@ -420,6 +420,7 @@ public class ComplatZoneController extends BaseController {
 			complatZoneService.save(complatZone);
 			String desc = sysUserSession.getLoginAccount() + "修改 【" + complatZone.getName() + "】 区域编码(区域管理)"; 
 			jisLogService.save(sysUserSession.getLoginAccount(),sysUserSession.getUserIp(),desc,11,2);
+			returnMsg("success", "保存成功", request);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			returnMsg("error", "保存失败", request);
