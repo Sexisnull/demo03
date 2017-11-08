@@ -337,7 +337,7 @@
 								value="${complatUser.name}" maxlength="33" />
 						</td>
 						<th>
-							登录名：
+							<b class="mustbe">*</b>登录名：
 						</th>
 						<td>
 							<input type="text" id="loginname" name="loginname"
@@ -347,7 +347,7 @@
 					</tr>
 					<tr>
 						<th>
-							密码：
+							<b class="mustbe">*</b>密码：
 						</th>
 						<td>
 							<input type="password" id="pwd" name="pwd" value="${pwd}"
@@ -396,7 +396,7 @@
 					</tr>
 					<tr>
 						<th>
-							重复密码：
+							<b class="mustbe">*</b>重复密码：
 						</th>
 						<td>
 							<input type="password" name="confPwd" id="confPwd" value="${pwd}">
