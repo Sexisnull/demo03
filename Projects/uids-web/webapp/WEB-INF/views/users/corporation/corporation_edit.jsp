@@ -53,6 +53,10 @@ $().ready(function() {
 		   phone:{
 		   	isCompTel:true
 		   }
+		  },messages:{
+		  	pwd:{
+		  		cnRangelength:"密码长度介于6至18位之间"
+		  	}
 		  },submitHandler : function() {								
 				$.ajax({
 					type : "POST",

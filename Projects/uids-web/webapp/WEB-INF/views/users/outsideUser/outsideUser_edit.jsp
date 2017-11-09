@@ -93,10 +93,11 @@ $().ready(function() {
 			address:{
 		   		cnRangelength: [0,127],
 		   		isName:true
-		   	},
-		   	submitHandler:function(form){
-				form.submit();
-			}
+		   	}
+		},messages:{
+		  	pwd:{
+		  		cnRangelength:"密码长度介于6至18位之间"
+		  	}
 		}
 	});
 	// Ajax重命名校验
