@@ -453,21 +453,14 @@ public class ComplatOutsideuserController extends BaseController {
 	@RequestMapping(value="/checkOutisideUserMobile", method = RequestMethod.GET)
 	public void checkOutisideUserMobile(String mobile,Model model,HttpServletRequest request,HttpServletResponse response) {
 		try {
-			List<ComplatOutsideuser> outsideUserList = new ArrayList<ComplatOutsideuser>();
 			String mobileInput=StringUtils.trim((String)request.getParameter("mobile"));
 			String oldMobile=StringUtils.trim((String)request.getParameter("oldMobile"));
 			if(!mobileInput.equals(oldMobile)){
-				outsideUserList = outsideUserService.findByMobile(mobile);
-				if(outsideUserList.size() > 0){
-					for(int i=0;i<outsideUserList.size();i++){
-						if(outsideUserList.get(i) != null && outsideUserList.get(i).getOperSign() != 3){					
-							response.getWriter().write("0");								
-						}else{
-							response.getWriter().write("1");
-						}
-					}
-				}else{
+				Integer checkMobile = outsideUserService.findByMobileIsUsed(mobile);
+				if(checkMobile > 0){
 					response.getWriter().write("0");
+				}else{
+					response.getWriter().write("1");
 				}
 			}else{
 				response.getWriter().write("1");
@@ -489,19 +482,12 @@ public class ComplatOutsideuserController extends BaseController {
 	@RequestMapping(value="/checkOutisideUserPapersNumber", method = RequestMethod.GET)
 	public void checkOutisideUserPapersNumber(String papersNumber,Model model,HttpServletRequest request,HttpServletResponse response) {
 		try {
-			List<ComplatOutsideuser> outsideUserList = new ArrayList<ComplatOutsideuser>();
 			String papersNumberInput=StringUtils.trim((String)request.getParameter("papersNumber"));
 			String oldPapersNumber=StringUtils.trim((String)request.getParameter("oldPapersNumber"));
 			if(!papersNumberInput.equals(oldPapersNumber)){
-				outsideUserList = outsideUserService.findByIdCard(papersNumber);
-				if(outsideUserList.size() > 0){
-					for(int i=0;i<outsideUserList.size();i++){
-						if(outsideUserList.get(i)!=null && outsideUserList.get(i).getOperSign() != 3){					
-							response.getWriter().write("0");								
-						}else{
-							response.getWriter().write("1");
-						}
-					}
+				Integer checkPapersNumber = outsideUserService.findByIdCardIsUsed(papersNumber);
+				if(checkPapersNumber > 0){
+					response.getWriter().write("0");
 				}else{
 					response.getWriter().write("1");
 				}

@@ -96,4 +96,8 @@ public interface ComplatOutsideuserService {
 	boolean insert(ComplatOutsideuser outsideUser);
 	
 	boolean modifyAuthing(ComplatOutsideuser outsideUser);
+	
+	Integer findByMobileIsUsed(String mobile);
+	
+	Integer findByIdCardIsUsed(String papersNumber);
 }

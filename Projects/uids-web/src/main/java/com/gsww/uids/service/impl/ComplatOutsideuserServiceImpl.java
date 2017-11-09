@@ -203,4 +203,17 @@ public class ComplatOutsideuserServiceImpl implements ComplatOutsideuserService 
 		return false;
 	}
 
+	@Override
+	public Integer findByMobileIsUsed(String mobile) {
+		String sql= "select count(1) from complat_outsideuser where mobile = '"+mobile+"' and Opersign <> 3";
+		return jdbcTemplate.queryForObject(sql, Integer.class);
+	}
+
+	@Override
+	public Integer findByIdCardIsUsed(String papersNumber) {
+		
+		String sql= "select count(1) from complat_outsideuser where papersnumber = '"+papersNumber+"' and Opersign <> 3";
+		return jdbcTemplate.queryForObject(sql, Integer.class);
+	}
+
 }
