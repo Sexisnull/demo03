@@ -424,12 +424,11 @@ public class ComplatOutsideuserController extends BaseController {
 	@RequestMapping(value="/checkOutisideUserLoginName", method = RequestMethod.GET)
 	public void checkLoginName(String loginName,Model model,HttpServletRequest request,HttpServletResponse response) {
 		try {
-			ComplatOutsideuser complatOutsideuser = null;
 			String loginNameInput=StringUtils.trim((String)request.getParameter("loginName"));
 			String oldLoginName=StringUtils.trim((String)request.getParameter("oldLoginName"));
 			if(!loginNameInput.equals(oldLoginName)){
-				complatOutsideuser = outsideUserService.findByLoginNameIsUsed(loginName);
-				if(complatOutsideuser!=null){					
+				Integer checkUnique = outsideUserService.findByLoginNameIsUsed(loginName);
+				if(checkUnique > 0){					
 					response.getWriter().write("0");								
 				}else{
 					response.getWriter().write("1");
@@ -454,15 +453,21 @@ public class ComplatOutsideuserController extends BaseController {
 	@RequestMapping(value="/checkOutisideUserMobile", method = RequestMethod.GET)
 	public void checkOutisideUserMobile(String mobile,Model model,HttpServletRequest request,HttpServletResponse response) {
 		try {
-			ComplatOutsideuser complatOutsideuser = null;
+			List<ComplatOutsideuser> outsideUserList = new ArrayList<ComplatOutsideuser>();
 			String mobileInput=StringUtils.trim((String)request.getParameter("mobile"));
 			String oldMobile=StringUtils.trim((String)request.getParameter("oldMobile"));
 			if(!mobileInput.equals(oldMobile)){
-				complatOutsideuser = outsideUserService.findByMobile(mobile);
-				if(complatOutsideuser!=null){					
-					response.getWriter().write("0");								
+				outsideUserList = outsideUserService.findByMobile(mobile);
+				if(outsideUserList.size() > 0){
+					for(int i=0;i<outsideUserList.size();i++){
+						if(outsideUserList.get(i) != null && outsideUserList.get(i).getOperSign() != 3){					
+							response.getWriter().write("0");								
+						}else{
+							response.getWriter().write("1");
+						}
+					}
 				}else{
-					response.getWriter().write("1");
+					response.getWriter().write("0");
 				}
 			}else{
 				response.getWriter().write("1");
@@ -484,13 +489,19 @@ public class ComplatOutsideuserController extends BaseController {
 	@RequestMapping(value="/checkOutisideUserPapersNumber", method = RequestMethod.GET)
 	public void checkOutisideUserPapersNumber(String papersNumber,Model model,HttpServletRequest request,HttpServletResponse response) {
 		try {
-			ComplatOutsideuser complatOutsideuser = null;
+			List<ComplatOutsideuser> outsideUserList = new ArrayList<ComplatOutsideuser>();
 			String papersNumberInput=StringUtils.trim((String)request.getParameter("papersNumber"));
 			String oldPapersNumber=StringUtils.trim((String)request.getParameter("oldPapersNumber"));
 			if(!papersNumberInput.equals(oldPapersNumber)){
-				complatOutsideuser = outsideUserService.findByIdCard(papersNumber);
-				if(complatOutsideuser!=null){					
-					response.getWriter().write("0");								
+				outsideUserList = outsideUserService.findByIdCard(papersNumber);
+				if(outsideUserList.size() > 0){
+					for(int i=0;i<outsideUserList.size();i++){
+						if(outsideUserList.get(i)!=null && outsideUserList.get(i).getOperSign() != 3){					
+							response.getWriter().write("0");								
+						}else{
+							response.getWriter().write("1");
+						}
+					}
 				}else{
 					response.getWriter().write("1");
 				}

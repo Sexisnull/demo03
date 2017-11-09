@@ -253,7 +253,7 @@ public class ComplatCorporationController extends BaseController{
 				}
 				//重复校验
 				if(corporation.getIid() == null){
-					Integer checkData = complatCorporationService.checkUnique(corporation.getLoginName(), corporation.getRegNumber(), corporation.getOrgNumber());
+					Integer checkData = complatCorporationService.checkUnique(corporation.getLoginName(), corporation.getRegNumber(), corporation.getOrgNumber(),corporation.getType());
 					if(checkData > 0){
 						resMap.put("ret", "0");
 						resMap.put("msg", "法人用户重复，保存失败！");

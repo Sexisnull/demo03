@@ -97,5 +97,5 @@ public interface ComplatCorporationService {
 	/**
 	 * 根据loginName,regNumber,orgNumber校验数据唯一性
 	 */
-	Integer checkUnique(String loginName,String regNumber,String orgNumber) throws Exception;
+	Integer checkUnique(String loginName,String regNumber,String orgNumber,Integer type) throws Exception;
 }

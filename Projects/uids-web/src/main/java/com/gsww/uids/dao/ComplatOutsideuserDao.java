@@ -45,9 +45,9 @@ public interface ComplatOutsideuserDao extends
 	 */
 	ComplatOutsideuser findByLoginName(String loginName);
 
-	ComplatOutsideuser findByMobile(String cellPhoneNum);
+	List<ComplatOutsideuser> findByMobile(String cellPhoneNum);
 
-	ComplatOutsideuser findByPapersNumber(String idCard);
+	List<ComplatOutsideuser> findByPapersNumber(String idCard);
 
 	@Modifying
 	@Query("update ComplatOutsideuser t set t.loginTime = ?2 , t.loginIp=?3 where t.iid = ?1")
@@ -60,4 +60,5 @@ public interface ComplatOutsideuserDao extends
 	@Modifying
 	@Query("update ComplatOutsideuser t set t.pwd = ?2 where t.iid = ?1")
 	int updatePwd(int iid, String pwd);
+	
 }

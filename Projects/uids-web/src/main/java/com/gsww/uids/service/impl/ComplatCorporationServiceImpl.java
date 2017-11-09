@@ -238,15 +238,15 @@ public class ComplatCorporationServiceImpl implements ComplatCorporationService{
 	}
 
 	@Override
-	public Integer checkUnique(String loginName, String regNumber, String orgNumber)
+	public Integer checkUnique(String loginName, String regNumber, String orgNumber,Integer type)
 			throws Exception {
 		String sql = "";
 		if(StringHelper.isNotBlack(orgNumber) && StringHelper.isNotBlack(regNumber)){
-			sql = "select count(1) from Complat_Corporation t where t.loginname = '"+loginName+"' and t.regnumber = '"+regNumber+"' and t.orgnumber='"+orgNumber+"'";
+			sql = "select count(1) from Complat_Corporation t where t.loginname = '"+loginName+"' and t.regnumber = '"+regNumber+"' and t.orgnumber='"+orgNumber+"' and t.type = "+type+" and t.Opersign <> 3";
 		}else if(!StringHelper.isNotBlack(regNumber)){
-			sql = "select count(1) from Complat_Corporation t where t.loginname = '"+loginName+"' and t.orgnumber='"+orgNumber+"'";
+			sql = "select count(1) from Complat_Corporation t where t.loginname = '"+loginName+"' and t.orgnumber='"+orgNumber+"' and t.type = "+type+" and t.Opersign <> 3";
 		}else{
-			sql = "select count(1) from Complat_Corporation t where t.loginname = '"+loginName+"' and t.regnumber = '"+regNumber+"'";
+			sql = "select count(1) from Complat_Corporation t where t.loginname = '"+loginName+"' and t.regnumber = '"+regNumber+"' and t.type = "+type+" and t.Opersign <> 3";
 		}
 		
 		Integer countData = jdbcTemplate.queryForObject(sql, Integer.class);

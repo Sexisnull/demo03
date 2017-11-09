@@ -12,7 +12,8 @@ $().ready(function() {
 	$("#editForm").validate({
 		rules : {
 			deptCode1: {
-				isRegionCode1 : true
+				isRegionCode1 : true,
+				uniqueAreaCode :true
 			}
 		},
 		submitHandler : function(form) {
@@ -30,8 +31,8 @@ $().ready(function() {
 			}
 		}
 	});
-	// Ajax重命名校验
-	$.uniqueValidate('uniqueName', '${ctx}/complat/checkZoneName', ['regionName','oldRoleName','regionCode'], '对不起，这个区域名称重复了');
+	// Ajax重命名校验 - regionCode1编辑之后的;regionCode原来的
+	$.uniqueValidate('uniqueAreaCode', '${ctx}/complat/checkAreaCode', ['regionCode1','regionCode'], '对不起，这个区域编码重复了');
 
 	//区域编码校验
 	jQuery.validator.addMethod("isRegionCode1", function(value, element) { 

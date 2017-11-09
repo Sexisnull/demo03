@@ -75,18 +75,18 @@ public class ComplatOutsideuserServiceImpl implements ComplatOutsideuserService 
 	}
 
 	@Override
-	public ComplatOutsideuser findByLoginNameIsUsed(String loginName) {
-		ComplatOutsideuser oList = outsideUserDao.findByLoginName(loginName);
-		return oList;
+	public Integer findByLoginNameIsUsed(String loginName) {
+		String sql= "select count(1) from complat_outsideuser where loginname = '"+loginName+"' and Opersign <> 3";
+		return jdbcTemplate.queryForObject(sql, Integer.class);
 	}
 
 	@Override
-	public ComplatOutsideuser findByMobile(String cellPhoneNum) {
+	public List<ComplatOutsideuser> findByMobile(String cellPhoneNum) {
 	    return this.outsideUserDao.findByMobile(cellPhoneNum);
 	}
 
 	@Override
-	public ComplatOutsideuser findByIdCard(String IdCard) {
+	public List<ComplatOutsideuser> findByIdCard(String IdCard) {
 		return this.outsideUserDao.findByPapersNumber(IdCard);
 	}
 
@@ -202,4 +202,5 @@ public class ComplatOutsideuserServiceImpl implements ComplatOutsideuserService 
 	public boolean modifyAuthing(ComplatOutsideuser outsideUser) {
 		return false;
 	}
+
 }
