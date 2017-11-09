@@ -61,9 +61,9 @@ public interface ComplatOutsideuserService {
 	 */
 	public List<Map<String, Object>> findByNameOrPinYin(String keyword);
 
-	public List<ComplatOutsideuser> findByMobile(String cellPhoneNum);
+	public ComplatOutsideuser findByMobile(String cellPhoneNum);
 
-	public List<ComplatOutsideuser> findByIdCard(String IdCard);
+	public ComplatOutsideuser findByIdCard(String IdCard);
 
 	public ComplatOutsideuser findByLoginName(String userName);
 

@@ -81,12 +81,12 @@ public class ComplatOutsideuserServiceImpl implements ComplatOutsideuserService 
 	}
 
 	@Override
-	public List<ComplatOutsideuser> findByMobile(String cellPhoneNum) {
+	public ComplatOutsideuser findByMobile(String cellPhoneNum) {
 	    return this.outsideUserDao.findByMobile(cellPhoneNum);
 	}
 
 	@Override
-	public List<ComplatOutsideuser> findByIdCard(String IdCard) {
+	public ComplatOutsideuser findByIdCard(String IdCard) {
 		return this.outsideUserDao.findByPapersNumber(IdCard);
 	}
 
