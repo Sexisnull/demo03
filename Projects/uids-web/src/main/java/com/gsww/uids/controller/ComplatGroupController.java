@@ -567,7 +567,7 @@ public class ComplatGroupController extends BaseController {
 	 * @throws Exception
 	 */
 	public boolean importCheck(List<ComplatGroup> group,Model model,HttpServletRequest request,HttpServletResponse response)throws Exception {
-		int row = 1;
+		int row = group.size();
 		String allWarn = "";
 		String oneWarn = "";
 		boolean check = true;
@@ -643,10 +643,10 @@ public class ComplatGroupController extends BaseController {
 			}
 			if(StringUtils.isNotBlank(oneWarn)){
 				oneWarn = "第" + row + "行数据导入失败：" + oneWarn + "\n";
-				allWarn = allWarn + oneWarn;
+				allWarn = oneWarn + allWarn;
 				oneWarn = "";
 			}
-			row++;
+			row--;
 		}
 		if(StringUtils.isNotBlank(allWarn)){
 			check = false;
