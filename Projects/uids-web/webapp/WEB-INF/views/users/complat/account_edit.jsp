@@ -224,7 +224,7 @@ var complatUserNameInput=$("#name").val();
 			 }, 
 	     pwd : {
 				  required: true,
-				  cnRangelength: [6,18]
+			 	maxlength: 18
 			 },
 	   
 	     pwdquestion : {
