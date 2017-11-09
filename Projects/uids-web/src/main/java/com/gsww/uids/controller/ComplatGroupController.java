@@ -602,6 +602,10 @@ public class ComplatGroupController extends BaseController {
 			if(complatGroupService.queryNameIsUsed(name, pId)){
 				oneWarn = oneWarn + "机构名称重复。";
 			}
+			//进行导入的上级机构编码是否存在校验
+			if(complatGroupService.findByCodeid(parentCode) == null){
+				oneWarn = oneWarn + "上级机构编码不存在。";
+			}
 			//每个导入字段正则式校验
 			if(!Pattern.matches(zhengZeShi1, complatGroup.getName()) || complatGroup.getName().length() >= 100){
 				oneWarn = oneWarn + "机构名称不符合规范。";
