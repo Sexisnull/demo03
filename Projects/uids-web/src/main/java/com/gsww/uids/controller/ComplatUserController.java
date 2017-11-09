@@ -786,7 +786,8 @@ public class ComplatUserController extends BaseController {
 					.findByCodeid(codeid);
 			// 设置机构编码
 		    if(null==complatGroup){
-		    	groupId = 0;
+		    	groupId=0;
+		    	oneWarn = "第" + row + "行数据机构编码:" +codeid+"不正确"+ oneWarn + "\n";
 		    }else{
 		    	groupId = complatGroup.getIid();
 		    }
@@ -1916,5 +1917,6 @@ public class ComplatUserController extends BaseController {
 		String str = "我是中国人";
 		String pinyin = getPinYinHeadChar(str);
 		System.out.println(pinyin);
+
 	}
 }
