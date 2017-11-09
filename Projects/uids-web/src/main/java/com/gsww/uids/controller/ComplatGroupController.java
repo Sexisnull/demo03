@@ -602,8 +602,10 @@ public class ComplatGroupController extends BaseController {
 				oneWarn = oneWarn + "不是权限内的导入。";
 			}
 			//重名校验
-			if(complatGroupService.queryNameIsUsed(name, pId)){
-				oneWarn = oneWarn + "机构名称重复。";
+			if(pId != null){
+				if(complatGroupService.queryNameIsUsed(name, pId)){
+					oneWarn = oneWarn + "机构名称重复。";
+				}
 			}
 			//每个导入字段正则式校验
 			if(!Pattern.matches(zhengZeShi1, complatGroup.getName()) || complatGroup.getName().length() >= 100){
