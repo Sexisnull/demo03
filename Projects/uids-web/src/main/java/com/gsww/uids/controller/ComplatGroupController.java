@@ -587,8 +587,11 @@ public class ComplatGroupController extends BaseController {
 			String parentCode = complatGroup.getParentCode();//上级机构编码
 			String name = complatGroup.getName();//机构名称
 			Integer pId = 0; //初始化上级机构id
-			if(StringUtils.isNotBlank(parentCode)){
-				pId = complatGroupService.findByCodeid(parentCode).getIid();//上级机构id
+			ComplatGroup one = complatGroupService.findByCodeid(parentCode);
+			if(StringUtils.isNotBlank(parentCode) && one != null){
+				pId = one.getIid();//上级机构id
+			}else{
+				oneWarn = oneWarn + "导入的上级机构编码不存在。";
 			}
 			//校验机构名称，机构后缀，和上级机构编码是否为空
 			if(complatGroup.getName().isEmpty() || complatGroup.getSuffix().isEmpty() || complatGroup.getParentCode().isEmpty()){
@@ -601,10 +604,6 @@ public class ComplatGroupController extends BaseController {
 			//重名校验
 			if(complatGroupService.queryNameIsUsed(name, pId)){
 				oneWarn = oneWarn + "机构名称重复。";
-			}
-			//进行导入的上级机构编码是否存在校验
-			if(complatGroupService.findByCodeid(parentCode) == null){
-				oneWarn = oneWarn + "上级机构编码不存在。";
 			}
 			//每个导入字段正则式校验
 			if(!Pattern.matches(zhengZeShi1, complatGroup.getName()) || complatGroup.getName().length() >= 100){
