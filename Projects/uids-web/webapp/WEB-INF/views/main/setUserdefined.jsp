@@ -55,7 +55,7 @@ $(function(){
 		var apploginName=$("#apploginname").val();
 		var appPwd = $("#apppwd").val();
 		if(apploginName==''){
-			alert("登陆名不能为空");
+			alert("登录名不能为空");
 			return;
 		}
 		if(id=='' && appPwd==''){
