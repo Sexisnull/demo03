@@ -295,13 +295,11 @@ public class FrontAppController extends BaseController {
 	 * 
 	 * @param request
 	 * @param appid
-	 * @param appname
 	 * @param model
 	 * @return
 	 */
 	@RequestMapping(value = "/setUserDefined")
-	public String setUserdefined(HttpServletRequest request, String appid,
-			String appname, Model model) {
+	public String setUserdefined(HttpServletRequest request, String appid, Model model) {
 		try {
 			JisUserdefined userDefined = new JisUserdefined();
 			SysUserSession sysUserSession = (SysUserSession) request
@@ -315,7 +313,12 @@ public class FrontAppController extends BaseController {
 				if (userDefined == null) {
 					userDefined = new JisUserdefined();
 				}
-				model.addAttribute("appname", appname);
+				JisApplication app = jisApplicationService.findByKey(Integer.valueOf(appid));
+				if (app!=null){
+					model.addAttribute("appname", app.getName());
+				}else {
+					model.addAttribute("appname", "");
+				}
 				model.addAttribute("userDefinedId", userDefined.getIid());
 				model.addAttribute("loginAllName", user.getLoginallname());
 				model.addAttribute("appid", appid);
