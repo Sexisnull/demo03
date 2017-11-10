@@ -59,7 +59,7 @@ $(function(){
 			return;
 		}
 		if(id=='' && appPwd==''){
-			alert("初次设置登陆密码不能为空");
+			alert("初次设置登录密码不能为空");
 			return;
 		}
 		
