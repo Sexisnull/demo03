@@ -33,7 +33,7 @@ public class CountUser {
 		super();
 		this.userName = userName;
 		this.groupName = groupName;
-		IP = IP;
+		this.IP = IP;
 		this.operateTime = operateTime;
 	}
 

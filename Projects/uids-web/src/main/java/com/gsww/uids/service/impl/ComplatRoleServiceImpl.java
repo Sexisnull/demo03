@@ -92,7 +92,7 @@ public class ComplatRoleServiceImpl implements ComplatRoleService {
 				.append("left join sys_role_menu_rel rm on m.menu_id=rm.menu_id and rm.role_id=? where m.menu_state='1' ");
 		resAndAccreditSql.append("order by m.menu_seq asc");
 		List<Map<String, Object>> resAndAccreditList = jdbcTemplate
-				.queryForList(resAndAccreditSql.toString(), new String[] { id });
+				.queryForList(resAndAccreditSql.toString(), (Object[])new String[] { id });
 		// 获取操作及授权记录
 		StringBuffer operAndAccreditSql = new StringBuffer();
 		operAndAccreditSql
@@ -103,7 +103,7 @@ public class ComplatRoleServiceImpl implements ComplatRoleService {
 				.append("where o.operator_state='1' order by o.menu_id,o.tab_index,o.operator_type,o.operator_level asc");
 		List<Map<String, Object>> operAndAccreditList = jdbcTemplate
 				.queryForList(operAndAccreditSql.toString(),
-						new String[] { id });
+						(Object[])new String[] { id });
 		// 将资源及操作记录整合后放入list
 		List<SysResourceTree> list = new ArrayList<SysResourceTree>();
 		for (Map<String, Object> map : resAndAccreditList) {
@@ -234,10 +234,10 @@ public class ComplatRoleServiceImpl implements ComplatRoleService {
 	public List<JisRoleobject> findByUserId(Integer userId,Integer groupId)
 			throws Exception {
 		String getRoleSql = "select t.roleid from jis_roleobject t where objectid = ? and type='0'";
-		List<Map<String, Object>> roleRelationMap = jdbcTemplate.queryForList(getRoleSql, new Integer[] { userId });
+		List<Map<String, Object>> roleRelationMap = jdbcTemplate.queryForList(getRoleSql, (Object[])new Integer[] { userId });
 		if(roleRelationMap ==null || roleRelationMap.size()==0){
 			getRoleSql = "select t.roleid from jis_roleobject t where objectid = ? and type='2'";
-			roleRelationMap = jdbcTemplate.queryForList(getRoleSql, new Integer[] { groupId });
+			roleRelationMap = jdbcTemplate.queryForList(getRoleSql, (Object[])new Integer[] { groupId });
 		}
 		List<JisRoleobject> roleRelationList = new ArrayList<JisRoleobject>();
 		for (Map<String, Object> map : roleRelationMap) {

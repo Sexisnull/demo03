@@ -3,7 +3,6 @@ package com.gsww.jup.util;
 import com.gsww.uids.constant.JisSettings;
 import com.hanweb.common.util.JsonUtil;
 import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -12,7 +11,8 @@ import java.util.Map;
 
 public class CellphoneShortMessageUtil
 {
-  public String sendPhoneShortMessage(String telNum, String content, String appBusinessId, String appBusinessName, int loseTime)
+  @SuppressWarnings("unused")
+public String sendPhoneShortMessage(String telNum, String content, String appBusinessId, String appBusinessName, int loseTime)
   {
     JisSettings settings = new JisSettings();
     String appId = settings.getAppId().trim();

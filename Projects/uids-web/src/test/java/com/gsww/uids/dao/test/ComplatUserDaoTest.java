@@ -45,6 +45,7 @@ public class ComplatUserDaoTest {
 		assertTrue(true);
 	}
 	
+	@SuppressWarnings("unused")
 	@Test
 	public void findByLoginnameAndGroupid(){
 		try {

@@ -10,6 +10,7 @@ import org.hibernate.annotations.GenericGenerator;
 /**
  * SysResource entity. @author MyEclipse Persistence Tools
  */
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "SYS_MENU")
 public class SysMenu implements java.io.Serializable{
@@ -40,6 +41,7 @@ public class SysMenu implements java.io.Serializable{
 	}
 
 	/** full constructor */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public SysMenu(String parentMenuId, String menuName, String menuUrl,
 			String menuImg, String menuState, String isTreenode, int menuSeq,
 			Set SysOperator) {

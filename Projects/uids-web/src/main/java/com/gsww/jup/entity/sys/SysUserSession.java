@@ -22,6 +22,7 @@ public class SysUserSession {
 	/** 
 	 * serialVersionUID :  
 	 */
+	@SuppressWarnings("unused")
 	private static final long serialVersionUID = -5325484377920023911L;
 
 	private String accountId; 			// 用户登录帐号ID

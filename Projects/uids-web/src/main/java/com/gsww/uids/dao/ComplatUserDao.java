@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import com.gsww.uids.entity.ComplatOutsideuser;
 import com.gsww.uids.entity.ComplatUser;
 
 /**

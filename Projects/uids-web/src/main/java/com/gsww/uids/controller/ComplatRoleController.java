@@ -3,7 +3,6 @@ package com.gsww.uids.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +35,6 @@ import com.gsww.uids.entity.ComplatGroup;
 import com.gsww.uids.entity.ComplatOutsideuser;
 import com.gsww.uids.entity.ComplatRole;
 import com.gsww.uids.entity.JisApplication;
-import com.gsww.uids.entity.JisLog;
 import com.gsww.uids.entity.JisRoleobject;
 import com.gsww.uids.service.ComplatGroupService;
 import com.gsww.uids.service.ComplatOutsideuserService;
@@ -582,6 +580,7 @@ public class ComplatRoleController extends BaseController {
 	 * @param request
 	 * @param response
 	 */
+	@SuppressWarnings("unused")
 	@RequestMapping(value = "/group_search", method = RequestMethod.POST)
 	public void searchGroupDate(String keyword, String roleid,
 			HttpServletRequest request, HttpServletResponse response) {
@@ -643,6 +642,7 @@ public class ComplatRoleController extends BaseController {
 	 * @param request
 	 * @param response
 	 */
+	@SuppressWarnings("unused")
 	@RequestMapping(value = "/user_search", method = RequestMethod.POST)
 	public void searchUserDate(String keyword, String roleid,
 			HttpServletRequest request, HttpServletResponse response) {

@@ -16,6 +16,7 @@ public class JsonHelper {
 		
 	}
 
+	@SuppressWarnings("unchecked")
 	public static Map<String, Object> parserJson(String json) throws Exception {
 		try {
 			return getMapper().readValue(json, Map.class);

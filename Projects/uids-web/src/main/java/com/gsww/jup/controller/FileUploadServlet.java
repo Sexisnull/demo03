@@ -22,11 +22,16 @@ public class FileUploadServlet extends HttpServlet {
 	private static final long serialVersionUID = 8382832509729035231L;
 	private static final int BUFFER_SIZE = 16 * 1024 ;
 	
+	@SuppressWarnings("unused")
 	private String bizId="";
-    private String relId="";
-    private String configId="";
-    private String fileType="";
-    private String subPath="";
+    @SuppressWarnings("unused")
+	private String relId="";
+    @SuppressWarnings("unused")
+	private String configId="";
+    @SuppressWarnings("unused")
+	private String fileType="";
+    @SuppressWarnings("unused")
+	private String subPath="";
 	/**
 	 * Constructor of the object.
 	 */
@@ -86,6 +91,7 @@ public class FileUploadServlet extends HttpServlet {
 	 * @param response
 	 * @return
 	 */
+	@SuppressWarnings({ "unchecked", "unused", "rawtypes" })
 	private String uploadFiles(HttpServletRequest request, HttpServletResponse response){
 		String name="";
         String extName = "";

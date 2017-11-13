@@ -26,6 +26,7 @@ public class CaptchaController {
 	@Autowired
 	private Producer captchaProducer = null;
 
+	@SuppressWarnings("unused")
 	@RequestMapping(value = "/image", method = RequestMethod.GET)
 	public void getKaptchaImage(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		HttpSession session = request.getSession();

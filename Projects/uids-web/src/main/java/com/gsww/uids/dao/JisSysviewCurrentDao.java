@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import com.gsww.jup.entity.sys.SysOperator;
 import com.gsww.uids.entity.JisSysviewCurrent;
 
 

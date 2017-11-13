@@ -21,7 +21,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 public class FileUploadController extends BaseController {
 	
 	private static final int BUFFER_SIZE = 16 * 1024 ;
-	@SuppressWarnings("finally")
+	@SuppressWarnings({ "unused", "unchecked", "rawtypes" })
 	@RequestMapping(value="/fileUploadToDisk", method = RequestMethod.POST)
 	public void uploadFile(HttpServletRequest request, HttpServletResponse response){
 		String name="";

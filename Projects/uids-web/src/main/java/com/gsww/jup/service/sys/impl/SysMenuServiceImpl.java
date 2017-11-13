@@ -24,7 +24,6 @@ import com.gsww.jup.dao.sys.SysRoleOperRelDao;
 import com.gsww.jup.entity.sys.SysMenu;
 import com.gsww.jup.entity.sys.SysOperator;
 import com.gsww.jup.service.sys.SysMenuService;
-import com.gsww.jup.util.Constants;
 import com.gsww.jup.util.NullHelper;
 import com.gsww.jup.util.XmlHelper;
 
@@ -103,6 +102,7 @@ public class SysMenuServiceImpl implements SysMenuService {
 	 * @param systemCode
 	 * @return
 	 */
+	@SuppressWarnings("unused")
 	public String getSysMenu(String roleIds, String setId) throws Exception {
 		List<Map<String, Object>> list = null;
 		if (roleIds == null || roleIds.equals(""))
@@ -129,6 +129,7 @@ public class SysMenuServiceImpl implements SysMenuService {
 	 * @param systemCode
 	 * @return
 	 */
+	@SuppressWarnings("unused")
 	public String getSysMenuJson(String roleIds)
 			throws Exception {
 		List<Map<String, Object>> list = null;

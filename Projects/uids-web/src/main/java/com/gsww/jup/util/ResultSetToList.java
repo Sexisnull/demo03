@@ -4,12 +4,12 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ResultSetToList {
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static List convertList(ResultSet rs) throws SQLException {
 		List list = new ArrayList();
 		ResultSetMetaData md = rs.getMetaData();

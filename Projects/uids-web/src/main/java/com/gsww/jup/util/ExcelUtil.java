@@ -1,18 +1,13 @@
 package com.gsww.jup.util;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -21,11 +16,8 @@ import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
@@ -211,6 +203,7 @@ public class ExcelUtil {
 	 * @return
 	 * @throws IOException
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes", "unused" })
 	public static void writeExcel(Map<String, Object> map, Workbook wb,HttpServletResponse response,String fileName) throws IOException {
 		if (null != map) {
 			List<Object> headList = (List<Object>) map.get(ExcelUtil.HEADERINFO);

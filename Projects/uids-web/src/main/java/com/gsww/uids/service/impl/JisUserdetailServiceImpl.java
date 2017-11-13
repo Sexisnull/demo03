@@ -2,7 +2,6 @@ package com.gsww.uids.service.impl;
 
 
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -10,13 +9,11 @@ import com.gsww.jup.dao.JdbcDAO;
 import com.gsww.jup.util.StringHelper;
 import com.gsww.uids.service.JisUserdetailService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
 import com.gsww.uids.dao.JisUserdetailDao;
-import com.gsww.uids.entity.ComplatUser;
 import com.gsww.uids.entity.JisUserdetail;
 
 
@@ -42,6 +39,7 @@ public class JisUserdetailServiceImpl implements JisUserdetailService {
 		jisUserdetailDao.save(jisUserdetail);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void update(Integer iid, String cardId,Map<String,String> userMap) throws Exception{
 		Iterator it = userMap.entrySet().iterator();

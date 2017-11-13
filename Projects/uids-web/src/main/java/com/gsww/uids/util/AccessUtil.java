@@ -1,12 +1,9 @@
 package com.gsww.uids.util;
 
-import java.io.PrintStream;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
@@ -19,7 +16,8 @@ public class AccessUtil
 
   private static String crossdomain = "/WEB-INF/config/crossdomain.xml";
 
-  public static boolean checkAccess(HttpServletRequest request)
+  @SuppressWarnings("rawtypes")
+public static boolean checkAccess(HttpServletRequest request)
   {
     try
     {

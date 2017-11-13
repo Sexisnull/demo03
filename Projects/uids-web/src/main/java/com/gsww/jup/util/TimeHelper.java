@@ -79,6 +79,7 @@ public class TimeHelper {
 		CurrentTime = formatter.format(NowDate);
 		return CurrentTime;
 	}
+	@SuppressWarnings("static-access")
 	public static String getYesterdayCompactTime() {
 		Calendar cal = Calendar.getInstance(); 
 		cal.add(cal.DATE, -1); 
@@ -86,6 +87,7 @@ public class TimeHelper {
 		CurrentTime = formatter.format(cal.getTime());
 		return CurrentTime;
 	}
+	@SuppressWarnings("static-access")
 	public static String getYesterdayCompactTimeForFileName() {
 		Calendar cal = Calendar.getInstance(); 
 		cal.add(cal.DATE, -1); 
@@ -367,6 +369,7 @@ public class TimeHelper {
 	 * 
 	 * @throws ParseException
 	 */
+	@SuppressWarnings("unused")
 	public static int getTotalDaysOfMonth(String strDate) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Calendar calendar = new GregorianCalendar();

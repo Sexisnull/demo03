@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.gsww.jup.dao.sys.SysRoleAcctRelDao;
-import com.gsww.jup.entity.sys.SysRoleAcctRel;
 import com.gsww.jup.entity.sys.SysUserSession;
 import com.gsww.jup.service.sys.SysLoginService;
 import com.gsww.uids.dao.ComplatRoleDao;

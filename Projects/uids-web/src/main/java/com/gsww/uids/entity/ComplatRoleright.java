@@ -10,6 +10,7 @@ import javax.persistence.Table;
 /**
  * ComplatRoleright entity. @author MyEclipse Persistence Tools
  */
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "complat_roleright")
 public class ComplatRoleright implements java.io.Serializable {

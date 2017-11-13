@@ -83,7 +83,7 @@ public class HibernateDao<T, PK extends Serializable> extends SimpleHibernateDao
 	 * 
 	 * @return 分页查询结果, 附带结果列表及所有查询时的参数.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Page<T> findPage(final Page<T> page, final String hql, final Object... values) {
 		Assert.notNull(page, "page不能为空");
 
@@ -109,7 +109,7 @@ public class HibernateDao<T, PK extends Serializable> extends SimpleHibernateDao
 	 * 
 	 * @return 分页查询结果, 附带结果列表及所有查询时的参数.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Page<T> findPage(final Page<T> page, final String hql, final Map<String, ?> values) {
 		Assert.notNull(page, "page不能为空");
 
@@ -135,7 +135,7 @@ public class HibernateDao<T, PK extends Serializable> extends SimpleHibernateDao
 	 * 
 	 * @return 分页查询结果.附带结果列表及所有查询时的参数.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Page<T> findPage(final Page<T> page, final Criterion... criterions) {
 		Assert.notNull(page, "page不能为空");
 
@@ -232,7 +232,7 @@ public class HibernateDao<T, PK extends Serializable> extends SimpleHibernateDao
 	/**
 	 * 执行count查询获得本次Criteria查询所能获得的对象总数.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected int countCriteriaResult(final Criteria c) {
 		CriteriaImpl impl = (CriteriaImpl) c;
 
@@ -359,6 +359,7 @@ public class HibernateDao<T, PK extends Serializable> extends SimpleHibernateDao
 	 * 
 	 * 在修改对象的情景下,如果属性新修改的值(value)等于属性原来的值(orgValue)则不作比较.
 	 */
+	@SuppressWarnings("rawtypes")
 	public boolean isPropertyUnique(final String propertyName, final Object newValue, final Object oldValue) {
 		if (newValue == null || newValue.equals(oldValue)) {
 			return true;
@@ -370,6 +371,7 @@ public class HibernateDao<T, PK extends Serializable> extends SimpleHibernateDao
 			return true;
 		}
 	}
+	@SuppressWarnings("rawtypes")
 	public boolean isPropertyRelativelyUnique(final String relativeName,final Object relativeValue,final String propertyName, final Object newValue, final Object oldValue){
 		if (newValue == null || newValue.equals(oldValue)) {
 			return true;

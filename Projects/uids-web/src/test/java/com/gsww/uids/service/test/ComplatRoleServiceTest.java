@@ -1,7 +1,5 @@
 package com.gsww.uids.service.test;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import net.sf.json.JSONArray;
 
@@ -13,15 +11,10 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.gsww.jup.controller.BaseController;
 import com.gsww.uids.entity.ComplatRole;
-import com.gsww.uids.entity.ComplatRolerelation;
 import com.gsww.uids.entity.JisRoleobject;
 import com.gsww.uids.service.ComplatRoleService;
 

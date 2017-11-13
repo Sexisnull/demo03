@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gsww.jup.dao.JdbcDAO;
 import com.gsww.uids.dao.ComplatUserDao;
-import com.gsww.uids.entity.ComplatOutsideuser;
 import com.gsww.uids.entity.ComplatUser;
 import com.gsww.uids.service.ComplatUserService;
 

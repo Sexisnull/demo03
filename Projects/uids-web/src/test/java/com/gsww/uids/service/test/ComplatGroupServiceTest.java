@@ -7,8 +7,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.validation.constraints.AssertTrue;
-
 import net.sf.json.JSONArray;
 
 import org.junit.Test;
@@ -19,7 +17,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.gsww.uids.entity.ComplatGroup;
 import com.gsww.uids.service.ComplatGroupService;
-import com.gsww.uids.service.ComplatUserService;
 
 @RunWith(SpringJUnit4ClassRunner.class)  
 @ContextConfiguration("/applicationContext.xml") 

@@ -187,6 +187,7 @@ public class JSONUtil {
 		}  
 		return list;
 	}
+	@SuppressWarnings("unchecked")
 	public static List<Map<String, Object>> readJsonListMapObj(String jsonString){
 		ObjectMapper objectMapper = new ObjectMapper();
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
@@ -201,6 +202,7 @@ public class JSONUtil {
 		}  
 		return list;
 	}
+	@SuppressWarnings("unchecked")
 	public static Map<String, Map<String, Object>> readJsonToMapObj(String jsonString){
 		ObjectMapper objectMapper = new ObjectMapper();
 		Map<String, Map<String, Object>> list = null;

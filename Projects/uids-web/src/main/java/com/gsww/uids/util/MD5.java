@@ -5,6 +5,7 @@ import java.util.Random;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
+@SuppressWarnings("restriction")
 public class MD5
 {
   static final int S11 = 7;

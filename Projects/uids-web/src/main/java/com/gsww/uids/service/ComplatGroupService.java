@@ -3,7 +3,6 @@ package com.gsww.uids.service;
 import java.util.List;
 import java.util.Map;
 
-import com.gsww.jup.entity.sys.SysMenu;
 import com.gsww.uids.entity.ComplatGroup;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

@@ -1,11 +1,9 @@
-
 package com.gsww.uids.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import com.gsww.uids.entity.JisSysview;
-import com.gsww.uids.entity.JisSysviewCurrent;
 
 public interface JisSysviewService {
 	

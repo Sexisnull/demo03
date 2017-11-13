@@ -18,7 +18,6 @@ import com.gsww.uids.dao.ComplatUserDao;
 import com.gsww.uids.entity.ComplatBanlist;
 import com.gsww.uids.entity.ComplatUser;
 import com.gsww.uids.service.ComplatBanListService;
-import com.gsww.uids.service.ComplatUserService;
 
 @Transactional
 @Service("ComplatBanListService")
