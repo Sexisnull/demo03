@@ -52,6 +52,7 @@ public class BaseController {
 	  * @param className 具体实体类
 	  * @return
 	  */
+	@SuppressWarnings("rawtypes")
 	protected PageRequest buildPageRequest(HttpServletRequest hrequest,PageUtils pageUtils,Class className,String findNowPage) {
 		
 		pageUtils=this.getNowPageNo(hrequest,className, pageUtils,findNowPage);	
@@ -112,6 +113,7 @@ public class BaseController {
 		return spec;
 	}
 
+	@SuppressWarnings("rawtypes")
 	protected Criterion buildPropertyFilterCriterion(final Operator operator, final String propertyName, final Object propertyValue) throws Exception {
 		Assert.hasText(propertyName, "propertyName不能为空");
 		Criterion criterion = null;
@@ -148,6 +150,7 @@ public class BaseController {
 	 * @param pageUtils 分页实体
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	PageUtils getNowPageNo(HttpServletRequest hrequest,Class className,PageUtils pageUtils,String findNowPage){
 		HttpSession session =  hrequest.getSession();
 		if("true".equals(findNowPage)){

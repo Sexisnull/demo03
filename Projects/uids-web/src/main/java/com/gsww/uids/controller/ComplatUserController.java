@@ -1851,6 +1851,7 @@ public class ComplatUserController extends BaseController {
 	 * @param args
 	 */
 
+	@SuppressWarnings("unused")
 	@RequestMapping(value = "/getGroup", method = RequestMethod.POST)
 	public void getGroup(HttpServletRequest request,
 			HttpServletResponse response) {

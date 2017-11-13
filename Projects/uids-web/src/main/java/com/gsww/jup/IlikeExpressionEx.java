@@ -9,10 +9,12 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.PostgreSQLDialect;
 
+@SuppressWarnings({ "deprecation", "serial" })
 public class IlikeExpressionEx extends IlikeExpression{  
     
     private final String propertyName;  
-    private final Object value;  
+    @SuppressWarnings("unused")
+	private final Object value;  
       
     protected IlikeExpressionEx(String propertyName, Object value) {  
         super(propertyName, value);  

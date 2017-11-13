@@ -3,18 +3,15 @@ package com.gsww.jup.entity.sys;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
-
-
 /**
  * SysSsoSessToken entity. @author MyEclipse Persistence Tools
  */
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "SYS_SSO_SESS_TOKEN")
 public class SysSsoSessToken  implements java.io.Serializable {

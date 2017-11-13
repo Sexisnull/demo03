@@ -23,7 +23,8 @@ import com.hanweb.common.util.mvc.JsonResult;
 public class RealNameAuthrizationService {
 	private final Log logger = LogFactory.getLog(getClass());
 
-	 public JsonResult verifyCorRealName(ComplatCorporation corPorationFormBean)
+	 @SuppressWarnings({ "unused", "rawtypes", "unchecked" })
+	public JsonResult verifyCorRealName(ComplatCorporation corPorationFormBean)
 	  {
 	    boolean bl = false;
 	    String charset = "utf-8";

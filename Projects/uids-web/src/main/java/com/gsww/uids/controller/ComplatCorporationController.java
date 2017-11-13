@@ -143,7 +143,6 @@ public class ComplatCorporationController extends BaseController{
 	 * 保存用户信息
 	 * @return 
 	 */
-	@SuppressWarnings("finally")
 	@RequestMapping(value = "/corporationSave", method = RequestMethod.POST)
 	public void corporationSave(ComplatCorporation corporation,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		Map<String, Object> resMap = new HashMap<String, Object>();
@@ -404,7 +403,6 @@ public class ComplatCorporationController extends BaseController{
      * @return
      * @throws Exception
 	 */
-	@SuppressWarnings("finally") 
 	@RequestMapping(value = "/corporationAuth", method = RequestMethod.POST)
 	public void corporationAuth(ComplatCorporation corporation,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		Map<String, Object> resMap = new HashMap<String, Object>();

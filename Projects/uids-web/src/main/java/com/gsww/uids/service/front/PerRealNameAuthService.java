@@ -29,7 +29,8 @@ public class PerRealNameAuthService
   @Autowired
   private JisLogService jisLogService;
 
-  public JsonResult verifyPerRealName(ComplatOutsideuser outsideUserFormBean) { boolean b = true;
+  @SuppressWarnings({ "unused", "rawtypes", "unchecked" })
+public JsonResult verifyPerRealName(ComplatOutsideuser outsideUserFormBean) { boolean b = true;
     String charset = "utf-8";
     JsonResult jsonResult = JsonResult.getInstance();
     String syscode = JisSettings.getSettings().getCorRequestCod();

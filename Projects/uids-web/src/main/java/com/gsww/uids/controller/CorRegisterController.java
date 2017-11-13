@@ -31,7 +31,6 @@ import com.hanweb.common.util.JsonUtil;
 import com.hanweb.common.util.NumberUtil;
 import com.hanweb.common.util.SpringUtil;
 import com.hanweb.common.util.StringUtil;
-import com.hanweb.common.util.security.SecurityUtil;
 
 @Controller
 @RequestMapping({"front/register"})
@@ -173,7 +172,6 @@ public class CorRegisterController
     return jsonResult;
   }
   
-  @SuppressWarnings("unused")
   private String dePwd(String password,HttpServletRequest request){
 	  String en_password = "";
 	    try{
@@ -217,7 +215,8 @@ public class CorRegisterController
       return (byte) "0123456789ABCDEF".indexOf(c);
   }
 
-  @RequestMapping({"sendCellphoneShortMessageCorRe"})
+  @SuppressWarnings("rawtypes")
+@RequestMapping({"sendCellphoneShortMessageCorRe"})
   @ResponseBody
   public String sendCellphoneShortMessageCorRe(HttpSession session, String telNum)
   {
@@ -298,7 +297,8 @@ public class CorRegisterController
     return "存在相同的手机号码";
   }*/
 
-  @RequestMapping({"corregsuccess"})
+  @SuppressWarnings("unused")
+@RequestMapping({"corregsuccess"})
   public ModelAndView perRegSuccess(HttpServletRequest request, HttpSession session,Model model)
   {
     ModelAndView modelAndView = new ModelAndView("jis/front/corregsuccess");

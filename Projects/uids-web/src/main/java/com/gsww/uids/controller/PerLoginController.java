@@ -115,6 +115,7 @@ public class PerLoginController {
 		return "jis/front/perlogin";
 	}
 
+	@SuppressWarnings("unused")
 	@POST
 	@RequestMapping(value = "/doperlogin")
 	@ResponseBody
@@ -315,6 +316,7 @@ public class PerLoginController {
 		return jsonResult;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping(value = "/sendDynamicPwd")
 	@ResponseBody
 	public String sendDynamicPwd(String telNum, HttpSession session) {
@@ -530,6 +532,7 @@ public class PerLoginController {
 		return jsonResult;
 	}
 
+	@SuppressWarnings({ "unused", "rawtypes" })
 	@RequestMapping(value = "/sendCellphoneShortMessageUserPwdRecover")
 	@ResponseBody
 	public String sendCellphoneShortMessageUserPwdRecover(HttpSession session,

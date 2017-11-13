@@ -14,7 +14,6 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import com.gsww.jup.SpringContextHolder;
-import com.gsww.jup.entity.sys.SysOperator;
 import com.gsww.jup.entity.sys.SysUserSession;
 import com.gsww.jup.service.sys.SysOperatorService;
 

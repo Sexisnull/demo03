@@ -14,12 +14,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jasig.cas.client.authentication.AttributePrincipal;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -465,6 +463,7 @@ public class SysLoginController extends BaseController {
 	 * @param request
 	 * @return
 	 */
+	@SuppressWarnings("unused")
 	@RequestMapping(value = "/login/getGroup", method = RequestMethod.POST)
 	public void getGroup(HttpServletRequest request,
 			HttpServletResponse response) {

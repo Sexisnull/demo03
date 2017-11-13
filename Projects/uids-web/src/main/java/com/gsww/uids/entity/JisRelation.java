@@ -10,6 +10,7 @@ import javax.persistence.Table;
 /**
  * JisRelation entity. @author MyEclipse Persistence Tools
  */
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "jis_relation")
 public class JisRelation implements java.io.Serializable {

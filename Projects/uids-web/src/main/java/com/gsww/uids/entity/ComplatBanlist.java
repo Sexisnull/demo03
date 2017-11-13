@@ -13,12 +13,16 @@ import javax.persistence.Table;
 /**
  * ComplatBanlist entity. @author MyEclipse Persistence Tools
  */
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "complat_banlist")
 public class ComplatBanlist implements java.io.Serializable {
 
 	// Fields
 
+	/**
+	 * 
+	 */
 	private Integer iid;
 	private String ipaddr;
 	private Timestamp logindate;

@@ -62,6 +62,7 @@ public class XmlHelper {
 	}
 
 	//在父结点中查询指定名称的结点集
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static Element[] getElementsByName(Element parent, String name) {
 		ArrayList resList = new ArrayList();
 		NodeList nl = getNodeList(parent);

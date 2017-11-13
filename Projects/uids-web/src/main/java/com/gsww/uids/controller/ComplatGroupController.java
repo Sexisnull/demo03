@@ -2,11 +2,8 @@ package com.gsww.uids.controller;
 
 import java.io.PrintWriter;
 import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -18,7 +15,6 @@ import java.util.regex.Pattern;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.gsww.jup.entity.sys.SysUserSession;
 import net.sf.json.JSONArray;
@@ -38,12 +34,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.web.Servlets;
 
-import com.gsww.jup.Constants;
 import com.gsww.jup.controller.BaseController;
 import com.gsww.jup.service.sys.SysParaService;
 import com.gsww.jup.util.ExcelUtil;
@@ -86,7 +80,8 @@ public class ComplatGroupController extends BaseController {
     private String strWarn;//导入失败的提示语句
     
     
-    @RequestMapping(value = "/groupOrgTree", method = RequestMethod.GET)
+    @SuppressWarnings("unused")
+	@RequestMapping(value = "/groupOrgTree", method = RequestMethod.GET)
 	public String complatList(
 			String jumpId,Model model, ServletRequest request, HttpServletRequest hrequest) {
 		try {
@@ -658,7 +653,6 @@ public class ComplatGroupController extends BaseController {
 	/**
 	 * 将导入失败提示语传入前台
 	 */
-	@SuppressWarnings("finally")
 	@RequestMapping(value = "/importWarn", method = RequestMethod.POST)
 	public void importWarn(Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		try {
@@ -677,6 +671,7 @@ public class ComplatGroupController extends BaseController {
     /**
      * excel文件导出
      */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/complatgroupExport", method = RequestMethod.GET)
 	public void complatgroupExport(String iid,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		try{
@@ -760,7 +755,6 @@ public class ComplatGroupController extends BaseController {
 	/**
      * 导入弹出框
      */
-    @SuppressWarnings("finally")
     @RequestMapping(value = "/showImport", method = RequestMethod.GET)
     public String showInport(HttpServletRequest request, HttpServletResponse response)
             throws Exception {

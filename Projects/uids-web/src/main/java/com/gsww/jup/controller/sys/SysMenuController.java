@@ -28,10 +28,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.web.Servlets;
 
 import com.gsww.jup.controller.BaseController;
-import com.gsww.jup.criteria.Criteria;
-import com.gsww.jup.criteria.Criterion;
-import com.gsww.jup.criteria.Criterion.Operator;
-import com.gsww.jup.criteria.Restrictions;
 import com.gsww.jup.entity.sys.SysMenu;
 import com.gsww.jup.entity.sys.SysUserSession;
 import com.gsww.jup.service.sys.SysMenuService;
@@ -56,6 +52,7 @@ public class SysMenuController  extends BaseController{
 	@Autowired
 	private SysMenuService sysMenuService;
 	//页面消息展示类型
+	@SuppressWarnings("unused")
 	private Map<String,String> resMap=new HashMap<String,String>();
 	private SysMenu sysMenu;
 	
@@ -159,7 +156,7 @@ public class SysMenuController  extends BaseController{
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings("finally")
+	@SuppressWarnings({ "finally", "unused" })
 	@RequestMapping(value = "/menu/menuSave", method = RequestMethod.POST)
 	public ModelAndView menuSave(String menuId,SysMenu sysMenu,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		try {
@@ -182,7 +179,7 @@ public class SysMenuController  extends BaseController{
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings("finally")
+	@SuppressWarnings({ "finally", "unused" })
 	@RequestMapping(value = "/menu/menuDelete", method = RequestMethod.GET)
 	public ModelAndView menuDelete(String menuId,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		try {

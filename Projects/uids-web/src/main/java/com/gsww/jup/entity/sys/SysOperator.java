@@ -7,13 +7,10 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -50,7 +47,8 @@ public class SysOperator implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public SysOperator(SysMenu sysMenu, String operatorName, String operatorUrl, String operatorImage, int operatorLevel, String operatorState, String operatorType, String tabIndex, Set sysRoleOperRels) {
+	@SuppressWarnings("unchecked")
+	public SysOperator(SysMenu sysMenu, String operatorName, String operatorUrl, String operatorImage, int operatorLevel, String operatorState, String operatorType, String tabIndex, @SuppressWarnings("rawtypes") Set sysRoleOperRels) {
 		this.sysMenu = sysMenu;
 		this.operatorName = operatorName;
 		this.operatorUrl = operatorUrl;

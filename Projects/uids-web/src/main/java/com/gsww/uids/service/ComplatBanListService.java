@@ -7,7 +7,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.gsww.uids.entity.ComplatBanlist;
-import com.gsww.uids.entity.ComplatUser;
 
 public interface ComplatBanListService {
 	public Page<ComplatBanlist> getComplatBanPage(Specification<ComplatBanlist> spec,PageRequest pageRequest);

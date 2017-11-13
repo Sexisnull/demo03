@@ -11,6 +11,7 @@ import javax.persistence.TemporalType;
 /**
  * ComplatTempfile entity. @author MyEclipse Persistence Tools
  */
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "complat_tempfile")
 public class ComplatTempfile implements java.io.Serializable {

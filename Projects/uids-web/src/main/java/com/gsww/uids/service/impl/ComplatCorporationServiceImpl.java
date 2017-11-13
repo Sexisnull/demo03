@@ -1,9 +1,7 @@
 package com.gsww.uids.service.impl;
 
-
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -173,6 +171,7 @@ public class ComplatCorporationServiceImpl implements ComplatCorporationService{
 		return complatCorporationDao.save(corporation) != null;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unused" })
 	@Override
 	public boolean add(ComplatCorporation corporation) throws OperationException {
 		if (corporation == null) {

@@ -11,6 +11,7 @@ import javax.persistence.Table;
 /**
  * ComplatUserOk entity. @author MyEclipse Persistence Tools
  */
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "complat_user-ok")
 public class ComplatUserOk implements java.io.Serializable {

@@ -104,7 +104,7 @@ public class ServletUtils {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static Map getParametersStartingWith(HttpServletRequest request, String prefix) {
 		//Assert.notNull(request, "Request must not be null");
 		Enumeration paramNames = request.getParameterNames();
