@@ -131,6 +131,7 @@ public class ComplatUserController extends BaseController {
 	@Autowired
 	private JisSettings jisSetting;
 
+	private String strWarn;//导入失败的提示语句
 	/**
 	 * 获取政府用户左侧机构树
 	 * 
@@ -595,7 +596,6 @@ public class ComplatUserController extends BaseController {
 			ComplatGroup complatGroup = null; 
 			if (importCheck(users, model, request, response)) {// 判断数据格式是否合适
 				// 机构是否存在，机构下是否存在用户
-				if (dataCheck(users, model, request, response)) {
 					for (ComplatUser complatUser : users) {
 						// 导入时将机构名汉字转换成首字母大写保存到pinyin字段中
 						String daPinYin = getPinYinHeadChar(complatUser.getName());
@@ -653,7 +653,7 @@ public class ComplatUserController extends BaseController {
 					}
 					returnMsg("success", "导入成功！", request);
 				}
-			}
+		
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			returnMsg("error", "导入失败", request);
@@ -688,14 +688,17 @@ public class ComplatUserController extends BaseController {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		int row = 1;
-		String warn = "";
+		String allWarn = "";
+		String oneWarn = "";
 		boolean check = true;
+		Integer groupId;
+		Integer iid;
 		List<String> resultList = new ArrayList<String>();
 		// 定义所有字段的正则表达式
 		String nameReg = "^(?!_)(?!.*?_$)[a-zA-Z0-9\u4e00-\u9fa5]{1,255}$";
 		String ageReg = "^(?:[1-9][0-9]?|1[01][0-9]|120)$";
 		String groupIdReg = "^[0-9]*$";
-		String headshipReg = "[\u4e00-\u9fa5]{1,255}$";
+//		String headshipReg = "[\u4e00-\u9fa5]{1,255}$";
 		String phoneReg = "(((0\\d{3}[\\-])?\\d{7}|(0\\d{2}[\\-])?\\d{8}))([\\-]\\d{2,4})?$";
 		String mobileReg = "^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\\d{8}$";
 		String addressReg = "[\\dA-Za-z0-9\u4E00-\u9FA5]{1,255}";
@@ -708,40 +711,64 @@ public class ComplatUserController extends BaseController {
 		String cardIdReg = "([1-6]\\d{5}(19|20)\\d\\d(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])\\d{3}[0-9xX])|([1-6]\\d{5}\\d\\d(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])\\d{3})";
 		for (ComplatUser complatUser : users) {
 			// 判断是否有不合规范的数据
-			if ((StringUtils.isEmpty(complatUser.getName()) || (!StringUtils.isEmpty(complatUser.getName()) && !match(nameReg,complatUser.getName())))
-					|| (StringUtils.isEmpty(complatUser.getAge().toString().trim()) || (!StringUtils.isEmpty(complatUser.getAge().toString().trim()) && !match(ageReg,complatUser.getAge().toString().trim())))
-					|| (StringUtils.isEmpty(complatUser.getSex().toString().trim()) || (!StringUtils.isEmpty(complatUser.getSex().toString().trim()) && !((complatUser.getSex() != 1) || (complatUser.getSex() != 0))))
-					|| (StringUtils.isEmpty(complatUser.getGroupName().toString().trim()))
-					|| (StringUtils.isEmpty(complatUser.getCodeid().toString().trim()) || (!StringUtils.isEmpty(complatUser.getCodeid().toString().trim()) && !match(groupIdReg, complatUser.getCodeid().toString().trim())))
-					|| (StringUtils.isEmpty(complatUser.getHeadship()) || (!StringUtils.isEmpty(complatUser.getHeadship()) && !match(headshipReg, complatUser.getHeadship())))
-					|| (StringUtils.isEmpty(complatUser.getPhone()) || (!match(phoneReg, complatUser.getPhone())))
-					|| (StringUtils.isEmpty(complatUser.getMobile()) || (!StringUtils.isEmpty(complatUser.getMobile()) && !match(mobileReg, complatUser.getMobile())))
-					|| (StringUtils.isEmpty(complatUser.getAddress()) || (!StringUtils.isEmpty(complatUser.getAddress()) && !match(addressReg, complatUser.getAddress())))
-					|| (StringUtils.isEmpty(complatUser.getPost()) || (!StringUtils.isEmpty(complatUser.getPost()) && !match(postReg,complatUser.getPost())))
-					// || (StringUtils.isEmpty(complatUser.getIp()) ||
-					// (!StringUtils.isEmpty(complatUser.getIp())&&
-					// !match(ipReg,complatUser.getIp())))
-					|| (StringUtils.isEmpty(complatUser.getFax()) || (!match(faxReg, complatUser.getFax())))
-					|| (StringUtils.isEmpty(complatUser.getEmail()) || (!StringUtils.isEmpty(complatUser.getEmail()) && !match(emailReg, complatUser.getEmail())))
-					|| (StringUtils.isEmpty(complatUser.getQq()) || (!match(qqReg, complatUser.getQq())))
-					|| (StringUtils.isEmpty(complatUser.getLoginname()) || (!StringUtils.isEmpty(complatUser.getLoginname()) && !match(loginameReg, complatUser.getLoginname())))
-					|| (StringUtils.isEmpty(complatUser.getPwd()))
-					// || (StringUtils.isEmpty(complatUser.getPinyin()) ||
-					// (!StringUtils.isEmpty(complatUser.getPinyin())&&
-					// !match(PinYinReg,complatUser.getPinyin())))
-					|| (StringUtils.isEmpty(complatUser.getCardid()) || (!StringUtils.isEmpty(complatUser.getCardid()) && !match(cardIdReg, complatUser.getCardid())))) {
-				warn = warn + String.valueOf(row) + ",";
-				check = false;
+			if (StringUtils.isEmpty(complatUser.getName())){
+				oneWarn = oneWarn + "用户名不能为空。";
+			}else if ((!StringUtils.isEmpty(complatUser.getName()) && !match(nameReg,complatUser.getName()))) {
+				oneWarn = oneWarn + "用户名不符合规范。";			
+			}else if(StringUtils.isEmpty(complatUser.getAge().toString().trim())){
+				oneWarn = oneWarn + "年龄不能为空。";	
+			}else if((!StringUtils.isEmpty(complatUser.getAge().toString().trim()) && !match(ageReg,complatUser.getAge().toString().trim()))) {
+				oneWarn = oneWarn + "年龄不符合规范。";	
+			}else if(StringUtils.isEmpty(complatUser.getSex().toString().trim())){
+				oneWarn = oneWarn + "性别不能为空。";	
+			}else if(!StringUtils.isEmpty(complatUser.getSex().toString().trim()) && !((complatUser.getSex() != 1) || (complatUser.getSex() != 0))) {
+				oneWarn = oneWarn + "性别不符合规范。";
+			}else if(StringUtils.isEmpty(complatUser.getGroupName().toString().trim())){
+				oneWarn = oneWarn + "所属机构不能为空。";
+			}else if(StringUtils.isEmpty(complatUser.getCodeid().toString().trim())) {
+				oneWarn = oneWarn + "机构编码不能为空。";
+			}else if((!StringUtils.isEmpty(complatUser.getCodeid().toString().trim()) && !match(groupIdReg, complatUser.getCodeid().toString().trim()))){
+				oneWarn = oneWarn + "机构编码不符合规范。";
+			}else if(StringUtils.isEmpty(complatUser.getHeadship().toString().trim())) {
+				oneWarn = oneWarn + "职务不能为空。";
+			}else if((!match(phoneReg, complatUser.getPhone().toString().trim()))) {
+				oneWarn = oneWarn + "固定电话不符合规范。";
+			}else if(StringUtils.isEmpty(complatUser.getMobile())){
+				oneWarn = oneWarn + "手机号不能为空。";
+			}else if((!StringUtils.isEmpty(complatUser.getMobile()) && !match(mobileReg, complatUser.getMobile()))) {
+				oneWarn = oneWarn + "手机号不符合规范。";
+			}else if(StringUtils.isEmpty(complatUser.getAddress())){
+				oneWarn = oneWarn + "地址不能为空。";
+			}else if((!StringUtils.isEmpty(complatUser.getAddress()) && !match(addressReg, complatUser.getAddress()))) {
+				oneWarn = oneWarn + "地址不符合规范。";
+			}else if(StringUtils.isEmpty(complatUser.getPost())){
+				oneWarn = oneWarn + "邮政编码不能为空。";
+			}else if((!StringUtils.isEmpty(complatUser.getPost()) && !match(postReg,complatUser.getPost()))) {
+				oneWarn = oneWarn + "邮政编码不符合规范。";
+			}else if(StringUtils.isEmpty(complatUser.getFax())){
+				oneWarn = oneWarn + "传真不能为空。";
+			}else if((!match(faxReg, complatUser.getFax()))){
+				oneWarn = oneWarn + "传真不符合规范。";
+			}else if(StringUtils.isEmpty(complatUser.getEmail())) {
+				oneWarn = oneWarn + "Email不能为空。";
+			}else if((!StringUtils.isEmpty(complatUser.getEmail()) && !match(emailReg, complatUser.getEmail()))){
+				oneWarn = oneWarn + "Email不符合规范。";
+			}else if(StringUtils.isEmpty(complatUser.getQq())){
+				oneWarn = oneWarn + "QQ不能为空。";
+			}else if((!match(qqReg, complatUser.getQq()))){
+				oneWarn = oneWarn + "QQ不能为空。";
+			}else if(StringUtils.isEmpty(complatUser.getLoginname())){
+				oneWarn = oneWarn + "登录名不能为空。";
+			}else if((!StringUtils.isEmpty(complatUser.getLoginname()) && !match(loginameReg, complatUser.getLoginname()))) {
+				oneWarn = oneWarn + "登录名不符合规范。";				
+			}else if(StringUtils.isEmpty(complatUser.getPwd())){
+				oneWarn = oneWarn + "密码不能为空。";
+			}else if(StringUtils.isEmpty(complatUser.getCardid())) {
+				oneWarn = oneWarn + "身份证号不能为空。";
+			}else if((!StringUtils.isEmpty(complatUser.getCardid()) && !match(cardIdReg, complatUser.getCardid()))){
+				oneWarn = oneWarn + "身份证号不符合规范。";
 			}
-
-			if (warn.length() >= 1) {
-				warn = warn.substring(0, warn.length() - 1);
-			}
-			if (check == false) {
-				returnMsg("error", "导入失败,第" + warn + "行数据有误，请修正后重新导入！", request);
-				return check;
-			}
-
+			
 			// 判断当前登录用户是否有导入该条数据的权限
 			// 获取系统当前登录用户
 			SysUserSession sysUserSession = (SysUserSession) request
@@ -753,87 +780,85 @@ public class ComplatUserController extends BaseController {
 				String Iid = list.get(i).getIid().toString();
 				resultList.add(Iid);
 			}
-            
+
 			String codeid = complatUser.getCodeid();
 			ComplatGroup complatGroup = complatGroupService
-					.findByCodeid(codeid);			
-			//设置机构编码
-            Integer groupId = complatGroup.getIid();
+					.findByCodeid(codeid);
+			// 设置机构编码
+		    if(null==complatGroup){
+		    	groupId=0;
+		    	oneWarn = "第" + row + "行数据机构编码:" +codeid+"不正确"+ oneWarn + "\n";
+		    }else{
+		    	groupId = complatGroup.getIid();
+		    }
+			
 			if (!resultList.contains(groupId.toString())) {
-				check = false;
-				warn = warn + String.valueOf(row) + ",";
-			} else {
-				;
+				oneWarn = "第" + row + "行数据您没有权限导入" + oneWarn + "\n";
+				check=false;
+			}else{				
 				check = true;
-				return check;
 			}
-
-			if (check == false) {
-				returnMsg("error",
-						"导入失败,第" + warn.substring(0, warn.length() - 1)
-								+ "行,您没有操作权限", request);
-				return check;
-			}
-		}
-		row++;
-		return check;
-	}
-
-	/**
-	 * 判断机构和用户是否存在
-	 * 
-	 * @param file
-	 * @param request
-	 * @param response
-	 * @return
-	 * @throws Exception
-	 * @author <a href=" ">shenxh</a>
-	 */
-	public boolean dataCheck(List<ComplatUser> users, Model model,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		// 判断excel文件中的机构名称在当前登录机构下面是否存在
-		int row = 1;
-		String warn = "";
-		boolean check = true;
-		ComplatGroup complatGroup = null;
-		for (ComplatUser complatUser : users) {
-			String codeid = complatUser.getCodeid();
+            
+			
+			
+			//判断机构编码对应的机构是否存在
+			codeid = complatUser.getCodeid();
 			complatGroup = complatGroupService.findByCodeid(codeid);	
-			if (complatGroup==null) {
-				warn = warn + String.valueOf(row) + ",";
-				check = false;
-			} else {
+			if (null==complatGroup) {
+				oneWarn = "第" + row + "行数据的机构编码对应的机构不存在：" + oneWarn + "\n";	
+				check=false;
+			}else{
 				check = true;
 			}
-			if (warn.length() >= 1) {
-				warn = warn.substring(0, warn.length() - 1);
-			}
-			if (check == false) {
-				returnMsg("error", "第" + warn + "行的机构不存在，导入失败", request);
-				return check;
-			}
+				
 			// 判断当前机构及其子机构下面是否存在登录名为导入数据中的用户
+			codeid = complatUser.getCodeid();
+			complatGroup = complatGroupService.findByCodeid(codeid);
+			if(null==complatGroup){
+				iid=0;
+			}else{
+				iid=complatGroup.getIid();
+			}
 			List<Map<String, Object>> userList = complatUserService
-					.findByLoginnameAndgroupid(complatUser.getLoginname(),
-							complatGroup.getIid());
-			String name = complatUser.getName();
+					.findByLoginnameAndgroupid(complatUser.getLoginname(),iid);
 			if (userList.size() != 0) {
-				warn = warn + String.valueOf(row) + ",";
-				check = false;
-			} else {
+				oneWarn = "第" + row + "行数据的登录名为："+complatUser.getLoginname()+" 的用户已存在"+ "\n";	
+			}else{
 				check = true;
 			}
-			// if(warn.length() >= 1){
-			// warn = warn.substring(0, warn.length()-1);
-			// }
-			if (check == false) {
-				returnMsg("error",
-						"第" + warn + "行导入失败,用户名为:" + name + "的用户已存在", request);
-			}
+				
+			if(StringUtils.isNotBlank(oneWarn)){
+				oneWarn = "第" + row + "行数据导入失败：" + oneWarn + "\n";
+				allWarn = allWarn + oneWarn;
+				oneWarn = "";
+			}	
 			row++;
 		}
-		return check;
+				
+		if(StringUtils.isNotBlank(allWarn)){
+			check = false;
+			strWarn = allWarn;
+		}
+		return check;	
+	}
+
+	
+	/**
+	 * 将导入失败提示语传入前台
+	 */
+	@RequestMapping(value = "/inportWarn", method = RequestMethod.POST)
+	public void importWarn(Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
+		try {
+			if(StringUtils.isNotBlank(strWarn)){
+				response.getWriter().write(strWarn);
+				strWarn = "";
+			}else{
+				response.getWriter().write("");
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			response.getWriter().write(-1);
+		}
 	}
 
 	/**
@@ -1826,6 +1851,7 @@ public class ComplatUserController extends BaseController {
 	 * @param args
 	 */
 
+	@SuppressWarnings("unused")
 	@RequestMapping(value = "/getGroup", method = RequestMethod.POST)
 	public void getGroup(HttpServletRequest request,
 			HttpServletResponse response) {
@@ -1892,5 +1918,6 @@ public class ComplatUserController extends BaseController {
 		String str = "我是中国人";
 		String pinyin = getPinYinHeadChar(str);
 		System.out.println(pinyin);
+
 	}
 }

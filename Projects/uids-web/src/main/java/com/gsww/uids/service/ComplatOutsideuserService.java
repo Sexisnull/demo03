@@ -86,7 +86,7 @@ public interface ComplatOutsideuserService {
      * @param loginName
      * @return
 	 */
-	public ComplatOutsideuser findByLoginNameIsUsed(String loginName);
+	public Integer findByLoginNameIsUsed(String loginName);
 	
 	/**
 	 * 统一注册插入个人用户
@@ -96,4 +96,8 @@ public interface ComplatOutsideuserService {
 	boolean insert(ComplatOutsideuser outsideUser);
 	
 	boolean modifyAuthing(ComplatOutsideuser outsideUser);
+	
+	Integer findByMobileIsUsed(String mobile);
+	
+	Integer findByIdCardIsUsed(String papersNumber);
 }

@@ -27,7 +27,6 @@ import com.gsww.uids.service.JisLogService;
 import com.gsww.uids.service.front.PerRealNameAuthService;
 import com.gsww.uids.util.AccessUtil;
 import com.gsww.uids.util.JsonResult;
-import com.gsww.uids.util.MD5;
 import com.gsww.uids.util.ResultState;
 import com.hanweb.common.util.JsonUtil;
 import com.hanweb.common.util.Md5Util;
@@ -161,7 +160,6 @@ public class PerRegisterController {
 	}
 
 	/**解密*/
-	@SuppressWarnings("unused")
 	private String dePwd(String password, HttpServletRequest request) {
 		String en_password = "";
 		try {
@@ -215,6 +213,7 @@ public class PerRegisterController {
 	 * @param telNum
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping({ "sendCellphoneShortMessageUserRe" })
 	@ResponseBody
 	public String sendCellphoneShortMessageUserRe(HttpSession session, String telNum) {
@@ -268,6 +267,7 @@ public class PerRegisterController {
 	 * @param session
 	 * @return
 	 */
+	@SuppressWarnings("unused")
 	@RequestMapping({ "doperregister" })
 	@ResponseBody
 	public JsonResult PersonalRegister(HttpSession session) {
@@ -321,6 +321,7 @@ public class PerRegisterController {
 	}
 
 	//插入个人用户表
+	@SuppressWarnings("unused")
 	public boolean addOutUserForReg(ComplatOutsideuser outsideUser) throws Exception {
 		if (outsideUser == null) {
 			return false;

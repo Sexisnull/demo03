@@ -1,4 +1,3 @@
-
 package com.gsww.uids.service.impl;
 
 import java.util.Date;
@@ -57,6 +56,7 @@ public class JisLogServiceImpl implements JisLogService {
 	@Autowired
 	private JisLogDao jisLogDao;
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public Page<Map<String, String>> getJisLogPage(int pageNumber,
 			int pageSize, List<List<String>> searchCodition) throws Exception {

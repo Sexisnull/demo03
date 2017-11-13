@@ -93,10 +93,11 @@ $().ready(function() {
 			address:{
 		   		cnRangelength: [0,127],
 		   		isName:true
-		   	},
-		   	submitHandler:function(form){
-				form.submit();
-			}
+		   	}
+		},messages:{
+		  	pwd:{
+		  		cnRangelength:"密码长度介于6至18位之间"
+		  	}
 		}
 	});
 	// Ajax重命名校验
@@ -223,7 +224,7 @@ color: rgb(119, 119, 119);
 	<div class="position">
 		<ol class="breadcrumb">
 			<li>
-				<a href="${ctx}/backIndex" target="_top">首页</a>
+				首页
 			</li>
 			<li class="split"></li>
 			<li class="active">

@@ -4,7 +4,6 @@
  */
 package com.gsww.jup.controller.sys;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletRequest;

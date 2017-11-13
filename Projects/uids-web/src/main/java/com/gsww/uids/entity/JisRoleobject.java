@@ -10,6 +10,7 @@ import javax.persistence.Table;
 /**
  * JisRoleobject entity. @author MyEclipse Persistence Tools
  */
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "jis_roleobject")
 public class JisRoleobject implements java.io.Serializable {

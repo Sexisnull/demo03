@@ -11,6 +11,7 @@ import javax.persistence.Table;
 /**
  * JisSysviewDetail entity. @author MyEclipse Persistence Tools
  */
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "jis_sysview_detail")
 public class JisSysviewDetail implements java.io.Serializable {

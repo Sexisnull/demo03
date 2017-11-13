@@ -62,7 +62,8 @@ public class Cas20ProxyReceivingTicketValidationFilter extends AbstractTicketVal
      */
     private ProxyGrantingTicketStorage proxyGrantingTicketStorage = new ProxyGrantingTicketStorageImpl();
 
-    protected void initInternal(final FilterConfig filterConfig) throws ServletException {
+    @SuppressWarnings("rawtypes")
+	protected void initInternal(final FilterConfig filterConfig) throws ServletException {
         super.initInternal(filterConfig);
         setProxyReceptorUrl(getPropertyFromInitParams(filterConfig, "proxyReceptorUrl", null));
 
@@ -107,7 +108,8 @@ public class Cas20ProxyReceivingTicketValidationFilter extends AbstractTicketVal
      * @param filterConfig the Filter Configuration object.
      * @return a fully constructed TicketValidator.
      */
-    protected final TicketValidator getTicketValidator(final FilterConfig filterConfig) {
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	protected final TicketValidator getTicketValidator(final FilterConfig filterConfig) {
         final String allowAnyProxy = getPropertyFromInitParams(filterConfig, "acceptAnyProxy", null);
         final String allowedProxyChains = getPropertyFromInitParams(filterConfig, "allowedProxyChains", null);
         final String casServerUrlPrefix = getPropertyFromInitParams(filterConfig, "casServerUrlPrefix", null);

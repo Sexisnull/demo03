@@ -73,27 +73,54 @@ $(document).ready(function(){
         fileTypeExts : '*.xls;*.xlsx',//允许上传的文件类型           
         'removeCompleted':true,
         'onUploadComplete' : function(file) {
-        	W.location.href = "${ctx}/complat/complatList?msg=success";
-            //上传队列全部完成后执行的回调函数    
+        	$.ajax({
+				 type: "POST",
+				 url: "${ctx}/complat/inportWarn",
+				 dataType: 'text',
+				 async:false,
+				 success: function (data) {
+				 if (data != "" && data != null) {
+					 hidden();
+					 show(data);				 
+				 }else {
+				     W.parent.location.href = "${ctx}/complat/groupOrgTree";
+				 }
+				}
+            });
          }
     });
 });
 
+
+function hidden(){
+	document.getElementById("import").style.display="none";
+	//alert(document.getElementById("div").style.display)
+	}
+
+	function show(data){
+	document.getElementById("showWarn").style.display="block";
+	//先创建一个文本节点
+	var textNode = document.createTextNode(data);
+	//获取div对象
+	var divNode = document.getElementById("showWarn");
+	//给div添加文本元素
+	divNode.appendChild(textNode);
+	}
 </script>
 
 </head>
 <body>
 
 	<!-- 导入用户的弹出层 -->
-			<div class="Popup">
-				<!-- 隐藏div -->				
-				<div class="Popup_cen">
-				    <ul class="mainInput">
-				    	<li style="float:left;"><input  type="button" class="btnImport" value="模板下载" onclick="downloadTemplate()"/></li>
-				        <li style="float:left;"><input type="file" id="file_upload" name="file_upload" class="uploadify"></li>
-				        
-				    </ul>					
-			   </div>
+	<div class="Popup" id="import" name="import">			
+		<div class="Popup_cen">
+			<ul class="mainInput">
+				<li style="float:left;"><input  type="button" class="btnImport" value="模板下载" onclick="downloadTemplate()"/></li>
+				<li style="float:left;"><input type="file" id="file_upload" name="file_upload" class="uploadify"></li>
+			</ul>					
+		</div>
+	</div>
+	<div id="showWarn" name="showWarn" style="display: none"></div>			
 
 </body>
 </html>

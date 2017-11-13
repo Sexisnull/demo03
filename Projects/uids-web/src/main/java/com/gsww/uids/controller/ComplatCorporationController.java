@@ -143,7 +143,6 @@ public class ComplatCorporationController extends BaseController{
 	 * 保存用户信息
 	 * @return 
 	 */
-	@SuppressWarnings("finally")
 	@RequestMapping(value = "/corporationSave", method = RequestMethod.POST)
 	public void corporationSave(ComplatCorporation corporation,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		Map<String, Object> resMap = new HashMap<String, Object>();
@@ -253,8 +252,8 @@ public class ComplatCorporationController extends BaseController{
 				}
 				//重复校验
 				if(corporation.getIid() == null){
-					Integer checkData = complatCorporationService.checkUnique(corporation.getLoginName(), corporation.getRegNumber(), corporation.getOrgNumber());
-					if(checkData == 1){
+					Integer checkData = complatCorporationService.checkUnique(corporation.getLoginName(), corporation.getRegNumber(), corporation.getOrgNumber(),corporation.getType());
+					if(checkData > 0){
 						resMap.put("ret", "0");
 						resMap.put("msg", "法人用户重复，保存失败！");
 						response.getWriter().write(JSONObject.toJSONString(resMap));
@@ -404,7 +403,6 @@ public class ComplatCorporationController extends BaseController{
      * @return
      * @throws Exception
 	 */
-	@SuppressWarnings("finally") 
 	@RequestMapping(value = "/corporationAuth", method = RequestMethod.POST)
 	public void corporationAuth(ComplatCorporation corporation,Model model,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		Map<String, Object> resMap = new HashMap<String, Object>();

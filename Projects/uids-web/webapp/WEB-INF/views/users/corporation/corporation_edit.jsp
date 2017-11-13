@@ -53,6 +53,10 @@ $().ready(function() {
 		   phone:{
 		   	isCompTel:true
 		   }
+		  },messages:{
+		  	pwd:{
+		  		cnRangelength:"密码长度介于6至18位之间"
+		  	}
 		  },submitHandler : function() {								
 				$.ajax({
 					type : "POST",
@@ -187,6 +191,15 @@ $().ready(function() {
 		$("#qyCardNumber").rules("add",{required:true});
 		$("#qyCardNumber").rules("add",{isIdCardNo:true});
 		$("#qyCardNumber").rules("add",{maxlength:18});
+		
+		//当点击企业法人再点击非企业法人时，清空文本框内容
+		$("#regNumber").val("");
+		$("#loginName").val("");
+		$("#pwd").val("");
+		$("#mobile").val("");
+		$("#email").val("");
+		$("#phone").val("");
+		$("#scope").val("");
 	}
 	
 	//非企业法人页面初始化  
@@ -242,7 +255,13 @@ $().ready(function() {
 			$("#fqyCardNumber").rules("add",{isIdCardNo:true});
 			$("#fqyCardNumber").rules("add",{maxlength:18});
 			
-			
+			//当点击非企业法人再点击企业法人时，清空文本框内容
+			$("#regNumber").val("");
+			$("#loginName").val("");
+			$("#pwd").val("");
+			$("#mobile").val("");
+			$("#email").val("");
+			$("#phone").val("");			
 	}
 	
 	//提交表单,并校验企业工商注册号或统一社会信用代码、组织机构代码  
@@ -414,7 +433,7 @@ color: rgb(119, 119, 119);
 	<div class="position">
 		<ol class="breadcrumb">
 			<li>
-				<a href="${ctx}/backIndex" target="_top">首页</a>
+				首页
 			</li>
 			<li class="split"></li>
 			<li class="active">

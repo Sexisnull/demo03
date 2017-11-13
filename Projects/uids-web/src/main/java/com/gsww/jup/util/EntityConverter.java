@@ -25,12 +25,14 @@ public class EntityConverter {
 	/**
 	 * 查询数据结果集
 	 */
+	@SuppressWarnings("rawtypes")
 	private List dataList;
 	/**
 	 * 包名+实体类名
 	 */
 	private String dtoName;
 	
+	@SuppressWarnings("rawtypes")
 	public EntityConverter(String querySql,List dataList,String dtoName){
 		this.querySql = querySql;
 		this.dataList = dataList;
@@ -42,6 +44,7 @@ public class EntityConverter {
 	 * @return
 	 * @throws Exception 
 	 */
+	@SuppressWarnings("rawtypes")
 	private List getQueryColumns() throws Exception{
 		List columns = new ArrayList();
 		if(this.querySql == null){
@@ -55,6 +58,7 @@ public class EntityConverter {
 	 * @return
 	 * @throws Exception 
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private List addColumns(List list) throws Exception{
 		if(list == null){
 			list = new ArrayList();
@@ -83,6 +87,7 @@ public class EntityConverter {
 	 * 实体对象转换结果
 	 * @return
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Object getConvertResult(){
 		Object retObj = null;
 		if (dataList.size() == 0) {
@@ -117,6 +122,7 @@ public class EntityConverter {
 	 * Jdbc查询结果转换
 	 * @return
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Object getJdbcConvertResult(){
 		Object retObj = null;
 		if (dataList.size() == 0) {

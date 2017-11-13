@@ -64,6 +64,7 @@ public class JdbcDAO {
 		}
 	}*/
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Object queryForObject(String sql, Object[] args, Class objClass)
 			throws Exception {
 		try {
@@ -74,6 +75,7 @@ public class JdbcDAO {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	public List<Map<String, Object>> queryForList(String sql, Object[] args)
 			throws Exception {
 		long start = System.currentTimeMillis();
@@ -87,6 +89,7 @@ public class JdbcDAO {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	public Map<String, Object> queryForMap(String sql)
 			throws Exception {
 		long start = System.currentTimeMillis();
@@ -120,6 +123,7 @@ public class JdbcDAO {
 		}
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public String queryClobToString(String sql, Object[] args) throws Exception {
 		List list = null;
 		try {
@@ -164,6 +168,7 @@ public class JdbcDAO {
 				});
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public int callProcedure(String procedureName, final int parameter) {
 		final String sql = "{call " + procedureName + "}";
 		Object obj = jdbcTemplate.execute(sql, new CallableStatementCallback() {

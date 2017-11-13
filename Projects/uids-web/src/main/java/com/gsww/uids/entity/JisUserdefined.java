@@ -10,6 +10,7 @@ import javax.persistence.Table;
 /**
  * JisUserdefined entity. @author MyEclipse Persistence Tools
  */
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "jis_userdefined")
 public class JisUserdefined implements java.io.Serializable {

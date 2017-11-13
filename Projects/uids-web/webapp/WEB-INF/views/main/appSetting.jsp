@@ -27,7 +27,7 @@
 		$('#calltest').removeClass();
 	});
 		function openSetting(appid, appname){
-			var url = "${ctx}/setUserDefined?appid="+appid+"&appname="+appname;
+			var url = "${ctx}/setUserDefined?appid="+appid;
 			$.dialog({
 				title:'参数设置',
 				width: '500px',

@@ -656,6 +656,7 @@ public final class StringHelper {
 		}
 		return sb.toString();
 	}
+	@SuppressWarnings("rawtypes")
 	public static String splitListToString(String seperators, List list){
         String temp=list.toString();
         StringBuffer strSb=new StringBuffer();
@@ -666,6 +667,7 @@ public final class StringHelper {
         
         return strSb.toString().substring(1,strSb.length()-1);
 } 
+	@SuppressWarnings("rawtypes")
 	public static String splitListToStringIncDou(String seperators, List list){
         String temp=list.toString();
         StringBuffer strSb=new StringBuffer();

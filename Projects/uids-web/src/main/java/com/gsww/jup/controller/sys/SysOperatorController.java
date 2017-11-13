@@ -43,11 +43,13 @@ import com.gsww.jup.util.StringHelper;
  */
 @Controller
 public class SysOperatorController extends BaseController{
+	@SuppressWarnings("unused")
 	private static Logger logger = LoggerFactory.getLogger(SysOperatorController.class);
 	@Autowired
 	private SysOperatorService operatorService;
 	@Autowired
 	private SysMenuService sysMenuService;
+	@SuppressWarnings("unused")
 	private Map<String,String> resMap=new HashMap<String,String>();
 
 	/**
@@ -163,7 +165,6 @@ public class SysOperatorController extends BaseController{
 	/**
 	 * 检查操作状态
 	 */
-	@SuppressWarnings("finally")
 	@RequestMapping(value = "/operator/checkOperatorState", method = RequestMethod.POST)
 	public void checkOperatorStat(String operatorId,HttpServletRequest request,HttpServletResponse response)  throws Exception {
 		try {

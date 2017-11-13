@@ -2,7 +2,6 @@ package com.gsww.uids.util;
 
 import com.hanweb.common.util.SpringUtil;
 import com.hanweb.common.util.StringUtil;
-import com.hanweb.common.util.mvc.ResultState;
 
 import java.util.HashMap;
 import java.util.Map;

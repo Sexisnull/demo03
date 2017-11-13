@@ -1,9 +1,7 @@
 package com.gsww.jup.util;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.math.BigInteger;
 import java.security.KeyFactory;
@@ -20,7 +18,6 @@ import java.security.spec.RSAPrivateKeySpec;
 import java.security.spec.RSAPublicKeySpec;
 
 import javax.crypto.Cipher;
-import javax.servlet.Servlet;
 import javax.servlet.http.HttpServletRequest;
 
 public class RSAUtil {
@@ -136,7 +133,8 @@ public class RSAUtil {
             throw new Exception(e.getMessage());  
         }  
     }  
-	 public static byte[] decrypt(PrivateKey pk, byte[] raw) throws Exception {  
+	 @SuppressWarnings("static-access")
+	public static byte[] decrypt(PrivateKey pk, byte[] raw) throws Exception {  
         try {  
             Cipher cipher = Cipher.getInstance("RSA",  
                     new org.bouncycastle.jce.provider.BouncyCastleProvider());  

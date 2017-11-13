@@ -34,7 +34,7 @@ $().ready(function() {
 	<!--表单的面包屑区域-->
 	<ol class="breadcrumb">
 				<li>
-					<a href="${ctx}/backIndex" target="_top">首页</a>
+					首页
 				</li>
 				<li class="split"></li>
 				<li class="active">

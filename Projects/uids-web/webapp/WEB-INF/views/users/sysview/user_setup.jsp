@@ -69,8 +69,11 @@
 									cnRangelength: [0,64],
 									isHeadship : true
 								}
-							},
-							submitHandler : function() {								
+							},messages:{
+							  	pwd:{
+							  		cnRangelength:"密码长度介于6至18位之间"
+							  	}
+							},submitHandler : function() {								
 								$.ajax({
 									type : "POST",
 									async : false,
@@ -314,7 +317,7 @@
 		<div class="position">
 			<ol class="breadcrumb">
 				<li>
-					<a href="${ctx}/backIndex" target="_top">首页</a>
+					首页
 				</li>
 				<li class="split"></li>
 				<li class="active">

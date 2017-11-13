@@ -4,10 +4,8 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
-import com.gsww.jup.entity.sys.SysMenu;
 import com.gsww.uids.entity.ComplatGroup;
 
 public interface ComplatGroupDao extends  PagingAndSortingRepository<ComplatGroup, String>,
@@ -72,7 +70,9 @@ JpaSpecificationExecutor<ComplatGroup>{
 	 */
 	@Query(value = "(SELECT * FROM complat_group where iid =?1) " +
 			" UNION (SELECT * FROM complat_group where pid =?1)"+
- 		    " UNION (SELECT * FROM complat_group where pid in (SELECT iid FROM complat_group where pid =?1))"
+			" UNION (SELECT * FROM complat_group where pid in (SELECT iid FROM complat_group where pid =?1))" +
+			" UNION (SELECT * FROM complat_group where pid in (SELECT cg.iid FROM complat_group cg where pid in (SELECT iid FROM complat_group where pid =?1))) " +
+			" UNION (SELECT * FROM complat_group where pid in (SELECT iid FROM complat_group where pid in(SELECT cg.iid FROM complat_group cg where pid in (SELECT iid FROM complat_group where pid =?1))))"
 			,nativeQuery=true)
 	public List<ComplatGroup> findAllDeptByDeptId(String detId);
 }

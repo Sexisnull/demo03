@@ -1,6 +1,5 @@
 package com.gsww.uids.controller;
 
-import com.hanweb.common.util.DateUtil;
 import com.hanweb.common.util.Md5Util;
 import com.hanweb.common.util.StringUtil;
 import com.hanweb.common.util.mvc.ControllerUtil;
@@ -11,7 +10,6 @@ import com.gsww.uids.service.ComplatCorporationService;
 import com.gsww.jup.util.Dbid;
 import com.gsww.uids.constant.CorporationSessionInfo;
 
-import java.util.Calendar;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;

@@ -60,4 +60,5 @@ public interface ComplatOutsideuserDao extends
 	@Modifying
 	@Query("update ComplatOutsideuser t set t.pwd = ?2 where t.iid = ?1")
 	int updatePwd(int iid, String pwd);
+	
 }

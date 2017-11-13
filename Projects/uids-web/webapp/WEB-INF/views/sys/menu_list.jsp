@@ -55,7 +55,7 @@ function deleteData() {
 	<div class="position">
 		<ol class="breadcrumb">
 			<li>
-				<a href="${ctx}/backIndex" target="_top">首页</a>
+				首页
 			</li>
 			<li class="split"></li>
 			<li class="active">
@@ -66,7 +66,7 @@ function deleteData() {
 				菜单管理
 			</li>
     	</ol>
-    	<%-- <a href="${ctx}/backIndex" target="_top">首页</a><em>></em><a>系统管理</a><em>></em><a class="last-position">菜单管理</a> --%>
+    	<%-- 首页<em>></em><a>系统管理</a><em>></em><a class="last-position">菜单管理</a> --%>
     </div>
     
     <div class="search-content">

@@ -66,7 +66,7 @@
 		<!--列表的面包屑区域-->
 		<div class="position">
 			<ol class="breadcrumb">
-				<li><a href="${ctx}/backIndex" target="_top">首页</a></li>
+				<li>首页</li>
 				<li class="split"></li>
 				<li class="active">个性化设置</li>
 				<li class="split"></li>

@@ -224,7 +224,7 @@ var complatUserNameInput=$("#name").val();
 			 }, 
 	     pwd : {
 				  required: true,
-				  cnRangelength: [6,18]
+			 	maxlength: 18
 			 },
 	   
 	     pwdquestion : {
@@ -568,7 +568,7 @@ function checkAndSave() {
 	<div class="position">
 		<ol class="breadcrumb">
 			<li>
-				<a href="${ctx}/backIndex" target="_top">首页</a>
+				首页
 			</li>
 			<li class="split"></li>
 			<li class="active">政府用户</li>

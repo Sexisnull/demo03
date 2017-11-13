@@ -428,4 +428,33 @@ public class ComplatZoneController extends BaseController {
 			return new ModelAndView("redirect:/complat/zoneList");
 		}
 	}
+	
+	/**
+     * @discription   行政区划编码重命名校验   
+     * @param papersNumber
+     * @param model
+     * @param request
+     * @param response
+	 */
+	@RequestMapping(value="/checkAreaCode", method = RequestMethod.GET)
+	public void checkAreaCode(String regionCode1,Model model,HttpServletRequest request,HttpServletResponse response) {
+		try {
+			ComplatZone complatZone = null;
+			String regionCodeInput=StringUtils.trim((String)request.getParameter("regionCode1"));
+			String oldregionCode=StringUtils.trim((String)request.getParameter("regionCode"));
+			if(!regionCodeInput.equals(oldregionCode)){
+				complatZone = complatZoneService.findByCodeId(regionCode1);
+				if(complatZone != null){					
+					response.getWriter().write("0");								
+				}else{
+					response.getWriter().write("1");
+				}
+			}else{
+				response.getWriter().write("1");
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+	}
+
 }

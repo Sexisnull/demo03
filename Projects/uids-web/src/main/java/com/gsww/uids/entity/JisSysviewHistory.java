@@ -1,6 +1,5 @@
 package com.gsww.uids.entity;
 
-import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +10,7 @@ import javax.persistence.Table;
 /**
  * JisSysviewHistory entity. @author MyEclipse Persistence Tools
  */
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "jis_sysview_history")
 public class JisSysviewHistory implements java.io.Serializable {
